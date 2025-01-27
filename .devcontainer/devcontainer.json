@@ -1,0 +1,6 @@
+{
+    "name": "PHP Development Container",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "php",
+    "workspaceFolder": "/var/www"
+}
