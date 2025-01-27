@@ -29,8 +29,7 @@
    Once installed, open your project in VS Code and reopen it in the dev container using the `Reopen in Container` command.
 
 2. **That's it!**  
-   After the dev container starts, the necessary environment and dependencies should be automatically set up. You can now start working on the project.
-
+   After the dev container starts, run `composer setup` and then you will be ready to work!
 
 
 # Notes
