@@ -1,14 +1,11 @@
 {
-    "name": "PHP Development Container",
-    "dockerComposeFile": "../docker-compose.yml",
-    "service": "php",
-    "workspaceFolder": "/var/www",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "dbaeumer.vscode-eslint",
-                "rvest.vs-code-prettier-eslint"
-            ]
-        }
+  "name": "PHP Development Container",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "php",
+  "workspaceFolder": "/var/www",
+  "customizations": {
+    "vscode": {
+      "extensions": ["rvest.vs-code-prettier-eslint"]
     }
+  }
 }
