@@ -1,6 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-# Laravel Docker Starter Kit
+# Urbantree Application Development Kit
 
 - Laravel v11.x
 - PHP v8.3.x
@@ -20,21 +18,17 @@
 - Stable version of [Docker](https://docs.docker.com/engine/install/)
 - Compatible version of [Docker Compose](https://docs.docker.com/compose/install/#install-compose)
 
-# How to Deploy
+# How to Run
 
 1. **Run the DevContainer**:
    Make sure you have [Visual Studio Code](https://code.visualstudio.com/) with the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension installed.
 
    Once installed, open your project in VS Code and reopen it in the dev container using the `Reopen in Container` command.
 
-2. **That's it!**
-   After the dev container starts, run `composer setup` and then you will be ready to work!
+2. **Initialize the Project**:
+   After the dev container starts, run `composer setup` to install dependencies and set up the application. You are now ready to start developing!
 
 # Notes
-
-### Laravel Versions
-
-- Laravel 11.x
 
 ### Laravel App
 
@@ -112,3 +106,7 @@
   - `vendor/bin/rector process --dry-run`
 - Process
   - `vendor/bin/rector process`
+
+# Credits
+
+This development kit is based on the original template kit from [Refactorian's Laravel Docker Starter Kit](https://github.com/refactorian/laravel-docker).
