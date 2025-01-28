@@ -29,8 +29,6 @@ jobs:
           touch database/database.sqlite
       - name: Install Node.js
         uses: actions/setup-node@v3
-        with:
-          node-version: "stable"
       - name: Install NPM Dependencies
         run: npm install
       - name: Build Frontend Assets
