@@ -7,7 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>{{ config('app.name') }}</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}" />
-    @vite(['resources/ts/main.tsx', 'resources/css/app.css'])
+    @vite('resources/ts/main.tsx')
+    @vite('resources/css/app.css')
 </head>
 
 <body>
