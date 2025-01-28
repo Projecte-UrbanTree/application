@@ -1,11 +1,16 @@
 {
-    "name": "PHP Development Container",
-    "dockerComposeFile": "../docker-compose.yml",
-    "service": "php",
-    "workspaceFolder": "/var/www",
-    "features": {
-        "ghcr.io/devcontainers/features/git:1": {
-            "enableGitCredentialHelper": true
-        }
+  "name": "UrbanTree application",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "php",
+  "workspaceFolder": "/var/www",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "enableGitCredentialHelper": true
     }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["rvest.vs-code-prettier-eslint"]
+    }
+  }
 }
