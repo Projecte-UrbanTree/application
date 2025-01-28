@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from 'primereact/button';
-import { useEffect } from "react";
 
 const App: React.FC = () => {
     return (
