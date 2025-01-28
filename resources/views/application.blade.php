@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="{{ asset('favicon.ico') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>{{ config('app.name') }}</title>
-    @vite(['resources/ts/main.tsx'])
+    <link rel="icon" href="{{ asset('favicon.ico') }}" />
+    @vite(['resources/ts/main.tsx', 'resources/css/app.css'])
 </head>
 
 <body>

@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import tailwindcss from '@tailwindcss/vite'
 import laravel from "laravel-vite-plugin";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -20,6 +21,7 @@ export default defineConfig({
         },
     },
     plugins: [
+        tailwindcss(),
         laravel({
             input: ["resources/ts/main.tsx"],
             refresh: true,
