@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('work_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
             $table->date('date');
             $table->integer('status')->default(0);
+            $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
             $table->timestamps();
         });
     }

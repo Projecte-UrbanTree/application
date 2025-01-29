@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->foreignId('zone_id')->nullable()->constrained('zones')->nullOnDelete();
+            $table->foreignId('zone_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
-            $table->unique(['latitude', 'longitude'], 'UC_Point');
         });
     }
 

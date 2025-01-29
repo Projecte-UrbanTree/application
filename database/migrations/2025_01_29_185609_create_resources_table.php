@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->foreignId('resource_type_id')->constrained('resource_type')->onDelete('cascade');
+            $table->foreignId('resource_type_id')->constrained('resource_types')->onDelete('cascade');
             $table->timestamps();
         });
     }

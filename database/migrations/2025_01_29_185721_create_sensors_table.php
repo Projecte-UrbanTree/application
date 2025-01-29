@@ -14,12 +14,7 @@ return new class extends Migration
         Schema::create('sensors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
-            $table->foreignId('zone_id')->constrained('zones')->onDelete('cascade');
-            $table->foreignId('point_id')->unique()->nullable()->constrained('points')->onDelete('cascade');
-            $table->string('model')->nullable();
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
-            $table->unique(['contract_id', 'zone_id', 'point_id'], 'UC_Sensor');
         });
     }
 

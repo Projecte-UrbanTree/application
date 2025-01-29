@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
             $table->string('name')->nullable();
-            $table->string('color', 7)->nullable();
             $table->string('description')->nullable();
+            $table->string('color', 7)->nullable();
             $table->timestamps();
         });
     }

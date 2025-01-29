@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('element_types', function (Blueprint $table) {
+        Schema::create('resource_types', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->boolean('requires_tree_type')->default(false);
             $table->text('description')->nullable();
-            $table->string('icon')->nullable();
-            $table->string('color', 7)->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('element_types');
+        Schema::dropIfExists('resource_types');
     }
 };

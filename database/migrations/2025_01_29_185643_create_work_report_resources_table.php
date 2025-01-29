@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('work_report_id')->constrained('work_reports')->onDelete('cascade');
             $table->foreignId('resource_id')->constrained('resources')->onDelete('cascade');
             $table->timestamps();
-            $table->unique(['work_report_id', 'resource_id'], 'UC_WorkReportResource');
         });
     }
 

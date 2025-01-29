@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('work_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('work_order_id')->unique()->constrained('work_orders')->onDelete('cascade');
             $table->string('observation')->nullable();
             $table->float('spent_fuel');
+            $table->foreignId('work_order_id')->constrained('work_orders')->onDelete('cascade');
             $table->timestamps();
         });
     }

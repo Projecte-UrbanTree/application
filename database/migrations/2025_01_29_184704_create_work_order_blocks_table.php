@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('work_report_photos', function (Blueprint $table) {
+        Schema::create('work_order_blocks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('work_report_id')->constrained('work_reports')->onDelete('cascade');
-            $table->foreignId('photo_id')->constrained('photos')->onDelete('cascade');
+            $table->string('notes')->nullable();
+            $table->foreignId('work_order_id')->constrained('work_orders')->onDelete('cascade');
             $table->timestamps();
-            $table->unique(['work_report_id', 'photo_id'], 'UC_WorkReportPhoto');
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('work_report_photos');
+        Schema::dropIfExists('work_order_blocks');
     }
 };
