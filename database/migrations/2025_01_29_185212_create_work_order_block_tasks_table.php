@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('work_order_block_tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('work_order_block_id')->constrained('work_order_blocks')->onDelete('cascade');
+            $table->integer('status')->default(0);
+            $table->integer('spent_time')->nullable();
             $table->foreignId('task_id')->constrained('task_types')->onDelete('cascade');
             $table->foreignId('element_type_id')->constrained('element_types')->onDelete('cascade');
             $table->foreignId('tree_type_id')->nullable()->constrained('tree_types')->onDelete('set null');
-            $table->integer('status')->default(0);
-            $table->integer('spent_time')->nullable();
+            $table->foreignId('work_order_block_id')->constrained('work_order_blocks')->onDelete('cascade');
             $table->timestamps();
         });
     }

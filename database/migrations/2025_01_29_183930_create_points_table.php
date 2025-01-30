@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
+            $table->enum('type', ['zone_delimiter', 'element'])->default('zone_delimiter');
             $table->foreignId('zone_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });

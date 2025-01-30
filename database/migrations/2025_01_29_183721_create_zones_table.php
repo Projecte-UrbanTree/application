@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->string('color', 7)->nullable();
+            $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
             $table->timestamps();
         });
     }

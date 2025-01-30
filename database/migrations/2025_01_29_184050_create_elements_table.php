@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('elements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('element_type_id')->constrained('element_types')->onDelete('cascade');
-            $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
-            $table->foreignId('zone_id')->constrained('zones')->onDelete('cascade');
-            $table->foreignId('point_id')->constrained('points')->onDelete('cascade');
-            $table->foreignId('tree_type_id')->nullable()->constrained('tree_types')->nullOnDelete();
             $table->string('description', 255)->nullable();
+            $table->foreignId('point_id')->constrained('points')->onDelete('cascade');
+            $table->foreignId('element_type_id')->constrained('element_types')->onDelete('cascade');
+            $table->foreignId('tree_type_id')->nullable()->constrained('tree_types')->nullOnDelete();
             $table->timestamps();
         });
     }

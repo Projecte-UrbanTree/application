@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('work_order_block_zones', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('work_order_block_id')->constrained('work_order_blocks')->onDelete('cascade');
             $table->foreignId('zone_id')->constrained('zones')->onDelete('cascade');
+            $table->foreignId('work_order_block_id')->constrained('work_order_blocks')->onDelete('cascade');
             $table->timestamps();
         });
     }
