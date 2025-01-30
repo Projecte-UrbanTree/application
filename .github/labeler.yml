@@ -1,0 +1,73 @@
+area/controllers:
+  - changed-files:
+      - any-glob-to-any-file: app/Http/Controllers/**
+
+area/models:
+  - changed-files:
+      - any-glob-to-any-file: app/Models/**
+
+area/providers:
+  - changed-files:
+      - any-glob-to-any-file: app/Providers/**
+
+area/database:
+  - changed-files:
+      - any-glob-to-any-file: database/**
+
+area/docker:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .devcontainer/**
+          - "**/.dockerignore"
+          - "docker-compose.yml"
+          - "Dockerfile"
+
+area/views:
+  - changed-files:
+      - any-glob-to-any-file:
+          - resources/views/**
+
+area/javascript:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.js"
+          - resources/js/**
+          - resources/ts/**
+
+area/routes:
+  - changed-files:
+      - any-glob-to-any-file:
+          - routes/**
+
+area/tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - phpunit.xml.dist
+          - tests/**
+
+kind/dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/composer.+(json|lock)"
+          - "**/package.+(json|lock)"
+  - head-branch: '^dependabot\/'
+
+kind/design:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.css"
+          - resources/css/**
+          - .editorconfig
+          - .prettierrc.cjs
+
+kind/docs:
+  - head-branch: '^docs\/'
+
+kind/feature:
+  - head-branch: '^feat\/'
+
+kind/bug:
+  - head-branch: '^fix\/'
+
+kind/improvement:
+  - head-branch: '^refactor\/'
