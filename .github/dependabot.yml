@@ -9,6 +9,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    labels:
+      - "kind/dependencies"
+      - "needs-triage"
     groups:
       production-dependencies:
         dependency-type: "production"
@@ -23,3 +26,26 @@ updates:
         dependency-type: "production"
       development-dependencies:
         dependency-type: "development"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "kind/dependencies"
+      - "area/docker"
+      - "needs-triage"
+    groups:
+      general:
+        dependency-type: production
+        applies-to: version-updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "kind/dependencies"
+      - "needs-triage"
+    groups:
+      general:
+        dependency-type: production
+        applies-to: version-updates
