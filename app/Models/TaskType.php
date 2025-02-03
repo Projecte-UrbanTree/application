@@ -13,6 +13,6 @@ class TaskType extends Model
 
     public function workOrderBlockTasks()
     {
-        return $this->hasMany(WorkOrderBlockTask::class, 'task_id');
+        return $this->hasMany(WorkOrderBlockTask::class, 'task_type_id');
     }
 }
