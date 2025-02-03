@@ -19,8 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
-        'password',
+        'company',
+        'dni',
+        'role',
     ];
 
     /**
@@ -44,5 +47,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function workOrderUsers()
+    {
+        return $this->hasMany(WorkOrderUser::class, 'user_id');
     }
 }
