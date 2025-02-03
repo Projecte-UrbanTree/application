@@ -10,6 +10,7 @@ class TaskType extends Model
         'name',
         'description',
     ];
+
     public function workOrderBlockTasks()
     {
         return $this->hasMany(WorkOrderBlockTask::class, 'task_id');

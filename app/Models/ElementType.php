@@ -13,10 +13,12 @@ class ElementType extends Model
         'icon',
         'color',
     ];
+
     public function elements()
     {
         return $this->hasMany(Element::class, 'element_type_id');
     }
+
     public function workOrderBlockTasks()
     {
         return $this->hasMany(WorkOrderBlockTask::class, 'element_type_id');

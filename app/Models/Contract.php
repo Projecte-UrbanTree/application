@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Contract extends Model
 {
     protected $fillable = [
@@ -15,14 +14,17 @@ class Contract extends Model
         'invoice_agreed',
         'invoice_paid',
     ];
+
     public function sensors()
     {
         return $this->hasMany(Sensor::class, 'contract_id');
     }
+
     public function zones()
     {
         return $this->hasMany(Zone::class, 'contract_id');
     }
+
     public function workOrders()
     {
         return $this->hasMany(WorkOrder::class, 'contract_id');

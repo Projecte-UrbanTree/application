@@ -10,6 +10,7 @@ class ResourceType extends Model
         'name',
         'description',
     ];
+
     public function resources()
     {
         return $this->hasMany(Resource::class, 'resource_type_id');

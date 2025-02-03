@@ -12,19 +12,24 @@ class Element extends Model
         'tree_type_id',
         'point_id',
     ];
+
     public function points()
     {
         return $this->belongsTo(Point::class, 'point_id');
     }
+
     public function elementTypes()
     {
         return $this->belongsTo(ElementType::class, 'element_type_id');
     }
+
     public function treeTypes()
     {
         return $this->belongsTo(TreeType::class, 'tree_type_id');
     }
-    public function incidences(){
+
+    public function incidences()
+    {
         return $this->hasMany(Incidence::class, 'element_id');
     }
 }

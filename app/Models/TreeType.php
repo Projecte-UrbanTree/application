@@ -11,10 +11,12 @@ class TreeType extends Model
         'genus',
         'species',
     ];
+
     public function elements()
     {
         return $this->hasMany(Element::class, 'tree_type_id');
     }
+
     public function workOrderBlockTasks()
     {
         return $this->hasMany(WorkOrderBlockTask::class, 'tree_type_id');

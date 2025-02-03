@@ -11,10 +11,12 @@ class Resource extends Model
         'description',
         'resource_type_id',
     ];
+
     public function resourceTypes()
     {
         return $this->belongsTo(ResourceType::class, 'resource_type_id');
     }
+
     public function workReportResources()
     {
         return $this->hasMany(WorkReportResource::class, 'resource_id');

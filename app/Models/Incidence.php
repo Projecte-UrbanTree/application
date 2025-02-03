@@ -12,6 +12,7 @@ class Incidence extends Model
         'status',
         'element_id',
     ];
+
     public function elements()
     {
         return $this->belongsTo(Element::class, 'element_id');

@@ -12,11 +12,14 @@ class Point extends Model
         'type',
         'zone_id',
     ];
+
     public function zones()
     {
         return $this->belongsTo(Zone::class, 'zone_id');
     }
-    public function elements(){
+
+    public function elements()
+    {
         return $this->hasMany(Element::class, 'point_id');
     }
 }
