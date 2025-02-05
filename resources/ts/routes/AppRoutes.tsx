@@ -1,17 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Error404 from '@/pages/Error/404';
-
 import Login from '@/pages/Login';
-
 import AdminDashboard from '@/pages/Admin/Dashboard';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
-import { AuthProvider } from '@/contexts/AuthContext';
+import AuthLayout from '@/layouts/AuthLayout';
 
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <AuthLayout title="Login">
+              <Login />
+            </AuthLayout>
+          }
+        />
 
         {/* Protected Routes */}
         <Route element={<AdminProtectedRoute />}>
