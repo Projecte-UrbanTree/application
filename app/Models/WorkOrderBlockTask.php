@@ -27,7 +27,7 @@ class WorkOrderBlockTask extends Model
 
     public function tasksTypes()
     {
-        return $this->belongsTo(Task::class, 'task_type_id');
+        return $this->belongsTo(TaskType::class, 'task_type_id');
     }
 
     public function workOrderBlocks()
