@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\LandingFormData;
+use App\Models\LandingForm;
 
-class LandingFormDataController extends Controller
+class LandingFormController extends Controller
 {
     public function store(Request $request)
     {
@@ -16,7 +16,7 @@ class LandingFormDataController extends Controller
             'message' => 'required|string',
         ]);
 
-        $landingFormData = new LandingFormData();
+        $landingFormData = new LandingForm();
         $landingFormData->name = $request->name;
         $landingFormData->email = $request->email;
         $landingFormData->phone = $request->phone;
