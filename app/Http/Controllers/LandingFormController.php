@@ -16,12 +16,12 @@ class LandingFormController extends Controller
             'message' => 'required|string',
         ]);
 
-        $landingFormData = new LandingForm; 
-        $landingFormData->name = $request->name;
-        $landingFormData->email = $request->email;
-        $landingFormData->phone = $request->phone;
-        $landingFormData->message = $request->message;
-        $landingFormData->save();
+        $landingForm = new LandingForm(); 
+        $landingForm->name = $request->name;
+        $landingForm->email = $request->email;
+        $landingForm->phone = $request->phone;
+        $landingForm->message = $request->message;
+        $landingForm->save();
 
         return redirect('/')->with('success', 'Mensaje enviado correctamente.');
     }
