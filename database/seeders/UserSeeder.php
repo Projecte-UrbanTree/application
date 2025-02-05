@@ -15,19 +15,40 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'name' => 'Administrator',
+                'name' => 'Gemma',
+                'username' => 'Palanca',
                 'email' => 'admin@urbantree.com',
-                'password' => Hash::make('password'),
+                'company'=> 'Urban Tree 5.0',
+                'dni'=> '12345678A',
+                'password' => Hash::make('demopass'),
+                'role' => 2,
             ],
             [
                 'name' => 'Worker',
-                'email' => 'worker@urbantree.com',
-                'password' => Hash::make('password'),
+                'username' => '1 Demo',
+                'email' => 'worker1@urbantree.com',
+                'company'=> 'Urban Tree 5.0',
+                'dni'=> '12345678B',
+                'password' => Hash::make('demopass'),
+                'role' => 1,
             ],
             [
+                'name' => 'Worker',
+                'username' => '2 Demo',
+                'email' => 'worker2@urbantree.com',
+                'company'=> 'Urban Tree 5.0',
+                'dni'=> '12345678C',
+                'password' => Hash::make('demopass'),
+                'role' => 1,
+            ]
+            [
                 'name' => 'Customer',
+                'username' => 'Demo',
                 'email' => 'customer@urbantree.com',
-                'password' => Hash::make('password'),
+                'company'=> 'Urban Tree 5.0',
+                'dni'=> '12345678D',
+                'password' => Hash::make('demopass'),
+                'role' => 0,
             ],
         ]);
     }
