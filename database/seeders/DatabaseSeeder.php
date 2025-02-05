@@ -20,18 +20,18 @@ class DatabaseSeeder extends Seeder
             TaskTypesSeeder::class,
             ElementTypesSeeder::class,
             ContractSeeder::class,
-            ZoneSeeder::class, // Asegúrate de crear este seeder si no existe
+            ZoneSeeder::class,
             PointSeeder::class,
             ElementSeeder::class,
             IncidentSeeder::class,
-            WorkOrderSeeder::class, // Asegúrate de crear este seeder si no existe
+            WorkOrderSeeder::class, 
             WorkOrderUserSeeder::class,
             WorkOrderBlockSeeder::class,
             WorkOrderBlockZoneSeeder::class,
             WorkOrderBlockTaskSeeder::class,
             ResourceTypeSeeder::class,
             ResourceSeeder::class,
-            WorkReportSeeder::class, // Asegúrate de crear este seeder si no existe
+            WorkReportSeeder::class, 
             WorkReportResourceSeeder::class,
             SensorSeeder::class,
         ]);
