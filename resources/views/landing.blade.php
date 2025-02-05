@@ -127,7 +127,7 @@
         </script>
       @endif
 
-      <form action="/landing-form-data" method="POST" class="space-y-6">
+      <form action="/landing-form" method="POST" class="space-y-6">
         @csrf
         <div>
           <label class="block text-gray-700 font-semibold mb-2">Nombre completo</label>
