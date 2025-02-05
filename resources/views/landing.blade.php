@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Urban Tree 5.0 - Gestión Integral de Espacios Verdes</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Urban Tree 5.0</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-50">
 
@@ -207,7 +207,7 @@
         </script>
       @endif
 
-      <form id="contact" action="/landing-form" method="POST" class="space-y-6">
+      <form id="contact" action="{{ route('form') }}" method="POST" class="space-y-4">
         @csrf
         <div>
           <label class="block text-gray-700 font-semibold mb-2">Nombre completo</label>
