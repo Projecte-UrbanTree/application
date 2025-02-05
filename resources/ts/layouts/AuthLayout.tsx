@@ -12,7 +12,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
     : import.meta.env.VITE_APP_NAME;
 
   return (
-    <div className="bg-gray-50 font-sans leading-normal tracking-normal flex items-center justify-center h-screen p-2 md:p-0">
+    <div className="font-sans leading-normal tracking-normal flex items-center justify-center h-screen p-2 md:p-0">
       <div className="w-full max-w-lg bg-white rounded p-8 border border-gray-200">
         {/* Header with Logo */}
         <header className="text-center my-8">

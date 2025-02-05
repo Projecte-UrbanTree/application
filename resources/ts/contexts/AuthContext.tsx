@@ -19,8 +19,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}
-      {isAuthenticated ? <button onClick={logout}>Logout</button> : ''}
+      {isAuthenticated ? (
+        <div className="absolute top-2 right-2 hidden">
+          Authenticated
+          <button
+            onClick={logout}
+            className="px-4 py-2 rounded bg-red-500 text-white ml-2 cursor-pointer">
+            Logout
+          </button>
+        </div>
+      ) : null}
       {children}
     </AuthContext.Provider>
   );
