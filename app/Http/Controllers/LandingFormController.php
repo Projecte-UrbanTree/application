@@ -16,7 +16,7 @@ class LandingFormController extends Controller
             'message' => 'required|string',
         ]);
 
-        $landingForm = new LandingForm(); 
+        $landingForm = new LandingForm;
         $landingForm->name = $request->name;
         $landingForm->email = $request->email;
         $landingForm->phone = $request->phone;

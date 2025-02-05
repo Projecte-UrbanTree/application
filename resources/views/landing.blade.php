@@ -10,15 +10,95 @@
 </head>
 <body class="bg-gray-50">
 
-  <header class="bg-gradient-to-r from-green-700 to-green-800 text-white text-center py-16 px-4">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-        Urban Tree 5.0
-      </h1>
-      <p class="text-xl mb-8 opacity-90">Plataforma integral para la planificación y ejecución de tareas de mantenimiento</p>
-    </div>
-  </header>
+  <!-- Banner Image -->
+  <div class="w-full">
+    <img src="{{ asset('images/banner.jpg') }}" alt="Banner" class="w-full h-auto">
+  </div>
+  <!-- Pricing Section -->
+  <section class="container mx-auto py-16 px-4">
+    <div class="max-w-6xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">Planes que crecen contigo</h2>
+      <p class="text-gray-600 mb-12 max-w-2xl mx-auto">Adaptamos nuestra solución a las necesidades de tu organización para una gestión eficiente de espacios verdes.</p>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Basic Plan -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+          <h3 class="text-xl font-bold mb-4">Municipal</h3>
+          <div class="text-4xl font-bold mb-6 text-green-600">€199<span class="text-lg text-gray-500">/mes</span></div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Hasta 5 contratos activos
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Soporte básico (48h)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Informes básicos
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Gestión de 2 equipos
+            </li>
+          </ul>
+          <a href="#contact" class="block w-full bg-green-100 text-green-700 py-3 rounded-lg font-semibold hover:bg-green-200 transition-colors">
+            Solicitar Info
+          </a>
+        </div>
 
+        <!-- Popular Plan -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-green-500 relative">
+          <div class="absolute top-0 right-0 bg-green-500 text-white px-4 py-1 rounded-bl-lg text-sm">Más popular</div>
+          <h3 class="text-xl font-bold mb-4">Provincial</h3>
+          <div class="text-4xl font-bold mb-6 text-green-600">€499<span class="text-lg text-gray-500">/mes</span></div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Hasta 25 contratos
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Soporte prioritario (24h)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Analíticas avanzadas
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Gestión de 10 equipos
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Automatizaciones
+            </li>
+          </ul>
+          <a href="#contact" class="block w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+            Solicitar Info
+          </a>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+          <h3 class="text-xl font-bold mb-4">Nacional</h3>
+          <div class="text-4xl font-bold mb-6 text-green-600">€999<span class="text-lg text-gray-500">/mes</span></div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Contratos ilimitados
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Soporte premium (1h)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Reportes personalizados
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Gestión ilimitada
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 mr-2"></i>Integraciones API
+            </li>
+          </ul>
+          <a href="#contact" class="block w-full bg-green-100 text-green-700 py-3 rounded-lg font-semibold hover:bg-green-200 transition-colors">
+            Solicitar Info
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
   <section class="container mx-auto py-16 px-4">
     <h2 class="text-3xl font-bold text-center mb-12">Funcionalidades Principales</h2>
     
@@ -127,7 +207,7 @@
         </script>
       @endif
 
-      <form action="/landing-form" method="POST" class="space-y-6">
+      <form id="contact" action="/landing-form" method="POST" class="space-y-6">
         @csrf
         <div>
           <label class="block text-gray-700 font-semibold mb-2">Nombre completo</label>
@@ -158,7 +238,7 @@
   </section>
 
   <footer class="bg-gray-900 text-white text-center py-6 mt-16">
-    <p>&copy; 2025 Urban Tree. Todos los derechos reservados.</p>
+    <p>&copy; 2025 Urban Tree 5.0. Todos los derechos reservados.</p>
     <div class="mt-2">
       <a href="#" class="text-gray-400 hover:text-white mx-2">Política de Privacidad</a>
       <a href="#" class="text-gray-400 hover:text-white mx-2">Términos de Servicio</a>
