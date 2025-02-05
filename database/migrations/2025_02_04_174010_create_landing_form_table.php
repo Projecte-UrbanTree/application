@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('landing_form_data', function (Blueprint $table) {
+        Schema::create('landing_form', function (Blueprint $table) {
             $table->id();
             $table->string('name', 150);
             $table->string('email', 255);
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('landing_form_data');
+        Schema::dropIfExists('landing_form');
     }
 };
