@@ -21,6 +21,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    labels:
+      - "kind/dependencies"
+      - "area/javascript"
+      - "needs-triage"
     groups:
       production-dependencies:
         dependency-type: "production"
