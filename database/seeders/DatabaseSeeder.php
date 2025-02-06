@@ -2,10 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,14 +21,14 @@ class DatabaseSeeder extends Seeder
             PointSeeder::class,
             ElementSeeder::class,
             IncidentSeeder::class,
-            WorkOrderSeeder::class, 
+            WorkOrderSeeder::class,
             WorkOrderUserSeeder::class,
             WorkOrderBlockSeeder::class,
             WorkOrderBlockZoneSeeder::class,
             WorkOrderBlockTaskSeeder::class,
             ResourceTypeSeeder::class,
             ResourceSeeder::class,
-            WorkReportSeeder::class, 
+            WorkReportSeeder::class,
             WorkReportResourceSeeder::class,
             SensorSeeder::class,
         ]);
