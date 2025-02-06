@@ -1,4 +1,5 @@
 {
+    "name": "application",
     "private": true,
     "type": "module",
     "scripts": {
