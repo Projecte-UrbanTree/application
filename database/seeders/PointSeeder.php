@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PointSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class PointSeeder extends Seeder
     public function run(): void
     {
         DB::table('points')->insert([
-                        [
+            [
                 'latitude' => 51.5074,
                 'longitude' => 0.1278,
                 'type' => 'zone_delimiter',
