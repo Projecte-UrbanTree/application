@@ -1,17 +1,15 @@
 @import 'tailwindcss';
 @source "../views";
 
-@layer tailwind-base, primereact, tailwind-utilities;
-
-/* IMPORTANT: In "styled" mode you must add the PrimeReact Theme here. Do NOT include in "unstyled" mode */
 @import 'primereact/resources/themes/lara-light-blue/theme.css'
   layer(primereact);
 
-@layer tailwind-base {
-  @tailwind base;
+body {
+  background-image: url('@resources/images/background.svg');
+  position: relative;
 }
 
-@layer tailwind-utilities {
-  @tailwind components;
-  @tailwind utilities;
+#app {
+  min-height: 100vh;
+  background-color: rgba(249, 250, 251, 0.85);
 }
