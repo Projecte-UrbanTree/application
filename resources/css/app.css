@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source "../views";
 
 @import 'primereact/resources/themes/lara-light-blue/theme.css'
   layer(primereact);

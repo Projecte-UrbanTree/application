@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +12,7 @@ class WorkOrderBlockZoneSeeder extends Seeder
      */
     public function run(): void
     {
-         DB::table('work_order_block_zones')->insert([
+        DB::table('work_order_block_zones')->insert([
             [
                 'zone_id' => 1,
                 'work_order_block_id' => 1,

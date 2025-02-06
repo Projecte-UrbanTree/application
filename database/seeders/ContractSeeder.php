@@ -38,6 +38,6 @@ class ContractSeeder extends Seeder
                 'invoice_paid' => 300.00,
             ],
         ]);
-       
+
     }
 }
