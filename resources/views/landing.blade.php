@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Tree 5.0</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://kit.fontawesome.com/f03c46a869.js" crossorigin="anonymous"></script>
   @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-50">
@@ -19,7 +18,7 @@
     <div class="max-w-6xl mx-auto text-center">
       <h2 class="text-3xl font-bold mb-6">Planes que crecen contigo</h2>
       <p class="text-gray-600 mb-12 max-w-2xl mx-auto">Adaptamos nuestra solución a las necesidades de tu organización para una gestión eficiente de espacios verdes.</p>
-      
+
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Basic Plan -->
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
@@ -101,7 +100,7 @@
   </section>
   <section class="container mx-auto py-16 px-4">
     <h2 class="text-3xl font-bold text-center mb-12">Funcionalidades Principales</h2>
-    
+
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
         <div class="w-12 h-12 bg-green-600 text-white text-xl rounded-lg mb-4 flex items-center justify-center">
@@ -184,7 +183,7 @@
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-xl p-8">
       <h2 class="text-3xl font-bold text-center mb-6">¿Listo para optimizar tu gestión?</h2>
       <p class="text-center text-gray-600 mb-8">Solicita una demostración personalizada</p>
-      
+
       @if($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
           <ul class="list-disc pl-5">
@@ -213,7 +212,7 @@
           <label class="block text-gray-700 font-semibold mb-2">Nombre completo</label>
           <input type="text" name="name" required class="w-full p-3 border rounded-lg focus:ring-2 ring-green-500 outline-none">
         </div>
-        
+
         <div class="grid md:grid-cols-2 gap-6">
           <div>
             <label class="block text-gray-700 font-semibold mb-2">Correo electrónico</label>
