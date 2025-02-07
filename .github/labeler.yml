@@ -8,11 +8,17 @@ area/models:
 
 area/providers:
   - changed-files:
-      - any-glob-to-any-file: app/Providers/**
+      - any-glob-to-any-file:
+          - app/Providers/**
+          - bootstrap/providers.php
 
 area/database:
   - changed-files:
       - any-glob-to-any-file: database/**
+
+area/i18n:
+  - changed-files:
+      - any-glob-to-any-file: lang/**
 
 area/docker:
   - changed-files:
