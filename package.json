@@ -29,7 +29,7 @@
         "vite": "^6.0.11"
     },
     "dependencies": {
-        "@tailwindcss/vite": "^4.0.3",
+        "@tailwindcss/vite": "^4.0.6",
         "primereact": "^10.9.2",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
