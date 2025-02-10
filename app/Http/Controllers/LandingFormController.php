@@ -19,7 +19,7 @@ class LandingFormController extends Controller
         // Guardar los datos en la base de datos
         LandingForm::create([
             'email' => $request->email,
-            'subject' => $request->subject ?? 'Probar aplicación web',
+            'subject' => $request->subject,
             'message' => $request->message,
         ]);
 
