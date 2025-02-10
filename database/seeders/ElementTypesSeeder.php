@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ElementTypesSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class ElementTypesSeeder extends Seeder
      */
     public function run(): void
     {
-        DB:table('element_types')->insert([
+        DB::table('element_types')->insert([
             [
                 'name' => 'Element 1',
                 'requires_tree_type' => true,

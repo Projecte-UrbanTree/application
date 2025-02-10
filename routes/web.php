@@ -1,10 +1,8 @@
 <?php
 
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingFormController;
-
-// Aumentar el tiempo máximo de ejecución a 60 segundos
-ini_set('max_execution_time', 60);
 
 Route::get('/landing',function(){
     return view('landing');

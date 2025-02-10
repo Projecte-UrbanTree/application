@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ContractSeeder extends Seeder
 {
@@ -38,6 +38,6 @@ class ContractSeeder extends Seeder
                 'invoice_paid' => 300.00,
             ],
         ]);
-       
+
     }
 }
