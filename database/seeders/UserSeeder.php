@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'name' => 'Gemma',
-                'username' => 'Palanca',
+                'surname' => 'Palanca',
                 'email' => 'admin@urbantree.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678A',
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Worker',
-                'username' => '1 Demo',
+                'surname' => '1 Demo',
                 'email' => 'worker1@urbantree.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678B',
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Worker',
-                'username' => '2 Demo',
+                'surname' => '2 Demo',
                 'email' => 'worker2@urbantree.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678C',
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Customer',
-                'username' => 'Demo',
+                'surname' => 'Demo',
                 'email' => 'customer@urbantree.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678D',
