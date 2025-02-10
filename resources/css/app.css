@@ -5,11 +5,17 @@
   layer(primereact);
 
 body {
-  background-image: url('@resources/images/background.svg');
-  position: relative;
+  font-family: 'Poppins', sans-serif;
 }
 
 #app {
   min-height: 100vh;
   background-color: rgba(249, 250, 251, 0.85);
+}
+
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+.transition-transform {
+  transition-property: transform;
 }

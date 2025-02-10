@@ -4,21 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UrbanTree 5.0</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    @vite('resources/css/app.css')
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        /* Habilitar transformaciones y transiciones */
-        .hover\:scale-105:hover {
-            transform: scale(1.05);
-        }
-        .transition-transform {
-            transition-property: transform;
-        }
-
-    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Header -->
@@ -34,8 +21,8 @@
     <!-- Main Content -->
     <main class="">
         <!-- Hero Section -->
-        <section class="relative py-20 bg-gradient-to-b from-green-500 to-gray-50">
-            <div class="max-w-screen-lg mx-auto flex flex-col md:flex-row items-center justify-between">
+        <section class="relative py-20 bg-gradient-to-b from-green-500 to-gray-50"> <!-- Añadido pt-12 para móviles -->
+            <div class="max-w-screen-lg mx-auto flex flex-col md:flex-row items-center justify-between mt-20">
                 <div class="text-center md:text-left ml-5 md:w-1/2">
                     <h2 class="text-4xl font-bold text-white mb-4">UrbanTree 5.0</h2>
                     <p class="text-lg text-green-100 mb-8 leading-snug">UrbanTree 5.0 ofrece herramientas innovadoras para monitorear y optimizar el mantenimiento de parques y jardines, mejorando la calidad de vida en las ciudades.</p>                    
@@ -76,11 +63,6 @@
                     <p class="text-gray-700">Genera informes personalizados para tomar decisiones informadas.</p>
                 </div>
             </div>
-        </section>
-
-        <!-- About Section -->
-        <section class="max-w-screen-lg mx-auto px-6 py-16">
-            <img src="{{ asset('images/Banner.png') }}" alt="">
         </section>
         <!-- Pricing Section -->
         <section class="max-w-screen-lg mx-auto px-6 py-16">
