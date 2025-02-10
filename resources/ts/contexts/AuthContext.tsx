@@ -20,7 +20,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Example check
     const token = localStorage.getItem('auth-token');
     if (token) {
       setIsAuthenticated(true);
