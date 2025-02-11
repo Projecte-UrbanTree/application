@@ -1,3 +1,5 @@
+import axiosClient from '@/api/axiosClient';
+
 import {
   createContext,
   useContext,
@@ -26,26 +28,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('auth-token');
-    if (token) {
-      setIsAuthenticated(true);
-    }
+    const fetchUser = async () => {
+      const token = localStorage.getItem('auth-token');
+      if (token) {
+        setIsAuthenticated(true);
+        try {
+          const response = await axiosClient.get('/user');
+          console.log(response.data);
+        } catch (error) {
+          console.error('Error fetching user:', error);
+        }
+      }
+    };
+
     setIsLoading(false);
+    fetchUser(); // debug, remove after react skeleton is implemented completely
   }, []);
 
   return (
     <AuthContext.Provider
       value={{ isAuthenticated, signIn, signOut, isLoading }}>
-      {isAuthenticated ? (
-        <div className="absolute top-2 right-2 hidden">
-          Authenticated
-          <button
-            onClick={signOut}
-            className="px-4 py-2 rounded bg-red-500 text-white ml-2 cursor-pointer">
-            Logout
-          </button>
-        </div>
-      ) : null}
       {children}
     </AuthContext.Provider>
   );

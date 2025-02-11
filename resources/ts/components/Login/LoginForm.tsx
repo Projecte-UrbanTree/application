@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import axiosClient from '@/api/axiosClient';
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -11,8 +11,18 @@ const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    console.log('Handle submit');
-    login('dummy-token');
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.post('/login', {
+        email,
+        password,
+      });
+
+      login(response.data.token);
+    } catch (error) {
+      setError('Credenciales incorrectas');
+    }
   };
 
   return (
