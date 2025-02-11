@@ -7,7 +7,7 @@ import AdminLayout from '@/layouts/AdminLayout';
 import AuthLayout from '@/layouts/AuthLayout';
 
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
-import UnauthenticatedRoute from '@/middlewares/UnauthenticatedRoute.tsx';
+import UnauthenticatedRoute from '@/middlewares/UnauthenticatedRoute';
 
 export default function AppRoutes() {
   return (

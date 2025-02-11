@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from 'react-router';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function AdminProtectedRoute() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuthContext();
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
