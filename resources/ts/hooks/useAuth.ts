@@ -2,23 +2,23 @@ import { useEffect } from 'react';
 import { useAuth as useAuthContext } from '../contexts/AuthContext';
 
 export function useAuth() {
-	const { isAuthenticated, login: contextLogin, logout: contextLogout } = useAuthContext();
+	const { isAuthenticated, signIn, signOut } = useAuthContext();
 
 	useEffect(() => {
 		const token = localStorage.getItem('auth-token');
 		if (token && !isAuthenticated) {
-			contextLogin();
+			signIn();
 		}
-	}, [isAuthenticated, contextLogin]);
+	}, [isAuthenticated, signIn]);
 
-	const login = () => {
+	const login = (token: string) => {
 		localStorage.setItem('auth-token', 'dummy-token');
-		contextLogin();
+		signIn();
 	};
 
 	const logout = () => {
 		localStorage.removeItem('auth-token');
-		contextLogout();
+		signOut();
 	};
 
 	return { isAuthenticated, login, logout };
