@@ -24,7 +24,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = () => setIsAuthenticated(true);
   const signOut = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('auth-token');
   };
 
   useEffect(() => {
