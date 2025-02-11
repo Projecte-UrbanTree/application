@@ -19,7 +19,7 @@ const LoginForm = () => {
         password,
       });
 
-      login(response.data.token);
+      login(response.data.accessToken);
     } catch (error) {
       setError('Credenciales incorrectas');
     }

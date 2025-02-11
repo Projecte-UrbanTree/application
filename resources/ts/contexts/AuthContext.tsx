@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(true);
         try {
           const response = await axiosClient.get('/user');
-          console.log(response.data);
+          console.log('User:', response.data);
         } catch (error) {
           console.error('Error fetching user:', error);
         }

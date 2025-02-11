@@ -12,7 +12,7 @@ export function useAuth() {
 	}, [isAuthenticated, signIn]);
 
 	const login = (token: string) => {
-		localStorage.setItem('auth-token', 'dummy-token');
+		localStorage.setItem('auth-token', token);
 		signIn();
 	};
 
