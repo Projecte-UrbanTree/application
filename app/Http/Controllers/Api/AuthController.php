@@ -23,7 +23,6 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        // Create and return token without setting session
         $token = $user->createToken('accessToken')->plainTextToken;
 
         return response()->json(['success' => true, 'accessToken' => $token]);
