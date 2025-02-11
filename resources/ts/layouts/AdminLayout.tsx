@@ -23,6 +23,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   successMessage,
   errorMessage,
 }) => {
+  document.title = title
+    ? `${title} - ${import.meta.env.VITE_APP_NAME}`
+    : import.meta.env.VITE_APP_NAME;
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [contract, setContract] = useState(currentContract);
   const navigate = useNavigate();
