@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
-const Form = () => {
+const LoginForm = () => {
   const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    login();
-    navigate('/admin/dashboard'); // Redirect after login
-  };
 
   const [email, setEmail] = useState('customer@urbantree.com');
   const [password, setPassword] = useState('demopass');
@@ -17,32 +11,8 @@ const Form = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    const data = {
-      email,
-      password,
-      remember_me: rememberMe,
-    };
-
-    try {
-      const response = await fetch('/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.error || 'Login failed');
-      } else {
-        // Handle successful login, e.g., redirect or show a success message
-      }
-    } catch (error) {
-      setError('An error occurred');
-    }
+    console.log('Handle submit');
+    login('dummy-token');
   };
 
   return (
@@ -56,7 +26,7 @@ const Form = () => {
         </div>
       )}
 
-      <div onSubmit={handleLogin} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
             htmlFor="email"
@@ -110,16 +80,15 @@ const Form = () => {
         </div>
 
         <div>
-          <button
+          <input
+            value="Iniciar sesión"
             type="submit"
             className="w-full bg-blue-500 hover:bg-primaryDark text-white font-medium py-2 px-4 rounded"
-            onClick={handleLogin}>
-            Iniciar sesión
-          </button>
+          />
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
-export default Form;
+export default LoginForm;
