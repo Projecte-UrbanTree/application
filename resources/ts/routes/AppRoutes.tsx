@@ -9,7 +9,14 @@ import AuthLayout from '@/layouts/AuthLayout';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
 import UnauthenticatedRoute from '@/middlewares/UnauthenticatedRoute';
 
+import { useAuth } from '@/hooks/useAuth';
+import Preloader from '@/components/Preloader';
+
 export default function AppRoutes() {
+  const { isLoading } = useAuth();
+  if (isLoading) {
+    return <Preloader />;
+  }
   return (
     <Router>
       <Routes>
@@ -30,9 +37,8 @@ export default function AppRoutes() {
             element={
               <AdminLayout
                 title="Dashboard"
-                contracts={[]}
-                currentContract={'Testing'}
-                currentPath="">
+                contracts={[{ id: '1', name: 'Tortosa' }]}
+                currentContract={'1'}>
                 <AdminDashboard />
               </AdminLayout>
             }
