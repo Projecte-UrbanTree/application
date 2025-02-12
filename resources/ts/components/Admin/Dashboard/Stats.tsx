@@ -18,12 +18,12 @@ export function Stats() {
     {
       key: 'elements',
       icon: 'tabler:box',
-      count: 75,
+      count: 3000,
     },
     {
       key: 'workOrders',
       icon: 'tabler:tool',
-      count: 30,
+      count: 129,
     },
   ];
 
@@ -39,7 +39,7 @@ export function Stats() {
           <h2 className="text-lg font-medium text-gray-700">
             {t(`admin.pages.dashboard.stats.widgets.${item.key}`)}
           </h2>
-          <p className="mt-3 text-3xl font-semibold text-gray-900">
+          <p className="mt-3 text-3xl font-semibold text-gray-700">
             {item.count}
           </p>
         </div>

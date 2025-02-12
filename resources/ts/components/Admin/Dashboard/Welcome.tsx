@@ -9,11 +9,11 @@ export function Welcome() {
   return (
     <div className="bg-gray-50 rounded p-6 mb-8 border border-gray-300">
       <div className="flex items-center space-x-4">
-        <span className="text-4xl text-gray-800">
+        <span className="text-4xl">
           <Icon icon="tabler:trees" color="#8BCC63" />
         </span>
         <div>
-          <h1 className="text-2xl font-semibold text-gray-800">
+          <h1 className="text-2xl font-semibold text-gray-700">
             {t('admin.pages.dashboard.welcome.greeting', {
               name: user?.name,
               surname: user?.surname,
