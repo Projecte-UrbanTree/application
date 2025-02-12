@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('dni')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('role'); // 0: customer, 1: worker, 2: admin
+            $table->string('role')->default('customer');
             $table->rememberToken();
             $table->timestamps();
         });
