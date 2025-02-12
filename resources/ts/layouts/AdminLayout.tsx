@@ -10,6 +10,7 @@ import { Icon } from '@iconify/react';
 
 import logo from '@images/logo.png';
 import LangSelector from '@/components/LangSelector';
+import { useI18n } from '@/hooks/useI18n';
 
 interface AdminLayoutProps {
   title: string;
@@ -38,6 +39,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
   const toastRef = React.useRef<Toast>(null);
+  const { t } = useI18n();
 
   const handleContractChange = (e: DropdownChangeEvent): void => {
     setContract(e.target.value);
@@ -85,12 +87,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               href="#"
               className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-2">
               <Icon inline={true} width="24px" icon="tabler:adjustments-cog" />{' '}
-              Gestión
+              {t('admin.menu.management')}
             </a>
             <a
               href="#"
               className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-2">
-              <Icon width="24px" icon="tabler:map-cog" /> Inventario
+              <Icon width="24px" icon="tabler:map-cog" />{' '}
+              {t('admin.menu.inventory')}
             </a>
           </div>
 
@@ -164,47 +167,56 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Contratos
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.contracts')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Órdenes de trabajo
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.workOrders')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Tipos de elemento
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.elementTypes')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Especies
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.species')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Tipos de tarea
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.taskTypes')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Recursos
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.resources')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Tipos de recursos
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.resourceTypes')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Usuarios
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.users')}
           </a>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:question-mark" /> Estadísticas
+            <Icon width="22px" icon="tabler:question-mark" />{' '}
+            {t('admin.submenu.stats')}
           </a>
         </div>
       </div>
