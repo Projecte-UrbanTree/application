@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
 import { Avatar } from 'primereact/avatar';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
 
 import { Icon } from '@iconify/react';
 
@@ -17,8 +17,6 @@ interface AdminLayoutProps {
   children: React.ReactNode;
   contracts: { id: string; name: string }[];
   currentContract: string;
-  successMessage?: string;
-  errorMessage?: string;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
@@ -26,19 +24,18 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   children,
   contracts,
   currentContract,
-  successMessage,
-  errorMessage,
 }) => {
   document.title = title
     ? `${title} - ${import.meta.env.VITE_APP_NAME}`
     : import.meta.env.VITE_APP_NAME;
+
+  const location = useLocation();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [contract, setContract] = useState(currentContract);
   const { user, logout } = useAuth();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
-  const toastRef = React.useRef<Toast>(null);
   const { t } = useI18n();
 
   const handleContractChange = (e: DropdownChangeEvent): void => {
@@ -89,13 +86,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           <div className="hidden md:flex space-x-6">
             <a
               href="#"
-              className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-2">
+              className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname !== '/admin/inventory' ? 'bg-gray-200' : ''}`}>
               <Icon inline={true} width="24px" icon="tabler:adjustments-cog" />{' '}
               {t('admin.menu.management')}
             </a>
             <a
               href="#"
-              className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-2">
+              className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname === '/admin/inventory' ? 'bg-gray-200' : ''}`}>
               <Icon width="24px" icon="tabler:map-cog" />{' '}
               {t('admin.menu.inventory')}
             </a>
