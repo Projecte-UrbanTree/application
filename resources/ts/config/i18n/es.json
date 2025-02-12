@@ -50,5 +50,8 @@
                 }
             }
         }
+    },
+    "general": {
+        "allContracts": "Todos los contratos"
     }
 }

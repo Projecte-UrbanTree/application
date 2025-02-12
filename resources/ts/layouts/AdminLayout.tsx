@@ -110,9 +110,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               options={contracts}
               onChange={handleContractChange}
               optionLabel="name"
-              optionValue="id">
-              <option value="-1">Todos los contratos</option>
-            </Dropdown>
+              optionValue="id"
+            />
             <LangSelector />
 
             <div className="relative">
