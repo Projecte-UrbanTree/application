@@ -1,7 +1,7 @@
-import { useToastContext } from "@/contexts/ToastContext";
+import { useToastContext } from '@/contexts/ToastContext';
 
 export function useToast() {
-    const { showToast } = useToastContext();
+  const { showToast } = useToastContext();
 
-    return { showToast };
+  return { showToast };
 }
