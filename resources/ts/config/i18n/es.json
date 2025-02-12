@@ -1,0 +1,16 @@
+{
+    "public": {
+        "login": {
+            "form": {
+                "labelEmail": "Correo electrónico",
+                "labelPassword": "Contraseña",
+                "placeholderEmail": "tucorreo@ejemplo.com",
+                "rememberMe": "Recuérdame",
+                "btnLogin": "Iniciar sesión",
+                "msgError": "Credenciales incorrectas",
+                "titleSuccess": "Éxito",
+                "msgSuccess": "Inicio de sesión correcto"
+            }
+        }
+    }
+}

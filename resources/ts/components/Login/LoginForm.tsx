@@ -1,9 +1,20 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import axiosClient from '@/api/axiosClient';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
+import { Checkbox } from 'primereact/checkbox';
+import { Button } from 'primereact/button';
+import { Message } from 'primereact/message';
+import { useI18n } from '@/hooks/useI18n';
+
+import { useToast } from '@/hooks/useToast';
 
 const LoginForm = () => {
+  const { showToast } = useToast();
   const { login } = useAuth();
+  const { t } = useI18n();
 
   const [email, setEmail] = useState('customer@urbantree.com');
   const [password, setPassword] = useState('demopass');
@@ -18,84 +29,67 @@ const LoginForm = () => {
         email,
         password,
       });
-
-      login(response.data.accessToken);
+      showToast(
+        'success',
+        t('public.login.form.titleSuccess'),
+        t('public.login.form.msgSuccess'),
+      );
+      login(response.data.accessToken, response.data.userData);
     } catch (error) {
-      setError('Credenciales incorrectas');
+      setError(t('public.login.form.msgError'));
     }
   };
 
   return (
-    <div>
-      {error && (
-        <div
-          className="bg-red-600 text-white px-4 py-3 rounded mb-6"
-          role="alert">
-          <strong className="font-semibold">Error: </strong>
-          <span>{error}</span>
-        </div>
-      )}
+    <div className="p-4 w-full">
+      {error && <Message severity="error" text={error} className="w-full" />}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-800">
-            Correo electrónico
+          <label htmlFor="email" className="block text-sm font-medium">
+            {t('public.login.form.labelEmail')}
           </label>
-          <input
-            type="email"
+          <InputText
             id="email"
-            name="email"
-            required
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+            className="w-full"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="tucorreo@ejemplo.com"
+            placeholder={t('public.login.form.placeholderEmail')}
+            required
           />
         </div>
 
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-800">
-            Contraseña
+          <label htmlFor="password" className="block text-sm font-medium">
+            {t('public.login.form.labelPassword')}
           </label>
-          <input
-            type="password"
+          <Password
             id="password"
-            name="password"
-            required
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
+            className="w-full mt-1 p-password"
+            inputStyle={{ width: '100%' }}
+            feedback={false}
+            required
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <input
-              id="remember_me"
-              name="remember_me"
-              type="checkbox"
-              className="h-4 w-4 text-primary focus:ring-primary-500 border-gray-300 rounded"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-            />
-            <label htmlFor="remember_me" className="ml-2 text-sm text-gray-900">
-              Recuérdame
-            </label>
-          </div>
+        <div className="flex items-center">
+          <Checkbox
+            inputId="remember_me"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.checked ?? false)}
+          />
+          <label htmlFor="remember_me" className="ml-2 text-sm">
+            {t('public.login.form.rememberMe')}
+          </label>
         </div>
 
-        <div>
-          <input
-            value="Iniciar sesión"
-            type="submit"
-            className="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded cursor-pointer"
-          />
-        </div>
+        <Button
+          label={t('public.login.form.btnLogin')}
+          type="submit"
+          className="w-full"
+        />
       </form>
     </div>
   );

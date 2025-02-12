@@ -1,0 +1,16 @@
+{
+    "public": {
+        "login": {
+            "form": {
+                "labelEmail": "Email address",
+                "labelPassword": "Password",
+                "placeholderEmail": "youremail@example.com",
+                "rememberMe": "Remember me",
+                "btnLogin": "Log in",
+                "msgError": "Incorrect credentials",
+                "titleSuccess": "Success",
+                "msgSuccess": "Logged in successfully"
+            }
+        }
+    }
+}
