@@ -79,7 +79,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           </a>
 
           <div className="block md:hidden">
-            <Button icon="pi pi-bars" onClick={() => setMenuOpen(!menuOpen)} />
+            <Button
+              onClick={() => setMenuOpen(!menuOpen)}
+              color="text-gray-800">
+              <Icon width="24px" icon="tabler:menu" color="#ffffff" />
+            </Button>
           </div>
 
           <div className="hidden md:flex space-x-6">
