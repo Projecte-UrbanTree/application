@@ -1,3 +1,4 @@
+@source "../views";
 @import 'tailwindcss';
 @import 'primereact/resources/themes/tailwind-light/theme.css';
 
