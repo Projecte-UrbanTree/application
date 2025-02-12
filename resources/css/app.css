@@ -1,15 +1,27 @@
 @import 'tailwindcss';
-@source "../views";
-
-@import 'primereact/resources/themes/lara-light-blue/theme.css'
-  layer(primereact);
+@import 'primereact/resources/themes/tailwind-light/theme.css';
 
 body {
-  background-image: url('@resources/images/background.svg');
+  background-image: url('@images/background.svg');
   position: relative;
 }
 
 #app {
   min-height: 100vh;
-  background-color: rgba(249, 250, 251, 0.85);
+  background-color: rgba(249, 250, 251, 0.9);
+}
+
+/* Fade animation */
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.fade-animation {
+  animation: fadeInOut 1.5s infinite ease-in-out;
 }
