@@ -14,8 +14,9 @@ export function useI18n() {
 
     const getAvailableLanguages = () => {
         return [
-            { code: 'en', name: 'English', flag: '🇺🇸' },
-            { code: 'es', name: 'Español', flag: '🇪🇸' },
+            { code: 'ca', name: 'Català', flag: 'flag:es-ct-4x3' },
+            { code: 'es', name: 'Español', flag: 'flag:es-4x3' },
+            { code: 'en', name: 'English', flag: 'flag:gb-4x3' },
         ]
     }
 

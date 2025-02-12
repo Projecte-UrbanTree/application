@@ -1,0 +1,57 @@
+{
+    "public": {
+        "login": {
+            "form": {
+                "labelEmail": "Correu electrònic",
+                "labelPassword": "Contrasenya",
+                "placeholderEmail": "elteucorreu@exemple.com",
+                "rememberMe": "Recorda'm",
+                "btnLogin": "Inicia sessió",
+                "msgError": "Credencials incorrectes",
+                "titleSuccess": "Èxit",
+                "msgSuccess": "Sessió iniciada correctament"
+            }
+        }
+    },
+    "admin": {
+        "menu": {
+            "management": "Gestió",
+            "inventory": "Inventari"
+        },
+        "submenu": {
+            "contracts": "Contractes",
+            "workOrders": "Ordres de treball",
+            "elementTypes": "Tipus d'element",
+            "species": "Espècies",
+            "taskTypes": "Tipus de tasca",
+            "resources": "Recursos",
+            "resourceTypes": "Tipus de recursos",
+            "users": "Usuaris",
+            "stats": "Estadístiques"
+        },
+        "profileDropdown": {
+            "accountSettings": "Configuració del compte",
+            "license": "Llicència",
+            "logout": "Tanca sessió"
+        },
+        "pages": {
+            "dashboard": {
+                "welcome": {
+                    "greeting": "Benvingut de nou, {{name}} {{surname}}.",
+                    "message": "Et donem la benvinguda al teu tauler. Aquí tens un resum ràpid de les teves dades."
+                },
+                "stats": {
+                    "widgets": {
+                        "users": "Usuaris",
+                        "contracts": "Contractes",
+                        "elements": "Elements",
+                        "workOrders": "Ordres de treball"
+                    }
+                }
+            }
+        }
+    },
+    "general": {
+        "allContracts": "Tots els contractes"
+    }
+}
