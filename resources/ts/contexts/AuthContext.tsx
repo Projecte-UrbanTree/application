@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const response = await axiosClient.get('/user');
           setUser(response.data);
           setIsAuthenticated(true);
-          setTimeout(() => setIsLoading(false), 2000);
+          setTimeout(() => setIsLoading(false), 1000);
         } catch (error) {
           setIsAuthenticated(false);
           localStorage.removeItem('authToken');
