@@ -11,30 +11,33 @@
     <!-- Header -->
     <header class="fixed w-full bg-white shadow-lg border-1 border-gray-200 z-10">
         <div class="max-w-screen-lg mx-auto flex items-center justify-between p-3">
-            <a href="/">
-                <img class="h-12" src="{{ asset('images/logo.png') }}" alt="Urban Tree Logo">
+            <a href="/" class="">
+                <img class="h-12 ml-2" src="{{ asset('images/logo.png') }}" alt="Urban Tree Logo">
             </a>
-            <a href="/" class="inline-block px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-green-200 transition duration-300">Acceso Panel</a>     
+            <a href="/" class="mr-2 inline-block px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-green-200 transition duration-300">Acceso Panel</a>     
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="">
         <!-- Hero Section -->
-        <section class="relative py-20 bg-gradient-to-b from-green-500 to-gray-50"> <!-- Añadido pt-12 para móviles -->
+        <section class="relative py-20 bg-gradient-to-b from-green-500 to-gray-50"> 
             <div class="max-w-screen-lg mx-auto flex flex-col md:flex-row items-center justify-between mt-20">
                 <div class="text-center md:text-left ml-5 md:w-1/2">
                     <h2 class="text-4xl font-bold text-white mb-4">UrbanTree 5.0</h2>
                     <p class="text-lg text-green-100 mb-8 leading-snug">UrbanTree 5.0 ofrece herramientas innovadoras para monitorear y optimizar el mantenimiento de parques y jardines, mejorando la calidad de vida en las ciudades.</p>                    
-                    <form action="{{ route('landingform.store') }}" method="POST" class="max-w-md mx-auto">
+                    <form action="{{ route('landingform.store') }}" method="POST">
                         @csrf 
-                        <div class="mb-4">
-                            <input type="email" name="email" placeholder="Correo electrónico" class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <div class="flex items-center gap-4 mb-4">
+                            <input type="email" name="email" placeholder="Correo electrónico" 
+                                class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <button type="submit" 
+                                class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-white hover:text-green-600 border border-green-600 transition duration-300">
+                                Quiero demo
+                            </button>
                         </div>
-                         <input type="hidden" name="subject" value="Demo">
+                        <input type="hidden" name="subject" value="Demo">
                         <input type="hidden" name="message" value="Quiero probar Demo">
-                        
-                        <button type="submit" class="mt-8 inline-block px-8 py-3 bg-white text-green-600 font-semibold rounded-lg shadow-md hover:bg-green-600 hover:text-white transition duration-300">Quiero demo</button>
                     </form>
                 </div>
                 <div class="mt-8 md:mt-0 md:w-1/2">
@@ -75,7 +78,7 @@
                 <h3 class="text-xl font-bold text-green-600 mb-4">Básico</h3>
                 <p class="text-2xl font-bold text-gray-800 mb-4">$199/mes</p>
                 <ul class="ml-6 list-disc text-left text-gray-700 mb-6">
-                    <li>Monitoreo en tiempo real</li>
+                    <li>Monitoreo cada hora</li>
                     <li>Optimización de recursos</li>
                     <li>Informes básicos</li>
                     <li>Soporte por correo electrónico (48h)</li>
@@ -91,11 +94,10 @@
                     <li>Optimización de recursos</li>
                     <li>Informes detallados</li>
                     <li>Soporte por correo electrónico (24h)</li>
-                    <li>Soporte prioritario</li>
                 </ul>
                 <button onclick="location.href='#form'" class="mt-14 px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-gray-500 transition duration-300">Seleccionar</button>
             </div>
-            <div class="border-2 border-gray-200 bg-white p-6 rounded-xl shadow-lg text-center transition duration-300 hover:scale-105 border-4 border-green-600">
+            <div class="border-2 border-gray-200 bg-white p-6 rounded-xl shadow-lg text-center transition duration-300 hover:scale-105">
                 <h3 class="text-xl font-bold text-green-600 mb-4">Premium</h3>
                 <p class="text-2xl font-bold text-gray-800 mb-4">$999/mes</p>
                 <ul class="ml-6 list-disc text-left text-gray-700 mb-6">
@@ -133,7 +135,18 @@
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white text-center py-6">
-        <p class="text-sm">&copy; 2024-2025 UrbanTree 5.0. Todos los derechos reservados.</p>
+        <div class="max-w-screen-lg mx-auto">
+            <div class="flex flex-col justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm">&copy; 2024-2025 UrbanTree 5.0. Todos los derechos reservados.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300" style="margin: 0 8px;">Política de Privacidad</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300" style="margin: 0 8px;">Términos de Servicio</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300" style="margin: 0 8px;">Contacto</a>
+                </div>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
