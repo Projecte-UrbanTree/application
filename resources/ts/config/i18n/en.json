@@ -29,6 +29,11 @@
             "users": "Users",
             "stats": "Statistics"
         },
+        "profileDropdown": {
+            "accountSettings": "Account Settings",
+            "license": "License",
+            "logout": "Log out"
+        },
         "pages": {
             "dashboard": {
                 "welcome": {

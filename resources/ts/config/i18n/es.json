@@ -29,6 +29,11 @@
             "users": "Usuarios",
             "stats": "Estadísticas"
         },
+        "profileDropdown": {
+            "accountSettings": "Configuración de la cuenta",
+            "license": "Licencia",
+            "logout": "Cerrar sesión"
+        },
         "pages": {
             "dashboard": {
                 "welcome": {

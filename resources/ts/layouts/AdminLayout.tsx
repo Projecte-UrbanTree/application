@@ -127,17 +127,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                   <a
                     href="/admin/account"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer text-sm">
-                    Configuración de la cuenta
+                    {t('admin.profileDropdown.accountSettings')}
                   </a>
                   <a
                     href="/license"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer text-sm">
-                    Licencia
+                    {t('admin.profileDropdown.license')}
                   </a>
                   <a
                     onClick={logout}
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer text-sm">
-                    Cerrar sesión
+                    {t('admin.profileDropdown.logout')}
                   </a>
                 </div>
               )}

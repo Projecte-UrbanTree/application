@@ -7,22 +7,22 @@ export function Stats() {
   const statsData = [
     {
       key: 'users',
-      icon: 'tabler:question-mark',
+      icon: 'tabler:users',
       count: 100,
     },
     {
       key: 'contracts',
-      icon: 'tabler:question-mark',
+      icon: 'tabler:notebook',
       count: 50,
     },
     {
       key: 'elements',
-      icon: 'tabler:question-mark',
+      icon: 'tabler:box',
       count: 75,
     },
     {
       key: 'workOrders',
-      icon: 'tabler:question-mark',
+      icon: 'tabler:tool',
       count: 30,
     },
   ];
