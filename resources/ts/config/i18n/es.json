@@ -12,5 +12,38 @@
                 "msgSuccess": "Inicio de sesión correcto"
             }
         }
+    },
+    "admin": {
+        "menu": {
+            "management": "Gestión",
+            "inventory": "Inventario"
+        },
+        "submenu": {
+            "contracts": "Contratos",
+            "workOrders": "Órdenes de trabajo",
+            "elementTypes": "Tipos de elemento",
+            "species": "Especies",
+            "taskTypes": "Tipos de tarea",
+            "resources": "Recursos",
+            "resourceTypes": "Tipos de recursos",
+            "users": "Usuarios",
+            "stats": "Estadísticas"
+        },
+        "pages": {
+            "dashboard": {
+                "welcome": {
+                    "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
+                    "message": "Te damos la bienvenida a tu tablero. Aquí tienes un resumen rápido de tus datos."
+                },
+                "stats": {
+                    "widgets": {
+                        "users": "Usuarios",
+                        "contracts": "Contratos",
+                        "elements": "Elementos",
+                        "workOrders": "Órdenes de trabajo"
+                    }
+                }
+            }
+        }
     }
 }
