@@ -54,7 +54,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(response.data);
           setIsAuthenticated(true);
           setTimeout(() => setIsLoading(false), 2000);
-          console.log('Authenticated user:', response.data);
         } catch (error) {
           setIsAuthenticated(false);
           localStorage.removeItem('authToken');
