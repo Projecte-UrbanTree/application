@@ -8,11 +8,26 @@ import {
   useEffect,
 } from 'react';
 
+interface User {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  company: string;
+  dni: string;
+  email_verified_at: string;
+  role: string;
+  created_at: string;
+  updated_at: string;
+}
 interface AuthContextType {
+  isLoading: boolean;
   isAuthenticated: boolean;
   signIn: () => void;
   signOut: () => void;
-  isLoading: boolean;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -21,32 +36,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const signIn = () => setIsAuthenticated(true);
+  const signIn = () => {
+    setIsAuthenticated(true);
+  };
   const signOut = () => {
     setIsAuthenticated(false);
   };
 
+  const [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem('auth-token');
+      const token = localStorage.getItem('authToken');
       if (token) {
-        setIsAuthenticated(true);
         try {
           const response = await axiosClient.get('/user');
-          console.log('User:', response.data);
+          setUser(response.data);
+          setIsAuthenticated(true);
+          setTimeout(() => setIsLoading(false), 2000);
         } catch (error) {
-          console.error('Error fetching user:', error);
+          setIsAuthenticated(false);
+          localStorage.removeItem('authToken');
+          setIsLoading(false);
         }
-      }
+      } else setIsLoading(false);
     };
 
-    setIsLoading(false);
     fetchUser(); // debug, remove after react skeleton is implemented completely
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, signIn, signOut, isLoading }}>
+      value={{
+        isLoading,
+        isAuthenticated,
+        signIn,
+        signOut,
+        user,
+        setUser,
+        setIsLoading,
+      }}>
       {children}
     </AuthContext.Provider>
   );

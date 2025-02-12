@@ -1,0 +1,57 @@
+{
+    "public": {
+        "login": {
+            "form": {
+                "labelEmail": "Correo electrónico",
+                "labelPassword": "Contraseña",
+                "placeholderEmail": "tucorreo@ejemplo.com",
+                "rememberMe": "Recuérdame",
+                "btnLogin": "Iniciar sesión",
+                "msgError": "Credenciales incorrectas",
+                "titleSuccess": "Éxito",
+                "msgSuccess": "Inicio de sesión correcto"
+            }
+        }
+    },
+    "admin": {
+        "menu": {
+            "management": "Gestión",
+            "inventory": "Inventario"
+        },
+        "submenu": {
+            "contracts": "Contratos",
+            "workOrders": "Órdenes de trabajo",
+            "elementTypes": "Tipos de elemento",
+            "species": "Especies",
+            "taskTypes": "Tipos de tarea",
+            "resources": "Recursos",
+            "resourceTypes": "Tipos de recursos",
+            "users": "Usuarios",
+            "stats": "Estadísticas"
+        },
+        "profileDropdown": {
+            "accountSettings": "Configuración de la cuenta",
+            "license": "Licencia",
+            "logout": "Cerrar sesión"
+        },
+        "pages": {
+            "dashboard": {
+                "welcome": {
+                    "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
+                    "message": "Te damos la bienvenida a tu tablero. Aquí tienes un resumen rápido de tus datos."
+                },
+                "stats": {
+                    "widgets": {
+                        "users": "Usuarios",
+                        "contracts": "Contratos",
+                        "elements": "Elementos",
+                        "workOrders": "Órdenes de trabajo"
+                    }
+                }
+            }
+        }
+    },
+    "general": {
+        "allContracts": "Todos los contratos"
+    }
+}

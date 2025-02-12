@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 
-import logo from '@resources/images/logo.png';
+import { Avatar } from 'primereact/avatar';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
+import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
+
+import { Icon } from '@iconify/react';
+
+import logo from '@images/logo.png';
+import LangSelector from '@/components/LangSelector';
+import { useI18n } from '@/hooks/useI18n';
 
 interface AdminLayoutProps {
   title: string;
   children: React.ReactNode;
   contracts: { id: string; name: string }[];
   currentContract: string;
-  currentPath: string;
   successMessage?: string;
   errorMessage?: string;
 }
@@ -19,7 +26,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   children,
   contracts,
   currentContract,
-  currentPath,
   successMessage,
   errorMessage,
 }) => {
@@ -29,100 +35,115 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [contract, setContract] = useState(currentContract);
-  const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
+  const profileRef = React.useRef<HTMLDivElement>(null);
+  const toastRef = React.useRef<Toast>(null);
+  const { t } = useI18n();
 
-  const handleContractChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setContract(event.target.value);
+  const handleContractChange = (e: DropdownChangeEvent): void => {
+    setContract(e.target.value);
   };
 
   const handleProfileClick = () => {
-    const profileDropdown = document.getElementById('profile-dropdown');
-    if (profileDropdown) {
-      profileDropdown.classList.toggle('hidden');
-    }
+    setProfileDropdownVisible(!profileDropdownVisible);
   };
 
-  const closeMobileMenu = () => {
-    setMenuOpen(false);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target as Node)
+      ) {
+        setProfileDropdownVisible(false);
+      }
+    };
+
+    if (profileDropdownVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [profileDropdownVisible]);
 
   return (
     <div>
-      <header className="border-b bg-white shadow-md">
-        <nav className="flex items-center justify-between px-4 py-4 max-w-7xl mx-auto">
-          <a href="/" className="hidden sm:block">
-            <img className="w-36 md:w-48" src={logo} alt="Logo" />
+      <header className="border-b border-gray-200 bg-white shadow-md">
+        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+          <a href="#" className="hidden sm:block">
+            <img className="w-36 md:w-50" src={logo} alt="Logo" />
           </a>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="block md:hidden text-gray-700 focus:outline-none">
-            <i className="fas fa-bars text-xl"></i>
-          </button>
+          <div className="block md:hidden">
+            <Button
+              onClick={() => setMenuOpen(!menuOpen)}
+              color="text-gray-800">
+              <Icon width="24px" icon="tabler:menu" color="#ffffff" />
+            </Button>
+          </div>
 
           <div className="hidden md:flex space-x-6">
             <a
-              href="/admin"
-              className={`text-sm text-gray-700 hover:text-gray-600 active:text-gray-700 ${
-                currentPath.includes('/admin') &&
-                !currentPath.includes('/admin/inventory')
-                  ? 'font-semibold'
-                  : ''
-              }`}>
-              <i className="fas fa-toolbox"></i> Gestión
+              href="#"
+              className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-2">
+              <Icon inline={true} width="24px" icon="tabler:adjustments-cog" />{' '}
+              {t('admin.menu.management')}
             </a>
             <a
-              href="/admin/inventory"
-              className={`text-sm text-gray-700 hover:text-gray-600 active:text-gray-700 ${
-                currentPath === '/admin/inventory' ? 'font-semibold' : ''
-              }`}>
-              <i className="fas fa-box-archive"></i> Inventario
+              href="#"
+              className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-2">
+              <Icon width="24px" icon="tabler:map-cog" />{' '}
+              {t('admin.menu.inventory')}
             </a>
           </div>
 
           <div className="flex items-center gap-4">
-            <select
+            <Dropdown
               id="contractBtn"
               name="contractBtn"
-              className="bg-white text-sm rounded-md p-2 text-right focus:outline-none"
+              className="w-48"
               value={contract}
-              onChange={handleContractChange}>
-              {contracts.map((contract) => (
-                <option key={contract.id} value={contract.id}>
-                  {contract.name}
-                </option>
-              ))}
-              <option value="-1">Todos los contratos</option>
-            </select>
+              options={contracts}
+              onChange={handleContractChange}
+              optionLabel="name"
+              optionValue="id"
+            />
+            <LangSelector />
 
             <div className="relative">
-              <div
-                className="h-10 w-10 flex items-center justify-center bg-gray-300 text-gray-700 font-semibold text-lg rounded-full cursor-pointer"
-                onClick={handleProfileClick}>
-                IS
-              </div>
-              <div
-                id="profile-dropdown"
-                className="hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md ring-1 ring-black/5 z-10">
-                <a
-                  href="/admin/account"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Configuración de la cuenta
-                </a>
-                <a
-                  href="/license"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Licencia
-                </a>
-                <a
-                  onClick={logout}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Cerrar sesión
-                </a>
-              </div>
+              <Avatar
+                onClick={handleProfileClick}
+                label={(user?.name?.[0] ?? '') + (user?.surname?.[0] ?? '')}
+                size="large"
+                shape="circle"
+                className="cursor-pointer"
+                style={{ color: '#fff', backgroundColor: '#8ccc63' }}
+              />
+              {profileDropdownVisible && (
+                <div
+                  className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md ring-1 ring-black/5 z-10"
+                  ref={profileRef}>
+                  <a
+                    href="/admin/account"
+                    className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    {t('admin.profileDropdown.accountSettings')}
+                  </a>
+                  <a
+                    href="/license"
+                    className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    {t('admin.profileDropdown.license')}
+                  </a>
+                  <a
+                    onClick={logout}
+                    className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    {t('admin.profileDropdown.logout')}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </nav>
@@ -131,13 +152,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           className={`${menuOpen ? '' : 'hidden'} md:hidden px-4 py-4 bg-gray-100`}>
           <a
             href="/admin"
-            className="block py-2 text-sm text-gray-700 hover:bg-gray-200 rounded">
-            <i className="fas fa-toolbox"></i> Gestión
+            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
+            <Icon width="24px" icon="tabler:adjustments-cog" />{' '}
+            {t('admin.menu.management')}
           </a>
           <a
             href="/admin/inventory"
-            className="block py-2 text-sm text-gray-700 hover:bg-gray-200 rounded">
-            <i className="fas fa-box-archive"></i> Inventario
+            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
+            <Icon width="24px" icon="tabler:map-cog" />{' '}
+            {t('admin.menu.inventory')}
           </a>
         </div>
       </header>
@@ -147,79 +170,62 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-4 py-4 bg-gray-100 shadow-md">
         <div className="submenu text-center flex items-center space-x-6 mx-auto">
           <a
-            href="/admin/contracts"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-file-contract block"></i> Contratos
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:file-description" />{' '}
+            {t('admin.submenu.contracts')}
           </a>
           <a
-            href="/admin/work-orders"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-briefcase block"></i> Órdenes de trabajo
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:tools" />{' '}
+            {t('admin.submenu.workOrders')}
           </a>
           <a
-            href="/admin/element-types"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-cube block"></i> Tipos de elemento
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:box" />{' '}
+            {t('admin.submenu.elementTypes')}
           </a>
           <a
-            href="/admin/tree-types"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-tree block"></i> Especies
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:tree" />{' '}
+            {t('admin.submenu.species')}
           </a>
           <a
-            href="/admin/task-types"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-tasks block"></i> Tipos de tarea
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:list-check" />{' '}
+            {t('admin.submenu.taskTypes')}
           </a>
           <a
-            href="/admin/resources"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-box block"></i> Recursos
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:package" />{' '}
+            {t('admin.submenu.resources')}
           </a>
           <a
-            href="/admin/resource-types"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-solid fa-layer-group block"></i> Tipos de
-            recursos
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:package-export" />{' '}
+            {t('admin.submenu.resourceTypes')}
           </a>
           <a
-            href="/admin/users"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-users block"></i> Usuarios
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:users" /> {t('admin.submenu.users')}
           </a>
           <a
-            href="/admin/stats"
-            className="text-sm text-gray-700 hover:text-gray-600 active:text-gray-700">
-            <i className="fas fa-chart-bar block"></i> Estadísticas
+            href="#"
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+            <Icon width="22px" icon="tabler:chart-bar" />{' '}
+            {t('admin.submenu.stats')}
           </a>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 pt-8 pb-16">
-        {successMessage && (
-          <div
-            className="bg-green-400 text-white px-4 py-3 rounded mb-6 transform transition-all duration-500 ease-in-out"
-            role="alert">
-            <span className="inline-block mr-2">
-              <i className="fas fa-check-circle w-5 h-5 text-white"></i>
-            </span>
-            {successMessage}
-          </div>
-        )}
-
-        {errorMessage && (
-          <div
-            className="bg-red-400 text-white px-4 py-3 rounded mb-6 transform transition-all duration-500 ease-in-out"
-            role="alert">
-            <span className="inline-block mr-2">
-              <i className="fas fa-exclamation-circle w-5 h-5 text-white"></i>
-            </span>
-            <strong className="font-bold">Error:</strong> {errorMessage}
-          </div>
-        )}
-
-        {children}
-      </main>
+      <main className="max-w-7xl mx-auto px-6 pt-8 pb-16">{children}</main>
     </div>
   );
 };

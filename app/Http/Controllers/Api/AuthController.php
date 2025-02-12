@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('accessToken')->plainTextToken;
 
-        return response()->json(['success' => true, 'accessToken' => $token]);
+        return response()->json(['success' => true, 'accessToken' => $token, 'userData' => $user]);
     }
 
     public function logout(Request $request): JSONResponse

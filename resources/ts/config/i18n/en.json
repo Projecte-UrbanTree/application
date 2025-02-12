@@ -1,0 +1,57 @@
+{
+    "public": {
+        "login": {
+            "form": {
+                "labelEmail": "Email address",
+                "labelPassword": "Password",
+                "placeholderEmail": "youremail@example.com",
+                "rememberMe": "Remember me",
+                "btnLogin": "Log in",
+                "msgError": "Incorrect credentials",
+                "titleSuccess": "Success",
+                "msgSuccess": "Logged in successfully"
+            }
+        }
+    },
+    "admin": {
+        "menu": {
+            "management": "Management",
+            "inventory": "Inventory"
+        },
+        "submenu": {
+            "contracts": "Contracts",
+            "workOrders": "Work Orders",
+            "elementTypes": "Element Types",
+            "species": "Species",
+            "taskTypes": "Task Types",
+            "resources": "Resources",
+            "resourceTypes": "Resource Types",
+            "users": "Users",
+            "stats": "Statistics"
+        },
+        "profileDropdown": {
+            "accountSettings": "Account Settings",
+            "license": "License",
+            "logout": "Log out"
+        },
+        "pages": {
+            "dashboard": {
+                "welcome": {
+                    "greeting": "Welcome back, {{name}} {{surname}}.",
+                    "message": "We are glad to see you again. Here is a quick overview of your data."
+                },
+                "stats": {
+                    "widgets": {
+                        "users": "Users",
+                        "contracts": "Contracts",
+                        "elements": "Elements",
+                        "workOrders": "Work Orders"
+                    }
+                }
+            }
+        }
+    },
+    "general": {
+        "allContracts": "All contracts"
+    }
+}
