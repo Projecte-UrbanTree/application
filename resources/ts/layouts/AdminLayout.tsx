@@ -89,13 +89,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           <div className="hidden md:flex space-x-6">
             <a
               href="#"
-              className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-2">
+              className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-2">
               <Icon inline={true} width="24px" icon="tabler:adjustments-cog" />{' '}
               {t('admin.menu.management')}
             </a>
             <a
               href="#"
-              className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-2">
+              className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-2">
               <Icon width="24px" icon="tabler:map-cog" />{' '}
               {t('admin.menu.inventory')}
             </a>
@@ -171,54 +171,54 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         <div className="submenu text-center flex items-center space-x-6 mx-auto">
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:file-description" />{' '}
             {t('admin.submenu.contracts')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:tools" />{' '}
             {t('admin.submenu.workOrders')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:box" />{' '}
             {t('admin.submenu.elementTypes')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:tree" />{' '}
             {t('admin.submenu.species')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:list-check" />{' '}
             {t('admin.submenu.taskTypes')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:package" />{' '}
             {t('admin.submenu.resources')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:package-export" />{' '}
             {t('admin.submenu.resourceTypes')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:users" /> {t('admin.submenu.users')}
           </a>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-600 active:text-gray-700 flex items-center gap-1 text-sm">
+            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
             <Icon width="22px" icon="tabler:chart-bar" />{' '}
             {t('admin.submenu.stats')}
           </a>
