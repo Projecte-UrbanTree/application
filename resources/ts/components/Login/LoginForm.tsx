@@ -16,7 +16,7 @@ const LoginForm = () => {
   const { login } = useAuth();
   const { t } = useI18n();
 
-  const [email, setEmail] = useState('customer@urbantree.com');
+  const [email, setEmail] = useState('admin@urbantree.com');
   const [password, setPassword] = useState('demopass');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
