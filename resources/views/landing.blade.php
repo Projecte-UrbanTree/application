@@ -10,17 +10,26 @@
 </head>
 
 <body class="bg-gray-50">
-  <div class="flex justify-end space-x-4">
-    <a href="{{ route('set-language', ['lang' => 'es']) }}" class="text-gray-700">🇪🇸 Español</a>
-    <a href="{{ route('set-language', ['lang' => 'en']) }}" class="text-gray-700">🇬🇧 English</a>
-    <a href="{{ route('set-language', ['lang' => 'ca']) }}" class="text-gray-700">🇨🇦 Català</a>
-    <a href="{{ url('/login') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-all">
-      {{ __('landing.login') }}
-    </a>
-  </div>
+  <nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50 py-3">
+    <div class="container mx-auto flex justify-between items-center px-4">
+      <div class="text-lg font-bold text-green-700">Urban Tree 5.0</div>
+      <div class="flex space-x-4">
+        <a href="{{ route('set-language', ['lang' => 'es']) }}" class="text-gray-700 hover:text-green-600">🇪🇸 Español</a>
+        <a href="{{ route('set-language', ['lang' => 'en']) }}" class="text-gray-700 hover:text-green-600">🇬🇧 English</a>
+        <a href="{{ route('set-language', ['lang' => 'ca']) }}" class="text-gray-700 hover:text-green-600">🇨🇦 Català</a>
+        <a href="{{ url('/login') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-all">
+          {{ __('landing.login') }}
+        </a>
+      </div>
+    </div>
+  </nav>
 
-  <div class="w-full">
-    <img src="{{ asset('images/banner.jpg') }}" alt="Banner" class="w-full h-auto">
+  <div class="w-full mt-16">
+      @php
+          $lang = app()->getLocale(); // Obtener idioma actual
+          $banner = ($lang === 'es') ? 'bannerEs.jpg' : (($lang === 'ca') ? 'bannerCa.jpg' : 'bannerEn.jpg');
+      @endphp
+      <img src="{{ asset('images/' . $banner) }}" alt="Banner" class="w-full h-[400px] object-cover">
   </div>
   <div class="container mx-auto text-center my-8">
     <h2 class="text-2xl font-bold mb-4">{{ __('landing.video') }}</h2>

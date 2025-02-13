@@ -18,7 +18,7 @@ class LandingController extends Controller
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|regex:/^(?=(?:\D*\d){9}\D*$)[0-9\s]+$/',
-            'message' => 'required|string',
+            'message' => 'required|string|min:10|max:255',
         ]);
 
         $landingForm = new LandingForm;
