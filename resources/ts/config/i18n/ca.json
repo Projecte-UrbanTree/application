@@ -12,12 +12,13 @@
                 "msgSuccess": "Sessió iniciada correctament"
             }
         },
-        "errors": {
+        "error": {
             "title": "Error {{errorCode}}",
             "description": "S'ha produït un error inesperat. Si us plau, torna-ho a provar més tard.",
-            "404Title": "Error 404",
-            "404Description": "Pàgina no trobada",
-            "btnReturn": "Torna enrere"
+            "btnReturn": "Torna enrere",
+            "errorMessages": {
+                "404": "Pàgina no trobada"
+            }
         }
     },
     "admin": {

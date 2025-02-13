@@ -22,8 +22,7 @@ export default function AppRoutes() {
         element: (
           <Error
             errorCode="404"
-            errorTitle={t('public.errors.404Title')}
-            errorMessage={t('public.errors.404Description')}
+            errorMessage={t('public.error.errorMessages.404')}
           />
         ),
       },

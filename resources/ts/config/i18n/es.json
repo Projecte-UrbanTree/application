@@ -12,12 +12,13 @@
                 "msgSuccess": "Inicio de sesión correcto"
             }
         },
-        "errors": {
+        "error": {
             "title": "Error {{errorCode}}",
             "description": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
-            "404Title": "Error 404",
-            "404Description": "Página no encontrada",
-            "btnReturn": "Volver"
+            "btnReturn": "Volver",
+            "errorMessages": {
+                "404": "Página no encontrada"
+            }
         }
     },
     "admin": {
