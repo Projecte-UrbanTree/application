@@ -12,7 +12,7 @@ class WorkOrder extends Model
         'contract_id',
     ];
 
-    public function contracts()
+    public function contract()
     {
         return $this->belongsTo(Contract::class, 'contract_id');
     }
@@ -27,8 +27,8 @@ class WorkOrder extends Model
         return $this->hasMany(WorkOrderBlock::class, 'work_order_id');
     }
 
-    public function workOrdersUsers()
+    public function users(): BelongsToMany
     {
-        return $this->hasMany(WorkOrderUser::class, 'work_order_id');
+        return $this->belongsToMany(User::class, 'work_order_users', 'work_order_id', 'user_id')->withTimestamps();
     }
 }

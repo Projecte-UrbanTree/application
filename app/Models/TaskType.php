@@ -11,8 +11,8 @@ class TaskType extends Model
         'description',
     ];
 
-    public function workOrderBlockTasks()
+    public function workOrderBlock()
     {
-        return $this->hasMany(WorkOrderBlockTask::class, 'task_type_id');
+        return $this->belongsToMany(WorkOrderBlock::class, 'work_order_block_task_types', 'task_type_id', 'work_order_block_id')->withTimestamps();
     }
 }

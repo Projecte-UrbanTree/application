@@ -14,13 +14,13 @@ class WorkReport extends Model
         'report_incidents',
     ];
 
-    public function workOrders()
+    public function workOrder()
     {
         return $this->belongsTo(WorkOrder::class, 'work_order_id');
     }
 
-    public function workReportResources()
+    public function resources()
     {
-        return $this->hasMany(WorkReportResource::class, 'work_report_id');
+        return $this->belongsToMany(Resource::class, 'work_report_resources', 'work_report_id', 'resource_id')->withTimestamps();
     }
 }

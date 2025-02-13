@@ -16,13 +16,13 @@ class WorkOrderBlock extends Model
         return $this->belongsTo(WorkOrder::class, 'work_order_id');
     }
 
-    public function workOrderBlockTasks()
+    public function taskTypes(): BelongsToMany
     {
-        return $this->hasMany(WorkOrderBlockTask::class, 'work_order_block_id');
+        return $this->belongsToMany(Task::class, 'work_order_block_tasks', 'work_order_block_id', 'task_id')->withTimestamps();
     }
 
-    public function workOrderBlockZones()
+    public function zones()
     {
-        return $this->hasMany(WorkOrderBlockTask::class, 'work_order_block_id');
+        return $this->belongsToMany(Zone::class, 'work_order_block_zones', 'work_order_block_id', 'zone_id')->withTimestamps();
     }
 }
