@@ -20,7 +20,7 @@ class LanguageMiddleware
         if (Cookie::has('locale')) {
             app()->setLocale(Cookie::get('locale'));
         } else {
-            app()->setLocale('es');
+            app()->setLocale('ca');
         }
         return $next($request);
     }
