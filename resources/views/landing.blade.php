@@ -32,7 +32,7 @@
       <img src="{{ asset('images/' . $banner) }}" alt="Banner" class="w-full h-[400px] object-cover">
   </div>
   <div class="container mx-auto text-center my-8">
-    <h2 class="text-2xl font-bold mb-4">{{ __('landing.video') }}</h2>
+    <h2 class="text-3xl font-bold mb-6">{{ __('landing.video') }}</h2>
     <div class="w-full max-w-3xl mx-auto">
       <iframe class="w-full h-64 md:h-96 rounded-lg shadow-lg"
         src="https://www.youtube.com/embed/yed3-_zggHo"
