@@ -20,7 +20,8 @@
                     "description": "La pàgina que busques no existeix."
                 }
             },
-            "btnReturn": "Torna enrere"
+            "btnReturn": "Torna enrere",
+            "unknown": "Desconegut"
         }
     },
     "admin": {

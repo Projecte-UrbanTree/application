@@ -4,12 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'primereact/button';
 
 interface ErrorProps {
-  errorTitle?: string;
   errorCode?: string;
-  errorMessage?: string;
 }
 
-export default function Error({ errorCode = 'N/A', errorMessage }: ErrorProps) {
+export default function Error({ errorCode = 'Unknown' }: ErrorProps) {
   const { t } = useTranslation();
 
   return (
@@ -18,7 +16,8 @@ export default function Error({ errorCode = 'N/A', errorMessage }: ErrorProps) {
         {t('public.error.title', { errorCode })}
       </h1>
       <p className="mt-4 text-xl text-gray-700">
-        {errorMessage || t('public.errors.description')}
+        {t(`public.error.messages.${errorCode}.description`) ||
+          t('public.error.description')}
       </p>
       <div className="mt-4">
         <Button

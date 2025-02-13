@@ -19,12 +19,7 @@ export default function AppRoutes() {
       ...routesConfig,
       {
         path: '*',
-        element: (
-          <Error
-            errorCode="404"
-            errorMessage={t('public.error.messages.404.description')}
-          />
-        ),
+        element: <Error errorCode="404" />,
       },
     ]);
   }
