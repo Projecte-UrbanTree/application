@@ -14,11 +14,9 @@
         },
         "error": {
             "title": "Error {{errorCode}}",
-            "description": "S'ha produït un error inesperat. Si us plau, torna-ho a provar més tard.",
-            "messages": {
-                "404": {
-                    "description": "La pàgina que busques no existeix."
-                }
+            "descriptions": {
+                "unexpected": "Ha ocorregut un error inesperat. Si us plau, torna a intentar-ho més tard.",
+                "404": "La pàgina que busques no existeix."
             },
             "btnReturn": "Torna enrere"
         }

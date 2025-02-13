@@ -14,11 +14,9 @@
         },
         "error": {
             "title": "Error {{errorCode}}",
-            "description": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
-            "messages": {
-                "404": {
-                    "description": "La página que buscas no existe."
-                }
+            "descriptions": {
+                "unexpected": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
+                "404": "La página que buscas no existe."
             },
             "btnReturn": "Volver atrás"
         }
