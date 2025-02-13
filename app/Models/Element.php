@@ -13,17 +13,17 @@ class Element extends Model
         'point_id',
     ];
 
-    public function points()
+    public function point()
     {
         return $this->belongsTo(Point::class, 'point_id');
     }
 
-    public function elementTypes()
+    public function elementType()
     {
         return $this->belongsTo(ElementType::class, 'element_type_id');
     }
 
-    public function treeTypes()
+    public function treeType()
     {
         return $this->belongsTo(TreeType::class, 'tree_type_id');
     }

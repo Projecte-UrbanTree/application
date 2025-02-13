@@ -11,7 +11,7 @@ class WorkOrderBlockZone extends Model
         'work_order_block_id',
     ];
 
-    public function workOrderBlocks()
+    public function workOrderBlock()
     {
         return $this->belongsTo(WorkOrderBlock::class, 'work_order_block_id');
     }

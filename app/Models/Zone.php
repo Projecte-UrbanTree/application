@@ -13,18 +13,18 @@ class Zone extends Model
         'contract_id',
     ];
 
-    public function contracts()
+    public function contract()
     {
         return $this->belongsTo(Contract::class, 'contract_id');
     }
 
-    public function workOrderBlockZones()
+    public function workOrderBlocks()
     {
-        return $this->hasMany(WorkOrderBlockZone::class, 'zone_id');
+        return $this->belongsToMany(WorkOrderBlock::class, 'work_order_block_zones', 'zone_id', 'work_order_block_id')->withTimestamps();
     }
 
     public function points()
     {
-        return $this->hasMany(Point::class, 'point_id');
+        return $this->hasMany(Point::class, 'zone_id');
     }
 }

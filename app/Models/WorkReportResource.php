@@ -11,12 +11,12 @@ class WorkReportResource extends Model
         'resource_id',
     ];
 
-    public function workReports()
+    public function workReport()
     {
         return $this->belongsTo(WorkReport::class, 'work_report_id');
     }
 
-    public function resources()
+    public function resource()
     {
         return $this->belongsTo(Resource::class, 'resource_id');
     }
