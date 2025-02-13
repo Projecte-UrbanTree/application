@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
 import { Avatar } from 'primereact/avatar';
@@ -37,6 +37,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
   const { t } = useI18n();
+
+  const contractsWithAll = [
+    ...contracts,
+    { id: 'all', name: t('general.allContracts') },
+  ];
 
   const handleContractChange = (e: DropdownChangeEvent): void => {
     setContract(e.target.value);
@@ -84,12 +89,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
 
           <div className="hidden md:flex space-x-6">
-            <a
-              href="#"
+            <Link
+              to="/admin/dashboard"
               className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname !== '/admin/inventory' ? 'bg-gray-200' : ''}`}>
               <Icon inline={true} width="24px" icon="tabler:adjustments-cog" />{' '}
               {t('admin.menu.management')}
-            </a>
+            </Link>
             <a
               href="#"
               className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname === '/admin/inventory' ? 'bg-gray-200' : ''}`}>
@@ -104,7 +109,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               name="contractBtn"
               className="w-48"
               value={contract}
-              options={contracts}
+              options={contractsWithAll}
               onChange={handleContractChange}
               optionLabel="name"
               optionValue="id"
@@ -208,11 +213,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             <Icon width="22px" icon="tabler:package-export" />{' '}
             {t('admin.submenu.resourceTypes')}
           </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
+          <Link
+            to="/admin/users"
+            className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm ${location.pathname === '/admin/users' ? 'bg-gray-200' : ''}`}>
             <Icon width="22px" icon="tabler:users" /> {t('admin.submenu.users')}
-          </a>
+          </Link>
           <a
             href="#"
             className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
