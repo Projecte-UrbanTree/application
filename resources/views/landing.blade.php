@@ -200,6 +200,21 @@
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-xl p-8">
       <h2 class="text-3xl font-bold text-center mb-6">{{ __('landing.contact_title') }}</h2>
       <p class="text-center text-gray-600 mb-8">{{ __('landing.contact_description') }}</p>
+      @if(session('success'))
+      <div class="bg-green-500 text-white p-3 rounded-md mb-6">
+        {{ session('success') }}
+      </div>
+      @endif
+
+      @if ($errors->any())
+      <div class="bg-red-500 text-white p-3 rounded-md mb-6">
+        <ul class="list-disc list-inside">
+          @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
       <form id="contact" action="{{ route('form') }}" method="POST" class="space-y-6">
         @csrf
         <div>
