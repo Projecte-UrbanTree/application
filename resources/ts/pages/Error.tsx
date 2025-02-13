@@ -1,6 +1,7 @@
-import React from 'react';
 import logo from '@images/logo.png';
 import { useTranslation } from 'react-i18next';
+
+import { Button } from 'primereact/button';
 
 interface ErrorProps {
   errorTitle?: string;
@@ -23,11 +24,12 @@ export default function Error({
       <p className="mt-4 text-xl text-gray-700">
         {errorMessage || t('public.errors.description')}
       </p>
-      <button
-        onClick={() => window.history.back()}
-        className="mt-8 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer">
-        {t('public.errors.btnReturn')}
-      </button>
+      <div className="mt-4">
+        <Button
+          label={t('public.errors.btnReturn')}
+          onClick={() => history.back()}
+        />
+      </div>
     </div>
   );
 }
