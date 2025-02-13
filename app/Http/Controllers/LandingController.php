@@ -9,7 +9,7 @@ class LandingController extends Controller
 {
     public function index()
     {
-        return view('landing');
+        return view('/Landings/landing11');
     }
 
     public function store(Request $request)
@@ -18,7 +18,7 @@ class LandingController extends Controller
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|regex:/^(?=(?:\D*\d){9}\D*$)[0-9\s]+$/',
-            'message' => 'required|string',
+            'message' => 'required|string|min:10|max:255',
         ]);
 
         $landingForm = new LandingForm;
@@ -28,6 +28,6 @@ class LandingController extends Controller
         $landingForm->message = $request->message;
         $landingForm->save();
 
-        return redirect('/')->with('success', 'Mensaje enviado correctamente.');
+        return redirect('/landing11')->with('success', 'Mensaje enviado correctamente.');
     }
 }
