@@ -11,6 +11,13 @@
                 "titleSuccess": "Success",
                 "msgSuccess": "Logged in successfully"
             }
+        },
+        "errors": {
+            "title": "Error {{errorCode}}",
+            "description": "An unexpected error occurred. Please try again later.",
+            "404Title": "Error 404",
+            "404Description": "Page Not Found",
+            "btnReturn": "Return Back"
         }
     },
     "admin": {

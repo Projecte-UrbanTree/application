@@ -11,6 +11,13 @@
                 "titleSuccess": "Èxit",
                 "msgSuccess": "Sessió iniciada correctament"
             }
+        },
+        "errors": {
+            "title": "Error {{errorCode}}",
+            "description": "S'ha produït un error inesperat. Si us plau, torna-ho a provar més tard.",
+            "404Title": "Error 404",
+            "404Description": "Pàgina no trobada",
+            "btnReturn": "Torna enrere"
         }
     },
     "admin": {

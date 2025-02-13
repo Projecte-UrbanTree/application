@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
-import Error404 from '@/pages/Error';
+import Error from '@/pages/Error';
+import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -13,7 +14,20 @@ export default function AppRoutes() {
   }
 
   function RoutesComponent() {
-    return useRoutes([...routesConfig, { path: '*', element: <Error404 /> }]);
+    const { t } = useTranslation();
+    return useRoutes([
+      ...routesConfig,
+      {
+        path: '*',
+        element: (
+          <Error
+            errorCode="404"
+            errorTitle={t('public.errors.404Title')}
+            errorMessage={t('public.errors.404Description')}
+          />
+        ),
+      },
+    ]);
   }
 
   return (
