@@ -11,6 +11,14 @@
                 "titleSuccess": "Éxito",
                 "msgSuccess": "Inicio de sesión correcto"
             }
+        },
+        "error": {
+            "title": "Error {{errorCode}}",
+            "descriptions": {
+                "unexpected": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
+                "404": "La página que buscas no existe."
+            },
+            "btnReturn": "Volver atrás"
         }
     },
     "admin": {
