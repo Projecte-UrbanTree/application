@@ -3,8 +3,6 @@
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LangController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cookie;
 
 Route::get('/', [LandingController::class, 'index'])->name('home');
 
