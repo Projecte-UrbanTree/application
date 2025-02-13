@@ -15,10 +15,12 @@
         "error": {
             "title": "Error {{errorCode}}",
             "description": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
-            "btnReturn": "Volver",
-            "errorMessages": {
-                "404": "La página que buscas no existe."
-            }
+            "messages": {
+                "404": {
+                    "description": "La página que buscas no existe."
+                }
+            },
+            "btnReturn": "Volver atrás"
         }
     },
     "admin": {

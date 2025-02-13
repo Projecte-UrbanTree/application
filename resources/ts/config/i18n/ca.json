@@ -15,10 +15,12 @@
         "error": {
             "title": "Error {{errorCode}}",
             "description": "S'ha produït un error inesperat. Si us plau, torna-ho a provar més tard.",
-            "btnReturn": "Torna enrere",
-            "errorMessages": {
-                "404": "La pàgina que busques no existeix."
-            }
+            "messages": {
+                "404": {
+                    "description": "La pàgina que busques no existeix."
+                }
+            },
+            "btnReturn": "Torna enrere"
         }
     },
     "admin": {
