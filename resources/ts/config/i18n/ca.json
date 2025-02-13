@@ -17,7 +17,7 @@
             "description": "S'ha produït un error inesperat. Si us plau, torna-ho a provar més tard.",
             "btnReturn": "Torna enrere",
             "errorMessages": {
-                "404": "Pàgina no trobada"
+                "404": "La pàgina que busques no existeix."
             }
         }
     },

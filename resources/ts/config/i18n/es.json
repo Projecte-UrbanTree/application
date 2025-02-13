@@ -17,7 +17,7 @@
             "description": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
             "btnReturn": "Volver",
             "errorMessages": {
-                "404": "Página no encontrada"
+                "404": "La página que buscas no existe."
             }
         }
     },
