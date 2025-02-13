@@ -20,8 +20,7 @@
                     "description": "The page you are looking for does not exist."
                 }
             },
-            "btnReturn": "Go back",
-            "unknown": "Unknown"
+            "btnReturn": "Go back"
         }
     },
     "admin": {
