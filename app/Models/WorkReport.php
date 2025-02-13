@@ -10,6 +10,8 @@ class WorkReport extends Model
         'observation',
         'spent_fuel',
         'work_order_id',
+        'report_status',
+        'report_incidents',
     ];
 
     public function workOrders()

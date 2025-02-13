@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('observation')->nullable();
             $table->float('spent_fuel');
+            $table->integer('report_status')->default(0);
+            $table->text('report_incidents')->nullable();
             $table->foreignId('work_order_id')->constrained('work_orders')->onDelete('cascade');
             $table->timestamps();
         });

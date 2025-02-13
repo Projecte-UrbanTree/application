@@ -10,9 +10,8 @@ class Contract extends Model
         'name',
         'start_date',
         'end_date',
-        'invoice_proposed',
-        'invoice_agreed',
-        'invoice_paid',
+        'final_price',
+        'status',
     ];
 
     public function sensors()

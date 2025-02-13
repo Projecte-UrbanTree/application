@@ -16,9 +16,8 @@ return new class extends Migration
             $table->string('name', 255);
             $table->date('start_date');
             $table->date('end_date')->nullable();
-            $table->decimal('invoice_proposed', 10, 2)->nullable();
-            $table->decimal('invoice_agreed', 10, 2)->nullable();
-            $table->decimal('invoice_paid', 10, 2)->nullable();
+            $table->decimal('final_price', 10, 2)->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
