@@ -16,8 +16,8 @@ class LanguageMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Cookie::has('locale')) {
-            app()->setLocale(Cookie::get('locale'));
+        if (Cookie::has('lang')) {
+            app()->setLocale(Cookie::get('lang'));
         } else {
             app()->setLocale('ca');
         }
