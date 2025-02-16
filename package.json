@@ -38,6 +38,7 @@
         "react-i18next": "^15.4.0",
         "react-router-dom": "^7.1.5",
         "tailwindcss": "^4.0.3",
-        "typescript": "^5.7.3"
+        "typescript": "^5.7.3",
+        "typescript-cookie": "^1.0.6"
     }
 }
