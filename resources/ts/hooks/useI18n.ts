@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { setCookie } from 'typescript-cookie';
 
 export function useI18n() {
   const { t, i18n } = useTranslation();
 
   const setLanguage = (lang: string) => {
-    localStorage.setItem('lang', lang);
+    setCookie('lang', lang);
     i18n.changeLanguage(lang);
   };
 

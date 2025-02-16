@@ -4,6 +4,8 @@ import ca from './i18n/ca.json';
 import es from './i18n/es.json';
 import en from './i18n/en.json';
 
+import { getCookie, setCookie } from 'typescript-cookie';
+
 const resources = {
   ca: {
     translation: ca,
@@ -16,15 +18,15 @@ const resources = {
   },
 };
 
-if (localStorage.getItem('lang') === null) {
-  localStorage.setItem('lang', 'ca');
+if(!getCookie('lang')) {
+  setCookie('lang', 'ca');
 }
 
-const localStorageLang = localStorage.getItem('lang') || 'ca';
+const lang = getCookie('lang');
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: localStorageLang,
+  lng: lang,
   interpolation: {
     escapeValue: true,
   },
