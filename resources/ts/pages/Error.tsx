@@ -5,15 +5,17 @@ import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
 
 interface ErrorProps {
+  icon?: string;
   errorCode?: string;
 }
 
-export default function Error({ errorCode }: ErrorProps) {
+export default function Error({ icon, errorCode }: ErrorProps) {
   const { t } = useTranslation();
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h1 className="text-6xl font-bold text-gray-600">
+      {icon && <Icon icon={icon} className="text-9xl text-indigo-600" />}
+      <h1 className="text-6xl font-bold text-gray-800">
         {t('public.error.title', { errorCode })}
       </h1>
       <p className="mt-4 text-xl text-gray-700">

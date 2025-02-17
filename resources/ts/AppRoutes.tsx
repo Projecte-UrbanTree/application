@@ -19,7 +19,7 @@ export default function AppRoutes() {
       ...routesConfig,
       {
         path: '*',
-        element: <Error errorCode="404" />,
+        element: <Error icon="tabler:face-id-error" errorCode="404" />,
       },
     ]);
   }
