@@ -31,6 +31,7 @@
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.0.6",
+        "chart.js": "^4.4.7",
         "i18next": "^24.2.2",
         "primereact": "^10.9.2",
         "react": "^19.0.0",

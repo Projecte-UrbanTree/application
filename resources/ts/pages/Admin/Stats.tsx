@@ -1,35 +1,50 @@
-import { useState, useEffect } from 'react';
-
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-
-import { Icon } from '@iconify/react';
-
-import axiosClient from '@/api/axiosClient';
+import { Chart } from 'primereact/chart';
 
 export default function Users() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState([]);
+  const chartData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'Demo Data',
+        backgroundColor: '#42A5F5',
+        borderColor: '#1E88E5',
+        data: [65, 59, 80, 81, 56, 55, 40],
+      },
+    ],
+  };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axiosClient.get('/admin/users');
-        setUsers(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+  const options = {
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
   return (
     <>
-      <div className="bg-white rounded p-6 mb-8 border border-gray-300">
-        stats
+      <div className="grid grid-cols-2 gap-4">
+        <div
+          className="bg-white rounded p-6 mb-8 border border-gray-300"
+          style={{ height: '200px' }}>
+          <Chart type="bar" data={chartData} options={options} />
+        </div>
+        <div
+          className="bg-white rounded p-6 mb-8 border border-gray-300"
+          style={{ height: '200px' }}>
+          <Chart type="bar" data={chartData} options={options} />
+        </div>
+        <div
+          className="bg-white rounded p-6 mb-8 border border-gray-300"
+          style={{ height: '200px' }}>
+          <Chart type="bar" data={chartData} options={options} />
+        </div>
+        <div
+          className="bg-white rounded p-6 mb-8 border border-gray-300"
+          style={{ height: '200px' }}>
+          <Chart type="bar" data={chartData} options={options} />
+        </div>
       </div>
     </>
   );
