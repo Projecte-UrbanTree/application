@@ -7,12 +7,8 @@ use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
-    public function index()
-    {
-        return view('/Landings/landing11');
-    }
 
-    public function store(Request $request)
+    public function landing11(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:150',
