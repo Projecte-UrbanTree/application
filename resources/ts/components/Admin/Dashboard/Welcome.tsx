@@ -7,7 +7,7 @@ export function Welcome() {
   const { user } = useAuth();
   const { t } = useI18n();
   return (
-    <div className="bg-gray-50 rounded p-6 mb-8 border border-gray-300">
+    <div className="bg-white rounded p-6 mb-8 border border-gray-300">
       <div className="flex items-center space-x-4">
         <span className="text-4xl">
           <Icon icon="tabler:trees" color="#8BCC63" />

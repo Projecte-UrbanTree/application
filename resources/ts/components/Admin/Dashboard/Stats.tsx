@@ -55,7 +55,7 @@ export function Stats() {
         {Array.from({ length: 4 }).map((_, index) => (
           <div
             key={index}
-            className="bg-gray-50 rounded p-6 flex flex-col items-center text-center border border-gray-300">
+            className="bg-white rounded p-6 flex flex-col items-center text-center border border-gray-300">
             <div className="bg-gray-200 w-16 h-16 rounded-full mb-4 animate-pulse"></div>
             <h2 className="text-lg font-medium text-gray-700">Loading...</h2>
             <p className="mt-3 text-3xl font-semibold text-gray-700">0</p>
@@ -69,7 +69,7 @@ export function Stats() {
       {statsData.map((item) => (
         <div
           key={item.key}
-          className="bg-gray-50 rounded p-6 flex flex-col items-center text-center border border-gray-300">
+          className="bg-white rounded p-6 flex flex-col items-center text-center border border-gray-300">
           <div className="text-gray-700 mb-4">
             <Icon icon={item.icon} width="48px" />
           </div>
