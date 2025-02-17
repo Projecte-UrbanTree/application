@@ -25,7 +25,7 @@ export default function LangSelector({ className }: LangSelectorProps) {
           height="20"
           style={{ marginRight: '8px' }}
         />
-        <span>{option.label}</span>
+        <span>{option.value.toUpperCase()}</span>
       </div>
     );
   };
@@ -41,7 +41,7 @@ export default function LangSelector({ className }: LangSelectorProps) {
       onChange={(e) => setLanguage(e.value)}
       itemTemplate={languageTemplate}
       valueTemplate={selectedLanguageTemplate}
-      className={className ? className : 'w-40'}
+      className={className ? className : 'w-32'}
     />
   );
 }
