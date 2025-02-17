@@ -224,7 +224,7 @@
         </ul>
       </div>
       @endif
-      <form id="contact" action="{{ route('landing.form') }}" method="POST" class="space-y-6">
+      <form id="contact" action="{{ route('landing.form', ['number' => 11]) }}" method="POST" class="space-y-6">
         @csrf
         <div>
           <label class="block text-gray-700 font-semibold mb-2">{{ __('landings/landing11.name') }}</label>
