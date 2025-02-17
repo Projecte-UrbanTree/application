@@ -75,30 +75,29 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   return (
     <div>
       <header className="border-b border-gray-200 bg-white shadow-md">
-        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+        <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
-            <a href="#" className="hidden sm:block">
-              <img className="w-36 md:w-52" src={logo} alt="Logo" />
+            <div className="block md:hidden">
+              <Button
+                onClick={() => setMenuOpen(!menuOpen)}
+                color="text-gray-800">
+                <Icon width="24px" icon="tabler:menu" color="#ffffff" />
+              </Button>
+            </div>
+            <a href="/" className="">
+              <img className="w-48" src={logo} alt="Logo" />
             </a>
             <div className="hidden md:flex space-x-6">
               <Link
                 to="/admin/manage/dashboard"
                 className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname.includes('/admin/manage') ? 'bg-gray-200 text-indigo-600' : ''}`}>
-                <Icon
-                  inline={true}
-                  width="24px"
-                  icon="tabler:briefcase-filled"
-                />{' '}
+                <Icon inline={true} width="24px" icon="tabler:briefcase" />{' '}
                 {t('admin.menu.management')}
               </Link>
               <Link
                 to="/admin/settings/contracts"
                 className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname.includes('/admin/settings') ? 'bg-gray-200 text-indigo-600' : ''}`}>
-                <Icon
-                  inline={true}
-                  width="24px"
-                  icon="tabler:settings-filled"
-                />{' '}
+                <Icon inline={true} width="24px" icon="tabler:settings" />{' '}
                 {t('admin.menu.settings')}
               </Link>
               <a
@@ -110,26 +109,20 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             </div>
           </div>
 
-          <div className="block md:hidden">
-            <Button
-              onClick={() => setMenuOpen(!menuOpen)}
-              color="text-gray-800">
-              <Icon width="24px" icon="tabler:menu" color="#ffffff" />
-            </Button>
-          </div>
-
           <div className="flex items-center gap-4">
-            <Dropdown
-              id="contractBtn"
-              name="contractBtn"
-              className="w-48"
-              value={contract}
-              options={contractsWithAll}
-              onChange={handleContractChange}
-              optionLabel="name"
-              optionValue="id"
-            />
-            <LangSelector />
+            <div className="hidden md:flex gap-4">
+              <Dropdown
+                id="contractBtn"
+                name="contractBtn"
+                className="w-48"
+                value={contract}
+                options={contractsWithAll}
+                onChange={handleContractChange}
+                optionLabel="name"
+                optionValue="id"
+              />
+              <LangSelector />
+            </div>
 
             <div className="relative">
               <Avatar
@@ -166,7 +159,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </nav>
 
         <div
-          className={`${menuOpen ? '' : 'hidden'} md:hidden px-4 py-4 bg-gray-100`}>
+          className={`${menuOpen ? '' : 'hidden'} md:hidden px-6 py-6 bg-gray-100`}>
           <a
             href="/admin"
             className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
@@ -179,12 +172,24 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             <Icon width="24px" icon="tabler:map-cog" />{' '}
             {t('admin.menu.inventory')}
           </a>
+          <div className="mt-4 flex flex-col gap-4">
+            <Dropdown
+              id="contractBtnMobile"
+              name="contractBtnMobile"
+              value={contract}
+              options={contractsWithAll}
+              onChange={handleContractChange}
+              optionLabel="name"
+              optionValue="id"
+            />
+            <LangSelector className="w-full" />
+          </div>
         </div>
       </header>
 
       <div
         id="submenu"
-        className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 py-4 bg-gray-100 shadow-md">
+        className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-6 md:px-0 py-4 bg-gray-100 shadow-md">
         <div className="submenu text-center flex items-center space-x-6 mx-auto max-w-7xl">
           {location.pathname.includes('/admin/manage') && (
             <>
@@ -192,19 +197,19 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               <Link
                 to="/admin/manage/dashboard"
                 className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/manage/dashboard' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-                <Icon width="22px" icon="tabler:layout-dashboard-filled" />{' '}
+                <Icon width="22px" icon="tabler:layout-dashboard" />{' '}
                 {t('admin.submenu.manage.dashboard')}
               </Link>
               <Link
                 to="/admin/manage/work-orders"
                 className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/manage/work-orders' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-                <Icon width="22px" icon="tabler:clipboard-text-filled" />{' '}
+                <Icon width="22px" icon="tabler:clipboard-text" />{' '}
                 {t('admin.submenu.manage.workOrders')}
               </Link>
               <Link
                 to="/admin/manage/stats"
                 className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/manage/stats' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-                <Icon width="22px" icon="tabler:chart-pie-4-filled" />{' '}
+                <Icon width="22px" icon="tabler:chart-pie-4" />{' '}
                 {t('admin.submenu.manage.stats')}
               </Link>
             </>
