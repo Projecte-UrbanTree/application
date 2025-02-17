@@ -159,17 +159,23 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </nav>
 
         <div
-          className={`${menuOpen ? '' : 'hidden'} md:hidden px-6 py-6 bg-gray-100`}>
+          className={`${menuOpen ? '' : 'hidden'} md:hidden px-8 py-6 bg-gray-100`}>
           <a
-            href="/admin"
+            href="/admin/manage/dashboard"
             className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
-            <Icon width="24px" icon="tabler:adjustments-cog" />{' '}
+            <Icon width="24px" icon="tabler:briefcase" />{' '}
             {t('admin.menu.management')}
+          </a>
+          <a
+            href="/admin/settings/contracts"
+            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
+            <Icon width="24px" icon="tabler:settings" />{' '}
+            {t('admin.menu.settings')}
           </a>
           <a
             href="/admin/inventory"
             className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
-            <Icon width="24px" icon="tabler:map-cog" />{' '}
+            <Icon width="24px" icon="tabler:chart-treemap" />{' '}
             {t('admin.menu.inventory')}
           </a>
           <div className="mt-4 flex flex-col gap-4">
@@ -189,8 +195,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
       <div
         id="submenu"
-        className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-6 md:px-0 py-4 bg-gray-100 shadow-md">
-        <div className="submenu text-center flex items-center mx-auto max-w-7xl">
+        className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-100 shadow-md">
+        <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
           {location.pathname.includes('/admin/manage') && (
             <>
               {/* Manage submenu */}
@@ -264,7 +270,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto pt-8 pb-16">{children}</main>
+      <main className="max-w-7xl mx-auto pt-8 pb-16 px-8">{children}</main>
     </div>
   );
 };
