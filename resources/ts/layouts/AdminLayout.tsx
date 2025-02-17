@@ -190,7 +190,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       <div
         id="submenu"
         className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-6 md:px-0 py-4 bg-gray-100 shadow-md">
-        <div className="submenu text-center flex items-center space-x-6 mx-auto max-w-7xl">
+        <div className="submenu text-center flex items-center mx-auto max-w-7xl">
           {location.pathname.includes('/admin/manage') && (
             <>
               {/* Manage submenu */}
