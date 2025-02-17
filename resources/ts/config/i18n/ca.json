@@ -48,6 +48,12 @@
             "license": "Llicència",
             "logout": "Tanca sessió"
         },
+        "roles": {
+            "admin": "Administrador",
+            "worker": "Treballador",
+            "customer": "Client",
+            "unknown": "Desconegut"
+        },
         "pages": {
             "dashboard": {
                 "title": "Tauler",
@@ -65,28 +71,74 @@
                 }
             },
             "users": {
-                "title": "Usuaris"
+                "title": "Usuaris",
+                "columns": {
+                    "name": "Nom",
+                    "surname": "Cognom",
+                    "email": "Correu electrònic",
+                    "company": "Empresa",
+                    "dni": "DNI",
+                    "role": "Rol"
+                }
             },
             "contracts": {
-                "title": "Contractes"
+                "title": "Contractes",
+                "columns": {
+                    "name": "Nom",
+                    "start_date": "Data d'inici",
+                    "end_date": "Data de finalització",
+                    "invoice_proposed": "Factura proposada",
+                    "invoice_agreed": "Factura acordada",
+                    "invoice_paid": "Factura pagada"
+                }
             },
             "workOrders": {
-                "title": "Ordres de treball"
+                "title": "Ordres de treball",
+                "columns": {
+                    "date": "Data",
+                    "status": "Estat",
+                    "contract_id": "Contracte"
+                }
             },
             "elementTypes": {
-                "title": "Tipus d'element"
+                "title": "Tipus d'element",
+                "columns": {
+                    "name": "Nom",
+                    "requires_tree_type": "Requereix tipus d'arbre",
+                    "description": "Descripció",
+                    "icon": "Icona",
+                    "color": "Color"
+                }
             },
             "treeTypes": {
-                "title": "Tipus d'arbre"
+                "title": "Tipus d'arbre",
+                "columns": {
+                    "family": "Família",
+                    "genus": "Gènere",
+                    "species": "Espècie"
+                }
             },
             "taskTypes": {
-                "title": "Tipus de tasca"
+                "title": "Tipus de tasca",
+                "columns": {
+                    "name": "Nom",
+                    "description": "Descripció"
+                }
             },
             "resources": {
-                "title": "Recursos"
+                "title": "Recursos",
+                "columns": {
+                    "name": "Nom",
+                    "description": "Descripció",
+                    "resource_type_id": "Tipus de recurs"
+                }
             },
             "resourceTypes": {
-                "title": "Tipus de recurs"
+                "title": "Tipus de recurs",
+                "columns": {
+                    "name": "Nom",
+                    "description": "Descripció"
+                }
             },
             "stats": {
                 "title": "Estadístiques"

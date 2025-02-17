@@ -65,32 +65,84 @@
                 "title": "Tablero"
             },
             "users": {
-                "title": "Usuarios"
+                "title": "Usuarios",
+                "columns": {
+                    "name": "Nombre",
+                    "surname": "Apellido",
+                    "email": "Correo electrónico",
+                    "company": "Empresa",
+                    "dni": "DNI",
+                    "role": "Rol"
+                }
             },
             "contracts": {
-                "title": "Contratos"
+                "title": "Contratos",
+                "columns": {
+                    "name": "Nombre",
+                    "start_date": "Fecha de inicio",
+                    "end_date": "Fecha de fin",
+                    "invoice_proposed": "Factura propuesta",
+                    "invoice_agreed": "Factura acordada",
+                    "invoice_paid": "Factura pagada"
+                }
             },
             "workOrders": {
-                "title": "Órdenes de trabajo"
+                "title": "Órdenes de trabajo",
+                "columns": {
+                    "date": "Fecha",
+                    "status": "Estado",
+                    "contract_id": "Contrato"
+                }
             },
             "elementTypes": {
-                "title": "Tipos de elemento"
+                "title": "Tipos de elemento",
+                "columns": {
+                    "name": "Nombre",
+                    "requires_tree_type": "Requiere tipo de árbol",
+                    "description": "Descripción",
+                    "icon": "Ícono",
+                    "color": "Color"
+                }
             },
             "treeTypes": {
-                "title": "Tipos de árbol"
+                "title": "Tipos de árbol",
+                "columns": {
+                    "family": "Familia",
+                    "genus": "Género",
+                    "species": "Especie"
+                }
             },
             "taskTypes": {
-                "title": "Tipos de tarea"
+                "title": "Tipos de tarea",
+                "columns": {
+                    "name": "Nombre",
+                    "description": "Descripción"
+                }
             },
             "resources": {
-                "title": "Recursos"
+                "title": "Recursos",
+                "columns": {
+                    "name": "Nombre",
+                    "description": "Descripción",
+                    "resource_type_id": "Tipo de recurso"
+                }
             },
             "resourceTypes": {
-                "title": "Tipos de recurso"
+                "title": "Tipos de recurso",
+                "columns": {
+                    "name": "Nombre",
+                    "description": "Descripción"
+                }
             },
             "stats": {
                 "title": "Estadísticas"
             }
+        },
+        "roles": {
+            "admin": "Administrador",
+            "worker": "Operario",
+            "customer": "Cliente",
+            "unknown": "Desconocido"
         }
     },
     "general": {

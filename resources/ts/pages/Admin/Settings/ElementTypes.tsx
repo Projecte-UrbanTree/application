@@ -7,10 +7,12 @@ import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
+import { useTranslation } from 'react-i18next';
 
 export default function ElementTypes() {
   const [isLoading, setIsLoading] = useState(true);
   const [elementTypes, setElementTypes] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchElementTypes = async () => {
@@ -30,11 +32,26 @@ export default function ElementTypes() {
     <>
       <div className="bg-white rounded p-6 mb-8 border border-gray-300">
         <DataTable loading={isLoading} value={elementTypes}>
-          <Column field="name" header="Name" />
-          <Column field="requires_tree_type" header="Requires Tree Type" />
-          <Column field="description" header="Description" />
-          <Column field="icon" header="Icon" />
-          <Column field="color" header="Color" />
+          <Column
+            field="name"
+            header={t('admin.pages.elementTypes.columns.name')}
+          />
+          <Column
+            field="requires_tree_type"
+            header={t('admin.pages.elementTypes.columns.requires_tree_type')}
+          />
+          <Column
+            field="description"
+            header={t('admin.pages.elementTypes.columns.description')}
+          />
+          <Column
+            field="icon"
+            header={t('admin.pages.elementTypes.columns.icon')}
+          />
+          <Column
+            field="color"
+            header={t('admin.pages.elementTypes.columns.color')}
+          />
           {/* Actions */}
           <Column
             body={() => (

@@ -8,10 +8,12 @@ import { Badge } from 'primereact/badge';
 import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
+import { useTranslation } from 'react-i18next';
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -31,24 +33,41 @@ export default function Users() {
     <>
       <div className="bg-white rounded p-6 mb-8 border border-gray-300">
         <DataTable loading={isLoading} value={users}>
-          <Column field="name" header="Name" />
-          <Column field="surname" header="Surname" />
-          <Column field="email" header="Email" />
-          <Column field="company" header="Company" />
-          <Column field="dni" header="DNI" />
+          <Column field="name" header={t('admin.pages.users.columns.name')} />
+          <Column
+            field="surname"
+            header={t('admin.pages.users.columns.surname')}
+          />
+          <Column field="email" header={t('admin.pages.users.columns.email')} />
+          <Column
+            field="company"
+            header={t('admin.pages.users.columns.company')}
+          />
+          <Column field="dni" header={t('admin.pages.users.columns.dni')} />
           <Column
             field="role"
-            header="Role"
+            header={t('admin.pages.users.columns.role')}
             body={(rowData: { role: string }) => {
               switch (rowData.role) {
                 case 'admin':
-                  return <Badge severity="danger" value="Admin" />;
+                  return (
+                    <Badge severity="danger" value={t('admin.roles.admin')} />
+                  );
                 case 'worker':
-                  return <Badge severity="success" value="Worker" />;
+                  return (
+                    <Badge severity="success" value={t('admin.roles.worker')} />
+                  );
                 case 'customer':
-                  return <Badge severity="info" value="Customer" />;
+                  return (
+                    <Badge severity="info" value={t('admin.roles.customer')} />
+                  );
                 default:
-                  return <Badge severity="warning" value="Unknown" />;
+                  return (
+                    <Badge
+                      severity="warning"
+                      value={t('admin.roles.unknown')}
+                    />
+                  );
               }
             }}
           />

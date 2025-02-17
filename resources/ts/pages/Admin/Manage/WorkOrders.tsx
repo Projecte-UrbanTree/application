@@ -7,10 +7,12 @@ import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
+import { useTranslation } from 'react-i18next';
 
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
   const [workOrders, setWorkOrders] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchWorkOrders = async () => {
@@ -30,9 +32,18 @@ export default function WorkOrders() {
     <>
       <div className="bg-white rounded p-6 mb-8 border border-gray-300">
         <DataTable loading={isLoading} value={workOrders}>
-          <Column field="date" header="Date" />
-          <Column field="status" header="Status" />
-          <Column field="contract_id" header="Contract ID" />
+          <Column
+            field="date"
+            header={t('admin.pages.workOrders.columns.date')}
+          />
+          <Column
+            field="status"
+            header={t('admin.pages.workOrders.columns.status')}
+          />
+          <Column
+            field="contract_id"
+            header={t('admin.pages.workOrders.columns.contract_id')}
+          />
           {/* Actions */}
           <Column
             body={() => (

@@ -7,10 +7,12 @@ import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
+import { useTranslation } from 'react-i18next';
 
 export default function TreeTypes() {
   const [isLoading, setIsLoading] = useState(true);
   const [treeTypes, setTreeTypes] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchTreeTypes = async () => {
@@ -30,9 +32,18 @@ export default function TreeTypes() {
     <>
       <div className="bg-white rounded p-6 mb-8 border border-gray-300">
         <DataTable loading={isLoading} value={treeTypes}>
-          <Column field="family" header="Family" />
-          <Column field="genus" header="Genus" />
-          <Column field="species" header="Species" />
+          <Column
+            field="family"
+            header={t('admin.pages.treeTypes.columns.family')}
+          />
+          <Column
+            field="genus"
+            header={t('admin.pages.treeTypes.columns.genus')}
+          />
+          <Column
+            field="species"
+            header={t('admin.pages.treeTypes.columns.species')}
+          />
           {/* Actions */}
           <Column
             body={() => (

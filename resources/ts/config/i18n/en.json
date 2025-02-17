@@ -48,6 +48,12 @@
             "license": "License",
             "logout": "Log out"
         },
+        "roles": {
+            "admin": "Admin",
+            "worker": "Worker",
+            "customer": "Customer",
+            "unknown": "Unknown"
+        },
         "pages": {
             "dashboard": {
                 "title": "Dashboard",
@@ -65,28 +71,74 @@
                 }
             },
             "users": {
-                "title": "Users"
+                "title": "Users",
+                "columns": {
+                    "name": "Name",
+                    "surname": "Surname",
+                    "email": "Email",
+                    "company": "Company",
+                    "dni": "DNI",
+                    "role": "Role"
+                }
             },
             "contracts": {
-                "title": "Contracts"
+                "title": "Contracts",
+                "columns": {
+                    "name": "Name",
+                    "start_date": "Start Date",
+                    "end_date": "End Date",
+                    "invoice_proposed": "Invoice Proposed",
+                    "invoice_agreed": "Invoice Agreed",
+                    "invoice_paid": "Invoice Paid"
+                }
             },
             "workOrders": {
-                "title": "Work Orders"
+                "title": "Work Orders",
+                "columns": {
+                    "date": "Date",
+                    "status": "Status",
+                    "contract_id": "Contract"
+                }
             },
             "elementTypes": {
-                "title": "Element Types"
+                "title": "Element Types",
+                "columns": {
+                    "name": "Name",
+                    "requires_tree_type": "Requires Tree Type",
+                    "description": "Description",
+                    "icon": "Icon",
+                    "color": "Color"
+                }
             },
             "treeTypes": {
-                "title": "Tree Types"
+                "title": "Tree Types",
+                "columns": {
+                    "family": "Family",
+                    "genus": "Genus",
+                    "species": "Species"
+                }
             },
             "taskTypes": {
-                "title": "Task Types"
+                "title": "Task Types",
+                "columns": {
+                    "name": "Name",
+                    "description": "Description"
+                }
             },
             "resources": {
-                "title": "Resources"
+                "title": "Resources",
+                "columns": {
+                    "name": "Name",
+                    "description": "Description",
+                    "resource_type_id": "Resource Type"
+                }
             },
             "resourceTypes": {
-                "title": "Resource Types"
+                "title": "Resource Types",
+                "columns": {
+                    "name": "Name",
+                    "description": "Description"
+                }
             },
             "stats": {
                 "title": "Statistics"
