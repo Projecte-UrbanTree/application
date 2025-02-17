@@ -44,6 +44,7 @@
         },
         "pages": {
             "dashboard": {
+                "title": "Tauler",
                 "welcome": {
                     "greeting": "Benvingut de nou, {{name}} {{surname}}.",
                     "message": "Et donem la benvinguda al teu tauler. Aquí tens un resum ràpid de les teves dades."
@@ -56,6 +57,33 @@
                         "workOrders": "Ordres de treball"
                     }
                 }
+            },
+            "users": {
+                "title": "Usuaris"
+            },
+            "contracts": {
+                "title": "Contractes"
+            },
+            "workorders": {
+                "title": "Ordres de treball"
+            },
+            "elementtypes": {
+                "title": "Tipus d'element"
+            },
+            "treetypes": {
+                "title": "Tipus d'arbre"
+            },
+            "tasktypes": {
+                "title": "Tipus de tasca"
+            },
+            "resources": {
+                "title": "Recursos"
+            },
+            "resourcetypes": {
+                "title": "Tipus de recurs"
+            },
+            "stats": {
+                "title": "Estadístiques"
             }
         }
     },

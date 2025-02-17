@@ -56,6 +56,33 @@
                         "workOrders": "Órdenes de trabajo"
                     }
                 }
+            },
+            "users": {
+                "title": "Usuarios"
+            },
+            "contracts": {
+                "title": "Contratos"
+            },
+            "workOrders": {
+                "title": "Órdenes de trabajo"
+            },
+            "elementTypes": {
+                "title": "Tipos de elemento"
+            },
+            "treeTypes": {
+                "title": "Tipos de árbol"
+            },
+            "taskTypes": {
+                "title": "Tipos de tarea"
+            },
+            "resources": {
+                "title": "Recursos"
+            },
+            "resourceTypes": {
+                "title": "Tipos de recurso"
+            },
+            "stats": {
+                "title": "Estadísticas"
             }
         }
     },

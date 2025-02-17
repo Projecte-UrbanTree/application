@@ -44,6 +44,7 @@
         },
         "pages": {
             "dashboard": {
+                "title": "Dashboard",
                 "welcome": {
                     "greeting": "Welcome back, {{name}} {{surname}}.",
                     "message": "We are glad to see you again. Here is a quick overview of your data."
@@ -56,6 +57,33 @@
                         "workOrders": "Work Orders"
                     }
                 }
+            },
+            "users": {
+                "title": "Users"
+            },
+            "contracts": {
+                "title": "Contracts"
+            },
+            "workorders": {
+                "title": "Work Orders"
+            },
+            "elementtypes": {
+                "title": "Element Types"
+            },
+            "treetypes": {
+                "title": "Tree Types"
+            },
+            "tasktypes": {
+                "title": "Task Types"
+            },
+            "resources": {
+                "title": "Resources"
+            },
+            "resourcetypes": {
+                "title": "Resource Types"
+            },
+            "stats": {
+                "title": "Statistics"
             }
         }
     },
