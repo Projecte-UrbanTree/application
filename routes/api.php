@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\ContractController;
-use App\Http\Controllers\Admin\ElementTypeController;
-use App\Http\Controllers\Admin\ResourceController;
-use App\Http\Controllers\Admin\ResourceTypeController;
-use App\Http\Controllers\Admin\TaskTypeController;
-use App\Http\Controllers\Admin\TreeTypeController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\WorkOrderController;
+use App\Http\Controllers\Api\Admin\ContractController;
+use App\Http\Controllers\Api\Admin\ElementTypeController;
+use App\Http\Controllers\Api\Admin\ResourceController;
+use App\Http\Controllers\Api\Admin\ResourceTypeController;
+use App\Http\Controllers\Api\Admin\TaskTypeController;
+use App\Http\Controllers\Api\Admin\TreeTypeController;
+use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
         Route::get('stats', function (Request $request) {
             return response()->json([
                 'users' => User::count(),
