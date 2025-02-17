@@ -6,11 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Urban Tree 5.0</title>
     @vite('resources/css/app.css')
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/lib/index.js"></script>
 </head>
 
 <body class="bg-white h-screen flex items-center justify-center">
     <div class="h-screen w-full flex items-center justify-center">
         <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+            <!-- Header con el Dropdown de Idioma y el botón de Iniciar sesión -->
+            <div class="absolute top-0 right-0 p-6 flex items-center space-x-4 z-10">
+                <!-- Dropdown de Idioma -->
+                <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                    <button class="bg-gray-800 text-white px-4 py-2 rounded-md text-sm" @click="open = !open">
+                        Idioma
+                    </button>
+                    <div x-show="open" x-transition class="absolute right-0 w-40 mt-2 bg-white shadow-lg rounded-md border border-gray-200 z-20">
+                        <ul>
+                            <li class="flex items-center px-4 py-2">
+                                <img class="w-5 h-5 mr-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/1024px-Flag_of_Spain.svg.png" alt="Español">
+                                <a href="#" class="text-gray-700">Español</a>
+                            </li>
+                            <li class="flex items-center px-4 py-2">
+                                <img class="w-5 h-5 mr-2" src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg" alt="English">
+                                <a href="#" class="text-gray-700">English</a>
+                            </li>
+                            <li class="flex items-center px-4 py-2">
+                                <img class="w-5 h-5 mr-2" src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Catalonia.svg" alt="Català">
+                                <a href="#" class="text-gray-700">Català</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Botón de Iniciar sesión -->
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer">
+                    Iniciar sesión
+                </button>
+            </div>
+
             <p class="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-6xl">Urban Tree 5.0</p>
             <p class="text-center text-sm text-gray-500">Cuidando el verde, protegiendo el futuro.</p>
             <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2 group">
@@ -24,10 +55,11 @@
                             <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.</p>
                         </div>
                         <div class="@container relative h-full w-full max-lg:mx-auto max-lg:max-w-sm">
-                            <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
-                                <img class="size-full object-cover object-top" src="https://tailwindui.com/plus-assets/img/component-images/bento-03-mobile-friendly.png" alt="">
+                            <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden">
+                                <img class="size-full object-cover object-top" src="{{ asset('images/screenshot.jpg') }}" alt="">
                             </div>
                         </div>
+
                     </div>
                     <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 lg:rounded-l-[2rem]"></div>
                 </div>
@@ -89,6 +121,8 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </body>
 
 </html>
