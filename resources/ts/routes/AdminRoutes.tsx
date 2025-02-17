@@ -12,8 +12,6 @@ import AdminResources from '@/pages/Admin/Resources';
 import AdminResourceTypes from '@/pages/Admin/ResourceTypes';
 import AdminStats from '@/pages/Admin/Stats';
 
-import { useI18n } from '@/hooks/useI18n';
-
 import { RouteObject } from 'react-router-dom';
 
 const AdminRoutes: RouteObject[] = [
