@@ -10,7 +10,7 @@ class LangController extends Controller
     public function setLanguage($lang)
     {
         App::setLocale($lang);
-        Cookie::queue('locale', $lang, 60 * 24 * 30);
+        Cookie::queue(Cookie::make('lang', $lang, 525600, '/', null, false, false));
 
         return redirect()->back();
     }
