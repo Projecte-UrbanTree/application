@@ -80,7 +80,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       <header className="border-b border-gray-200 bg-white shadow-md">
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
-            <div className="block md:hidden">
+            <div className="block lg:hidden">
               <Button
                 onClick={() => setMenuOpen(!menuOpen)}
                 color="text-gray-800">
@@ -90,7 +90,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             <a href="/" className="">
               <img className="w-48" src={logo} alt="Logo" />
             </a>
-            <div className="hidden md:flex space-x-6">
+            <div className="hidden lg:flex space-x-6">
               <Link
                 to="/admin/manage/dashboard"
                 className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname.includes('/admin/manage') ? 'bg-gray-200 text-indigo-600' : ''}`}>
@@ -113,7 +113,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex gap-4">
+            <div className="hidden lg:flex gap-4">
               <Dropdown
                 id="contractBtn"
                 name="contractBtn"
@@ -160,27 +160,38 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             </div>
           </div>
         </nav>
-
         <div
-          className={`${menuOpen ? '' : 'hidden'} md:hidden px-8 py-6 bg-gray-100`}>
-          <a
-            href="/admin/manage/dashboard"
-            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
+          className={`${menuOpen ? '' : 'hidden'} lg:hidden px-8 py-6 bg-gray-100`}>
+          <Link
+            to="/admin/manage/dashboard"
+            className={`block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2 ${
+              location.pathname.includes('/admin/manage')
+                ? 'bg-gray-200 text-indigo-600'
+                : ''
+            }`}>
             <Icon width="24px" icon="tabler:briefcase" />{' '}
             {t('admin.menu.management')}
-          </a>
-          <a
-            href="/admin/settings/contracts"
-            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
+          </Link>
+          <Link
+            to="/admin/settings/contracts"
+            className={`block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2 ${
+              location.pathname.includes('/admin/settings')
+                ? 'bg-gray-200 text-indigo-600'
+                : ''
+            }`}>
             <Icon width="24px" icon="tabler:settings" />{' '}
             {t('admin.menu.settings')}
-          </a>
-          <a
-            href="/admin/inventory"
-            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
+          </Link>
+          <Link
+            to="/admin/inventory"
+            className={`block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2 ${
+              location.pathname === '/admin/inventory'
+                ? 'bg-gray-200 text-indigo-600'
+                : ''
+            }`}>
             <Icon width="24px" icon="tabler:chart-treemap" />{' '}
             {t('admin.menu.inventory')}
-          </a>
+          </Link>
           <div className="mt-4 flex flex-col gap-4">
             <Dropdown
               id="contractBtnMobile"
@@ -198,7 +209,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
       <div
         id="submenu"
-        className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-100 shadow-md">
+        className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-100 shadow-md">
         <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
           {location.pathname.includes('/admin/manage') && (
             <>
