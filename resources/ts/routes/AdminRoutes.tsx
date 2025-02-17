@@ -24,7 +24,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/dashboard',
         element: (
           <AdminLayout
-            title="Dashboard"
+            titleI18n="admin.pages.dashboard.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminDashboard />
@@ -35,7 +35,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/users',
         element: (
           <AdminLayout
-            title="Users"
+            titleI18n="admin.pages.users.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminUsers />
@@ -46,7 +46,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/contracts',
         element: (
           <AdminLayout
-            title="Contracts"
+            titleI18n="admin.pages.contracts.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminContracts />
@@ -57,7 +57,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/work-orders',
         element: (
           <AdminLayout
-            title="Work Orders"
+            titleI18n="admin.pages.workorders.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminWorkOrders />
@@ -68,7 +68,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/element-types',
         element: (
           <AdminLayout
-            title="Element Types"
+            titleI18n="admin.pages.elementtypes.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminElementTypes />
@@ -79,7 +79,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/tree-types',
         element: (
           <AdminLayout
-            title="Tree Types"
+            titleI18n="admin.pages.treetypes.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminTreeTypes />
@@ -90,7 +90,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/task-types',
         element: (
           <AdminLayout
-            title="Task Types"
+            titleI18n="admin.pages.tasktypes.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminTaskTypes />
@@ -101,7 +101,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/resources',
         element: (
           <AdminLayout
-            title="Resources"
+            titleI18n="admin.pages.resources.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminResources />
@@ -112,7 +112,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/resource-types',
         element: (
           <AdminLayout
-            title="Resource Types"
+            titleI18n="admin.pages.resourcetypes.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminResourceTypes />
@@ -123,7 +123,7 @@ const AdminRoutes: RouteObject[] = [
         path: '/admin/stats',
         element: (
           <AdminLayout
-            title="Stats"
+            titleI18n="admin.pages.stats.title"
             contracts={[{ id: '1', name: 'Tortosa' }]}
             currentContract={'1'}>
             <AdminStats />

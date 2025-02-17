@@ -13,20 +13,21 @@ import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 
 interface AdminLayoutProps {
-  title: string;
+  titleI18n: string;
   children: React.ReactNode;
   contracts: { id: string; name: string }[];
   currentContract: string;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
-  title,
+  titleI18n,
   children,
   contracts,
   currentContract,
 }) => {
-  document.title = title
-    ? `${title} - ${import.meta.env.VITE_APP_NAME}`
+  const { t } = useI18n();
+  document.title = titleI18n
+    ? `${t(titleI18n)} - ${import.meta.env.VITE_APP_NAME}`
     : import.meta.env.VITE_APP_NAME;
 
   const location = useLocation();
@@ -36,7 +37,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const { user, logout } = useAuth();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
-  const { t } = useI18n();
 
   const contractsWithAll = [
     ...contracts,
