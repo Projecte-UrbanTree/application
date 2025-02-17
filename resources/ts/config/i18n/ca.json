@@ -64,22 +64,22 @@
             "contracts": {
                 "title": "Contractes"
             },
-            "workorders": {
+            "workOrders": {
                 "title": "Ordres de treball"
             },
-            "elementtypes": {
+            "elementTypes": {
                 "title": "Tipus d'element"
             },
-            "treetypes": {
+            "treeTypes": {
                 "title": "Tipus d'arbre"
             },
-            "tasktypes": {
+            "taskTypes": {
                 "title": "Tipus de tasca"
             },
             "resources": {
                 "title": "Recursos"
             },
-            "resourcetypes": {
+            "resourceTypes": {
                 "title": "Tipus de recurs"
             },
             "stats": {

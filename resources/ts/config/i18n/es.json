@@ -33,7 +33,7 @@
             "species": "Especies",
             "taskTypes": "Tipos de tarea",
             "resources": "Recursos",
-            "resourceTypes": "Tipos de recursos",
+            "resourceTypes": "Tipos de recurso",
             "users": "Usuarios",
             "stats": "Estadísticas"
         },
@@ -55,7 +55,8 @@
                         "elements": "Elementos",
                         "workOrders": "Órdenes de trabajo"
                     }
-                }
+                },
+                "title": "Tablero"
             },
             "users": {
                 "title": "Usuarios"

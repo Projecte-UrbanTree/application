@@ -64,22 +64,22 @@
             "contracts": {
                 "title": "Contracts"
             },
-            "workorders": {
+            "workOrders": {
                 "title": "Work Orders"
             },
-            "elementtypes": {
+            "elementTypes": {
                 "title": "Element Types"
             },
-            "treetypes": {
+            "treeTypes": {
                 "title": "Tree Types"
             },
-            "tasktypes": {
+            "taskTypes": {
                 "title": "Task Types"
             },
             "resources": {
                 "title": "Resources"
             },
-            "resourcetypes": {
+            "resourceTypes": {
                 "title": "Resource Types"
             },
             "stats": {
