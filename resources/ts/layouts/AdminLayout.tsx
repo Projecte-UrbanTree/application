@@ -26,9 +26,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   currentContract,
 }) => {
   const { t } = useI18n();
-  document.title = titleI18n
-    ? `${t(titleI18n)} - ${import.meta.env.VITE_APP_NAME}`
-    : import.meta.env.VITE_APP_NAME;
+
+  useEffect(() => {
+    document.title = titleI18n
+      ? `${t(titleI18n)} - ${import.meta.env.VITE_APP_NAME}`
+      : import.meta.env.VITE_APP_NAME;
+  }, [titleI18n, t]);
 
   const location = useLocation();
 
