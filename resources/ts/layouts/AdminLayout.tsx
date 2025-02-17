@@ -117,7 +117,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               <Dropdown
                 id="contractBtn"
                 name="contractBtn"
-                className="w-48"
+                className="w-32"
                 value={contract}
                 options={contractsWithAll}
                 onChange={handleContractChange}
