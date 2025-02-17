@@ -10,7 +10,10 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["rvest.vs-code-prettier-eslint"]
+      "extensions": [
+        "rvest.vs-code-prettier-eslint",
+        "eamodio.gitlens"
+      ]
     }
   }
 }
