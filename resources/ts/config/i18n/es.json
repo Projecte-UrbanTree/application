@@ -24,18 +24,24 @@
     "admin": {
         "menu": {
             "management": "Gestión",
+            "settings": "Configuración",
             "inventory": "Inventario"
         },
         "submenu": {
-            "contracts": "Contratos",
-            "workOrders": "Órdenes de trabajo",
-            "elementTypes": "Tipos de elemento",
-            "species": "Especies",
-            "taskTypes": "Tipos de tarea",
-            "resources": "Recursos",
-            "resourceTypes": "Tipos de recurso",
-            "users": "Usuarios",
-            "stats": "Estadísticas"
+            "manage": {
+                "dashboard": "Tablero",
+                "workOrders": "Órdenes de trabajo",
+                "stats": "Estadísticas"
+            },
+            "settings": {
+                "contracts": "Contratos",
+                "elementTypes": "Tipos de elemento",
+                "species": "Especies",
+                "taskTypes": "Tipos de tarea",
+                "resources": "Recursos",
+                "resourceTypes": "Tipos de recurso",
+                "users": "Usuarios"
+            }
         },
         "profileDropdown": {
             "accountSettings": "Configuración de la cuenta",

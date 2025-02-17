@@ -82,24 +82,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             </a>
             <div className="hidden md:flex space-x-6">
               <Link
-                to="/admin/dashboard"
-                className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname !== '/admin/inventory' ? 'bg-gray-200 text-indigo-600' : ''}`}>
-                <Icon
-                  inline={true}
-                  width="24px"
-                  icon="tabler:adjustments-cog"
-                />{' '}
+                to="/admin/manage/dashboard"
+                className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname.includes('/admin/manage') ? 'bg-gray-200 text-indigo-600' : ''}`}>
+                <Icon inline={true} width="24px" icon="tabler:tool" />{' '}
                 {t('admin.menu.management')}
               </Link>
               <Link
-                to="/admin/dashboard"
-                className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname !== '/admin/inventory' ? 'bg-gray-200 text-indigo-600' : ''}`}>
-                <Icon
-                  inline={true}
-                  width="24px"
-                  icon="tabler:adjustments-cog"
-                />{' '}
-                {t('admin.menu.management')}
+                to="/admin/settings/contracts"
+                className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname.includes('/admin/settings') ? 'bg-gray-200 text-indigo-600' : ''}`}>
+                <Icon inline={true} width="24px" icon="tabler:settings" />{' '}
+                {t('admin.menu.settings')}
               </Link>
               <a
                 href="#"
@@ -186,59 +178,76 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         id="submenu"
         className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 py-4 bg-gray-100 shadow-md">
         <div className="submenu text-center flex items-center space-x-6 mx-auto max-w-7xl">
-          <Link
-            to="/admin/contracts"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/contracts' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:file-description" />{' '}
-            {t('admin.submenu.contracts')}
-          </Link>
-          <Link
-            to="/admin/work-orders"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/work-orders' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:tools" />{' '}
-            {t('admin.submenu.workOrders')}
-          </Link>
-          <Link
-            to="/admin/element-types"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/element-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:box" />{' '}
-            {t('admin.submenu.elementTypes')}
-          </Link>
-          <Link
-            to="/admin/tree-types"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/tree-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:tree" />{' '}
-            {t('admin.submenu.species')}
-          </Link>
-          <Link
-            to="/admin/task-types"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/task-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:list-check" />{' '}
-            {t('admin.submenu.taskTypes')}
-          </Link>
-          <Link
-            to="/admin/resources"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/resources' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:package" />{' '}
-            {t('admin.submenu.resources')}
-          </Link>
-          <Link
-            to="/admin/resource-types"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/resource-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:package-export" />{' '}
-            {t('admin.submenu.resourceTypes')}
-          </Link>
-          <Link
-            to="/admin/users"
-            className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/users' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:users" /> {t('admin.submenu.users')}
-          </Link>
-          <Link
-            to="/admin/stats"
-            className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/stats' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
-            <Icon width="22px" icon="tabler:chart-bar" />{' '}
-            {t('admin.submenu.stats')}
-          </Link>
+          {location.pathname.includes('/admin/manage') && (
+            <>
+              {/* Manage submenu */}
+              <Link
+                to="/admin/manage/dashboard"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/manage/dashboard' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:dashboard" />{' '}
+                {t('admin.submenu.manage.dashboard')}
+              </Link>
+              <Link
+                to="/admin/manage/work-orders"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/manage/work-orders' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:tools" />{' '}
+                {t('admin.submenu.manage.workOrders')}
+              </Link>
+              <Link
+                to="/admin/manage/stats"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/manage/stats' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:chart-bar" />{' '}
+                {t('admin.submenu.manage.stats')}
+              </Link>
+            </>
+          )}
+          {location.pathname.includes('/admin/settings') && (
+            <>
+              {/* Settings submenu */}
+              <Link
+                to="/admin/settings/contracts"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/settings/contracts' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:file-description" />{' '}
+                {t('admin.submenu.settings.contracts')}
+              </Link>
+              <Link
+                to="/admin/settings/element-types"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/settings/element-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:box" />{' '}
+                {t('admin.submenu.settings.elementTypes')}
+              </Link>
+              <Link
+                to="/admin/settings/tree-types"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/settings/tree-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:tree" />{' '}
+                {t('admin.submenu.settings.species')}
+              </Link>
+              <Link
+                to="/admin/settings/task-types"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/settings/task-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:list-check" />{' '}
+                {t('admin.submenu.settings.taskTypes')}
+              </Link>
+              <Link
+                to="/admin/settings/resources"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/settings/resources' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:package" />{' '}
+                {t('admin.submenu.settings.resources')}
+              </Link>
+              <Link
+                to="/admin/settings/resource-types"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/settings/resource-types' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:package-export" />{' '}
+                {t('admin.submenu.settings.resourceTypes')}
+              </Link>
+              <Link
+                to="/admin/settings/users"
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${location.pathname === '/admin/settings/users' ? 'bg-gray-200 text-indigo-600' : 'text-gray-700'}`}>
+                <Icon width="22px" icon="tabler:users" />{' '}
+                {t('admin.submenu.settings.users')}
+              </Link>
+            </>
+          )}
         </div>
       </div>
 

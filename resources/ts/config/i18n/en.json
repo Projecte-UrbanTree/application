@@ -24,18 +24,24 @@
     "admin": {
         "menu": {
             "management": "Management",
+            "settings": "Settings",
             "inventory": "Inventory"
         },
         "submenu": {
-            "contracts": "Contracts",
-            "workOrders": "Work Orders",
-            "elementTypes": "Element Types",
-            "species": "Species",
-            "taskTypes": "Task Types",
-            "resources": "Resources",
-            "resourceTypes": "Resource Types",
-            "users": "Users",
-            "stats": "Statistics"
+            "manage": {
+                "dashboard": "Dashboard",
+                "workOrders": "Work Orders",
+                "stats": "Statistics"
+            },
+            "settings": {
+                "contracts": "Contracts",
+                "elementTypes": "Element Types",
+                "species": "Species",
+                "taskTypes": "Task Types",
+                "resources": "Resources",
+                "resourceTypes": "Resource Types",
+                "users": "Users"
+            }
         },
         "profileDropdown": {
             "accountSettings": "Account Settings",

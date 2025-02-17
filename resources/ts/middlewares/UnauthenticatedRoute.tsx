@@ -7,7 +7,7 @@ export default function UnauthenticatedRoute() {
   return !isAuthenticated ? (
     <Outlet />
   ) : user?.role === 'admin' ? (
-    <Navigate to="/admin/dashboard" replace />
+    <Navigate to="/admin/manage/dashboard" replace />
   ) : user?.role === 'worker' ? (
     <Navigate to="/worker" replace />
   ) : (

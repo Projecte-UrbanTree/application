@@ -24,18 +24,24 @@
     "admin": {
         "menu": {
             "management": "Gestió",
+            "settings": "Configuració",
             "inventory": "Inventari"
         },
         "submenu": {
-            "contracts": "Contractes",
-            "workOrders": "Ordres de treball",
-            "elementTypes": "Tipus d'element",
-            "species": "Espècies",
-            "taskTypes": "Tipus de tasca",
-            "resources": "Recursos",
-            "resourceTypes": "Tipus de recursos",
-            "users": "Usuaris",
-            "stats": "Estadístiques"
+            "manage": {
+                "dashboard": "Tauler",
+                "workOrders": "Ordres de treball",
+                "stats": "Estadístiques"
+            },
+            "settings": {
+                "contracts": "Contractes",
+                "elementTypes": "Tipus d'element",
+                "species": "Espècies",
+                "taskTypes": "Tipus de tasca",
+                "resources": "Recursos",
+                "resourceTypes": "Tipus de recurs",
+                "users": "Usuaris"
+            }
         },
         "profileDropdown": {
             "accountSettings": "Configuració del compte",
