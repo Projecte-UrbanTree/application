@@ -1,16 +1,16 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
 
-import AdminDashboard from '@/pages/Admin/Manage/Dashboard';
+import AdminDashboard from '@/pages/Admin/Dashboard';
 import AdminUsers from '@/pages/Admin/Settings/Users';
 import AdminContracts from '@/pages/Admin/Settings/Contracts';
-import AdminWorkOrders from '@/pages/Admin/Manage/WorkOrders';
+import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 import AdminElementTypes from '@/pages/Admin/Settings/ElementTypes';
 import AdminTreeTypes from '@/pages/Admin/Settings/TreeTypes';
 import AdminTaskTypes from '@/pages/Admin/Settings/TaskTypes';
 import AdminResources from '@/pages/Admin/Settings/Resources';
 import AdminResourceTypes from '@/pages/Admin/Settings/ResourceTypes';
-import AdminStats from '@/pages/Admin/Manage/Stats';
+import AdminStats from '@/pages/Admin/Stats';
 
 import { RouteObject } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ const AdminRoutes: RouteObject[] = [
     element: <AdminProtectedRoute />,
     children: [
       {
-        path: '/admin/manage',
+        path: '/admin',
         children: [
           {
             path: 'dashboard',
@@ -54,87 +54,87 @@ const AdminRoutes: RouteObject[] = [
               </AdminLayout>
             ),
           },
-        ],
-      },
-      {
-        path: '/admin/settings',
-        children: [
           {
-            path: 'users',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.users.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminUsers />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'contracts',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.contracts.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminContracts />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'element-types',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.elementTypes.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminElementTypes />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'tree-types',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.treeTypes.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminTreeTypes />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'task-types',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.taskTypes.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminTaskTypes />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'resources',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.resources.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminResources />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'resource-types',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.resourceTypes.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminResourceTypes />
-              </AdminLayout>
-            ),
+            path: 'settings',
+            children: [
+              {
+                path: 'users',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.users.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <AdminUsers />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'contracts',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.contracts.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <AdminContracts />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'element-types',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.elementTypes.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <AdminElementTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'tree-types',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.treeTypes.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <AdminTreeTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'task-types',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.taskTypes.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <AdminTaskTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'resources',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.resources.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <AdminResources />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'resource-types',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.resourceTypes.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <AdminResourceTypes />
+                  </AdminLayout>
+                ),
+              },
+            ],
           },
         ],
       },
