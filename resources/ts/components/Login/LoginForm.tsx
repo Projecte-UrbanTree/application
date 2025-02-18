@@ -40,6 +40,7 @@ const LoginForm = () => {
       } else {
         setError(t('general.genericError'));
       }
+      setTimeout(() => setError(null), 5000);
     }
   };
 
