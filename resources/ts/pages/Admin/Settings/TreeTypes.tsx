@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { Panel } from 'primereact/panel';
-import { Toolbar } from 'primereact/toolbar';
 
 import { Icon } from '@iconify/react';
 

@@ -4,7 +4,6 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
-import { ProgressSpinner } from 'primereact/progressspinner';
 
 import { Icon } from '@iconify/react';
 
