@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('landings/landing7.title') }}</title>
     @vite('resources/css/app.css')
-    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/lib/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
-
 </head>
 
 <body class="bg-white h-screen flex items-center justify-center">
