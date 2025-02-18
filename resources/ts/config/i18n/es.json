@@ -28,8 +28,10 @@
         "submenu": {
             "manage": {
                 "dashboard": "Tablero",
-                "inventory": "Inventario",
                 "workOrders": "Órdenes de trabajo",
+                "inventory": "Inventario",
+                "workers": "Trabajadores",
+                "resources": "Recursos",
                 "stats": "Estadísticas"
             },
             "settings": {
@@ -37,7 +39,6 @@
                 "elementTypes": "Tipos de elemento",
                 "species": "Especies",
                 "taskTypes": "Tipos de tarea",
-                "resources": "Recursos",
                 "resourceTypes": "Tipos de recurso",
                 "users": "Usuarios"
             }

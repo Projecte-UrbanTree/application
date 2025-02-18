@@ -28,8 +28,10 @@
         "submenu": {
             "manage": {
                 "dashboard": "Dashboard",
-                "inventory": "Inventory",
                 "workOrders": "Work Orders",
+                "inventory": "Inventory",
+                "workers": "Workers",
+                "resources": "Recursos",
                 "stats": "Statistics"
             },
             "settings": {
@@ -37,7 +39,6 @@
                 "elementTypes": "Element Types",
                 "species": "Species",
                 "taskTypes": "Task Types",
-                "resources": "Resources",
                 "resourceTypes": "Resource Types",
                 "users": "Users"
             }

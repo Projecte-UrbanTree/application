@@ -77,8 +77,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const isManagementActive =
     location.pathname.startsWith('/admin/dashboard') ||
-    location.pathname.startsWith('/admin/inventory') ||
     location.pathname.startsWith('/admin/work-orders') ||
+    location.pathname.startsWith('/admin/inventory') ||
+    location.pathname.startsWith('/admin/workers') ||
     location.pathname.startsWith('/admin/resources') ||
     location.pathname.startsWith('/admin/stats');
 
@@ -101,8 +102,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       icon: 'tabler:clipboard-text',
     },
     {
+      to: '/admin/workers',
+      label: t('admin.submenu.manage.workers'),
+      icon: 'tabler:users',
+    },
+    {
       to: '/admin/resources',
-      label: t('admin.submenu.settings.resources'),
+      label: t('admin.submenu.manage.resources'),
       icon: 'tabler:package',
     },
     {

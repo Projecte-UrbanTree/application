@@ -8,6 +8,8 @@ import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 import AdminElementTypes from '@/pages/Admin/Settings/ElementTypes';
 import AdminTreeTypes from '@/pages/Admin/Settings/TreeTypes';
 import AdminTaskTypes from '@/pages/Admin/Settings/TaskTypes';
+import AdminInventory from '@/pages/Admin/Inventory';
+import AdminWorkers from '@/pages/Admin/Workers';
 import AdminResources from '@/pages/Admin/Resources';
 import AdminResourceTypes from '@/pages/Admin/Settings/ResourceTypes';
 import AdminStats from '@/pages/Admin/Stats';
@@ -42,6 +44,28 @@ const AdminRoutes: RouteObject[] = [
                 contracts={[{ id: '1', name: 'Tortosa' }]}
                 currentContract={'1'}>
                 <AdminWorkOrders />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'inventory',
+            element: (
+              <AdminLayout
+                titleI18n="admin.pages.inventory.title"
+                contracts={[{ id: '1', name: 'Tortosa' }]}
+                currentContract={'1'}>
+                <AdminInventory />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'workers',
+            element: (
+              <AdminLayout
+                titleI18n="admin.pages.workers.title"
+                contracts={[{ id: '1', name: 'Tortosa' }]}
+                currentContract={'1'}>
+                <AdminWorkers />
               </AdminLayout>
             ),
           },
