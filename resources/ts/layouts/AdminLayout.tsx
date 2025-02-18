@@ -77,7 +77,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const isManagementActive =
     location.pathname.startsWith('/admin/dashboard') ||
+    location.pathname.startsWith('/admin/inventory') ||
     location.pathname.startsWith('/admin/work-orders') ||
+    location.pathname.startsWith('/admin/resources') ||
     location.pathname.startsWith('/admin/stats');
 
   const isSettingsPage = location.pathname.includes('/admin/settings');
@@ -97,6 +99,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       to: '/admin/work-orders',
       label: t('admin.submenu.manage.workOrders'),
       icon: 'tabler:clipboard-text',
+    },
+    {
+      to: '/admin/resources',
+      label: t('admin.submenu.settings.resources'),
+      icon: 'tabler:package',
     },
     {
       to: '/admin/stats',
@@ -124,11 +131,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       to: '/admin/settings/task-types',
       label: t('admin.submenu.settings.taskTypes'),
       icon: 'tabler:list-check',
-    },
-    {
-      to: '/admin/settings/resources',
-      label: t('admin.submenu.settings.resources'),
-      icon: 'tabler:package',
     },
     {
       to: '/admin/settings/resource-types',
