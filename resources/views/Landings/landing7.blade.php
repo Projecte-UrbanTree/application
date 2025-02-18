@@ -6,18 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('landings/landing7.title') }}</title>
     @vite('resources/css/app.css')
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    <!-- Remove Alpine.js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script> -->
 </head>
 
 <body class="bg-white h-screen flex items-center justify-center">
     <div class="h-screen w-full flex items-center justify-center">
         <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
             <div class="absolute top-0 right-0 p-6 flex items-center space-x-4 z-10">
-                <div class="relative" x-data="{ open: false }" @click.away="open = false">
-                    <button class="bg-gray-800 text-white px-4 py-2 rounded-md text-sm" @click="open = !open">
+                <div class="relative">
+                    <button class="bg-gray-800 text-white px-4 py-2 rounded-md text-sm" id="language-button">
                         {{ __('landings/landing7.language') }}
                     </button>
-                    <div x-show="open" x-transition class="absolute right-0 w-40 mt-2 bg-white shadow-lg rounded-md border border-gray-200 z-20">
+                    <div id="language-menu" class="hidden absolute right-0 w-40 mt-2 bg-white shadow-lg rounded-md border border-gray-200 z-20">
                         <ul>
                             <li class="flex items-center px-4 py-2">
                                 <a href="{{ route('set-language', ['lang' => 'es']) }}" class="text-gray-700">Español</a>
@@ -28,14 +29,12 @@
                             <li class="flex items-center px-4 py-2">
                                 <a href="{{ route('set-language', ['lang' => 'ca']) }}" class="text-gray-700">Català</a>
                             </li>
-
                         </ul>
                     </div>
                 </div>
                 <button class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer">
                     <a href="{{ url('/login') }}" class="text-white">{{ __('landings/landing7.button_login') }}</a>
                 </button>
-
             </div>
 
             <p class="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-6xl">{{ __('landings/landing7.title') }}</p>
@@ -114,8 +113,22 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const languageButton = document.getElementById('language-button');
+            const languageMenu = document.getElementById('language-menu');
 
+            languageButton.addEventListener('click', function () {
+                languageMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!languageButton.contains(event.target) && !languageMenu.contains(event.target)) {
+                    languageMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
