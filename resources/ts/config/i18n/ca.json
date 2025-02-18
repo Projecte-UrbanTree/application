@@ -53,6 +53,9 @@
             "customer": "Client",
             "unknown": "Desconegut"
         },
+        "buttons": {
+            "createNew": "Crear nou"
+        },
         "pages": {
             "dashboard": {
                 "title": "Tauler",

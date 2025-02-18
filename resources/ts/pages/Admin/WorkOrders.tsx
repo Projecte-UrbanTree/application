@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
-
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-
 import { Icon } from '@iconify/react';
-
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,8 +28,16 @@ export default function WorkOrders() {
 
   return (
     <>
-      <div className="bg-white rounded p-6 mb-8 border border-gray-300">
-        <DataTable loading={isLoading} value={workOrders}>
+      <CrudPanel
+        title="admin.pages.workOrders.title"
+        onCreate={() => console.log('Create new work order')}>
+        <DataTable
+          loading={isLoading}
+          value={workOrders}
+          paginator
+          rows={10}
+          stripedRows
+          showGridlines>
           <Column
             field="date"
             header={t('admin.pages.workOrders.columns.date')}
@@ -55,7 +61,7 @@ export default function WorkOrders() {
             )}
           />
         </DataTable>
-      </div>
+      </CrudPanel>
     </>
   );
 }

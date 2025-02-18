@@ -9,6 +9,7 @@ import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,8 +32,16 @@ export default function Users() {
 
   return (
     <>
-      <div className="bg-white rounded p-6 mb-8 border border-gray-300">
-        <DataTable loading={isLoading} value={users}>
+      <CrudPanel
+        title="admin.pages.users.title"
+        onCreate={() => console.log('Create new user')}>
+        <DataTable
+          loading={isLoading}
+          value={users}
+          paginator
+          rows={10}
+          stripedRows
+          showGridlines>
           <Column field="name" header={t('admin.pages.users.columns.name')} />
           <Column
             field="surname"
@@ -82,7 +91,7 @@ export default function Users() {
             )}
           />
         </DataTable>
-      </div>
+      </CrudPanel>
     </>
   );
 }

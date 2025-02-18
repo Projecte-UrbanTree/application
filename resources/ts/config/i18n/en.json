@@ -142,6 +142,9 @@
             "stats": {
                 "title": "Statistics"
             }
+        },
+        "buttons": {
+            "createNew": "Create New"
         }
     },
     "general": {

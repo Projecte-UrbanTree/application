@@ -47,6 +47,9 @@
             "license": "Licencia",
             "logout": "Cerrar sesión"
         },
+        "buttons": {
+            "createNew": "Crear nuevo"
+        },
         "pages": {
             "dashboard": {
                 "welcome": {

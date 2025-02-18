@@ -3,11 +3,14 @@ import { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { Panel } from 'primereact/panel';
+import { Toolbar } from 'primereact/toolbar';
 
 import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
 export default function TreeTypes() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,8 +33,16 @@ export default function TreeTypes() {
 
   return (
     <>
-      <div className="bg-white rounded p-6 mb-8 border border-gray-300">
-        <DataTable loading={isLoading} value={treeTypes}>
+      <CrudPanel
+        title="admin.pages.treeTypes.title"
+        onCreate={() => console.log('Create new tree type')}>
+        <DataTable
+          loading={isLoading}
+          value={treeTypes}
+          paginator
+          rows={10}
+          stripedRows
+          showGridlines>
           <Column
             field="family"
             header={t('admin.pages.treeTypes.columns.family')}
@@ -55,7 +66,7 @@ export default function TreeTypes() {
             )}
           />
         </DataTable>
-      </div>
+      </CrudPanel>
     </>
   );
 }

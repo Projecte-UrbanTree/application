@@ -8,6 +8,7 @@ import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
 export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,8 +31,16 @@ export default function Resources() {
 
   return (
     <>
-      <div className="bg-white rounded p-6 mb-8 border border-gray-300">
-        <DataTable loading={isLoading} value={resources}>
+      <CrudPanel
+        title="admin.pages.resources.title"
+        onCreate={() => console.log('Create new resource')}>
+        <DataTable
+          loading={isLoading}
+          value={resources}
+          paginator
+          rows={10}
+          stripedRows
+          showGridlines>
           <Column
             field="name"
             header={t('admin.pages.resources.columns.name')}
@@ -55,7 +64,7 @@ export default function Resources() {
             )}
           />
         </DataTable>
-      </div>
+      </CrudPanel>
     </>
   );
 }

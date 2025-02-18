@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { Panel } from 'primereact/panel';
 
 import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
 export default function ResourceTypes() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,8 +32,16 @@ export default function ResourceTypes() {
 
   return (
     <>
-      <div className="bg-white rounded p-6 mb-8 border border-gray-300">
-        <DataTable loading={isLoading} value={resourceTypes}>
+      <CrudPanel
+        title="admin.pages.resourceTypes.title"
+        onCreate={() => console.log('Create new resource type')}>
+        <DataTable
+          loading={isLoading}
+          value={resourceTypes}
+          paginator
+          rows={10}
+          stripedRows
+          showGridlines>
           <Column
             field="name"
             header={t('admin.pages.resourceTypes.columns.name')}
@@ -51,7 +61,7 @@ export default function ResourceTypes() {
             )}
           />
         </DataTable>
-      </div>
+      </CrudPanel>
     </>
   );
 }
