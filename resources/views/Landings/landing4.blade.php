@@ -75,14 +75,11 @@
         <p class="text-lg md:text-xl mb-8 text-gray-500 font-bold">
           {{ __('landings/landing4.tagline') }}
         </p>
-        <button
-          class="mt-8 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold px-8 py-4 rounded-full shadow-lg hover:opacity-90 transition cursor-pointer"
-          @click="
+        <button class="mt-8 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold px-8 py-4 rounded-full shadow-lg hover:opacity-90 transition cursor-pointer" @click="
             plan = 'Basic';
             openPayment = true;
             showOverlay = true;
-          "
-        >
+          ">
           {{ __('landings/landing4.explore') }}
         </button>
       </div>
@@ -108,14 +105,8 @@
                 </p>
               </div>
               <div class="@container relative min-h-[30rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
-                <div
-                  class="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl flex items-center justify-center"
-                >
-                  <img
-                    class="max-w-full max-h-full object-contain"
-                    src="{{ asset('images/urbantree-map.jpg') }}"
-                    alt=""
-                  />
+                <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
+                  <img class="size-full object-cover object-top" src="{{ asset('images/urbantree-map.jpg') }}" alt="" />
                 </div>
               </div>
             </div>
@@ -133,11 +124,7 @@
                 </p>
               </div>
               <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
-                <img
-                  class="w-full max-lg:max-w-xs"
-                  src="https://tailwindui.com/plus-assets/img/component-images/bento-03-performance.png"
-                  alt=""
-                >
+                <img class="w-full max-lg:max-w-xs" src="https://tailwindui.com/plus-assets/img/component-images/bento-03-performance.png" alt="">
               </div>
             </div>
             <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-t-[2rem]"></div>
@@ -154,11 +141,7 @@
                 </p>
               </div>
               <div class="@container flex flex-1 items-center max-lg:py-6 lg:pb-2">
-                <img
-                  class="h-[min(152px,40cqw)] object-cover"
-                  src="https://tailwindui.com/plus-assets/img/component-images/bento-03-security.png"
-                  alt=""
-                >
+                <img class="h-[min(152px,40cqw)] object-cover" src="https://tailwindui.com/plus-assets/img/component-images/bento-03-security.png" alt="">
               </div>
             </div>
             <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5"></div>
@@ -175,12 +158,8 @@
                 </p>
               </div>
               <div class="relative min-h-[30rem] w-full grow">
-                <div class="absolute top-10 right-0 bottom-0 left-10 rounded-tl-xl bg-gray-900 shadow-2xl flex items-center justify-center">
-                  <img
-                    class="max-w-full max-h-full object-contain"
-                    src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2"
-                    alt="Naturaleza"
-                  />
+                <div class="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl">
+                  <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2" alt="Naturaleza" />
                   <div class="px-6 pt-6 pb-14"></div>
                 </div>
               </div>
@@ -226,14 +205,11 @@
             <p class="mt-2 text-sm text-emerald-700">
               {{ __('landings/landing4.money') }}
             </p>
-            <button
-              class="mt-6 block w-full rounded-md px-3 py-2 text-center text-sm font-semibold text-emerald-600 ring-1 ring-emerald-200 hover:ring-emerald-300 cursor-pointer"
-              @click="
+            <button class="mt-6 block w-full rounded-md px-3 py-2 text-center text-sm font-semibold text-emerald-600 ring-1 ring-emerald-200 hover:ring-emerald-300 cursor-pointer" @click="
                 plan = 'Basic';
                 openPayment = true;
                 showOverlay = true;
-              "
-            >
+              ">
               {{ __('landings/landing4.buy_plan') }}
             </button>
           </div>
@@ -250,14 +226,11 @@
             <p class="mt-2 text-sm text-emerald-700">
               {{ __('landings/landing4.money') }}
             </p>
-            <button
-              class="mt-6 block w-full rounded-md bg-emerald-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-emerald-500 cursor-pointer"
-              @click="
+            <button class="mt-6 block w-full rounded-md bg-emerald-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-emerald-500 cursor-pointer" @click="
                 plan = 'Pro';
                 openPayment = true;
                 showOverlay = true;
-              "
-            >
+              ">
               {{ __('landings/landing4.buy_plan') }}
             </button>
           </div>
@@ -274,14 +247,11 @@
             <p class="mt-2 text-sm text-emerald-700">
               {{ __('landings/landing4.money') }}
             </p>
-            <button
-              class="mt-6 block w-full rounded-md px-3 py-2 text-center text-sm font-semibold text-emerald-600 ring-1 ring-emerald-200 hover:ring-emerald-300 cursor-pointer"
-              @click="
+            <button class="mt-6 block w-full rounded-md px-3 py-2 text-center text-sm font-semibold text-emerald-600 ring-1 ring-emerald-200 hover:ring-emerald-300 cursor-pointer" @click="
                 plan = 'Enterprise';
                 openPayment = true;
                 showOverlay = true;
-              "
-            >
+              ">
               {{ __('landings/landing4.buy_plan') }}
             </button>
           </div>
@@ -296,27 +266,12 @@
         </p>
       </div>
     </footer>
-    <div
-      class="fixed inset-0 bg-[rgba(0,0,0,0.5)] backdrop-blur-sm z-40"
-      x-show="showOverlay"
-      x-transition
-      @click="openPayment = false; showOverlay = false"
-    ></div>
-    <div
-      class="fixed top-0 right-0 z-50 w-full max-w-md h-screen bg-white shadow-xl p-6 overflow-auto transform transition-all duration-300"
-      x-show="openPayment"
-      x-transition:enter="translate-x-full"
-      x-transition:enter-end="translate-x-0"
-      x-transition:leave="translate-x-0"
-      x-transition:leave-end="translate-x-full"
-    >
-      <button
-        class="absolute top-4 right-4 text-3xl font-bold text-gray-600 hover:text-gray-800 cursor-pointer"
-        @click="
+    <div class="fixed inset-0 bg-[rgba(0,0,0,0.5)] backdrop-blur-sm z-40" x-show="showOverlay" x-transition @click="openPayment = false; showOverlay = false"></div>
+    <div class="fixed top-0 right-0 z-50 w-full max-w-md h-screen bg-white shadow-xl p-6 overflow-auto transform transition-all duration-300" x-show="openPayment" x-transition:enter="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-full">
+      <button class="absolute top-4 right-4 text-3xl font-bold text-gray-600 hover:text-gray-800 cursor-pointer" @click="
           openPayment = false;
           showOverlay = false;
-        "
-      >
+        ">
         &times;
       </button>
       <template x-if="plan === 'Basic'">
@@ -342,37 +297,22 @@
           {{ __('landings/landing4.select_your_plan') }}
         </label>
         <div class="flex space-x-2">
-          <button
-            type="button"
-            :class="{
+          <button type="button" :class="{
               'bg-emerald-600 text-white': plan === 'Basic',
               'bg-gray-200 text-gray-700': plan !== 'Basic'
-            }"
-            class="px-4 py-2 rounded-md cursor-pointer"
-            @click="plan = 'Basic'"
-          >
+            }" class="px-4 py-2 rounded-md cursor-pointer" @click="plan = 'Basic'">
             {{ __('landings/landing4.basic') }}
           </button>
-          <button
-            type="button"
-            :class="{
+          <button type="button" :class="{
               'bg-emerald-600 text-white': plan === 'Pro',
               'bg-gray-200 text-gray-700': plan !== 'Pro'
-            }"
-            class="px-4 py-2 rounded-md cursor-pointer"
-            @click="plan = 'Pro'"
-          >
+            }" class="px-4 py-2 rounded-md cursor-pointer" @click="plan = 'Pro'">
             {{ __('landings/landing4.pro') }}
           </button>
-          <button
-            type="button"
-            :class="{
+          <button type="button" :class="{
               'bg-emerald-600 text-white': plan === 'Enterprise',
               'bg-gray-200 text-gray-700': plan !== 'Enterprise'
-            }"
-            class="px-4 py-2 rounded-md cursor-pointer"
-            @click="plan = 'Enterprise'"
-          >
+            }" class="px-4 py-2 rounded-md cursor-pointer" @click="plan = 'Enterprise'">
             {{ __('landings/landing4.enterprise') }}
           </button>
         </div>
@@ -381,64 +321,24 @@
         <label class="block text-sm font-semibold text-emerald-700 mb-2">
           {{ __('landings/landing4.billing_contact') }}
         </label>
-        <input
-          type="email"
-          class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500"
-          placeholder="correo@ejemplo.com"
-        />
+        <input type="email" class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="correo@ejemplo.com" />
       </div>
       <div class="mb-4">
         <label class="block text-sm font-semibold text-emerald-700 mb-2">
           {{ __('landings/landing4.payment_method_title') }}
         </label>
         <div class="flex space-x-2">
-          <button
-            type="button"
-            class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center"
-            :class="method === 'card' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'"
-            @click="method = 'card'"
-          >
-            <img
-              src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/credit-card.svg"
-              alt="Tarjeta"
-              class="w-6 h-6"
-            />
+          <button type="button" class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center" :class="method === 'card' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'" @click="method = 'card'">
+            <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/icons/credit-card.svg" alt="Tarjeta" class="w-6 h-6" />
           </button>
-          <button
-            type="button"
-            class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center"
-            :class="method === 'googlePay' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'"
-            @click="method = 'googlePay'"
-          >
-            <img
-              src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/google.svg"
-              alt="Google Pay"
-              class="w-6 h-6"
-            />
+          <button type="button" class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center" :class="method === 'googlePay' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'" @click="method = 'googlePay'">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/google.svg" alt="Google Pay" class="w-6 h-6" />
           </button>
-          <button
-            type="button"
-            class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center"
-            :class="method === 'applePay' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'"
-            @click="method = 'applePay'"
-          >
-            <img
-              src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/apple.svg"
-              alt="Apple Pay"
-              class="w-6 h-6"
-            />
+          <button type="button" class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center" :class="method === 'applePay' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'" @click="method = 'applePay'">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/apple.svg" alt="Apple Pay" class="w-6 h-6" />
           </button>
-          <button
-            type="button"
-            class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center"
-            :class="method === 'paypal' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'"
-            @click="method = 'paypal'"
-          >
-            <img
-              src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/paypal.svg"
-              alt="PayPal"
-              class="w-6 h-6"
-            />
+          <button type="button" class="px-3 py-2 rounded-md border border-gray-300 flex items-center justify-center" :class="method === 'paypal' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700'" @click="method = 'paypal'">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/paypal.svg" alt="PayPal" class="w-6 h-6" />
           </button>
         </div>
       </div>
@@ -448,32 +348,20 @@
             <label class="block text-sm font-semibold text-emerald-700 mb-1">
               {{ __('landings/landing4.card_number') }}
             </label>
-            <input
-              type="text"
-              class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500"
-              placeholder="1234 1234 1234 1234"
-            />
+            <input type="text" class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="1234 1234 1234 1234" />
           </div>
           <div class="flex space-x-3">
             <div class="w-1/2">
               <label class="block text-sm font-semibold text-emerald-700 mb-1">
                 {{ __('landings/landing4.expiration') }}
               </label>
-              <input
-                type="text"
-                class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500"
-                placeholder="MM/YY"
-              />
+              <input type="text" class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="MM/YY" />
             </div>
             <div class="w-1/2">
               <label class="block text-sm font-semibold text-emerald-700 mb-1">
                 {{ __('landings/landing4.cvc') }}
               </label>
-              <input
-                type="text"
-                class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500"
-                placeholder="123"
-              />
+              <input type="text" class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="123" />
             </div>
           </div>
         </div>
@@ -483,10 +371,7 @@
           <label class="block text-sm font-semibold text-emerald-700 mb-2">
             {{ __('landings/landing4.add_payment_method') }}
           </label>
-          <button
-            type="button"
-            class="w-full px-4 py-2 border border-emerald-600 text-emerald-600 rounded-md hover:bg-emerald-600 hover:text-white cursor-pointer"
-          >
+          <button type="button" class="w-full px-4 py-2 border border-emerald-600 text-emerald-600 rounded-md hover:bg-emerald-600 hover:text-white cursor-pointer">
             Add Google Pay
           </button>
         </div>
@@ -496,20 +381,14 @@
           <label class="block text-sm font-semibold text-emerald-700 mb-2">
             {{ __('landings/landing4.add_payment_method') }}
           </label>
-          <button
-            type="button"
-            class="w-full px-4 py-2 border border-emerald-600 text-emerald-600 rounded-md hover:bg-emerald-600 hover:text-white cursor-pointer"
-          >
+          <button type="button" class="w-full px-4 py-2 border border-emerald-600 text-emerald-600 rounded-md hover:bg-emerald-600 hover:text-white cursor-pointer">
             Add Apple Pay
           </button>
         </div>
       </template>
       <template x-if="method === 'paypal'">
         <div class="mb-6">
-          <button
-            type="button"
-            class="w-full px-4 py-2 border border-emerald-600 text-emerald-600 rounded-md hover:bg-emerald-600 hover:text-white cursor-pointer"
-          >
+          <button type="button" class="w-full px-4 py-2 border border-emerald-600 text-emerald-600 rounded-md hover:bg-emerald-600 hover:text-white cursor-pointer">
             Add PayPal
           </button>
         </div>
@@ -519,4 +398,4 @@
       </button>
     </div>
   </body>
-</html>
+</html> 
