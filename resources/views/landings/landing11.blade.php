@@ -9,7 +9,7 @@
   @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50" id="app">
   <nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50 py-3">
     <div class="container mx-auto flex justify-between items-center px-4">
       <div class="text-lg font-bold text-green-700">Urban Tree 5.0</div>
