@@ -116,16 +116,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 <Icon inline={true} width="24px" icon="tabler:settings" />{' '}
                 {t('admin.menu.settings')}
               </Link>
-              <a
-                href="#"
-                className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${
-                  location.pathname === '/admin/inventory'
-                    ? 'bg-gray-200 text-indigo-600'
-                    : ''
-                }`}>
-                <Icon width="24px" icon="tabler:chart-treemap" />{' '}
-                {t('admin.menu.inventory')}
-              </a>
             </div>
           </div>
 
@@ -199,16 +189,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             <Icon width="24px" icon="tabler:settings" />{' '}
             {t('admin.menu.settings')}
           </Link>
-          <Link
-            to="/admin/inventory"
-            className={`block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2 ${
-              location.pathname === '/admin/inventory'
-                ? 'bg-gray-200 text-indigo-600'
-                : ''
-            }`}>
-            <Icon width="24px" icon="tabler:chart-treemap" />{' '}
-            {t('admin.menu.inventory')}
-          </Link>
           <div className="mt-4 flex flex-col gap-4">
             {!isSettingsPage && (
               <Dropdown
@@ -242,6 +222,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 }`}>
                 <Icon width="22px" icon="tabler:layout-dashboard" />{' '}
                 {t('admin.submenu.manage.dashboard')}
+              </Link>
+              <Link
+                to="/admin/inventory"
+                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                  location.pathname === '/admin/inventory'
+                    ? 'bg-gray-200 text-indigo-600'
+                    : 'text-gray-700'
+                }`}>
+                <Icon width="22px" icon="tabler:chart-treemap" />{' '}
+                {t('admin.submenu.manage.inventory')}
               </Link>
               <Link
                 to="/admin/work-orders"

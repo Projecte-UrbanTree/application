@@ -23,12 +23,12 @@
     "admin": {
         "menu": {
             "management": "Management",
-            "settings": "Settings",
-            "inventory": "Inventory"
+            "settings": "Settings"
         },
         "submenu": {
             "manage": {
                 "dashboard": "Dashboard",
+                "inventory": "Inventory",
                 "workOrders": "Work Orders",
                 "stats": "Statistics"
             },

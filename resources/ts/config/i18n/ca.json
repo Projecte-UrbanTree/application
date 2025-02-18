@@ -23,12 +23,12 @@
     "admin": {
         "menu": {
             "management": "Gestió",
-            "settings": "Configuració",
-            "inventory": "Inventari"
+            "settings": "Configuració"
         },
         "submenu": {
             "manage": {
                 "dashboard": "Tauler",
+                "inventory": "Inventari",
                 "workOrders": "Ordres de treball",
                 "stats": "Estadístiques"
             },
