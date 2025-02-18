@@ -7,26 +7,19 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@babel/preset-env": "^7.26.7",
-        "@babel/preset-react": "^7.26.3",
-        "@babel/preset-typescript": "^7.26.0",
-        "@eslint/js": "^9.19.0",
+        "@eslint/js": "^9.20.0",
         "@iconify/react": "^5.2.0",
         "@types/node": "^22.10.10",
         "@types/react": "^19.0.8",
         "@types/react-dom": "^19.0.3",
         "axios": "^1.7.9",
-        "eslint": "^8.57.0",
+        "eslint": "^9.20.1",
         "eslint-config-prettier": "^10.0.1",
-        "eslint-import-resolver-typescript": "^3.7.0",
-        "eslint-plugin-import": "^2.31.0",
-        "eslint-plugin-prettier": "^5.2.3",
-        "eslint-plugin-react": "^7.37.4",
         "globals": "^15.14.0",
         "laravel-vite-plugin": "^1.2.0",
         "prettier": "^3.4.2",
-        "prettier-eslint": "^16.3.0",
-        "typescript-eslint": "^8.22.0",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.24.1",
         "vite": "^6.0.11"
     },
     "dependencies": {
@@ -39,7 +32,6 @@
         "react-i18next": "^15.4.0",
         "react-router-dom": "^7.1.5",
         "tailwindcss": "^4.0.3",
-        "typescript": "^5.7.3",
         "typescript-cookie": "^1.0.6"
     }
 }
