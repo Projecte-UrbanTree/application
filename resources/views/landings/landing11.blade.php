@@ -25,11 +25,7 @@
   </nav>
 
   <div class="w-full mt-16">
-      @php
-          $lang = app()->getLocale(); // Obtener idioma actual
-          $banner = ($lang === 'es') ? 'bannerEs.jpg' : (($lang === 'ca') ? 'bannerCa.jpg' : 'bannerEn.jpg');
-      @endphp
-      <img src="{{ asset("images/landings/landing11/$banner") }}" alt="Banner" class="w-full h-[400px] object-cover">
+      <img src="{{ asset("images/landings/landing11/banner-" . app()->getLocale() . ".jpg") }}" alt="Banner" class="w-full h-[400px] object-cover">
   </div>
   <div class="container mx-auto text-center my-8">
     <h2 class="text-3xl font-bold mb-6">{{ __('landings/landing11.video') }}</h2>
