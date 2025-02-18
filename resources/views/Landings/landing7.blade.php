@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('landings/landing7.title') }}</title>
     @vite('resources/css/app.css')
-    <!-- Remove Alpine.js -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script> -->
 </head>
 
-<body class="bg-white h-screen flex items-center justify-center">
+<body class="h-screen flex items-center justify-center" id="app">
     <div class="h-screen w-full flex items-center justify-center">
         <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
             <div class="absolute top-0 right-0 p-6 flex items-center space-x-4 z-10">
@@ -32,13 +30,13 @@
                         </ul>
                     </div>
                 </div>
-                <button class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer">
+                <button class="bg-green-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer">
                     <a href="{{ url('/login') }}" class="text-white">{{ __('landings/landing7.button_login') }}</a>
                 </button>
             </div>
 
             <p class="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-6xl">{{ __('landings/landing7.title') }}</p>
-            <p class="text-center text-sm text-gray-500">{{ __('landings/landing7.tagline') }}</p>
+            <p class="text-center text-sm text-green-800">{{ __('landings/landing7.tagline') }}</p>
 
             <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2 group">
 
@@ -52,7 +50,7 @@
                         </div>
                         <div class="@container relative h-full w-full max-lg:mx-auto max-lg:max-w-sm">
                             <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden">
-                                <img class="size-full object-cover object-top" src="{{ asset('images/screenshot.jpg') }}" alt="">
+                                <img class="size-full object-cover object-top" src="{{ asset('images/landings/landing7/screenshot.jpg') }}" alt="">
                             </div>
                         </div>
                     </div>
@@ -68,7 +66,7 @@
                             <p class="mt-2 mb-3 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">{{ __('landings/landing7.performance_description') }}</p>
                         </div>
                         <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
-                            <img class="w-full max-lg:max-w-xs" src="https://tailwindui.com/plus-assets/img/component-images/bento-03-performance.png" alt="" />
+                            <img class="w-full max-lg:max-w-xs" src="{{ asset('images/landings/landing7/performance.png') }}" alt="" />
                         </div>
                     </div>
                     <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-t-[2rem]"></div>
@@ -83,7 +81,7 @@
                             <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">{{ __('landings/landing7.security_description') }}</p>
                         </div>
                         <div class="@container flex flex-1 items-center max-lg:py-6 lg:pb-2">
-                            <img class="h-[120px] max-w-[80%] object-cover" src="https://tailwindui.com/plus-assets/img/component-images/bento-03-security.png" alt="" />
+                            <img class="h-[120px] max-w-[80%] object-cover" src="{{ asset('images/landings/landing7/security.png') }}" alt="" />
                         </div>
                     </div>
                     <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5"></div>
@@ -100,7 +98,7 @@
                             </div>
                             <div class="relative h-full w-full">
                                 <div class="px-6 pt-6 pb-14">
-                                    <img src="{{ asset('images/urbantree-map.jpg') }}" alt="Mapa interactivo" class="w-full h-96 object-cover rounded-3xl">
+                                    <img src="{{ asset('images/landings/landing11/urbantree-map.jpg') }}" alt="Mapa interactivo" class="w-full h-96 object-cover rounded-3xl">
                                 </div>
                             </div>
                         </div>
