@@ -1,4 +1,3 @@
-import logo from '@images/logo.png';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from 'primereact/button';
