@@ -80,6 +80,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     location.pathname.startsWith('/admin/work-orders') ||
     location.pathname.startsWith('/admin/stats');
 
+  const isSettingsPage = location.pathname.includes('/admin/settings');
+
   return (
     <div>
       <header className="border-b border-gray-200 bg-white shadow-md">
@@ -129,16 +131,18 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex gap-4">
-              <Dropdown
-                id="contractBtn"
-                name="contractBtn"
-                className="w-32"
-                value={contract}
-                options={contractsWithAll}
-                onChange={handleContractChange}
-                optionLabel="name"
-                optionValue="id"
-              />
+              {!isSettingsPage && (
+                <Dropdown
+                  id="contractBtn"
+                  name="contractBtn"
+                  className="w-32"
+                  value={contract}
+                  options={contractsWithAll}
+                  onChange={handleContractChange}
+                  optionLabel="name"
+                  optionValue="id"
+                />
+              )}
               <LangSelector />
             </div>
 
@@ -206,15 +210,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             {t('admin.menu.inventory')}
           </Link>
           <div className="mt-4 flex flex-col gap-4">
-            <Dropdown
-              id="contractBtnMobile"
-              name="contractBtnMobile"
-              value={contract}
-              options={contractsWithAll}
-              onChange={handleContractChange}
-              optionLabel="name"
-              optionValue="id"
-            />
+            {!isSettingsPage && (
+              <Dropdown
+                id="contractBtnMobile"
+                name="contractBtnMobile"
+                value={contract}
+                options={contractsWithAll}
+                onChange={handleContractChange}
+                optionLabel="name"
+                optionValue="id"
+              />
+            )}
             <LangSelector className="w-full" />
           </div>
         </div>
