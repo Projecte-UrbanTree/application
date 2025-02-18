@@ -9,7 +9,7 @@
   @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50" id="app">
   <nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50 py-3">
     <div class="container mx-auto flex justify-between items-center px-4">
       <div class="text-lg font-bold text-green-700">Urban Tree 5.0</div>
@@ -25,11 +25,7 @@
   </nav>
 
   <div class="w-full mt-16">
-      @php
-          $lang = app()->getLocale(); // Obtener idioma actual
-          $banner = ($lang === 'es') ? 'bannerEs.jpg' : (($lang === 'ca') ? 'bannerCa.jpg' : 'bannerEn.jpg');
-      @endphp
-      <img src="{{ asset('images/' . $banner) }}" alt="Banner" class="w-full h-[400px] object-cover">
+      <img src="{{ asset("images/landings/landing11/banner-" . app()->getLocale() . ".jpg") }}" alt="Banner" class="w-full h-[400px] object-cover">
   </div>
   <div class="container mx-auto text-center my-8">
     <h2 class="text-3xl font-bold mb-6">{{ __('landings/landing11.video') }}</h2>
@@ -168,7 +164,7 @@
 
   <section class="container mx-auto py-16 px-4">
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-      <img src="{{ asset('images/urbantree-map.jpg') }}" alt="Management Interface" class="w-full h-96 object-cover">
+      <img src="{{ asset('images/landings/landing11/urbantree-map.jpg') }}" alt="Management Interface" class="w-full h-96 object-cover">
       <div class="p-8 bg-gray-50">
         <h3 class="text-2xl font-bold mb-4">{{ __('landings/landing11.features_title') }}</h3>
         <div class="grid md:grid-cols-2 gap-8">
