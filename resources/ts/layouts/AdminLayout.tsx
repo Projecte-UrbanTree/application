@@ -100,18 +100,20 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             <div className="hidden lg:flex space-x-6">
               <Link
                 to="/admin/dashboard"
-                className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${
-                  isManagementActive ? 'bg-gray-200 text-indigo-600' : ''
+                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                  isManagementActive
+                    ? 'bg-indigo-600 text-white'
+                    : 'hover:bg-gray-200'
                 }`}>
                 <Icon inline={true} width="24px" icon="tabler:briefcase" />{' '}
                 {t('admin.menu.management')}
               </Link>
               <Link
                 to="/admin/settings/contracts"
-                className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${
+                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
                   location.pathname.includes('/admin/settings')
-                    ? 'bg-gray-200 text-indigo-600'
-                    : ''
+                    ? 'bg-indigo-600 text-white'
+                    : 'hover:bg-gray-200'
                 }`}>
                 <Icon inline={true} width="24px" icon="tabler:settings" />{' '}
                 {t('admin.menu.settings')}
@@ -215,7 +217,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               {/* Management submenu */}
               <Link
                 to="/admin/dashboard"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/dashboard'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -225,7 +227,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/inventory"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/inventory'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -235,7 +237,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/work-orders"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/work-orders'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -245,7 +247,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/stats"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/stats'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -260,7 +262,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               {/* Settings submenu */}
               <Link
                 to="/admin/settings/contracts"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/settings/contracts'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -270,7 +272,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/settings/element-types"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/settings/element-types'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -280,7 +282,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/settings/tree-types"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/settings/tree-types'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -290,7 +292,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/settings/task-types"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/settings/task-types'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -300,7 +302,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/settings/resources"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/settings/resources'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
@@ -310,7 +312,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               </Link>
               <Link
                 to="/admin/settings/resource-types"
-                className={`px-1 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
+                className={`px-2 py-3 rounded flex items-center gap-1 hover:bg-gray-200 ${
                   location.pathname === '/admin/settings/resource-types'
                     ? 'bg-gray-200 text-indigo-600'
                     : 'text-gray-700'
