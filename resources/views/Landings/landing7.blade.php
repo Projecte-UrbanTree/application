@@ -8,8 +8,8 @@
     @vite('resources/css/app.css')
 </head>
 
-<body class="h-screen flex items-center justify-center" id="app">
-    <div class="h-screen w-full flex items-center justify-center">
+<body class=" flex items-center justify-center" id="app">
+    <div class=" w-full flex items-center justify-center">
         <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
             <div class="absolute top-0 right-0 p-6 flex items-center space-x-4 z-10">
                 <div class="relative">
@@ -35,7 +35,7 @@
                 </button>
             </div>
 
-            <p class="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-6xl">{{ __('landings/landing7.title') }}</p>
+            <p class="mx-auto mt-28 lg:mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-6xl">{{ __('landings/landing7.title') }}</p>
             <p class="text-center text-sm text-green-800">{{ __('landings/landing7.tagline') }}</p>
 
             <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2 group">
