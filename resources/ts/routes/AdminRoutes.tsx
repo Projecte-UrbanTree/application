@@ -12,6 +12,7 @@ import AdminResources from '@/pages/Admin/Settings/Resources';
 import AdminResourceTypes from '@/pages/Admin/Settings/ResourceTypes';
 import AdminStats from '@/pages/Admin/Stats';
 
+import { Navigate } from 'react-router-dom';
 import { RouteObject } from 'react-router-dom';
 
 const AdminRoutes: RouteObject[] = [
@@ -21,6 +22,7 @@ const AdminRoutes: RouteObject[] = [
       {
         path: '/admin',
         children: [
+          { index: true, element: <Navigate to="/admin/dashboard" /> },
           {
             path: 'dashboard',
             element: (
@@ -57,6 +59,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'settings',
             children: [
+              { index: true, element: <Navigate to="/admin/settings/users" /> },
               {
                 path: 'users',
                 element: (
