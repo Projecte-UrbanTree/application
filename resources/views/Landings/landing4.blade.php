@@ -158,11 +158,16 @@
                 </p>
               </div>
               <div class="relative min-h-[30rem] w-full grow">
-                <div class="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl">
-                  <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2" alt="Naturaleza" />
-                  <div class="px-6 pt-6 pb-14"></div>
-                </div>
-              </div>
+  <div class="absolute inset-0 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl">
+    <img
+      src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg"
+      alt="Naturaleza"
+      class="w-full h-full object-cover"
+    />
+    <div class="px-6 pt-6 pb-14"></div>
+  </div>
+</div>
+
             </div>
             <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
           </div>
