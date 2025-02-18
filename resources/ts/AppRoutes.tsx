@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import Error from '@/pages/Error';
-import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -14,7 +13,6 @@ export default function AppRoutes() {
   }
 
   function RoutesComponent() {
-    const { t } = useTranslation();
     return useRoutes([
       ...routesConfig,
       {
