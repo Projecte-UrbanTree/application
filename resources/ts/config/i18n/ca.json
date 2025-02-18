@@ -7,7 +7,6 @@
                 "placeholderEmail": "elteucorreu@exemple.com",
                 "rememberMe": "Recorda'm",
                 "btnLogin": "Inicia sessió",
-                "msgError": "Credencials incorrectes",
                 "titleSuccess": "Èxit",
                 "msgSuccess": "Sessió iniciada correctament"
             }
@@ -146,6 +145,7 @@
         }
     },
     "general": {
+        "genericError": "Hi ha hagut un error. Si us plau, torna a intentar-ho més tard.",
         "allContracts": "Tots els contractes"
     }
 }

@@ -7,7 +7,6 @@
                 "placeholderEmail": "tucorreo@ejemplo.com",
                 "rememberMe": "Recuérdame",
                 "btnLogin": "Iniciar sesión",
-                "msgError": "Credenciales incorrectas",
                 "titleSuccess": "Éxito",
                 "msgSuccess": "Inicio de sesión correcto"
             }
@@ -146,6 +145,7 @@
         }
     },
     "general": {
+        "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
         "allContracts": "Todos los contratos"
     }
 }

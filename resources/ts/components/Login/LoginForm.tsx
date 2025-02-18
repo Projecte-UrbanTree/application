@@ -34,8 +34,12 @@ const LoginForm = () => {
         t('public.login.form.msgSuccess'),
       );
       login(response.data.accessToken, response.data.userData);
-    } catch (error) {
-      setError(t('public.login.form.msgError'));
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        setError(error.response.data.message);
+      } else {
+        setError(t('general.genericError'));
+      }
     }
   };
 

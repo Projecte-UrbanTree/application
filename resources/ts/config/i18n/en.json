@@ -7,7 +7,6 @@
                 "placeholderEmail": "youremail@example.com",
                 "rememberMe": "Remember me",
                 "btnLogin": "Log in",
-                "msgError": "Incorrect credentials",
                 "titleSuccess": "Success",
                 "msgSuccess": "Logged in successfully"
             }
@@ -146,6 +145,7 @@
         }
     },
     "general": {
+        "genericError": "An error occurred. Please try again later.",
         "allContracts": "All contracts"
     }
 }
