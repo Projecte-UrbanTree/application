@@ -9,7 +9,7 @@ class LandingController extends Controller
 {
     public function index(int $number)
     {
-        return view("/Landings/landing$number");
+        return view("/landings/landing$number");
     }
 
     public function store(int $number, Request $request)
