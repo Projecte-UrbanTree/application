@@ -48,4 +48,9 @@ return [
 'expiration'  => 'Expiración',
 'cvc'         => 'CVC',
 'select_your_plan' => 'Selecciona tu Plan',
+'contact_title' => 'Contacta con nosotros',
+'contact_name' => 'Nombre',
+'contact_email' => 'Correo electrónico',
+'contact_message' => 'Mensaje',
+'contact_submit' => 'Enviar',
 ];

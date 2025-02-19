@@ -48,4 +48,10 @@ return [
 'expiration'  => 'Expiration',
 'cvc'         => 'CVC',
 'select_your_plan' => 'Select Your Plan',
+'contact_title' => 'Contact Us',
+'contact_name' => 'Name',
+'contact_email' => 'Email',
+'contact_message' => 'Message',
+'contact_submit' => 'Send',
+
 ];

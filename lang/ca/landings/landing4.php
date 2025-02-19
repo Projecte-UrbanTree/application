@@ -47,5 +47,9 @@ return [
     'card_number' => 'Nombre de la targeta',
 'expiration'  => 'Expiració',
 'cvc'         => 'CVC',
-'select_your_plan' => 'Selecciona el teu Pla',
+'contact_title' => 'Contacta amb nosaltres',
+'contact_name' => 'Nom',
+'contact_email' => 'Correu electrònic',
+'contact_message' => 'Missatge',
+'contact_submit' => 'Enviar',
 ];

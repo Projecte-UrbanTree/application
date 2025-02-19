@@ -160,7 +160,7 @@
               <div class="relative min-h-[30rem] w-full grow">
   <div class="absolute inset-0 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl">
     <img
-      src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg"
+  src="{{ asset('images/img4-bg.jpg') }}"
       alt="Naturaleza"
       class="w-full h-full object-cover"
     />
@@ -263,14 +263,47 @@
         </div>
       </div>
     </section>
-    <footer id="footer" class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white py-12 px-4">
-      <div class="max-w-7xl mx-auto">
-        <p class="text-center text-sm">
-          &copy; 2025 Urban Tree 5.0.
-          {{ __('landings/landing4.tagline') }}
-        </p>
+   <footer id="footer" class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white py-12 px-4">
+  <div class="max-w-7xl mx-auto">
+    <h4 class="text-center text-2xl font-bold mb-6">{{ __('landings/landing4.contact_title') }}</h4>
+    <form action="#" method="" class="bg-white/10 p-6 rounded-xl shadow-md max-w-xl mx-auto space-y-4">
+      <div class="flex flex-col sm:flex-row gap-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="{{ __('landings/landing4.contact_name') }}"
+          class="w-full sm:w-1/2 px-4 py-3 rounded-md text-gray-900 focus:ring-emerald-500 focus:border-emerald-500"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="{{ __('landings/landing4.contact_email') }}"
+          class="w-full sm:w-1/2 px-4 py-3 rounded-md text-gray-900 focus:ring-emerald-500 focus:border-emerald-500"
+          required
+        />
       </div>
-    </footer>
+      <textarea
+        name="message"
+        placeholder="{{ __('landings/landing4.contact_message') }}"
+        rows="4"
+        class="w-full px-4 py-3 rounded-md text-gray-900 focus:ring-emerald-500 focus:border-emerald-500"
+        required
+      ></textarea>
+      <button
+        type="submit"
+        class="w-full bg-emerald-600 hover:bg-emerald-700 px-6 py-3 rounded-md font-semibold"
+      >
+        {{ __('landings/landing4.contact_submit') }}
+      </button>
+    </form>
+    <p class="text-center text-sm mt-8">
+      &copy; 2025 Urban Tree 5.0. {{ __('landings/landing4.tagline') }}
+    </p>
+  </div>
+</footer>
+
+
     <div class="fixed inset-0 bg-[rgba(0,0,0,0.5)] backdrop-blur-sm z-40" x-show="showOverlay" x-transition @click="openPayment = false; showOverlay = false"></div>
     <div class="fixed top-0 right-0 z-50 w-full max-w-md h-screen bg-white shadow-xl p-6 overflow-auto transform transition-all duration-300" x-show="openPayment" x-transition:enter="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="translate-x-0" x-transition:leave-end="translate-x-full">
       <button class="absolute top-4 right-4 text-3xl font-bold text-gray-600 hover:text-gray-800 cursor-pointer" @click="
