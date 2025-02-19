@@ -22,15 +22,19 @@
                 </a>
             </div>
             <div class="flex">
+                <!-- Updated language icons to use flag images like in landing10 -->
                 <div class="flex items-center justify-center mr-4">
-                    <a href="{{ route('set-language', ['lang' => 'en']) }}" class="mx-2 flex items-center gap-1 text-gray-700 hover:text-indigo-600">
-                        🇬🇧 EN
+                    <a href="{{ route('set-language', ['lang' => 'ca']) }}" class="mx-2 text-gray-400 hover:text-gray-300">
+                        <span class="sr-only">Català</span>
+                        <img class="size-6" src="{{ asset('images/flags/es-ct.svg') }}" alt="Catalan flag">
                     </a>
-                    <a href="{{ route('set-language', ['lang' => 'es']) }}" class="mx-2 flex items-center gap-1 text-gray-700 hover:text-indigo-600">
-                        🇪🇸 ES
+                    <a href="{{ route('set-language', ['lang' => 'es']) }}" class="mx-2 text-gray-400 hover:text-gray-300">
+                        <span class="sr-only">Español</span>
+                        <img class="size-6" src="{{ asset('images/flags/es.svg') }}" alt="Spanish flag">
                     </a>
-                    <a href="{{ route('set-language', ['lang' => 'ca']) }}" class="mx-2 flex items-center gap-1 text-gray-700 hover:text-indigo-600">
-                        🇨🇦 CA
+                    <a href="{{ route('set-language', ['lang' => 'en']) }}" class="mx-2 text-gray-400 hover:text-gray-300">
+                        <span class="sr-only">English</span>
+                        <img class="size-6" src="{{ asset('images/flags/us.svg') }}" alt="English flag">
                     </a>
                 </div>
                 <a href="/login" class="text-sm/6 font-semibold px-4 py-2 bg-indigo-600 text-white rounded">
