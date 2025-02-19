@@ -13,21 +13,25 @@ import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 
 interface AdminLayoutProps {
-  title: string;
+  titleI18n: string;
   children: React.ReactNode;
   contracts: { id: string; name: string }[];
   currentContract: string;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
-  title,
+  titleI18n,
   children,
   contracts,
   currentContract,
 }) => {
-  document.title = title
-    ? `${title} - ${import.meta.env.VITE_APP_NAME}`
-    : import.meta.env.VITE_APP_NAME;
+  const { t } = useI18n();
+
+  useEffect(() => {
+    document.title = titleI18n
+      ? `${t(titleI18n)} - ${import.meta.env.VITE_APP_NAME}`
+      : import.meta.env.VITE_APP_NAME;
+  }, [titleI18n, t]);
 
   const location = useLocation();
 
@@ -36,7 +40,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const { user, logout } = useAuth();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
-  const { t } = useI18n();
 
   const contractsWithAll = [
     ...contracts,
@@ -72,49 +75,151 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     };
   }, [profileDropdownVisible]);
 
+  const isManagementActive =
+    location.pathname.startsWith('/admin/dashboard') ||
+    location.pathname.startsWith('/admin/work-orders') ||
+    location.pathname.startsWith('/admin/inventory') ||
+    location.pathname.startsWith('/admin/workers') ||
+    location.pathname.startsWith('/admin/resources') ||
+    location.pathname.startsWith('/admin/stats');
+
+  const isSettingsPage = location.pathname.includes('/admin/settings');
+
+  const managementSubmenuItems = [
+    {
+      to: '/admin/dashboard',
+      label: t('admin.submenu.manage.dashboard'),
+      icon: 'tabler:layout-dashboard',
+    },
+    {
+      to: '/admin/inventory',
+      label: t('admin.submenu.manage.inventory'),
+      icon: 'tabler:chart-treemap',
+    },
+    {
+      to: '/admin/work-orders',
+      label: t('admin.submenu.manage.workOrders'),
+      icon: 'tabler:clipboard-text',
+    },
+    {
+      to: '/admin/workers',
+      label: t('admin.submenu.manage.workers'),
+      icon: 'tabler:users',
+    },
+    {
+      to: '/admin/resources',
+      label: t('admin.submenu.manage.resources'),
+      icon: 'tabler:package',
+    },
+    {
+      to: '/admin/stats',
+      label: t('admin.submenu.manage.stats'),
+      icon: 'tabler:chart-pie-4',
+    },
+  ];
+  const settingsSubmenuItems = [
+    {
+      to: '/admin/settings/contracts',
+      label: t('admin.submenu.settings.contracts'),
+      icon: 'tabler:file-description',
+    },
+    {
+      to: '/admin/settings/element-types',
+      label: t('admin.submenu.settings.elementTypes'),
+      icon: 'tabler:box',
+    },
+    {
+      to: '/admin/settings/tree-types',
+      label: t('admin.submenu.settings.species'),
+      icon: 'tabler:tree',
+    },
+    {
+      to: '/admin/settings/task-types',
+      label: t('admin.submenu.settings.taskTypes'),
+      icon: 'tabler:list-check',
+    },
+    {
+      to: '/admin/settings/resource-types',
+      label: t('admin.submenu.settings.resourceTypes'),
+      icon: 'tabler:package-export',
+    },
+    {
+      to: '/admin/settings/users',
+      label: t('admin.submenu.settings.users'),
+      icon: 'tabler:users',
+    },
+  ];
+
+  const mobileNavItems = [
+    {
+      to: '/admin/dashboard',
+      label: t('admin.menu.management'),
+      icon: 'tabler:briefcase',
+      active: isManagementActive,
+    },
+    {
+      to: '/admin/settings/contracts',
+      label: t('admin.menu.settings'),
+      icon: 'tabler:settings',
+      active: location.pathname.includes('/admin/settings'),
+    },
+  ];
+
   return (
     <div>
       <header className="border-b border-gray-200 bg-white shadow-md">
-        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-          <a href="#" className="hidden sm:block">
-            <img className="w-36 md:w-50" src={logo} alt="Logo" />
-          </a>
-
-          <div className="block md:hidden">
-            <Button
-              onClick={() => setMenuOpen(!menuOpen)}
-              color="text-gray-800">
-              <Icon width="24px" icon="tabler:menu" color="#ffffff" />
-            </Button>
-          </div>
-
-          <div className="hidden md:flex space-x-6">
-            <Link
-              to="/admin/dashboard"
-              className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname !== '/admin/inventory' ? 'bg-gray-200' : ''}`}>
-              <Icon inline={true} width="24px" icon="tabler:adjustments-cog" />{' '}
-              {t('admin.menu.management')}
-            </Link>
-            <a
-              href="#"
-              className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-2 py-2 rounded active:text-gray-700 flex items-center gap-2 ${location.pathname === '/admin/inventory' ? 'bg-gray-200' : ''}`}>
-              <Icon width="24px" icon="tabler:map-cog" />{' '}
-              {t('admin.menu.inventory')}
+        <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
+          <div className="flex items-center gap-4">
+            <div className="block lg:hidden">
+              <Button
+                onClick={() => setMenuOpen(!menuOpen)}
+                color="text-gray-800">
+                <Icon width="24px" icon="tabler:menu" color="#ffffff" />
+              </Button>
+            </div>
+            <a href="/" className="">
+              <img className="w-48" src={logo} alt="Logo" />
             </a>
+            <div className="hidden lg:flex space-x-6">
+              <Link
+                to="/admin/dashboard"
+                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                  isManagementActive
+                    ? 'bg-indigo-600 text-white'
+                    : 'hover:bg-gray-100'
+                }`}>
+                <Icon inline={true} width="24px" icon="tabler:briefcase" />{' '}
+                {t('admin.menu.management')}
+              </Link>
+              <Link
+                to="/admin/settings/contracts"
+                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                  location.pathname.includes('/admin/settings')
+                    ? 'bg-indigo-600 text-white'
+                    : 'hover:bg-gray-100'
+                }`}>
+                <Icon inline={true} width="24px" icon="tabler:settings" />{' '}
+                {t('admin.menu.settings')}
+              </Link>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <Dropdown
-              id="contractBtn"
-              name="contractBtn"
-              className="w-48"
-              value={contract}
-              options={contractsWithAll}
-              onChange={handleContractChange}
-              optionLabel="name"
-              optionValue="id"
-            />
-            <LangSelector />
+            <div className="hidden lg:flex gap-4">
+              {!isSettingsPage && (
+                <Dropdown
+                  id="contractBtn"
+                  name="contractBtn"
+                  className="w-32"
+                  value={contract}
+                  options={contractsWithAll}
+                  onChange={handleContractChange}
+                  optionLabel="name"
+                  optionValue="id"
+                />
+              )}
+              <LangSelector />
+            </div>
 
             <div className="relative">
               <Avatar
@@ -149,85 +254,69 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             </div>
           </div>
         </nav>
-
         <div
-          className={`${menuOpen ? '' : 'hidden'} md:hidden px-4 py-4 bg-gray-100`}>
-          <a
-            href="/admin"
-            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
-            <Icon width="24px" icon="tabler:adjustments-cog" />{' '}
-            {t('admin.menu.management')}
-          </a>
-          <a
-            href="/admin/inventory"
-            className="block py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center gap-2">
-            <Icon width="24px" icon="tabler:map-cog" />{' '}
-            {t('admin.menu.inventory')}
-          </a>
+          className={`${menuOpen ? '' : 'hidden'} lg:hidden px-8 py-6 bg-gray-100`}>
+          {mobileNavItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`block py-2 text-gray-700 hover:bg-gray-100 rounded flex items-center gap-2 ${
+                item.active ? 'bg-gray-200 text-indigo-600' : ''
+              }`}>
+              <Icon width="24px" icon={item.icon} /> {item.label}
+            </Link>
+          ))}
+          <div className="mt-4 flex flex-col gap-4">
+            {!isSettingsPage && (
+              <Dropdown
+                id="contractBtnMobile"
+                name="contractBtnMobile"
+                value={contract}
+                options={contractsWithAll}
+                onChange={handleContractChange}
+                optionLabel="name"
+                optionValue="id"
+              />
+            )}
+            <LangSelector className="w-full" />
+          </div>
         </div>
       </header>
 
       <div
         id="submenu"
-        className="md:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-4 py-4 bg-gray-100 shadow-md">
-        <div className="submenu text-center flex items-center space-x-6 mx-auto">
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:file-description" />{' '}
-            {t('admin.submenu.contracts')}
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:tools" />{' '}
-            {t('admin.submenu.workOrders')}
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:box" />{' '}
-            {t('admin.submenu.elementTypes')}
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:tree" />{' '}
-            {t('admin.submenu.species')}
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:list-check" />{' '}
-            {t('admin.submenu.taskTypes')}
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:package" />{' '}
-            {t('admin.submenu.resources')}
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:package-export" />{' '}
-            {t('admin.submenu.resourceTypes')}
-          </a>
-          <Link
-            to="/admin/users"
-            className={`text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm ${location.pathname === '/admin/users' ? 'bg-gray-200' : ''}`}>
-            <Icon width="22px" icon="tabler:users" /> {t('admin.submenu.users')}
-          </Link>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-gray-600 hover:bg-gray-200 px-1 py-2 rounded active:text-gray-700 flex items-center gap-1 text-sm">
-            <Icon width="22px" icon="tabler:chart-bar" />{' '}
-            {t('admin.submenu.stats')}
-          </a>
+        className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-50 shadow-md">
+        <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
+          {isManagementActive &&
+            managementSubmenuItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`px-2 py-3 rounded flex items-center gap-1 ${
+                  location.pathname === item.to
+                    ? 'bg-gray-100 text-indigo-600'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}>
+                <Icon width="22px" icon={item.icon} /> {item.label}
+              </Link>
+            ))}
+          {location.pathname.includes('/admin/settings') &&
+            settingsSubmenuItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`px-2 py-3 rounded flex items-center gap-1 ${
+                  location.pathname === item.to
+                    ? 'bg-gray-100 text-indigo-600'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}>
+                <Icon width="22px" icon={item.icon} /> {item.label}
+              </Link>
+            ))}
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-6 pt-8 pb-16">{children}</main>
+      <main className="max-w-7xl mx-auto pt-8 pb-16 px-8">{children}</main>
     </div>
   );
 };

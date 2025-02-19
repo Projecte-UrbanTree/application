@@ -7,7 +7,6 @@
                 "placeholderEmail": "tucorreo@ejemplo.com",
                 "rememberMe": "Recuérdame",
                 "btnLogin": "Iniciar sesión",
-                "msgError": "Credenciales incorrectas",
                 "titleSuccess": "Éxito",
                 "msgSuccess": "Inicio de sesión correcto"
             }
@@ -24,23 +23,33 @@
     "admin": {
         "menu": {
             "management": "Gestión",
-            "inventory": "Inventario"
+            "settings": "Configuración"
         },
         "submenu": {
-            "contracts": "Contratos",
-            "workOrders": "Órdenes de trabajo",
-            "elementTypes": "Tipos de elemento",
-            "species": "Especies",
-            "taskTypes": "Tipos de tarea",
-            "resources": "Recursos",
-            "resourceTypes": "Tipos de recursos",
-            "users": "Usuarios",
-            "stats": "Estadísticas"
+            "manage": {
+                "dashboard": "Tablero",
+                "workOrders": "Órdenes de trabajo",
+                "inventory": "Inventario",
+                "workers": "Trabajadores",
+                "resources": "Recursos",
+                "stats": "Estadísticas"
+            },
+            "settings": {
+                "contracts": "Contratos",
+                "elementTypes": "Tipos de elemento",
+                "species": "Especies",
+                "taskTypes": "Tipos de tarea",
+                "resourceTypes": "Tipos de recurso",
+                "users": "Usuarios"
+            }
         },
         "profileDropdown": {
             "accountSettings": "Configuración de la cuenta",
             "license": "Licencia",
             "logout": "Cerrar sesión"
+        },
+        "buttons": {
+            "createNew": "Crear nuevo"
         },
         "pages": {
             "dashboard": {
@@ -55,11 +64,92 @@
                         "elements": "Elementos",
                         "workOrders": "Órdenes de trabajo"
                     }
+                },
+                "title": "Tablero"
+            },
+            "users": {
+                "title": "Usuarios",
+                "columns": {
+                    "name": "Nombre",
+                    "surname": "Apellido",
+                    "email": "Correo electrónico",
+                    "company": "Empresa",
+                    "dni": "DNI",
+                    "role": "Rol"
                 }
+            },
+            "contracts": {
+                "title": "Contratos",
+                "columns": {
+                    "name": "Nombre",
+                    "start_date": "Fecha de inicio",
+                    "end_date": "Fecha de fin",
+                    "invoice_proposed": "Factura propuesta",
+                    "invoice_agreed": "Factura acordada",
+                    "invoice_paid": "Factura pagada"
+                }
+            },
+            "workOrders": {
+                "title": "Órdenes de trabajo",
+                "columns": {
+                    "date": "Fecha",
+                    "status": "Estado",
+                    "contract_id": "Contrato"
+                }
+            },
+            "elementTypes": {
+                "title": "Tipos de elemento",
+                "columns": {
+                    "name": "Nombre",
+                    "requires_tree_type": "Requiere tipo de árbol",
+                    "description": "Descripción",
+                    "icon": "Ícono",
+                    "color": "Color"
+                }
+            },
+            "treeTypes": {
+                "title": "Tipos de árbol",
+                "columns": {
+                    "family": "Familia",
+                    "genus": "Género",
+                    "species": "Especie"
+                }
+            },
+            "taskTypes": {
+                "title": "Tipos de tarea",
+                "columns": {
+                    "name": "Nombre",
+                    "description": "Descripción"
+                }
+            },
+            "resources": {
+                "title": "Recursos",
+                "columns": {
+                    "name": "Nombre",
+                    "description": "Descripción",
+                    "resource_type_id": "Tipo de recurso"
+                }
+            },
+            "resourceTypes": {
+                "title": "Tipos de recurso",
+                "columns": {
+                    "name": "Nombre",
+                    "description": "Descripción"
+                }
+            },
+            "stats": {
+                "title": "Estadísticas"
             }
+        },
+        "roles": {
+            "admin": "Administrador",
+            "worker": "Operario",
+            "customer": "Cliente",
+            "unknown": "Desconocido"
         }
     },
     "general": {
+        "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
         "allContracts": "Todos los contratos"
     }
 }

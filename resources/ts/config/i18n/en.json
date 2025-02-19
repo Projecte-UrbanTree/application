@@ -7,7 +7,6 @@
                 "placeholderEmail": "youremail@example.com",
                 "rememberMe": "Remember me",
                 "btnLogin": "Log in",
-                "msgError": "Incorrect credentials",
                 "titleSuccess": "Success",
                 "msgSuccess": "Logged in successfully"
             }
@@ -24,26 +23,40 @@
     "admin": {
         "menu": {
             "management": "Management",
-            "inventory": "Inventory"
+            "settings": "Settings"
         },
         "submenu": {
-            "contracts": "Contracts",
-            "workOrders": "Work Orders",
-            "elementTypes": "Element Types",
-            "species": "Species",
-            "taskTypes": "Task Types",
-            "resources": "Resources",
-            "resourceTypes": "Resource Types",
-            "users": "Users",
-            "stats": "Statistics"
+            "manage": {
+                "dashboard": "Dashboard",
+                "workOrders": "Work Orders",
+                "inventory": "Inventory",
+                "workers": "Workers",
+                "resources": "Recursos",
+                "stats": "Statistics"
+            },
+            "settings": {
+                "contracts": "Contracts",
+                "elementTypes": "Element Types",
+                "species": "Species",
+                "taskTypes": "Task Types",
+                "resourceTypes": "Resource Types",
+                "users": "Users"
+            }
         },
         "profileDropdown": {
             "accountSettings": "Account Settings",
             "license": "License",
             "logout": "Log out"
         },
+        "roles": {
+            "admin": "Admin",
+            "worker": "Worker",
+            "customer": "Customer",
+            "unknown": "Unknown"
+        },
         "pages": {
             "dashboard": {
+                "title": "Dashboard",
                 "welcome": {
                     "greeting": "Welcome back, {{name}} {{surname}}.",
                     "message": "We are glad to see you again. Here is a quick overview of your data."
@@ -56,10 +69,87 @@
                         "workOrders": "Work Orders"
                     }
                 }
+            },
+            "users": {
+                "title": "Users",
+                "columns": {
+                    "name": "Name",
+                    "surname": "Surname",
+                    "email": "Email",
+                    "company": "Company",
+                    "dni": "DNI",
+                    "role": "Role"
+                }
+            },
+            "contracts": {
+                "title": "Contracts",
+                "columns": {
+                    "name": "Name",
+                    "start_date": "Start Date",
+                    "end_date": "End Date",
+                    "invoice_proposed": "Invoice Proposed",
+                    "invoice_agreed": "Invoice Agreed",
+                    "invoice_paid": "Invoice Paid"
+                }
+            },
+            "workOrders": {
+                "title": "Work Orders",
+                "columns": {
+                    "date": "Date",
+                    "status": "Status",
+                    "contract_id": "Contract"
+                }
+            },
+            "elementTypes": {
+                "title": "Element Types",
+                "columns": {
+                    "name": "Name",
+                    "requires_tree_type": "Requires Tree Type",
+                    "description": "Description",
+                    "icon": "Icon",
+                    "color": "Color"
+                }
+            },
+            "treeTypes": {
+                "title": "Tree Types",
+                "columns": {
+                    "family": "Family",
+                    "genus": "Genus",
+                    "species": "Species"
+                }
+            },
+            "taskTypes": {
+                "title": "Task Types",
+                "columns": {
+                    "name": "Name",
+                    "description": "Description"
+                }
+            },
+            "resources": {
+                "title": "Resources",
+                "columns": {
+                    "name": "Name",
+                    "description": "Description",
+                    "resource_type_id": "Resource Type"
+                }
+            },
+            "resourceTypes": {
+                "title": "Resource Types",
+                "columns": {
+                    "name": "Name",
+                    "description": "Description"
+                }
+            },
+            "stats": {
+                "title": "Statistics"
             }
+        },
+        "buttons": {
+            "createNew": "Create New"
         }
     },
     "general": {
+        "genericError": "An error occurred. Please try again later.",
         "allContracts": "All contracts"
     }
 }

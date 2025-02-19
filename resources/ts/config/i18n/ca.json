@@ -7,7 +7,6 @@
                 "placeholderEmail": "elteucorreu@exemple.com",
                 "rememberMe": "Recorda'm",
                 "btnLogin": "Inicia sessió",
-                "msgError": "Credencials incorrectes",
                 "titleSuccess": "Èxit",
                 "msgSuccess": "Sessió iniciada correctament"
             }
@@ -24,26 +23,43 @@
     "admin": {
         "menu": {
             "management": "Gestió",
-            "inventory": "Inventari"
+            "settings": "Configuració"
         },
         "submenu": {
-            "contracts": "Contractes",
-            "workOrders": "Ordres de treball",
-            "elementTypes": "Tipus d'element",
-            "species": "Espècies",
-            "taskTypes": "Tipus de tasca",
-            "resources": "Recursos",
-            "resourceTypes": "Tipus de recursos",
-            "users": "Usuaris",
-            "stats": "Estadístiques"
+            "manage": {
+                "dashboard": "Tauler",
+                "workOrders": "Ordres de treball",
+                "inventory": "Inventari",
+                "workers": "Treballadors",
+                "resources": "Recursos",
+                "stats": "Estadístiques"
+            },
+            "settings": {
+                "contracts": "Contractes",
+                "elementTypes": "Tipus d'element",
+                "species": "Espècies",
+                "taskTypes": "Tipus de tasca",
+                "resourceTypes": "Tipus de recurs",
+                "users": "Usuaris"
+            }
         },
         "profileDropdown": {
             "accountSettings": "Configuració del compte",
             "license": "Llicència",
             "logout": "Tanca sessió"
         },
+        "roles": {
+            "admin": "Administrador",
+            "worker": "Treballador",
+            "customer": "Client",
+            "unknown": "Desconegut"
+        },
+        "buttons": {
+            "createNew": "Crear nou"
+        },
         "pages": {
             "dashboard": {
+                "title": "Tauler",
                 "welcome": {
                     "greeting": "Benvingut de nou, {{name}} {{surname}}.",
                     "message": "Et donem la benvinguda al teu tauler. Aquí tens un resum ràpid de les teves dades."
@@ -56,10 +72,84 @@
                         "workOrders": "Ordres de treball"
                     }
                 }
+            },
+            "users": {
+                "title": "Usuaris",
+                "columns": {
+                    "name": "Nom",
+                    "surname": "Cognom",
+                    "email": "Correu electrònic",
+                    "company": "Empresa",
+                    "dni": "DNI",
+                    "role": "Rol"
+                }
+            },
+            "contracts": {
+                "title": "Contractes",
+                "columns": {
+                    "name": "Nom",
+                    "start_date": "Data d'inici",
+                    "end_date": "Data de finalització",
+                    "invoice_proposed": "Factura proposada",
+                    "invoice_agreed": "Factura acordada",
+                    "invoice_paid": "Factura pagada"
+                }
+            },
+            "workOrders": {
+                "title": "Ordres de treball",
+                "columns": {
+                    "date": "Data",
+                    "status": "Estat",
+                    "contract_id": "Contracte"
+                }
+            },
+            "elementTypes": {
+                "title": "Tipus d'element",
+                "columns": {
+                    "name": "Nom",
+                    "requires_tree_type": "Requereix tipus d'arbre",
+                    "description": "Descripció",
+                    "icon": "Icona",
+                    "color": "Color"
+                }
+            },
+            "treeTypes": {
+                "title": "Tipus d'arbre",
+                "columns": {
+                    "family": "Família",
+                    "genus": "Gènere",
+                    "species": "Espècie"
+                }
+            },
+            "taskTypes": {
+                "title": "Tipus de tasca",
+                "columns": {
+                    "name": "Nom",
+                    "description": "Descripció"
+                }
+            },
+            "resources": {
+                "title": "Recursos",
+                "columns": {
+                    "name": "Nom",
+                    "description": "Descripció",
+                    "resource_type_id": "Tipus de recurs"
+                }
+            },
+            "resourceTypes": {
+                "title": "Tipus de recurs",
+                "columns": {
+                    "name": "Nom",
+                    "description": "Descripció"
+                }
+            },
+            "stats": {
+                "title": "Estadístiques"
             }
         }
     },
     "general": {
+        "genericError": "Hi ha hagut un error. Si us plau, torna a intentar-ho més tard.",
         "allContracts": "Tots els contractes"
     }
 }

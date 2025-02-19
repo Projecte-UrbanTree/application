@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import axiosClient from '@/api/axiosClient';
@@ -35,8 +34,13 @@ const LoginForm = () => {
         t('public.login.form.msgSuccess'),
       );
       login(response.data.accessToken, response.data.userData);
-    } catch (error) {
-      setError(t('public.login.form.msgError'));
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        setError(error.response.data.message);
+      } else {
+        setError(t('general.genericError'));
+      }
+      setTimeout(() => setError(null), 5000);
     }
   };
 

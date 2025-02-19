@@ -2,7 +2,11 @@ import { useI18n } from '@/hooks/useI18n';
 import { Dropdown } from 'primereact/dropdown';
 import { Icon } from '@iconify/react';
 
-export default function LangSelector() {
+interface LangSelectorProps {
+  className?: string;
+}
+
+export default function LangSelector({ className }: LangSelectorProps) {
   const { getAvailableLanguages, getLanguage, setLanguage } = useI18n();
 
   const languages = getAvailableLanguages().map((lang) => ({
@@ -21,7 +25,7 @@ export default function LangSelector() {
           height="20"
           style={{ marginRight: '8px' }}
         />
-        <span>{option.label}</span>
+        <span>{option.value.toUpperCase()}</span>
       </div>
     );
   };
@@ -37,7 +41,7 @@ export default function LangSelector() {
       onChange={(e) => setLanguage(e.value)}
       itemTemplate={languageTemplate}
       valueTemplate={selectedLanguageTemplate}
-      className="w-40"
+      className={className ? className : 'w-32'}
     />
   );
 }

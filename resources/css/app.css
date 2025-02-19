@@ -2,10 +2,10 @@
 @source "../views";
 @import 'primereact/resources/themes/tailwind-light/theme.css';
 
+
 #app {
   min-height: 100vh;
-  background-image: url('@images/background.svg');
-  background-color: rgba(249, 250, 251, 0.85);
+  background-color: rgba(249, 250, 251, 1);
 }
 
 /* Fade animation */
