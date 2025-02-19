@@ -8,6 +8,7 @@ import routesConfig from './routes/routesConfig';
 
 export default function AppRoutes() {
   const { isLoading } = useAuth();
+
   if (isLoading) {
     return <Preloader />;
   }
