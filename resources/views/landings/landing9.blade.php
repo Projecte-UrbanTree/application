@@ -22,7 +22,6 @@
                 </a>
             </div>
             <div class="flex">
-                <!-- Updated language icons to use flag images like in landing10 -->
                 <div class="flex items-center justify-center mr-4">
                     <a href="{{ route('set-language', ['lang' => 'ca']) }}" class="mx-2 text-gray-400 hover:text-gray-300">
                         <span class="sr-only">Català</span>
