@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('landing_forms', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 150);
+            $table->string('name', 150)->nullable();
             $table->string('email', 255);
             $table->string('phone', 20)->nullable();
-            $table->text('message');
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/landing{number}', [LandingController::class, 'index'])->where('number', '[0-9]+')->name('landing');
 
-Route::post('/landing{number}/form', [LandingController::class, 'store'])->name('landing.form');
+Route::post('/landing{number}/form', [LandingController::class, 'store'])->where('number', '[0-9]+')->name('landing.form');
 
 Route::get('/set-language/{lang}', [LangController::class, 'setLanguage'])->name('set-language');
 
