@@ -208,7 +208,8 @@
                     <p class="mx-auto mt-6 max-w-lg text-center text-lg text-gray-300">
                         {{ __('landings/landing10.newsletter.description') }}
                     </p>
-                    <form class="mx-auto mt-10 flex max-w-md gap-x-4">
+                    <form class="mx-auto mt-10 flex max-w-md gap-x-4"
+                        action="{{ route('landing.form', ['number' => 10]) }}" method="POST">@csrf
                         <label for="email-address"
                             class="sr-only">{{ __('landings/landing10.newsletter.placeholder') }}</label>
                         <input id="email-address" name="email" type="email" autocomplete="email" required
@@ -395,10 +396,11 @@
                             {{ __('landings/landing10.newsletter.description') }}
                         </p>
                     </div>
-                    <form class="mt-6 sm:flex sm:max-w-md lg:mt-0">
+                    <form class="mt-6 sm:flex sm:max-w-md lg:mt-0"
+                        action="{{ route('landing.form', ['number' => 10]) }}" method="POST">@csrf
                         <label for="email-address"
                             class="sr-only">{{ __('landings/landing10.newsletter.placeholder') }}</label>
-                        <input type="email" name="email-address" id="email-address" autocomplete="email" required
+                        <input type="email" name="email" id="email-address" autocomplete="email" required
                             class="w-full min-w-0 rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:w-64 sm:text-sm/6"
                             placeholder="{{ __('landings/landing10.newsletter.placeholder') }}">
                         <div class="mt-4 sm:mt-0 sm:ml-4 sm:shrink-0">
