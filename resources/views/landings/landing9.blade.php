@@ -33,7 +33,7 @@
                         🇨🇦 CA
                     </a>
                 </div>
-                <a href="#" class="text-sm/6 font-semibold px-4 py-2 bg-indigo-600 text-white rounded">
+                <a href="/login" class="text-sm/6 font-semibold px-4 py-2 bg-indigo-600 text-white rounded">
                     {{ __('landings/landing9.header.login') }}
                 </a>
             </div>
