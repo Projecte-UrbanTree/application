@@ -26,10 +26,6 @@
 
         <!-- Main Content -->
         <main class="">
-            @php
-                $lang = app()->getLocale(); // Obtener idioma actual
-                $banner = ($lang === 'es') ? 'bannerEs.jpg' : (($lang === 'ca') ? 'bannerCa.jpg' : 'bannerEn.jpg');
-            @endphp
             <!-- Hero Section -->
             <section class="relative py-20 bg-gradient-to-b from-green-500 to-gray-50"> 
                 <div class="max-w-screen-lg mx-auto flex flex-col md:flex-row items-center justify-between">
