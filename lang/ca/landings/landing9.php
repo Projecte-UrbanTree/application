@@ -57,7 +57,7 @@ return [
     'cta' => [
         'title' => 'Uneix-te a la comunitat Urban Tree',
         'description' => 'Descobreix com pots contribuir al futur de la gestió sostenible de l\'arbrat urbà. Visita el nostre repositori i comença a col·laborar.',
-        'video_url' => 'https://www.youtube.com/embed/M0VBcCEp10E',
+        'video_url' => 'https://www.youtube.com/embed/3eCPW5mGKhw',
         'video_title' => 'Introducció a Urban Tree 5.0',
     ],
     'footer' => [
