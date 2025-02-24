@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedContract } from '@/store/slices/contractSlice';
+import { RootState } from '@/store/store';
 
 import { Avatar } from 'primereact/avatar';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
@@ -40,6 +43,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const { user, logout } = useAuth();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+  const selectedContract = useSelector((state: RootState) => state.contract.selectedContract);
 
   const contractsWithAll = [
     ...contracts,
@@ -48,6 +53,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const handleContractChange = (e: DropdownChangeEvent): void => {
     setContract(e.target.value);
+    dispatch(setSelectedContract(e.target.value));
   };
 
   const handleProfileClick = () => {
@@ -211,7 +217,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                   id="contractBtn"
                   name="contractBtn"
                   className="w-32"
-                  value={contract}
+                  value={selectedContract}
                   options={contractsWithAll}
                   onChange={handleContractChange}
                   optionLabel="name"
@@ -271,7 +277,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
               <Dropdown
                 id="contractBtnMobile"
                 name="contractBtnMobile"
-                value={contract}
+                value={selectedContract}
                 options={contractsWithAll}
                 onChange={handleContractChange}
                 optionLabel="name"
