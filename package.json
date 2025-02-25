@@ -23,6 +23,7 @@
         "vite": "^6.0.11"
     },
     "dependencies": {
+        "@reduxjs/toolkit": "^2.6.0",
         "@tailwindcss/vite": "^4.0.6",
         "chart.js": "^4.4.7",
         "i18next": "^24.2.2",
@@ -30,6 +31,7 @@
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-i18next": "^15.4.0",
+        "react-redux": "^9.2.0",
         "react-router-dom": "^7.1.5",
         "tailwindcss": "^4.0.3",
         "typescript-cookie": "^1.0.6"
