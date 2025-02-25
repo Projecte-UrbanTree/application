@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedContract } from '@/store/slices/contractSlice';
-import { RootState } from '@/store/store';
+import { setSelectedContract } from '@/config/stores/slices/contractSlice';
+import { RootState } from '@/config/stores/Userstore';
 
 import { Avatar } from 'primereact/avatar';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
