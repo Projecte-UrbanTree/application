@@ -8,62 +8,46 @@ import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import CrudPanel from '@/components/admin/CrudPanel';
 
-export default function Contracts() {
+export default function TaskTypes() {
   const [isLoading, setIsLoading] = useState(true);
-  const [contracts, setContracts] = useState([]);
+  const [taskTypes, setTaskTypes] = useState([]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fetchContracts = async () => {
+    const fetchTaskTypes = async () => {
       try {
-        const response = await axiosClient.get('/admin/contracts');
-        setContracts(response.data);
+        const response = await axiosClient.get('/admin/task-types');
+        setTaskTypes(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchContracts();
+    fetchTaskTypes();
   }, []);
 
   return (
     <>
       <CrudPanel
-        title="admin.pages.contracts.title"
-        onCreate={() => console.log('Create new contract')}>
+        title="admin.pages.taskTypes.title"
+        onCreate={() => console.log('Create new task type')}>
         <DataTable
           loading={isLoading}
-          value={contracts}
+          value={taskTypes}
           paginator
           rows={10}
           stripedRows
           showGridlines>
           <Column
             field="name"
-            header={t('admin.pages.contracts.columns.name')}
+            header={t('admin.pages.taskTypes.columns.name')}
           />
           <Column
-            field="start_date"
-            header={t('admin.pages.contracts.columns.start_date')}
-          />
-          <Column
-            field="end_date"
-            header={t('admin.pages.contracts.columns.end_date')}
-          />
-          <Column
-            field="invoice_proposed"
-            header={t('admin.pages.contracts.columns.invoice_proposed')}
-          />
-          <Column
-            field="invoice_agreed"
-            header={t('admin.pages.contracts.columns.invoice_agreed')}
-          />
-          <Column
-            field="invoice_paid"
-            header={t('admin.pages.contracts.columns.invoice_paid')}
+            field="description"
+            header={t('admin.pages.taskTypes.columns.description')}
           />
           {/* Actions */}
           <Column
