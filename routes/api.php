@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
         Route::get('stats', function (Request $request) {
             return response()->json([
                 'users' => User::count(),
