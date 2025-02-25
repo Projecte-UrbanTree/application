@@ -2,7 +2,8 @@ import AdminLayout from '@/layouts/AdminLayout';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
 
 import AdminDashboard from '@/pages/Admin/Dashboard';
-import AdminUsers from '@/pages/Admin/Settings/Users';
+import AdminUsers from '@/pages/Admin/Settings/User/Users';
+import CreateUser from "@/pages/Admin/Settings/User/Create";
 import AdminContracts from '@/pages/Admin/Settings/Contracts';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 import AdminElementTypes from '@/pages/Admin/Settings/ElementTypes';
@@ -103,6 +104,17 @@ const AdminRoutes: RouteObject[] = [
                     contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract={'1'}>
                     <AdminUsers />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'users/create',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.users.create.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <CreateUser />
                   </AdminLayout>
                 ),
               },

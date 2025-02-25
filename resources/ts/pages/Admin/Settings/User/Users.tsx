@@ -4,6 +4,8 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
+import { useNavigate } from "react-router-dom";
+
 
 import { Icon } from '@iconify/react';
 
@@ -15,6 +17,7 @@ export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -34,7 +37,7 @@ export default function Users() {
     <>
       <CrudPanel
         title="admin.pages.users.title"
-        onCreate={() => console.log('Create new user')}>
+        onCreate={() => navigate("/admin/settings/users/create")}>
         <DataTable
           loading={isLoading}
           value={users}
