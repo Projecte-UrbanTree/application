@@ -10,7 +10,8 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "laraveles/spanish": "^1.5"
+        "laraveles/spanish": "^1.5",
+        "sentry/sentry-laravel": "^4.13"
     },
     "require-dev": {
         "driftingly/rector-laravel": "^1.0",

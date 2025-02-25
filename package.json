@@ -23,6 +23,7 @@
         "vite": "^6.0.11"
     },
     "dependencies": {
+        "@sentry/react": "^9.2.0",
         "@tailwindcss/vite": "^4.0.6",
         "chart.js": "^4.4.7",
         "i18next": "^24.2.2",
