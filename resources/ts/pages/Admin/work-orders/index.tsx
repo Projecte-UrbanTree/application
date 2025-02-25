@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import CrudPanel from '@/components/admin/CrudPanel';
 
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
