@@ -1,54 +1,57 @@
 import { useState, useEffect } from 'react';
+
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+
 import { Icon } from '@iconify/react';
+
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/admin/CrudPanel';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
-export default function WorkOrders() {
+export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
-  const [workOrders, setWorkOrders] = useState([]);
+  const [resources, setResources] = useState([]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fetchWorkOrders = async () => {
+    const fetchResources = async () => {
       try {
-        const response = await axiosClient.get('/admin/work-orders');
-        setWorkOrders(response.data);
+        const response = await axiosClient.get('/admin/resources');
+        setResources(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchWorkOrders();
+    fetchResources();
   }, []);
 
   return (
     <>
       <CrudPanel
-        title="admin.pages.workOrders.title"
-        onCreate={() => console.log('Create new work order')}>
+        title="admin.pages.resources.title"
+        onCreate={() => console.log('Create new resource')}>
         <DataTable
           loading={isLoading}
-          value={workOrders}
+          value={resources}
           paginator
           rows={10}
           stripedRows
           showGridlines>
           <Column
-            field="date"
-            header={t('admin.pages.workOrders.columns.date')}
+            field="name"
+            header={t('admin.pages.resources.columns.name')}
           />
           <Column
-            field="status"
-            header={t('admin.pages.workOrders.columns.status')}
+            field="description"
+            header={t('admin.pages.resources.columns.description')}
           />
           <Column
-            field="contract_id"
-            header={t('admin.pages.workOrders.columns.contract_id')}
+            field="resource_type_id"
+            header={t('admin.pages.resources.columns.resource_type_id')}
           />
           {/* Actions */}
           <Column

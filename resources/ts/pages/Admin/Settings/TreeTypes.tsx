@@ -8,46 +8,50 @@ import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/admin/CrudPanel';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
-export default function TaskTypes() {
+export default function TreeTypes() {
   const [isLoading, setIsLoading] = useState(true);
-  const [taskTypes, setTaskTypes] = useState([]);
+  const [treeTypes, setTreeTypes] = useState([]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fetchTaskTypes = async () => {
+    const fetchTreeTypes = async () => {
       try {
-        const response = await axiosClient.get('/admin/task-types');
-        setTaskTypes(response.data);
+        const response = await axiosClient.get('/admin/tree-types');
+        setTreeTypes(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchTaskTypes();
+    fetchTreeTypes();
   }, []);
 
   return (
     <>
       <CrudPanel
-        title="admin.pages.taskTypes.title"
-        onCreate={() => console.log('Create new task type')}>
+        title="admin.pages.treeTypes.title"
+        onCreate={() => console.log('Create new tree type')}>
         <DataTable
           loading={isLoading}
-          value={taskTypes}
+          value={treeTypes}
           paginator
           rows={10}
           stripedRows
           showGridlines>
           <Column
-            field="name"
-            header={t('admin.pages.taskTypes.columns.name')}
+            field="family"
+            header={t('admin.pages.treeTypes.columns.family')}
           />
           <Column
-            field="description"
-            header={t('admin.pages.taskTypes.columns.description')}
+            field="genus"
+            header={t('admin.pages.treeTypes.columns.genus')}
+          />
+          <Column
+            field="species"
+            header={t('admin.pages.treeTypes.columns.species')}
           />
           {/* Actions */}
           <Column

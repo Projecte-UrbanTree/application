@@ -1,18 +1,18 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
 
-import AdminDashboard from '@/pages/admin/dashboard';
-import AdminUsers from '@/pages/admin/settings/users';
-import AdminContracts from '@/pages/admin/settings/contracts';
-import AdminWorkOrders from '@/pages/admin/work-orders';
-import AdminElementTypes from '@/pages/admin/settings/element-types';
-import AdminTreeTypes from '@/pages/admin/settings/tree-types';
-import AdminTaskTypes from '@/pages/admin/settings/task-types';
-import AdminInventory from '@/pages/admin/inventory';
-import AdminWorkers from '@/pages/admin/workers';
-import AdminResources from '@/pages/admin/resources';
-import AdminResourceTypes from '@/pages/admin/settings/resource-types';
-import AdminStats from '@/pages/admin/stats';
+import AdminDashboard from '@/pages/Admin/Dashboard';
+import AdminUsers from '@/pages/Admin/Settings/Users';
+import AdminContracts from '@/pages/Admin/Settings/Contracts';
+import AdminWorkOrders from '@/pages/Admin/WorkOrders';
+import AdminElementTypes from '@/pages/Admin/Settings/ElementTypes';
+import AdminTreeTypes from '@/pages/Admin/Settings/TreeTypes';
+import AdminTaskTypes from '@/pages/Admin/Settings/TaskTypes';
+import AdminInventory from '@/pages/Admin/Inventory';
+import AdminWorkers from '@/pages/Admin/Workers';
+import AdminResources from '@/pages/Admin/Resources';
+import AdminResourceTypes from '@/pages/Admin/Settings/ResourceTypes';
+import AdminStats from '@/pages/Admin/Stats';
 
 import { Navigate } from 'react-router-dom';
 import { RouteObject } from 'react-router-dom';

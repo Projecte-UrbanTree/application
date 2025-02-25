@@ -1,5 +1,5 @@
-import { Welcome } from '@/components/admin/dashboard/Welcome';
-import { Stats } from '@/components/admin/dashboard/Stats';
+import { Welcome } from '@/components/Admin/Dashboard/Welcome';
+import { Stats } from '@/components/Admin/Dashboard/Stats';
 
 export default function Dashboard() {
   return (
