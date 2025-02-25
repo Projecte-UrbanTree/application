@@ -8,58 +8,46 @@ import { Icon } from '@iconify/react';
 
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/admin/CrudPanel';
+import CrudPanel from '@/components/Admin/CrudPanel';
 
-export default function ElementTypes() {
+export default function TaskTypes() {
   const [isLoading, setIsLoading] = useState(true);
-  const [elementTypes, setElementTypes] = useState([]);
+  const [taskTypes, setTaskTypes] = useState([]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fetchElementTypes = async () => {
+    const fetchTaskTypes = async () => {
       try {
-        const response = await axiosClient.get('/admin/element-types');
-        setElementTypes(response.data);
+        const response = await axiosClient.get('/admin/task-types');
+        setTaskTypes(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchElementTypes();
+    fetchTaskTypes();
   }, []);
 
   return (
     <>
       <CrudPanel
-        title="admin.pages.elementTypes.title"
-        onCreate={() => console.log('Create new element type')}>
+        title="admin.pages.taskTypes.title"
+        onCreate={() => console.log('Create new task type')}>
         <DataTable
           loading={isLoading}
-          value={elementTypes}
+          value={taskTypes}
           paginator
           rows={10}
           stripedRows
           showGridlines>
           <Column
             field="name"
-            header={t('admin.pages.elementTypes.columns.name')}
-          />
-          <Column
-            field="requires_tree_type"
-            header={t('admin.pages.elementTypes.columns.requires_tree_type')}
+            header={t('admin.pages.taskTypes.columns.name')}
           />
           <Column
             field="description"
-            header={t('admin.pages.elementTypes.columns.description')}
-          />
-          <Column
-            field="icon"
-            header={t('admin.pages.elementTypes.columns.icon')}
-          />
-          <Column
-            field="color"
-            header={t('admin.pages.elementTypes.columns.color')}
+            header={t('admin.pages.taskTypes.columns.description')}
           />
           {/* Actions */}
           <Column
