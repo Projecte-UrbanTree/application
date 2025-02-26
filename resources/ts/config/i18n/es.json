@@ -153,9 +153,7 @@
           "name": "Nombre",
           "start_date": "Fecha de inicio",
           "end_date": "Fecha de fin",
-          "invoice_proposed": "Factura propuesta",
-          "invoice_agreed": "Factura acordada",
-          "invoice_paid": "Factura pagada"
+          "final_price": "Precio final"
         }
       },
       "workOrders": {
