@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -16,7 +16,6 @@ import {
     selectContract,
     setContractState,
 } from '@/contexts/store/slice/contractSlice';
-import { RootState } from '@/contexts/store/store';
 import { ContractProps } from '@/types/contract';
 
 interface AdminLayoutProps {
@@ -33,42 +32,41 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     currentContract,
 }) => {
     const { t } = useI18n();
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        document.title = titleI18n
-            ? `${t(titleI18n)} - ${import.meta.env.VITE_APP_NAME}`
-            : import.meta.env.VITE_APP_NAME;
-    }, [titleI18n, t]);
-
-    const location = useLocation();
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [contract, setContract] = useState<ContractProps>(currentContract);
     const { user, logout } = useAuth();
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const profileRef = useRef<HTMLDivElement>(null);
+
+    const [menuOpen, setMenuOpen] = useState(false);
     const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
-    const profileRef = React.useRef<HTMLDivElement>(null);
 
-    const state = useSelector((state: RootState) => state.user);
-    console.log(state.name);
-
-    const contractsWithAll = [
-        ...contracts,
-        { id: 'all', name: t('general.allContracts') },
-    ];
-
-    const handleContractChange = (e: DropdownChangeEvent): void => {
-        console.log(typeof e.value);
-
-        // save the new contract in ReduxState
-        dispatch(selectContract(e.value));
-
-        setContract(e.target.value);
+    const allContractsOption: ContractProps = {
+        id: 'all',
+        name: t('general.allContracts'),
     };
 
-    const handleProfileClick = () => {
-        setProfileDropdownVisible(!profileDropdownVisible);
-    };
+    const contractsWithAll = contracts.some((c) => c.id === 'all')
+        ? contracts
+        : [...contracts, allContractsOption];
+
+    const [contract, setContract] = useState<ContractProps>(
+        currentContract ?? allContractsOption,
+    );
+
+    const handleContractChange = useCallback(
+        (e: DropdownChangeEvent) => {
+            const selectedContract = contractsWithAll.find(
+                (c) => c.id === e.value,
+            );
+            if (selectedContract) {
+                dispatch(selectContract(selectedContract.id));
+                setContract(selectedContract);
+            }
+        },
+        [contractsWithAll, dispatch],
+    );
+
+    const handleProfileClick = () => setProfileDropdownVisible((prev) => !prev);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -82,22 +80,19 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
         if (profileDropdownVisible) {
             document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
+            return () =>
+                document.removeEventListener('mousedown', handleClickOutside);
         }
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
     }, [profileDropdownVisible]);
 
-    const isManagementActive =
-        location.pathname.startsWith('/admin/dashboard') ||
-        location.pathname.startsWith('/admin/work-orders') ||
-        location.pathname.startsWith('/admin/inventory') ||
-        location.pathname.startsWith('/admin/workers') ||
-        location.pathname.startsWith('/admin/resources') ||
-        location.pathname.startsWith('/admin/stats');
+    const isManagementActive = [
+        '/admin/dashboard',
+        '/admin/work-orders',
+        '/admin/inventory',
+        '/admin/workers',
+        '/admin/resources',
+        '/admin/stats',
+    ].some((path) => location.pathname.startsWith(path));
 
     const isSettingsPage = location.pathname.includes('/admin/settings');
 
@@ -241,7 +236,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                     id="contractBtn"
                                     name="contractBtn"
                                     className="w-32"
-                                    value={contract}
+                                    value={contract.id}
                                     options={contractsWithAll}
                                     onChange={handleContractChange}
                                     optionLabel="name"
@@ -283,7 +278,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                         {t('admin.profileDropdown.license')}
                                     </a>
                                     <a
-                                        onClick={logout}
+                                        onClick={() => logout()}
                                         className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                                         {t('admin.profileDropdown.logout')}
                                     </a>
@@ -307,13 +302,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                     <div className="mt-4 flex flex-col gap-4">
                         {!isSettingsPage && (
                             <Dropdown
-                                id="contractBtnMobile"
-                                name="contractBtnMobile"
-                                value={contract}
+                                id="contractBtn"
+                                name="contractBtn"
+                                className="w-32"
+                                value={contract.id}
                                 options={contractsWithAll}
                                 onChange={handleContractChange}
                                 optionLabel="name"
                                 optionValue="id"
+                                placeholder={t('general.selectContract')}
                             />
                         )}
                         <LangSelector className="w-full" />

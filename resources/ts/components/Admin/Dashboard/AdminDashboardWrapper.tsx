@@ -1,14 +1,28 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/contexts/store/store';
 import { ContractProps } from '@/types/contract';
 import AdminLayout from '@/layouts/AdminLayout';
 import { setContractState } from '@/contexts/store/slice/contractSlice';
-import { useEffect } from 'react';
+import { t } from 'i18next';
 
 interface AdminLayoutWrapperProps {
     titleI18n: string;
     children: React.ReactNode;
 }
+
+const mockContracts: ContractProps[] = [
+    { id: '1', name: 'Tortosa' },
+    { id: '2', name: 'Barcelona' },
+    { id: '3', name: 'Valencia' },
+    { id: '4', name: 'Madrid' },
+    { id: '5', name: 'Sevilla' },
+];
+
+const allContractsOption: ContractProps = {
+    id: 'all',
+    name: t('general.allContracts'),
+};
 
 export default function AdminLayoutWrapper({
     titleI18n,
@@ -16,44 +30,30 @@ export default function AdminLayoutWrapper({
 }: AdminLayoutWrapperProps) {
     const dispatch = useDispatch();
 
-    const mockContracts = [
-        { id: '1', name: 'Tortosa' },
-        { id: '2', name: 'Barcelona' },
-        { id: '3', name: 'Valencia' },
-        { id: '4', name: 'Madrid' },
-        { id: '5', name: 'Sevilla' },
-    ];
+    const { allContracts, currentContract } = useSelector(
+        (state: RootState) => state.contract,
+    );
+
+    const contracts = allContracts.length > 0 ? allContracts : mockContracts;
+
+    const selectedContract = currentContract ?? allContractsOption;
 
     useEffect(() => {
-        dispatch(
-            setContractState({
-                allContracts: mockContracts,
-                currentContract: mockContracts[0],
-            }),
-        );
-    }, [dispatch]);
+        if (allContracts.length === 0) {
+            dispatch(
+                setContractState({
+                    allContracts: contracts,
+                    currentContract: selectedContract,
+                }),
+            );
+        }
+    }, [dispatch, allContracts, contracts, selectedContract]);
 
-    const contracts = useSelector(
-        (state: RootState) => state.contract.allContracts,
-    );
-
-    console.log('All contrats: ', contracts);
-
-    const currentContract = useSelector(
-        (state: RootState) => state.contract.currentContract,
-    );
-
-    console.log('Current Contract: ', currentContract);
-
-    // TODO: MAKE THE API CALL FOR OBTAIN ALL THE CONTRACTS
-    // TODO: SAVE THE DATA FROM RESPONSE TO => dispatch(setContractState( {...} ))
     return (
         <AdminLayout
             titleI18n={titleI18n}
-            contracts={contracts}
-            currentContract={
-                currentContract ?? { id: 'all', name: 'all contracts' }
-            }>
+            contracts={mockContracts}
+            currentContract={selectedContract}>
             {children}
         </AdminLayout>
     );
