@@ -13,7 +13,7 @@ return [
     // Header & Plans
     'title' => 'Urban Tree 5.0',
     'description' => 'UrbanTree 5.0 offers innovative tools to monitor and optimize the maintenance of parks and gardens, improving the quality of life in cities.',
-
+    
     // Form 1
     'placeholder_email' => 'Email',
     'button' => 'Request Demo',

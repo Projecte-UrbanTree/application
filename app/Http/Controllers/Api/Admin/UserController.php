@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request; 
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Request; // added
+use Illuminate\Validation\Rule; // added
 
 class UserController extends Controller
 {

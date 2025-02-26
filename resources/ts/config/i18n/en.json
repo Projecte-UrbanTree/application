@@ -156,7 +156,9 @@
           "name": "Name",
           "start_date": "Start Date",
           "end_date": "End Date",
-          "final_price": "Final Price"
+          "invoice_proposed": "Invoice Proposed",
+          "invoice_agreed": "Invoice Agreed",
+          "invoice_paid": "Invoice Paid"
         }
       },
       "workOrders": {
