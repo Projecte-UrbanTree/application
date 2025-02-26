@@ -12,13 +12,13 @@ import logo from '@images/logo.png';
 import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 import { useDispatch, useSelector } from 'react-redux';
-import { setContractState } from '@/contexts/store/slice/contractSlice';
+import {
+    selectContract,
+    setContractState,
+} from '@/contexts/store/slice/contractSlice';
 import { RootState } from '@/contexts/store/store';
+import { ContractProps } from '@/types/contract';
 
-interface ContractProps {
-    id: string;
-    name: string;
-}
 interface AdminLayoutProps {
     titleI18n: string;
     children: React.ReactNode;
@@ -60,7 +60,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     const handleContractChange = (e: DropdownChangeEvent): void => {
         console.log(typeof e.value);
 
-        dispatch(setContractState(e.value));
+        // save the new contract in ReduxState
+        dispatch(selectContract(e.value));
 
         setContract(e.target.value);
     };
@@ -297,7 +298,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                         <Link
                             key={item.to}
                             to={item.to}
-                            className={`block py-2 text-gray-700 hover:bg-gray-100 rounded flex items-center gap-2 ${
+                            className={`py-2 text-gray-700 hover:bg-gray-100 rounded flex items-center gap-2 ${
                                 item.active ? 'bg-gray-200 text-indigo-600' : ''
                             }`}>
                             <Icon width="24px" icon={item.icon} /> {item.label}
