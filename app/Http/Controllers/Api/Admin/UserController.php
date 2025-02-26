@@ -49,14 +49,8 @@ class UserController extends Controller
             'company' => 'nullable|string|max:255',
             'dni' => 'nullable|string|max:50',
             'role' => ['sometimes', Rule::in(['admin', 'worker', 'customer'])],
-            'password' => 'nullable|string|min:8',
+            'password' => 'required|string|min:8',
         ]);
-
-        if (isset($validated['password']) && $validated['password'] !== '') {
-            $validated['password'] = bcrypt($validated['password']);
-        } else {
-            unset($validated['password']);
-        }
 
         $user->update($validated);
 

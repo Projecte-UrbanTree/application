@@ -6,6 +6,8 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
 import { useNavigate } from "react-router-dom";
+import { confirmDialog } from 'primereact/confirmdialog'; // optional: for nicer confirmation, or use window.confirm
+
 
 import { Icon } from '@iconify/react';
 
@@ -15,25 +17,13 @@ import CrudPanel from '@/components/Admin/CrudPanel';
 
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
-  interface User {
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-    company: string;
-    dni: string;
-    role: string;
-  }
-
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState([]);
   const location = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const successMsg = location.state?.success;
   const errorMsg = location.state?.error;
-
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -49,34 +39,17 @@ export default function Users() {
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    if (successMsg || errorMsg) {
-      setMsg(successMsg || errorMsg);
-      const timer = setTimeout(() => {
-        setMsg(null);
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-
-  }, [successMsg, errorMsg]);
-
-  const handleDelete = async (userId: number) => {
-    if (!window.confirm(t('admin.pages.users.deleteConfirm'))) return;
-    try {
-      await axiosClient.delete(`/admin/users/${userId}`);
-      setUsers(users.filter(user => user.id !== userId));
-      setMsg(t('admin.pages.users.deletedSuccess'));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <>
-      {/* Display the local message */}
-      {msg && (
-        <div className={`mb-4 p-3 rounded text-center ${msg && (successMsg || msg === t('admin.pages.users.deletedSuccess')) ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-          {msg}
+      {/* Display success or error message if present */}
+      {successMsg && (
+        <div className="mb-4 p-3 bg-green-100 text-green-800 rounded">
+          {successMsg}
+        </div>
+      )}
+      {errorMsg && (
+        <div className="mb-4 p-3 bg-red-100 text-red-800 rounded">
+          {errorMsg}
         </div>
       )}
       <CrudPanel
@@ -129,14 +102,10 @@ export default function Users() {
           />
           {/* Actions */}
           <Column
-            header={t('admin.pages.users.actions')}
-            body={(rowData: { id: number }) => (
-              <div className="flex justify-center space-x-2 gap-2">
-                <Button onClick={() => navigate(`/admin/settings/users/edit/${rowData.id}`)} title="Editar usuario" className="p-button-rounded p-button-info">
-                  <Icon icon="tabler:edit"/>
-                </Button>
-                <Button onClick={() => handleDelete(rowData.id)} title="Eliminar usuario" className="p-button-rounded p-button-danger">
-                  <Icon icon="tabler:trash"/>
+            body={() => (
+              <div className="flex justify-center space-x-2">
+                <Button>
+                  <Icon icon="tabler:edit" />
                 </Button>
               </div>
             )}
