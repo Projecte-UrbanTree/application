@@ -46,6 +46,10 @@
 - Password: `urbantree`
 - Database: `urbantree`
 
+### Laravel Telescope
+
+- URL: <http://localhost/telescope>
+
 ### Basic docker compose commands
 
 - Build or rebuild services

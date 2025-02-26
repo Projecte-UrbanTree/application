@@ -54,16 +54,8 @@ export default function Contracts() {
             header={t('admin.pages.contracts.columns.end_date')}
           />
           <Column
-            field="invoice_proposed"
-            header={t('admin.pages.contracts.columns.invoice_proposed')}
-          />
-          <Column
-            field="invoice_agreed"
-            header={t('admin.pages.contracts.columns.invoice_agreed')}
-          />
-          <Column
-            field="invoice_paid"
-            header={t('admin.pages.contracts.columns.invoice_paid')}
+            field="final_price"
+            header={t('admin.pages.contracts.columns.final_price')}
           />
           {/* Actions */}
           <Column
