@@ -145,7 +145,8 @@
         "actions": "Acciones",
         "deletedSuccess": "Usuario eliminado exitosamente",
         "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
-        "success": "Usuario creado exitosamente"
+        "success": "Usuario creado exitosamente",
+        "update": "Usuario actualizado exitosamente"
       },
       "contracts": {
         "title": "Contratos",

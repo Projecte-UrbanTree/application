@@ -69,7 +69,7 @@ export default function EditUser() {
                 delete data.password;
             }
             await axiosClient.put(`/admin/users/${id}`, data);
-            navigate("/admin/settings/users", { state: { success: t("admin.pages.users.success") } });
+            navigate("/admin/settings/users", { state: { success: t("admin.pages.users.update") } });
         } catch (error) {
             navigate("/admin/settings/users", { state: { error: t("admin.pages.users.error", "Error saving user") } });
         }

@@ -151,7 +151,8 @@
         "actions": "Accions",
         "deletedSuccess": "Usuari eliminat correctament",
         "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
-        "success": "Usuari creat correctament"
+        "success": "Usuari creat correctament",
+        "update": "Usuari actualitzat correctament"
       },
       "contracts": {
         "title": "Contractes",
