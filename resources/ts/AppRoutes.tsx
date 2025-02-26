@@ -7,25 +7,25 @@ import Preloader from '@/components/Preloader';
 import routesConfig from './routes/routesConfig';
 
 export default function AppRoutes() {
-  const { isLoading } = useAuth();
+    const { isLoading } = useAuth();
 
-  if (isLoading) {
-    return <Preloader />;
-  }
+    if (isLoading) {
+        return <Preloader />;
+    }
 
-  function RoutesComponent() {
-    return useRoutes([
-      ...routesConfig,
-      {
-        path: '*',
-        element: <Error icon="tabler:face-id-error" errorCode="404" />,
-      },
-    ]);
-  }
+    function RoutesComponent() {
+        return useRoutes([
+            ...routesConfig,
+            {
+                path: '*',
+                element: <Error icon="tabler:face-id-error" errorCode="404" />,
+            },
+        ]);
+    }
 
-  return (
-    <Router>
-      <RoutesComponent />
-    </Router>
-  );
+    return (
+        <Router>
+            <RoutesComponent />
+        </Router>
+    );
 }
