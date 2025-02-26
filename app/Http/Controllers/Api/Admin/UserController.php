@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request; // added
+use Illuminate\Validation\Rule; // added
 
 class UserController extends Controller
 {
@@ -12,7 +14,7 @@ class UserController extends Controller
         return response()->json(User::all());
     }
 
-    public function store(REQUEST $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -21,7 +23,10 @@ class UserController extends Controller
             'company' => 'nullable|string|max:255',
             'dni' => 'nullable|string|max:50',
             'role' => ['required', Rule::in(['admin', 'worker', 'customer'])],
+            'password' => 'required|string|min:8',
         ]);
+
+        $validated['password'] = bcrypt($validated['password']);
 
         $user = User::create($validated);
 
@@ -44,6 +49,7 @@ class UserController extends Controller
             'company' => 'nullable|string|max:255',
             'dni' => 'nullable|string|max:50',
             'role' => ['sometimes', Rule::in(['admin', 'worker', 'customer'])],
+            'password' => 'required|string|min:8',
         ]);
 
         $user->update($validated);

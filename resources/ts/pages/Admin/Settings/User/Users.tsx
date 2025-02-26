@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
 import { useNavigate } from "react-router-dom";
+import { confirmDialog } from 'primereact/confirmdialog'; // optional: for nicer confirmation, or use window.confirm
 
 
 import { Icon } from '@iconify/react';
@@ -16,8 +18,12 @@ import CrudPanel from '@/components/Admin/CrudPanel';
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const location = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const successMsg = location.state?.success;
+  const errorMsg = location.state?.error;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -35,6 +41,17 @@ export default function Users() {
 
   return (
     <>
+      {/* Display success or error message if present */}
+      {successMsg && (
+        <div className="mb-4 p-3 bg-green-100 text-green-800 rounded">
+          {successMsg}
+        </div>
+      )}
+      {errorMsg && (
+        <div className="mb-4 p-3 bg-red-100 text-red-800 rounded">
+          {errorMsg}
+        </div>
+      )}
       <CrudPanel
         title="admin.pages.users.title"
         onCreate={() => navigate("/admin/settings/users/create")}>
