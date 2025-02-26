@@ -5,6 +5,7 @@ import axiosClient from "@/api/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
+import { Button } from "primereact/button";
 
 export default function CreateUser() {
     const navigate = useNavigate();
@@ -57,21 +58,12 @@ export default function CreateUser() {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 md:p-10">
             <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg overflow-hidden">
                 <header className="bg-blue-700 px-6 py-4 flex items-center">
-                    <button
+                    <Button
+                        className="p-button-text text-white hover:text-blue-200 mr-4"
                         onClick={() => navigate("/admin/settings/users")}
-                        title={t("admin.pages.users.create.returnButton")}
-                        className="text-white hover:text-blue-200 transition duration-200 mr-4"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
+                        <Icon icon="tabler:arrow-left" className="h-6 w-6" />
+                    </Button>
                     <h2 className="text-white text-3xl font-bold">
                         {t("admin.pages.users.create.title")}
                     </h2>
@@ -166,12 +158,14 @@ export default function CreateUser() {
                                     <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
                                 </div>
                                 <div className="md:col-span-2 flex justify-end mt-4">
-                                    <button
+                                    <Button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className={`w-full md:w-auto flex items-center justify-center bg-blue-600 text-white px-6 py-3 rounded shadow-sm transition-all duration-200 text-lg ${
-                                            isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
-                                        }`}
+                                        className="w-full md:w-auto flex items-center justify-center text-white px-6 py-3 rounded shadow-sm transition-all duration-200 text-lg"
+                                        style={{
+                                            background: isSubmitting ? "#4b5563" : "#2563eb",
+                                            border: "none"
+                                        }}
                                     >
                                         {isSubmitting ? (
                                             <>
@@ -181,7 +175,7 @@ export default function CreateUser() {
                                         ) : (
                                             t("admin.pages.users.create.submitButton")
                                         )}
-                                    </button>
+                                    </Button>
                                 </div>
                             </Form>
                         )}
