@@ -36,6 +36,7 @@ export default function CreateUser() {
             .min(8, t("admin.pages.users.create.validations.password_min"))
             .matches(/[A-Z]/, t("admin.pages.users.create.validations.password_uppercase"))
             .matches(/[0-9]/, t("admin.pages.users.create.validations.password_number"))
+            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.create.validations.password_special"))
             .required(t("admin.pages.users.create.validations.password_required"))
     });
 
