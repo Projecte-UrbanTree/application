@@ -103,7 +103,8 @@
             "password_required": "La contrasenya és obligatòria",
             "password_min": "Ha de tenir almenys 8 caràcters",
             "password_uppercase": "Ha de contenir almenys una lletra majúscula",
-            "password_number": "Ha de contenir almenys un número"
+            "password_number": "Ha de contenir almenys un número",
+            "password_special": "Ha de contenir almenys un caràcter especial"
           },
           "returnButton": "Tornar a la llista d'usuaris",
           "submitButton": "Crear Usuari",

@@ -50,15 +50,11 @@ export default function Users() {
   }, []);
 
   useEffect(() => {
-    if (successMsg || errorMsg) {
-      setMsg(successMsg || errorMsg);
-      const timer = setTimeout(() => {
-        setMsg(null);
-      }, 4000);
+    if (msg) {
+      const timer = setTimeout(() => setMsg(null), 4000);
       return () => clearTimeout(timer);
     }
-
-  }, [successMsg, errorMsg]);
+  }, [msg]);
 
   const handleDelete = async (userId: number) => {
     if (!window.confirm(t('admin.pages.users.deleteConfirm'))) return;

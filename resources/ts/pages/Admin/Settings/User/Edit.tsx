@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axiosClient from "@/api/axiosClient";
 import { useTranslation } from "react-i18next";
-import { Button } from 'primereact/button';
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
+import { Password } from "primereact/password";
+import { Card } from "primereact/card";
 
 export default function EditUser() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const [initialValues, setInitialValues] = useState<{
+const [initialValues, setInitialValues] = useState<{
         name: string;
         surname: string;
         email: string;
-        company?: string;
-        dni?: string;
+        company: string;
+        dni: string;
         role: string;
         password?: string;
     }>({
@@ -26,7 +30,7 @@ export default function EditUser() {
         company: "",
         dni: "",
         role: "worker",
-        password: "",
+        password: ""
     });
     const [isLoading, setIsLoading] = useState(true);
 
@@ -42,7 +46,7 @@ export default function EditUser() {
                     company: user.company || "",
                     dni: user.dni || "",
                     role: user.role,
-                    password: "",
+                    password: ""
                 });
                 setIsLoading(false);
             } catch (error) {
@@ -68,7 +72,7 @@ export default function EditUser() {
             .min(8, t("admin.pages.users.edit.validations.password_min"))
             .matches(/[A-Z]/, t("admin.pages.users.create.validations.password_uppercase"))
             .matches(/[0-9]/, t("admin.pages.users.create.validations.password_number"))
-            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.create.validations.password_special")),
+            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.create.validations.password_special"))
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
@@ -84,6 +88,12 @@ export default function EditUser() {
         }
     };
 
+    const roleOptions = [
+        { label: t("admin.roles.admin"), value: "admin" },
+        { label: t("admin.roles.worker"), value: "worker" },
+        { label: t("admin.roles.customer"), value: "customer" }
+    ];
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
@@ -94,128 +104,147 @@ export default function EditUser() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 md:p-10">
-            <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg overflow-hidden">
-                <header className="bg-blue-700 px-6 py-4 flex items-center">
+        <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
+            <Card className="w-full max-w-3xl shadow-lg">
+                <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
                     <Button
-                        className="p-button-text text-white hover:text-blue-200 transition duration-200 mr-4"
+                        className="p-button-text mr-4"
+                        style={{ color: "#fff" }}
                         onClick={() => navigate("/admin/settings/users")}
                     >
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
-                    <h2 className="text-white text-3xl font-bold">{t("admin.pages.users.edit.title")}</h2>
+                    <h2 className="text-white text-3xl font-bold">
+                        {t("admin.pages.users.edit.title")}
+                    </h2>
                 </header>
-                <div className="p-8">
+                <div className="p-6">
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                         enableReinitialize
                     >
-                        {({ isSubmitting }) => (
-                            <Form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {({ errors, touched, isSubmitting }) => (
+                            <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="flex flex-col">
-                                    <label className="text-gray-700 font-medium mb-2">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
                                         {t("admin.pages.users.edit.labels.name")}
                                     </label>
                                     <Field
                                         name="name"
+                                        as={InputText}
                                         placeholder={t("admin.pages.users.edit.placeholders.name")}
-                                        className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className={errors.name && touched.name ? "p-invalid" : ""}
                                     />
-                                    <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
+                                    {errors.name && touched.name && (
+                                        <small className="p-error">{errors.name}</small>
+                                    )}
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="text-gray-700 font-medium mb-2">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
                                         {t("admin.pages.users.edit.labels.surname")}
                                     </label>
                                     <Field
                                         name="surname"
+                                        as={InputText}
                                         placeholder={t("admin.pages.users.edit.placeholders.surname")}
-                                        className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className={errors.surname && touched.surname ? "p-invalid" : ""}
                                     />
-                                    <ErrorMessage name="surname" component="div" className="text-red-500 text-sm mt-1" />
+                                    {errors.surname && touched.surname && (
+                                        <small className="p-error">{errors.surname}</small>
+                                    )}
                                 </div>
-                                <div className="flex flex-col col-span-1 md:col-span-2">
-                                    <label className="text-gray-700 font-medium mb-2">
+                                <div className="flex flex-col">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:mail" className="h-5 w-5 mr-2" />
                                         {t("admin.pages.users.edit.labels.email")}
                                     </label>
                                     <Field
                                         name="email"
+                                        as={InputText}
                                         type="email"
                                         placeholder={t("admin.pages.users.edit.placeholders.email")}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className={errors.email && touched.email ? "p-invalid" : ""}
                                     />
-                                    <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                                    {errors.email && touched.email && (
+                                        <small className="p-error">{errors.email}</small>
+                                    )}
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="text-gray-700 font-medium mb-2">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:building" className="h-5 w-5 mr-2" />
                                         {t("admin.pages.users.edit.labels.company")}
                                     </label>
                                     <Field
                                         name="company"
+                                        as={InputText}
                                         placeholder={t("admin.pages.users.edit.placeholders.company")}
-                                        className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="text-gray-700 font-medium mb-2">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:id" className="h-5 w-5 mr-2" />
                                         {t("admin.pages.users.edit.labels.dni")}
                                     </label>
                                     <Field
                                         name="dni"
+                                        as={InputText}
                                         placeholder={t("admin.pages.users.edit.placeholders.dni")}
-                                        className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="text-gray-700 font-medium mb-2">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
                                         {t("admin.pages.users.edit.labels.role")}
                                     </label>
                                     <Field
                                         name="role"
-                                        as="select"
-                                        className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    >
-                                        <option value="admin">{t("admin.roles.admin")}</option>
-                                        <option value="worker">{t("admin.roles.worker")}</option>
-                                        <option value="customer">{t("admin.roles.customer")}</option>
-                                    </Field>
-                                    <ErrorMessage name="role" component="div" className="text-red-500 text-sm mt-1" />
+                                        as={Dropdown}
+                                        options={roleOptions}
+                                        placeholder={t("admin.pages.users.edit.placeholders.role")}
+                                        className={errors.role && touched.role ? "p-invalid" : ""}
+                                    />
+                                    {errors.role && touched.role && (
+                                        <small className="p-error">{errors.role}</small>
+                                    )}
                                 </div>
-                                <div className="flex flex-col col-span-1 md:col-span-2">
-                                    <label className="text-gray-700 font-medium mb-2">
+                                <div className="flex flex-col">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:lock" className="h-5 w-5 mr-2" />
                                         {t("admin.pages.users.edit.labels.password")}
                                     </label>
                                     <Field
                                         name="password"
-                                        type="password"
+                                        as={Password}
                                         placeholder={t("admin.pages.users.edit.placeholders.password")}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        toggleMask
+                                        className={errors.password && touched.password ? "p-invalid" : ""}
                                     />
-                                    <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+                                    {errors.password && touched.password && (
+                                        <small className="p-error">{errors.password}</small>
+                                    )}
                                 </div>
-                                <div className="md:col-span-2 flex justify-end">
+                                <div className="md:col-span-2 flex justify-end mt-4">
                                     <Button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full md:w-auto bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow hover:bg-blue-700 transition duration-200"
-                                    >
-                                        {isSubmitting ? (
-                                            <>
-                                                <Icon icon="eos-icons:loading" className="h-5 w-5 mr-2 animate-spin" />
-                                                {t("admin.pages.users.edit.submittingText")}
-                                            </>
-                                        ) : (
-                                            t("admin.pages.users.edit.submitButton")
-                                        )}
-                                    </Button>
+                                        className="w-full md:w-auto"
+                                        icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
+                                        label={
+                                            isSubmitting
+                                                ? t("admin.pages.users.edit.submittingText")
+                                                : t("admin.pages.users.edit.submitButton")
+                                        }
+                                    />
                                 </div>
                             </Form>
                         )}
                     </Formik>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }

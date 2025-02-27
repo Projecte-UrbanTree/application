@@ -97,7 +97,9 @@
             "password_required": "La contraseña es obligatoria",
             "password_min": "Debe tener al menos 8 caracteres",
             "password_uppercase": "Debe contener al menos una letra mayúscula",
-            "password_number": "Debe contener al menos un número"
+            "password_number": "Debe contener al menos un número",
+            "password_special": "Debe contener al menos un carácter especial"
+            
           },
           "returnButton": "Volver a la lista de usuarios",
           "submitButton": "Crear Usuario",
