@@ -57,6 +57,15 @@
     "buttons": {
       "createNew": "Crear nou"
     },
+    "fields": {
+      "name": "Nom",
+      "surname": "Cognom",
+      "email": "Correu",
+      "company": "Empresa",
+      "dni": "DNI",
+      "role": "Rol",
+      "password": "Contrasenya"
+    },
     "pages": {
       "dashboard": {
         "title": "Tauler",
@@ -75,23 +84,22 @@
       },
       "users": {
         "title": "Usuaris",
+        "loading": "Carregant...",
+        "editButton": "Editar usuari",
+        "deleteButton": "Eliminar usuari",
+        "columns": {
+          "email": "Correu electrònic"
+        },
+        "actions": "Accions",
+        "deletedSuccess": "Usuari eliminat correctament",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
+        "success": "Usuari creat correctament",
+        "update": "Usuari actualitzat correctament",
+        "error": "Error guardant l'usuari",
         "create": {
           "title": "Crear Usuari",
-          "labels": {
-            "name": "Nom",
-            "surname": "Cognom",
-            "email": "Correu",
-            "company": "Empresa",
-            "dni": "DNI",
-            "role": "Rol",
-            "password": "Contrasenya"
-          },
           "placeholders": {
-            "name": "Nom",
-            "surname": "Cognom",
-            "email": "Correu",
-            "company": "Empresa",
-            "dni": "DNI",
+            "role": "Selecciona un rol",
             "password": "Contrasenya"
           },
           "validations": {
@@ -112,21 +120,8 @@
         },
         "edit": {
           "title": "Editar Usuari",
-          "labels": {
-            "name": "Nom",
-            "surname": "Cognom",
-            "email": "Correu",
-            "company": "Empresa",
-            "dni": "DNI",
-            "role": "Rol",
-            "password": "Contrasenya"
-          },
           "placeholders": {
-            "name": "Nom",
-            "surname": "Cognom",
-            "email": "Correu",
-            "company": "Empresa",
-            "dni": "DNI",
+            "role": "Selecciona un rol",
             "password": "Contrasenya (deixar en blanc per no canviar)"
           },
           "validations": {
@@ -140,25 +135,11 @@
           "returnButton": "Tornar a la llista d'usuaris",
           "submitButton": "Guardar Canvis",
           "submittingText": "Guardant..."
-        },
-        "columns": {
-          "name": "Nom",
-          "surname": "Cognom",
-          "email": "Correu electrònic",
-          "company": "Empresa",
-          "dni": "DNI",
-          "role": "Rol"
-        },
-        "actions": "Accions",
-        "deletedSuccess": "Usuari eliminat correctament",
-        "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
-        "success": "Usuari creat correctament",
-        "update": "Usuari actualitzat correctament"
+        }
       },
       "contracts": {
         "title": "Contractes",
         "columns": {
-          "name": "Nom",
           "start_date": "Data d'inici",
           "end_date": "Data de finalització",
           "invoice_proposed": "Factura proposada",
@@ -177,7 +158,6 @@
       "elementTypes": {
         "title": "Tipus d'element",
         "columns": {
-          "name": "Nom",
           "requires_tree_type": "Requereix tipus d'arbre",
           "description": "Descripció",
           "icon": "Icona",
@@ -195,14 +175,12 @@
       "taskTypes": {
         "title": "Tipus de tasca",
         "columns": {
-          "name": "Nom",
           "description": "Descripció"
         }
       },
       "resources": {
         "title": "Recursos",
         "columns": {
-          "name": "Nom",
           "description": "Descripció",
           "resource_type_id": "Tipus de recurs"
         }
@@ -210,7 +188,6 @@
       "resourceTypes": {
         "title": "Tipus de recurs",
         "columns": {
-          "name": "Nom",
           "description": "Descripció"
         }
       },

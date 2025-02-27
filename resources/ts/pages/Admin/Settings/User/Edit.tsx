@@ -15,7 +15,7 @@ export default function EditUser() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
-const [initialValues, setInitialValues] = useState<{
+    const [initialValues, setInitialValues] = useState<{
         name: string;
         surname: string;
         email: string;
@@ -84,7 +84,7 @@ const [initialValues, setInitialValues] = useState<{
             await axiosClient.put(`/admin/users/${id}`, data);
             navigate("/admin/settings/users", { state: { success: t("admin.pages.users.update") } });
         } catch (error) {
-            navigate("/admin/settings/users", { state: { error: t("admin.pages.users.error", "Error saving user") } });
+            navigate("/admin/settings/users", { state: { error: t("admin.pages.users.error") } });
         }
     };
 
@@ -98,7 +98,7 @@ const [initialValues, setInitialValues] = useState<{
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <Icon icon="eos-icons:loading" className="h-8 w-8 animate-spin text-blue-600" />
-                <span className="mt-2 text-blue-600">{t("admin.pages.users.loading", "Loading...")}</span>
+                <span className="mt-2 text-blue-600">{t("admin.pages.users.loading")}</span>
             </div>
         );
     }
@@ -130,12 +130,12 @@ const [initialValues, setInitialValues] = useState<{
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.edit.labels.name")}
+                                        {t("admin.fields.name")}
                                     </label>
                                     <Field
                                         name="name"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.edit.placeholders.name")}
+                                        placeholder={t("admin.fields.name")}
                                         className={errors.name && touched.name ? "p-invalid" : ""}
                                     />
                                     {errors.name && touched.name && (
@@ -145,12 +145,12 @@ const [initialValues, setInitialValues] = useState<{
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.edit.labels.surname")}
+                                        {t("admin.fields.surname")}
                                     </label>
                                     <Field
                                         name="surname"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.edit.placeholders.surname")}
+                                        placeholder={t("admin.fields.surname")}
                                         className={errors.surname && touched.surname ? "p-invalid" : ""}
                                     />
                                     {errors.surname && touched.surname && (
@@ -160,13 +160,13 @@ const [initialValues, setInitialValues] = useState<{
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:mail" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.edit.labels.email")}
+                                        {t("admin.fields.email")}
                                     </label>
                                     <Field
                                         name="email"
                                         as={InputText}
                                         type="email"
-                                        placeholder={t("admin.pages.users.edit.placeholders.email")}
+                                        placeholder={t("admin.fields.email")}
                                         className={errors.email && touched.email ? "p-invalid" : ""}
                                     />
                                     {errors.email && touched.email && (
@@ -176,29 +176,29 @@ const [initialValues, setInitialValues] = useState<{
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:building" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.edit.labels.company")}
+                                        {t("admin.fields.company")}
                                     </label>
                                     <Field
                                         name="company"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.edit.placeholders.company")}
+                                        placeholder={t("admin.fields.company")}
                                     />
                                 </div>
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:id" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.edit.labels.dni")}
+                                        {t("admin.fields.dni")}
                                     </label>
                                     <Field
                                         name="dni"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.edit.placeholders.dni")}
+                                        placeholder={t("admin.fields.dni")}
                                     />
                                 </div>
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.edit.labels.role")}
+                                        {t("admin.fields.role")}
                                     </label>
                                     <Field
                                         name="role"
@@ -214,7 +214,7 @@ const [initialValues, setInitialValues] = useState<{
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:lock" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.edit.labels.password")}
+                                        {t("admin.fields.password")}
                                     </label>
                                     <Field
                                         name="password"

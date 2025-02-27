@@ -90,12 +90,12 @@ export default function CreateUser() {
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.create.labels.name")}
+                                        {t("admin.fields.name")}
                                     </label>
                                     <Field
                                         name="name"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.create.placeholders.name")}
+                                        placeholder={t("admin.fields.name")}
                                         className={errors.name && touched.name ? "p-invalid" : ""}
                                     />
                                     {errors.name && touched.name && (
@@ -105,12 +105,12 @@ export default function CreateUser() {
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.create.labels.surname")}
+                                        {t("admin.fields.surname")}
                                     </label>
                                     <Field
                                         name="surname"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.create.placeholders.surname")}
+                                        placeholder={t("admin.fields.surname")}
                                         className={errors.surname && touched.surname ? "p-invalid" : ""}
                                     />
                                     {errors.surname && touched.surname && (
@@ -120,13 +120,13 @@ export default function CreateUser() {
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:mail" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.create.labels.email")}
+                                        {t("admin.fields.email")}
                                     </label>
                                     <Field
                                         name="email"
                                         as={InputText}
                                         type="email"
-                                        placeholder={t("admin.pages.users.create.placeholders.email")}
+                                        placeholder={t("admin.fields.email")}
                                         className={errors.email && touched.email ? "p-invalid" : ""}
                                     />
                                     {errors.email && touched.email && (
@@ -136,29 +136,29 @@ export default function CreateUser() {
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:building" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.create.labels.company")}
+                                        {t("admin.fields.company")}
                                     </label>
                                     <Field
                                         name="company"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.create.placeholders.company")}
+                                        placeholder={t("admin.fields.company")}
                                     />
                                 </div>
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:id" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.create.labels.dni")}
+                                        {t("admin.fields.dni")}
                                     </label>
                                     <Field
                                         name="dni"
                                         as={InputText}
-                                        placeholder={t("admin.pages.users.create.placeholders.dni")}
+                                        placeholder={t("admin.fields.dni")}
                                     />
                                 </div>
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.create.labels.role")}
+                                        {t("admin.fields.role")}
                                     </label>
                                     <Field
                                         name="role"
@@ -174,7 +174,7 @@ export default function CreateUser() {
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:lock" className="h-5 w-5 mr-2" />
-                                        {t("admin.pages.users.create.labels.password")}
+                                        {t("admin.fields.password")}
                                     </label>
                                     <Field
                                         name="password"

@@ -38,7 +38,7 @@
         "contracts": "Contratos",
         "elementTypes": "Tipos de elemento",
         "species": "Especies",
-        "taskTypes": "Tipos de tarea",
+        "taskTypes": "Tipus de tarea",
         "resourceTypes": "Tipos de recurso",
         "users": "Usuarios"
       }
@@ -48,8 +48,23 @@
       "license": "Licencia",
       "logout": "Cerrar sesión"
     },
+    "roles": {
+      "admin": "Administrador",
+      "worker": "Operario",
+      "customer": "Cliente",
+      "unknown": "Desconocido"
+    },
     "buttons": {
       "createNew": "Crear nuevo"
+    },
+    "fields": {
+      "name": "Nombre",
+      "surname": "Apellido",
+      "email": "Correo",
+      "company": "Empresa",
+      "dni": "DNI",
+      "role": "Rol",
+      "password": "Contraseña"
     },
     "pages": {
       "dashboard": {
@@ -69,23 +84,22 @@
       },
       "users": {
         "title": "Usuarios",
+        "loading": "Cargando...",
+        "editButton": "Editar usuario",
+        "deleteButton": "Eliminar usuario",
+        "columns": {
+          "email": "Correo electrónico"
+        },
+        "actions": "Acciones",
+        "deletedSuccess": "Usuario eliminado exitosamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
+        "success": "Usuario creado exitosamente",
+        "update": "Usuario actualizado exitosamente",
+        "error": "Error guardando el usuario",
         "create": {
           "title": "Crear Usuario",
-          "labels": {
-            "name": "Nombre",
-            "surname": "Apellido",
-            "email": "Correo",
-            "company": "Empresa",
-            "dni": "DNI",
-            "role": "Rol",
-            "password": "Contraseña"
-          },
           "placeholders": {
-            "name": "Nombre",
-            "surname": "Apellido",
-            "email": "Correo",
-            "company": "Empresa",
-            "dni": "DNI",
+            "role": "Selecciona un rol",
             "password": "Contraseña"
           },
           "validations": {
@@ -99,7 +113,6 @@
             "password_uppercase": "Debe contener al menos una letra mayúscula",
             "password_number": "Debe contener al menos un número",
             "password_special": "Debe contener al menos un carácter especial"
-            
           },
           "returnButton": "Volver a la lista de usuarios",
           "submitButton": "Crear Usuario",
@@ -107,21 +120,8 @@
         },
         "edit": {
           "title": "Editar Usuario",
-          "labels": {
-            "name": "Nombre",
-            "surname": "Apellido",
-            "email": "Correo",
-            "company": "Empresa",
-            "dni": "DNI",
-            "role": "Rol",
-            "password": "Contraseña"
-          },
           "placeholders": {
-            "name": "Nombre",
-            "surname": "Apellido",
-            "email": "Correo",
-            "company": "Empresa",
-            "dni": "DNI",
+            "role": "Selecciona un rol",
             "password": "Contraseña (dejar en blanco para no cambiar)"
           },
           "validations": {
@@ -135,25 +135,11 @@
           "returnButton": "Volver a la lista de usuarios",
           "submitButton": "Guardar Cambios",
           "submittingText": "Guardando..."
-        },
-        "columns": {
-          "name": "Nombre",
-          "surname": "Apellido",
-          "email": "Correo electrónico",
-          "company": "Empresa",
-          "dni": "DNI",
-          "role": "Rol"
-        },
-        "actions": "Acciones",
-        "deletedSuccess": "Usuario eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
-        "success": "Usuario creado exitosamente",
-        "update": "Usuario actualizado exitosamente"
+        }
       },
       "contracts": {
         "title": "Contratos",
         "columns": {
-          "name": "Nombre",
           "start_date": "Fecha de inicio",
           "end_date": "Fecha de fin",
           "invoice_proposed": "Factura propuesta",
@@ -172,7 +158,6 @@
       "elementTypes": {
         "title": "Tipos de elemento",
         "columns": {
-          "name": "Nombre",
           "requires_tree_type": "Requiere tipo de árbol",
           "description": "Descripción",
           "icon": "Ícono",
@@ -190,14 +175,12 @@
       "taskTypes": {
         "title": "Tipos de tarea",
         "columns": {
-          "name": "Nombre",
           "description": "Descripción"
         }
       },
       "resources": {
         "title": "Recursos",
         "columns": {
-          "name": "Nombre",
           "description": "Descripción",
           "resource_type_id": "Tipo de recurso"
         }
@@ -205,19 +188,12 @@
       "resourceTypes": {
         "title": "Tipos de recurso",
         "columns": {
-          "name": "Nombre",
           "description": "Descripción"
         }
       },
       "stats": {
         "title": "Estadísticas"
       }
-    },
-    "roles": {
-      "admin": "Administrador",
-      "worker": "Operario",
-      "customer": "Cliente",
-      "unknown": "Desconocido"
     }
   },
   "general": {
