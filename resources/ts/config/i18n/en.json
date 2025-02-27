@@ -140,6 +140,7 @@
       "contracts": {
         "title": "Contracts",
         "columns": {
+          "name": "Contract",
           "start_date": "Start Date",
           "end_date": "End Date",
           "invoice_proposed": "Invoice Proposed",
@@ -158,6 +159,7 @@
       "elementTypes": {
         "title": "Element Types",
         "columns": {
+          "name": "Element Type",
           "requires_tree_type": "Requires Tree Type",
           "description": "Description",
           "icon": "Icon",
@@ -175,12 +177,14 @@
       "taskTypes": {
         "title": "Task Types",
         "columns": {
+          "name": "Task Type",
           "description": "Description"
         }
       },
       "resources": {
         "title": "Resources",
         "columns": {
+          "name": "Resource",
           "description": "Description",
           "resource_type_id": "Resource Type"
         }
@@ -188,6 +192,7 @@
       "resourceTypes": {
         "title": "Resource Types",
         "columns": {
+          "name": "Resource Type",
           "description": "Description"
         }
       },

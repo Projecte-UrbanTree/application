@@ -140,6 +140,7 @@
       "contracts": {
         "title": "Contractes",
         "columns": {
+          "name": "Contracte",
           "start_date": "Data d'inici",
           "end_date": "Data de finalització",
           "invoice_proposed": "Factura proposada",
@@ -158,6 +159,7 @@
       "elementTypes": {
         "title": "Tipus d'element",
         "columns": {
+          "name": "Tipus d'element",
           "requires_tree_type": "Requereix tipus d'arbre",
           "description": "Descripció",
           "icon": "Icona",
@@ -175,12 +177,14 @@
       "taskTypes": {
         "title": "Tipus de tasca",
         "columns": {
+          "name": "Tipus de tasca",
           "description": "Descripció"
         }
       },
       "resources": {
         "title": "Recursos",
         "columns": {
+          "name": "Recurs",
           "description": "Descripció",
           "resource_type_id": "Tipus de recurs"
         }
@@ -188,6 +192,7 @@
       "resourceTypes": {
         "title": "Tipus de recurs",
         "columns": {
+          "name": "Tipus de recurs",
           "description": "Descripció"
         }
       },
