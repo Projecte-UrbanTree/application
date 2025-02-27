@@ -128,6 +128,7 @@ export default function CreateUser() {
                                         type="email"
                                         placeholder={t("admin.fields.email")}
                                         className={errors.email && touched.email ? "p-invalid" : ""}
+                                        keyfilter="email"
                                     />
                                     {errors.email && touched.email && (
                                         <small className="p-error">{errors.email}</small>
