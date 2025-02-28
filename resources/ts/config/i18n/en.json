@@ -150,11 +150,32 @@
       },
       "workOrders": {
         "title": "Work Orders",
+        "deleteConfirm": "Are you sure you want to delete this work order?",
+        "noData": "No work orders available.",
         "columns": {
+          "id": "ID",
+          "contract": "Contract",
           "date": "Date",
-          "status": "Status",
-          "contract_id": "Contract"
-        }
+          "users": "Users",
+          "contract_id": "Contract",
+          "status": "Status"
+        },
+        "status": {
+          "delivered": "Report delivered",
+          "notStarted": "Not started",
+          "inProgress": "In progress",
+          "completed": "Completed",
+          "unknown": "Unknown"
+        },
+        "actions": "Actions",
+        "actionTypes": {
+          "viewReport": "View report",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "zones": "Zones",
+        "tasks": "Tasks",
+        "notes": "Notes"
       },
       "elementTypes": {
         "title": "Element Types",

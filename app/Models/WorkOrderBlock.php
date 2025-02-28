@@ -11,7 +11,7 @@ class WorkOrderBlock extends Model
         'work_order_id',
     ];
 
-    public function workOrders()
+    public function workOrder()
     {
         return $this->belongsTo(WorkOrder::class, 'work_order_id');
     }
@@ -24,5 +24,10 @@ class WorkOrderBlock extends Model
     public function zones()
     {
         return $this->belongsToMany(Zone::class, 'work_order_block_zones', 'work_order_block_id', 'zone_id')->withTimestamps();
+    }
+
+    public function blockTasks()
+    {
+        return $this->hasMany(\App\Models\WorkOrderBlockTask::class, 'work_order_block_id');
     }
 }

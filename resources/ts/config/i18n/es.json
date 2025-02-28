@@ -150,11 +150,32 @@
       },
       "workOrders": {
         "title": "Órdenes de trabajo",
+        "deleteConfirm": "¿Estás seguro de eliminar esta orden de trabajo?",
+        "noData": "No hay órdenes de trabajo disponibles.",
         "columns": {
+          "id": "ID",
+          "contract": "Contrato",
           "date": "Fecha",
-          "status": "Estado",
-          "contract_id": "Contrato"
-        }
+          "users": "Usuarios",
+          "contract_id": "Contrato",
+          "status": "Estado"
+        },
+        "status": {
+          "delivered": "Parte entregado",
+          "notStarted": "No iniciado",
+          "inProgress": "En progreso",
+          "completed": "Completado",
+          "unknown": "Desconocido"
+        },
+        "actions": "Acciones",
+        "actionTypes": {
+          "viewReport": "Ver informe",
+          "edit": "Editar",
+          "delete": "Eliminar"
+        },
+        "zones": "Zonas",
+        "tasks": "Tareas",
+        "notes": "Notas"
       },
       "elementTypes": {
         "title": "Tipos de elemento",
