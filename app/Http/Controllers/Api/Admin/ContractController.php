@@ -18,7 +18,7 @@ class ContractController extends Controller
 
         if (!$contract) {
             return response()->json([
-                'message' => 'Contrato no encontrado'
+                'message' => 'Contrato no encontrado.'
             ], 400);
         }
 
