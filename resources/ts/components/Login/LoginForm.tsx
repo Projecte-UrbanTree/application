@@ -11,9 +11,6 @@ import { useI18n } from '@/hooks/useI18n';
 import { useToast } from '@/hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '@/types/user';
-import { log } from 'console';
-import { setUserData } from '@/contexts/store/slice/userSlice';
-import { useDispatch } from 'react-redux';
 
 export interface LoginResponse {
     success?: boolean;
