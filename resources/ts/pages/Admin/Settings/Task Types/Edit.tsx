@@ -22,7 +22,6 @@ export default function EditTaskType() {
   useEffect(() => {
     const fetchTaskType = async () => {
       try {
-        // Asegúrate de tener definida la ruta GET /admin/task-types/{id}
         const response = await axiosClient.get(`/admin/task-types/${id}`);
         const data = response.data;
         setInitialValues({
