@@ -234,17 +234,6 @@ const AdminRoutes: RouteObject[] = [
                   </AdminLayout>
                 ),
               },
-              {
-                path: 'resource-types/destroy/:id',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.resourceTypes.delete.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <EditResourceType />
-                  </AdminLayout>
-                ),
-              },
             ],
           },
         ],

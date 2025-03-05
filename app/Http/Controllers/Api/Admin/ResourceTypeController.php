@@ -17,7 +17,7 @@ class ResourceTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'null'],
         ]);
 
         $resourceType = ResourceType::create($validated);
@@ -38,7 +38,7 @@ class ResourceTypeController extends Controller
 
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
-            'description' => ['sometimes', 'string', 'max:255'],
+            'description' => ['sometimes', 'string', 'null'],
         ]);
 
         $resourceType->update($validated);

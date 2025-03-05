@@ -42,7 +42,6 @@ export default function EditResourceType() {
 
     const validationSchema = Yup.object({
         name: Yup.string().required(t("admin.pages.resourceTypes.edit.validations.name_required")),
-        description: Yup.string().required(t("admin.pages.resourceTypes.edit.validations.description_required"))
     });
 
     const handleSubmit = async (values: typeof initialValues) => {

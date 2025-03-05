@@ -21,7 +21,6 @@ export default function CreateResourceType() {
 
     const validationSchema = Yup.object({
         name: Yup.string().required(t("admin.pages.resourceTypes.create.validations.name_required")),
-        description: Yup.string().required(t("admin.pages.resourceTypes.create.validations.description_required"))
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
