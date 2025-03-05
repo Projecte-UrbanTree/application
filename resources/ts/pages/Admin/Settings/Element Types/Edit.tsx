@@ -10,6 +10,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Card } from "primereact/card";
 import { ColorPicker } from "primereact/colorpicker";
+import { InputTextarea } from "primereact/inputtextarea";
 
 export default function EditElementType() {
     const { id } = useParams<{ id: string }>();
@@ -149,7 +150,8 @@ export default function EditElementType() {
                                     </label>
                                     <Field
                                         name="description"
-                                        as={InputText}
+                                        as={InputTextarea}
+                                        rows={5}
                                         placeholder={t("admin.fields.description")}
                                         className={errors.description && touched.description ? "p-invalid" : ""}
                                     />

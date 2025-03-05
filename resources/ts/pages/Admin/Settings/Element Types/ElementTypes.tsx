@@ -55,7 +55,7 @@ export default function ElementsTypes() {
     const handleDelete = async (elementTypeId: number) => {
         if (!window.confirm(t("admin.pages.elementTypes.deleteConfirm"))) return;
         try {
-            await axiosClient.delete(`/admin/elementTypes/${elementTypeId}`);
+            await axiosClient.delete(`/admin/element-types/${elementTypeId}`);
             setElementTypes(elementTypes.filter((elementype) => elementype.id !== elementTypeId));
             setMsg(t("admin.pages.elementTypes.deletedSuccess"));
         } catch (error) {
@@ -65,8 +65,12 @@ export default function ElementsTypes() {
 
     const colorBodyTemplate = (rowData: ElementType) => {
         return (
-            <div style={{ backgroundColor: "#" + rowData.color, width: '24px', height: '24px', borderRadius: '0%' }}></div>
+            <div style={{ backgroundColor: rowData.color, width: '24px', height: '24px', borderRadius: '10%' }}></div>
         );
+    };
+
+    const iconBodyTemplate = (rowData: ElementType) => {
+        return rowData.icon ? <Icon icon={rowData.icon} className="text-2xl" /> : null;
     };
 
     if (isLoading) {
@@ -88,7 +92,7 @@ export default function ElementsTypes() {
                 />
             )}
             <CrudPanel
-                title="admin.pages.elementTypes.title"
+                title={t("admin.pages.elementTypes.title")}
                 onCreate={() => navigate("/admin/settings/element-types/create")}
             >
                 <DataTable
@@ -99,11 +103,11 @@ export default function ElementsTypes() {
                     showGridlines
                     className="p-datatable-sm"
                 >
-                    <Column field="name" header={t("admin.fields.name")} />
-                    <Column field="requires_tree_type" header={t("admin.fields.requires_tree_type")} />
-                    <Column field="description" header={t("admin.fields.description")} />
-                    <Column field="icon" header={t("admin.fields.icon")} />
-                    <Column field="color" header={t("admin.fields.color")} body={colorBodyTemplate} />
+                    <Column field="name" header={t("admin.pages.elementTypes.columns.name")} />
+                    <Column field="requires_tree_type" header={t("admin.pages.elementTypes.columns.requires_tree_type")} />
+                    <Column field="description" header={t("admin.pages.elementTypes.columns.description")} />
+                    <Column field="icon" header={t("admin.pages.elementTypes.columns.icon")} body={iconBodyTemplate} />
+                    <Column field="color" header={t("admin.pages.elementTypes.columns.color")} body={colorBodyTemplate} />
                     <Column
                         header={t("admin.pages.elementTypes.actions")}
                         body={(rowData: { id: number }) => (
