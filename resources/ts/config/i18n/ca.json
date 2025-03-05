@@ -176,9 +176,52 @@
       },
       "taskTypes": {
         "title": "Tipus de tasca",
+        "loading": "Carregant...",
+        "actions": "Accions",
+        "deletedSuccess": "Tipus de tasca eliminat correctament",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
+        "success": "Tipus de tasca creat correctament",
+        "update": "Tipus de tasca actualitzat correctament",
+        "error": "Error guardant el tipus de tasca",
         "columns": {
           "name": "Tipus de tasca",
           "description": "Descripció"
+        },
+        "create": {
+          "title": "Crear Tipus de tasca",
+          "fields": {
+            "name": "Nom",
+            "description": "Descripció"
+          },
+          "placeholders": {
+            "name": "Nom del tipus de tasca",
+            "description": "Descripció del tipus de tasca"
+          },
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria"
+          },
+          "returnButton": "Tornar a la llista de tipus de tasca",
+          "submitButton": "Crear Tipus de tasca",
+          "submittingText": "Creant..."
+        },
+        "edit": {
+          "title": "Editar Tipus de tasca",
+          "fields": {
+            "name": "Nom",
+            "description": "Descripció"
+          },
+          "placeholders": {
+            "name": "Nom del tipus de tasca",
+            "description": "Descripció del tipus de tasca"
+          },
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria"
+          },
+          "returnButton": "Tornar a la llista de tipus de tasca",
+          "submitButton": "Guardar canvis",
+          "submittingText": "Guardant..."
         }
       },
       "resources": {
