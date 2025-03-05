@@ -178,6 +178,8 @@
         "title": "Tipus de tasca",
         "loading": "Carregant...",
         "actions": "Accions",
+        "editButton": "Editar tipus de tasca",
+        "deleteButton": "Eliminar tipus de tasca",
         "deletedSuccess": "Tipus de tasca eliminat correctament",
         "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
         "success": "Tipus de tasca creat correctament",

@@ -38,7 +38,7 @@
         "contracts": "Contratos",
         "elementTypes": "Tipos de elemento",
         "species": "Especies",
-        "taskTypes": "Tipus de tarea",
+        "taskTypes": "Tipos de tarea",
         "resourceTypes": "Tipos de recurso",
         "users": "Usuarios"
       }
@@ -176,9 +176,54 @@
       },
       "taskTypes": {
         "title": "Tipos de tarea",
+        "loading": "Cargando...",
+        "actions": "Acciones",
+        "deletedSuccess": "Tipo de tarea eliminado exitosamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este tipo de tarea?",
+        "editButton": "Editar tipo de tarea",
+        "deleteButton": "Eliminar tipo de tarea",
+        "success": "Tipo de tarea creado exitosamente",
+        "update": "Tipo de tarea actualizado exitosamente",
+        "error": "Error guardando el tipo de tarea",
         "columns": {
           "name": "Tipo de tarea",
           "description": "Descripción"
+        },
+        "create": {
+          "title": "Crear Tipo de tarea",
+          "fields": {
+            "name": "Nombre",
+            "description": "Descripción"
+          },
+          "placeholders": {
+            "name": "Nombre del tipo de tarea",
+            "description": "Descripción del tipo de tarea"
+          },
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "description_required": "La descripción es obligatoria"
+          },
+          "returnButton": "Volver a la lista de tipos de tarea",
+          "submitButton": "Crear Tipo de tarea",
+          "submittingText": "Creando..."
+        },
+        "edit": {
+          "title": "Editar Tipo de tarea",
+          "fields": {
+            "name": "Nombre",
+            "description": "Descripción"
+          },
+          "placeholders": {
+            "name": "Nombre del tipo de tarea",
+            "description": "Descripción del tipo de tarea"
+          },
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "description_required": "La descripción es obligatoria"
+          },
+          "returnButton": "Volver a la lista de tipos de tarea",
+          "submitButton": "Guardar cambios",
+          "submittingText": "Guardando..."
         }
       },
       "resources": {
