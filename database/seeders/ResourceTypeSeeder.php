@@ -14,16 +14,16 @@ class ResourceTypeSeeder extends Seeder
     {
         DB::table('resource_types')->insert([
             [
-                'name' => 'Resource Type 1',
-                'description' => 'Description for Resource Type 1',
+                'name' => 'Type 1',
+                'description' => 'Description for Type 1',
             ],
             [
-                'name' => 'Resource Type 2',
-                'description' => 'Description for Resource Type 2',
+                'name' => 'Type 2',
+                'description' => 'Description for Type 2',
             ],
             [
-                'name' => 'Resource Type 3',
-                'description' => 'Description for Resource Type 3',
+                'name' => 'Type 3',
+                'description' => 'Description for Type 3',
             ],
         ]);
     }

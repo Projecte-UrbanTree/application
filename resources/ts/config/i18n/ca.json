@@ -64,7 +64,8 @@
       "company": "Empresa",
       "dni": "DNI",
       "role": "Rol",
-      "password": "Contrasenya"
+      "password": "Contrasenya",
+      "description": "Descripció"
     },
     "pages": {
       "dashboard": {
@@ -194,6 +195,33 @@
         "columns": {
           "name": "Tipus de recurs",
           "description": "Descripció"
+        },
+        "loading": "Carregant...",
+        "editButton": "Editar tipus de recurs",
+        "deleteButton": "Eliminar tipus de recurs",
+        "actions": "Accions",
+        "deletedSuccess": "Tipus de recurs eliminat correctament",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
+        "success": "Tipus de recurs creat correctament",
+        "update": "Tipus de recurs actualitzat correctament",
+        "error": "Error guardant el tipus de recurs",
+        "create": {
+          "title": "Crear Tipus de Recurs",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria"
+          },
+          "submitButton": "Crear Tipus de Recurs",
+          "submittingText": "Creant..."
+        },
+        "edit": {
+          "title": "Editar Tipus de Recurs",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria"
+          },
+          "submitButton": "Guardar Canvis",
+          "submittingText": "Guardant..."
         }
       },
       "stats": {
