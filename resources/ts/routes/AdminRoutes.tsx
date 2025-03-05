@@ -14,6 +14,8 @@ import AdminInventory from '@/pages/Admin/Inventory';
 import AdminWorkers from '@/pages/Admin/Workers';
 import AdminResources from '@/pages/Admin/Resources';
 import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTypes';
+import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
+import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import AdminStats from '@/pages/Admin/Stats';
 
 import { Navigate } from 'react-router-dom';
@@ -182,6 +184,28 @@ const AdminRoutes: RouteObject[] = [
                     contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract={'1'}>
                     <AdminResourceTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'resource-types/create',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.resourceTypes.create.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <CreateResourceType />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'resource-types/edit/:id',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.resourceTypes.edit.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <EditResourceType />
                   </AdminLayout>
                 ),
               },
