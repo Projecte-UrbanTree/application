@@ -64,7 +64,10 @@
       "company": "Company",
       "dni": "DNI",
       "role": "Role",
-      "password": "Password"
+      "password": "Password",
+      "family": "Family",
+      "genus": "Genus",
+      "species": "Species"
     },
     "pages": {
       "dashboard": {
@@ -172,6 +175,35 @@
           "family": "Family",
           "genus": "Genus",
           "species": "Species"
+        },
+        "loading": "Loading...",
+        "editButton": "Edit Tree Type",
+        "deleteButton": "Delete Tree Type",
+        "actions": "Actions",
+        "deletedSuccess": "Tree type deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this tree type?",
+        "success": "Tree type created successfully",
+        "update": "Tree type updated successfully",
+        "error": "Error saving tree type",
+        "create": {
+          "title": "Create Tree Type",
+          "validation": {
+            "family": "Family is required",
+            "genus": "Genus is required",
+            "species": "Species is required"
+          },
+          "validation1": {
+            "family": "Family must contain only alphanumeric characters",
+            "genus": "Genus must contain only alphanumeric characters",
+            "species": "Species must contain only alphanumeric characters"
+          },
+          "submitButton": "Create Tree Type",
+          "submittingText": "Creating..."
+        },
+        "edit": {
+          "title": "Edit Tree Type",
+          "submitButton": "Save Changes",
+          "submittingText": "Saving..."
         }
       },
       "taskTypes": {
