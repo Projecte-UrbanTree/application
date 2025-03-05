@@ -108,7 +108,7 @@ export default function EditTaskType() {
                   )}
                 </div>
 
-                {/* Campo Descripción */}
+                {/* Description Field */}
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-700 mb-1">
                     {t("admin.pages.taskTypes.edit.fields.description")}
