@@ -38,7 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
         });
         Route::get('contracts', [ContractController::class, 'index']);
         Route::get('work-orders', [WorkOrderController::class, 'index']);
-        Route::get('element-types', [ElementTypeController::class, 'index']);
         Route::get('tree-types', [TreeTypeController::class, 'index']);
         Route::get('task-types', [TaskTypeController::class, 'index']);
         Route::get('resources', [ResourceController::class, 'index']);
@@ -50,5 +49,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('users/{id}', [UserController::class, 'show']);
         Route::put('users/{id}', [UserController::class, 'update']);
         Route::delete('users/{id}', [UserController::class, 'destroy']);
+
+        //Route for Elements Types
+        Route::get('element-types', [ElementTypeController::class, 'index']);
+        Route::post('element-types', [ElementTypeController::class, 'store']);
+        Route::get('element-types/{id}', [ElementTypeController::class, 'show']);
+        Route::put('element-types/{id}', [ElementTypeController::class, 'update']);
+        Route::delete('element-types/{id}', [ElementTypeController::class, 'destroy']);
     });
 });

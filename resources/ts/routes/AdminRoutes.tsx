@@ -8,6 +8,8 @@ import EditUser from '@/pages/Admin/Settings/Users/Edit';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
+import CreateElementTypes from '@/pages/Admin/Settings/Element Types/Create';
+import EditElementTypes from '@/pages/Admin/Settings/Element Types/Edit';
 import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
 import AdminTaskTypes from '@/pages/Admin/Settings/Task Types/TaskTypes';
 import AdminInventory from '@/pages/Admin/Inventory';
@@ -149,6 +151,28 @@ const AdminRoutes: RouteObject[] = [
                     contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract={'1'}>
                     <AdminElementTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'element-types/create',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.elementTypes.create.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <CreateElementTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'element-types/edit/:id',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.elementTypes.edit.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <EditElementTypes />
                   </AdminLayout>
                 ),
               },
