@@ -21,9 +21,14 @@ export default function CreateTreeType() {
     };
 
     const validationSchema = Yup.object({
-        family: Yup.string().required(t("admin.pages.treeTypes.create.validation.family")),
-        genus: Yup.string().required(t("admin.pages.treeTypes.create.validation.genus")),
-        species: Yup.string().required(t("admin.pages.treeTypes.create.validation.species"))
+        family: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.family"))
+            .required(t("admin.pages.treeTypes.create.validation.family")),
+        genus: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.genus"))
+            .required(t("admin.pages.treeTypes.create.validation.genus")),
+        species: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.species"))
     });
 
     const handleSubmit = async (values: typeof initialValues) => {

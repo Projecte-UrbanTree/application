@@ -192,6 +192,11 @@
             "genus": "Genus is required",
             "species": "Species is required"
           },
+          "validation1": {
+            "family": "Family must contain only alphanumeric characters",
+            "genus": "Genus must contain only alphanumeric characters",
+            "species": "Species must contain only alphanumeric characters"
+          },
           "submitButton": "Create Tree Type",
           "submittingText": "Creating..."
         },

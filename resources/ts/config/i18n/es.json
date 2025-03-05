@@ -192,6 +192,11 @@
             "genus": "El género es obligatorio",
             "species": "La especie es obligatoria"
           },
+          "validation1": {
+            "family": "La familia debe contener solo caracteres alfanuméricos",
+            "genus": "El género debe contener solo caracteres alfanuméricos",
+            "species": "La especie debe contener solo caracteres alfanuméricos"
+          },
           "submitButton": "Crear Tipo de Árbol",
           "submittingText": "Creando..."
         },

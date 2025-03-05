@@ -34,7 +34,7 @@ export default function EditTreeType() {
                 setInitialValues({
                     family: tree_type.family,
                     genus: tree_type.genus,
-                    species: tree_type.species,
+                    species: tree_type.species ?? "",
                 });
                 setIsLoading(false);
             } catch (error) {
@@ -46,9 +46,14 @@ export default function EditTreeType() {
     }, [id]);
 
     const validationSchema = Yup.object({
-        family: Yup.string().required(t("admin.pages.treeTypes.create.validation.family")),
-        genus: Yup.string().required(t("admin.pages.treeTypes.create.validation.genus")),
-        species: Yup.string().required(t("admin.pages.treeTypes.create.validation.species"))
+        family: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.family"))
+            .required(t("admin.pages.treeTypes.create.validation.family")),
+        genus: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.genus"))
+            .required(t("admin.pages.treeTypes.create.validation.genus")),
+        species: Yup.string()
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.species"))
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
