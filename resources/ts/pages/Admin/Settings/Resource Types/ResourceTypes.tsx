@@ -78,13 +78,15 @@ export default function ResourceTypes() {
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await axiosClient.delete(`/admin/resource-types/${id}`);
-      setResourceTypes((prevResourceTypes) => prevResourceTypes.filter((resourceType) => resourceType.id !== id));
-      setMsg(t("admin.pages.resourceTypes.deletedSuccess"));
-    } catch (error) {
-      console.error(error);
-      setMsg(t("admin.pages.resourceTypes.deleteError"));
+    if (window.confirm(t("admin.pages.resourceTypes.deleteConfirm"))) {
+      try {
+        await axiosClient.delete(`/admin/resource-types/${id}`);
+        setResourceTypes((prevResourceTypes) => prevResourceTypes.filter((resourceType) => resourceType.id !== id));
+        setMsg(t("admin.pages.resourceTypes.deletedSuccess"));
+      } catch (error) {
+        console.error(error);
+        setMsg(t("admin.pages.resourceTypes.deleteError"));
+      }
     }
   };
 
