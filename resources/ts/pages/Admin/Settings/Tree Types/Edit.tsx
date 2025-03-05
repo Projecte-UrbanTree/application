@@ -27,9 +27,9 @@ export default function EditTreeType() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchTreeType = async () => {
             try {
-                const response = await axiosClient.get(`/admin/treeTypes/${id}`);
+                const response = await axiosClient.get(`/admin/tree-types/${id}`);
                 const tree_type = response.data;
                 setInitialValues({
                     family: tree_type.family,
@@ -42,7 +42,7 @@ export default function EditTreeType() {
                 setIsLoading(false);
             }
         };
-        fetchUser();
+        fetchTreeType();
     }, [id]);
 
     const validationSchema = Yup.object({
@@ -54,10 +54,10 @@ export default function EditTreeType() {
     const handleSubmit = async (values: typeof initialValues) => {
         try {
             const data = { ...values };
-            await axiosClient.put(`/admin/treeTypes/${id}`, data);
-            navigate("/admin/settings/treeTypes", { state: { success: t("admin.pages.treeTypes.update") } });
+            await axiosClient.put(`/admin/tree-types/${id}`, data);
+            navigate("/admin/settings/tree-types", { state: { success: t("admin.pages.treeTypes.update") } });
         } catch (error) {
-            navigate("/admin/settings/treeTypes", { state: { error: t("admin.pages.treeTypes.error") } });
+            navigate("/admin/settings/tree-types", { state: { error: t("admin.pages.treeTypes.error") } });
         }
     };
 
@@ -77,7 +77,7 @@ export default function EditTreeType() {
                     <Button
                         className="p-button-text mr-4"
                         style={{ color: "#fff" }}
-                        onClick={() => navigate("/admin/settings/treeTypes")}
+                        onClick={() => navigate("/admin/settings/tree-types")}
                     >
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
@@ -100,7 +100,7 @@ export default function EditTreeType() {
                                         {t("admin.fields.family")}
                                     </label>
                                     <Field
-                                        name="name"
+                                        name="family"
                                         as={InputText}
                                         placeholder={t("admin.fields.family")}
                                         className={errors.family && touched.family ? "p-invalid" : ""}
@@ -115,7 +115,7 @@ export default function EditTreeType() {
                                         {t("admin.fields.genus")}
                                     </label>
                                     <Field
-                                        name="surname"
+                                        name="genus"
                                         as={InputText}
                                         placeholder={t("admin.fields.genus")}
                                         className={errors.genus && touched.genus ? "p-invalid" : ""}

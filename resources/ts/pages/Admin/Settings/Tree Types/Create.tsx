@@ -30,8 +30,8 @@ export default function CreateTreeType() {
         setIsSubmitting(true);
         try {
             await axiosClient.get("/sanctum/csrf-cookie");
-            await axiosClient.post("/admin/treeTypes", values);
-            navigate("/admin/settings/treeTypes", { state: { success: t("admin.pages.treeTypes.success") } });
+            await axiosClient.post("/admin/tree-types", values);
+            navigate("/admin/settings/tree-types", { state: { success: t("admin.pages.treeTypes.success") } });
         } catch (error) {
             console.error(error);
         } finally {
@@ -46,7 +46,7 @@ export default function CreateTreeType() {
                     <Button
                         className="p-button-text mr-4"
                         style={{ color: "#fff" }}
-                        onClick={() => navigate("/admin/settings/treeTypes")}	
+                        onClick={() => navigate("/admin/settings/tree-types")}	
                     >
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>

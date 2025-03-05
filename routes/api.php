@@ -39,12 +39,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('contracts', [ContractController::class, 'index']);
         Route::get('work-orders', [WorkOrderController::class, 'index']);
         Route::get('element-types', [ElementTypeController::class, 'index']);
+        
+        // Route for Tree Types
         Route::get('tree-types', [TreeTypeController::class, 'index']);
+        Route::post('tree-types', [TreeTypeController::class, 'store']);
+        Route::get('tree-types/{id}', [TreeTypeController::class, 'show']);
+        Route::put('tree-types/{id}', [TreeTypeController::class, 'update']);
+        Route::delete('tree-types/{id}', [TreeTypeController::class, 'destroy']);
+
         Route::get('task-types', [TaskTypeController::class, 'index']);
         Route::get('resources', [ResourceController::class, 'index']);
         Route::get('resource-types', [ResourceTypeController::class, 'index']);
 
-        // Route for users
+        // Route for Users
         Route::get('users', [UserController::class, 'index']);
         Route::post('users', [UserController::class, 'store']);
         Route::get('users/{id}', [UserController::class, 'show']);

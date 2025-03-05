@@ -10,11 +10,12 @@ class TreeTypeController extends Controller
 {
     public function index()
     {
-        return response()->json(TreeType::all());
+        $treeTypes = TreeType::all();
+        return response()->json($treeTypes);
     }
-    public function store()
+    public function store(Request $request)
     {
-        $validated = request()->validate([
+        $validated = $request->validate([
             'family' => ['required', 'string', 'max:255'],
             'genus' => ['required', 'string', 'max:255'],
             'species' => ['nullable', 'string', 'max:255'],
@@ -27,10 +28,10 @@ class TreeTypeController extends Controller
         $treeType = TreeType::findOrFail($id);
         return response()->json($treeType);
     }
-    public function update($id)
+    public function update(Request $request, $id)
     {
         $treeType = TreeType::findOrFail($id);
-        $validated = request()->validate([
+        $validated = $request->validate([
             'family' => ['sometimes', 'string', 'max:255'],
             'genus' => ['sometimes', 'string', 'max:255'],
             'species' => ['nullable', 'string', 'max:255'],
