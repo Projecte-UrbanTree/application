@@ -65,6 +65,9 @@
       "dni": "DNI",
       "role": "Rol",
       "password": "Contraseña",
+      "family": "Familia",
+      "genus": "Género",
+      "species": "Especie",
       "description": "Descripción"
     },
     "pages": {
@@ -173,6 +176,35 @@
           "family": "Familia",
           "genus": "Género",
           "species": "Especie"
+        },
+        "loading": "Cargando...",
+        "editButton": "Editar Tipo de Árbol",
+        "deleteButton": "Eliminar Tipo de Árbol",
+        "actions": "Acciones",
+        "deletedSuccess": "Tipo de árbol eliminado exitosamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
+        "success": "Tipo de árbol creado exitosamente",
+        "update": "Tipo de árbol actualizado exitosamente",
+        "error": "Error guardando el tipo de árbol",
+        "create": {
+          "title": "Crear Tipo de Árbol",
+          "validation": {
+            "family": "La familia es obligatoria",
+            "genus": "El género es obligatorio",
+            "species": "La especie es obligatoria"
+          },
+          "validation1": {
+            "family": "La familia debe contener solo caracteres alfanuméricos",
+            "genus": "El género debe contener solo caracteres alfanuméricos",
+            "species": "La especie debe contener solo caracteres alfanuméricos"
+          },
+          "submitButton": "Crear Tipo de Árbol",
+          "submittingText": "Creando..."
+        },
+        "edit": {
+          "title": "Editar Tipo de Árbol",
+          "submitButton": "Guardar Cambios",
+          "submittingText": "Guardando..."
         }
       },
       "taskTypes": {
