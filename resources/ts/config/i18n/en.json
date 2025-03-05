@@ -65,9 +65,15 @@
       "dni": "DNI",
       "role": "Role",
       "password": "Password",
-      "family": "Family",
-      "genus": "Genus",
-      "species": "Species"
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "status": "Status",
+      "final_price": "Final Price"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "completed": "Completed"
     },
     "pages": {
       "dashboard": {
@@ -142,13 +148,42 @@
       },
       "contracts": {
         "title": "Contracts",
+        "loading": "Loading...",
+        "actions": "Actions",
+        "editButton": "Edit contract",
+        "deleteButton": "Delete contract",
         "columns": {
           "name": "Contract",
           "start_date": "Start Date",
           "end_date": "End Date",
-          "invoice_proposed": "Invoice Proposed",
-          "invoice_agreed": "Invoice Agreed",
-          "invoice_paid": "Invoice Paid"
+          "final_price": "Final Price",
+          "status": "Status"
+        },
+        "success": "Contract created successfully",
+        "deletedSuccess": "Contract deleted successfully",
+        "update": "Contract updated successfully",
+        "deleteConfirm": "Are you sure you want to delete this contract?",
+        "create": {
+          "title": "Create Contract",
+          "submitButton": "Create Contract",
+          "validations": {
+            "name_required": "Name is required",
+            "start_date_required": "Start date is required",
+            "end_date_required": "End date is required"
+          },
+          "submittingText": "Creating..."
+        },
+        "edit": {
+          "title": "Edit Contract",
+          "placeholders": {
+            "status": "Select a status"
+          },
+          "submitButton": "Save Changes",
+          "validations": {
+            "status_invalid": "Invalid status",
+            "name_required": "Name is required"
+          },
+          "submittingText": "Saving..."
         }
       },
       "workOrders": {
@@ -175,35 +210,6 @@
           "family": "Family",
           "genus": "Genus",
           "species": "Species"
-        },
-        "loading": "Loading...",
-        "editButton": "Edit Tree Type",
-        "deleteButton": "Delete Tree Type",
-        "actions": "Actions",
-        "deletedSuccess": "Tree type deleted successfully",
-        "deleteConfirm": "Are you sure you want to delete this tree type?",
-        "success": "Tree type created successfully",
-        "update": "Tree type updated successfully",
-        "error": "Error saving tree type",
-        "create": {
-          "title": "Create Tree Type",
-          "validation": {
-            "family": "Family is required",
-            "genus": "Genus is required",
-            "species": "Species is required"
-          },
-          "validation1": {
-            "family": "Family must contain only alphanumeric characters",
-            "genus": "Genus must contain only alphanumeric characters",
-            "species": "Species must contain only alphanumeric characters"
-          },
-          "submitButton": "Create Tree Type",
-          "submittingText": "Creating..."
-        },
-        "edit": {
-          "title": "Edit Tree Type",
-          "submitButton": "Save Changes",
-          "submittingText": "Saving..."
         }
       },
       "taskTypes": {

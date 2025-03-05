@@ -65,9 +65,15 @@
       "dni": "DNI",
       "role": "Rol",
       "password": "Contraseña",
-      "family": "Familia",
-      "genus": "Género",
-      "species": "Especie"
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha de fin",
+      "status": "Estado",
+      "final_price": "Precio final"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "completed": "Completado"
     },
     "pages": {
       "dashboard": {
@@ -142,13 +148,42 @@
       },
       "contracts": {
         "title": "Contratos",
+        "loading": "Cargando...",
+        "actions": "Acciones",
+        "editButton": "Editar contrato",
+        "deleteButton": "Eliminar contrato",
         "columns": {
           "name": "Contrato",
           "start_date": "Fecha de inicio",
           "end_date": "Fecha de fin",
-          "invoice_proposed": "Factura propuesta",
-          "invoice_agreed": "Factura acordada",
-          "invoice_paid": "Factura pagada"
+          "final_price": "Precio final",
+          "status": "Estado"
+        },
+        "success": "Contrato creado correctamente",
+        "deletedSuccess": "Contrato eliminado correctamente",
+        "update": "Contrato actualizado correctamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+        "create": {
+          "title": "Crear Contrato",
+          "submitButton": "Crear Contrato",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria"
+          },
+          "submittingText": "Creando..."
+        },
+        "edit": {
+          "title": "Editar Contrato",
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submitButton": "Guardar Cambios",
+          "validations": {
+            "status_invalid": "Estado no válido",
+            "name_required": "El nombre es obligatorio"
+          },
+          "submittingText": "Guardando..."
         }
       },
       "workOrders": {
@@ -175,35 +210,6 @@
           "family": "Familia",
           "genus": "Género",
           "species": "Especie"
-        },
-        "loading": "Cargando...",
-        "editButton": "Editar Tipo de Árbol",
-        "deleteButton": "Eliminar Tipo de Árbol",
-        "actions": "Acciones",
-        "deletedSuccess": "Tipo de árbol eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
-        "success": "Tipo de árbol creado exitosamente",
-        "update": "Tipo de árbol actualizado exitosamente",
-        "error": "Error guardando el tipo de árbol",
-        "create": {
-          "title": "Crear Tipo de Árbol",
-          "validation": {
-            "family": "La familia es obligatoria",
-            "genus": "El género es obligatorio",
-            "species": "La especie es obligatoria"
-          },
-          "validation1": {
-            "family": "La familia debe contener solo caracteres alfanuméricos",
-            "genus": "El género debe contener solo caracteres alfanuméricos",
-            "species": "La especie debe contener solo caracteres alfanuméricos"
-          },
-          "submitButton": "Crear Tipo de Árbol",
-          "submittingText": "Creando..."
-        },
-        "edit": {
-          "title": "Editar Tipo de Árbol",
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando..."
         }
       },
       "taskTypes": {
