@@ -17,26 +17,26 @@ return [
         'description' => 'From daily monitoring to specialized technical reports. Our platform centralizes and simplifies all tasks related to urban and peri-urban tree maintenance and assessment.',
         'technical_assessment' => [
             'title' => 'Technical assessments',
-            'description' => 'Conduct and document visual assessments (VTA) and risk analysis (ERCA) systematically. Generate professional reports with a single click.'
+            'description' => 'Conduct and document visual assessments (VTA) and risk analysis (ERCA) systematically. Generate professional reports with a single click.',
         ],
         'iot_monitoring' => [
             'title' => 'IoT Monitoring',
-            'description' => 'Integrate sensor data to monitor tree health in real-time. Early detection of irrigation, stability, and environmental condition issues.'
+            'description' => 'Integrate sensor data to monitor tree health in real-time. Early detection of irrigation, stability, and environmental condition issues.',
         ],
         'maintenance' => [
             'title' => 'Maintenance management',
-            'description' => 'Plan and supervise all maintenance tasks: pruning, phytosanitary treatments, irrigation, and more. Real-time tracking of each tree\'s status.'
-        ]
+            'description' => 'Plan and supervise all maintenance tasks: pruning, phytosanitary treatments, irrigation, and more. Real-time tracking of each tree\'s status.',
+        ],
     ],
     'newsletter' => [
         'title' => 'Subscribe to our newsletter',
         'description' => 'The latest news, articles, and resources, sent to your inbox weekly.',
         'subscribe' => 'Subscribe',
         'subscribe_alt' => 'To our newsletter',
-        'placeholder' => 'Enter your email'
+        'placeholder' => 'Enter your email',
     ],
     'testimonials' => [
         'section_title' => 'Our thoughts',
-        'title' => 'Our team\'s thoughts about the product'
-    ]
+        'title' => 'Our team\'s thoughts about the product',
+    ],
 ];

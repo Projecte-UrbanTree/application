@@ -171,37 +171,34 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
             <div className="block lg:hidden">
-              <Button
-                onClick={() => setMenuOpen(!menuOpen)}
-                color="text-gray-800">
+              <Button onClick={() => setMenuOpen(!menuOpen)} color="text-gray-800">
                 <Icon width="24px" icon="tabler:menu" color="#ffffff" />
               </Button>
             </div>
             <a href="/" className="">
               <img className="w-48" src={logo} alt="Logo" />
             </a>
-            <div className="hidden lg:flex space-x-6">
-              <Link
-                to="/admin/dashboard"
-                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
-                  isManagementActive
-                    ? 'bg-indigo-600 text-white'
-                    : 'hover:bg-gray-100'
-                }`}>
-                <Icon inline={true} width="24px" icon="tabler:briefcase" />{' '}
-                {t('admin.menu.management')}
-              </Link>
-              <Link
-                to="/admin/settings/contracts"
-                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
-                  location.pathname.includes('/admin/settings')
-                    ? 'bg-indigo-600 text-white'
-                    : 'hover:bg-gray-100'
-                }`}>
-                <Icon inline={true} width="24px" icon="tabler:settings" />{' '}
-                {t('admin.menu.settings')}
-              </Link>
-            </div>
+          </div>
+
+          <div className="hidden lg:flex space-x-6 justify-center flex-grow">
+            <Link
+              to="/admin/dashboard"
+              className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                isManagementActive ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
+              }`}>
+              <Icon inline={true} width="24px" icon="tabler:briefcase" />{' '}
+              {t('admin.menu.management')}
+            </Link>
+            <Link
+              to="/admin/settings/contracts"
+              className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                location.pathname.includes('/admin/settings')
+                  ? 'bg-indigo-600 text-white'
+                  : 'hover:bg-gray-100'
+              }`}>
+              <Icon inline={true} width="24px" icon="tabler:settings" />{' '}
+              {t('admin.menu.settings')}
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
