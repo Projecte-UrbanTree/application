@@ -58,8 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('users/{id}', [UserController::class, 'update']);
         Route::delete('users/{id}', [UserController::class, 'destroy']);
 
-
-         // Route for resource types
+        // Route for resource types
         Route::get('resource-types', [ResourceTypeController::class, 'index']);
         Route::post('resource-types', [ResourceTypeController::class, 'store']);
         Route::get('resource-types/{id}', [ResourceTypeController::class, 'show']);
