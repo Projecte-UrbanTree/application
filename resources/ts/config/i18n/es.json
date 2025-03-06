@@ -67,7 +67,8 @@
       "password": "Contraseña",
       "family": "Familia",
       "genus": "Género",
-      "species": "Especie"
+      "species": "Especie",
+      "description": "Descripción"
     },
     "pages": {
       "dashboard": {
@@ -240,6 +241,33 @@
         "columns": {
           "name": "Tipo de recurso",
           "description": "Descripción"
+        },
+        "loading": "Cargando...",
+        "editButton": "Editar tipo de recurso",
+        "deleteButton": "Eliminar tipo de recurso",
+        "actions": "Acciones",
+        "deletedSuccess": "Tipo de recurso eliminado exitosamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
+        "success": "Tipo de recurso creado exitosamente",
+        "update": "Tipo de recurso actualizado exitosamente",
+        "error": "Error guardando el tipo de recurso",
+        "create": {
+          "title": "Crear Tipo de Recurso",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "description_required": "La descripción es obligatoria"
+          },
+          "submitButton": "Crear Tipo de Recurso",
+          "submittingText": "Creando..."
+        },
+        "edit": {
+          "title": "Editar Tipo de Recurso",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "description_required": "La descripción es obligatoria"
+          },
+          "submitButton": "Guardar Cambios",
+          "submittingText": "Guardando..."
         }
       },
       "stats": {
