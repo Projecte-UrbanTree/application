@@ -10,7 +10,6 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Password } from "primereact/password";
 import { Card } from "primereact/card";
-
 export default function EditUser() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -33,7 +32,6 @@ export default function EditUser() {
         password: ""
     });
     const [isLoading, setIsLoading] = useState(true);
-
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -56,25 +54,23 @@ export default function EditUser() {
         };
         fetchUser();
     }, [id]);
-
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.users.edit.validations.name_required")),
-        surname: Yup.string().required(t("admin.pages.users.edit.validations.surname_required")),
+        name: Yup.string().required(t("admin.pages.users.form.validation.name_required")),
+        surname: Yup.string().required(t("admin.pages.users.form.validation.surname_required")),
         email: Yup.string()
-            .email(t("admin.pages.users.edit.validations.invalid_email"))
-            .required(t("admin.pages.users.edit.validations.email_required")),
+            .email(t("admin.pages.users.form.validation.invalid_email"))
+            .required(t("admin.pages.users.form.validation.email_required")),
         company: Yup.string(),
         dni: Yup.string(),
         role: Yup.string()
-            .oneOf(["admin", "worker", "customer"], t("admin.pages.users.edit.validations.role_invalid"))
-            .required(t("admin.pages.users.edit.validations.role_invalid")),
+            .oneOf(["admin", "worker", "customer"], t("admin.pages.users.form.validation.role_invalid"))
+            .required(t("admin.pages.users.form.validation.role_invalid")),
         password: Yup.string()
-            .min(8, t("admin.pages.users.edit.validations.password_min"))
-            .matches(/[A-Z]/, t("admin.pages.users.create.validations.password_uppercase"))
-            .matches(/[0-9]/, t("admin.pages.users.create.validations.password_number"))
-            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.create.validations.password_special"))
+            .min(8, t("admin.pages.users.form.validation.password_min"))
+            .matches(/[A-Z]/, t("admin.pages.users.form.validation.password_uppercase"))
+            .matches(/[0-9]/, t("admin.pages.users.form.validation.password_number"))
+            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.form.validation.password_special"))
     });
-
     const handleSubmit = async (values: typeof initialValues) => {
         try {
             const data = { ...values };
@@ -82,27 +78,24 @@ export default function EditUser() {
                 delete data.password;
             }
             await axiosClient.put(`/admin/users/${id}`, data);
-            navigate("/admin/settings/users", { state: { success: t("admin.pages.users.update") } });
+            navigate("/admin/settings/users", { state: { success: t("admin.pages.users.list.messages.updateSuccess") } });
         } catch (error) {
-            navigate("/admin/settings/users", { state: { error: t("admin.pages.users.error") } });
+            navigate("/admin/settings/users", { state: { error: t("admin.pages.users.list.messages.error") } });
         }
     };
-
     const roleOptions = [
         { label: t("admin.roles.admin"), value: "admin" },
         { label: t("admin.roles.worker"), value: "worker" },
         { label: t("admin.roles.customer"), value: "customer" }
     ];
-
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <Icon icon="eos-icons:loading" className="h-8 w-8 animate-spin text-blue-600" />
-                <span className="mt-2 text-blue-600">{t("admin.pages.users.loading")}</span>
+                <span className="mt-2 text-blue-600">{t("general.loading")}</span>
             </div>
         );
     }
-
     return (
         <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
             <Card className="w-full max-w-3xl shadow-lg">
@@ -115,7 +108,7 @@ export default function EditUser() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.users.edit.title")}
+                        {t("admin.pages.users.form.title.edit")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -205,7 +198,7 @@ export default function EditUser() {
                                         name="role"
                                         as={Dropdown}
                                         options={roleOptions}
-                                        placeholder={t("admin.pages.users.edit.placeholders.role")}
+                                        placeholder={t("admin.pages.users.form.edit.placeholders.role")}
                                         className={errors.role && touched.role ? "p-invalid" : ""}
                                     />
                                     {errors.role && touched.role && (
@@ -220,7 +213,7 @@ export default function EditUser() {
                                     <Field
                                         name="password"
                                         as={Password}
-                                        placeholder={t("admin.pages.users.edit.placeholders.password")}
+                                        placeholder={t("admin.pages.users.form.placeholders.passwordEdit")}
                                         toggleMask
                                         className={errors.password && touched.password ? "p-invalid" : ""}
                                     />
@@ -236,8 +229,8 @@ export default function EditUser() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.users.edit.submittingText")
-                                                : t("admin.pages.users.edit.submitButton")
+                                                ? t("admin.pages.users.form.submittingText.edit")
+                                                : t("admin.pages.users.form.submitButton.edit")
                                         }
                                     />
                                 </div>
