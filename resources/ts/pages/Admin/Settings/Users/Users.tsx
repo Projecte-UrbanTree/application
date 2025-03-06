@@ -61,7 +61,7 @@ export default function Users() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <ProgressSpinner style={{ width: "50px", height: "50px" }} strokeWidth="4" />
-                <span className="mt-2 text-blue-600">{t("admin.pages.users.list.loading")}</span>
+                <span className="mt-2 text-blue-600">{t("general.loading")}</span>
             </div>
         );
     }

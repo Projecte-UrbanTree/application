@@ -88,7 +88,6 @@
       "users": {
         "title": "Usuaris",
         "list": {
-          "loading": "Carregant...",
           "actions": {
             "edit": "Editar usuari",
             "delete": "Eliminar usuari",
@@ -176,7 +175,6 @@
         "title": "Tipus d'arbre",
         "list": {
           "title": "Tipus d'arbre",
-          "loading": "Carregant...",
           "actions": {
             "label": "Accions",
             "edit": "Editar Tipus d'Arbre",
