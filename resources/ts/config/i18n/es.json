@@ -87,57 +87,70 @@
       },
       "users": {
         "title": "Usuarios",
-        "loading": "Cargando...",
-        "editButton": "Editar usuario",
-        "deleteButton": "Eliminar usuario",
-        "columns": {
-          "email": "Correo electrónico"
+        "list": {
+          "loading": "Cargando...",
+          "actions": {
+            "edit": "Editar usuario",
+            "delete": "Eliminar usuario",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Usuario eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
+            "createSuccess": "Usuario creado exitosamente",
+            "updateSuccess": "Usuario actualizado exitosamente",
+            "error": "Error guardando el usuario"
+          },
+          "columns": {
+            "name": "Nombre",
+            "surname": "Apellido",
+            "email": "Correo electrónico",
+            "company": "Empresa",
+            "dni": "DNI",
+            "role": "Rol"
+          }
         },
-        "actions": "Acciones",
-        "deletedSuccess": "Usuario eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
-        "success": "Usuario creado exitosamente",
-        "update": "Usuario actualizado exitosamente",
-        "error": "Error guardando el usuario",
-        "create": {
-          "title": "Crear Usuario",
-          "placeholders": {
-            "role": "Selecciona un rol",
-            "password": "Contraseña"
+        "form": {
+          "create": {
+            "title": "Crear Usuario",
+            "placeholders": {
+              "role": "Selecciona un rol",
+              "password": "Contraseña"
+            },
+            "validations": {
+              "name_required": "El nombre es obligatorio",
+              "surname_required": "El apellido es obligatorio",
+              "invalid_email": "Correo inválido",
+              "email_required": "El correo es obligatorio",
+              "role_invalid": "Rol no válido",
+              "password_required": "La contraseña es obligatoria",
+              "password_min": "Debe tener al menos 8 caracteres",
+              "password_uppercase": "Debe contener al menos una letra mayúscula",
+              "password_number": "Debe contener al menos un número",
+              "password_special": "Debe contener al menos un carácter especial"
+            },
+            "returnButton": "Volver a la lista de usuarios",
+            "submitButton": "Crear Usuario",
+            "submittingText": "Creando..."
           },
-          "validations": {
-            "name_required": "El nombre es obligatorio",
-            "surname_required": "El apellido es obligatorio",
-            "invalid_email": "Correo inválido",
-            "email_required": "El correo es obligatorio",
-            "role_invalid": "Rol no válido",
-            "password_required": "La contraseña es obligatoria",
-            "password_min": "Debe tener al menos 8 caracteres",
-            "password_uppercase": "Debe contener al menos una letra mayúscula",
-            "password_number": "Debe contener al menos un número",
-            "password_special": "Debe contener al menos un carácter especial"
-          },
-          "returnButton": "Volver a la lista de usuarios",
-          "submitButton": "Crear Usuario",
-          "submittingText": "Creando..."
-        },
-        "edit": {
-          "title": "Editar Usuario",
-          "placeholders": {
-            "role": "Selecciona un rol",
-            "password": "Contraseña (dejar en blanco para no cambiar)"
-          },
-          "validations": {
-            "name_required": "El nombre es obligatorio",
-            "surname_required": "El apellido es obligatorio",
-            "invalid_email": "Correo inválido",
-            "email_required": "El correo es obligatorio",
-            "role_invalid": "Rol no válido",
-            "password_min": "Debe tener al menos 8 caracteres"
-          },
-          "returnButton": "Volver a la lista de usuarios",
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando..."
+          "edit": {
+            "title": "Editar Usuario",
+            "placeholders": {
+              "role": "Selecciona un rol",
+              "password": "Contraseña (dejar en blanco para no cambiar)"
+            },
+            "validations": {
+              "name_required": "El nombre es obligatorio",
+              "surname_required": "El apellido es obligatorio",
+              "invalid_email": "Correo inválido",
+              "email_required": "El correo es obligatorio",
+              "role_invalid": "Rol no válido",
+              "password_min": "Debe tener al menos 8 caracteres"
+            },
+            "returnButton": "Volver a la lista de usuarios",
+            "submitButton": "Guardar Cambios",
+            "submittingText": "Guardando..."
+          }
         }
       },
       "contracts": {
@@ -171,39 +184,58 @@
       },
       "treeTypes": {
         "title": "Tipos de árbol",
-        "columns": {
-          "family": "Familia",
-          "genus": "Género",
-          "species": "Especie"
-        },
-        "loading": "Cargando...",
-        "editButton": "Editar Tipo de Árbol",
-        "deleteButton": "Eliminar Tipo de Árbol",
-        "actions": "Acciones",
-        "deletedSuccess": "Tipo de árbol eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
-        "success": "Tipo de árbol creado exitosamente",
-        "update": "Tipo de árbol actualizado exitosamente",
-        "error": "Error guardando el tipo de árbol",
-        "create": {
-          "title": "Crear Tipo de Árbol",
-          "validation": {
-            "family": "La familia es obligatoria",
-            "genus": "El género es obligatorio",
-            "species": "La especie es obligatoria"
+        "list": {
+          "title": "Tipos de árbol",
+          "loading": "Cargando...",
+          "actions": {
+            "label": "Acciones",
+            "edit": "Editar Tipo de Árbol",
+            "delete": "Eliminar Tipo de Árbol"
           },
-          "validation1": {
-            "family": "La familia debe contener solo caracteres alfanuméricos",
-            "genus": "El género debe contener solo caracteres alfanuméricos",
-            "species": "La especie debe contener solo caracteres alfanuméricos"
+          "messages": {
+            "deletedSuccess": "Tipo de árbol eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
+            "createSuccess": "Tipo de árbol creado exitosamente",
+            "updateSuccess": "Tipo de árbol actualizado exitosamente",
+            "error": "Error guardando el tipo de árbol"
           },
-          "submitButton": "Crear Tipo de Árbol",
-          "submittingText": "Creando..."
+          "columns": {
+            "family": "Familia",
+            "genus": "Género",
+            "species": "Especie"
+          }
         },
-        "edit": {
-          "title": "Editar Tipo de Árbol",
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando..."
+        "form": {
+          "create": {
+            "title": "Crear Tipo de Árbol",
+            "validation": {
+              "family": "La familia es obligatoria",
+              "genus": "El género es obligatorio",
+              "species": "La especie es obligatoria",
+              "alphanumeric": {
+                "family": "La familia debe contener solo caracteres alfanuméricos",
+                "genus": "El género debe contener solo caracteres alfanuméricos",
+                "species": "La especie debe contener solo caracteres alfanuméricos"
+              }
+            },
+            "submitButton": "Crear Tipo de Árbol",
+            "submittingText": "Creando..."
+          },
+          "edit": {
+            "title": "Editar Tipo de Árbol",
+            "validation": {
+              "family": "La familia es obligatoria",
+              "genus": "El género es obligatorio",
+              "species": "La especie es obligatoria",
+              "alphanumeric": {
+                "family": "La familia debe contener solo caracteres alfanuméricos",
+                "genus": "El género debe contener solo caracteres alfanuméricos",
+                "species": "La especie debe contener solo caracteres alfanuméricos"
+              }
+            },
+            "submitButton": "Guardar Cambios",
+            "submittingText": "Guardando..."
+          }
         }
       },
       "taskTypes": {
@@ -235,6 +267,7 @@
   },
   "general": {
     "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
-    "allContracts": "Todos los contratos"
+    "allContracts": "Todos los contratos",
+    "loading": "Cargando..."
   }
 }

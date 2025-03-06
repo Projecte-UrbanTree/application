@@ -87,57 +87,70 @@
       },
       "users": {
         "title": "Usuaris",
-        "loading": "Carregant...",
-        "editButton": "Editar usuari",
-        "deleteButton": "Eliminar usuari",
-        "columns": {
-          "email": "Correu electrònic"
+        "list": {
+          "loading": "Carregant...",
+          "actions": {
+            "edit": "Editar usuari",
+            "delete": "Eliminar usuari",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Usuari eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
+            "createSuccess": "Usuari creat correctament",
+            "updateSuccess": "Usuari actualitzat correctament",
+            "error": "Error guardant l'usuari"
+          },
+          "columns": {
+            "name": "Nom",
+            "surname": "Cognom",
+            "email": "Correu electrònic",
+            "company": "Empresa",
+            "dni": "DNI",
+            "role": "Rol"
+          }
         },
-        "actions": "Accions",
-        "deletedSuccess": "Usuari eliminat correctament",
-        "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
-        "success": "Usuari creat correctament",
-        "update": "Usuari actualitzat correctament",
-        "error": "Error guardant l'usuari",
-        "create": {
-          "title": "Crear Usuari",
-          "placeholders": {
-            "role": "Selecciona un rol",
-            "password": "Contrasenya"
+        "form": {
+          "create": {
+            "title": "Crear Usuari",
+            "placeholders": {
+              "role": "Selecciona un rol",
+              "password": "Contrasenya"
+            },
+            "validations": {
+              "name_required": "El nom és obligatori",
+              "surname_required": "El cognom és obligatori",
+              "invalid_email": "Correu invàlid",
+              "email_required": "El correu és obligatori",
+              "role_invalid": "Rol no vàlid",
+              "password_required": "La contrasenya és obligatòria",
+              "password_min": "Ha de tenir almenys 8 caràcters",
+              "password_uppercase": "Ha de contenir almenys una lletra majúscula",
+              "password_number": "Ha de contenir almenys un número",
+              "password_special": "Ha de contenir almenys un caràcter especial"
+            },
+            "returnButton": "Tornar a la llista d'usuaris",
+            "submitButton": "Crear Usuari",
+            "submittingText": "Creant..."
           },
-          "validations": {
-            "name_required": "El nom és obligatori",
-            "surname_required": "El cognom és obligatori",
-            "invalid_email": "Correu invàlid",
-            "email_required": "El correu és obligatori",
-            "role_invalid": "Rol no vàlid",
-            "password_required": "La contrasenya és obligatòria",
-            "password_min": "Ha de tenir almenys 8 caràcters",
-            "password_uppercase": "Ha de contenir almenys una lletra majúscula",
-            "password_number": "Ha de contenir almenys un número",
-            "password_special": "Ha de contenir almenys un caràcter especial"
-          },
-          "returnButton": "Tornar a la llista d'usuaris",
-          "submitButton": "Crear Usuari",
-          "submittingText": "Creant..."
-        },
-        "edit": {
-          "title": "Editar Usuari",
-          "placeholders": {
-            "role": "Selecciona un rol",
-            "password": "Contrasenya (deixar en blanc per no canviar)"
-          },
-          "validations": {
-            "name_required": "El nom és obligatori",
-            "surname_required": "El cognom és obligatori",
-            "invalid_email": "Correu invàlid",
-            "email_required": "El correu és obligatori",
-            "role_invalid": "Rol no vàlid",
-            "password_min": "Ha de tenir almenys 8 caràcters"
-          },
-          "returnButton": "Tornar a la llista d'usuaris",
-          "submitButton": "Guardar Canvis",
-          "submittingText": "Guardant..."
+          "edit": {
+            "title": "Editar Usuari",
+            "placeholders": {
+              "role": "Selecciona un rol",
+              "password": "Contrasenya (deixar en blanc per no canviar)"
+            },
+            "validations": {
+              "name_required": "El nom és obligatori",
+              "surname_required": "El cognom és obligatori",
+              "invalid_email": "Correu invàlid",
+              "email_required": "El correu és obligatori",
+              "role_invalid": "Rol no vàlid",
+              "password_min": "Ha de tenir almenys 8 caràcters"
+            },
+            "returnButton": "Tornar a la llista d'usuaris",
+            "submitButton": "Guardar Canvis",
+            "submittingText": "Guardant..."
+          }
         }
       },
       "contracts": {
@@ -171,39 +184,58 @@
       },
       "treeTypes": {
         "title": "Tipus d'arbre",
-        "columns": {
-          "family": "Família",
-          "genus": "Gènere",
-          "species": "Espècie"
-        },
-        "loading": "Carregant...",
-        "editButton": "Editar Tipus d'Arbre",
-        "deleteButton": "Eliminar Tipus d'Arbre",
-        "actions": "Accions",
-        "deletedSuccess": "Tipus d'arbre eliminat correctament",
-        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'arbre?",
-        "success": "Tipus d'arbre creat correctament",
-        "update": "Tipus d'arbre actualitzat correctament",
-        "error": "Error guardant el tipus d'arbre",
-        "create": {
-          "title": "Crear Tipus d'Arbre",
-          "validation": {
-            "family": "La família és obligatòria",
-            "genus": "El gènere és obligatori",
-            "species": "L'espècie és obligatòria"
+        "list": {
+          "title": "Tipus d'arbre",
+          "loading": "Carregant...",
+          "actions": {
+            "label": "Accions",
+            "edit": "Editar Tipus d'Arbre",
+            "delete": "Eliminar Tipus d'Arbre"
           },
-          "validation1": {
-            "family": "La família ha de contenir només caràcters alfanumèrics",
-            "genus": "El gènere ha de contenir només caràcters alfanumèrics",
-            "species": "L'espècie ha de contenir només caràcters alfanumèrics"
+          "messages": {
+            "deletedSuccess": "Tipus d'arbre eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'arbre?",
+            "createSuccess": "Tipus d'arbre creat correctament",
+            "updateSuccess": "Tipus d'arbre actualitzat correctament",
+            "error": "Error guardant el tipus d'arbre"
           },
-          "submitButton": "Crear Tipus d'Arbre",
-          "submittingText": "Creant..."
+          "columns": {
+            "family": "Família",
+            "genus": "Gènere",
+            "species": "Espècie"
+          }
         },
-        "edit": {
-          "title": "Editar Tipus d'Arbre",
-          "submitButton": "Guardar Canvis",
-          "submittingText": "Guardant..."
+        "form": {
+          "create": {
+            "title": "Crear Tipus d'Arbre",
+            "validation": {
+              "family": "La família és obligatòria",
+              "genus": "El gènere és obligatori",
+              "species": "L'espècie és obligatòria",
+              "alphanumeric": {
+                "family": "La família ha de contenir només caràcters alfanumèrics",
+                "genus": "El gènere ha de contenir només caràcters alfanumèrics",
+                "species": "L'espècie ha de contenir només caràcters alfanumèrics"
+              }
+            },
+            "submitButton": "Crear Tipus d'Arbre",
+            "submittingText": "Creant..."
+          },
+          "edit": {
+            "title": "Editar Tipus d'Arbre",
+            "validation": {
+              "family": "La família és obligatòria",
+              "genus": "El gènere és obligatori",
+              "species": "L'espècie és obligatòria",
+              "alphanumeric": {
+                "family": "La família ha de contenir només caràcters alfanumèrics",
+                "genus": "El gènere ha de contenir només caràcters alfanumèrics",
+                "species": "L'espècie ha de contenir només caràcters alfanumèrics"
+              }
+            },
+            "submitButton": "Guardar Canvis",
+            "submittingText": "Guardant..."
+          }
         }
       },
       "taskTypes": {
@@ -235,6 +267,7 @@
   },
   "general": {
     "genericError": "Hi ha hagut un error. Si us plau, torna a intentar-ho més tard.",
-    "allContracts": "Tots els contractes"
+    "allContracts": "Tots els contractes",
+    "loading": "Carregant..."
   }
 }

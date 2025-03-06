@@ -10,12 +10,10 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Password } from "primereact/password";
 import { Card } from "primereact/card";
-
 export default function CreateUser() {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
-
     const initialValues = {
         name: "",
         surname: "",
@@ -25,45 +23,41 @@ export default function CreateUser() {
         role: "worker",
         password: ""
     };
-
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.users.create.validations.name_required")),
-        surname: Yup.string().required(t("admin.pages.users.create.validations.surname_required")),
+        name: Yup.string().required(t("admin.pages.users.form.create.validations.name_required")),
+        surname: Yup.string().required(t("admin.pages.users.form.create.validations.surname_required")),
         email: Yup.string()
-            .email(t("admin.pages.users.create.validations.invalid_email"))
-            .required(t("admin.pages.users.create.validations.email_required")),
+            .email(t("admin.pages.users.form.create.validations.invalid_email"))
+            .required(t("admin.pages.users.form.create.validations.email_required")),
         company: Yup.string(),
         dni: Yup.string(),
         role: Yup.string()
-            .oneOf(["admin", "worker", "customer"], t("admin.pages.users.create.validations.role_invalid"))
-            .required(t("admin.pages.users.create.validations.role_invalid")),
+            .oneOf(["admin", "worker", "customer"], t("admin.pages.users.form.create.validations.role_invalid"))
+            .required(t("admin.pages.users.form.create.validations.role_invalid")),
         password: Yup.string()
-            .min(8, t("admin.pages.users.create.validations.password_min"))
-            .matches(/[A-Z]/, t("admin.pages.users.create.validations.password_uppercase"))
-            .matches(/[0-9]/, t("admin.pages.users.create.validations.password_number"))
-            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.create.validations.password_special"))
-            .required(t("admin.pages.users.create.validations.password_required"))
+            .min(8, t("admin.pages.users.form.create.validations.password_min"))
+            .matches(/[A-Z]/, t("admin.pages.users.form.create.validations.password_uppercase"))
+            .matches(/[0-9]/, t("admin.pages.users.form.create.validations.password_number"))
+            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.form.create.validations.password_special"))
+            .required(t("admin.pages.users.form.create.validations.password_required"))
     });
-
     const handleSubmit = async (values: typeof initialValues) => {
         setIsSubmitting(true);
         try {
             await axiosClient.get("/sanctum/csrf-cookie");
             await axiosClient.post("/admin/users", values);
-            navigate("/admin/settings/users", { state: { success: t("admin.pages.users.success") } });
+            navigate("/admin/settings/users", { state: { success: t("admin.pages.users.list.messages.createSuccess") } });
         } catch (error) {
             console.error(error);
         } finally {
             setIsSubmitting(false);
         }
     };
-
     const roleOptions = [
         { label: t("admin.roles.admin"), value: "admin" },
         { label: t("admin.roles.worker"), value: "worker" },
         { label: t("admin.roles.customer"), value: "customer" }
     ];
-
     return (
         <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
             <Card className="w-full max-w-3xl shadow-lg">
@@ -76,7 +70,7 @@ export default function CreateUser() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.users.create.title")}
+                        {t("admin.pages.users.form.create.title")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -165,7 +159,7 @@ export default function CreateUser() {
                                         name="role"
                                         as={Dropdown}
                                         options={roleOptions}
-                                        placeholder={t("admin.pages.users.create.placeholders.role")}
+                                        placeholder={t("admin.pages.users.form.create.placeholders.role")}
                                         className={errors.role && touched.role ? "p-invalid" : ""}
                                     />
                                     {errors.role && touched.role && (
@@ -180,7 +174,7 @@ export default function CreateUser() {
                                     <Field
                                         name="password"
                                         as={Password}
-                                        placeholder={t("admin.pages.users.create.placeholders.password")}
+                                        placeholder={t("admin.pages.users.form.create.placeholders.password")}
                                         toggleMask
                                         className={errors.password && touched.password ? "p-invalid" : ""}
                                     />
@@ -196,8 +190,8 @@ export default function CreateUser() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.users.create.submittingText")
-                                                : t("admin.pages.users.create.submitButton")
+                                                ? t("admin.pages.users.form.create.submittingText")
+                                                : t("admin.pages.users.form.create.submitButton")
                                         }
                                     />
                                 </div>
