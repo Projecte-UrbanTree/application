@@ -111,45 +111,35 @@
           }
         },
         "form": {
-          "create": {
-            "title": "Crear Usuario",
-            "placeholders": {
-              "role": "Selecciona un rol",
-              "password": "Contraseña"
-            },
-            "validations": {
-              "name_required": "El nombre es obligatorio",
-              "surname_required": "El apellido es obligatorio",
-              "invalid_email": "Correo inválido",
-              "email_required": "El correo es obligatorio",
-              "role_invalid": "Rol no válido",
-              "password_required": "La contraseña es obligatoria",
-              "password_min": "Debe tener al menos 8 caracteres",
-              "password_uppercase": "Debe contener al menos una letra mayúscula",
-              "password_number": "Debe contener al menos un número",
-              "password_special": "Debe contener al menos un carácter especial"
-            },
-            "returnButton": "Volver a la lista de usuarios",
-            "submitButton": "Crear Usuario",
-            "submittingText": "Creando..."
+          "title": {
+            "create": "Crear Usuario",
+            "edit": "Editar Usuario"
           },
-          "edit": {
-            "title": "Editar Usuario",
-            "placeholders": {
-              "role": "Selecciona un rol",
-              "password": "Contraseña (dejar en blanco para no cambiar)"
-            },
-            "validations": {
-              "name_required": "El nombre es obligatorio",
-              "surname_required": "El apellido es obligatorio",
-              "invalid_email": "Correo inválido",
-              "email_required": "El correo es obligatorio",
-              "role_invalid": "Rol no válido",
-              "password_min": "Debe tener al menos 8 caracteres"
-            },
-            "returnButton": "Volver a la lista de usuarios",
-            "submitButton": "Guardar Cambios",
-            "submittingText": "Guardando..."
+          "placeholders": {
+            "role": "Selecciona un rol",
+            "password": "Contraseña",
+            "passwordEdit": "Contraseña (dejar en blanco para no cambiar)"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "surname_required": "El apellido es obligatorio",
+            "invalid_email": "Correo inválido",
+            "email_required": "El correo es obligatorio",
+            "role_invalid": "Rol no válido",
+            "password_required": "La contraseña es obligatoria",
+            "password_min": "Debe tener al menos 8 caracteres",
+            "password_uppercase": "Debe contener al menos una letra mayúscula",
+            "password_number": "Debe contener al menos un número",
+            "password_special": "Debe contener al menos un carácter especial"
+          },
+          "returnButton": "Volver a la lista de usuarios",
+          "submitButton": {
+            "create": "Crear Usuario",
+            "edit": "Guardar Cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
           }
         }
       },
@@ -206,35 +196,27 @@
           }
         },
         "form": {
-          "create": {
-            "title": "Crear Tipo de Árbol",
-            "validation": {
-              "family": "La familia es obligatoria",
-              "genus": "El género es obligatorio",
-              "species": "La especie es obligatoria",
-              "alphanumeric": {
-                "family": "La familia debe contener solo caracteres alfanuméricos",
-                "genus": "El género debe contener solo caracteres alfanuméricos",
-                "species": "La especie debe contener solo caracteres alfanuméricos"
-              }
-            },
-            "submitButton": "Crear Tipo de Árbol",
-            "submittingText": "Creando..."
+          "title": {
+            "create": "Crear Tipo de Árbol",
+            "edit": "Editar Tipo de Árbol"
           },
-          "edit": {
-            "title": "Editar Tipo de Árbol",
-            "validation": {
-              "family": "La familia es obligatoria",
-              "genus": "El género es obligatorio",
-              "species": "La especie es obligatoria",
-              "alphanumeric": {
-                "family": "La familia debe contener solo caracteres alfanuméricos",
-                "genus": "El género debe contener solo caracteres alfanuméricos",
-                "species": "La especie debe contener solo caracteres alfanuméricos"
-              }
-            },
-            "submitButton": "Guardar Cambios",
-            "submittingText": "Guardando..."
+          "validation": {
+            "family": "La familia es obligatoria",
+            "genus": "El género es obligatorio",
+            "species": "La especie es obligatoria",
+            "alphanumeric": {
+              "family": "La familia debe contener solo caracteres alfanuméricos",
+              "genus": "El género debe contener solo caracteres alfanuméricos",
+              "species": "La especie debe contener solo caracteres alfanuméricos"
+            }
+          },
+          "submitButton": {
+            "create": "Crear Tipo de Árbol",
+            "edit": "Guardar Cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
           }
         }
       },

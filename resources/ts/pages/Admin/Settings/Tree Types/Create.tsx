@@ -19,13 +19,13 @@ export default function CreateTreeType() {
     };
     const validationSchema = Yup.object({
         family: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.create.validation.alphanumeric.family"))
-            .required(t("admin.pages.treeTypes.form.create.validation.family")),
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.family"))
+            .required(t("admin.pages.treeTypes.form.validation.family")),
         genus: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.create.validation.alphanumeric.genus"))
-            .required(t("admin.pages.treeTypes.form.create.validation.genus")),
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.genus"))
+            .required(t("admin.pages.treeTypes.form.validation.genus")),
         species: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.create.validation.alphanumeric.species"))
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.species"))
     });
     const handleSubmit = async (values: typeof initialValues) => {
         setIsSubmitting(true);
@@ -51,7 +51,7 @@ export default function CreateTreeType() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.treeTypes.form.create.title")}
+                        {t("admin.pages.treeTypes.form.title.create")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -115,8 +115,8 @@ export default function CreateTreeType() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.treeTypes.form.create.submittingText")
-                                                : t("admin.pages.treeTypes.form.create.submitButton")
+                                                ? t("admin.pages.treeTypes.form.submittingText.create")
+                                                : t("admin.pages.treeTypes.form.submitButton.create")
                                         }
                                     />
                                 </div>

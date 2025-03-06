@@ -111,45 +111,35 @@
           }
         },
         "form": {
-          "create": {
-            "title": "Create User",
-            "placeholders": {
-              "role": "Select a role",
-              "password": "Password"
-            },
-            "validations": {
-              "name_required": "Name is required",
-              "surname_required": "Surname is required",
-              "invalid_email": "Invalid email address",
-              "email_required": "Email is required",
-              "role_invalid": "Invalid role",
-              "password_required": "Password is required",
-              "password_min": "Must be at least 8 characters",
-              "password_uppercase": "Must contain at least one uppercase letter",
-              "password_number": "Must contain at least one number",
-              "password_special": "Must contain at least one special character"
-            },
-            "returnButton": "Return to user list",
-            "submitButton": "Create User",
-            "submittingText": "Creating..."
+          "title": {
+            "create": "Create User",
+            "edit": "Edit User"
           },
-          "edit": {
-            "title": "Edit User",
-            "placeholders": {
-              "role": "Select a role",
-              "password": "Password (leave blank to keep unchanged)"
-            },
-            "validations": {
-              "name_required": "Name is required",
-              "surname_required": "Surname is required",
-              "invalid_email": "Invalid email",
-              "email_required": "Email is required",
-              "role_invalid": "Invalid role",
-              "password_min": "Must be at least 8 characters"
-            },
-            "returnButton": "Return to user list",
-            "submitButton": "Save Changes",
-            "submittingText": "Saving..."
+          "placeholders": {
+            "role": "Select a role",
+            "password": "Password",
+            "passwordEdit": "Password (leave blank to keep unchanged)"
+          },
+          "validation": {
+            "name_required": "Name is required",
+            "surname_required": "Surname is required",
+            "invalid_email": "Invalid email address",
+            "email_required": "Email is required",
+            "role_invalid": "Invalid role",
+            "password_required": "Password is required",
+            "password_min": "Must be at least 8 characters",
+            "password_uppercase": "Must contain at least one uppercase letter",
+            "password_number": "Must contain at least one number",
+            "password_special": "Must contain at least one special character"
+          },
+          "returnButton": "Return to user list",
+          "submitButton": {
+            "create": "Create User",
+            "edit": "Save Changes"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
           }
         }
       },
@@ -201,35 +191,27 @@
           }
         },
         "form": {
-          "create": {
-            "title": "Create Tree Type",
-            "validation": {
-              "family": "Family is required",
-              "genus": "Genus is required",
-              "species": "Species is required",
-              "alphanumeric": {
-                "family": "Family must contain only alphanumeric characters",
-                "genus": "Genus must contain only alphanumeric characters",
-                "species": "Species must contain only alphanumeric characters"
-              }
-            },
-            "submitButton": "Create Tree Type",
-            "submittingText": "Creating..."
+          "title": {
+            "create": "Create Tree Type",
+            "edit": "Edit Tree Type"
           },
-          "edit": {
-            "title": "Edit Tree Type",
-            "validation": {
-              "family": "Family is required",
-              "genus": "Genus is required",
-              "species": "Species is required",
-              "alphanumeric": {
-                "family": "Family must contain only alphanumeric characters",
-                "genus": "Genus must contain only alphanumeric characters",
-                "species": "Species must contain only alphanumeric characters"
-              }
-            },
-            "submitButton": "Save Changes",
-            "submittingText": "Saving..."
+          "validation": {
+            "family": "Family is required",
+            "genus": "Genus is required",
+            "species": "Species is required",
+            "alphanumeric": {
+              "family": "Family must contain only alphanumeric characters",
+              "genus": "Genus must contain only alphanumeric characters",
+              "species": "Species must contain only alphanumeric characters"
+            }
+          },
+          "submitButton": {
+            "create": "Create Tree Type",
+            "edit": "Save Changes"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
           }
         }
       },

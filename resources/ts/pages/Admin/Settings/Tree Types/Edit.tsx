@@ -42,13 +42,13 @@ export default function EditTreeType() {
     }, [id]);
     const validationSchema = Yup.object({
         family: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.edit.validation.alphanumeric.family"))
-            .required(t("admin.pages.treeTypes.form.edit.validation.family")),
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.family"))
+            .required(t("admin.pages.treeTypes.form.validation.family")),
         genus: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.edit.validation.alphanumeric.genus"))
-            .required(t("admin.pages.treeTypes.form.edit.validation.genus")),
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.genus"))
+            .required(t("admin.pages.treeTypes.form.validation.genus")),
         species: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.edit.validation.alphanumeric.species"))
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.species"))
     });
     const handleSubmit = async (values: typeof initialValues) => {
         try {
@@ -79,7 +79,7 @@ export default function EditTreeType() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.treeTypes.form.edit.title")}
+                        {t("admin.pages.treeTypes.form.title.edit")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -144,8 +144,8 @@ export default function EditTreeType() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.treeTypes.form.edit.submittingText")
-                                                : t("admin.pages.treeTypes.form.edit.submitButton")
+                                                ? t("admin.pages.treeTypes.form.submittingText.edit")
+                                                : t("admin.pages.treeTypes.form.submitButton.edit")
                                         }
                                     />
                                 </div>

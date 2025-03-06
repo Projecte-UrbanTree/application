@@ -55,21 +55,21 @@ export default function EditUser() {
         fetchUser();
     }, [id]);
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.users.form.edit.validations.name_required")),
-        surname: Yup.string().required(t("admin.pages.users.form.edit.validations.surname_required")),
+        name: Yup.string().required(t("admin.pages.users.form.validation.name_required")),
+        surname: Yup.string().required(t("admin.pages.users.form.validation.surname_required")),
         email: Yup.string()
-            .email(t("admin.pages.users.form.edit.validations.invalid_email"))
-            .required(t("admin.pages.users.form.edit.validations.email_required")),
+            .email(t("admin.pages.users.form.validation.invalid_email"))
+            .required(t("admin.pages.users.form.validation.email_required")),
         company: Yup.string(),
         dni: Yup.string(),
         role: Yup.string()
-            .oneOf(["admin", "worker", "customer"], t("admin.pages.users.form.edit.validations.role_invalid"))
-            .required(t("admin.pages.users.form.edit.validations.role_invalid")),
+            .oneOf(["admin", "worker", "customer"], t("admin.pages.users.form.validation.role_invalid"))
+            .required(t("admin.pages.users.form.validation.role_invalid")),
         password: Yup.string()
-            .min(8, t("admin.pages.users.form.edit.validations.password_min"))
-            .matches(/[A-Z]/, t("admin.pages.users.form.create.validations.password_uppercase"))
-            .matches(/[0-9]/, t("admin.pages.users.form.create.validations.password_number"))
-            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.form.create.validations.password_special"))
+            .min(8, t("admin.pages.users.form.validation.password_min"))
+            .matches(/[A-Z]/, t("admin.pages.users.form.validation.password_uppercase"))
+            .matches(/[0-9]/, t("admin.pages.users.form.validation.password_number"))
+            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("admin.pages.users.form.validation.password_special"))
     });
     const handleSubmit = async (values: typeof initialValues) => {
         try {
@@ -108,7 +108,7 @@ export default function EditUser() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.users.form.edit.title")}
+                        {t("admin.pages.users.form.title.edit")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -213,7 +213,7 @@ export default function EditUser() {
                                     <Field
                                         name="password"
                                         as={Password}
-                                        placeholder={t("admin.pages.users.form.edit.placeholders.password")}
+                                        placeholder={t("admin.pages.users.form.placeholders.passwordEdit")}
                                         toggleMask
                                         className={errors.password && touched.password ? "p-invalid" : ""}
                                     />
@@ -229,8 +229,8 @@ export default function EditUser() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.users.form.edit.submittingText")
-                                                : t("admin.pages.users.form.edit.submitButton")
+                                                ? t("admin.pages.users.form.submittingText.edit")
+                                                : t("admin.pages.users.form.submitButton.edit")
                                         }
                                     />
                                 </div>
