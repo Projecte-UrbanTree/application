@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
         Route::get('stats', function (Request $request) {
             return response()->json([
                 'users' => User::count(),
@@ -64,7 +64,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('resource-types/{id}', [ResourceTypeController::class, 'show']);
         Route::put('resource-types/{id}', [ResourceTypeController::class, 'update']);
         Route::delete('resource-types/{id}', [ResourceTypeController::class, 'destroy']);
-
 
         // Route for task types
         Route::get('task-types', [TaskTypeController::class, 'index']);

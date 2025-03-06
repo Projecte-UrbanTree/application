@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TaskType;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TaskTypeController extends Controller
 {
