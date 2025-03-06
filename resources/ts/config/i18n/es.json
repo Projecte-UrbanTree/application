@@ -38,7 +38,7 @@
         "contracts": "Contratos",
         "elementTypes": "Tipos de elemento",
         "species": "Especies",
-        "taskTypes": "Tipus de tarea",
+        "taskTypes": "Tipos de tarea",
         "resourceTypes": "Tipos de recurso",
         "users": "Usuarios"
       }
@@ -89,7 +89,6 @@
       "users": {
         "title": "Usuarios",
         "list": {
-          "loading": "Cargando...",
           "actions": {
             "edit": "Editar usuario",
             "delete": "Eliminar usuario",
@@ -177,7 +176,6 @@
         "title": "Tipos de árbol",
         "list": {
           "title": "Tipos de árbol",
-          "loading": "Cargando...",
           "actions": {
             "label": "Acciones",
             "edit": "Editar Tipo de Árbol",
@@ -223,9 +221,51 @@
       },
       "taskTypes": {
         "title": "Tipos de tarea",
-        "columns": {
-          "name": "Tipo de tarea",
-          "description": "Descripción"
+        "list": {
+          "title": "Tipos de tarea",
+          "actions": {
+            "edit": "Editar tipo de tarea",
+            "delete": "Eliminar tipo de tarea",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Tipo de tarea eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de tarea?",
+            "createSuccess": "Tipo de tarea creado exitosamente",
+            "updateSuccess": "Tipo de tarea actualizado exitosamente",
+            "error": "Error guardando el tipo de tarea"
+          },
+          "columns": {
+            "name": "Nombre",
+            "description": "Descripción"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipo de tarea",
+            "edit": "Editar Tipo de tarea"
+          },
+          "fields": {
+            "name": "Nombre",
+            "description": "Descripción"
+          },
+          "placeholders": {
+            "name": "Introduce el nombre",
+            "description": "Introduce la descripción"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "error_numbers": "El nombre no puede contener números o caracteres especiales"
+          },
+          "returnButton": "Volver a la lista de tipos de tarea",
+          "submitButton": {
+            "create": "Crear Tipo de tarea",
+            "edit": "Guardar cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
         }
       },
       "resources": {
