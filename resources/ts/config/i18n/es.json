@@ -67,7 +67,16 @@
       "password": "Contraseña",
       "family": "Familia",
       "genus": "Género",
-      "species": "Especie"
+      "species": "Especie",
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha de fin",
+      "status": "Estado",
+      "final_price": "Precio final"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "completed": "Completado"
     },
     "pages": {
       "dashboard": {
@@ -145,13 +154,45 @@
       },
       "contracts": {
         "title": "Contratos",
+        "loading": "Cargando...",
+        "actions": "Acciones",
+        "editButton": "Editar contrato",
+        "deleteButton": "Eliminar contrato",
         "columns": {
           "name": "Contrato",
           "start_date": "Fecha de inicio",
           "end_date": "Fecha de fin",
-          "invoice_proposed": "Factura propuesta",
-          "invoice_agreed": "Factura acordada",
-          "invoice_paid": "Factura pagada"
+          "final_price": "Precio final",
+          "status": "Estado"
+        },
+        "success": "Contrato creado correctamente",
+        "deletedSuccess": "Contrato eliminado correctamente",
+        "update": "Contrato actualizado correctamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+        "error": "Error guardando el contrato",
+        "create": {
+          "title": "Crear Contrato",
+          "submitButton": "Crear Contrato",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin no puede ser anterior a la fecha de inicio"
+          },
+          "submittingText": "Creando..."
+        },
+        "edit": {
+          "title": "Editar Contrato",
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submitButton": "Guardar Cambios",
+          "validations": {
+            "status_invalid": "Estado no válido",
+            "name_required": "El nombre es obligatorio",
+            "end_date_after_start_date": "La fecha de fin no puede ser anterior a la fecha de inicio"
+          },
+          "submittingText": "Guardando..."
         }
       },
       "workOrders": {

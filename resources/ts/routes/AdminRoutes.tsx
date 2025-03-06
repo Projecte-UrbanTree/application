@@ -6,6 +6,8 @@ import AdminUsers from '@/pages/Admin/Settings/Users/Users';
 import CreateUser from "@/pages/Admin/Settings/Users/Create";
 import EditUser from '@/pages/Admin/Settings/Users/Edit';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
+import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
+import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
 import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
@@ -141,6 +143,28 @@ const AdminRoutes: RouteObject[] = [
                     contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract={'1'}>
                     <AdminContracts />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'contracts/create',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.contracts.create.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <CreateContract />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'contracts/edit/:id',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.contracts.edit.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <EditContract />
                   </AdminLayout>
                 ),
               },
