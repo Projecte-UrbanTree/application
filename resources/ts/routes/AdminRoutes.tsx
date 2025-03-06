@@ -6,7 +6,11 @@ import AdminUsers from '@/pages/Admin/Settings/Users/Users';
 import CreateUser from "@/pages/Admin/Settings/Users/Create";
 import EditUser from '@/pages/Admin/Settings/Users/Edit';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
-import AdminWorkOrders from '@/pages/Admin/WorkOrders';
+
+import AdminWorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
+import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
+import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
+
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
 import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
 import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
@@ -49,6 +53,28 @@ const AdminRoutes: RouteObject[] = [
                 contracts={[{ id: '1', name: 'Tortosa' }]}
                 currentContract={'1'}>
                 <AdminWorkOrders />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'work-orders/create',
+            element: (
+              <AdminLayout
+                titleI18n="admin.pages.workOrders.create.title"
+                contracts={[{ id: '1', name: 'Tortosa' }]}
+                currentContract={'1'}>
+                <CreateWorkOrder />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'work-orders/edit/:id',
+            element: (
+              <AdminLayout
+                titleI18n="admin.pages.workOrders.edit.title"
+                contracts={[{ id: '1', name: 'Tortosa' }]}
+                currentContract={'1'}>
+                <EditWorkOrder />
               </AdminLayout>
             ),
           },

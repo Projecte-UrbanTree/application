@@ -37,7 +37,15 @@ Route::middleware('auth:sanctum')->group(function () {
             ]);
         });
         Route::get('contracts', [ContractController::class, 'index']);
+
+        // Route for Work Orders
         Route::get('work-orders', [WorkOrderController::class, 'index']);
+        Route::get('work-orders/create', [WorkOrderController::class, 'create']);
+        Route::post('work-orders', [WorkOrderController::class, 'store']);
+        Route::get('work-orders/{id}', [WorkOrderController::class, 'show']);
+        Route::put('work-orders/{id}', [WorkOrderController::class, 'update']);
+        Route::delete('work-orders/{id}', [WorkOrderController::class, 'destroy']);
+
         Route::get('element-types', [ElementTypeController::class, 'index']);
 
         // Route for Tree Types
