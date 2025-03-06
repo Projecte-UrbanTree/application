@@ -65,6 +65,9 @@
       "dni": "DNI",
       "role": "Rol",
       "password": "Contrasenya",
+      "family": "Família",
+      "genus": "Gènere",
+      "species": "Espècie",
       "start_date": "Data d'inici",
       "end_date": "Data de finalització",
       "status": "Estat",
@@ -213,6 +216,35 @@
           "family": "Família",
           "genus": "Gènere",
           "species": "Espècie"
+        },
+        "loading": "Carregant...",
+        "editButton": "Editar Tipus d'Arbre",
+        "deleteButton": "Eliminar Tipus d'Arbre",
+        "actions": "Accions",
+        "deletedSuccess": "Tipus d'arbre eliminat correctament",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'arbre?",
+        "success": "Tipus d'arbre creat correctament",
+        "update": "Tipus d'arbre actualitzat correctament",
+        "error": "Error guardant el tipus d'arbre",
+        "create": {
+          "title": "Crear Tipus d'Arbre",
+          "validation": {
+            "family": "La família és obligatòria",
+            "genus": "El gènere és obligatori",
+            "species": "L'espècie és obligatòria"
+          },
+          "validation1": {
+            "family": "La família ha de contenir només caràcters alfanumèrics",
+            "genus": "El gènere ha de contenir només caràcters alfanumèrics",
+            "species": "L'espècie ha de contenir només caràcters alfanumèrics"
+          },
+          "submitButton": "Crear Tipus d'Arbre",
+          "submittingText": "Creant..."
+        },
+        "edit": {
+          "title": "Editar Tipus d'Arbre",
+          "submitButton": "Guardar Canvis",
+          "submittingText": "Guardant..."
         }
       },
       "taskTypes": {
