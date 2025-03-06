@@ -201,7 +201,7 @@
           },
           "validations": {
             "name_required": "Name is required",
-            "description_required": "Description is required"
+            "error_numbers": "The name cannot contain numbers or special characters"
           },
           "returnButton": "Return to task type list",
           "submitButton": "Create Task Type",
@@ -219,7 +219,7 @@
           },
           "validations": {
             "name_required": "Name is required",
-            "description_required": "Description is required"
+            "error_numbers": "The name cannot contain numbers or special characters"
           },
           "returnButton": "Return to task type list",
           "submitButton": "Save changes",

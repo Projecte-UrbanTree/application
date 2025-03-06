@@ -201,7 +201,7 @@
           },
           "validations": {
             "name_required": "El nombre es obligatorio",
-            "description_required": "La descripción es obligatoria"
+            "error_numbers": "El nombre no puede contener números ni caracteres especiales"
           },
           "returnButton": "Volver a la lista de tipos de tarea",
           "submitButton": "Crear Tipo de tarea",
@@ -219,7 +219,7 @@
           },
           "validations": {
             "name_required": "El nombre es obligatorio",
-            "description_required": "La descripción es obligatoria"
+            "error_numbers": "El nombre no puede contener números ni caracteres especiales"
           },
           "returnButton": "Volver a la lista de tipos de tarea",
           "submitButton": "Guardar cambios",

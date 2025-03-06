@@ -201,7 +201,7 @@
           },
           "validations": {
             "name_required": "El nom és obligatori",
-            "description_required": "La descripció és obligatòria"
+            "error_numbers": "El nom no pot contenir números ni caràcters especials"
           },
           "returnButton": "Tornar a la llista de tipus de tasca",
           "submitButton": "Crear Tipus de tasca",
@@ -219,7 +219,7 @@
           },
           "validations": {
             "name_required": "El nom és obligatori",
-            "description_required": "La descripció és obligatòria"
+            "error_numbers": "El nom no pot contenir números ni caràcters especials"
           },
           "returnButton": "Tornar a la llista de tipus de tasca",
           "submitButton": "Guardar canvis",

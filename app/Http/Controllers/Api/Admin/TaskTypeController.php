@@ -18,7 +18,7 @@ class TaskTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
         ]);
 
         $taskType = TaskType::create($validated);

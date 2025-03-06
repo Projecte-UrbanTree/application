@@ -22,10 +22,9 @@ export default function CreateTaskType() {
   const validationSchema = Yup.object({
     name: Yup.string().required(
       t("admin.pages.taskTypes.create.validations.name_required")
-    ),
-    description: Yup.string().required(
-      t("admin.pages.taskTypes.create.validations.description_required")
     )
+    .matches(/^[A-Za-z0-9 ]+$/, t("admin.pages.taskTypes.create.validations.error_numbers")),    
+  description: Yup.string().nullable()
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
