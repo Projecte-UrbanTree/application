@@ -21,7 +21,7 @@ class ContractController extends Controller
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date'],
             'final_price' => ['required', 'numeric'],
-            'status' => ['required', Rule::in(['active', 'inactive', 'completed'])],
+            'status' => ['required', Rule::in([0, 1, 2])],
         ]);
 
         $contract = Contract::create($validated);
@@ -45,7 +45,7 @@ class ContractController extends Controller
             'start_date' => ['sometimes', 'date'],
             'end_date' => ['sometimes', 'date'],
             'final_price' => ['sometimes', 'numeric'],
-            'status' => ['sometimes', Rule::in(['active', 'inactive', 'completed'])],
+            'status' => ['sometimes', Rule::in([0, 1, 2])],
         ]);
 
         $contract->update($validated);

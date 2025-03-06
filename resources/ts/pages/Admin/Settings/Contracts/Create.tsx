@@ -22,7 +22,7 @@ export default function CreateContract() {
         start_date: null,
         end_date: null,
         final_price: 0,
-        status: "active"
+        status: 0
     };
 
     const validationSchema = Yup.object({
@@ -30,8 +30,8 @@ export default function CreateContract() {
         start_date: Yup.date().required(t("admin.pages.contracts.create.validations.start_date_required")),
         end_date: Yup.date().required(t("admin.pages.contracts.create.validations.end_date_required")),
         final_price: Yup.number().required(t("admin.pages.contracts.create.validations.final_price_required")),
-        status: Yup.string()
-            .oneOf(["active", "inactive", "completed"], t("admin.pages.contracts.create.validations.status_invalid"))
+        status: Yup.number()
+            .oneOf([0, 1, 2], t("admin.pages.contracts.create.validations.status_invalid"))
             .required(t("admin.pages.contracts.create.validations.status_required"))
     });
 
@@ -49,9 +49,9 @@ export default function CreateContract() {
     };
 
     const statusOptions = [
-        { label: t("admin.status.active"), value: "active" },
-        { label: t("admin.status.inactive"), value: "inactive" },
-        { label: t("admin.status.completed"), value: "completed" }
+        { label: t("admin.status.active"), value: 0 },
+        { label: t("admin.status.inactive"), value: 1 },
+        { label: t("admin.status.completed"), value: 2 }
     ];
 
     return (

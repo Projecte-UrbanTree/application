@@ -20,7 +20,7 @@ export default function Contracts() {
         start_date: string;
         end_date: string;
         final_price: string;
-        status: string;
+        status: number;
     }
 
     const [contracts, setContracts] = useState<Contract[]>([]);
@@ -31,6 +31,12 @@ export default function Contracts() {
     const successMsg = location.state?.success;
     const errorMsg = location.state?.error;
     const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+
+    const statusOptions = [
+        { label: t("admin.status.active"), value: 0 },
+        { label: t("admin.status.inactive"), value: 1 },
+        { label: t("admin.status.completed"), value: 2 }
+    ];
 
     useEffect(() => {
         const fetchContracts = async () => {
@@ -98,7 +104,9 @@ export default function Contracts() {
                     <Column field="start_date" header={t("admin.pages.contracts.columns.start_date")} />
                     <Column field="end_date" header={t("admin.pages.contracts.columns.end_date")} />
                     <Column field="final_price" header={t("admin.pages.contracts.columns.final_price")} />
-                    <Column field="status" header={t("admin.pages.contracts.columns.status")} />
+                    <Column field="status" header={t("admin.pages.contracts.columns.status")} body={(rowData: Contract) => (
+                        <Badge value={statusOptions.find(option => option.value === rowData.status)?.label} />
+                    )} />
                     <Column
                         header={t("admin.pages.contracts.actions")}
                         body={(rowData: { id: number }) => (
