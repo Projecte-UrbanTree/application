@@ -87,25 +87,40 @@
       },
       "users": {
         "title": "Users",
-        "loading": "Loading...",
-        "editButton": "Edit User",
-        "deleteButton": "Delete User",
-        "columns": {
-          "email": "Email"
+        "list": {
+          "loading": "Loading...",
+          "actions": {
+            "edit": "Edit User",
+            "delete": "Delete User",
+            "label": "Actions"
+          },
+          "messages": {
+            "deleteSuccess": "User deleted successfully",
+            "deleteConfirm": "Are you sure you want to delete this user?",
+            "createSuccess": "User created successfully",
+            "updateSuccess": "User updated successfully",
+            "error": "Error saving user"
+          },
+          "columns": {
+            "name": "Name",
+            "surname": "Surname",
+            "email": "Email",
+            "company": "Company",
+            "dni": "DNI",
+            "role": "Role"
+          }
         },
-        "actions": "Actions",
-        "deletedSuccess": "User deleted successfully",
-        "deleteConfirm": "Are you sure you want to delete this user?",
-        "success": "User saved successfully",
-        "update": "User updated successfully",
-        "error": "Error saving user",
-        "create": {
-          "title": "Create User",
+        "form": {
+          "title": {
+            "create": "Create User",
+            "edit": "Edit User"
+          },
           "placeholders": {
             "role": "Select a role",
-            "password": "Password"
+            "password": "Password",
+            "passwordEdit": "Password (leave blank to keep unchanged)"
           },
-          "validations": {
+          "validation": {
             "name_required": "Name is required",
             "surname_required": "Surname is required",
             "invalid_email": "Invalid email address",
@@ -118,26 +133,14 @@
             "password_special": "Must contain at least one special character"
           },
           "returnButton": "Return to user list",
-          "submitButton": "Create User",
-          "submittingText": "Creating..."
-        },
-        "edit": {
-          "title": "Edit User",
-          "placeholders": {
-            "role": "Select a role",
-            "password": "Password (leave blank to keep unchanged)"
+          "submitButton": {
+            "create": "Create User",
+            "edit": "Save Changes"
           },
-          "validations": {
-            "name_required": "Name is required",
-            "surname_required": "Surname is required",
-            "invalid_email": "Invalid email",
-            "email_required": "Email is required",
-            "role_invalid": "Invalid role",
-            "password_min": "Must be at least 8 characters"
-          },
-          "returnButton": "Return to user list",
-          "submitButton": "Save Changes",
-          "submittingText": "Saving..."
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
+          }
         }
       },
       "contracts": {
@@ -171,39 +174,45 @@
       },
       "treeTypes": {
         "title": "Tree Types",
-        "columns": {
-          "family": "Family",
-          "genus": "Genus",
-          "species": "Species"
+        "list": {
+          "title": "Tree Types",
+          "loading": "Loading...",
+          "actions": {
+            "label": "Actions",
+            "edit": "Edit Tree Type",
+            "delete": "Delete Tree Type"
+          },
+          "messages": {
+            "deletedSuccess": "Tree type deleted successfully",
+            "deleteConfirm": "Are you sure you want to delete this tree type?",
+            "createSuccess": "Tree type created successfully",
+            "updateSuccess": "Tree type updated successfully",
+            "error": "Error saving tree type"
+          }
         },
-        "loading": "Loading...",
-        "editButton": "Edit Tree Type",
-        "deleteButton": "Delete Tree Type",
-        "actions": "Actions",
-        "deletedSuccess": "Tree type deleted successfully",
-        "deleteConfirm": "Are you sure you want to delete this tree type?",
-        "success": "Tree type created successfully",
-        "update": "Tree type updated successfully",
-        "error": "Error saving tree type",
-        "create": {
-          "title": "Create Tree Type",
+        "form": {
+          "title": {
+            "create": "Create Tree Type",
+            "edit": "Edit Tree Type"
+          },
           "validation": {
             "family": "Family is required",
             "genus": "Genus is required",
-            "species": "Species is required"
+            "species": "Species is required",
+            "alphanumeric": {
+              "family": "Family must contain only alphanumeric characters",
+              "genus": "Genus must contain only alphanumeric characters",
+              "species": "Species must contain only alphanumeric characters"
+            }
           },
-          "validation1": {
-            "family": "Family must contain only alphanumeric characters",
-            "genus": "Genus must contain only alphanumeric characters",
-            "species": "Species must contain only alphanumeric characters"
+          "submitButton": {
+            "create": "Create Tree Type",
+            "edit": "Save Changes"
           },
-          "submitButton": "Create Tree Type",
-          "submittingText": "Creating..."
-        },
-        "edit": {
-          "title": "Edit Tree Type",
-          "submitButton": "Save Changes",
-          "submittingText": "Saving..."
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
+          }
         }
       },
       "taskTypes": {
@@ -235,6 +244,7 @@
   },
   "general": {
     "genericError": "An error occurred. Please try again later.",
-    "allContracts": "All contracts"
+    "allContracts": "All contracts",
+    "loading": "Loading..."
   }
 }
