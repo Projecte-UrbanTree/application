@@ -38,9 +38,8 @@ export default function EditTaskType() {
 
   const validationSchema = Yup.object({
     name: Yup.string().required(
-      t("admin.pages.taskTypes.edit.validations.name_required")
-    ).matches(/^[A-Za-z0-9 ]+$/, t("admin.pages.taskTypes.edit.validations.error_numbers")),
-
+      t("admin.pages.taskTypes.form.validation.name_required")
+    ).matches(/^[A-Za-z0-9 ]+$/, t("admin.pages.taskTypes.form.validation.error_numbers")),
     description: Yup.string().nullable()
   });
 
@@ -48,11 +47,11 @@ export default function EditTaskType() {
     try {
       await axiosClient.put(`/admin/task-types/${id}`, values);
       navigate("/admin/settings/task-types", {
-        state: { success: t("admin.pages.taskTypes.update") }
+        state: { success: t("admin.pages.taskTypes.list.messages.updateSuccess") }
       });
     } catch {
       navigate("/admin/settings/task-types", {
-        state: { error: t("admin.pages.taskTypes.error") }
+        state: { error: t("admin.pages.taskTypes.list.messages.error") }
       });
     }
   };
@@ -62,7 +61,7 @@ export default function EditTaskType() {
       <div className="flex flex-col items-center justify-center min-h-screen">
         <Icon icon="eos-icons:loading" className="h-8 w-8 animate-spin text-blue-600" />
         <span className="mt-2 text-blue-600">
-          {t("admin.pages.taskTypes.loading")}
+          {t("general.loading")}
         </span>
       </div>
     );
@@ -80,7 +79,7 @@ export default function EditTaskType() {
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
           <h2 className="text-white text-3xl font-bold">
-            {t("admin.pages.taskTypes.edit.title")}
+            {t("admin.pages.taskTypes.form.title.edit")}
           </h2>
         </header>
         <div className="p-6">
@@ -94,12 +93,12 @@ export default function EditTaskType() {
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-700 mb-1">
-                    {t("admin.pages.taskTypes.edit.fields.name")}
+                    {t("admin.pages.taskTypes.form.fields.name")}
                   </label>
                   <Field
                     name="name"
                     as={InputText}
-                    placeholder={t("admin.pages.taskTypes.edit.placeholders.name")}
+                    placeholder={t("admin.pages.taskTypes.form.placeholders.name")}
                     className={errors.name && touched.name ? "p-invalid" : ""}
                   />
                   {errors.name && touched.name && (
@@ -110,12 +109,12 @@ export default function EditTaskType() {
                 {/* Description Field */}
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-700 mb-1">
-                    {t("admin.pages.taskTypes.edit.fields.description")}
+                    {t("admin.pages.taskTypes.form.fields.description")}
                   </label>
                   <Field
                     name="description"
                     as={InputText}
-                    placeholder={t("admin.pages.taskTypes.edit.placeholders.description")}
+                    placeholder={t("admin.pages.taskTypes.form.placeholders.description")}
                     className={errors.description && touched.description ? "p-invalid" : ""}
                   />
                   {errors.description && touched.description && (
@@ -131,8 +130,8 @@ export default function EditTaskType() {
                     icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                     label={
                       isSubmitting
-                        ? t("admin.pages.taskTypes.edit.submittingText")
-                        : t("admin.pages.taskTypes.edit.submitButton")
+                        ? t("admin.pages.taskTypes.form.submittingText.edit")
+                        : t("admin.pages.taskTypes.form.submitButton.edit")
                     }
                   />
                 </div>

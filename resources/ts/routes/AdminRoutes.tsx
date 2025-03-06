@@ -218,8 +218,7 @@ const AdminRoutes: RouteObject[] = [
                   <AdminLayout
                     titleI18n="admin.pages.taskTypes.title"
                     contracts={[{ id: "1", name: "Tortosa" }]}
-                    currentContract="1"
-                  >
+                    currentContract="1">
                     <AdminTaskTypes />
                   </AdminLayout>
                 ),
@@ -230,8 +229,7 @@ const AdminRoutes: RouteObject[] = [
                   <AdminLayout
                     titleI18n="admin.pages.taskTypes.create.title"
                     contracts={[{ id: "1", name: "Tortosa" }]}
-                    currentContract="1"
-                  >
+                    currentContract="1">
                     <CreateTaskType />
                   </AdminLayout>
                 ),
@@ -242,8 +240,7 @@ const AdminRoutes: RouteObject[] = [
                   <AdminLayout
                     titleI18n="admin.pages.taskTypes.edit.title"
                     contracts={[{ id: "1", name: "Tortosa" }]}
-                    currentContract="1"
-                  >
+                    currentContract="1">
                     <EditTaskType />
                   </AdminLayout>
                 ),

@@ -220,54 +220,58 @@
       },
       "taskTypes": {
         "title": "Tipus de tasca",
-        "loading": "Carregant...",
-        "actions": "Accions",
-        "editButton": "Editar tipus de tasca",
-        "deleteButton": "Eliminar tipus de tasca",
-        "deletedSuccess": "Tipus de tasca eliminat correctament",
-        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
-        "success": "Tipus de tasca creat correctament",
-        "update": "Tipus de tasca actualitzat correctament",
-        "error": "Error guardant el tipus de tasca",
+        "list": {
+          "title": "Tipus de tasca",
+          "actions": {
+            "edit": "Editar tipus de tasca",
+            "delete": "Eliminar tipus de tasca",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Tipus de tasca eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
+            "createSuccess": "Tipus de tasca creat correctament",
+            "updateSuccess": "Tipus de tasca actualitzat correctament",
+            "error": "Error guardant el tipus de tasca"
+          },
+          "columns": {
+            "name": "Nom",
+            "description": "Descripció"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Editar Tipus de tasca"
+          },
+          "fields": {
+            "name": "Nom",
+            "description": "Descripció"
+          },
+          "placeholders": {
+            "name": "Introdueix el nom",
+            "description": "Introdueix la descripció"
+          },
+          "validation": {
+            "name_required": "El nom és obligatori",
+            "error_numbers": "El nom no pot contenir números ni caràcters especials"
+          },
+          "returnButton": "Tornar a la llista de tipus de tasca",
+          "submitButton": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Guardar canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          }
+        }
+      },
+      "resourceTypes": {
+        "title": "Tipus de recurs",
         "columns": {
-          "name": "Tipus de tasca",
+          "name": "Tipus de recurs",
           "description": "Descripció"
-        },
-        "create": {
-          "title": "Crear Tipus de tasca",
-          "fields": {
-            "name": "Nom",
-            "description": "Descripció"
-          },
-          "placeholders": {
-            "name": "Nom del tipus de tasca",
-            "description": "Descripció del tipus de tasca"
-          },
-          "validations": {
-            "name_required": "El nom és obligatori",
-            "error_numbers": "El nom no pot contenir números ni caràcters especials"
-          },
-          "returnButton": "Tornar a la llista de tipus de tasca",
-          "submitButton": "Crear Tipus de tasca",
-          "submittingText": "Creant..."
-        },
-        "edit": {
-          "title": "Editar Tipus de tasca",
-          "fields": {
-            "name": "Nom",
-            "description": "Descripció"
-          },
-          "placeholders": {
-            "name": "Nom del tipus de tasca",
-            "description": "Descripció del tipus de tasca"
-          },
-          "validations": {
-            "name_required": "El nom és obligatori",
-            "error_numbers": "El nom no pot contenir números ni caràcters especials"
-          },
-          "returnButton": "Tornar a la llista de tipus de tasca",
-          "submitButton": "Guardar canvis",
-          "submittingText": "Guardant..."
         }
       },
       "resources": {
@@ -276,13 +280,6 @@
           "name": "Recurs",
           "description": "Descripció",
           "resource_type_id": "Tipus de recurs"
-        }
-      },
-      "resourceTypes": {
-        "title": "Tipus de recurs",
-        "columns": {
-          "name": "Tipus de recurs",
-          "description": "Descripció"
         }
       },
       "stats": {

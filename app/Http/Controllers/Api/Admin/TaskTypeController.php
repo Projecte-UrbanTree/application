@@ -39,7 +39,7 @@ class TaskTypeController extends Controller
 
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
-            'description' => ['sometimes', 'string'],
+            'description' => ['nullable', 'string'],
         ]);
 
         $taskType->update($validated);

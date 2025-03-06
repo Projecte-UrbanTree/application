@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import { Badge } from "primereact/badge";
 import { Message } from "primereact/message";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Icon } from "@iconify/react";
@@ -50,14 +49,14 @@ export default function TaskTypes() {
   }, [msg]);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm(t("admin.pages.taskTypes.deleteConfirm"))) return;
+    if (!window.confirm(t("admin.pages.taskTypes.list.messages.deleteConfirm"))) return;
     try {
       await axiosClient.delete(`/admin/task-types/${id}`);
       setTaskTypes(taskTypes.filter((tt) => tt.id !== id));
-      setMsg(t("admin.pages.taskTypes.deletedSuccess"));
+      setMsg(t("admin.pages.taskTypes.list.messages.deleteSuccess"));
     } catch (error) {
       console.error(error);
-      setMsg(t("admin.pages.taskTypes.error"));
+      setMsg(t("admin.pages.taskTypes.list.messages.error"));
     }
   };
 
@@ -65,7 +64,7 @@ export default function TaskTypes() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <ProgressSpinner style={{ width: "50px", height: "50px" }} strokeWidth="4" />
-        <span className="mt-2 text-blue-600">{t("admin.pages.taskTypes.loading")}</span>
+        <span className="mt-2 text-blue-600">{t("general.loading")}</span>
       </div>
     );
   }
@@ -75,7 +74,7 @@ export default function TaskTypes() {
       {msg && (
         <Message
           severity={
-            msg === t("admin.pages.taskTypes.deletedSuccess") || msg === successMsg
+            msg === t("admin.pages.taskTypes.list.messages.deleteSuccess") || msg === successMsg
               ? "success"
               : "error"
           }
@@ -84,7 +83,7 @@ export default function TaskTypes() {
         />
       )}
       <CrudPanel
-        title="admin.pages.taskTypes.title"
+        title={t("admin.pages.taskTypes.title")}
         onCreate={() => navigate("/admin/settings/task-types/create")}
       >
         <DataTable
@@ -98,28 +97,28 @@ export default function TaskTypes() {
         >
           <Column
             field="name"
-            header={t("admin.pages.taskTypes.columns.name")}
+            header={t("admin.pages.taskTypes.list.columns.name")}
           />
           <Column
             field="description"
-            header={t("admin.pages.taskTypes.columns.description")}
+            header={t("admin.pages.taskTypes.list.columns.description")}
           />
           <Column
-            header={t("admin.pages.taskTypes.actions")}
+            header={t("admin.pages.taskTypes.list.actions.label")}
             body={(rowData: TaskType) => (
               <div className="flex justify-center gap-2">
                 <Button
                   icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
                   className="p-button-rounded p-button-info"
                   onClick={() => navigate(`/admin/settings/task-types/edit/${rowData.id}`)}
-                  tooltip={t("admin.pages.taskTypes.editButton")}
+                  tooltip={t("admin.pages.taskTypes.list.actions.edit")}
                   tooltipOptions={{ position: "top" }}
                 />
                 <Button
                   icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
                   className="p-button-rounded p-button-danger"
                   onClick={() => handleDelete(rowData.id)}
-                  tooltip={t("admin.pages.taskTypes.deleteButton")}
+                  tooltip={t("admin.pages.taskTypes.list.actions.delete")}
                   tooltipOptions={{ position: "top" }}
                 />
               </div>
