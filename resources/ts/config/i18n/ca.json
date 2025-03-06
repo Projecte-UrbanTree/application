@@ -163,6 +163,7 @@
         "deletedSuccess": "Contracte eliminat correctament",
         "update": "Contracte actualitzat correctament",
         "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
+        "error": "Error guardant el contracte",
         "create": {
           "title": "Crear Contracte",
           "submitButton": "Crear Contracte",
@@ -170,7 +171,8 @@
           "validations": {
             "name_required": "El nom és obligatori",
             "start_date_required": "La data d'inici és obligatòria",
-            "end_date_required": "La data de finalització és obligatòria"
+            "end_date_required": "La data de finalització és obligatòria",
+            "end_date_after_start_date": "La data de finalització no pot ser anterior a la data d'inici"
           }
         },
         "edit": {
@@ -182,7 +184,8 @@
           "submittingText": "Guardant...",
           "validations": {
             "status_invalid": "Estat no vàlid",
-            "name_required": "El nom és obligatori"
+            "name_required": "El nom és obligatori",
+            "end_date_after_start_date": "La data de finalització no pot ser anterior a la data d'inici"
           }
         }
       },

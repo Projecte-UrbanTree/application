@@ -24,6 +24,10 @@ class ContractController extends Controller
             'status' => ['required', Rule::in([0, 1, 2])],
         ]);
 
+        // Convertir las fechas a formato 'Y-m-d'
+        $validated['start_date'] = date('Y-m-d', strtotime($validated['start_date']));
+        $validated['end_date'] = date('Y-m-d', strtotime($validated['end_date']));
+
         $contract = Contract::create($validated);
 
         return response()->json($contract, 201);
@@ -47,6 +51,14 @@ class ContractController extends Controller
             'final_price' => ['sometimes', 'numeric'],
             'status' => ['sometimes', Rule::in([0, 1, 2])],
         ]);
+
+        // Convertir las fechas a formato 'Y-m-d' si están presentes
+        if (isset($validated['start_date'])) {
+            $validated['start_date'] = date('Y-m-d', strtotime($validated['start_date']));
+        }
+        if (isset($validated['end_date'])) {
+            $validated['end_date'] = date('Y-m-d', strtotime($validated['end_date']));
+        }
 
         $contract->update($validated);
 

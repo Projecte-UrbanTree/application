@@ -55,7 +55,9 @@ export default function EditContract() {
     const validationSchema = Yup.object({
         name: Yup.string().required(t("admin.pages.contracts.edit.validations.name_required")),
         start_date: Yup.date().required(t("admin.pages.contracts.edit.validations.start_date_required")),
-        end_date: Yup.date().required(t("admin.pages.contracts.edit.validations.end_date_required")),
+        end_date: Yup.date()
+            .required(t("admin.pages.contracts.edit.validations.end_date_required"))
+            .min(Yup.ref('start_date'), t("admin.pages.contracts.edit.validations.end_date_after_start_date")),
         final_price: Yup.number().required(t("admin.pages.contracts.edit.validations.final_price_required")),
         status: Yup.number()
             .oneOf([0, 1, 2], t("admin.pages.contracts.edit.validations.status_invalid"))

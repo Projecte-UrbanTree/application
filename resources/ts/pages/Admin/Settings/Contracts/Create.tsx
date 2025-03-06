@@ -28,7 +28,9 @@ export default function CreateContract() {
     const validationSchema = Yup.object({
         name: Yup.string().required(t("admin.pages.contracts.create.validations.name_required")),
         start_date: Yup.date().required(t("admin.pages.contracts.create.validations.start_date_required")),
-        end_date: Yup.date().required(t("admin.pages.contracts.create.validations.end_date_required")),
+        end_date: Yup.date()
+            .required(t("admin.pages.contracts.create.validations.end_date_required"))
+            .min(Yup.ref('start_date'), t("admin.pages.contracts.create.validations.end_date_after_start_date")),
         final_price: Yup.number().required(t("admin.pages.contracts.create.validations.final_price_required")),
         status: Yup.number()
             .oneOf([0, 1, 2], t("admin.pages.contracts.create.validations.status_invalid"))
