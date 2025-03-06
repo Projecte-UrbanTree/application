@@ -68,10 +68,10 @@
       "family": "Família",
       "genus": "Gènere",
       "species": "Espècie",
-      "start_date": "Data d'inici",
-      "end_date": "Data de finalització",
       "status": "Estat",
-      "final_price": "Preu final"
+      "final_price": "Preu final",
+      "start_date": "Data d'inici",
+      "end_date": "Data de finalització"
     },
     "status": {
       "active": "Actiu",
@@ -153,44 +153,55 @@
       },
       "contracts": {
         "title": "Contractes",
-        "loading": "Carregant...",
-        "actions": "Accions",
-        "editButton": "Editar contracte",
-        "deleteButton": "Eliminar contracte",
-        "columns": {
-          "name": "Contracte",
-          "start_date": "Data d'inici",
-          "end_date": "Data de finalització",
-          "final_price": "Preu final",
-          "status": "Estat"
-        },
-        "success": "Contracte creat correctament",
-        "deletedSuccess": "Contracte eliminat correctament",
-        "update": "Contracte actualitzat correctament",
-        "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
-        "error": "Error guardant el contracte",
-        "create": {
-          "title": "Crear Contracte",
-          "submitButton": "Crear Contracte",
-          "submittingText": "Creant...",
-          "validations": {
-            "name_required": "El nom és obligatori",
-            "start_date_required": "La data d'inici és obligatòria",
-            "end_date_required": "La data de finalització és obligatòria",
-            "end_date_after_start_date": "La data de finalització no pot ser anterior a la data d'inici"
+        "list": {
+          "actions": {
+            "edit": "Editar contracte",
+            "delete": "Eliminar contracte",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Contracte eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
+            "createSuccess": "Contracte creat correctament",
+            "updateSuccess": "Contracte actualitzat correctament",
+            "error": "Error guardant el contracte"
+          },
+          "columns": {
+            "name": "Contracte",
+            "start_date": "Data d'inici",
+            "end_date": "Data de finalització",
+            "invoice_proposed": "Factura proposada",
+            "invoice_agreed": "Factura acordada",
+            "invoice_paid": "Factura pagada",
+            "final_price": "Preu final",
+            "status": "Estat"
           }
         },
-        "edit": {
-          "title": "Editar Contracte",
+        "form": {
+          "title": {
+            "create": "Crear Contracte",
+            "edit": "Editar Contracte"
+          },
           "placeholders": {
             "status": "Selecciona un estat"
           },
-          "submitButton": "Guardar Canvis",
-          "submittingText": "Guardant...",
-          "validations": {
+          "validation": {
+            "name_required": "El nom es obligatori",
+            "start_date_required": "La data d'inici es obligatòria",
+            "end_date_required": "La data de finalització es obligatòria",
+            "end_date_after_start_date": "La data de finalització ha de ser posterior a la data d'inici",
+            "final_price_required": "El preu final es obligatori",
             "status_invalid": "Estat no vàlid",
-            "name_required": "El nom és obligatori",
-            "end_date_after_start_date": "La data de finalització no pot ser anterior a la data d'inici"
+            "status_required": "L'estat es obligatori"
+          },
+          "returnButton": "Tornar a la llista de contractes",
+          "submitButton": {
+            "create": "Crear Contracte",
+            "edit": "Guardar Canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
           }
         }
       },
@@ -261,8 +272,57 @@
       },
       "taskTypes": {
         "title": "Tipus de tasca",
+        "list": {
+          "title": "Tipus de tasca",
+          "actions": {
+            "edit": "Editar tipus de tasca",
+            "delete": "Eliminar tipus de tasca",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Tipus de tasca eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
+            "createSuccess": "Tipus de tasca creat correctament",
+            "updateSuccess": "Tipus de tasca actualitzat correctament",
+            "error": "Error guardant el tipus de tasca"
+          },
+          "columns": {
+            "name": "Nom",
+            "description": "Descripció"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Editar Tipus de tasca"
+          },
+          "fields": {
+            "name": "Nom",
+            "description": "Descripció"
+          },
+          "placeholders": {
+            "name": "Introdueix el nom",
+            "description": "Introdueix la descripció"
+          },
+          "validation": {
+            "name_required": "El nom és obligatori",
+            "error_numbers": "El nom no pot contenir números ni caràcters especials"
+          },
+          "returnButton": "Tornar a la llista de tipus de tasca",
+          "submitButton": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Guardar canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          }
+        }
+      },
+      "resourceTypes": {
+        "title": "Tipus de recurs",
         "columns": {
-          "name": "Tipus de tasca",
+          "name": "Tipus de recurs",
           "description": "Descripció"
         }
       },
@@ -272,13 +332,6 @@
           "name": "Recurs",
           "description": "Descripció",
           "resource_type_id": "Tipus de recurs"
-        }
-      },
-      "resourceTypes": {
-        "title": "Tipus de recurs",
-        "columns": {
-          "name": "Tipus de recurs",
-          "description": "Descripció"
         }
       },
       "stats": {

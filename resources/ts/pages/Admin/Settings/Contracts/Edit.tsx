@@ -53,23 +53,23 @@ export default function EditContract() {
     }, [id]);
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.contracts.edit.validations.name_required")),
-        start_date: Yup.date().required(t("admin.pages.contracts.edit.validations.start_date_required")),
+        name: Yup.string().required(t("admin.pages.contracts.form.validation.name_required")),
+        start_date: Yup.date().required(t("admin.pages.contracts.form.validation.start_date_required")),
         end_date: Yup.date()
-            .required(t("admin.pages.contracts.edit.validations.end_date_required"))
-            .min(Yup.ref('start_date'), t("admin.pages.contracts.edit.validations.end_date_after_start_date")),
-        final_price: Yup.number().required(t("admin.pages.contracts.edit.validations.final_price_required")),
+            .required(t("admin.pages.contracts.form.validation.end_date_required"))
+            .min(Yup.ref('start_date'), t("admin.pages.contracts.form.validation.end_date_after_start_date")),
+        final_price: Yup.number().required(t("admin.pages.contracts.form.validation.final_price_required")),
         status: Yup.number()
-            .oneOf([0, 1, 2], t("admin.pages.contracts.edit.validations.status_invalid"))
-            .required(t("admin.pages.contracts.edit.validations.status_required"))
+            .oneOf([0, 1, 2], t("admin.pages.contracts.form.validation.status_invalid"))
+            .required(t("admin.pages.contracts.form.validation.status_required"))
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
         try {
             await axiosClient.put(`/admin/contracts/${id}`, values);
-            navigate("/admin/settings/contracts", { state: { success: t("admin.pages.contracts.update") } });
+            navigate("/admin/settings/contracts", { state: { success: t("admin.pages.contracts.list.messages.updateSuccess") } });
         } catch (error) {
-            navigate("/admin/settings/contracts", { state: { error: t("admin.pages.contracts.error") } });
+            navigate("/admin/settings/contracts", { state: { error: t("admin.pages.contracts.list.messages.error") } });
         }
     };
 
@@ -83,7 +83,7 @@ export default function EditContract() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <Icon icon="eos-icons:loading" className="h-8 w-8 animate-spin text-blue-600" />
-                <span className="mt-2 text-blue-600">{t("admin.pages.contracts.loading")}</span>
+                <span className="mt-2 text-blue-600">{t("general.loading")}</span>
             </div>
         );
     }
@@ -100,7 +100,7 @@ export default function EditContract() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.contracts.edit.title")}
+                        {t("admin.pages.contracts.form.title.edit")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -181,7 +181,7 @@ export default function EditContract() {
                                         name="status"
                                         as={Dropdown}
                                         options={statusOptions}
-                                        placeholder={t("admin.pages.contracts.edit.placeholders.status")}
+                                        placeholder={t("admin.pages.contracts.form.placeholders.status")}
                                         className={errors.status && touched.status ? "p-invalid" : ""}
                                     />
                                     {errors.status && touched.status && (
@@ -196,8 +196,8 @@ export default function EditContract() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.contracts.edit.submittingText")
-                                                : t("admin.pages.contracts.edit.submitButton")
+                                                ? t("admin.pages.contracts.form.submittingText.edit")
+                                                : t("admin.pages.contracts.form.submitButton.edit")
                                         }
                                     />
                                 </div>

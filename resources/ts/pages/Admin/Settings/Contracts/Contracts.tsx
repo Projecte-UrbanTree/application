@@ -60,11 +60,11 @@ export default function Contracts() {
     }, [msg]);
 
     const handleDelete = async (contractId: number) => {
-        if (!window.confirm(t("admin.pages.contracts.deleteConfirm"))) return;
+        if (!window.confirm(t("admin.pages.contracts.list.messages.deleteConfirm"))) return;
         try {
             await axiosClient.delete(`/admin/contracts/${contractId}`);
             setContracts(contracts.filter((contract) => contract.id !== contractId));
-            setMsg(t("admin.pages.contracts.deletedSuccess"));
+            setMsg(t("admin.pages.contracts.list.messages.deleteSuccess"));
         } catch (error) {
             console.error(error);
         }
@@ -74,7 +74,7 @@ export default function Contracts() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <ProgressSpinner style={{ width: "50px", height: "50px" }} strokeWidth="4" />
-                <span className="mt-2 text-blue-600">{t("admin.pages.contracts.loading")}</span>
+                <span className="mt-2 text-blue-600">{t("general.loading")}</span>
             </div>
         );
     }
@@ -83,13 +83,13 @@ export default function Contracts() {
         <>
             {msg && (
                 <Message
-                    severity={successMsg || msg === t("admin.pages.contracts.deletedSuccess") ? "success" : "error"}
+                    severity={successMsg || msg === t("admin.pages.contracts.list.messages.deleteSuccess") ? "success" : "error"}
                     text={msg}
                     className="mb-4 w-full"
                 />
             )}
             <CrudPanel
-                title="admin.pages.contracts.title"
+                title={t("admin.pages.contracts.title")}
                 onCreate={() => navigate("/admin/settings/contracts/create")}
             >
                 <DataTable
@@ -100,28 +100,28 @@ export default function Contracts() {
                     showGridlines
                     className="p-datatable-sm"
                 >
-                    <Column field="name" header={t("admin.pages.contracts.columns.name")} />
-                    <Column field="start_date" header={t("admin.pages.contracts.columns.start_date")} />
-                    <Column field="end_date" header={t("admin.pages.contracts.columns.end_date")} />
-                    <Column field="final_price" header={t("admin.pages.contracts.columns.final_price")} />
-                    <Column field="status" header={t("admin.pages.contracts.columns.status")} body={(rowData: Contract) => (
+                    <Column field="name" header={t("admin.pages.contracts.list.columns.name")} />
+                    <Column field="start_date" header={t("admin.pages.contracts.list.columns.start_date")} />
+                    <Column field="end_date" header={t("admin.pages.contracts.list.columns.end_date")} />
+                    <Column field="final_price" header={t("admin.pages.contracts.list.columns.final_price")} />
+                    <Column field="status" header={t("admin.pages.contracts.list.columns.status")} body={(rowData: Contract) => (
                         <Badge value={statusOptions.find(option => option.value === rowData.status)?.label} />
                     )} />
                     <Column
-                        header={t("admin.pages.contracts.actions")}
+                        header={t("admin.pages.contracts.list.actions.label")}
                         body={(rowData: { id: number }) => (
                             <div className="flex justify-center gap-2">
                                 <Button
                                     icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
                                     className="p-button-rounded p-button-info"
-                                    tooltip={t("admin.pages.contracts.editButton")}
+                                    tooltip={t("admin.pages.contracts.list.actions.edit")}
                                     tooltipOptions={{ position: "top" }}
                                     onClick={() => navigate(`/admin/settings/contracts/edit/${rowData.id}`)}
                                 />
                                 <Button
                                     icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
                                     className="p-button-rounded p-button-danger"
-                                    tooltip={t("admin.pages.contracts.deleteButton")}
+                                    tooltip={t("admin.pages.contracts.list.actions.delete")}
                                     tooltipOptions={{ position: "top" }}
                                     onClick={() => handleDelete(rowData.id)}
                                 />
