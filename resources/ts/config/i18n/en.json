@@ -224,13 +224,13 @@
       },
       "resourceTypes": {
         "title": "Resource Types",
+        "loading": "Loading...",
+        "editButton": "Edit Resource Type",
+        "deleteButton": "Delete Resource Type",
         "columns": {
           "name": "Resource Type",
           "description": "Description"
         },
-        "loading": "Loading...",
-        "editButton": "Edit Resource Type",
-        "deleteButton": "Delete Resource Type",
         "actions": "Actions",
         "deletedSuccess": "Resource type deleted successfully",
         "deleteConfirm": "Are you sure you want to delete this resource type?",
@@ -263,6 +263,7 @@
   },
   "general": {
     "genericError": "An error occurred. Please try again later.",
-    "allContracts": "All contracts"
+    "allContracts": "All contracts",
+    "loading": "Loading..."
   }
 }

@@ -55,7 +55,7 @@ export default function ResourceTypes() {
     try {
       const response = await axiosClient.post('/admin/resource-types', values);
       setResourceTypes((prevResourceTypes) => [...prevResourceTypes, response.data]);
-      setMsg(t("admin.pages.resourceTypes.success"));
+      setMsg(t("admin.pages.resourceTypes.createSuccess"));
     } catch (error) {
       console.error(error);
       setMsg(t("admin.pages.resourceTypes.error"));
@@ -70,7 +70,7 @@ export default function ResourceTypes() {
           resourceType.id === id ? response.data : resourceType
         )
       );
-      setMsg(t("admin.pages.resourceTypes.update"));
+      setMsg(t("admin.pages.resourceTypes.updateSuccess"));
     } catch (error) {
       console.error(error);
       setMsg(t("admin.pages.resourceTypes.error"));
@@ -109,7 +109,7 @@ export default function ResourceTypes() {
         />
       )}
       <CrudPanel
-        title="admin.pages.resourceTypes.title"
+        title={t("admin.pages.resourceTypes.title")}
         onCreate={() => navigate('/admin/settings/resource-types/create')}>
         <DataTable
           value={resourceTypes}

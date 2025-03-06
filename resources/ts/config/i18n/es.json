@@ -38,7 +38,7 @@
         "contracts": "Contratos",
         "elementTypes": "Tipos de elemento",
         "species": "Especies",
-        "taskTypes": "Tipus de tarea",
+        "taskTypes": "Tipos de tarea",
         "resourceTypes": "Tipos de recurso",
         "users": "Usuarios"
       }
@@ -88,25 +88,39 @@
       },
       "users": {
         "title": "Usuarios",
-        "loading": "Cargando...",
-        "editButton": "Editar usuario",
-        "deleteButton": "Eliminar usuario",
-        "columns": {
-          "email": "Correo electrónico"
+        "list": {
+          "actions": {
+            "edit": "Editar usuario",
+            "delete": "Eliminar usuario",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Usuario eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
+            "createSuccess": "Usuario creado exitosamente",
+            "updateSuccess": "Usuario actualizado exitosamente",
+            "error": "Error guardando el usuario"
+          },
+          "columns": {
+            "name": "Nombre",
+            "surname": "Apellido",
+            "email": "Correo electrónico",
+            "company": "Empresa",
+            "dni": "DNI",
+            "role": "Rol"
+          }
         },
-        "actions": "Acciones",
-        "deletedSuccess": "Usuario eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
-        "success": "Usuario creado exitosamente",
-        "update": "Usuario actualizado exitosamente",
-        "error": "Error guardando el usuario",
-        "create": {
-          "title": "Crear Usuario",
+        "form": {
+          "title": {
+            "create": "Crear Usuario",
+            "edit": "Editar Usuario"
+          },
           "placeholders": {
             "role": "Selecciona un rol",
-            "password": "Contraseña"
+            "password": "Contraseña",
+            "passwordEdit": "Contraseña (dejar en blanco para no cambiar)"
           },
-          "validations": {
+          "validation": {
             "name_required": "El nombre es obligatorio",
             "surname_required": "El apellido es obligatorio",
             "invalid_email": "Correo inválido",
@@ -119,26 +133,14 @@
             "password_special": "Debe contener al menos un carácter especial"
           },
           "returnButton": "Volver a la lista de usuarios",
-          "submitButton": "Crear Usuario",
-          "submittingText": "Creando..."
-        },
-        "edit": {
-          "title": "Editar Usuario",
-          "placeholders": {
-            "role": "Selecciona un rol",
-            "password": "Contraseña (dejar en blanco para no cambiar)"
+          "submitButton": {
+            "create": "Crear Usuario",
+            "edit": "Guardar Cambios"
           },
-          "validations": {
-            "name_required": "El nombre es obligatorio",
-            "surname_required": "El apellido es obligatorio",
-            "invalid_email": "Correo inválido",
-            "email_required": "El correo es obligatorio",
-            "role_invalid": "Rol no válido",
-            "password_min": "Debe tener al menos 8 caracteres"
-          },
-          "returnButton": "Volver a la lista de usuarios",
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando..."
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
         }
       },
       "contracts": {
@@ -172,39 +174,49 @@
       },
       "treeTypes": {
         "title": "Tipos de árbol",
-        "columns": {
-          "family": "Familia",
-          "genus": "Género",
-          "species": "Especie"
+        "list": {
+          "title": "Tipos de árbol",
+          "actions": {
+            "label": "Acciones",
+            "edit": "Editar Tipo de Árbol",
+            "delete": "Eliminar Tipo de Árbol"
+          },
+          "messages": {
+            "deletedSuccess": "Tipo de árbol eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
+            "createSuccess": "Tipo de árbol creado exitosamente",
+            "updateSuccess": "Tipo de árbol actualizado exitosamente",
+            "error": "Error guardando el tipo de árbol"
+          },
+          "columns": {
+            "family": "Familia",
+            "genus": "Género",
+            "species": "Especie"
+          }
         },
-        "loading": "Cargando...",
-        "editButton": "Editar Tipo de Árbol",
-        "deleteButton": "Eliminar Tipo de Árbol",
-        "actions": "Acciones",
-        "deletedSuccess": "Tipo de árbol eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
-        "success": "Tipo de árbol creado exitosamente",
-        "update": "Tipo de árbol actualizado exitosamente",
-        "error": "Error guardando el tipo de árbol",
-        "create": {
-          "title": "Crear Tipo de Árbol",
+        "form": {
+          "title": {
+            "create": "Crear Tipo de Árbol",
+            "edit": "Editar Tipo de Árbol"
+          },
           "validation": {
             "family": "La familia es obligatoria",
             "genus": "El género es obligatorio",
-            "species": "La especie es obligatoria"
+            "species": "La especie es obligatoria",
+            "alphanumeric": {
+              "family": "La familia debe contener solo caracteres alfanuméricos",
+              "genus": "El género debe contener solo caracteres alfanuméricos",
+              "species": "La especie debe contener solo caracteres alfanuméricos"
+            }
           },
-          "validation1": {
-            "family": "La familia debe contener solo caracteres alfanuméricos",
-            "genus": "El género debe contener solo caracteres alfanuméricos",
-            "species": "La especie debe contener solo caracteres alfanuméricos"
+          "submitButton": {
+            "create": "Crear Tipo de Árbol",
+            "edit": "Guardar Cambios"
           },
-          "submitButton": "Crear Tipo de Árbol",
-          "submittingText": "Creando..."
-        },
-        "edit": {
-          "title": "Editar Tipo de Árbol",
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando..."
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
         }
       },
       "taskTypes": {
@@ -222,47 +234,29 @@
           "resource_type_id": "Tipo de recurso"
         }
       },
+      "stats": {
+        "title": "Estadísticas"
+      },
       "resourceTypes": {
         "title": "Tipos de recurso",
-        "columns": {
-          "name": "Tipo de recurso",
-          "description": "Descripción"
-        },
-        "loading": "Cargando...",
+        "actions": "Acciones",
         "editButton": "Editar tipo de recurso",
         "deleteButton": "Eliminar tipo de recurso",
-        "actions": "Acciones",
-        "deletedSuccess": "Tipo de recurso eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
-        "success": "Tipo de recurso creado exitosamente",
-        "update": "Tipo de recurso actualizado exitosamente",
-        "error": "Error guardando el tipo de recurso",
+        "loading": "Cargando...",
         "create": {
           "title": "Crear Tipo de Recurso",
-          "validations": {
-            "name_required": "El nombre es obligatorio",
-            "description_required": "La descripción es obligatoria"
-          },
-          "submitButton": "Crear Tipo de Recurso",
-          "submittingText": "Creando..."
+          "submitButton": "Crear Tipo de Recurso"
         },
         "edit": {
           "title": "Editar Tipo de Recurso",
-          "validations": {
-            "name_required": "El nombre es obligatorio",
-            "description_required": "La descripción es obligatoria"
-          },
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando..."
+          "submitButton": "Guardar Cambios"
         }
-      },
-      "stats": {
-        "title": "Estadísticas"
       }
     }
   },
   "general": {
     "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
-    "allContracts": "Todos los contratos"
+    "allContracts": "Todos los contratos",
+    "loading": "Cargando..."
   }
 }
