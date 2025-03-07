@@ -60,7 +60,7 @@
       "resources": {
         "form": {
           "fields": {
-            "description": "Descripción",
+            "description": "Descripció",
             "name": "Nom",
             "type": "Tipo"
           },
@@ -94,7 +94,7 @@
             "label": "Accions"
           },
           "columns": {
-            "description": "Dscripció",
+            "description": "Descripció",
             "name": "Nom",
             "type": "Tipus"
           },
