@@ -231,8 +231,8 @@
           "messages": {
             "deleteSuccess": "Task type deleted successfully",
             "deleteConfirm": "Are you sure you want to delete this task type?",
-            "updateSuccess": "Task type updated successfully",
             "createSuccess": "Task type created successfully",
+            "updateSuccess": "Task type updated successfully",
             "error": "Error saving task type"
           },
           "columns": {
