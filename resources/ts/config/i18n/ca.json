@@ -59,10 +59,15 @@
       },
       "resources": {
         "form": {
+          "fields": {
+            "description": "Descripció",
+            "name": "Nom",
+            "type": "Tipo"
+          },
           "placeholders": {
-            "password": "Contrasenya",
-            "passwordEdit": "Contrasenya (deixar en blanc per no canviar)",
-            "role": "Selecciona un rol"
+            "description": "Introdueix la descripció",
+            "name": "Introdueix el nom",
+            "type": "Selecciona un tipo"
           },
           "returnButton": "Tornar a la llista de recursos",
           "submitButton": {
@@ -89,7 +94,7 @@
             "label": "Accions"
           },
           "columns": {
-            "description": "Dscripció",
+            "description": "Descripció",
             "name": "Nom",
             "type": "Tipus"
           },
@@ -99,19 +104,47 @@
             "deleteSuccess": "Recurs eliminat correctament",
             "error": "Error guardant el recurs",
             "updateSuccess": "Recurs actualitzat correctament"
-          }
-        },
-        "stats": {
-          "title": "Estadístiques"
+          },
+          "title": "Recursos"
         },
         "title": "Recursos"
       },
       "resourceTypes": {
+        "actions": "Accions",
         "columns": {
           "description": "Descripció",
           "name": "Tipus de recurs"
         },
-        "title": "Tipus de recurs"
+        "create": {
+          "submitButton": "Crear Tipo de Recurso",
+          "submittingText": "Creant...",
+          "title": "Crear Tipo de Recurso",
+          "validations": {
+            "description_required": "La descripción es obligatoria",
+            "name_required": "El nom és obligatori"
+          }
+        },
+        "deleteButton": "Eliminar tipo de recurso",
+        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
+        "deletedSuccess": "Tipo de recurso eliminado exitosamente",
+        "edit": {
+          "submitButton": "Guardar Canvis",
+          "submittingText": "Guardant...",
+          "title": "Editar Tipo de Recurso",
+          "validations": {
+            "description_required": "La descripción es obligatoria",
+            "name_required": "El nom és obligatori"
+          }
+        },
+        "editButton": "Editar tipo de recurso",
+        "error": "Error guardando el tipo de recurso",
+        "loading": "Cargando...",
+        "success": "Tipo de recurso creado exitosamente",
+        "title": "Tipus de recurs",
+        "update": "Tipo de recurso actualizado exitosamente"
+      },
+      "stats": {
+        "title": "Estadístiques"
       },
       "taskTypes": {
         "form": {
