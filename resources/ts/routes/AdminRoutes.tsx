@@ -1,30 +1,29 @@
 import AdminLayout from '@/layouts/AdminLayout';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
+import { Navigate, RouteObject } from 'react-router-dom';
 
 import AdminDashboard from '@/pages/Admin/Dashboard';
-import AdminUsers from '@/pages/Admin/Settings/Users/Users';
-import CreateUser from "@/pages/Admin/Settings/Users/Create";
-import EditUser from '@/pages/Admin/Settings/Users/Edit';
+import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
-import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
-import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
+import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
+import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
+import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTypes';
+import CreateResource from '@/pages/Admin/Settings/Resources/Create';
+import EditResource from '@/pages/Admin/Settings/Resources/Edit';
+import AdminResources from '@/pages/Admin/Settings/Resources/Resources';
+import CreateTaskType from '@/pages/Admin/Settings/Task Types/Create';
+import EditTaskType from '@/pages/Admin/Settings/Task Types/Edit';
+import AdminTaskTypes from '@/pages/Admin/Settings/Task Types/TaskTypes';
 import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
 import EditTreeType from '@/pages/Admin/Settings/Tree Types/Edit';
-
-import AdminTaskTypes from '@/pages/Admin/Settings/Task Types/TaskTypes';
-import CreateTaskType from "@/pages/Admin/Settings/Task Types/Create";
-import EditTaskType from "@/pages/Admin/Settings/Task Types/Edit";
-import AdminInventory from '@/pages/Admin/Inventory';
-import AdminWorkers from '@/pages/Admin/Workers';
-import AdminResources from '@/pages/Admin/Resources';
-import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTypes';
-import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
-import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
+import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
+import CreateUser from '@/pages/Admin/Settings/Users/Create';
+import EditUser from '@/pages/Admin/Settings/Users/Edit';
+import AdminUsers from '@/pages/Admin/Settings/Users/Users';
 import AdminStats from '@/pages/Admin/Stats';
-
-import { Navigate } from 'react-router-dom';
-import { RouteObject } from 'react-router-dom';
+import AdminWorkers from '@/pages/Admin/Workers';
+import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 
 const AdminRoutes: RouteObject[] = [
   {
@@ -86,6 +85,28 @@ const AdminRoutes: RouteObject[] = [
                 contracts={[{ id: '1', name: 'Tortosa' }]}
                 currentContract={'1'}>
                 <AdminResources />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'resources/create',
+            element: (
+              <AdminLayout
+                titleI18n="admin.pages.resources.create.title"
+                contracts={[{ id: '1', name: 'Tortosa' }]}
+                currentContract={'1'}>
+                <CreateResource />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'resources/edit/:id',
+            element: (
+              <AdminLayout
+                titleI18n="admin.pages.resources.edit.title"
+                contracts={[{ id: '1', name: 'Tortosa' }]}
+                currentContract={'1'}>
+                <EditResource />
               </AdminLayout>
             ),
           },
@@ -215,33 +236,33 @@ const AdminRoutes: RouteObject[] = [
                 ),
               },
               {
-                path: "task-types",
+                path: 'task-types',
                 element: (
                   <AdminLayout
                     titleI18n="admin.pages.taskTypes.title"
-                    contracts={[{ id: "1", name: "Tortosa" }]}
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract="1">
                     <AdminTaskTypes />
                   </AdminLayout>
                 ),
               },
               {
-                path: "task-types/create",
+                path: 'task-types/create',
                 element: (
                   <AdminLayout
                     titleI18n="admin.pages.taskTypes.create.title"
-                    contracts={[{ id: "1", name: "Tortosa" }]}
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract="1">
                     <CreateTaskType />
                   </AdminLayout>
                 ),
               },
               {
-                path: "task-types/edit/:id",
+                path: 'task-types/edit/:id',
                 element: (
                   <AdminLayout
                     titleI18n="admin.pages.taskTypes.edit.title"
-                    contracts={[{ id: "1", name: "Tortosa" }]}
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract="1">
                     <EditTaskType />
                   </AdminLayout>
