@@ -67,7 +67,8 @@
       "password": "Contrasenya",
       "family": "Família",
       "genus": "Gènere",
-      "species": "Espècie"
+      "species": "Espècie",
+      "description": "Descripción"
     },
     "pages": {
       "dashboard": {
@@ -267,19 +268,46 @@
           }
         }
       },
-      "resourceTypes": {
-        "title": "Tipus de recurs",
-        "columns": {
-          "name": "Tipus de recurs",
-          "description": "Descripció"
-        }
-      },
       "resources": {
         "title": "Recursos",
         "columns": {
           "name": "Recurs",
           "description": "Descripció",
           "resource_type_id": "Tipus de recurs"
+        }
+      },
+      "resourceTypes": {
+        "title": "Tipus de recurs",
+        "columns": {
+          "name": "Tipus de recurs",
+          "description": "Descripció"
+        },
+        "loading": "Cargando...",
+        "editButton": "Editar tipo de recurso",
+        "deleteButton": "Eliminar tipo de recurso",
+        "actions": "Accions",
+        "deletedSuccess": "Tipo de recurso eliminado exitosamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
+        "success": "Tipo de recurso creado exitosamente",
+        "update": "Tipo de recurso actualizado exitosamente",
+        "error": "Error guardando el tipo de recurso",
+        "create": {
+          "title": "Crear Tipo de Recurso",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripción es obligatoria"
+          },
+          "submitButton": "Crear Tipo de Recurso",
+          "submittingText": "Creant..."
+        },
+        "edit": {
+          "title": "Editar Tipo de Recurso",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripción es obligatoria"
+          },
+          "submitButton": "Guardar Canvis",
+          "submittingText": "Guardant..."
         }
       },
       "stats": {
