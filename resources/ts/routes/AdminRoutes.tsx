@@ -11,11 +11,18 @@ import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes
 import CreateElementTypes from '@/pages/Admin/Settings/Element Types/Create';
 import EditElementTypes from '@/pages/Admin/Settings/Element Types/Edit';
 import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
+import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
+import EditTreeType from '@/pages/Admin/Settings/Tree Types/Edit';
+
 import AdminTaskTypes from '@/pages/Admin/Settings/Task Types/TaskTypes';
+import CreateTaskType from "@/pages/Admin/Settings/Task Types/Create";
+import EditTaskType from "@/pages/Admin/Settings/Task Types/Edit";
 import AdminInventory from '@/pages/Admin/Inventory';
 import AdminWorkers from '@/pages/Admin/Workers';
 import AdminResources from '@/pages/Admin/Resources';
 import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTypes';
+import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
+import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import AdminStats from '@/pages/Admin/Stats';
 
 import { Navigate } from 'react-router-dom';
@@ -188,13 +195,79 @@ const AdminRoutes: RouteObject[] = [
                 ),
               },
               {
-                path: 'task-types',
+                path: 'tree-types/create',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.treeTypes.create.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <CreateTreeType />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'tree-types/edit/:id',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.treeTypes.edit.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <EditTreeType />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'tree-types/create',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.treeTypes.create.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <CreateTreeType />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'tree-types/edit/:id',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.treeTypes.edit.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <EditTreeType />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: "task-types",
                 element: (
                   <AdminLayout
                     titleI18n="admin.pages.taskTypes.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
+                    contracts={[{ id: "1", name: "Tortosa" }]}
+                    currentContract="1">
                     <AdminTaskTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: "task-types/create",
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.taskTypes.create.title"
+                    contracts={[{ id: "1", name: "Tortosa" }]}
+                    currentContract="1">
+                    <CreateTaskType />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: "task-types/edit/:id",
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.taskTypes.edit.title"
+                    contracts={[{ id: "1", name: "Tortosa" }]}
+                    currentContract="1">
+                    <EditTaskType />
                   </AdminLayout>
                 ),
               },
@@ -206,6 +279,28 @@ const AdminRoutes: RouteObject[] = [
                     contracts={[{ id: '1', name: 'Tortosa' }]}
                     currentContract={'1'}>
                     <AdminResourceTypes />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'resource-types/create',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.resourceTypes.create.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <CreateResourceType />
+                  </AdminLayout>
+                ),
+              },
+              {
+                path: 'resource-types/edit/:id',
+                element: (
+                  <AdminLayout
+                    titleI18n="admin.pages.resourceTypes.edit.title"
+                    contracts={[{ id: '1', name: 'Tortosa' }]}
+                    currentContract={'1'}>
+                    <EditResourceType />
                   </AdminLayout>
                 ),
               },
