@@ -73,6 +73,10 @@ export default function ElementsTypes() {
         return rowData.icon ? <Icon icon={rowData.icon} className="text-2xl" /> : null;
     };
 
+    const requiresTreeTypeBodyTemplate = (rowData: ElementType) => {
+        return rowData.requires_tree_type ? "Si" : "No";
+    };
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
@@ -104,7 +108,7 @@ export default function ElementsTypes() {
                     className="p-datatable-sm"
                 >
                     <Column field="name" header={t("admin.pages.elementTypes.columns.name")} />
-                    <Column field="requires_tree_type" header={t("admin.pages.elementTypes.columns.requires_tree_type")} />
+                    <Column field="requires_tree_type" header={t("admin.pages.elementTypes.columns.requires_tree_type")} body={requiresTreeTypeBodyTemplate} />
                     <Column field="description" header={t("admin.pages.elementTypes.columns.description")} />
                     <Column field="icon" header={t("admin.pages.elementTypes.columns.icon")} body={iconBodyTemplate} />
                     <Column field="color" header={t("admin.pages.elementTypes.columns.color")} body={colorBodyTemplate} />
