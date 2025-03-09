@@ -38,7 +38,7 @@ export default function EditElementType() {
                 const elementType = response.data;
                 setInitialValues({
                     name: elementType.name,
-                    requires_tree_type: elementType.requires_tree_type,
+                    requires_tree_type: elementType.requires_tree_type === 1,
                     description: elementType.description ?? "",
                     icon: elementType.icon,
                     color: elementType.color
@@ -62,7 +62,11 @@ export default function EditElementType() {
 
     const handleSubmit = async (values: typeof initialValues) => {
         try {
-            await axiosClient.put(`/admin/element-types/${id}`, values);
+            const updatedValues = {
+                ...values,
+                requires_tree_type: values.requires_tree_type ? 1 : 0
+            };
+            await axiosClient.put(`/admin/element-types/${id}`, updatedValues);
             navigate("/admin/settings/element-types", { state: { success: t("admin.pages.elementTypes.update") } });
         } catch (error) {
             navigate("/admin/settings/element-types", { state: { error: t("admin.pages.elementTypes.error") } });
@@ -72,6 +76,18 @@ export default function EditElementType() {
     const booleanOptions = [
         { label: t("admin.fields.true"), value: true },
         { label: t("admin.fields.false"), value: false }
+    ];
+
+    const iconList = [ //Falta traducir
+        { name: "Árbol", value: "tabler:tree" },
+        { name: "Casa", value: "tabler:home" },
+        { name: "Farola", value: "mdi:post-lamp" },
+        { name: "Parque", value: "mdi:park" }, 
+        { name: "Fuente", value: "tabler:fountain" },
+        { name: "Jardín", value: "mdi:flower" }, 
+        { name: "Montaña", value: "tabler:mountain" },
+        { name: "Playa", value: "tabler:beach" },
+        { name: "Volcán", value: "tabler:volcano" }
     ];
 
     if (isLoading) {
@@ -166,9 +182,32 @@ export default function EditElementType() {
                                     </label>
                                     <Field
                                         name="icon"
-                                        as={InputText}
-                                        placeholder={t("admin.fields.icon")}
-                                        className={errors.icon && touched.icon ? "p-invalid" : ""}
+                                        render={({ field, form }: { field: any, form: any }) => (
+                                            <Dropdown
+                                                id={field.name}
+                                                value={field.value}
+                                                options={iconList}
+                                                onChange={(e) => form.setFieldValue(field.name, e.value)}
+                                                placeholder={t("admin.fields.icon")}
+                                                filter
+                                                filterBy="name"
+                                                itemTemplate={(option) => (
+                                                    <div className="flex align-items-center">
+                                                        <Icon icon={option.value} className="mr-2 text-2xl" />
+                                                        <span>{option.name}</span>
+                                                    </div>
+                                                )}
+                                                valueTemplate={(option) => (
+                                                    option ? (
+                                                        <div className="flex align-items-center">
+                                                            <Icon icon={option.value} className="mr-2 text-2xl" />
+                                                            <span>{option.name}</span>
+                                                        </div>
+                                                    ) : null
+                                                )}
+                                                className={errors.icon && touched.icon ? "p-invalid" : ""}
+                                            />
+                                        )}
                                     />
                                     {errors.icon && touched.icon && (
                                         <small className="p-error">{errors.icon}</small>

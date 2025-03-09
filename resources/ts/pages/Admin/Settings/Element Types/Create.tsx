@@ -14,7 +14,7 @@ import { Card } from "primereact/card";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dialog } from "primereact/dialog";
 
-const iconList = [ // Falta traducir los nombres de los íconos
+const iconList = [ //Falta traducir
     { name: "Árbol", value: "tabler:tree" },
     { name: "Casa", value: "tabler:home" },
     { name: "Farola", value: "mdi:post-lamp" },
