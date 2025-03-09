@@ -65,7 +65,7 @@ export default function ElementsTypes() {
 
     const colorBodyTemplate = (rowData: ElementType) => {
         return (
-            <div style={{ backgroundColor: rowData.color, width: '24px', height: '24px', borderRadius: '10%' }}></div>
+            <div style={{ backgroundColor: `#${rowData.color}`, width: '24px', height: '24px', borderRadius: '10%'}}></div>
         );
     };
 

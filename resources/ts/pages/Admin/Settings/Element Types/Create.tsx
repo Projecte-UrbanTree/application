@@ -14,47 +14,16 @@ import { Card } from "primereact/card";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dialog } from "primereact/dialog";
 
-const iconList = [
-    { name: "Home", value: "tabler:home" },
-    { name: "User", value: "tabler:user" },
-    { name: "Star", value: "tabler:star" },
-    { name: "Check", value: "tabler:check" },
-    { name: "Times", value: "tabler:times" },
-    { name: "Bell", value: "tabler:bell" },
-    { name: "Calendar", value: "tabler:calendar" },
-    { name: "Camera", value: "tabler:camera" },
-    { name: "Heart", value: "tabler:heart" },
-    { name: "Settings", value: "tabler:settings" },
-    { name: "Search", value: "tabler:search" },
-    { name: "Lock", value: "tabler:lock" },
-    { name: "Unlock", value: "tabler:unlock" },
-    { name: "Trash", value: "tabler:trash" },
-    { name: "Edit", value: "tabler:edit" },
-    { name: "Plus", value: "tabler:plus" },
-    { name: "Minus", value: "tabler:minus" },
-    { name: "Download", value: "tabler:download" },
-    { name: "Upload", value: "tabler:upload" },
-    { name: "Cloud", value: "tabler:cloud" },
-    { name: "Folder", value: "tabler:folder" },
-    { name: "File", value: "tabler:file" },
-    { name: "Music", value: "tabler:music" },
-    { name: "Video", value: "tabler:video" },
-    { name: "Image", value: "tabler:image" },
-    { name: "Map", value: "tabler:map" },
-    { name: "Location", value: "tabler:location" },
-    { name: "Phone", value: "tabler:phone" },
-    { name: "Mail", value: "tabler:mail" },
-    { name: "Message", value: "tabler:message" },
-    { name: "Chat", value: "tabler:chat" },
-    { name: "Globe", value: "tabler:globe" },
-    { name: "Link", value: "tabler:link" },
-    { name: "Bookmark", value: "tabler:bookmark" },
-    { name: "Tag", value: "tabler:tag" },
-    { name: "Cart", value: "tabler:cart" },
-    { name: "Credit Card", value: "tabler:credit-card" },
-    { name: "Wallet", value: "tabler:wallet" },
-    { name: "Gift", value: "tabler:gift" },
-    { name: "Lightbulb", value: "tabler:lightbulb" }
+const iconList = [ // Falta traducir los nombres de los íconos
+    { name: "Árbol", value: "tabler:tree" },
+    { name: "Casa", value: "tabler:home" },
+    { name: "Farola", value: "mdi:post-lamp" },
+    { name: "Parque", value: "mdi:park" }, 
+    { name: "Fuente", value: "tabler:fountain" },
+    { name: "Jardín", value: "mdi:flower" }, 
+    { name: "Montaña", value: "tabler:mountain" },
+    { name: "Playa", value: "tabler:beach" },
+    { name: "Volcán", value: "tabler:volcano" }
 ];
 
 export default function CreateElementType() {
@@ -63,7 +32,6 @@ export default function CreateElementType() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [filteredIcons, setFilteredIcons] = useState<string[]>([]);
     const iconInputRef = useRef(null);
-    const [isIconModalVisible, setIsIconModalVisible] = useState(false);
 
     const initialValues = {
         name: "",
@@ -145,39 +113,40 @@ export default function CreateElementType() {
 
                                     <div className="flex flex-col">
                                         <label className="text-sm font-medium">Ícono</label>
-                                        <AutoComplete
+                                        <Dropdown
                                             value={values.icon}
-                                            suggestions={filteredIcons}
-                                            completeMethod={searchIcons}
+                                            options={iconList}
                                             onChange={(e) => setFieldValue("icon", e.value)}
-                                            onFocus={() => setIsIconModalVisible(true)}
                                             placeholder={t("admin.pages.elementTypes.create.placeholders.icon")}
-                                            itemTemplate={(item) => (
-                                                <Icon icon={item} className="text-2xl" />
+                                            filter
+                                            filterBy="name"
+                                            itemTemplate={(option) => (
+                                                <div className="flex align-items-center">
+                                                    <Icon icon={option.value} className="mr-2 text-2xl" />
+                                                    <span>{option.name}</span>
+                                                </div>
                                             )}
-                                            selectedItemTemplate={(value) =>
-                                                value ? <Icon icon={value} className="text-2xl" /> : null
-                                            }
+                                            valueTemplate={(option) => (
+                                                option ? (
+                                                    <div className="flex align-items-center">
+                                                        <Icon icon={option.value} className="mr-2 text-2xl" />
+                                                        <span>{option.name}</span>
+                                                    </div>
+                                                ) : null
+                                            )}
                                             className={errors.icon && touched.icon ? "p-invalid" : ""}
                                         />
                                         {errors.icon && touched.icon && (
                                             <small className="p-error">{errors.icon}</small>
                                         )}
-                                        <div className="grid grid-cols-6 gap-4 max-h-96 overflow-y-auto mt-2">
-                                            {iconList.map(icon => (
-                                                <div key={icon.value} className="cursor-pointer" onClick={() => {
-                                                    setFieldValue("icon", icon.value);
-                                                    setIsIconModalVisible(false);
-                                                }}>
-                                                    <Icon icon={icon.value} className="text-3xl" />
-                                                </div>
-                                            ))}
-                                        </div>
                                     </div>
 
                                     <div className="flex flex-col">
                                         <label className="text-sm font-medium">{t("admin.pages.elementTypes.columns.color")}</label>
-                                        <ColorPicker value={values.color} onChange={(e) => setFieldValue("color", e.value)} placeholder={t("admin.pages.elementTypes.create.placeholders.color")} />
+                                        <ColorPicker 
+                                            value={values.color} 
+                                            onChange={(e) => setFieldValue("color", e.value)} 
+                                        />
                                     </div>
 
                                     <div className="md:col-span-2 flex justify-end mt-4">
