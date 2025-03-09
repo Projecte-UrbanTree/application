@@ -67,7 +67,9 @@
       "password": "Contrasenya",
       "family": "Família",
       "genus": "Gènere",
-      "species": "Espècie"
+      "species": "Espècie",
+      "true": "Cert",
+      "false": "Fals"
     },
     "pages": {
       "dashboard": {

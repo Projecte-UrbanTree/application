@@ -68,7 +68,9 @@
       "family": "Family",
       "genus": "Genus",
       "species": "Species",
-      "description": "Description"
+      "description": "Description",
+      "true": "True",
+      "false": "False"
     },
     "pages": {
       "dashboard": {
