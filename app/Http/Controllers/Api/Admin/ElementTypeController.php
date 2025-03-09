@@ -5,15 +5,16 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ElementType;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ElementTypeController extends Controller
 {
     public function index()
     {
         $elementType = ElementType::all();
+
         return response()->json($elementType);
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

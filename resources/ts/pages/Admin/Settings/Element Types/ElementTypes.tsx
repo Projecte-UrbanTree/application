@@ -65,12 +65,12 @@ export default function ElementsTypes() {
 
     const colorBodyTemplate = (rowData: ElementType) => {
         return (
-            <div style={{ backgroundColor: `#${rowData.color}`, width: '24px', height: '24px', borderRadius: '10%'}}></div>
+            <div style={{ backgroundColor: `#${rowData.color}`, width: '24px', height: '24px', borderRadius: '10%', margin: '0 auto' }}></div>
         );
     };
 
     const iconBodyTemplate = (rowData: ElementType) => {
-        return rowData.icon ? <Icon icon={rowData.icon} className="text-2xl" /> : null;
+        return rowData.icon ? <Icon icon={rowData.icon} className="text-2xl mx-auto" /> : null;
     };
 
     const requiresTreeTypeBodyTemplate = (rowData: ElementType) => {
@@ -110,8 +110,8 @@ export default function ElementsTypes() {
                     <Column field="name" header={t("admin.pages.elementTypes.columns.name")} />
                     <Column field="requires_tree_type" header={t("admin.pages.elementTypes.columns.requires_tree_type")} body={requiresTreeTypeBodyTemplate} />
                     <Column field="description" header={t("admin.pages.elementTypes.columns.description")} />
-                    <Column field="icon" header={t("admin.pages.elementTypes.columns.icon")} body={iconBodyTemplate} />
-                    <Column field="color" header={t("admin.pages.elementTypes.columns.color")} body={colorBodyTemplate} />
+                    <Column field="icon" header={t("admin.pages.elementTypes.columns.icon")} body={iconBodyTemplate} style={{ textAlign: 'center' }} />
+                    <Column field="color" header={t("admin.pages.elementTypes.columns.color")} body={colorBodyTemplate} style={{ textAlign: 'center' }} />
                     <Column
                         header={t("admin.pages.elementTypes.actions")}
                         body={(rowData: { id: number }) => (
