@@ -1,7 +1,7 @@
 {
   "admin": {
     "buttons": {
-      "createNew": "Create New"
+      "createNew": "Create new"
     },
     "fields": {
       "company": "Company",
@@ -106,12 +106,12 @@
           "fields": {
             "description": "Description",
             "name": "Name",
-            "type": "Tipo"
+            "type": "Type"
           },
           "placeholders": {
             "description": "Enter description",
             "name": "Enter name",
-            "type": "Selecciona un tipo"
+            "type": "Select a type"
           },
           "returnButton": "Return to resource list",
           "submitButton": {
@@ -133,7 +133,7 @@
         },
         "list": {
           "actions": {
-            "delete": "Eliminar recurs",
+            "delete": "Delete resource",
             "edit": "Edit resource",
             "label": "Actions"
           },
