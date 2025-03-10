@@ -189,43 +189,42 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                 />
                             </Button>
                         </div>
-                        <a href="/" className="">
+                        <a href="/" className="flex-none">
                             <img className="w-48" src={logo} alt="Logo" />
                         </a>
-                        <div className="hidden lg:flex space-x-6">
-                            <Link
-                                to="/admin/dashboard"
-                                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
-                                    isManagementActive
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'hover:bg-gray-100'
-                                }`}>
-                                <Icon
-                                    inline={true}
-                                    width="24px"
-                                    icon="tabler:briefcase"
-                                />{' '}
-                                {t('admin.menu.management')}
-                            </Link>
-                            <Link
-                                to="/admin/settings/contracts"
-                                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
-                                    location.pathname.includes(
-                                        '/admin/settings',
-                                    )
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'hover:bg-gray-100'
-                                }`}>
-                                <Icon
-                                    inline={true}
-                                    width="24px"
-                                    icon="tabler:settings"
-                                />{' '}
-                                {t('admin.menu.settings')}
-                            </Link>
-                        </div>
                     </div>
 
+                    {/* Enlaces centrados (Management y Settings) */}
+                    <div className="hidden lg:flex flex-1 justify-center items-center space-x-6">
+                        <Link
+                            to="/admin/dashboard"
+                            className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                                isManagementActive
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'hover:bg-gray-100'
+                            }`}>
+                            <Icon
+                                inline={true}
+                                width="24px"
+                                icon="tabler:briefcase"
+                            />{' '}
+                            {t('admin.menu.management')}
+                        </Link>
+                        <Link
+                            to="/admin/settings/contracts"
+                            className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                                location.pathname.includes('/admin/settings')
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'hover:bg-gray-100'
+                            }`}>
+                            <Icon
+                                inline={true}
+                                width="24px"
+                                icon="tabler:settings"
+                            />{' '}
+                            {t('admin.menu.settings')}
+                        </Link>
+                    </div>
                     <div className="flex items-center gap-4">
                         <div className="hidden lg:flex gap-4">
                             {!isSettingsPage && (
@@ -301,7 +300,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                             <Dropdown
                                 id="contractBtn"
                                 name="contractBtn"
-                                className="w-32"
+                                className="w-full"
                                 value={contract.id}
                                 options={contractsWithAll}
                                 onChange={handleContractChange}
