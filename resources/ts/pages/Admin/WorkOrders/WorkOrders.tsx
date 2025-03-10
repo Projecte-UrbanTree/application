@@ -3,10 +3,11 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
+import { Message } from 'primereact/message'; // Added Message import
 import { Icon } from '@iconify/react';
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Added useLocation
 import CrudPanel from '@/components/Admin/CrudPanel';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
@@ -31,28 +32,36 @@ interface WorkOrder {
   contract: { name: string };
   users: { id: number; name: string; surname: string }[];
   work_orders_blocks: WorkOrderBlock[];
-  workReports: any[];
 }
 
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
-  // Important: For PrimeReact row expansion, we use an object
   const [expandedRows, setExpandedRows] = useState<any>({});
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const successMsg = location.state?.success;
+  const errorMsg = location.state?.error;
+  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+
+  useEffect(() => {
+    if (msg) {
+      const timer = setTimeout(() => setMsg(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [msg]);
 
   useEffect(() => {
     const fetchWorkOrders = async () => {
       try {
         const response = await axiosClient.get('/admin/work-orders');
-        // Debug para ver la estructura exacta de los datos
         console.log('Work orders data structure:', JSON.stringify(response.data[0], null, 2));
-        
-        // Transformar los datos para que sea más fácil trabajar con ellos en el frontend
+
         const transformedData = response.data.map((order: any) => ({
           ...order,
-          workOrdersBlocks: order.work_orders_blocks // Añadir alias para mantener compatibilidad
+          workOrdersBlocks: order.work_orders_blocks
         }));
         
         setWorkOrders(transformedData);
@@ -69,11 +78,15 @@ export default function WorkOrders() {
   const handleDelete = (id: number) => {
     if (window.confirm(t('admin.pages.workOrders.deleteConfirm'))) {
       axiosClient
-        .delete(`/admin/work-order/${id}`)
+        .delete(`/admin/work-orders/${id}`)
         .then(() => {
           setWorkOrders(workOrders.filter((wo: any) => wo.id !== id));
+          setMsg(t('admin.pages.workOrders.deleteSuccess'));
         })
-        .catch((error) => console.error('Error deleting work order:', error));
+        .catch((error) => {
+          console.error('Error deleting work order:', error);
+          setMsg(t('admin.pages.workOrders.deleteError'));
+        });
     }
   };
 
@@ -82,7 +95,6 @@ export default function WorkOrders() {
   }, [expandedRows]);
 
   const rowExpansionTemplate = (data: WorkOrder) => {
-    // Calculate indexes of all blocks so they're expanded by default
     const activeTabs = data.work_orders_blocks.map((_, i) => i);
 
     return (
@@ -159,6 +171,14 @@ export default function WorkOrders() {
 
   return (
     <>
+      {/* Add message display */}
+      {msg && (
+        <Message
+          severity={successMsg || msg === t('admin.pages.workOrders.deleteSuccess') ? 'success' : 'error'}
+          text={msg}
+          className="mb-4 w-full"
+        />
+      )}
       <CrudPanel
         title="admin.pages.workOrders.title"
         onCreate={() => navigate('/admin/work-orders/create')}
@@ -217,14 +237,6 @@ export default function WorkOrders() {
           <Column
             header={t('admin.pages.workOrders.columns.status')}
             body={(rowData) => {
-              if (rowData.workReports && rowData.workReports.length > 0) {
-                return (
-                  <Badge
-                    value={t('admin.pages.workOrders.status.delivered')}
-                    severity="info"
-                  />
-                );
-              }
               switch (rowData.status) {
                 case 0:
                   return (
@@ -247,6 +259,13 @@ export default function WorkOrders() {
                       severity="success"
                     />
                   );
+                  case 3:
+                    return (
+                      <Badge
+                        value={t('Work Report Sent')}
+                        severity="info"
+                      />
+                    );
                 default:
                   return (
                     <Badge
@@ -263,31 +282,18 @@ export default function WorkOrders() {
             header={t('admin.pages.workOrders.actions')}
             body={(rowData) => (
               <div className="flex justify-end gap-2">
-                {rowData.workReports && rowData.workReports.length > 0 ? (
-                  <Button
-                    icon={<Icon icon="tabler:file-alt" />}
-                    className="p-button-rounded p-button-info"
-                    onClick={() =>
-                      navigate(`/admin/work-report/${rowData.workReports[0].id}`)
-                    }
-                    title={t('admin.pages.workOrders.actionTypes.viewReport')}
-                  />
-                ) : (
-                  <>
-                    <Button
-                      icon={<Icon icon="tabler:edit" />}
-                      className="p-button-rounded p-button-primary"
-                      onClick={() => navigate(`/admin/work-order/${rowData.id}/edit`)}
-                      title={t('admin.pages.workOrders.actionTypes.edit')}
-                    />
-                    <Button
-                      icon={<Icon icon="tabler:trash" />}
-                      className="p-button-rounded p-button-danger"
-                      onClick={() => handleDelete(rowData.id)}
-                      title={t('admin.pages.workOrders.actionTypes.delete')}
-                    />
-                  </>
-                )}
+                <Button
+                  icon={<Icon icon="tabler:edit" />}
+                  className="p-button-rounded p-button-primary"
+                  onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)}
+                  title={t('admin.pages.workOrders.actionTypes.edit')}
+                />
+                <Button
+                  icon={<Icon icon="tabler:trash" />}
+                  className="p-button-rounded p-button-danger"
+                  onClick={() => handleDelete(rowData.id)}
+                  title={t('admin.pages.workOrders.actionTypes.delete')}
+                />
               </div>
             )}
           />

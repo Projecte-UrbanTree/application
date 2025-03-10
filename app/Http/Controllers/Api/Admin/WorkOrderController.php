@@ -18,6 +18,7 @@ class WorkOrderController extends Controller
             'workOrdersBlocks.blockTasks.elementType',
             'workOrdersBlocks.blockTasks.treeType',
             'workOrdersBlocks.blockTasks.tasksType',
+            'workReports',
         ])->get();
 
         return response()->json($workOrders);
