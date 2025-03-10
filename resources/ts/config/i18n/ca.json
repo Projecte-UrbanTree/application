@@ -5,15 +5,18 @@
     },
     "fields": {
       "company": "Empresa",
-      "description": "Descripció",
       "dni": "DNI",
       "email": "Correu",
+      "end_date": "Data de finalització",
       "family": "Família",
+      "final_price": "Preu final",
       "genus": "Gènere",
       "name": "Nom",
       "password": "Contrasenya",
       "role": "Rol",
       "species": "Espècie",
+      "start_date": "Data d'inici",
+      "status": "Estat",
       "surname": "Cognom"
     },
     "menu": {
@@ -22,13 +25,54 @@
     },
     "pages": {
       "contracts": {
-        "columns": {
-          "end_date": "Data de finalització",
-          "invoice_agreed": "Factura acordada",
-          "invoice_paid": "Factura pagada",
-          "invoice_proposed": "Factura proposada",
-          "name": "Contracte",
-          "start_date": "Data d'inici"
+        "form": {
+          "placeholders": {
+            "status": "Selecciona un estat"
+          },
+          "returnButton": "Tornar a la llista de contractes",
+          "submitButton": {
+            "create": "Crear Contracte",
+            "edit": "Guardar Canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Contracte",
+            "edit": "Editar Contracte"
+          },
+          "validation": {
+            "end_date_after_start_date": "La data de finalització ha de ser posterior a la data d'inici",
+            "end_date_required": "La data de finalització es obligatòria",
+            "final_price_required": "El preu final es obligatori",
+            "name_invalid": "El nom no és vàlid",
+            "name_required": "El nom es obligatori",
+            "start_date_required": "La data d'inici es obligatòria",
+            "status_invalid": "Estat no vàlid",
+            "status_required": "L'estat es obligatori"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar contracte",
+            "edit": "Editar contracte",
+            "label": "Accions"
+          },
+          "columns": {
+            "end_date": "Data de finalització",
+            "final_price": "Preu final",
+            "name": "Contracte",
+            "start_date": "Data d'inici",
+            "status": "Estat"
+          },
+          "messages": {
+            "createSuccess": "Contracte creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
+            "deleteSuccess": "Contracte eliminat correctament",
+            "error": "Error guardant el contracte",
+            "updateSuccess": "Contracte actualitzat correctament"
+          }
         },
         "title": "Contractes"
       },
@@ -62,12 +106,12 @@
           "fields": {
             "description": "Descripció",
             "name": "Nom",
-            "type": "Tipo"
+            "type": "Tipus"
           },
           "placeholders": {
             "description": "Introdueix la descripció",
             "name": "Introdueix el nom",
-            "type": "Selecciona un tipo"
+            "type": "Tria un tipus"
           },
           "returnButton": "Tornar a la llista de recursos",
           "submitButton": {
@@ -89,7 +133,7 @@
         },
         "list": {
           "actions": {
-            "delete": "Eliminar recurs",
+            "delete": "Esborrar recurs",
             "edit": "Editar recurs",
             "label": "Accions"
           },
@@ -110,38 +154,49 @@
         "title": "Recursos"
       },
       "resourceTypes": {
-        "actions": "Accions",
-        "columns": {
-          "description": "Descripció",
-          "name": "Tipus de recurs"
-        },
-        "create": {
-          "submitButton": "Crear Tipo de Recurso",
-          "submittingText": "Creant...",
-          "title": "Crear Tipo de Recurso",
-          "validations": {
-            "description_required": "La descripción es obligatoria",
+        "form": {
+          "placeholders": {
+            "description": "Introdueix la descripció",
+            "name": "Introdueix el nom"
+          },
+          "returnButton": "Tornar a la llista de tipus de recurs",
+          "submitButton": {
+            "create": "Crear Tipus de recurs",
+            "edit": "Guardar canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Tipus de recurs",
+            "edit": "Editar Tipus de recurs"
+          },
+          "validation": {
+            "description_required": "La descripció és obligatòria",
+            "name_invalid": "El nom només pot contenir lletres, números i espais",
             "name_required": "El nom és obligatori"
           }
         },
-        "deleteButton": "Eliminar tipo de recurso",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
-        "deletedSuccess": "Tipo de recurso eliminado exitosamente",
-        "edit": {
-          "submitButton": "Guardar Canvis",
-          "submittingText": "Guardant...",
-          "title": "Editar Tipo de Recurso",
-          "validations": {
-            "description_required": "La descripción es obligatoria",
-            "name_required": "El nom és obligatori"
+        "list": {
+          "actions": {
+            "delete": "Eliminar tipus de recurs",
+            "edit": "Editar tipus de recurs",
+            "label": "Accions"
+          },
+          "columns": {
+            "description": "Descripció",
+            "name": "Nom"
+          },
+          "messages": {
+            "createSuccess": "Tipus de recurs creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
+            "deleteSuccess": "Tipus de recurs eliminat correctament",
+            "error": "Error guardant el tipus de recurs",
+            "updateSuccess": "Tipus de recurs actualitzat correctament"
           }
         },
-        "editButton": "Editar tipo de recurso",
-        "error": "Error guardando el tipo de recurso",
-        "loading": "Cargando...",
-        "success": "Tipo de recurso creado exitosamente",
-        "title": "Tipus de recurs",
-        "update": "Tipo de recurso actualizado exitosamente"
+        "title": "Tipus de recurs"
       },
       "stats": {
         "title": "Estadístiques"
@@ -318,6 +373,11 @@
       "customer": "Client",
       "unknown": "Desconegut",
       "worker": "Treballador"
+    },
+    "status": {
+      "active": "Actiu",
+      "completed": "Completat",
+      "inactive": "Inactiu"
     },
     "submenu": {
       "manage": {
