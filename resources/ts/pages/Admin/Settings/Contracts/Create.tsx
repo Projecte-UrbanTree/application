@@ -3,7 +3,6 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axiosClient from "@/api/axiosClient";
 import { useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -11,6 +10,7 @@ import { Calendar } from "primereact/calendar";
 import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { Card } from "primereact/card";
+import { Icon } from "@iconify/react";
 
 export default function CreateContract() {
     const navigate = useNavigate();
@@ -26,7 +26,9 @@ export default function CreateContract() {
     };
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.contracts.form.validation.name_required")),
+        name: Yup.string()
+            .matches(/^[a-zA-Z0-9\s]+$/, t("admin.pages.contracts.form.validation.name_invalid"))
+            .required(t("admin.pages.contracts.form.validation.name_required")),
         start_date: Yup.date().required(t("admin.pages.contracts.form.validation.start_date_required")),
         end_date: Yup.date()
             .required(t("admin.pages.contracts.form.validation.end_date_required"))

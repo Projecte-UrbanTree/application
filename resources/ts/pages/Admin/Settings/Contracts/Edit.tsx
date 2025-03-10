@@ -53,7 +53,9 @@ export default function EditContract() {
     }, [id]);
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.contracts.form.validation.name_required")),
+        name: Yup.string()
+            .matches(/^[a-zA-Z0-9\s]+$/, t("admin.pages.contracts.form.validation.name_invalid"))
+            .required(t("admin.pages.contracts.form.validation.name_required")),
         start_date: Yup.date().required(t("admin.pages.contracts.form.validation.start_date_required")),
         end_date: Yup.date()
             .required(t("admin.pages.contracts.form.validation.end_date_required"))

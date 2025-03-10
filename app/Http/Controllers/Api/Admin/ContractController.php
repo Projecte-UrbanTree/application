@@ -24,7 +24,6 @@ class ContractController extends Controller
             'status' => ['required', Rule::in([0, 1, 2])],
         ]);
 
-        // Convertir las fechas a formato 'Y-m-d'
         $validated['start_date'] = date('Y-m-d', strtotime($validated['start_date']));
         $validated['end_date'] = date('Y-m-d', strtotime($validated['end_date']));
 
@@ -52,7 +51,6 @@ class ContractController extends Controller
             'status' => ['sometimes', Rule::in([0, 1, 2])],
         ]);
 
-        // Convertir las fechas a formato 'Y-m-d' si están presentes
         if (isset($validated['start_date'])) {
             $validated['start_date'] = date('Y-m-d', strtotime($validated['start_date']));
         }
@@ -70,6 +68,6 @@ class ContractController extends Controller
         $contract = Contract::findOrFail($id);
         $contract->delete();
 
-        return response()->json(['message' => 'Contrato eliminado'], 200);
+        return response()->json(['message' => 'Contract deleted'], 200);
     }
 }

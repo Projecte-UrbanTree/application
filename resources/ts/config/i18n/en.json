@@ -68,7 +68,15 @@
       "family": "Family",
       "genus": "Genus",
       "species": "Species",
-
+      "status": "Status",
+      "final_price": "Final Price",
+      "start_date": "Start Date",
+      "end_date": "End Date"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "completed": "Completed"
     },
     "pages": {
       "dashboard": {
@@ -159,6 +167,7 @@
           "title": "Create Contract",
           "validations": {
             "name_required": "Name is required",
+            "name_invalid": "Name is invalid",
             "start_date_required": "Start date is required",
             "end_date_required": "End date is required",
             "end_date_after_start_date": "End date must be after start date",
@@ -177,6 +186,7 @@
           "title": "Edit Contract",
           "validations": {
             "name_required": "Name is required",
+            "name_invalid": "Name is invalid",
             "start_date_required": "Start date is required",
             "end_date_required": "End date is required",
             "end_date_after_start_date": "End date must be after start date",
@@ -229,6 +239,7 @@
           },
           "validation": {
             "name_required": "Name is required",
+            "name_invalid": "Name is invalid",
             "start_date_required": "Start date is required",
             "end_date_required": "End date is required",
             "end_date_after_start_date": "End date must be after start date",
@@ -412,5 +423,10 @@
     "genericError": "An error occurred. Please try again later.",
     "allContracts": "All contracts",
     "loading": "Loading..."
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "completed": "Completed"
   }
 }

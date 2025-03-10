@@ -68,7 +68,15 @@
       "family": "Familia",
       "genus": "Género",
       "species": "Especie",
-
+      "status": "Estado",
+      "final_price": "Precio final",
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha de fin"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "completed": "Completado"
     },
     "pages": {
       "dashboard": {
@@ -155,6 +163,7 @@
           "title": "Crear Contrato",
           "validations": {
             "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
             "start_date_required": "La fecha de inicio es obligatoria",
             "end_date_required": "La fecha de fin es obligatoria",
             "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
@@ -173,6 +182,7 @@
           "title": "Editar Contrato",
           "validations": {
             "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
             "start_date_required": "La fecha de inicio es obligatoria",
             "end_date_required": "La fecha de fin es obligatoria",
             "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
@@ -225,6 +235,7 @@
           },
           "validation": {
             "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
             "start_date_required": "La fecha de inicio es obligatoria",
             "end_date_required": "La fecha de fin es obligatoria",
             "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
@@ -408,5 +419,10 @@
     "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
     "allContracts": "Todos los contratos",
     "loading": "Cargando..."
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "completed": "Completado"
   }
 }

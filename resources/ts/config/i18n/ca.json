@@ -187,6 +187,7 @@
           },
           "validation": {
             "name_required": "El nom es obligatori",
+            "name_invalid": "El nom no és vàlid",
             "start_date_required": "La data d'inici es obligatòria",
             "end_date_required": "La data de finalització es obligatòria",
             "end_date_after_start_date": "La data de finalització ha de ser posterior a la data d'inici",

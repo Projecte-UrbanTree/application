@@ -6,11 +6,10 @@ import { Button } from "primereact/button";
 import { Badge } from "primereact/badge";
 import { Message } from "primereact/message";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Icon } from "@iconify/react";
 import axiosClient from "@/api/axiosClient";
 import { useTranslation } from "react-i18next";
 import CrudPanel from "@/components/Admin/CrudPanel";
-
+import { Icon } from "@iconify/react";
 
 export default function Contracts() {
     const [isLoading, setIsLoading] = useState(true);
@@ -33,9 +32,9 @@ export default function Contracts() {
     const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
 
     const statusOptions = [
-        { label: t("admin.status.active"), value: 0 },
-        { label: t("admin.status.inactive"), value: 1 },
-        { label: t("admin.status.completed"), value: 2 }
+        { label: t("admin.status.active"), value: 0, color: "yellow" },
+        { label: t("admin.status.inactive"), value: 1, color: "red" },
+        { label: t("admin.status.completed"), value: 2, color: "green" }
     ];
 
     useEffect(() => {
@@ -105,7 +104,10 @@ export default function Contracts() {
                     <Column field="end_date" header={t("admin.pages.contracts.list.columns.end_date")} />
                     <Column field="final_price" header={t("admin.pages.contracts.list.columns.final_price")} />
                     <Column field="status" header={t("admin.pages.contracts.list.columns.status")} body={(rowData: Contract) => (
-                        <Badge value={statusOptions.find(option => option.value === rowData.status)?.label} />
+                        <Badge
+                            value={statusOptions.find(option => option.value === rowData.status)?.label}
+                            style={{ backgroundColor: statusOptions.find(option => option.value === rowData.status)?.color }}
+                        />
                     )} />
                     <Column
                         header={t("admin.pages.contracts.list.actions.label")}
