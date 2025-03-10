@@ -308,6 +308,7 @@
           "validation": {
             "name_required": "El nom és obligatori",
             "error_numbers": "El nom no pot contenir números ni caràcters especials"
+
           },
           "returnButton": "Tornar a la llista de tipus de tasca",
           "submitButton": {
