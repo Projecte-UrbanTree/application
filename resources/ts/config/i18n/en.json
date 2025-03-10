@@ -68,7 +68,15 @@
       "family": "Family",
       "genus": "Genus",
       "species": "Species",
-      "description": "Description"
+      "status": "Status",
+      "final_price": "Precio final",
+      "start_date": "Start Date",
+      "end_date": "End Date"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "completed": "Completado"
     },
     "pages": {
       "dashboard": {
@@ -149,9 +157,101 @@
           "name": "Contract",
           "start_date": "Start Date",
           "end_date": "End Date",
-          "invoice_proposed": "Invoice Proposed",
-          "invoice_agreed": "Invoice Agreed",
-          "invoice_paid": "Invoice Paid"
+          "status": "Status"
+        },
+        "create": {
+          "title": "Crear Contrato",
+          "validations": {
+            "name_required": "Name is required",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submittingText": "Creating...",
+          "submitButton": "Crear Contrato",
+          "success": "Contrato creado exitosamente"
+        },
+        "edit": {
+          "title": "Editar Contrato",
+          "validations": {
+            "name_required": "Name is required",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submittingText": "Saving...",
+          "submitButton": "Save Changes",
+          "update": "Contrato actualizado exitosamente",
+          "error": "Error guardando el contrato"
+        },
+        "loading": "Loading...",
+        "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+        "deletedSuccess": "Contrato eliminado exitosamente",
+        "actions": "Actions",
+        "editButton": "Editar Contrato",
+        "deleteButton": "Eliminar Contrato",
+        "list": {
+          "actions": {
+            "edit": "Editar contrato",
+            "delete": "Eliminar contrato",
+            "label": "Actions"
+          },
+          "messages": {
+            "deleteSuccess": "Contrato eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+            "createSuccess": "Contrato creado exitosamente",
+            "updateSuccess": "Contrato actualizado exitosamente",
+            "error": "Error guardando el contrato"
+          },
+          "columns": {
+            "name": "Contract",
+            "start_date": "Start Date",
+            "end_date": "End Date",
+            "final_price": "Precio final",
+            "status": "Status"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Contrato",
+            "edit": "Editar Contrato"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "validation": {
+            "name_required": "Name is required",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "returnButton": "Volver a la lista de contratos",
+          "submitButton": {
+            "create": "Crear Contrato",
+            "edit": "Save Changes"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
+          }
         }
       },
       "workOrders": {
@@ -330,5 +430,10 @@
     "genericError": "An error occurred. Please try again later.",
     "allContracts": "All contracts",
     "loading": "Loading..."
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "completed": "Completado"
   }
 }
