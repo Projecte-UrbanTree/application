@@ -12,10 +12,7 @@ import logo from '@images/logo.png';
 import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    selectContract,
-    setContractState,
-} from '@/contexts/store/slice/contractSlice';
+import { selectContract, setContractState } from '@/store/slice/contractSlice';
 import { ContractProps } from '@/types/contract';
 
 interface AdminLayoutProps {

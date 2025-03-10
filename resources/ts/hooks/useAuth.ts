@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/contexts/store/store';
-import { setUserData, clearUserData } from '@/contexts/store/slice/userSlice';
+import { RootState } from '@/store/store';
+import { setUserData, clearUserData } from '@/store/slice/userSlice';
 import axiosClient from '@/api/axiosClient';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '@/types/user';

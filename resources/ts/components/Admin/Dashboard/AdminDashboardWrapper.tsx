@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/contexts/store/store';
+import { RootState } from '@/store/store';
 import { ContractProps } from '@/types/contract';
 import AdminLayout from '@/layouts/AdminLayout';
-import { setContractState } from '@/contexts/store/slice/contractSlice';
+import { setContractState } from '@/store/slice/contractSlice';
 import { t } from 'i18next';
 
 interface AdminLayoutWrapperProps {

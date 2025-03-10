@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import '@/config/i18n';
 import { ToastProvider } from '@/contexts/ToastContext';
-import store from '@/contexts/store/store';
+import store from '@/store/store';
 
 const rootElement = document.getElementById('app');
 if (rootElement) {
