@@ -128,6 +128,22 @@ const AdminRoutes: RouteObject[] = [
                                 ),
                             },
                             {
+                                path: 'contracts/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.create.title">
+                                        <CreateContract />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'contracts/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.edit.title">
+                                        <EditContract />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
                                 path: 'element-types',
                                 element: (
                                     <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.title">
