@@ -4,7 +4,7 @@
       "createNew": "Crear nuevo"
     },
     "fields": {
-      "company": "Empresa",
+      "company": "Compañía",
       "dni": "DNI",
       "email": "Correo",
       "end_date": "Fecha de fin",
@@ -17,11 +17,11 @@
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
-      "surname": "Cognom"
+      "surname": "Apellido"
     },
     "menu": {
-      "management": "Gestió",
-      "settings": "Configuració"
+      "management": "Gestión",
+      "settings": "Configuración"
     },
     "pages": {
       "contracts": {
@@ -109,13 +109,13 @@
             "type": "Tipo"
           },
           "placeholders": {
-            "description": "Introdueix la descripció",
-            "name": "Introdueix el nom",
+            "description": "Introduce la descripción",
+            "name": "Introduce el nombre",
             "type": "Selecciona un tipo"
           },
-          "returnButton": "Tornar a la llista de recursos",
+          "returnButton": "Volver a la lista de recursos",
           "submitButton": {
-            "create": "Crear Recurs",
+            "create": "Crear Recurso",
             "edit": "Guardar Cambios"
           },
           "submittingText": {
@@ -123,31 +123,31 @@
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Recurs",
-            "edit": "Editar Recurs"
+            "create": "Crear Recurso",
+            "edit": "Editar Recurso"
           },
           "validation": {
-            "name_required": "El nom és obligatori",
-            "type_required": "El tipus és obligatori"
+            "name_required": "El nombre es obligatorio",
+            "type_required": "El tipo es obligatorio"
           }
         },
         "list": {
           "actions": {
             "delete": "Eliminar recurs",
-            "edit": "Editar recurs",
+            "edit": "Editar recurso",
             "label": "Acciones"
           },
           "columns": {
             "description": "Descripción",
             "name": "Nombre",
-            "type": "Tipus"
+            "type": "Tipo"
           },
           "messages": {
-            "createSuccess": "Recurs creat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest recurs?",
-            "deleteSuccess": "Recurs eliminat correctament",
-            "error": "Error guardant el recurs",
-            "updateSuccess": "Recurs actualitzat correctament"
+            "createSuccess": "Recurso creado exitosamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar este recurso?",
+            "deleteSuccess": "Recurso eliminado exitosamente",
+            "error": "Error guardando el recurso",
+            "updateSuccess": "Recurso actualizado exitosamente"
           },
           "title": "Recursos"
         },
@@ -246,7 +246,7 @@
             "error": "Error guardando el tipo de tarea",
             "updateSuccess": "Tipo de tarea actualizado exitosamente"
           },
-          "title": "Tipus de tasca"
+          "title": "Tipo de tarea"
         },
         "title": "Tipos de tarea"
       },
@@ -270,9 +270,9 @@
               "genus": "El género debe contener solo caracteres alfanuméricos",
               "species": "La especie debe contener solo caracteres alfanuméricos"
             },
-            "family": "La família és obligatòria",
-            "genus": "El gènere és obligatori",
-            "species": "L'espècie és obligatòria"
+            "family": "La familia es obligatoria",
+            "genus": "El género es obligatorio",
+            "species": "La especie es obligatoria"
           }
         },
         "list": {
@@ -293,7 +293,7 @@
             "error": "Error guardando el tipo de árbol",
             "updateSuccess": "Tipo de árbol actualizado exitosamente"
           },
-          "title": "Tipus d'arbre"
+          "title": "Tipos de árbol"
         },
         "title": "Tipos de árbol"
       },
@@ -337,7 +337,7 @@
             "label": "Acciones"
           },
           "columns": {
-            "company": "Empresa",
+            "company": "Compañía",
             "dni": "DNI",
             "email": "Correo electrónico",
             "name": "Nombre",
@@ -364,15 +364,15 @@
       }
     },
     "profileDropdown": {
-      "accountSettings": "Configuració del compte",
-      "license": "Llicència",
-      "logout": "Tanca sessió"
+      "accountSettings": "Configuración de la cuenta",
+      "license": "Licencia",
+      "logout": "Cerrar sesión"
     },
     "roles": {
       "admin": "Administrador",
-      "customer": "Client",
-      "unknown": "Desconegut",
-      "worker": "Treballador"
+      "customer": "Cliente",
+      "unknown": "Desconocido",
+      "worker": "Trabajador"
     },
     "status": {
       "active": "Activo",
@@ -382,18 +382,18 @@
     "submenu": {
       "manage": {
         "dashboard": "Tablero",
-        "inventory": "Inventari",
+        "inventory": "Inventario",
         "resources": "Recursos",
         "stats": "Estadísticas",
-        "workers": "Treballadors",
+        "workers": "Trabajadores",
         "workOrders": "Órdenes de trabajo"
       },
       "settings": {
         "contracts": "Contratos",
         "elementTypes": "Tipo de elemento",
         "resourceTypes": "Tipos de recurso",
-        "species": "Espècies",
-        "taskTypes": "Tipus de tasca",
+        "species": "Especies",
+        "taskTypes": "Tipos de tarea",
         "users": "Usuarios"
       }
     }
@@ -405,22 +405,22 @@
   },
   "public": {
     "error": {
-      "btnReturn": "Torna enrere",
+      "btnReturn": "Volver atrás",
       "descriptions": {
-        "404": "La pàgina que busques no existeix.",
-        "unexpected": "Ha ocorregut un error inesperat. Si us plau, torna a intentar-ho més tard."
+        "404": "La página que buscas no existe.",
+        "unexpected": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."
       },
       "title": "Error {{errorCode}}"
     },
     "login": {
       "form": {
-        "btnLogin": "Inicia sessió",
+        "btnLogin": "Iniciar sesión",
         "labelEmail": "Correo electrónico",
         "labelPassword": "Contraseña",
-        "msgSuccess": "Sessió iniciada correctament",
-        "placeholderEmail": "elteucorreu@exemple.com",
-        "rememberMe": "Recorda'm",
-        "titleSuccess": "Èxit"
+        "msgSuccess": "Sesión iniciada correctamente",
+        "placeholderEmail": "tucorreo@ejemplo.com",
+        "rememberMe": "Recuérdame",
+        "titleSuccess": "Éxito"
       }
     }
   }
