@@ -71,5 +71,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('task-types/{id}', [TaskTypeController::class, 'show']);
         Route::put('task-types/{id}', [TaskTypeController::class, 'update']);
         Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
+
+        // Route for Elements Types
+        Route::get('element-types', [ElementTypeController::class, 'index']);
+        Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
+        Route::post('element-types', [ElementTypeController::class, 'store']);
+        Route::get('element-types/{id}', [ElementTypeController::class, 'show']);
+        Route::put('element-types/{id}', [ElementTypeController::class, 'update']);
+        Route::delete('element-types/{id}', [ElementTypeController::class, 'destroy']);
+
     });
 });

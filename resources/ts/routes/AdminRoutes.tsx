@@ -8,6 +8,8 @@ import EditUser from '@/pages/Admin/Settings/Users/Edit';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
+import CreateElementTypes from '@/pages/Admin/Settings/Element Types/Create';
+import EditElementTypes from '@/pages/Admin/Settings/Element Types/Edit';
 import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
 import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
 import EditTreeType from '@/pages/Admin/Settings/Tree Types/Edit';
@@ -130,6 +132,22 @@ const AdminRoutes: RouteObject[] = [
                                 element: (
                                     <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.title">
                                         <AdminElementTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'element-types/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.create.title">
+                                        <CreateElementTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'element-types/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.edit.title">
+                                        <EditElementTypes />
                                     </AdminLayoutWrapper>
                                 ),
                             },
