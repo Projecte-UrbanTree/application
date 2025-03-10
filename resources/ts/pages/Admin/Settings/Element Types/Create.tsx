@@ -15,15 +15,21 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Dialog } from "primereact/dialog";
 
 const iconList = [ //Falta traducir
-    { name: "Árbol", value: "tabler:tree" },
-    { name: "Casa", value: "tabler:home" },
+    { name: "Árbol", value: "mdi:tree" },
+    { name: "Casa", value: "mdi:home" },
     { name: "Farola", value: "mdi:post-lamp" },
     { name: "Parque", value: "mdi:park" }, 
-    { name: "Fuente", value: "tabler:fountain" },
+    { name: "Fuente", value: "mdi:fountain" },
     { name: "Jardín", value: "mdi:flower" }, 
-    { name: "Montaña", value: "tabler:mountain" },
-    { name: "Playa", value: "tabler:beach" },
-    { name: "Volcán", value: "tabler:volcano" }
+    { name: "Montaña", value: "mdi:mountain" },
+    { name: "Playa", value: "mdi:beach" },
+    { name: "Volcán", value: "mdi:volcano" },
+    { name: "Grifo", value: "mdi:tap" },
+    { name: "Agua", value: "mdi:water-drop"},
+    { name: "Bombilla", value: "mdi:lightbulb"},
+    { name: "Trueno", value: "mdi:lightning-bolt"},
+    { name: "Césped", value: "mdi:grass"},
+    { name: "Nube", value: "mdi:cloud"},
 ];
 
 export default function CreateElementType() {

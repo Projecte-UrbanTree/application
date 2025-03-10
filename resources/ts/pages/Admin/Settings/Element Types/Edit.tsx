@@ -79,16 +79,23 @@ export default function EditElementType() {
     ];
 
     const iconList = [ //Falta traducir
-        { name: "Árbol", value: "tabler:tree" },
-        { name: "Casa", value: "tabler:home" },
-        { name: "Farola", value: "mdi:post-lamp" },
-        { name: "Parque", value: "mdi:park" }, 
-        { name: "Fuente", value: "tabler:fountain" },
-        { name: "Jardín", value: "mdi:flower" }, 
-        { name: "Montaña", value: "tabler:mountain" },
-        { name: "Playa", value: "tabler:beach" },
-        { name: "Volcán", value: "tabler:volcano" }
-    ];
+    { name: "Árbol", value: "tabler:tree" },
+    { name: "Casa", value: "tabler:home" },
+    { name: "Farola", value: "mdi:post-lamp" },
+    { name: "Parque", value: "mdi:park" }, 
+    { name: "Fuente", value: "tabler:fountain" },
+    { name: "Jardín", value: "mdi:flower" }, 
+    { name: "Montaña", value: "tabler:mountain" },
+    { name: "Playa", value: "tabler:beach" },
+    { name: "Volcán", value: "tabler:volcano" },
+    { name: "Grifo", value: "mdi:tap" },
+    { name: "Agua", value: "ic:baseline-water-drop"},
+    { name: "Bombilla", value: "ic:baseline-lightbulb"},
+    { name: "Trueno", value: "ic:baseline-electric-bolt"},
+    { name: "Flor", value: "ic:baseline-local-florist"},
+    { name: "Césped", value: "ic:baseline-spa"},
+    { name: "Nube", value: "ic:baseline-wb-cloudy"},
+];
 
     if (isLoading) {
         return (
