@@ -21,7 +21,7 @@ import AdminResources from '@/pages/Admin/Resources';
 import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTypes';
 import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
 import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
-import AdminStats from '@/pages/Admin/Stats';
+import AdminStats from '@/pages/Admin/Statistics';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -77,7 +77,7 @@ const AdminRoutes: RouteObject[] = [
                         ),
                     },
                     {
-                        path: 'stats',
+                        path: 'statistics',
                         element: (
                             <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
                                 <AdminStats />

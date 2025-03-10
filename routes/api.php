@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
+use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
@@ -27,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
         Route::get('stats', function (Request $request) {
             return response()->json([
                 'users' => User::count(),
@@ -71,5 +72,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('task-types/{id}', [TaskTypeController::class, 'show']);
         Route::put('task-types/{id}', [TaskTypeController::class, 'update']);
         Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
+
+        // Route for stats
+        Route::get('statistics', [StatisticsController::class, 'index']);
+
     });
 });

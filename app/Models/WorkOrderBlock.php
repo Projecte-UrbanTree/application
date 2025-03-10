@@ -11,7 +11,7 @@ class WorkOrderBlock extends Model
         'work_order_id',
     ];
 
-    public function workOrders()
+    public function workOrder()
     {
         return $this->belongsTo(WorkOrder::class, 'work_order_id');
     }
