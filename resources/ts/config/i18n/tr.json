@@ -1,366 +1,426 @@
 {
   "admin": {
     "buttons": {
-      "createNew": "crwdns764:0crwdne764:0"
+      "createNew": "crwdns2128:0crwdne2128:0"
     },
     "fields": {
-      "company": "crwdns766:0crwdne766:0",
-      "description": "crwdns768:0crwdne768:0",
-      "dni": "crwdns770:0crwdne770:0",
-      "email": "crwdns772:0crwdne772:0",
-      "family": "crwdns774:0crwdne774:0",
-      "genus": "crwdns776:0crwdne776:0",
-      "name": "crwdns778:0crwdne778:0",
-      "password": "crwdns780:0crwdne780:0",
-      "role": "crwdns782:0crwdne782:0",
-      "species": "crwdns784:0crwdne784:0",
-      "surname": "crwdns786:0crwdne786:0"
+      "company": "crwdns2130:0crwdne2130:0",
+      "dni": "crwdns2132:0crwdne2132:0",
+      "email": "crwdns2134:0crwdne2134:0",
+      "end_date": "crwdns2136:0crwdne2136:0",
+      "family": "crwdns2138:0crwdne2138:0",
+      "final_price": "crwdns2140:0crwdne2140:0",
+      "genus": "crwdns2142:0crwdne2142:0",
+      "name": "crwdns2144:0crwdne2144:0",
+      "password": "crwdns2146:0crwdne2146:0",
+      "role": "crwdns2148:0crwdne2148:0",
+      "species": "crwdns2150:0crwdne2150:0",
+      "start_date": "crwdns2152:0crwdne2152:0",
+      "status": "crwdns2154:0crwdne2154:0",
+      "surname": "crwdns2156:0crwdne2156:0"
     },
     "menu": {
-      "management": "crwdns788:0crwdne788:0",
-      "settings": "crwdns790:0crwdne790:0"
+      "management": "crwdns2158:0crwdne2158:0",
+      "settings": "crwdns2160:0crwdne2160:0"
     },
     "pages": {
       "contracts": {
-        "columns": {
-          "end_date": "crwdns792:0crwdne792:0",
-          "invoice_agreed": "crwdns794:0crwdne794:0",
-          "invoice_paid": "crwdns796:0crwdne796:0",
-          "invoice_proposed": "crwdns798:0crwdne798:0",
-          "name": "crwdns800:0crwdne800:0",
-          "start_date": "crwdns802:0crwdne802:0"
+        "form": {
+          "placeholders": {
+            "status": "crwdns2162:0crwdne2162:0"
+          },
+          "returnButton": "crwdns2164:0crwdne2164:0",
+          "submitButton": {
+            "create": "crwdns2166:0crwdne2166:0",
+            "edit": "crwdns2168:0crwdne2168:0"
+          },
+          "submittingText": {
+            "create": "crwdns2170:0crwdne2170:0",
+            "edit": "crwdns2172:0crwdne2172:0"
+          },
+          "title": {
+            "create": "crwdns2174:0crwdne2174:0",
+            "edit": "crwdns2176:0crwdne2176:0"
+          },
+          "validation": {
+            "end_date_after_start_date": "crwdns2178:0crwdne2178:0",
+            "end_date_required": "crwdns2180:0crwdne2180:0",
+            "final_price_required": "crwdns2182:0crwdne2182:0",
+            "name_invalid": "crwdns2184:0crwdne2184:0",
+            "name_required": "crwdns2186:0crwdne2186:0",
+            "start_date_required": "crwdns2188:0crwdne2188:0",
+            "status_invalid": "crwdns2190:0crwdne2190:0",
+            "status_required": "crwdns2192:0crwdne2192:0"
+          }
         },
-        "title": "crwdns804:0crwdne804:0"
+        "list": {
+          "actions": {
+            "delete": "crwdns2194:0crwdne2194:0",
+            "edit": "crwdns2196:0crwdne2196:0",
+            "label": "crwdns2198:0crwdne2198:0"
+          },
+          "columns": {
+            "end_date": "crwdns2200:0crwdne2200:0",
+            "final_price": "crwdns2202:0crwdne2202:0",
+            "name": "crwdns2204:0crwdne2204:0",
+            "start_date": "crwdns2206:0crwdne2206:0",
+            "status": "crwdns2208:0crwdne2208:0"
+          },
+          "messages": {
+            "createSuccess": "crwdns2210:0crwdne2210:0",
+            "deleteConfirm": "crwdns2212:0crwdne2212:0",
+            "deleteSuccess": "crwdns2214:0crwdne2214:0",
+            "error": "crwdns2216:0crwdne2216:0",
+            "updateSuccess": "crwdns2218:0crwdne2218:0"
+          }
+        },
+        "title": "crwdns2220:0crwdne2220:0"
       },
       "dashboard": {
         "stats": {
           "widgets": {
-            "contracts": "crwdns806:0crwdne806:0",
-            "elements": "crwdns808:0crwdne808:0",
-            "users": "crwdns810:0crwdne810:0",
-            "workOrders": "crwdns812:0crwdne812:0"
+            "contracts": "crwdns2222:0crwdne2222:0",
+            "elements": "crwdns2224:0crwdne2224:0",
+            "users": "crwdns2226:0crwdne2226:0",
+            "workOrders": "crwdns2228:0crwdne2228:0"
           }
         },
-        "title": "crwdns814:0crwdne814:0",
+        "title": "crwdns2230:0crwdne2230:0",
         "welcome": {
-          "greeting": "crwdns816:0{{name}}crwdnd816:0{{surname}}crwdne816:0",
-          "message": "crwdns818:0crwdne818:0"
+          "greeting": "crwdns2232:0{{name}}crwdnd2232:0{{surname}}crwdne2232:0",
+          "message": "crwdns2234:0crwdne2234:0"
         }
       },
       "elementTypes": {
         "columns": {
-          "color": "crwdns820:0crwdne820:0",
-          "description": "crwdns822:0crwdne822:0",
-          "icon": "crwdns824:0crwdne824:0",
-          "name": "crwdns826:0crwdne826:0",
-          "requires_tree_type": "crwdns828:0crwdne828:0"
+          "color": "crwdns2236:0crwdne2236:0",
+          "description": "crwdns2238:0crwdne2238:0",
+          "icon": "crwdns2240:0crwdne2240:0",
+          "name": "crwdns2242:0crwdne2242:0",
+          "requires_tree_type": "crwdns2244:0crwdne2244:0"
         },
-        "title": "crwdns830:0crwdne830:0"
+        "title": "crwdns2246:0crwdne2246:0"
       },
       "resources": {
         "form": {
           "fields": {
-            "description": "crwdns832:0crwdne832:0",
-            "name": "crwdns834:0crwdne834:0",
-            "type": "crwdns836:0crwdne836:0"
+            "description": "crwdns2248:0crwdne2248:0",
+            "name": "crwdns2250:0crwdne2250:0",
+            "type": "crwdns2252:0crwdne2252:0"
           },
           "placeholders": {
-            "description": "crwdns838:0crwdne838:0",
-            "name": "crwdns840:0crwdne840:0",
-            "type": "crwdns842:0crwdne842:0"
+            "description": "crwdns2254:0crwdne2254:0",
+            "name": "crwdns2256:0crwdne2256:0",
+            "type": "crwdns2258:0crwdne2258:0"
           },
-          "returnButton": "crwdns844:0crwdne844:0",
+          "returnButton": "crwdns2260:0crwdne2260:0",
           "submitButton": {
-            "create": "crwdns846:0crwdne846:0",
-            "edit": "crwdns848:0crwdne848:0"
+            "create": "crwdns2262:0crwdne2262:0",
+            "edit": "crwdns2264:0crwdne2264:0"
           },
           "submittingText": {
-            "create": "crwdns850:0crwdne850:0",
-            "edit": "crwdns852:0crwdne852:0"
+            "create": "crwdns2266:0crwdne2266:0",
+            "edit": "crwdns2268:0crwdne2268:0"
           },
           "title": {
-            "create": "crwdns854:0crwdne854:0",
-            "edit": "crwdns856:0crwdne856:0"
+            "create": "crwdns2270:0crwdne2270:0",
+            "edit": "crwdns2272:0crwdne2272:0"
           },
           "validation": {
-            "name_required": "crwdns858:0crwdne858:0",
-            "type_required": "crwdns860:0crwdne860:0"
+            "name_required": "crwdns2274:0crwdne2274:0",
+            "type_required": "crwdns2276:0crwdne2276:0"
           }
         },
         "list": {
           "actions": {
-            "delete": "crwdns862:0crwdne862:0",
-            "edit": "crwdns864:0crwdne864:0",
-            "label": "crwdns866:0crwdne866:0"
+            "delete": "crwdns2278:0crwdne2278:0",
+            "edit": "crwdns2280:0crwdne2280:0",
+            "label": "crwdns2282:0crwdne2282:0"
           },
           "columns": {
-            "description": "crwdns868:0crwdne868:0",
-            "name": "crwdns870:0crwdne870:0",
-            "type": "crwdns872:0crwdne872:0"
+            "description": "crwdns2284:0crwdne2284:0",
+            "name": "crwdns2286:0crwdne2286:0",
+            "type": "crwdns2288:0crwdne2288:0"
           },
           "messages": {
-            "createSuccess": "crwdns874:0crwdne874:0",
-            "deleteConfirm": "crwdns876:0crwdne876:0",
-            "deleteSuccess": "crwdns878:0crwdne878:0",
-            "error": "crwdns880:0crwdne880:0",
-            "updateSuccess": "crwdns882:0crwdne882:0"
+            "createSuccess": "crwdns2290:0crwdne2290:0",
+            "deleteConfirm": "crwdns2292:0crwdne2292:0",
+            "deleteSuccess": "crwdns2294:0crwdne2294:0",
+            "error": "crwdns2296:0crwdne2296:0",
+            "updateSuccess": "crwdns2298:0crwdne2298:0"
           },
-          "title": "crwdns884:0crwdne884:0"
+          "title": "crwdns2300:0crwdne2300:0"
         },
-        "title": "crwdns886:0crwdne886:0"
+        "title": "crwdns2302:0crwdne2302:0"
       },
       "resourceTypes": {
-        "actions": "crwdns888:0crwdne888:0",
-        "columns": {
-          "description": "crwdns890:0crwdne890:0",
-          "name": "crwdns892:0crwdne892:0"
-        },
-        "create": {
-          "submitButton": "crwdns894:0crwdne894:0",
-          "submittingText": "crwdns896:0crwdne896:0",
-          "title": "crwdns898:0crwdne898:0",
-          "validations": {
-            "description_required": "crwdns900:0crwdne900:0",
-            "name_required": "crwdns902:0crwdne902:0"
+        "form": {
+          "placeholders": {
+            "description": "crwdns2304:0crwdne2304:0",
+            "name": "crwdns2306:0crwdne2306:0"
+          },
+          "returnButton": "crwdns2308:0crwdne2308:0",
+          "submitButton": {
+            "create": "crwdns2310:0crwdne2310:0",
+            "edit": "crwdns2312:0crwdne2312:0"
+          },
+          "submittingText": {
+            "create": "crwdns2314:0crwdne2314:0",
+            "edit": "crwdns2316:0crwdne2316:0"
+          },
+          "title": {
+            "create": "crwdns2318:0crwdne2318:0",
+            "edit": "crwdns2320:0crwdne2320:0"
+          },
+          "validation": {
+            "description_required": "crwdns2322:0crwdne2322:0",
+            "name_invalid": "crwdns2324:0crwdne2324:0",
+            "name_required": "crwdns2326:0crwdne2326:0"
           }
         },
-        "deleteButton": "crwdns904:0crwdne904:0",
-        "deleteConfirm": "crwdns906:0crwdne906:0",
-        "deletedSuccess": "crwdns908:0crwdne908:0",
-        "edit": {
-          "submitButton": "crwdns910:0crwdne910:0",
-          "submittingText": "crwdns912:0crwdne912:0",
-          "title": "crwdns914:0crwdne914:0",
-          "validations": {
-            "description_required": "crwdns916:0crwdne916:0",
-            "name_required": "crwdns918:0crwdne918:0"
+        "list": {
+          "actions": {
+            "delete": "crwdns2328:0crwdne2328:0",
+            "edit": "crwdns2330:0crwdne2330:0",
+            "label": "crwdns2332:0crwdne2332:0"
+          },
+          "columns": {
+            "description": "crwdns2334:0crwdne2334:0",
+            "name": "crwdns2336:0crwdne2336:0"
+          },
+          "messages": {
+            "createSuccess": "crwdns2338:0crwdne2338:0",
+            "deleteConfirm": "crwdns2340:0crwdne2340:0",
+            "deleteSuccess": "crwdns2342:0crwdne2342:0",
+            "error": "crwdns2344:0crwdne2344:0",
+            "updateSuccess": "crwdns2346:0crwdne2346:0"
           }
         },
-        "editButton": "crwdns920:0crwdne920:0",
-        "error": "crwdns922:0crwdne922:0",
-        "loading": "crwdns924:0crwdne924:0",
-        "success": "crwdns926:0crwdne926:0",
-        "title": "crwdns928:0crwdne928:0",
-        "update": "crwdns930:0crwdne930:0"
+        "title": "crwdns2348:0crwdne2348:0"
       },
       "stats": {
-        "title": "crwdns932:0crwdne932:0"
+        "title": "crwdns2350:0crwdne2350:0"
       },
       "taskTypes": {
         "form": {
           "fields": {
-            "description": "crwdns934:0crwdne934:0",
-            "name": "crwdns936:0crwdne936:0"
+            "description": "crwdns2352:0crwdne2352:0",
+            "name": "crwdns2354:0crwdne2354:0"
           },
           "placeholders": {
-            "description": "crwdns938:0crwdne938:0",
-            "name": "crwdns940:0crwdne940:0"
+            "description": "crwdns2356:0crwdne2356:0",
+            "name": "crwdns2358:0crwdne2358:0"
           },
-          "returnButton": "crwdns942:0crwdne942:0",
+          "returnButton": "crwdns2360:0crwdne2360:0",
           "submitButton": {
-            "create": "crwdns944:0crwdne944:0",
-            "edit": "crwdns946:0crwdne946:0"
+            "create": "crwdns2362:0crwdne2362:0",
+            "edit": "crwdns2364:0crwdne2364:0"
           },
           "submittingText": {
-            "create": "crwdns948:0crwdne948:0",
-            "edit": "crwdns950:0crwdne950:0"
+            "create": "crwdns2366:0crwdne2366:0",
+            "edit": "crwdns2368:0crwdne2368:0"
           },
           "title": {
-            "create": "crwdns952:0crwdne952:0",
-            "edit": "crwdns954:0crwdne954:0"
+            "create": "crwdns2370:0crwdne2370:0",
+            "edit": "crwdns2372:0crwdne2372:0"
           },
           "validation": {
-            "error_numbers": "crwdns956:0crwdne956:0",
-            "name_required": "crwdns958:0crwdne958:0"
+            "error_numbers": "crwdns2374:0crwdne2374:0",
+            "name_required": "crwdns2376:0crwdne2376:0"
           }
         },
         "list": {
           "actions": {
-            "delete": "crwdns960:0crwdne960:0",
-            "edit": "crwdns962:0crwdne962:0",
-            "label": "crwdns964:0crwdne964:0"
+            "delete": "crwdns2378:0crwdne2378:0",
+            "edit": "crwdns2380:0crwdne2380:0",
+            "label": "crwdns2382:0crwdne2382:0"
           },
           "columns": {
-            "description": "crwdns966:0crwdne966:0",
-            "name": "crwdns968:0crwdne968:0"
+            "description": "crwdns2384:0crwdne2384:0",
+            "name": "crwdns2386:0crwdne2386:0"
           },
           "messages": {
-            "createSuccess": "crwdns970:0crwdne970:0",
-            "deleteConfirm": "crwdns972:0crwdne972:0",
-            "deleteSuccess": "crwdns974:0crwdne974:0",
-            "error": "crwdns976:0crwdne976:0",
-            "updateSuccess": "crwdns978:0crwdne978:0"
+            "createSuccess": "crwdns2388:0crwdne2388:0",
+            "deleteConfirm": "crwdns2390:0crwdne2390:0",
+            "deleteSuccess": "crwdns2392:0crwdne2392:0",
+            "error": "crwdns2394:0crwdne2394:0",
+            "updateSuccess": "crwdns2396:0crwdne2396:0"
           },
-          "title": "crwdns980:0crwdne980:0"
+          "title": "crwdns2398:0crwdne2398:0"
         },
-        "title": "crwdns982:0crwdne982:0"
+        "title": "crwdns2400:0crwdne2400:0"
       },
       "treeTypes": {
         "form": {
           "submitButton": {
-            "create": "crwdns984:0crwdne984:0",
-            "edit": "crwdns986:0crwdne986:0"
+            "create": "crwdns2402:0crwdne2402:0",
+            "edit": "crwdns2404:0crwdne2404:0"
           },
           "submittingText": {
-            "create": "crwdns988:0crwdne988:0",
-            "edit": "crwdns990:0crwdne990:0"
+            "create": "crwdns2406:0crwdne2406:0",
+            "edit": "crwdns2408:0crwdne2408:0"
           },
           "title": {
-            "create": "crwdns992:0crwdne992:0",
-            "edit": "crwdns994:0crwdne994:0"
+            "create": "crwdns2410:0crwdne2410:0",
+            "edit": "crwdns2412:0crwdne2412:0"
           },
           "validation": {
             "alphanumeric": {
-              "family": "crwdns996:0crwdne996:0",
-              "genus": "crwdns998:0crwdne998:0",
-              "species": "crwdns1000:0crwdne1000:0"
+              "family": "crwdns2414:0crwdne2414:0",
+              "genus": "crwdns2416:0crwdne2416:0",
+              "species": "crwdns2418:0crwdne2418:0"
             },
-            "family": "crwdns1002:0crwdne1002:0",
-            "genus": "crwdns1004:0crwdne1004:0",
-            "species": "crwdns1006:0crwdne1006:0"
+            "family": "crwdns2420:0crwdne2420:0",
+            "genus": "crwdns2422:0crwdne2422:0",
+            "species": "crwdns2424:0crwdne2424:0"
           }
         },
         "list": {
           "actions": {
-            "delete": "crwdns1008:0crwdne1008:0",
-            "edit": "crwdns1010:0crwdne1010:0",
-            "label": "crwdns1012:0crwdne1012:0"
+            "delete": "crwdns2426:0crwdne2426:0",
+            "edit": "crwdns2428:0crwdne2428:0",
+            "label": "crwdns2430:0crwdne2430:0"
           },
           "columns": {
-            "family": "crwdns1014:0crwdne1014:0",
-            "genus": "crwdns1016:0crwdne1016:0",
-            "species": "crwdns1018:0crwdne1018:0"
+            "family": "crwdns2432:0crwdne2432:0",
+            "genus": "crwdns2434:0crwdne2434:0",
+            "species": "crwdns2436:0crwdne2436:0"
           },
           "messages": {
-            "createSuccess": "crwdns1020:0crwdne1020:0",
-            "deleteConfirm": "crwdns1022:0crwdne1022:0",
-            "deletedSuccess": "crwdns1024:0crwdne1024:0",
-            "error": "crwdns1026:0crwdne1026:0",
-            "updateSuccess": "crwdns1028:0crwdne1028:0"
+            "createSuccess": "crwdns2438:0crwdne2438:0",
+            "deleteConfirm": "crwdns2440:0crwdne2440:0",
+            "deletedSuccess": "crwdns2442:0crwdne2442:0",
+            "error": "crwdns2444:0crwdne2444:0",
+            "updateSuccess": "crwdns2446:0crwdne2446:0"
           },
-          "title": "crwdns1030:0crwdne1030:0"
+          "title": "crwdns2448:0crwdne2448:0"
         },
-        "title": "crwdns1032:0crwdne1032:0"
+        "title": "crwdns2450:0crwdne2450:0"
       },
       "users": {
         "form": {
           "placeholders": {
-            "password": "crwdns1034:0crwdne1034:0",
-            "passwordEdit": "crwdns1036:0crwdne1036:0",
-            "role": "crwdns1038:0crwdne1038:0"
+            "password": "crwdns2452:0crwdne2452:0",
+            "passwordEdit": "crwdns2454:0crwdne2454:0",
+            "role": "crwdns2456:0crwdne2456:0"
           },
-          "returnButton": "crwdns1040:0crwdne1040:0",
+          "returnButton": "crwdns2458:0crwdne2458:0",
           "submitButton": {
-            "create": "crwdns1042:0crwdne1042:0",
-            "edit": "crwdns1044:0crwdne1044:0"
+            "create": "crwdns2460:0crwdne2460:0",
+            "edit": "crwdns2462:0crwdne2462:0"
           },
           "submittingText": {
-            "create": "crwdns1046:0crwdne1046:0",
-            "edit": "crwdns1048:0crwdne1048:0"
+            "create": "crwdns2464:0crwdne2464:0",
+            "edit": "crwdns2466:0crwdne2466:0"
           },
           "title": {
-            "create": "crwdns1050:0crwdne1050:0",
-            "edit": "crwdns1052:0crwdne1052:0"
+            "create": "crwdns2468:0crwdne2468:0",
+            "edit": "crwdns2470:0crwdne2470:0"
           },
           "validation": {
-            "email_required": "crwdns1054:0crwdne1054:0",
-            "invalid_email": "crwdns1056:0crwdne1056:0",
-            "name_required": "crwdns1058:0crwdne1058:0",
-            "password_min": "crwdns1060:0crwdne1060:0",
-            "password_number": "crwdns1062:0crwdne1062:0",
-            "password_required": "crwdns1064:0crwdne1064:0",
-            "password_special": "crwdns1066:0crwdne1066:0",
-            "password_uppercase": "crwdns1068:0crwdne1068:0",
-            "role_invalid": "crwdns1070:0crwdne1070:0",
-            "surname_required": "crwdns1072:0crwdne1072:0"
+            "email_required": "crwdns2472:0crwdne2472:0",
+            "invalid_email": "crwdns2474:0crwdne2474:0",
+            "name_required": "crwdns2476:0crwdne2476:0",
+            "password_min": "crwdns2478:0crwdne2478:0",
+            "password_number": "crwdns2480:0crwdne2480:0",
+            "password_required": "crwdns2482:0crwdne2482:0",
+            "password_special": "crwdns2484:0crwdne2484:0",
+            "password_uppercase": "crwdns2486:0crwdne2486:0",
+            "role_invalid": "crwdns2488:0crwdne2488:0",
+            "surname_required": "crwdns2490:0crwdne2490:0"
           }
         },
         "list": {
           "actions": {
-            "delete": "crwdns1074:0crwdne1074:0",
-            "edit": "crwdns1076:0crwdne1076:0",
-            "label": "crwdns1078:0crwdne1078:0"
+            "delete": "crwdns2492:0crwdne2492:0",
+            "edit": "crwdns2494:0crwdne2494:0",
+            "label": "crwdns2496:0crwdne2496:0"
           },
           "columns": {
-            "company": "crwdns1080:0crwdne1080:0",
-            "dni": "crwdns1082:0crwdne1082:0",
-            "email": "crwdns1084:0crwdne1084:0",
-            "name": "crwdns1086:0crwdne1086:0",
-            "role": "crwdns1088:0crwdne1088:0",
-            "surname": "crwdns1090:0crwdne1090:0"
+            "company": "crwdns2498:0crwdne2498:0",
+            "dni": "crwdns2500:0crwdne2500:0",
+            "email": "crwdns2502:0crwdne2502:0",
+            "name": "crwdns2504:0crwdne2504:0",
+            "role": "crwdns2506:0crwdne2506:0",
+            "surname": "crwdns2508:0crwdne2508:0"
           },
           "messages": {
-            "createSuccess": "crwdns1092:0crwdne1092:0",
-            "deleteConfirm": "crwdns1094:0crwdne1094:0",
-            "deleteSuccess": "crwdns1096:0crwdne1096:0",
-            "error": "crwdns1098:0crwdne1098:0",
-            "updateSuccess": "crwdns1100:0crwdne1100:0"
+            "createSuccess": "crwdns2510:0crwdne2510:0",
+            "deleteConfirm": "crwdns2512:0crwdne2512:0",
+            "deleteSuccess": "crwdns2514:0crwdne2514:0",
+            "error": "crwdns2516:0crwdne2516:0",
+            "updateSuccess": "crwdns2518:0crwdne2518:0"
           }
         },
-        "title": "crwdns1102:0crwdne1102:0"
+        "title": "crwdns2520:0crwdne2520:0"
       },
       "workOrders": {
         "columns": {
-          "contract_id": "crwdns1104:0crwdne1104:0",
-          "date": "crwdns1106:0crwdne1106:0",
-          "status": "crwdns1108:0crwdne1108:0"
+          "contract_id": "crwdns2522:0crwdne2522:0",
+          "date": "crwdns2524:0crwdne2524:0",
+          "status": "crwdns2526:0crwdne2526:0"
         },
-        "title": "crwdns1110:0crwdne1110:0"
+        "title": "crwdns2528:0crwdne2528:0"
       }
     },
     "profileDropdown": {
-      "accountSettings": "crwdns1112:0crwdne1112:0",
-      "license": "crwdns1114:0crwdne1114:0",
-      "logout": "crwdns1116:0crwdne1116:0"
+      "accountSettings": "crwdns2530:0crwdne2530:0",
+      "license": "crwdns2532:0crwdne2532:0",
+      "logout": "crwdns2534:0crwdne2534:0"
     },
     "roles": {
-      "admin": "crwdns1118:0crwdne1118:0",
-      "customer": "crwdns1120:0crwdne1120:0",
-      "unknown": "crwdns1122:0crwdne1122:0",
-      "worker": "crwdns1124:0crwdne1124:0"
+      "admin": "crwdns2536:0crwdne2536:0",
+      "customer": "crwdns2538:0crwdne2538:0",
+      "unknown": "crwdns2540:0crwdne2540:0",
+      "worker": "crwdns2542:0crwdne2542:0"
+    },
+    "status": {
+      "active": "crwdns2544:0crwdne2544:0",
+      "completed": "crwdns2546:0crwdne2546:0",
+      "inactive": "crwdns2548:0crwdne2548:0"
     },
     "submenu": {
       "manage": {
-        "dashboard": "crwdns1126:0crwdne1126:0",
-        "inventory": "crwdns1128:0crwdne1128:0",
-        "resources": "crwdns1130:0crwdne1130:0",
-        "stats": "crwdns1132:0crwdne1132:0",
-        "workers": "crwdns1134:0crwdne1134:0",
-        "workOrders": "crwdns1136:0crwdne1136:0"
+        "dashboard": "crwdns2550:0crwdne2550:0",
+        "inventory": "crwdns2552:0crwdne2552:0",
+        "resources": "crwdns2554:0crwdne2554:0",
+        "stats": "crwdns2556:0crwdne2556:0",
+        "workers": "crwdns2558:0crwdne2558:0",
+        "workOrders": "crwdns2560:0crwdne2560:0"
       },
       "settings": {
-        "contracts": "crwdns1138:0crwdne1138:0",
-        "elementTypes": "crwdns1140:0crwdne1140:0",
-        "resourceTypes": "crwdns1142:0crwdne1142:0",
-        "species": "crwdns1144:0crwdne1144:0",
-        "taskTypes": "crwdns1146:0crwdne1146:0",
-        "users": "crwdns1148:0crwdne1148:0"
+        "contracts": "crwdns2562:0crwdne2562:0",
+        "elementTypes": "crwdns2564:0crwdne2564:0",
+        "resourceTypes": "crwdns2566:0crwdne2566:0",
+        "species": "crwdns2568:0crwdne2568:0",
+        "taskTypes": "crwdns2570:0crwdne2570:0",
+        "users": "crwdns2572:0crwdne2572:0"
       }
     }
   },
   "general": {
-    "allContracts": "crwdns1150:0crwdne1150:0",
-    "genericError": "crwdns1152:0crwdne1152:0",
-    "loading": "crwdns1154:0crwdne1154:0"
+    "allContracts": "crwdns2574:0crwdne2574:0",
+    "genericError": "crwdns2576:0crwdne2576:0",
+    "loading": "crwdns2578:0crwdne2578:0"
   },
   "public": {
     "error": {
-      "btnReturn": "crwdns1156:0crwdne1156:0",
+      "btnReturn": "crwdns2580:0crwdne2580:0",
       "descriptions": {
-        "404": "crwdns1158:0crwdne1158:0",
-        "unexpected": "crwdns1160:0crwdne1160:0"
+        "404": "crwdns2582:0crwdne2582:0",
+        "unexpected": "crwdns2584:0crwdne2584:0"
       },
-      "title": "crwdns1162:0{{errorCode}}crwdne1162:0"
+      "title": "crwdns2586:0{{errorCode}}crwdne2586:0"
     },
     "login": {
       "form": {
-        "btnLogin": "crwdns1164:0crwdne1164:0",
-        "labelEmail": "crwdns1166:0crwdne1166:0",
-        "labelPassword": "crwdns1168:0crwdne1168:0",
-        "msgSuccess": "crwdns1170:0crwdne1170:0",
-        "placeholderEmail": "crwdns1172:0crwdne1172:0",
-        "rememberMe": "crwdns1174:0crwdne1174:0",
-        "titleSuccess": "crwdns1176:0crwdne1176:0"
+        "btnLogin": "crwdns2588:0crwdne2588:0",
+        "labelEmail": "crwdns2590:0crwdne2590:0",
+        "labelPassword": "crwdns2592:0crwdne2592:0",
+        "msgSuccess": "crwdns2594:0crwdne2594:0",
+        "placeholderEmail": "crwdns2596:0crwdne2596:0",
+        "rememberMe": "crwdns2598:0crwdne2598:0",
+        "titleSuccess": "crwdns2600:0crwdne2600:0"
       }
     }
   }
