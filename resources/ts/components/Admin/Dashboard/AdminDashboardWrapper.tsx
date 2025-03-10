@@ -30,14 +30,17 @@ export default function AdminLayoutWrapper({
         (state: RootState) => state.contract,
     );
 
-    const contracts = allContracts.length > 0 ? allContracts : [];
+    const contracts = [
+        defaultContract,
+        ...allContracts.filter((c) => c.id !== 0),
+    ];
     const selectedContract = currentContract;
 
     useEffect(() => {
         if (allContracts.length === 0) {
             dispatch(
                 setContractState({
-                    allContracts: [],
+                    allContracts: [defaultContract],
                     currentContract: currentContract ?? defaultContract,
                 }),
             );

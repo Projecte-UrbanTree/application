@@ -1,6 +1,6 @@
-import { Contract, ContractProps } from '@/types/contract';
+import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
+import { Contract } from '@/types/contract';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { init } from 'i18next';
 
 interface ContractState {
     allContracts: Contract[];
@@ -21,12 +21,15 @@ export const contractSlice = createSlice({
         },
 
         selectContract(state, action: PayloadAction<number>) {
-            const selected = state.allContracts.find(
-                (c) => c.id === action.payload,
-            );
-
-            if (selected) {
-                state.currentContract = selected;
+            if (action.payload === 0) {
+                state.currentContract = defaultContract;
+            } else {
+                const selected = state.allContracts.find(
+                    (c) => c.id === action.payload,
+                );
+                if (selected) {
+                    state.currentContract = selected;
+                }
             }
         },
 
