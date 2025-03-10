@@ -25,6 +25,14 @@ interface WorkOrderBlock {
   block_tasks?: WorkOrderBlockTask[];
 }
 
+interface WorkReport {
+  id: number;
+  observation: string;
+  spent_fuel: number;
+  report_status: number;
+  report_incidents: string;
+}
+
 interface WorkOrder {
   id: number;
   date: string;
@@ -32,6 +40,7 @@ interface WorkOrder {
   contract: { name: string };
   users: { id: number; name: string; surname: string }[];
   work_orders_blocks: WorkOrderBlock[];
+  work_reports?: WorkReport[]; // Add work_reports to the interface
 }
 
 export default function WorkOrders() {
@@ -276,26 +285,95 @@ export default function WorkOrders() {
               }
             }}
           />
+          
+          {/* Work Report Status */}
+          <Column
+            header={('Estat del Parte')}
+            body={(rowData) => {
+              if (!rowData.work_reports || rowData.work_reports.length === 0) {
+                return (
+                  <Badge
+                    value={t('admin.pages.workReports.status.noReport')}
+                    severity="secondary"
+                  />
+                );
+              }
+
+              const latestReport = rowData.work_reports[rowData.work_reports.length - 1];
+ 
+              switch (latestReport.report_status) {
+                case 0:
+                  return (
+                    <Badge
+                      value={('Pendent')}
+                      severity="warning"
+                    />
+                  );
+                case 1:
+                  return (
+                    <Badge
+                      value={('Completat')}
+                      severity="success"
+                    />
+                  );
+                case 2:
+                  return (
+                    <Badge
+                      value={('Rebutjat')}
+                      severity="danger"
+                    />
+                  );
+                case 3:
+                  return (
+                    <Badge
+                      value={t('Tancat amb Incidencies')}
+                      severity="danger"
+                    />
+                  );
+                default:
+                  return (
+                    <Badge
+                      value={t('admin.pages.workReports.status.unknown')}
+                      severity="secondary"
+                    />
+                  );
+              }
+            }}
+          />
 
           {/* Actions Column */}
           <Column
             header={t('admin.pages.workOrders.actions')}
-            body={(rowData) => (
-              <div className="flex justify-end gap-2">
-                <Button
-                  icon={<Icon icon="tabler:edit" />}
-                  className="p-button-rounded p-button-primary"
-                  onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)}
-                  title={t('admin.pages.workOrders.actionTypes.edit')}
-                />
-                <Button
-                  icon={<Icon icon="tabler:trash" />}
-                  className="p-button-rounded p-button-danger"
-                  onClick={() => handleDelete(rowData.id)}
-                  title={t('admin.pages.workOrders.actionTypes.delete')}
-                />
-              </div>
-            )}
+            body={(rowData) => {
+              if (rowData.status === 3) {
+                return (
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      icon={<Icon icon="tabler:eye" />}
+                      className="p-button-rounded p-button-info"
+                      onClick={() => navigate(`/admin/work-reports/${rowData.id}`)}
+                      title={t('admin.pages.workOrders.actionTypes.viewReport')}
+                    />
+                  </div>
+                );
+              }
+              return (
+                <div className="flex justify-end gap-2">
+                  <Button
+                    icon={<Icon icon="tabler:edit" />}
+                    className="p-button-rounded p-button-primary"
+                    onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)}
+                    title={t('admin.pages.workOrders.actionTypes.edit')}
+                  />
+                  <Button
+                    icon={<Icon icon="tabler:trash" />}
+                    className="p-button-rounded p-button-danger"
+                    onClick={() => handleDelete(rowData.id)}
+                    title={t('admin.pages.workOrders.actionTypes.delete')}
+                  />
+                </div>
+              );
+            }}
           />
         </DataTable>
       </CrudPanel>

@@ -11,6 +11,8 @@ import AdminWorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
 import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
 import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
 
+import WorkReport from '@/pages/Admin/WorkReport';
+
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
 import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
 import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
@@ -69,6 +71,14 @@ const AdminRoutes: RouteObject[] = [
                       element: (
                           <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
                               <EditWorkOrder />
+                          </AdminLayoutWrapper>
+                      ),
+                    },
+                    {
+                      path: 'work-reports/:id',
+                      element: (
+                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                              <WorkReport />
                           </AdminLayoutWrapper>
                       ),
                     },
