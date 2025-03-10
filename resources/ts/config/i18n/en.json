@@ -5,30 +5,74 @@
     },
     "fields": {
       "company": "Company",
-      "description": "Description",
       "dni": "DNI",
       "email": "Email",
+      "end_date": "End Date",
       "family": "Family",
+      "final_price": "Final Price",
       "genus": "Genus",
       "name": "Name",
       "password": "Password",
       "role": "Role",
       "species": "Species",
-      "surname": "Surname"
+      "start_date": "Start Date",
+      "status": "Status",
+      "surname": "Cognom"
     },
     "menu": {
-      "management": "Management",
-      "settings": "Settings"
+      "management": "Gestió",
+      "settings": "Configuració"
     },
     "pages": {
       "contracts": {
-        "columns": {
-          "end_date": "End Date",
-          "invoice_agreed": "Invoice Agreed",
-          "invoice_paid": "Invoice Paid",
-          "invoice_proposed": "Invoice Proposed",
-          "name": "Contract",
-          "start_date": "Start Date"
+        "form": {
+          "placeholders": {
+            "status": "Select a status"
+          },
+          "returnButton": "Return to contract list",
+          "submitButton": {
+            "create": "Create Contract",
+            "edit": "Save Changes"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
+          },
+          "title": {
+            "create": "Create Contract",
+            "edit": "Edit Contract"
+          },
+          "validation": {
+            "end_date_after_start_date": "End date must be after start date",
+            "end_date_required": "End date is required",
+            "final_price_required": "Final price is required",
+            "name_invalid": "Name is invalid",
+            "name_required": "Name is required",
+            "start_date_required": "Start date is required",
+            "status_invalid": "Invalid status",
+            "status_required": "Status is required"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Delete contract",
+            "edit": "Edit contract",
+            "label": "Actions"
+          },
+          "columns": {
+            "end_date": "End Date",
+            "final_price": "Final Price",
+            "name": "Contract",
+            "start_date": "Start Date",
+            "status": "Status"
+          },
+          "messages": {
+            "createSuccess": "Contract created successfully",
+            "deleteConfirm": "Are you sure you want to delete this contract?",
+            "deleteSuccess": "Contract deleted successfully",
+            "error": "Error saving contract",
+            "updateSuccess": "Contract updated successfully"
+          }
         },
         "title": "Contracts"
       },
@@ -62,16 +106,16 @@
           "fields": {
             "description": "Description",
             "name": "Name",
-            "type": "Type"
+            "type": "Tipo"
           },
           "placeholders": {
-            "description": "Enter description",
-            "name": "Enter name",
-            "type": "Select type"
+            "description": "Introdueix la descripció",
+            "name": "Introdueix el nom",
+            "type": "Selecciona un tipo"
           },
-          "returnButton": "Return to resource list",
+          "returnButton": "Tornar a la llista de recursos",
           "submitButton": {
-            "create": "Create Resource",
+            "create": "Crear Recurs",
             "edit": "Save Changes"
           },
           "submittingText": {
@@ -79,69 +123,80 @@
             "edit": "Saving..."
           },
           "title": {
-            "create": "Create Resource",
-            "edit": "Edit Resource"
+            "create": "Crear Recurs",
+            "edit": "Editar Recurs"
           },
           "validation": {
-            "name_required": "Name is required",
-            "type_required": "Type is required"
+            "name_required": "El nom és obligatori",
+            "type_required": "El tipus és obligatori"
           }
         },
         "list": {
           "actions": {
-            "delete": "Delete Resource",
-            "edit": "Edit Resource",
+            "delete": "Eliminar recurs",
+            "edit": "Editar recurs",
             "label": "Actions"
           },
           "columns": {
             "description": "Description",
             "name": "Name",
-            "type": "Type"
+            "type": "Tipus"
           },
           "messages": {
-            "createSuccess": "Resource created successfully",
-            "deleteConfirm": "Are you sure you want to delete this resource?",
-            "deleteSuccess": "Resource deleted successfully",
-            "error": "Error saving resource",
-            "updateSuccess": "Resource updated successfully"
+            "createSuccess": "Recurs creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest recurs?",
+            "deleteSuccess": "Recurs eliminat correctament",
+            "error": "Error guardant el recurs",
+            "updateSuccess": "Recurs actualitzat correctament"
           },
           "title": "Resources"
         },
         "title": "Resources"
       },
       "resourceTypes": {
-        "actions": "Actions",
-        "columns": {
-          "description": "Description",
-          "name": "Resource Type"
-        },
-        "create": {
-          "submitButton": "Create Resource Type",
-          "submittingText": "Creating...",
-          "title": "Create Resource Type",
-          "validations": {
+        "form": {
+          "placeholders": {
+            "description": "Enter description",
+            "name": "Enter name"
+          },
+          "returnButton": "Return to resource type list",
+          "submitButton": {
+            "create": "Create Resource Type",
+            "edit": "Save Changes"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
+          },
+          "title": {
+            "create": "Create Resource Type",
+            "edit": "Edit Resource Type"
+          },
+          "validation": {
             "description_required": "Description is required",
+            "name_invalid": "Name can only contain letters, numbers, and spaces",
             "name_required": "Name is required"
           }
         },
-        "deleteButton": "Delete Resource Type",
-        "deleteConfirm": "Are you sure you want to delete this resource type?",
-        "deletedSuccess": "Resource type deleted successfully",
-        "edit": {
-          "submitButton": "Save Changes",
-          "submittingText": "Saving...",
-          "title": "Edit Resource Type",
-          "validations": {
-            "description_required": "Description is required",
-            "name_required": "Name is required"
+        "list": {
+          "actions": {
+            "delete": "Delete resource type",
+            "edit": "Edit resource type",
+            "label": "Actions"
+          },
+          "columns": {
+            "description": "Description",
+            "name": "Name"
+          },
+          "messages": {
+            "createSuccess": "Resource type created successfully",
+            "deleteConfirm": "Are you sure you want to delete this resource type?",
+            "deleteSuccess": "Resource type deleted successfully",
+            "error": "Error saving the resource type",
+            "updateSuccess": "Resource type updated successfully"
           }
         },
-        "editButton": "Edit Resource Type",
-        "error": "Error saving the resource type",
-        "loading": "Loading...",
-        "success": "Resource type created successfully",
-        "title": "Resource Types",
-        "update": "Resource type updated successfully"
+        "title": "Resource Types"
       },
       "stats": {
         "title": "Statistics"
@@ -191,7 +246,7 @@
             "error": "Error saving task type",
             "updateSuccess": "Task type updated successfully"
           },
-          "title": "Task Types"
+          "title": "Tipus de tasca"
         },
         "title": "Task Types"
       },
@@ -309,31 +364,36 @@
       }
     },
     "profileDropdown": {
-      "accountSettings": "Account Settings",
-      "license": "License",
-      "logout": "Log out"
+      "accountSettings": "Configuració del compte",
+      "license": "Llicència",
+      "logout": "Tanca sessió"
     },
     "roles": {
       "admin": "Admin",
-      "customer": "Customer",
-      "unknown": "Unknown",
-      "worker": "Worker"
+      "customer": "Client",
+      "unknown": "Desconegut",
+      "worker": "Treballador"
+    },
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "inactive": "Inactive"
     },
     "submenu": {
       "manage": {
         "dashboard": "Dashboard",
-        "inventory": "Inventory",
+        "inventory": "Inventari",
         "resources": "Resources",
         "stats": "Statistics",
-        "workers": "Workers",
+        "workers": "Treballadors",
         "workOrders": "Work Orders"
       },
       "settings": {
         "contracts": "Contracts",
-        "elementTypes": "Element Types",
+        "elementTypes": "Element Type",
         "resourceTypes": "Resource Types",
-        "species": "Species",
-        "taskTypes": "Task Types",
+        "species": "Espècies",
+        "taskTypes": "Tipus de tasca",
         "users": "Users"
       }
     }
@@ -345,22 +405,22 @@
   },
   "public": {
     "error": {
-      "btnReturn": "Go back",
+      "btnReturn": "Torna enrere",
       "descriptions": {
-        "404": "The page you are looking for does not exist.",
-        "unexpected": "An unexpected error occurred. Please try again later."
+        "404": "La pàgina que busques no existeix.",
+        "unexpected": "Ha ocorregut un error inesperat. Si us plau, torna a intentar-ho més tard."
       },
       "title": "Error {{errorCode}}"
     },
     "login": {
       "form": {
-        "btnLogin": "Log in",
-        "labelEmail": "Email address",
+        "btnLogin": "Inicia sessió",
+        "labelEmail": "Email",
         "labelPassword": "Password",
-        "msgSuccess": "Logged in successfully",
-        "placeholderEmail": "youremail@example.com",
-        "rememberMe": "Remember me",
-        "titleSuccess": "Success"
+        "msgSuccess": "Sessió iniciada correctament",
+        "placeholderEmail": "elteucorreu@exemple.com",
+        "rememberMe": "Recorda'm",
+        "titleSuccess": "Èxit"
       }
     }
   }
