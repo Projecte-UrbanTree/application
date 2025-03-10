@@ -106,12 +106,12 @@
           "fields": {
             "description": "crwdns2248:0crwdne2248:0",
             "name": "crwdns2250:0crwdne2250:0",
-            "type": "crwdns2252:0crwdne2252:0"
+            "type": "crwdns2602:0crwdne2602:0"
           },
           "placeholders": {
             "description": "crwdns2254:0crwdne2254:0",
             "name": "crwdns2256:0crwdne2256:0",
-            "type": "crwdns2258:0crwdne2258:0"
+            "type": "crwdns2604:0crwdne2604:0"
           },
           "returnButton": "crwdns2260:0crwdne2260:0",
           "submitButton": {
@@ -133,7 +133,7 @@
         },
         "list": {
           "actions": {
-            "delete": "crwdns2278:0crwdne2278:0",
+            "delete": "crwdns2606:0crwdne2606:0",
             "edit": "crwdns2280:0crwdne2280:0",
             "label": "crwdns2282:0crwdne2282:0"
           },
