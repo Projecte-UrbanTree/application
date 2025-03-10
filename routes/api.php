@@ -36,8 +36,14 @@ Route::middleware('auth:sanctum')->group(function () {
                 'workOrders' => WorkOrder::count(),
             ]);
         });
-        Route::get('contracts', [ContractController::class, 'getContracts']);
-        Route::get('contracts/{id}', action: [ContractController::class, 'getContract']);
+
+        // Route for Contracts
+        Route::get('contracts', [ContractController::class, 'index']);
+        Route::post('contracts', [ContractController::class, 'store']);
+        Route::get('contracts/{id}', [ContractController::class, 'show']);
+        Route::put('contracts/{id}', [ContractController::class, 'update']);
+        Route::delete('contracts/{id}', [ContractController::class, 'destroy']);
+
         Route::get('work-orders', [WorkOrderController::class, 'index']);
         Route::get('element-types', [ElementTypeController::class, 'index']);
 
