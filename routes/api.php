@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
             ]);
         });
         Route::get('contracts', [ContractController::class, 'getContracts']);
-        Route::get('contracts/{id}', [ContractController::class, 'getContract']);
+        Route::get('contracts/{id}', action: [ContractController::class, 'getContract']);
         Route::get('work-orders', [WorkOrderController::class, 'index']);
         Route::get('element-types', [ElementTypeController::class, 'index']);
 
