@@ -85,6 +85,7 @@
             "family": "Família",
             "genus": "Gènere",
             "species": "Espècie",
+            "description": "Descripció",
             "true": "Cert",
             "false": "Fals"
         },
@@ -328,9 +329,47 @@
             },
             "resourceTypes": {
                 "title": "Tipus de recurs",
-                "columns": {
-                    "name": "Tipus de recurs",
-                    "description": "Descripció"
+                "list": {
+                    "actions": {
+                        "edit": "Editar tipus de recurs",
+                        "delete": "Eliminar tipus de recurs",
+                        "label": "Accions"
+                    },
+                    "messages": {
+                        "deleteSuccess": "Tipus de recurs eliminat correctament",
+                        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
+                        "createSuccess": "Tipus de recurs creat correctament",
+                        "updateSuccess": "Tipus de recurs actualitzat correctament",
+                        "error": "Error guardant el tipus de recurs"
+                    },
+                    "columns": {
+                        "name": "Nom",
+                        "description": "Descripció"
+                    }
+                },
+                "form": {
+                    "title": {
+                        "create": "Crear Tipus de recurs",
+                        "edit": "Editar Tipus de recurs"
+                    },
+                    "placeholders": {
+                        "name": "Introdueix el nom",
+                        "description": "Introdueix la descripció"
+                    },
+                    "validation": {
+                        "name_required": "El nom és obligatori",
+                        "description_required": "La descripció és obligatòria",
+                        "name_invalid": "El nom només pot contenir lletres, números i espais"
+                    },
+                    "returnButton": "Tornar a la llista de tipus de recurs",
+                    "submitButton": {
+                        "create": "Crear Tipus de recurs",
+                        "edit": "Guardar canvis"
+                    },
+                    "submittingText": {
+                        "create": "Creant...",
+                        "edit": "Guardant..."
+                    }
                 }
             },
             "resources": {

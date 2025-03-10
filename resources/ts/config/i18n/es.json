@@ -78,7 +78,7 @@
             "name": "Nombre",
             "surname": "Apellido",
             "email": "Correo",
-            "company": "Efmpresa",
+            "company": "Empresa",
             "dni": "DNI",
             "role": "Rol",
             "password": "Contraseña",
@@ -336,42 +336,53 @@
                     "resource_type_id": "Tipo de recurso"
                 }
             },
-            "resourceTypes": {
-                "title": "Tipos de recurso",
-                "columns": {
-                    "name": "Tipo de recurso",
-                    "description": "Descripción"
-                },
-                "loading": "Cargando...",
-                "editButton": "Editar tipo de recurso",
-                "deleteButton": "Eliminar tipo de recurso",
-                "actions": "Acciones",
-                "deletedSuccess": "Tipo de recurso eliminado exitosamente",
-                "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
-                "success": "Tipo de recurso creado exitosamente",
-                "update": "Tipo de recurso actualizado exitosamente",
-                "error": "Error guardando el tipo de recurso",
-                "create": {
-                    "title": "Crear Tipo de Recurso",
-                    "validations": {
-                        "name_required": "El nombre es obligatorio",
-                        "description_required": "La descripción es obligatoria"
-                    },
-                    "submitButton": "Crear Tipo de Recurso",
-                    "submittingText": "Creando..."
-                },
-                "edit": {
-                    "title": "Editar Tipo de Recurso",
-                    "validations": {
-                        "name_required": "El nombre es obligatorio",
-                        "description_required": "La descripción es obligatoria"
-                    },
-                    "submitButton": "Guardar Cambios",
-                    "submittingText": "Guardando..."
-                }
-            },
             "stats": {
                 "title": "Estadísticas"
+            },
+            "resourceTypes": {
+                "title": "Tipos de recurso",
+                "list": {
+                    "actions": {
+                        "edit": "Editar tipo de recurso",
+                        "delete": "Eliminar tipo de recurso",
+                        "label": "Acciones"
+                    },
+                    "messages": {
+                        "deleteSuccess": "Tipo de recurso eliminado exitosamente",
+                        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
+                        "createSuccess": "Tipo de recurso creado exitosamente",
+                        "updateSuccess": "Tipo de recurso actualizado exitosamente",
+                        "error": "Error guardando el tipo de recurso"
+                    },
+                    "columns": {
+                        "name": "Nombre",
+                        "description": "Descripción"
+                    }
+                },
+                "form": {
+                    "title": {
+                        "create": "Crear Tipo de recurso",
+                        "edit": "Editar Tipo de recurso"
+                    },
+                    "placeholders": {
+                        "name": "Introduce el nombre",
+                        "description": "Introduce la descripción"
+                    },
+                    "validation": {
+                        "name_required": "El nombre es obligatorio",
+                        "description_required": "La descripción es obligatoria",
+                        "name_invalid": "El nombre solo puede contener letras, números y espacios"
+                    },
+                    "returnButton": "Volver a la lista de tipos de recurso",
+                    "submitButton": {
+                        "create": "Crear Tipo de recurso",
+                        "edit": "Guardar cambios"
+                    },
+                    "submittingText": {
+                        "create": "Creando...",
+                        "edit": "Guardando..."
+                    }
+                }
             }
         }
     },

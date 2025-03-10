@@ -1,16 +1,22 @@
 import { Navigate, Outlet } from 'react-router';
-import { useAuthContext } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function UnauthenticatedRoute() {
-  const { isAuthenticated, user } = useAuthContext();
+    const { isAuthenticated, user } = useAuth();
 
-  return !isAuthenticated ? (
-    <Outlet />
-  ) : user?.role === 'admin' ? (
-    <Navigate to="/admin/dashboard" replace />
-  ) : user?.role === 'worker' ? (
-    <Navigate to="/worker" replace />
-  ) : (
-    <Navigate to="/customer" replace />
-  );
+    if (!isAuthenticated) {
+        return <Outlet />;
+    }
+
+    if (!user || !user.role) {
+        return <Navigate to="/" replace />;
+    }
+
+    const roleRoutes: Record<string, string> = {
+        admin: '/admin/dashboard',
+        worker: '/worker',
+        customer: '/customer',
+    };
+
+    return <Navigate to={roleRoutes[user.role] || '/'} replace />;
 }
