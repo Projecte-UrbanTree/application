@@ -231,8 +231,8 @@
           "messages": {
             "deleteSuccess": "Task type deleted successfully",
             "deleteConfirm": "Are you sure you want to delete this task type?",
-            "updateSuccess": "Task type updated successfully",
             "createSuccess": "Task type created successfully",
+            "updateSuccess": "Task type updated successfully",
             "error": "Error saving task type"
           },
           "columns": {
@@ -276,42 +276,53 @@
           "resource_type_id": "Resource Type"
         }
       },
-      "resourceTypes": {
-        "title": "Resource Types",
-        "columns": {
-          "name": "Resource Type",
-          "description": "Description"
-        },
-        "loading": "Loading...",
-        "editButton": "Edit Resource Type",
-        "deleteButton": "Delete Resource Type",
-        "actions": "Actions",
-        "deletedSuccess": "Resource type deleted successfully",
-        "deleteConfirm": "Are you sure you want to delete this resource type?",
-        "success": "Resource type created successfully",
-        "update": "Resource type updated successfully",
-        "error": "Error saving the resource type",
-        "create": {
-          "title": "Create Resource Type",
-          "validations": {
-            "name_required": "Name is required",
-            "description_required": "Description is required"
-          },
-          "submitButton": "Create Resource Type",
-          "submittingText": "Creating..."
-        },
-        "edit": {
-          "title": "Edit Resource Type",
-          "validations": {
-            "name_required": "Name is required",
-            "description_required": "Description is required"
-          },
-          "submitButton": "Save Changes",
-          "submittingText": "Saving..."
-        }
-      },
       "stats": {
         "title": "Statistics"
+      },
+      "resourceTypes": {
+        "title": "Resource Types",
+        "list": {
+          "actions": {
+            "edit": "Edit resource type",
+            "delete": "Delete resource type",
+            "label": "Actions"
+          },
+          "messages": {
+            "deleteSuccess": "Resource type deleted successfully",
+            "deleteConfirm": "Are you sure you want to delete this resource type?",
+            "createSuccess": "Resource type created successfully",
+            "updateSuccess": "Resource type updated successfully",
+            "error": "Error saving the resource type"
+          },
+          "columns": {
+            "name": "Name",
+            "description": "Description"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Create Resource Type",
+            "edit": "Edit Resource Type"
+          },
+          "placeholders": {
+            "name": "Enter name",
+            "description": "Enter description"
+          },
+          "validation": {
+            "name_required": "Name is required",
+            "description_required": "Description is required",
+            "name_invalid": "Name can only contain letters, numbers, and spaces"
+          },
+          "returnButton": "Return to resource type list",
+          "submitButton": {
+            "create": "Create Resource Type",
+            "edit": "Save Changes"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
+          }
+        }
       }
     }
   },
