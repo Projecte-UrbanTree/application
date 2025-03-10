@@ -25,6 +25,7 @@
         "yup": "^1.6.1"
     },
     "dependencies": {
+        "@reduxjs/toolkit": "^2.6.1",
         "@tailwindcss/vite": "^4.0.9",
         "@types/yup": "^0.32.0",
         "chart.js": "^4.4.8",
@@ -33,6 +34,7 @@
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-i18next": "^15.4.0",
+        "react-redux": "^9.2.0",
         "react-router-dom": "^7.1.5",
         "tailwindcss": "^4.0.3",
         "typescript-cookie": "^1.0.6"
