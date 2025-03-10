@@ -53,11 +53,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             const selectedContract = contracts.find((c) => c.id === e.value);
 
             if (selectedContract) {
-                dispatch(selectContract(selectedContract));
+                dispatch(selectContract(selectedContract.id!));
                 setContract(selectedContract);
             }
         },
-        [contract, dispatch],
+        [dispatch, contracts],
     );
 
     const handleProfileClick = () => setProfileDropdownVisible((prev) => !prev);
@@ -230,7 +230,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                     id="contractBtn"
                                     name="contractBtn"
                                     className="w-32"
-                                    value={contract.id}
+                                    value={contract.id ?? 0}
                                     options={contracts}
                                     onChange={handleContractChange}
                                     optionLabel="name"
@@ -299,7 +299,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                 id="contractBtn"
                                 name="contractBtn"
                                 className="w-32"
-                                value={contract.id}
+                                value={contract.id ?? 0}
                                 options={contracts}
                                 onChange={handleContractChange}
                                 optionLabel="name"

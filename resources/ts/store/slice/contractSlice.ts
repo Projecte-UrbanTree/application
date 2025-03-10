@@ -20,7 +20,7 @@ export const contractSlice = createSlice({
             return { ...state, ...action.payload };
         },
 
-        selectContract(state, action: PayloadAction<Contract>) {
+        selectContract(state, action: PayloadAction<number>) {
             const selected = state.allContracts.find(
                 (c) => c.id === action.payload,
             );
