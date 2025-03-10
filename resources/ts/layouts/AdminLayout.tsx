@@ -13,13 +13,14 @@ import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContract, setContractState } from '@/store/slice/contractSlice';
-import { ContractProps } from '@/types/contract';
+import { Contract, ContractProps } from '@/types/contract';
+import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 
 interface AdminLayoutProps {
     titleI18n: string;
     children: React.ReactNode;
-    contracts: ContractProps[];
-    currentContract: ContractProps;
+    contracts: Contract[];
+    currentContract?: Contract;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
@@ -37,30 +38,26 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     const [menuOpen, setMenuOpen] = useState(false);
     const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
 
-    const allContractsOption: ContractProps = {
-        id: 'all',
-        name: t('general.allContracts'),
-    };
-
-    const contractsWithAll = contracts.some((c) => c.id === 'all')
-        ? contracts
-        : [...contracts, allContractsOption];
-
-    const [contract, setContract] = useState<ContractProps>(
-        currentContract ?? allContractsOption,
+    const [contract, setContract] = useState<Contract>(
+        currentContract ?? defaultContract,
     );
+
+    useEffect(() => {
+        if (currentContract) {
+            setContract(currentContract);
+        }
+    }, [currentContract]);
 
     const handleContractChange = useCallback(
         (e: DropdownChangeEvent) => {
-            const selectedContract = contractsWithAll.find(
-                (c) => c.id === e.value,
-            );
+            const selectedContract = contracts.find((c) => c.id === e.value);
+
             if (selectedContract) {
-                dispatch(selectContract(selectedContract.id));
+                dispatch(selectContract(selectedContract));
                 setContract(selectedContract);
             }
         },
-        [contractsWithAll, dispatch],
+        [contract, dispatch],
     );
 
     const handleProfileClick = () => setProfileDropdownVisible((prev) => !prev);
@@ -234,7 +231,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                     name="contractBtn"
                                     className="w-32"
                                     value={contract.id}
-                                    options={contractsWithAll}
+                                    options={contracts}
                                     onChange={handleContractChange}
                                     optionLabel="name"
                                     optionValue="id"
@@ -303,7 +300,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                 name="contractBtn"
                                 className="w-32"
                                 value={contract.id}
-                                options={contractsWithAll}
+                                options={contracts}
                                 onChange={handleContractChange}
                                 optionLabel="name"
                                 optionValue="id"

@@ -1,5 +1,5 @@
 export interface ContractProps {
-    id: string;
+    id: number;
     name?: string;
 }
 
