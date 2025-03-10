@@ -281,17 +281,46 @@
       },
       "resourceTypes": {
         "title": "Tipos de recurso",
-        "actions": "Acciones",
-        "editButton": "Editar tipo de recurso",
-        "deleteButton": "Eliminar tipo de recurso",
-        "loading": "Cargando...",
-        "create": {
-          "title": "Crear Tipo de Recurso",
-          "submitButton": "Crear Tipo de Recurso"
+        "list": {
+          "actions": {
+            "edit": "Editar tipo de recurso",
+            "delete": "Eliminar tipo de recurso",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Tipo de recurso eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
+            "createSuccess": "Tipo de recurso creado exitosamente",
+            "updateSuccess": "Tipo de recurso actualizado exitosamente",
+            "error": "Error guardando el tipo de recurso"
+          },
+          "columns": {
+            "name": "Nombre",
+            "description": "Descripción"
+          }
         },
-        "edit": {
-          "title": "Editar Tipo de Recurso",
-          "submitButton": "Guardar Cambios"
+        "form": {
+          "title": {
+            "create": "Crear Tipo de recurso",
+            "edit": "Editar Tipo de recurso"
+          },
+          "placeholders": {
+            "name": "Introduce el nombre",
+            "description": "Introduce la descripción"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "description_required": "La descripción es obligatoria"
+          },
+          "returnButton": "Volver a la lista de tipos de recurso",
+          "submitButton": {
+            "create": "Crear Tipo de recurso",
+            "edit": "Guardar cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
         }
       }
     }

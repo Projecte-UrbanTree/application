@@ -269,9 +269,46 @@
       },
       "resourceTypes": {
         "title": "Tipus de recurs",
-        "columns": {
-          "name": "Tipus de recurs",
-          "description": "Descripció"
+        "list": {
+          "actions": {
+            "edit": "Editar tipus de recurs",
+            "delete": "Eliminar tipus de recurs",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Tipus de recurs eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
+            "createSuccess": "Tipus de recurs creat correctament",
+            "updateSuccess": "Tipus de recurs actualitzat correctament",
+            "error": "Error guardant el tipus de recurs"
+          },
+          "columns": {
+            "name": "Nom",
+            "description": "Descripció"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipus de recurs",
+            "edit": "Editar Tipus de recurs"
+          },
+          "placeholders": {
+            "name": "Introdueix el nom",
+            "description": "Introdueix la descripció"
+          },
+          "validation": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria"
+          },
+          "returnButton": "Tornar a la llista de tipus de recurs",
+          "submitButton": {
+            "create": "Crear Tipus de recurs",
+            "edit": "Guardar canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          }
         }
       },
       "resources": {
@@ -280,40 +317,6 @@
           "name": "Recurs",
           "description": "Descripció",
           "resource_type_id": "Tipus de recurs"
-        }
-      },
-      "resourceTypes": {
-        "title": "Tipus de recurs",
-        "columns": {
-          "name": "Tipus de recurs",
-          "description": "Descripció"
-        },
-        "loading": "Carregant...",
-        "editButton": "Editar tipus de recurs",
-        "deleteButton": "Eliminar tipus de recurs",
-        "actions": "Accions",
-        "deletedSuccess": "Tipus de recurs eliminat correctament",
-        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
-        "success": "Tipus de recurs creat correctament",
-        "update": "Tipus de recurs actualitzat correctament",
-        "error": "Error guardant el tipus de recurs",
-        "create": {
-          "title": "Crear Tipus de Recurs",
-          "validations": {
-            "name_required": "El nom és obligatori",
-            "description_required": "La descripció és obligatòria"
-          },
-          "submitButton": "Crear Tipus de Recurs",
-          "submittingText": "Creant..."
-        },
-        "edit": {
-          "title": "Editar Tipus de Recurs",
-          "validations": {
-            "name_required": "El nom és obligatori",
-            "description_required": "La descripció és obligatòria"
-          },
-          "submitButton": "Guardar Canvis",
-          "submittingText": "Guardant..."
         }
       },
       "stats": {
