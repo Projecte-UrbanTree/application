@@ -1,10 +1,11 @@
-import AdminLayout from '@/layouts/AdminLayout';
+import AdminLayoutWrapper from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
-import { Navigate, RouteObject } from 'react-router-dom';
 
 import AdminDashboard from '@/pages/Admin/Dashboard';
 import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
+import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
+import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
 import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
@@ -25,288 +26,242 @@ import AdminStats from '@/pages/Admin/Stats';
 import AdminWorkers from '@/pages/Admin/Workers';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders';
 
+import { Navigate, RouteObject } from 'react-router-dom';
+
 const AdminRoutes: RouteObject[] = [
-  {
-    element: <AdminProtectedRoute />,
-    children: [
-      {
-        path: '/admin',
+    {
+        element: <AdminProtectedRoute />,
         children: [
-          { index: true, element: <Navigate to="/admin/dashboard" /> },
-          {
-            path: 'dashboard',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.dashboard.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminDashboard />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'work-orders',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.workOrders.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminWorkOrders />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'inventory',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.inventory.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminInventory />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'workers',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.workers.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminWorkers />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'resources',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.resources.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminResources />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'resources/create',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.resources.create.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <CreateResource />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'resources/edit/:id',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.resources.edit.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <EditResource />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'stats',
-            element: (
-              <AdminLayout
-                titleI18n="admin.pages.stats.title"
-                contracts={[{ id: '1', name: 'Tortosa' }]}
-                currentContract={'1'}>
-                <AdminStats />
-              </AdminLayout>
-            ),
-          },
-          {
-            path: 'settings',
-            children: [
-              { index: true, element: <Navigate to="/admin/settings/users" /> },
-              {
-                path: 'users',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.users.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <AdminUsers />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'users/create',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.users.create.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <CreateUser />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'users/edit/:id',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.users.edit.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <EditUser />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'contracts',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.contracts.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <AdminContracts />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'element-types',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.elementTypes.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <AdminElementTypes />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'tree-types',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.treeTypes.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <AdminTreeTypes />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'tree-types/create',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.treeTypes.create.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <CreateTreeType />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'tree-types/edit/:id',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.treeTypes.edit.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <EditTreeType />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'tree-types/create',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.treeTypes.create.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <CreateTreeType />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'tree-types/edit/:id',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.treeTypes.edit.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <EditTreeType />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'task-types',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.taskTypes.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract="1">
-                    <AdminTaskTypes />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'task-types/create',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.taskTypes.create.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract="1">
-                    <CreateTaskType />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'task-types/edit/:id',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.taskTypes.edit.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract="1">
-                    <EditTaskType />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'resource-types',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.resourceTypes.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <AdminResourceTypes />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'resource-types/create',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.resourceTypes.create.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <CreateResourceType />
-                  </AdminLayout>
-                ),
-              },
-              {
-                path: 'resource-types/edit/:id',
-                element: (
-                  <AdminLayout
-                    titleI18n="admin.pages.resourceTypes.edit.title"
-                    contracts={[{ id: '1', name: 'Tortosa' }]}
-                    currentContract={'1'}>
-                    <EditResourceType />
-                  </AdminLayout>
-                ),
-              },
-            ],
-          },
+            {
+                path: '/admin',
+                children: [
+                    {
+                        index: true,
+                        element: <Navigate to="/admin/dashboard" />,
+                    },
+                    {
+                        path: 'dashboard',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.dashboard.title">
+                                <AdminDashboard />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'work-orders',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.title">
+                                <AdminWorkOrders />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'inventory',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.inventory.title">
+                                <AdminInventory />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'workers',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workers.title">
+                                <AdminWorkers />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'resources',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.resources.title">
+                                <AdminResources />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'resources/create',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.resources.create.title">
+                                <CreateResource />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'resources/edit/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.resources.edit.title">
+                                <EditResource />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'stats',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
+                                <AdminStats />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'settings',
+                        children: [
+                            {
+                                index: true,
+                                element: (
+                                    <Navigate to="/admin/settings/users" />
+                                ),
+                            },
+                            {
+                                path: 'users',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.users.title">
+                                        <AdminUsers />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'users/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.users.create.title">
+                                        <CreateUser />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'users/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.users.edit.title">
+                                        <EditUser />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'contracts',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.title">
+                                        <AdminContracts />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'contracts/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.create.title">
+                                        <CreateContract />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'contracts/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.edit.title">
+                                        <EditContract />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'element-types',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.title">
+                                        <AdminElementTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'tree-types',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.title">
+                                        <AdminTreeTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'tree-types/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.create.title">
+                                        <CreateTreeType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'tree-types/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.edit.title">
+                                        <EditTreeType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'tree-types/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.create.title">
+                                        <CreateTreeType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'tree-types/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.edit.title">
+                                        <EditTreeType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'task-types',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.title">
+                                        <AdminTaskTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'task-types/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.create.title">
+                                        <CreateTaskType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'task-types/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.edit.title">
+                                        <EditTaskType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'resource-types',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.title">
+                                        <AdminResourceTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'resource-types/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.create.title">
+                                        <CreateResourceType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'resource-types/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.edit.title">
+                                        <EditResourceType />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                        ],
+                    },
+                ],
+            },
         ],
-      },
-    ],
-  },
+    },
 ];
 
 export default AdminRoutes;

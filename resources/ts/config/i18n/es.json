@@ -14,11 +14,15 @@
       "password": "Contraseña",
       "role": "Rol",
       "species": "Especie",
-      "surname": "Apellido"
+      "status": "Estado",
+      "final_price": "Precio final",
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha de fin"
     },
-    "menu": {
-      "management": "Gestión",
-      "settings": "Configuración"
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "completed": "Completado"
     },
     "pages": {
       "contracts": {
@@ -33,169 +37,219 @@
         "title": "Contratos"
       },
       "dashboard": {
-        "stats": {
-          "widgets": {
-            "contracts": "Contratos",
-            "elements": "Elementos",
-            "users": "Usuarios",
-            "workOrders": "Órdenes de trabajo"
-          }
-        },
         "title": "Tablero",
         "welcome": {
           "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
           "message": "Te damos la bienvenida a tu tablero. Aquí tienes un resumen rápido de tus datos."
+        },
+        "stats": {
+          "widgets": {
+            "users": "Usuarios",
+            "contracts": "Contratos",
+            "elements": "Elementos",
+            "workOrders": "Órdenes de trabajo"
+          }
         }
       },
-      "elementTypes": {
-        "columns": {
-          "color": "Color",
-          "description": "Descripción",
-          "icon": "Ícono",
-          "name": "Tipo de elemento",
-          "requires_tree_type": "Requiere tipo de árbol"
-        },
-        "title": "Tipos de elemento"
-      },
-      "resources": {
-        "form": {
-          "fields": {
-            "description": "Descripción",
+      "users": {
+        "title": "Usuarios",
+        "list": {
+          "actions": {
+            "edit": "Editar usuario",
+            "delete": "Eliminar usuario",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Usuario eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
+            "createSuccess": "Usuario creado exitosamente",
+            "updateSuccess": "Usuario actualizado exitosamente",
+            "error": "Error guardando el usuario"
+          },
+          "columns": {
             "name": "Nombre",
-            "type": "Tipo"
+            "surname": "Apellido",
+            "email": "Correo electrónico",
+            "company": "Empresa",
+            "dni": "DNI",
+            "role": "Rol"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Usuario",
+            "edit": "Editar Usuario"
           },
           "placeholders": {
-            "description": "Introduce la descripción",
-            "name": "Introduce el nombre",
-            "type": "Selecciona un tipo"
-          },
-          "returnButton": "Volver a la lista de recursos",
-          "submitButton": {
-            "create": "Crear Recurso",
-            "edit": "Guardar cambios"
-          },
-          "submittingText": {
-            "create": "Creando...",
-            "edit": "Guardando..."
-          },
-          "title": {
-            "create": "Crear Recurso",
-            "edit": "Editar Recurso"
+            "role": "Selecciona un rol",
+            "password": "Contraseña",
+            "passwordEdit": "Contraseña (dejar en blanco para no cambiar)"
           },
           "validation": {
             "name_required": "El nombre es obligatorio",
-            "type_required": "El tipo es obligatorio"
-          }
-        },
-        "list": {
-          "actions": {
-            "delete": "Eliminar recurso",
-            "edit": "Editar recurso",
-            "label": "Acciones"
+            "surname_required": "El apellido es obligatorio",
+            "invalid_email": "Correo inválido",
+            "email_required": "El correo es obligatorio",
+            "role_invalid": "Rol no válido",
+            "password_required": "La contraseña es obligatoria",
+            "password_min": "Debe tener al menos 8 caracteres",
+            "password_uppercase": "Debe contener al menos una letra mayúscula",
+            "password_number": "Debe contener al menos un número",
+            "password_special": "Debe contener al menos un carácter especial"
           },
-          "columns": {
-            "description": "Descripción",
-            "name": "Nombre",
-            "type": "Tipo"
-          },
-          "messages": {
-            "createSuccess": "Recurso creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este recurso?",
-            "deleteSuccess": "Recurso eliminado exitosamente",
-            "error": "Error guardando el recurso",
-            "updateSuccess": "Recurso actualizado exitosamente"
-          },
-          "title": "Recursos"
-        },
-        "title": "Recursos"
-      },
-      "resourceTypes": {
-        "actions": "Acciones",
-        "columns": {
-          "description": "Descripción",
-          "name": "Tipo de recurso"
-        },
-        "create": {
-          "submitButton": "Crear Tipo de Recurso",
-          "submittingText": "Creando...",
-          "title": "Crear Tipo de Recurso",
-          "validations": {
-            "description_required": "La descripción es obligatoria",
-            "name_required": "El nombre es obligatorio"
-          }
-        },
-        "deleteButton": "Eliminar tipo de recurso",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
-        "deletedSuccess": "Tipo de recurso eliminado exitosamente",
-        "edit": {
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando...",
-          "title": "Editar Tipo de Recurso",
-          "validations": {
-            "description_required": "La descripción es obligatoria",
-            "name_required": "El nombre es obligatorio"
-          }
-        },
-        "editButton": "Editar tipo de recurso",
-        "error": "Error guardando el tipo de recurso",
-        "loading": "Cargando...",
-        "success": "Tipo de recurso creado exitosamente",
-        "title": "Tipos de recurso",
-        "update": "Tipo de recurso actualizado exitosamente"
-      },
-      "stats": {
-        "title": "Estadísticas"
-      },
-      "taskTypes": {
-        "form": {
-          "fields": {
-            "description": "Descripción",
-            "name": "Nombre"
-          },
-          "placeholders": {
-            "description": "Introduce la descripción",
-            "name": "Introduce el nombre"
-          },
-          "returnButton": "Volver a la lista de tipos de tarea",
+          "returnButton": "Volver a la lista de usuarios",
           "submitButton": {
-            "create": "Crear Tipo de tarea",
-            "edit": "Guardar cambios"
+            "create": "Crear Usuario",
+            "edit": "Guardar Cambios"
           },
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
-          },
-          "title": {
-            "create": "Crear Tipo de tarea",
-            "edit": "Editar Tipo de tarea"
-          },
-          "validation": {
-            "error_numbers": "El nombre no puede contener números o caracteres especiales",
-            "name_required": "El nombre es obligatorio"
           }
+        }
+      },
+      "contracts": {
+        "title": "Contratos",
+        "columns": {
+          "name": "Contrato",
+          "start_date": "Fecha de inicio",
+          "end_date": "Fecha de fin",
+          "status": "Estado"
         },
+        "create": {
+          "title": "Crear Contrato",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submittingText": "Creando...",
+          "submitButton": "Crear Contrato",
+          "success": "Contrato creado exitosamente"
+        },
+        "edit": {
+          "title": "Editar Contrato",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submittingText": "Guardando...",
+          "submitButton": "Guardar Cambios",
+          "update": "Contrato actualizado exitosamente",
+          "error": "Error guardando el contrato"
+        },
+        "loading": "Cargando...",
+        "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+        "deletedSuccess": "Contrato eliminado exitosamente",
+        "actions": "Acciones",
+        "editButton": "Editar Contrato",
+        "deleteButton": "Eliminar Contrato",
         "list": {
           "actions": {
-            "delete": "Eliminar tipo de tarea",
-            "edit": "Editar tipo de tarea",
+            "edit": "Editar contrato",
+            "delete": "Eliminar contrato",
             "label": "Acciones"
           },
-          "columns": {
-            "description": "Descripción",
-            "name": "Nombre"
-          },
           "messages": {
-            "createSuccess": "Tipo de tarea creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este tipo de tarea?",
-            "deleteSuccess": "Tipo de tarea eliminado exitosamente",
-            "error": "Error guardando el tipo de tarea",
-            "updateSuccess": "Tipo de tarea actualizado exitosamente"
+            "deleteSuccess": "Contrato eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+            "createSuccess": "Contrato creado exitosamente",
+            "updateSuccess": "Contrato actualizado exitosamente",
+            "error": "Error guardando el contrato"
           },
-          "title": "Tipos de tarea"
+          "columns": {
+            "name": "Contrato",
+            "start_date": "Fecha de inicio",
+            "end_date": "Fecha de fin",
+            "final_price": "Precio final",
+            "status": "Estado"
+          }
         },
-        "title": "Tipos de tarea"
+        "form": {
+          "title": {
+            "create": "Crear Contrato",
+            "edit": "Editar Contrato"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "returnButton": "Volver a la lista de contratos",
+          "submitButton": {
+            "create": "Crear Contrato",
+            "edit": "Guardar Cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
+        }
+      },
+      "workOrders": {
+        "title": "Órdenes de trabajo",
+        "columns": {
+          "date": "Fecha",
+          "status": "Estado",
+          "contract_id": "Contrato"
+        }
+      },
+      "elementTypes": {
+        "title": "Tipos de elemento",
+        "columns": {
+          "name": "Tipo de elemento",
+          "requires_tree_type": "Requiere tipo de árbol",
+          "description": "Descripción",
+          "icon": "Ícono",
+          "color": "Color"
+        }
       },
       "treeTypes": {
+        "title": "Tipos de árbol",
+        "list": {
+          "actions": {
+            "label": "Acciones",
+            "edit": "Editar Tipo de Árbol",
+            "delete": "Eliminar Tipo de Árbol"
+          },
+          "messages": {
+            "deletedSuccess": "Tipo de árbol eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
+            "createSuccess": "Tipo de árbol creado exitosamente",
+            "updateSuccess": "Tipo de árbol actualizado exitosamente",
+            "error": "Error guardando el tipo de árbol"
+          },
+          "columns": {
+            "family": "Familia",
+            "genus": "Género",
+            "species": "Especie"
+          }
+        },
         "form": {
           "submitButton": {
             "create": "Crear Tipo de Árbol",
@@ -214,127 +268,121 @@
               "family": "La familia debe contener solo caracteres alfanuméricos",
               "genus": "El género debe contener solo caracteres alfanuméricos",
               "species": "La especie debe contener solo caracteres alfanuméricos"
-            },
-            "family": "La familia es obligatoria",
-            "genus": "El género es obligatorio",
-            "species": "La especie es obligatoria"
-          }
-        },
-        "list": {
-          "actions": {
-            "delete": "Eliminar Tipo de Árbol",
-            "edit": "Editar Tipo de Árbol",
-            "label": "Acciones"
+            }
           },
-          "columns": {
-            "family": "Familia",
-            "genus": "Género",
-            "species": "Especie"
-          },
-          "messages": {
-            "createSuccess": "Tipo de árbol creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
-            "deletedSuccess": "Tipo de árbol eliminado exitosamente",
-            "error": "Error guardando el tipo de árbol",
-            "updateSuccess": "Tipo de árbol actualizado exitosamente"
-          },
-          "title": "Tipos de árbol"
-        },
-        "title": "Tipos de árbol"
-      },
-      "users": {
-        "form": {
-          "placeholders": {
-            "password": "Contraseña",
-            "passwordEdit": "Contraseña (dejar en blanco para no cambiar)",
-            "role": "Selecciona un rol"
-          },
-          "returnButton": "Volver a la lista de usuarios",
           "submitButton": {
-            "create": "Crear Usuario",
+            "create": "Crear Tipo de Árbol",
             "edit": "Guardar Cambios"
           },
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
-          },
-          "title": {
-            "create": "Crear Usuario",
-            "edit": "Editar Usuario"
-          },
-          "validation": {
-            "email_required": "El correo es obligatorio",
-            "invalid_email": "Correo inválido",
-            "name_required": "El nombre es obligatorio",
-            "password_min": "Debe tener al menos 8 caracteres",
-            "password_number": "Debe contener al menos un número",
-            "password_required": "La contraseña es obligatoria",
-            "password_special": "Debe contener al menos un carácter especial",
-            "password_uppercase": "Debe contener al menos una letra mayúscula",
-            "role_invalid": "Rol no válido",
-            "surname_required": "El apellido es obligatorio"
           }
-        },
+        }
+      },
+      "taskTypes": {
+        "title": "Tipos de tarea",
         "list": {
           "actions": {
-            "delete": "Eliminar usuario",
-            "edit": "Editar usuario",
+            "edit": "Editar tipo de tarea",
+            "delete": "Eliminar tipo de tarea",
             "label": "Acciones"
           },
-          "columns": {
-            "company": "Empresa",
-            "dni": "DNI",
-            "email": "Correo electrónico",
-            "name": "Nombre",
-            "role": "Rol",
-            "surname": "Apellido"
-          },
           "messages": {
-            "createSuccess": "Usuario creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
-            "deleteSuccess": "Usuario eliminado exitosamente",
-            "error": "Error guardando el usuario",
-            "updateSuccess": "Usuario actualizado exitosamente"
+            "deleteSuccess": "Tipo de tarea eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de tarea?",
+            "createSuccess": "Tipo de tarea creado exitosamente",
+            "updateSuccess": "Tipo de tarea actualizado exitosamente",
+            "error": "Error guardando el tipo de tarea"
+          },
+          "columns": {
+            "name": "Nombre",
+            "description": "Descripción"
           }
         },
-        "title": "Usuarios"
+        "form": {
+          "title": {
+            "create": "Crear Tipo de tarea",
+            "edit": "Editar Tipo de tarea"
+          },
+          "fields": {
+            "name": "Nombre",
+            "description": "Descripción"
+          },
+          "placeholders": {
+            "name": "Introduce el nombre",
+            "description": "Introduce la descripción"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "error_numbers": "El nombre no puede contener números o caracteres especiales"
+          },
+          "returnButton": "Volver a la lista de tipos de tarea",
+          "submitButton": {
+            "create": "Crear Tipo de tarea",
+            "edit": "Guardar cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
+        }
       },
-      "workOrders": {
+      "resources": {
+        "title": "Recursos",
         "columns": {
-          "contract_id": "Contrato",
-          "date": "Fecha",
-          "status": "Estado"
-        },
-        "title": "Órdenes de trabajo"
-      }
-    },
-    "profileDropdown": {
-      "accountSettings": "Configuración de la cuenta",
-      "license": "Licencia",
-      "logout": "Cerrar sesión"
-    },
-    "roles": {
-      "admin": "Administrador",
-      "customer": "Cliente",
-      "unknown": "Desconocido",
-      "worker": "Operario"
-    },
-    "submenu": {
-      "manage": {
-        "dashboard": "Tablero",
-        "inventory": "Inventario",
-        "resources": "Recursos",
-        "stats": "Estadísticas",
-        "workers": "Trabajadores",
-        "workOrders": "Órdenes de trabajo"
+          "name": "Recurso",
+          "description": "Descripción",
+          "resource_type_id": "Tipo de recurso"
+        }
       },
-      "settings": {
-        "contracts": "Contratos",
-        "elementTypes": "Tipos de elemento",
-        "resourceTypes": "Tipos de recurso",
-        "species": "Especies",
-        "taskTypes": "Tipos de tarea",
-        "users": "Usuarios"
+      "stats": {
+        "title": "Estadísticas"
+      },
+      "resourceTypes": {
+        "title": "Tipos de recurso",
+        "list": {
+          "actions": {
+            "edit": "Editar tipo de recurso",
+            "delete": "Eliminar tipo de recurso",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Tipo de recurso eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
+            "createSuccess": "Tipo de recurso creado exitosamente",
+            "updateSuccess": "Tipo de recurso actualizado exitosamente",
+            "error": "Error guardando el tipo de recurso"
+          },
+          "columns": {
+            "name": "Nombre",
+            "description": "Descripción"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipo de recurso",
+            "edit": "Editar Tipo de recurso"
+          },
+          "placeholders": {
+            "name": "Introduce el nombre",
+            "description": "Introduce la descripción"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "description_required": "La descripción es obligatoria",
+            "name_invalid": "El nombre solo puede contener letras, números y espacios"
+          },
+          "returnButton": "Volver a la lista de tipos de recurso",
+          "submitButton": {
+            "create": "Crear Tipo de recurso",
+            "edit": "Guardar cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
+        }
       }
     }
   },
@@ -343,25 +391,9 @@
     "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
     "loading": "Cargando..."
   },
-  "public": {
-    "error": {
-      "btnReturn": "Volver atrás",
-      "descriptions": {
-        "404": "La página que buscas no existe.",
-        "unexpected": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."
-      },
-      "title": "Error {{errorCode}}"
-    },
-    "login": {
-      "form": {
-        "btnLogin": "Iniciar sesión",
-        "labelEmail": "Correo electrónico",
-        "labelPassword": "Contraseña",
-        "msgSuccess": "Inicio de sesión correcto",
-        "placeholderEmail": "tucorreo@ejemplo.com",
-        "rememberMe": "Recuérdame",
-        "titleSuccess": "Éxito"
-      }
-    }
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "completed": "Completado"
   }
 }
