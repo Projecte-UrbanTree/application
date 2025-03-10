@@ -68,7 +68,15 @@
       "family": "Família",
       "genus": "Gènere",
       "species": "Espècie",
-      "description": "Descripció"
+      "status": "Estat",
+      "final_price": "Preu final",
+      "start_date": "Data d'inici",
+      "end_date": "Data de finalització"
+    },
+    "status": {
+      "active": "Actiu",
+      "inactive": "Inactiu",
+      "completed": "Completat"
     },
     "pages": {
       "dashboard": {
@@ -149,9 +157,101 @@
           "name": "Contracte",
           "start_date": "Data d'inici",
           "end_date": "Data de finalització",
-          "invoice_proposed": "Factura proposada",
-          "invoice_agreed": "Factura acordada",
-          "invoice_paid": "Factura pagada"
+          "status": "Estat"
+        },
+        "create": {
+          "title": "Crear Contracte",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La data d'inici és obligatòria",
+            "end_date_required": "La data de finalització és obligatòria",
+            "end_date_after_start_date": "La data de finalització no pot ser anterior a la data d'inici",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submittingText": "Creant...",
+          "submitButton": "Crear Contracte",
+          "success": "Contrato creado exitosamente"
+        },
+        "edit": {
+          "title": "Editar Contracte",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La data d'inici és obligatòria",
+            "end_date_required": "La data de finalització és obligatòria",
+            "end_date_after_start_date": "La data de finalització no pot ser anterior a la data d'inici",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estat no vàlid",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estat"
+          },
+          "submittingText": "Guardant...",
+          "submitButton": "Guardar Canvis",
+          "update": "Contrato actualizado exitosamente",
+          "error": "Error guardando el contrato"
+        },
+        "loading": "Carregant...",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
+        "deletedSuccess": "Contracte eliminat correctament",
+        "actions": "Accions",
+        "editButton": "Editar contracte",
+        "deleteButton": "Eliminar contracte",
+        "list": {
+          "actions": {
+            "edit": "Editar contracte",
+            "delete": "Eliminar contracte",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Contracte eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
+            "createSuccess": "Contracte creat correctament",
+            "updateSuccess": "Contracte actualitzat correctament",
+            "error": "Error guardant el contracte"
+          },
+          "columns": {
+            "name": "Contracte",
+            "start_date": "Data d'inici",
+            "end_date": "Data de finalització",
+            "final_price": "Preu final",
+            "status": "Estat"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Contracte",
+            "edit": "Editar Contracte"
+          },
+          "placeholders": {
+            "status": "Selecciona un estat"
+          },
+          "validation": {
+            "name_required": "El nom es obligatori",
+            "name_invalid": "El nom no és vàlid",
+            "start_date_required": "La data d'inici es obligatòria",
+            "end_date_required": "La data de finalització es obligatòria",
+            "end_date_after_start_date": "La data de finalització ha de ser posterior a la data d'inici",
+            "final_price_required": "El preu final es obligatori",
+            "status_invalid": "Estat no vàlid",
+            "status_required": "L'estat es obligatori"
+          },
+          "returnButton": "Tornar a la llista de contractes",
+          "submitButton": {
+            "create": "Crear Contracte",
+            "edit": "Guardar Canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          }
         }
       },
       "workOrders": {
@@ -330,5 +430,10 @@
     "genericError": "Hi ha hagut un error. Si us plau, torna a intentar-ho més tard.",
     "allContracts": "Tots els contractes",
     "loading": "Carregant..."
+  },
+  "status": {
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "completed": "Completat"
   }
 }
