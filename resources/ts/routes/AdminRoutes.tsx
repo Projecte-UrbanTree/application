@@ -57,6 +57,22 @@ const AdminRoutes: RouteObject[] = [
                         ),
                     },
                     {
+                      path: 'work-orders/create',
+                      element: (
+                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.create.title">
+                              <CreateWorkOrder />
+                          </AdminLayoutWrapper>
+                      ),
+                    },
+                    {
+                      path: 'work-orders/edit/:id',
+                      element: (
+                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                              <EditWorkOrder />
+                          </AdminLayoutWrapper>
+                      ),
+                    },
+                    {
                         path: 'inventory',
                         element: (
                             <AdminLayoutWrapper titleI18n="admin.pages.inventory.title">
