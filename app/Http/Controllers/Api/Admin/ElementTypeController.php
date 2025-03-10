@@ -61,4 +61,27 @@ class ElementTypeController extends Controller
 
         return response()->json(['message' => 'Elemento eliminado eliminado'], 200);
     }
+
+    public function icons()
+    {
+        $icons = [
+            'tree',
+            'home',
+            'post-lamp',
+            'park',
+            'fountain',
+            'flower',
+            'mountain',
+            'beach',
+            'volcano',
+            'tap',
+            'water-drop',
+            'lightbulb',
+            'lightning-bolt',
+            'grass',
+            'cloud',
+        ];
+
+        return response()->json($icons);
+    }
 }
