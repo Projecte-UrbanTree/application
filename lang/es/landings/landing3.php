@@ -1,4 +1,5 @@
 <?php
+
 return [
     'login' => 'Iniciar Sesión',
     'title' => 'Urban Tree 5.0',
