@@ -78,14 +78,14 @@ export default function ResourceTypes() {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm(t("admin.pages.resourceTypes.deleteConfirm"))) {
+    if (window.confirm(t("admin.pages.resourceTypes.list.messages.deleteConfirm"))) {
       try {
         await axiosClient.delete(`/admin/resource-types/${id}`);
         setResourceTypes((prevResourceTypes) => prevResourceTypes.filter((resourceType) => resourceType.id !== id));
-        setMsg(t("admin.pages.resourceTypes.deletedSuccess"));
+        setMsg(t("admin.pages.resourceTypes.list.messages.deleteSuccess"));
       } catch (error) {
         console.error(error);
-        setMsg(t("admin.pages.resourceTypes.deleteError"));
+        setMsg(t("admin.pages.resourceTypes.list.messages.deleteError"));
       }
     }
   };
@@ -94,7 +94,7 @@ export default function ResourceTypes() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <ProgressSpinner style={{ width: "50px", height: "50px" }} strokeWidth="4" />
-        <span className="mt-2 text-blue-600">{t("admin.pages.resourceTypes.loading")}</span>
+        <span className="mt-2 text-blue-600">{t("general.loading")}</span>
       </div>
     );
   }
@@ -103,7 +103,7 @@ export default function ResourceTypes() {
     <>
       {msg && (
         <Message
-          severity={successMsg || msg === t("admin.pages.resourceTypes.deletedSuccess") ? "success" : "error"}
+          severity={successMsg || msg === t("admin.pages.resourceTypes.list.messages.deleteSuccess") ? "success" : "error"}
           text={msg}
           className="mb-4 w-full"
         />
@@ -120,28 +120,28 @@ export default function ResourceTypes() {
           className="p-datatable-sm">
           <Column
             field="name"
-            header={t('admin.fields.name')}
+            header={t('admin.pages.resourceTypes.list.columns.name')}
           />
           <Column
             field="description"
-            header={t('admin.fields.description')}
+            header={t('admin.pages.resourceTypes.list.columns.description')}
           />
           
           <Column
-            header={t("admin.pages.resourceTypes.actions")}
+            header={t("admin.pages.resourceTypes.list.actions.label")}
             body={(rowData) => (
               <div className="flex justify-center gap-2">
                 <Button
                   icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
                   className="p-button-rounded p-button-info"
-                  tooltip={t("admin.pages.resourceTypes.editButton")}
+                  tooltip={t("admin.pages.resourceTypes.list.actions.edit")}
                   tooltipOptions={{ position: "top" }}
                   onClick={() => navigate(`/admin/settings/resource-types/edit/${rowData.id}`)}
                 />
                 <Button
                   icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
                   className="p-button-rounded p-button-danger"
-                  tooltip={t("admin.pages.resourceTypes.deleteButton")}
+                  tooltip={t("admin.pages.resourceTypes.list.actions.delete")}
                   tooltipOptions={{ position: "top" }}
                   onClick={() => handleDelete(rowData.id)}
                 />

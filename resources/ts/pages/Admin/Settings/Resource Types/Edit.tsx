@@ -41,15 +41,16 @@ export default function EditResourceType() {
     }, [id]);
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.resourceTypes.edit.validations.name_required")),
+        name: Yup.string().required(t("admin.pages.resourceTypes.form.validation.name_required")),
+        description: Yup.string().nullable(),
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
         try {
             await axiosClient.put(`/admin/resource-types/${id}`, values);
-            navigate("/admin/settings/resource-types", { state: { success: t("admin.pages.resourceTypes.update") } });
+            navigate("/admin/settings/resource-types", { state: { success: t("admin.pages.resourceTypes.list.messages.updateSuccess") } });
         } catch (error) {
-            navigate("/admin/settings/resource-types", { state: { error: t("admin.pages.resourceTypes.error") } });
+            navigate("/admin/settings/resource-types", { state: { error: t("admin.pages.resourceTypes.list.messages.error") } });
         }
     };
 
@@ -57,7 +58,7 @@ export default function EditResourceType() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <Icon icon="eos-icons:loading" className="h-8 w-8 animate-spin text-blue-600" />
-                <span className="mt-2 text-blue-600">{t("admin.pages.resourceTypes.loading")}</span>
+                <span className="mt-2 text-blue-600">{t("general.loading")}</span>
             </div>
         );
     }
@@ -74,7 +75,7 @@ export default function EditResourceType() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.resourceTypes.edit.title")}
+                        {t("admin.pages.resourceTypes.form.title.edit")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -124,8 +125,8 @@ export default function EditResourceType() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.resourceTypes.edit.submittingText")
-                                                : t("admin.pages.resourceTypes.edit.submitButton")
+                                                ? t("admin.pages.resourceTypes.form.submittingText.edit")
+                                                : t("admin.pages.resourceTypes.form.submitButton.edit")
                                         }
                                     />
                                 </div>

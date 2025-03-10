@@ -20,7 +20,8 @@ export default function CreateResourceType() {
     };
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.resourceTypes.create.validations.name_required")),
+        name: Yup.string().required(t("admin.pages.resourceTypes.form.validation.name_required")),
+        description: Yup.string().nullable(),
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
@@ -28,10 +29,10 @@ export default function CreateResourceType() {
         try {
             await axiosClient.get("/sanctum/csrf-cookie");
             await axiosClient.post("/admin/resource-types", values);
-            navigate("/admin/settings/resource-types", { state: { success: t("admin.pages.resourceTypes.success") } });
+            navigate("/admin/settings/resource-types", { state: { success: t("admin.pages.resourceTypes.list.messages.createSuccess") } });
         } catch (error) {
             console.error(error);
-            navigate("/admin/settings/resource-types", { state: { error: t("admin.pages.resourceTypes.error") } });
+            navigate("/admin/settings/resource-types", { state: { error: t("admin.pages.resourceTypes.list.messages.error") } });
         } finally {
             setIsSubmitting(false);
         }
@@ -49,7 +50,7 @@ export default function CreateResourceType() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.resourceTypes.create.title")}
+                        {t("admin.pages.resourceTypes.form.title.create")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -98,8 +99,8 @@ export default function CreateResourceType() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.resourceTypes.create.submittingText")
-                                                : t("admin.pages.resourceTypes.create.submitButton")
+                                                ? t("admin.pages.resourceTypes.form.submittingText.create")
+                                                : t("admin.pages.resourceTypes.form.submitButton.create")
                                         }
                                     />
                                 </div>
