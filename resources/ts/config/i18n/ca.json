@@ -106,12 +106,12 @@
           "fields": {
             "description": "Descripció",
             "name": "Nom",
-            "type": "Tipus"
+            "type": "Tipo"
           },
           "placeholders": {
             "description": "Introdueix la descripció",
             "name": "Introdueix el nom",
-            "type": "Tria un tipus"
+            "type": "Selecciona un tipo"
           },
           "returnButton": "Tornar a la llista de recursos",
           "submitButton": {
@@ -133,7 +133,7 @@
         },
         "list": {
           "actions": {
-            "delete": "Esborrar recurs",
+            "delete": "Eliminar recurs",
             "edit": "Editar recurs",
             "label": "Accions"
           },
