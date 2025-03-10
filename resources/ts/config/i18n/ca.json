@@ -67,8 +67,7 @@
       "password": "Contrasenya",
       "family": "Família",
       "genus": "Gènere",
-      "species": "Espècie",
-      "description": "Descripció"
+      "species": "Espècie"
     },
     "pages": {
       "dashboard": {
@@ -221,8 +220,57 @@
       },
       "taskTypes": {
         "title": "Tipus de tasca",
+        "list": {
+          "title": "Tipus de tasca",
+          "actions": {
+            "edit": "Editar tipus de tasca",
+            "delete": "Eliminar tipus de tasca",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Tipus de tasca eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
+            "createSuccess": "Tipus de tasca creat correctament",
+            "updateSuccess": "Tipus de tasca actualitzat correctament",
+            "error": "Error guardant el tipus de tasca"
+          },
+          "columns": {
+            "name": "Nom",
+            "description": "Descripció"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Editar Tipus de tasca"
+          },
+          "fields": {
+            "name": "Nom",
+            "description": "Descripció"
+          },
+          "placeholders": {
+            "name": "Introdueix el nom",
+            "description": "Introdueix la descripció"
+          },
+          "validation": {
+            "name_required": "El nom és obligatori",
+            "error_numbers": "El nom no pot contenir números ni caràcters especials"
+          },
+          "returnButton": "Tornar a la llista de tipus de tasca",
+          "submitButton": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Guardar canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          }
+        }
+      },
+      "resourceTypes": {
+        "title": "Tipus de recurs",
         "columns": {
-          "name": "Tipus de tasca",
+          "name": "Tipus de recurs",
           "description": "Descripció"
         }
       },
@@ -234,23 +282,42 @@
           "resource_type_id": "Tipus de recurs"
         }
       },
-      "stats": {
-        "title": "Estadístiques"
-      },
       "resourceTypes": {
         "title": "Tipus de recurs",
-        "actions": "Accions",
+        "columns": {
+          "name": "Tipus de recurs",
+          "description": "Descripció"
+        },
+        "loading": "Carregant...",
         "editButton": "Editar tipus de recurs",
         "deleteButton": "Eliminar tipus de recurs",
-        "loading": "Carregant...",
+        "actions": "Accions",
+        "deletedSuccess": "Tipus de recurs eliminat correctament",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
+        "success": "Tipus de recurs creat correctament",
+        "update": "Tipus de recurs actualitzat correctament",
+        "error": "Error guardant el tipus de recurs",
         "create": {
           "title": "Crear Tipus de Recurs",
-          "submitButton": "Crear Tipus de Recurs"
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria"
+          },
+          "submitButton": "Crear Tipus de Recurs",
+          "submittingText": "Creant..."
         },
         "edit": {
           "title": "Editar Tipus de Recurs",
-          "submitButton": "Guardar Canvis"
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria"
+          },
+          "submitButton": "Guardar Canvis",
+          "submittingText": "Guardant..."
         }
+      },
+      "stats": {
+        "title": "Estadístiques"
       }
     }
   },

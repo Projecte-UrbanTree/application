@@ -7,10 +7,7 @@ import axiosClient from "@/api/axiosClient";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { Dropdown } from "primereact/dropdown";
-import { Password } from "primereact/password";
 import { Card } from "primereact/card";
-
 export default function EditTreeType() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -22,10 +19,9 @@ export default function EditTreeType() {
     }>({
         family: "",
         genus: "",
-        species: "",
+        species: ""
     });
     const [isLoading, setIsLoading] = useState(true);
-
     useEffect(() => {
         const fetchTreeType = async () => {
             try {
@@ -34,7 +30,7 @@ export default function EditTreeType() {
                 setInitialValues({
                     family: tree_type.family,
                     genus: tree_type.genus,
-                    species: tree_type.species ?? "",
+                    species: tree_type.species ?? ""
                 });
                 setIsLoading(false);
             } catch (error) {
@@ -44,37 +40,33 @@ export default function EditTreeType() {
         };
         fetchTreeType();
     }, [id]);
-
     const validationSchema = Yup.object({
         family: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.family"))
-            .required(t("admin.pages.treeTypes.create.validation.family")),
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.family"))
+            .required(t("admin.pages.treeTypes.form.validation.family")),
         genus: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.genus"))
-            .required(t("admin.pages.treeTypes.create.validation.genus")),
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.genus"))
+            .required(t("admin.pages.treeTypes.form.validation.genus")),
         species: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.create.validation1.species"))
+            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.species"))
     });
-
     const handleSubmit = async (values: typeof initialValues) => {
         try {
             const data = { ...values };
             await axiosClient.put(`/admin/tree-types/${id}`, data);
-            navigate("/admin/settings/tree-types", { state: { success: t("admin.pages.treeTypes.update") } });
+            navigate("/admin/settings/tree-types", { state: { success: t("admin.pages.treeTypes.list.messages.updateSuccess") } });
         } catch (error) {
-            navigate("/admin/settings/tree-types", { state: { error: t("admin.pages.treeTypes.error") } });
+            navigate("/admin/settings/tree-types", { state: { error: t("admin.pages.treeTypes.list.messages.error") } });
         }
     };
-
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <Icon icon="eos-icons:loading" className="h-8 w-8 animate-spin text-blue-600" />
-                <span className="mt-2 text-blue-600">{t("admin.pages.treeTypes.loading")}</span>
+                <span className="mt-2 text-blue-600">{t("general.loading")}</span>
             </div>
         );
     }
-
     return (
         <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
             <Card className="w-full max-w-3xl shadow-lg">
@@ -87,7 +79,7 @@ export default function EditTreeType() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t("admin.pages.treeTypes.edit.title")}
+                        {t("admin.pages.treeTypes.form.title.edit")}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -152,8 +144,8 @@ export default function EditTreeType() {
                                         icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
                                         label={
                                             isSubmitting
-                                                ? t("admin.pages.treeTypes.edit.submittingText")
-                                                : t("admin.pages.treeTypes.edit.submitButton")
+                                                ? t("admin.pages.treeTypes.form.submittingText.edit")
+                                                : t("admin.pages.treeTypes.form.submitButton.edit")
                                         }
                                     />
                                 </div>
