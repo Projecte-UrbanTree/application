@@ -68,16 +68,7 @@
       "family": "Familia",
       "genus": "Género",
       "species": "Especie",
-      "description": "Descripción",
-      "status": "Estado",
-      "final_price": "Precio final",
-      "start_date": "Fecha de inicio",
-      "end_date": "Fecha de fin"
-    },
-    "status": {
-      "active": "Activo",
-      "inactive": "Inactivo",
-      "completed": "Completado"
+
     },
     "pages": {
       "dashboard": {
