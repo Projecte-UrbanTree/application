@@ -41,7 +41,9 @@ export default function EditResourceType() {
     }, [id]);
 
     const validationSchema = Yup.object({
-        name: Yup.string().required(t("admin.pages.resourceTypes.form.validation.name_required")),
+        name: Yup.string()
+            .matches(/^[a-zA-Z0-9 ]*$/, t("admin.pages.resourceTypes.form.validation.name_invalid"))
+            .required(t("admin.pages.resourceTypes.form.validation.name_required")),
         description: Yup.string().nullable(),
     });
 

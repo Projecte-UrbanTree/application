@@ -310,7 +310,8 @@
           },
           "validation": {
             "name_required": "El nombre es obligatorio",
-            "description_required": "La descripción es obligatoria"
+            "description_required": "La descripción es obligatoria",
+            "name_invalid": "El nombre solo puede contener letras, números y espacios"
           },
           "returnButton": "Volver a la lista de tipos de recurso",
           "submitButton": {

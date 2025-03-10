@@ -307,7 +307,8 @@
           },
           "validation": {
             "name_required": "Name is required",
-            "description_required": "Description is required"
+            "description_required": "Description is required",
+            "name_invalid": "Name can only contain letters, numbers, and spaces"
           },
           "returnButton": "Return to resource type list",
           "submitButton": {
