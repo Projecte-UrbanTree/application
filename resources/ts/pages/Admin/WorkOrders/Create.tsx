@@ -1,364 +1,397 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button } from 'primereact/button'
-import { Calendar } from 'primereact/calendar'
-import { MultiSelect } from 'primereact/multiselect'
-import { Dropdown } from 'primereact/dropdown'
-import { InputTextarea } from 'primereact/inputtextarea'
-import { Card } from 'primereact/card'
-import { Icon } from '@iconify/react'
-import { Divider } from 'primereact/divider'
-import { Panel } from 'primereact/panel'
-import CrudPanel from '@/components/Admin/CrudPanel'
-import { useTranslation } from 'react-i18next'
-import axiosClient from '@/api/axiosClient'
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Formik, Form, FieldArray } from 'formik';
+import * as Yup from 'yup';
+import { Calendar } from 'primereact/calendar';
+import { MultiSelect } from 'primereact/multiselect';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Icon } from '@iconify/react';
+import { Dropdown } from 'primereact/dropdown';
+import { Divider } from 'primereact/divider';
+import axiosClient from '@/api/axiosClient';
+import { RootState } from '@/store/store';
 
-interface TaskType { id: number; name: string }
-interface TreeType { id: number; species: string }
-interface ElementType { id: number; name: string; requires_tree_type: boolean }
-interface User { id: number; name: string; surname: string }
-interface Zone { id: number; name: string }
+const CreateWorkOrder = () => {
+    const navigate = useNavigate();
+    const [users, setUsers] = useState<any[]>([]);
+    const [zones, setZones] = useState<any[]>([]);
+    const [taskTypes, setTaskTypes] = useState<any[]>([]);
+    const [elementTypes, setElementTypes] = useState<any[]>([]);
+    const [treeTypes, setTreeTypes] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
 
-interface WorkBlock {
-  zoneIds: number[]
-  tasks: {
-    taskType: TaskType | null
-    elementType: ElementType | null
-    treeType: TreeType | null
-  }[]
-  notes: string
-}
+    const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
-export default function CreateWorkOrder() {
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-  const [date, setDate] = useState<Date | null>(null)
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([])
-  const [blocks, setBlocks] = useState<WorkBlock[]>([{
-    zoneIds: [],
-    tasks: [{ taskType: null, elementType: null, treeType: null }],
-    notes: '',
-  }])
-  const [loading, setLoading] = useState(true)
-  const [users, setUsers] = useState<User[]>([])
-  const [taskTypes, setTaskTypes] = useState<TaskType[]>([])
-  const [elementTypes, setElementTypes] = useState<ElementType[]>([])
-  const [treeTypes, setTreeTypes] = useState<TreeType[]>([])
-  const [zones, setZones] = useState<Zone[]>([])
+    useEffect(() => {
+        axiosClient.get('/admin/work-orders/create')
+            .then(response => {
+                setUsers(response.data.users);
+                setZones(response.data.zones);
+                setTaskTypes(response.data.task_types);
+                setElementTypes(response.data.element_types);
+                setTreeTypes(response.data.tree_types);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            });
+    }, []);
 
-  useEffect(() => {
-    const fetchFormData = async () => {
-      try {
-        const response = await axiosClient.get('/admin/work-orders/create')
-        setUsers(response.data.users || [])
-        setTaskTypes(response.data.task_types || [])
-        setElementTypes(response.data.element_types || [])
-        setTreeTypes(response.data.tree_types || [])
-        setZones(response.data.zones || [])
-        setLoading(false)
-      } catch (error) {
-        console.error('Error loading form data:', error)
-        setLoading(false)
-      }
-    }
-    fetchFormData()
-  }, [])
+    const initialValues = {
+        date: null,
+        selectedUsers: [],
+        blocks: [{
+            notes: '',
+            zones: [],
+            tasks: [{ 
+                task_type_id: null,
+                element_type_id: null,
+                tree_type_id: null
+            }]
+        }]
+    };
 
-  const addBlock = () => {
-    setBlocks(prev => [
-      ...prev,
-      {
-        zoneIds: [],
-        tasks: [{ taskType: null, elementType: null, treeType: null }],
-        notes: '',
-      },
-    ])
-  }
+    const validationSchema = Yup.object({
+        date: Yup.date().required('La fecha es obligatoria'),
+        selectedUsers: Yup.array().min(1, 'Debes seleccionar al menos un operario'),
+        blocks: Yup.array().of(
+            Yup.object({
+                notes: Yup.string().nullable(),
+                zones: Yup.array(),
+                tasks: Yup.array().of(
+                    Yup.object({
+                        task_type_id: Yup.number().nullable().required('Tipo de tarea requerido'),
+                        element_type_id: Yup.number().nullable().required('Tipo de elemento requerido'),
+                        tree_type_id: Yup.number().nullable()
+                    })
+                )
+            })
+        ).min(1, 'Debe haber al menos un bloque')
+    });
 
-  const removeBlock = (index: number) => {
-    setBlocks(prev => prev.filter((_, i) => i !== index))
-  }
+    const handleSubmit = async (values: any, { setSubmitting }: any) => {
+        try {
+            await axiosClient.post('/admin/work-orders', {
+                date: values.date,
+                users: values.selectedUsers,
+                contract_id: currentContract?.id,
+                blocks: values.blocks
+            });
+            navigate('/admin/work-orders', { state: { success: 'Orden de trabajo creada correctamente' } });
+        } catch (error) {
+            console.error('Error creating work order:', error);
+            setSubmitting(false);
+        }
+    };
 
-  const addTask = (blockIndex: number) => {
-    setBlocks(prev => {
-      const updated = [...prev]
-      updated[blockIndex].tasks.push({ taskType: null, elementType: null, treeType: null })
-      return updated
-    })
-  }
-
-  const removeTask = (blockIndex: number, taskIndex: number) => {
-    setBlocks(prev => {
-      const updated = [...prev]
-      updated[blockIndex].tasks.splice(taskIndex, 1)
-      return updated
-    })
-  }
-
-  const updateZones = (blockIndex: number, zoneIds: number[]) => {
-    setBlocks(prev => {
-      const updated = [...prev]
-      updated[blockIndex].zoneIds = zoneIds
-      return updated
-    })
-  }
-
-  const updateTask = (blockIndex: number, taskIndex: number, field: string, value: any) => {
-    setBlocks(prev => {
-      const updated = [...prev]
-      updated[blockIndex].tasks[taskIndex] = {
-        ...updated[blockIndex].tasks[taskIndex],
-        [field]: value
-      }
-      if (field === 'elementType' && value && !value.requires_tree_type) {
-        updated[blockIndex].tasks[taskIndex].treeType = null
-      }
-      return updated
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-      const payload = {
-        date: date?.toISOString().split('T')[0],
-        user_ids: selectedUsers.map(u => u.id),
-        blocks: blocks.map(b => ({
-          zone_ids: b.zoneIds,
-          tasks: b.tasks.map(t => ({
-            task_type_id: t.taskType?.id,
-            element_type_id: t.elementType?.id,
-            tree_type_id: t.treeType?.id,
-          })),
-          notes: b.notes
-        }))
-      }
-      await axiosClient.post('/admin/work-orders', payload)
-      navigate('/admin/work-orders', {
-        state: { success: t('admin.pages.workOrders.messages.createSuccess') }
-      })
-    } catch (error) {
-      console.error('Error creating work order:', error)
-    }
-  }
-
-  return (
-    <CrudPanel title={t('admin.pages.workOrders.create.title')}>
-      {loading ? (
-        <div className="flex justify-center p-6">
-          <i className="pi pi-spin pi-spinner text-4xl"></i>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="p-fluid">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-            <div className="field">
-              <label htmlFor="date" className="font-medium mb-2 block flex items-center gap-1">
-                <Icon icon="tabler:calendar" className="inline-block" />
-                {t('admin.fields.date') || 'Fecha'}
-              </label>
-              <Calendar
-                id="date"
-                value={date}
-                onChange={(e) => setDate(e.value as Date)}
-                showIcon
-                dateFormat="dd/mm/yy"
-                required
-                className="w-full"
-              />
+    const userTemplate = (option: any) => {
+        return (
+            <div className="flex align-items-center">
+                <div>{option.name} {option.surname}</div>
             </div>
-            <div className="field">
-              <label htmlFor="users" className="font-medium mb-2 block flex items-center gap-1">
-                <Icon icon="tabler:users" className="inline-block" />
-                {t('admin.fields.workers') || 'Operarios'}
-              </label>
-              <MultiSelect
-                id="users"
-                value={selectedUsers}
-                options={users}
-                onChange={(e) => setSelectedUsers(e.value)}
-                optionLabel="name"
-                itemTemplate={(option: User) => `${option.name} ${option.surname}`}
-                placeholder={t('admin.fields.selectWorkers') || 'Seleccionar operarios'}
-                display="chip"
-                filter
-                className="w-full"
-              />
+        );
+    };
+
+    const zoneTemplate = (option: any) => {
+        return (
+            <div className="flex align-items-center">
+                <div>{option.name}</div>
             </div>
-          </div>
+        );
+    };
 
-          <div className="flex justify-between my-4 items-center">
-            <h2 className="text-xl font-bold flex items-center gap-1">
-              <Icon icon="tabler:box" />
-              {t('admin.pages.workOrders.create.blocksTitle') || 'Bloques de trabajo'}
-            </h2>
-            <Button
-              type="button"
-              icon="pi pi-plus"
-              label={t('admin.pages.workOrders.create.addBlock') || 'Añadir bloque'}
-              onClick={addBlock}
-              severity="success"
-            />
-          </div>
+    // Check if an element type requires a tree type selection
+    const requiresTreeType = (elementTypeId: number | null) => {
+        if (!elementTypeId) return false;
+        const elementType = elementTypes.find(et => et.id === elementTypeId);
+        return elementType && elementType.requires_tree_type;
+    };
 
-          <Divider />
+    // Loading and contract check code...
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center p-4">
+                <i className="pi pi-spin pi-spinner" style={{ fontSize: '2rem' }}></i>
+            </div>
+        );
+    }
 
-          {blocks.map((block, blockIndex) => (
-            <Card
-              key={blockIndex}
-              className="mb-4 shadow-none border border-gray-300"
-              title={
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-bold">
-                    {t('admin.pages.workOrders.create.blockLabel') || 'Bloque'} {blockIndex + 1}
-                  </span>
-                  <Button
-                    icon="pi pi-trash"
-                    onClick={() => removeBlock(blockIndex)}
-                    severity="danger"
-                    text
-                    disabled={blocks.length === 1}
-                  />
-                </div>
-              }
-            >
-              <div className="mb-4">
-                <label className="font-medium mb-2 block flex items-center gap-1">
-                  <Icon icon="tabler:map-pin" />
-                  {t('admin.fields.zones') || 'Zonas'}
-                </label>
-                <MultiSelect
-                  value={block.zoneIds}
-                  options={zones}
-                  onChange={(e) => updateZones(blockIndex, e.value)}
-                  optionLabel="name"
-                  optionValue="id"
-                  placeholder={t('admin.fields.selectZones') || 'Seleccionar zonas'}
-                  display="chip"
-                  filter
-                  className="w-full"
-                />
-              </div>
+    if (!currentContract) {
+        return (
+            <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
+                <Card className="w-full max-w-3xl shadow-lg">
+                    <div className="p-6 text-center">
+                        <Icon icon="tabler:alert-circle" className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
+                        <h2 className="text-2xl font-bold mb-4">No hay contrato seleccionado</h2>
+                        <p className="text-gray-600 mb-6">Debes seleccionar un contrato en el panel superior para crear una orden de trabajo.</p>
+                        <Button
+                            label="Volver"
+                            icon="pi pi-arrow-left"
+                            onClick={() => navigate("/admin/work-orders")}
+                        />
+                    </div>
+                </Card>
+            </div>
+        );
+    }
 
-              <Panel
-                className="p-0"
-                header={
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium flex items-center gap-1">
-                      <Icon icon="tabler:list-check" />
-                      {t('admin.pages.workOrders.create.tasksTitle') || 'Tareas'}
-                    </span>
+    return (
+        <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
+            <Card className="w-full max-w-3xl shadow-lg">
+                <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
                     <Button
-                      icon="pi pi-plus"
-                      label={t('admin.pages.workOrders.create.addTask') || 'Añadir tarea'}
-                      onClick={() => addTask(blockIndex)}
-                      severity="success"
-                      size="small"
-                    />
-                  </div>
-                }
-              >
-                {block.tasks.map((task, taskIndex) => (
-                  <div key={taskIndex} className="p-3 border-b last:border-b-0 border-gray-200">
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="text-sm font-semibold">
-                        {t('admin.pages.workOrders.create.taskLabel') || 'Tarea'} {taskIndex + 1}
-                      </h4>
-                      <Button
-                        icon="pi pi-trash"
-                        onClick={() => removeTask(blockIndex, taskIndex)}
-                        severity="danger"
-                        text
-                        disabled={block.tasks.length === 1}
-                      />
-                    </div>
+                        className="p-button-text mr-4"
+                        style={{ color: "#fff" }}
+                        onClick={() => navigate("/admin/work-orders")}
+                    >
+                        <Icon icon="tabler:arrow-left" className="h-6 w-6" />
+                    </Button>
+                    <h2 className="text-white text-3xl font-bold">
+                        Crear Orden de Trabajo
+                    </h2>
+                </header>
+                <div className="p-6">
+                    <Formik
+                        initialValues={initialValues}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                    >
+                        {({ errors, touched, setFieldValue, values }) => (
+                            <Form className="grid grid-cols-1 gap-4">
+                                <div className="flex flex-col">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:calendar" className="h-5 w-5 mr-2" />
+                                        Fecha
+                                    </label>
+                                    <Calendar
+                                        id="date"
+                                        value={values.date}
+                                        onChange={(e) => setFieldValue('date', e.value)}
+                                        showIcon
+                                        dateFormat="dd/mm/yy"
+                                        className={errors.date && touched.date ? "p-invalid w-full" : "w-full"}
+                                    />
+                                    {errors.date && touched.date && (
+                                        <small className="p-error">{errors.date}</small>
+                                    )}
+                                </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="field">
-                        <label className="text-sm font-medium mb-1 block">
-                          {t('admin.pages.workOrders.create.taskType') || 'Tipo de tarea'}
-                        </label>
-                        <Dropdown
-                          value={task.taskType}
-                          options={taskTypes}
-                          onChange={(e) => updateTask(blockIndex, taskIndex, 'taskType', e.value)}
-                          optionLabel="name"
-                          placeholder={t('admin.pages.workOrders.create.selectTask') || 'Seleccione tarea'}
-                          className="w-full"
-                        />
-                      </div>
+                                <div className="flex flex-col">
+                                    <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                        <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
+                                        Operarios
+                                    </label>
+                                    <MultiSelect
+                                        value={values.selectedUsers}
+                                        options={users}
+                                        onChange={(e) => setFieldValue('selectedUsers', e.value)}
+                                        optionLabel="name"
+                                        placeholder="Selecciona operarios"
+                                        filter
+                                        itemTemplate={userTemplate}
+                                        className={errors.selectedUsers && touched.selectedUsers ? "p-invalid w-full" : "w-full"}
+                                        display="chip"
+                                    />
+                                    {errors.selectedUsers && touched.selectedUsers && (
+                                        <small className="p-error">{errors.selectedUsers}</small>
+                                    )}
+                                </div>
 
-                      <div className="field">
-                        <label className="text-sm font-medium mb-1 block">
-                          {t('admin.pages.workOrders.create.elementType') || 'Tipo de elemento'}
-                        </label>
-                        <Dropdown
-                          value={task.elementType}
-                          options={elementTypes}
-                          onChange={(e) => updateTask(blockIndex, taskIndex, 'elementType', e.value)}
-                          optionLabel="name"
-                          placeholder={t('admin.pages.workOrders.create.selectElement') || 'Seleccione elemento'}
-                          className="w-full"
-                        />
-                      </div>
+                                <div className="my-6">
+                                    <h3 className="text-2xl font-bold text-center mb-4">
+                                        Bloques de Trabajo
+                                    </h3>
+                                </div>
 
-                      <div className="field">
-                        <label className="text-sm font-medium mb-1 block">
-                          {t('admin.pages.workOrders.create.species') || 'Especie'}
-                        </label>
-                        <Dropdown
-                          value={task.treeType}
-                          options={treeTypes}
-                          onChange={(e) => updateTask(blockIndex, taskIndex, 'treeType', e.value)}
-                          optionLabel="species"
-                          placeholder={t('admin.pages.workOrders.create.selectSpecies') || 'Seleccione especie'}
-                          className="w-full"
-                          disabled={!task.elementType || !task.elementType.requires_tree_type}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Panel>
+                                <FieldArray name="blocks">
+                                    {({ remove, push }) => (
+                                        <div className="space-y-4">
+                                            {values.blocks.map((block, index) => (
+                                                <Card key={index} className="shadow-sm border border-gray-200">
+                                                    <div className="flex justify-between items-center mb-3">
+                                                        <h4 className="text-lg font-medium flex items-center">
+                                                            <Icon icon="tabler:box" className="h-5 w-5 mr-2" />
+                                                            Bloque {index + 1}
+                                                        </h4>
+                                                        {values.blocks.length > 1 && (
+                                                            <Button
+                                                                icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
+                                                                className="p-button-rounded p-button-danger"
+                                                                onClick={() => remove(index)}
+                                                                type="button"
+                                                                aria-label="Eliminar bloque"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    
+                                                    <div className="flex flex-col mb-3">
+                                                        <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                                            <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
+                                                            Zonas
+                                                        </label>
+                                                        <MultiSelect
+                                                            value={values.blocks[index].zones}
+                                                            options={zones}
+                                                            onChange={(e) => setFieldValue(`blocks[${index}].zones`, e.value)}
+                                                            optionLabel="name"
+                                                            placeholder="Selecciona zonas para este bloque"
+                                                            filter
+                                                            itemTemplate={zoneTemplate}
+                                                            className="w-full"
+                                                            display="chip"
+                                                        />
+                                                    </div>
 
-              <div className="field mt-4">
-                <label className="font-medium mb-2 block flex items-center gap-1">
-                  <Icon icon="tabler:note" />
-                  {t('admin.fields.notes') || 'Notas'}
-                </label>
-                <InputTextarea
-                  value={block.notes}
-                  onChange={(e) => {
-                    const updated = [...blocks]
-                    updated[blockIndex].notes = e.target.value
-                    setBlocks(updated)
-                  }}
-                  rows={3}
-                  autoResize
-                  placeholder={t('admin.pages.workOrders.create.notesPlaceholder') || 'Notas adicionales...'}
-                  className="w-full"
-                />
-              </div>
+                                                    <Divider align="left">
+                                                        <div className="inline-flex align-items-center">
+                                                            <Icon icon="tabler:list-check" className="mr-2" />
+                                                            <span>Tareas</span>
+                                                        </div>
+                                                    </Divider>
+                                                    
+                                                    <FieldArray name={`blocks[${index}].tasks`}>
+                                                        {({ remove: removeTask, push: pushTask }) => (
+                                                            <div className="space-y-3">
+                                                                {values.blocks[index].tasks.map((task, taskIndex) => (
+                                                                    <div key={taskIndex} className="p-2 border border-gray-200 rounded-lg">
+                                                                        <div className="flex justify-between items-center mb-2">
+                                                                            <h5 className="text-sm font-medium">Tarea {taskIndex + 1}</h5>
+                                                                            {values.blocks[index].tasks.length > 1 && (
+                                                                                <Button
+                                                                                    icon={<Icon icon="tabler:trash" className="h-4 w-4" />}
+                                                                                    className="p-button-rounded p-button-danger p-button-sm"
+                                                                                    onClick={() => removeTask(taskIndex)}
+                                                                                    type="button"
+                                                                                    aria-label="Eliminar tarea"
+                                                                                />
+                                                                            )}
+                                                                        </div>
+                                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                                                            <div className="flex flex-col">
+                                                                                <label className="text-xs font-medium text-gray-700 mb-1">
+                                                                                    Tipo de tarea
+                                                                                </label>
+                                                                                <Dropdown
+                                                                                    value={task.task_type_id}
+                                                                                    options={taskTypes}
+                                                                                    onChange={(e) => setFieldValue(`blocks[${index}].tasks[${taskIndex}].task_type_id`, e.value)}
+                                                                                    optionLabel="name"
+                                                                                    optionValue="id"
+                                                                                    placeholder="Selecciona tipo"
+                                                                                    className="w-full"
+                                                                                />
+                                                                            </div>
+                                                                            <div className="flex flex-col">
+                                                                                <label className="text-xs font-medium text-gray-700 mb-1">
+                                                                                    Tipo de elemento
+                                                                                </label>
+                                                                                <Dropdown
+                                                                                    value={task.element_type_id}
+                                                                                    options={elementTypes}
+                                                                                    onChange={(e) => {
+                                                                                        setFieldValue(`blocks[${index}].tasks[${taskIndex}].element_type_id`, e.value);
+                                                                                        // Clear tree_type_id if element doesn't require it
+                                                                                        if (!requiresTreeType(e.value)) {
+                                                                                            setFieldValue(`blocks[${index}].tasks[${taskIndex}].tree_type_id`, null);
+                                                                                        }
+                                                                                    }}
+                                                                                    optionLabel="name"
+                                                                                    optionValue="id"
+                                                                                    placeholder="Selecciona tipo"
+                                                                                    className="w-full"
+                                                                                />
+                                                                            </div>
+                                                                            <div className="flex flex-col">
+                                                                                <label className="text-xs font-medium text-gray-700 mb-1">
+                                                                                    Especie de árbol
+                                                                                </label>
+                                                                                <Dropdown
+                                                                                    value={task.tree_type_id}
+                                                                                    options={treeTypes}
+                                                                                    onChange={(e) => setFieldValue(`blocks[${index}].tasks[${taskIndex}].tree_type_id`, e.value)}
+                                                                                    optionLabel="species"
+                                                                                    optionValue="id"
+                                                                                    placeholder="Selecciona especie"
+                                                                                    className="w-full"
+                                                                                    disabled={!requiresTreeType(task.element_type_id)}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                                <div className="flex justify-center mt-2">
+                                                                    <Button
+                                                                        type="button"
+                                                                        icon="pi pi-plus"
+                                                                        label="Añadir Tarea"
+                                                                        className="p-button-outlined p-button-sm"
+                                                                        onClick={() => pushTask({ 
+                                                                            task_type_id: null,
+                                                                            element_type_id: null,
+                                                                            tree_type_id: null
+                                                                        })}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </FieldArray>
+                                                    
+                                                    <div className="flex flex-col mt-3">
+                                                        <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                                            <Icon icon="tabler:notes" className="h-5 w-5 mr-2" />
+                                                            Notas
+                                                        </label>
+                                                        <InputTextarea
+                                                            rows={3}
+                                                            value={values.blocks[index].notes}
+                                                            onChange={(e) => setFieldValue(`blocks[${index}].notes`, e.target.value)}
+                                                            className="w-full"
+                                                            placeholder="Añade notas para este bloque de trabajo..."
+                                                        />
+                                                    </div>
+                                                </Card>
+                                            ))}
+                                            
+                                            <div className="flex justify-center">
+                                                <Button
+                                                    type="button"
+                                                    icon="pi pi-plus"
+                                                    label="Añadir Bloque"
+                                                    className="p-button-outlined"
+                                                    onClick={() => push({ 
+                                                        notes: '', 
+                                                        zones: [],
+                                                        tasks: [{ 
+                                                            task_type_id: null, 
+                                                            element_type_id: null, 
+                                                            tree_type_id: null 
+                                                        }]
+                                                    })}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </FieldArray>
+
+                                <div className="flex justify-end mt-4">
+                                    <Button
+                                        type="submit"
+                                        icon="pi pi-check"
+                                        label="Crear Orden de Trabajo"
+                                        className="w-full md:w-auto"
+                                    />
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
             </Card>
-          ))}
+        </div>
+    );
+};
 
-          <div className="flex justify-end mt-4 gap-2">
-            <Button
-              type="button"
-              label={t('general.cancel') || 'Cancelar'}
-              icon="pi pi-times"
-              onClick={() => navigate('/admin/work-orders')}
-              severity="secondary"
-              className="p-button-outlined"
-            />
-            <Button
-              type="submit"
-              label={t('admin.pages.workOrders.create.submitButton') || 'Crear orden de trabajo'}
-              icon="pi pi-check"
-              severity="success"
-            />
-          </div>
-        </form>
-      )}
-    </CrudPanel>
-  )
-}
+export default CreateWorkOrder;

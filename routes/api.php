@@ -44,7 +44,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('contracts/{id}', [ContractController::class, 'update']);
         Route::delete('contracts/{id}', [ContractController::class, 'destroy']);
 
-
         // Route for Work Orders
         Route::get('work-orders', [WorkOrderController::class, 'index']);
         Route::get('work-orders/create', [WorkOrderController::class, 'create']);
