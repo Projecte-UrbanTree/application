@@ -1,0 +1,32 @@
+name: Laravel Pint
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  pint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+
+    - name: Install Composer dependencies
+      run: composer install --no-interaction --prefer-dist
+
+    - name: Run Pint
+      run: ./vendor/bin/pint
+
+    - uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "style: format using Laravel Pint (via GitHub Actions)"
