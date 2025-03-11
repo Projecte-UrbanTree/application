@@ -32,4 +32,9 @@ class Element extends Model
     {
         return $this->hasMany(Incidence::class, 'element_id');
     }
+
+    public function eva()
+    {
+        return $this->hasOne(Eva::class)->nullable();
+    }
 }

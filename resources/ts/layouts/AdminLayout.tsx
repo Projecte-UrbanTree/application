@@ -83,6 +83,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         '/admin/dashboard',
         '/admin/work-orders',
         '/admin/inventory',
+        '/admin/eva',
         '/admin/workers',
         '/admin/resources',
         '/admin/stats',
@@ -102,7 +103,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             icon: 'tabler:chart-treemap',
         },
         {
-            to: '/admin/eva',
+            to: '/admin/evas',
             label: t('admin.submenu.manage.eva'),
             icon: 'tabler:chart-bar',
         },

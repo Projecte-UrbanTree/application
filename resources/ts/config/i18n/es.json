@@ -101,6 +101,19 @@
         },
         "title": "Tipos de elemento"
       },
+      "evas": {
+        "title": "Evas",
+        "age": {
+          "years": "Años",
+          "months": "Meses"
+        },
+        "columns": {
+          "element_id": "ID del elemento",
+          "age": "Edad",
+          "height": "Altura",
+          "actions": "Acciones"
+        }
+      },
       "resources": {
         "form": {
           "fields": {
@@ -383,6 +396,7 @@
       "manage": {
         "dashboard": "Tablero",
         "inventory": "Inventario",
+        "eva": "EVA",
         "resources": "Recursos",
         "stats": "Estadísticas",
         "workers": "Trabajadores",

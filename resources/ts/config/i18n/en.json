@@ -361,6 +361,19 @@
           "status": "Status"
         },
         "title": "Work Orders"
+      },
+      "evas": {
+        "title": "Evas",
+        "age": {
+          "years": "Years",
+          "months": "Months"
+        },
+        "columns": {
+          "element_id": "Element ID",
+          "age": "Age",
+          "height": "Height",
+          "actions": "Actions"
+        }
       }
     },
     "profileDropdown": {
@@ -384,6 +397,7 @@
         "dashboard": "Dashboard",
         "inventory": "Inventory",
         "resources": "Resources",
+        "eva": "EVA",
         "stats": "Statistics",
         "workers": "Workers",
         "workOrders": "Work Orders"

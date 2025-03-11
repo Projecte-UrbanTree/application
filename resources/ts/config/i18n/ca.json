@@ -29,6 +29,7 @@
       "manage": {
         "dashboard": "Tauler",
         "workOrders": "Ordres de treball",
+        "eva": "EVA",
         "inventory": "Inventari",
         "workers": "Treballadors",
         "resources": "Recursos",
@@ -372,6 +373,19 @@
       },
       "stats": {
         "title": "Estadístiques"
+      },
+      "evas": {
+        "title": "Evas",
+        "age": {
+          "years": "Anys",
+          "months": "Mesos"
+        },
+        "columns": {
+          "element_id": "ID de l'element",
+          "age": "Edat",
+          "height": "Alçada",
+          "actions": "Accions"
+        }
       }
     }
   },

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
+use App\Http\Controllers\Api\Admin\EvaController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
 use App\Http\Controllers\Api\Admin\TaskTypeController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
+use App\Models\Eva;
 use App\Models\User;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
@@ -78,5 +80,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('task-types/{id}', [TaskTypeController::class, 'show']);
         Route::put('task-types/{id}', [TaskTypeController::class, 'update']);
         Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
+
+        // Route for eva
+        Route::get('evas', [EvaController::class, 'index']);
     });
 });

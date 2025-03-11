@@ -24,6 +24,7 @@ import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTy
 import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
 import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import AdminStats from '@/pages/Admin/Stats';
+import Eva from '@/pages/Admin/Eva';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -59,6 +60,14 @@ const AdminRoutes: RouteObject[] = [
                         element: (
                             <AdminLayoutWrapper titleI18n="admin.pages.inventory.title">
                                 <AdminInventory />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'evas',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.evas.title">
+                                <Eva />
                             </AdminLayoutWrapper>
                         ),
                     },
