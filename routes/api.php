@@ -81,6 +81,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
 
         // Route for Zones
+        // Route::resource('zones', ZoneController::class);
         Route::resource('zones', ZoneController::class);
     });
 });
