@@ -68,7 +68,15 @@
       "family": "Familia",
       "genus": "Género",
       "species": "Especie",
-      "description": "Descripción"
+      "status": "Estado",
+      "final_price": "Precio final",
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha de fin"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "completed": "Completado"
     },
     "pages": {
       "dashboard": {
@@ -149,9 +157,101 @@
           "name": "Contrato",
           "start_date": "Fecha de inicio",
           "end_date": "Fecha de fin",
-          "invoice_proposed": "Factura propuesta",
-          "invoice_agreed": "Factura acordada",
-          "invoice_paid": "Factura pagada"
+          "status": "Estado"
+        },
+        "create": {
+          "title": "Crear Contrato",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submittingText": "Creando...",
+          "submitButton": "Crear Contrato",
+          "success": "Contrato creado exitosamente"
+        },
+        "edit": {
+          "title": "Editar Contrato",
+          "validations": {
+            "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "submittingText": "Guardando...",
+          "submitButton": "Guardar Cambios",
+          "update": "Contrato actualizado exitosamente",
+          "error": "Error guardando el contrato"
+        },
+        "loading": "Cargando...",
+        "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+        "deletedSuccess": "Contrato eliminado exitosamente",
+        "actions": "Acciones",
+        "editButton": "Editar Contrato",
+        "deleteButton": "Eliminar Contrato",
+        "list": {
+          "actions": {
+            "edit": "Editar contrato",
+            "delete": "Eliminar contrato",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Contrato eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
+            "createSuccess": "Contrato creado exitosamente",
+            "updateSuccess": "Contrato actualizado exitosamente",
+            "error": "Error guardando el contrato"
+          },
+          "columns": {
+            "name": "Contrato",
+            "start_date": "Fecha de inicio",
+            "end_date": "Fecha de fin",
+            "final_price": "Precio final",
+            "status": "Estado"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Contrato",
+            "edit": "Editar Contrato"
+          },
+          "placeholders": {
+            "status": "Selecciona un estado"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "name_invalid": "El nombre no es válido",
+            "start_date_required": "La fecha de inicio es obligatoria",
+            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "final_price_required": "El precio final es obligatorio",
+            "status_invalid": "Estado no válido",
+            "status_required": "El estado es obligatorio"
+          },
+          "returnButton": "Volver a la lista de contratos",
+          "submitButton": {
+            "create": "Crear Contrato",
+            "edit": "Guardar Cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
         }
       },
       "workOrders": {
@@ -276,42 +376,53 @@
           "resource_type_id": "Tipo de recurso"
         }
       },
-      "resourceTypes": {
-        "title": "Tipos de recurso",
-        "columns": {
-          "name": "Tipo de recurso",
-          "description": "Descripción"
-        },
-        "loading": "Cargando...",
-        "editButton": "Editar tipo de recurso",
-        "deleteButton": "Eliminar tipo de recurso",
-        "actions": "Acciones",
-        "deletedSuccess": "Tipo de recurso eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
-        "success": "Tipo de recurso creado exitosamente",
-        "update": "Tipo de recurso actualizado exitosamente",
-        "error": "Error guardando el tipo de recurso",
-        "create": {
-          "title": "Crear Tipo de Recurso",
-          "validations": {
-            "name_required": "El nombre es obligatorio",
-            "description_required": "La descripción es obligatoria"
-          },
-          "submitButton": "Crear Tipo de Recurso",
-          "submittingText": "Creando..."
-        },
-        "edit": {
-          "title": "Editar Tipo de Recurso",
-          "validations": {
-            "name_required": "El nombre es obligatorio",
-            "description_required": "La descripción es obligatoria"
-          },
-          "submitButton": "Guardar Cambios",
-          "submittingText": "Guardando..."
-        }
-      },
       "stats": {
         "title": "Estadísticas"
+      },
+      "resourceTypes": {
+        "title": "Tipos de recurso",
+        "list": {
+          "actions": {
+            "edit": "Editar tipo de recurso",
+            "delete": "Eliminar tipo de recurso",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Tipo de recurso eliminado exitosamente",
+            "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
+            "createSuccess": "Tipo de recurso creado exitosamente",
+            "updateSuccess": "Tipo de recurso actualizado exitosamente",
+            "error": "Error guardando el tipo de recurso"
+          },
+          "columns": {
+            "name": "Nombre",
+            "description": "Descripción"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipo de recurso",
+            "edit": "Editar Tipo de recurso"
+          },
+          "placeholders": {
+            "name": "Introduce el nombre",
+            "description": "Introduce la descripción"
+          },
+          "validation": {
+            "name_required": "El nombre es obligatorio",
+            "description_required": "La descripción es obligatoria",
+            "name_invalid": "El nombre solo puede contener letras, números y espacios"
+          },
+          "returnButton": "Volver a la lista de tipos de recurso",
+          "submitButton": {
+            "create": "Crear Tipo de recurso",
+            "edit": "Guardar cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          }
+        }
       }
     }
   },
@@ -319,5 +430,10 @@
     "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
     "allContracts": "Todos los contratos",
     "loading": "Cargando..."
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "completed": "Completado"
   }
 }

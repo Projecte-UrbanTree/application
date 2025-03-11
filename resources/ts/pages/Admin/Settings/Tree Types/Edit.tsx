@@ -42,13 +42,13 @@ export default function EditTreeType() {
     }, [id]);
     const validationSchema = Yup.object({
         family: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.family"))
+            .matches(/^[a-zA-Z0-9\s]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.family"))
             .required(t("admin.pages.treeTypes.form.validation.family")),
         genus: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.genus"))
+            .matches(/^[a-zA-Z0-9\s]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.genus"))
             .required(t("admin.pages.treeTypes.form.validation.genus")),
         species: Yup.string()
-            .matches(/^[a-zA-Z0-9]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.species"))
+            .matches(/^[a-zA-Z0-9\s]+$/, t("admin.pages.treeTypes.form.validation.alphanumeric.species"))
     });
     const handleSubmit = async (values: typeof initialValues) => {
         try {
