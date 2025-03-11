@@ -190,8 +190,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                             <img className="w-48" src={logo} alt="Logo" />
                         </a>
                     </div>
-
-                    {/* Enlaces centrados (Management y Settings) */}
+                    
                     <div className="hidden lg:flex flex-1 justify-center items-center space-x-6">
                         <Link
                             to="/admin/dashboard"
