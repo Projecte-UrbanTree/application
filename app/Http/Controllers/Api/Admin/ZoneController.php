@@ -24,7 +24,5 @@ class ZoneController extends Controller
 
         $zone = Zone::create($validate);
         return response()->json($zone, 201);
-
-   
     }
 }

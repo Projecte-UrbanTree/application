@@ -88,5 +88,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Route for Point
         Route::resource('points', PointController::class);
+        Route::resource('points', PointController::class);
     });
 });
