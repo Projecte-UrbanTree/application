@@ -10,7 +10,6 @@ import { Card } from 'primereact/card';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Icon } from '@iconify/react';
 import { Dropdown } from 'primereact/dropdown';
-import { Divider } from 'primereact/divider';
 import axiosClient from '@/api/axiosClient';
 import { RootState } from '@/store/store';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +26,6 @@ const CreateWorkOrder = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { t } = useTranslation();
-
     const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
     useEffect(() => {
@@ -40,10 +38,7 @@ const CreateWorkOrder = () => {
                 setTreeTypes(response.data.tree_types);
                 setLoading(false);
             })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            });
+            .catch(() => setLoading(false));
     }, []);
 
     const initialValues = {
@@ -52,11 +47,7 @@ const CreateWorkOrder = () => {
         blocks: [{
             notes: '',
             zones: [],
-            tasks: [{ 
-                task_type_id: null,
-                element_type_id: null,
-                tree_type_id: null
-            }]
+            tasks: [{ task_type_id: null, element_type_id: null, tree_type_id: null }]
         }]
     };
 
@@ -81,19 +72,13 @@ const CreateWorkOrder = () => {
     const handleSubmit = async (values: any, { setSubmitting }: any) => {
         setIsSubmitting(true);
         setError(null);
-        
         try {
-            // Format the date in ISO format
             const formattedDate = values.date ? new Date(values.date).toISOString().split('T')[0] : null;
-            
-            // Extract just the IDs from the selectedUsers
             const userIds = values.selectedUsers.map((user: any) => user.id);
-            
-            // Prepare blocks data with properly formatted objects
             const formattedBlocks = values.blocks.map((block: any) => ({
                 notes: block.notes,
-                // Extract IDs from zones
-                zones: block.zones.map((zone: any) => zone.id),
+                zones: block.zones.filter(Boolean).map((zone: any) => 
+                    typeof zone === 'object' ? zone.id : zone),
                 tasks: block.tasks.map((task: any) => ({
                     task_type_id: task.task_type_id,
                     element_type_id: task.element_type_id,
@@ -101,15 +86,7 @@ const CreateWorkOrder = () => {
                 }))
             }));
             
-            // Log the formatted request data for debugging
-            console.log('Sending work order data:', {
-                date: formattedDate,
-                users: userIds,
-                contract_id: currentContract?.id,
-                blocks: formattedBlocks
-            });
-            
-            const response = await axiosClient.post('/admin/work-orders', {
+            await axiosClient.post('/admin/work-orders', {
                 date: formattedDate,
                 users: userIds,
                 contract_id: currentContract?.id,
@@ -117,48 +94,33 @@ const CreateWorkOrder = () => {
             });
             
             navigate('/admin/work-orders', { 
-                state: { 
-                    success: t('admin.pages.workOrders.createSuccess')
-                }
+                state: { success: t('admin.pages.workOrders.createSuccess') }
             });
         } catch (error: any) {
-            console.error('Error creating work order:', error);
-            
-            // Provide more specific error information if available
-            setError(
-                error.response?.data?.message || error.response?.data?.error || 
-                t('admin.pages.workOrders.createError')
-            );
-            
+            setError(error.response?.data?.message || t('admin.pages.workOrders.createError'));
             setSubmitting(false);
             setIsSubmitting(false);
         }
     };
 
-    const userTemplate = (option: any) => {
-        return (
-            <div className="flex align-items-center">
-                <div>{option.name} {option.surname}</div>
-            </div>
-        );
-    };
+    const userTemplate = (option: any) => (
+        <div className="flex align-items-center">
+            <div>{option.name} {option.surname}</div>
+        </div>
+    );
 
-    const zoneTemplate = (option: any) => {
-        return (
-            <div className="flex align-items-center">
-                <div>{option.name}</div>
-            </div>
-        );
-    };
+    const zoneTemplate = (option: any) => (
+        <div className="flex align-items-center">
+            <div>{option.name}</div>
+        </div>
+    );
 
-    // Check if an element type requires a tree type selection
     const requiresTreeType = (elementTypeId: number | null) => {
         if (!elementTypeId) return false;
         const elementType = elementTypes.find(et => et.id === elementTypeId);
         return elementType && elementType.requires_tree_type;
     };
 
-    // Loading and contract check code...
     if (loading) {
         return (
             <div className="flex items-center justify-center p-4">
@@ -175,11 +137,7 @@ const CreateWorkOrder = () => {
                         <Icon icon="tabler:alert-circle" className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
                         <h2 className="text-2xl font-bold mb-4">No hay contrato seleccionado</h2>
                         <p className="text-gray-600 mb-6">Debes seleccionar un contrato en el panel superior para crear una orden de trabajo.</p>
-                        <Button
-                            label="Volver"
-                            icon="pi pi-arrow-left"
-                            onClick={() => navigate("/admin/work-orders")}
-                        />
+                        <Button label="Volver" icon="pi pi-arrow-left" onClick={() => navigate("/admin/work-orders")} />
                     </div>
                 </Card>
             </div>
@@ -190,26 +148,14 @@ const CreateWorkOrder = () => {
         <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
             <Card className="w-full max-w-3xl shadow-lg">
                 <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-                    <Button
-                        className="p-button-text mr-4"
-                        style={{ color: "#fff" }}
-                        onClick={() => navigate("/admin/work-orders")}
-                    >
+                    <Button className="p-button-text mr-4" style={{ color: "#fff" }} onClick={() => navigate("/admin/work-orders")}>
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
-                    <h2 className="text-white text-3xl font-bold">
-                        Crear Orden de Trabajo
-                    </h2>
+                    <h2 className="text-white text-3xl font-bold">Crear Orden de Trabajo</h2>
                 </header>
                 <div className="p-6">
-                    {error && (
-                        <Message severity="error" text={error} className="mb-4 w-full" />
-                    )}
-                    <Formik
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
-                    >
+                    {error && <Message severity="error" text={error} className="mb-4 w-full" />}
+                    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
                         {({ errors, touched, setFieldValue, values }) => (
                             <Form className="grid grid-cols-1 gap-4">
                                 <div className="flex flex-col">
@@ -225,11 +171,8 @@ const CreateWorkOrder = () => {
                                         dateFormat="dd/mm/yy"
                                         className={errors.date && touched.date ? "p-invalid w-full" : "w-full"}
                                     />
-                                    {errors.date && touched.date && (
-                                        <small className="p-error">{errors.date}</small>
-                                    )}
+                                    {errors.date && touched.date && <small className="p-error">{errors.date}</small>}
                                 </div>
-
                                 <div className="flex flex-col">
                                     <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                         <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
@@ -246,24 +189,18 @@ const CreateWorkOrder = () => {
                                         className={errors.selectedUsers && touched.selectedUsers ? "p-invalid w-full" : "w-full"}
                                         display="chip"
                                     />
-                                    {errors.selectedUsers && touched.selectedUsers && (
-                                        <small className="p-error">{errors.selectedUsers}</small>
-                                    )}
+                                    {errors.selectedUsers && touched.selectedUsers && <small className="p-error">{errors.selectedUsers}</small>}
                                 </div>
-
                                 <div className="my-6">
-                                    <h3 className="text-2xl font-bold text-center mb-4">
-                                        Bloques de Trabajo
-                                    </h3>
+                                    <h3 className="text-2xl font-bold text-center mb-4">Bloques de Trabajo</h3>
                                 </div>
-
                                 <FieldArray name="blocks">
                                     {({ remove, push }) => (
                                         <div className="space-y-4">
                                             {values.blocks.map((block, index) => (
                                                 <Card key={index} className="shadow-sm border border-gray-200">
                                                     <div className="flex justify-between items-center mb-3">
-                                                        <h4 className="text-lg font-medium flex items-center">
+                                                        <h4 className="text-lg font-bold flex items-center">
                                                             <Icon icon="tabler:box" className="h-5 w-5 mr-2" />
                                                             Bloque {index + 1}
                                                         </h4>
@@ -277,7 +214,6 @@ const CreateWorkOrder = () => {
                                                             />
                                                         )}
                                                     </div>
-                                                    
                                                     <div className="flex flex-col mb-3">
                                                         <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                                             <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
@@ -295,14 +231,13 @@ const CreateWorkOrder = () => {
                                                             display="chip"
                                                         />
                                                     </div>
-                                                    
                                                     <FieldArray name={`blocks[${index}].tasks`}>
                                                         {({ remove: removeTask, push: pushTask }) => (
                                                             <div className="space-y-3 mt-6">
                                                                 {values.blocks[index].tasks.map((task, taskIndex) => (
                                                                     <div key={taskIndex} className="p-2 border border-gray-200 rounded-lg">
                                                                         <div className="flex justify-between items-center mb-2">
-                                                                            <h5 className="text-lg font-medium">Tarea {taskIndex + 1}</h5>
+                                                                            <h5 className="text-sm font-semibold">Tarea {taskIndex + 1}</h5>
                                                                             {values.blocks[index].tasks.length > 1 && (
                                                                                 <Button
                                                                                     icon={<Icon icon="tabler:trash" className="h-4 w-4" />}
@@ -315,9 +250,7 @@ const CreateWorkOrder = () => {
                                                                         </div>
                                                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                                                                             <div className="flex flex-col">
-                                                                                <label className="text-xs font-medium text-gray-700 mb-1">
-                                                                                    Tipo de tarea
-                                                                                </label>
+                                                                                <label className="text-xs font-medium text-gray-700 mb-1">Tipo de tarea</label>
                                                                                 <Dropdown
                                                                                     value={task.task_type_id}
                                                                                     options={taskTypes}
@@ -329,15 +262,12 @@ const CreateWorkOrder = () => {
                                                                                 />
                                                                             </div>
                                                                             <div className="flex flex-col">
-                                                                                <label className="text-xs font-medium text-gray-700 mb-1">
-                                                                                    Tipo de elemento
-                                                                                </label>
+                                                                                <label className="text-xs font-medium text-gray-700 mb-1">Tipo de elemento</label>
                                                                                 <Dropdown
                                                                                     value={task.element_type_id}
                                                                                     options={elementTypes}
                                                                                     onChange={(e) => {
                                                                                         setFieldValue(`blocks[${index}].tasks[${taskIndex}].element_type_id`, e.value);
-                                                                                        // Clear tree_type_id if element doesn't require it
                                                                                         if (!requiresTreeType(e.value)) {
                                                                                             setFieldValue(`blocks[${index}].tasks[${taskIndex}].tree_type_id`, null);
                                                                                         }
@@ -349,9 +279,7 @@ const CreateWorkOrder = () => {
                                                                                 />
                                                                             </div>
                                                                             <div className="flex flex-col">
-                                                                                <label className="text-xs font-medium text-gray-700 mb-1">
-                                                                                    Especie de árbol
-                                                                                </label>
+                                                                                <label className="text-xs font-medium text-gray-700 mb-1">Especie de árbol</label>
                                                                                 <Dropdown
                                                                                     value={task.tree_type_id}
                                                                                     options={treeTypes}
@@ -372,17 +300,12 @@ const CreateWorkOrder = () => {
                                                                         icon="pi pi-plus"
                                                                         label="Añadir Tarea"
                                                                         className="p-button-outlined p-button-sm"
-                                                                        onClick={() => pushTask({ 
-                                                                            task_type_id: null,
-                                                                            element_type_id: null,
-                                                                            tree_type_id: null
-                                                                        })}
+                                                                        onClick={() => pushTask({ task_type_id: null, element_type_id: null, tree_type_id: null })}
                                                                     />
                                                                 </div>
                                                             </div>
                                                         )}
                                                     </FieldArray>
-                                                    
                                                     <div className="flex flex-col mt-3">
                                                         <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                                                             <Icon icon="tabler:notes" className="h-5 w-5 mr-2" />
@@ -398,36 +321,20 @@ const CreateWorkOrder = () => {
                                                     </div>
                                                 </Card>
                                             ))}
-                                            
                                             <div className="flex justify-center">
                                                 <Button
                                                     type="button"
                                                     icon="pi pi-plus"
                                                     label="Añadir Bloque"
                                                     className="p-button-outlined"
-                                                    onClick={() => push({ 
-                                                        notes: '', 
-                                                        zones: [],
-                                                        tasks: [{ 
-                                                            task_type_id: null, 
-                                                            element_type_id: null, 
-                                                            tree_type_id: null 
-                                                        }]
-                                                    })}
+                                                    onClick={() => push({ notes: '', zones: [], tasks: [{ task_type_id: null, element_type_id: null, tree_type_id: null }] })}
                                                 />
                                             </div>
                                         </div>
                                     )}
                                 </FieldArray>
-
                                 <div className="flex justify-end mt-4">
-                                    <Button
-                                        type="submit"
-                                        icon="pi pi-check"
-                                        label="Crear Orden de Trabajo"
-                                        className="w-full md:w-auto"
-                                        loading={isSubmitting}
-                                    />
+                                    <Button type="submit" icon="pi pi-check" label="Crear Orden de Trabajo" className="w-full md:w-auto" loading={isSubmitting} />
                                 </div>
                             </Form>
                         )}
