@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import axiosClient from '@/api/axiosClient';
+import { Skeleton } from 'primereact/skeleton';
 
-function formatDate(date: Date): string {
+function formatDateSpanish(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
+    return `${day}-${month}-${year}`;
+}
+
+function parseIsoToSpanish(isoDate: string): string {
+    const [year, month, day] = isoDate.split('-');
     return `${day}-${month}-${year}`;
 }
 
@@ -17,14 +22,24 @@ function getThisWeekRange() {
     monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
-    return [formatDate(monday), formatDate(sunday)];
+    return [formatDateSpanish(monday), formatDateSpanish(sunday)];
 }
 
 function getThisMonthRange() {
     const today = new Date();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    return [formatDate(firstDay), formatDate(lastDay)];
+    return [formatDateSpanish(firstDay), formatDateSpanish(lastDay)];
+}
+
+function ShimmerCard() {
+    return (
+        <div className="p-6 border border-gray-300 rounded bg-white">
+            <Skeleton width="75%" height="1rem" className="mb-4" />
+            <Skeleton width="50%" height="1rem" className="mb-4" />
+            <Skeleton width="100%" height="150px" />
+        </div>
+    );
 }
 
 export default function Stats() {
@@ -45,6 +60,8 @@ export default function Stats() {
         fuel_consumption_total: 0,
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [customFromIso, setCustomFromIso] = useState('');
+    const [customToIso, setCustomToIso] = useState('');
 
     useEffect(() => {
         if (rangeOption === 'this_week') {
@@ -65,8 +82,13 @@ export default function Stats() {
         const [start, end] = getThisWeekRange();
         setFromDate(start);
         setToDate(end);
-        fetchData();
     }, []);
+
+    useEffect(() => {
+        if (fromDate && toDate) {
+            fetchData();
+        }
+    }, [fromDate, toDate]);
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -74,7 +96,9 @@ export default function Stats() {
             const res = await axiosClient.get('/admin/statistics', {
                 params: { from_date: fromDate, to_date: toDate },
             });
-            setDays(res.data.days || []);
+            const daysRaw = res.data.days || [];
+            const daysFormatted = daysRaw.map(parseIsoToSpanish);
+            setDays(daysFormatted);
             setTasksDoneCount(res.data.tasksDoneCount || []);
             setTasksNotDoneCount(res.data.tasksNotDoneCount || []);
             setHoursWorked(res.data.hoursWorked || []);
@@ -178,8 +202,17 @@ export default function Stats() {
                             <input
                                 type="date"
                                 className="border rounded px-2 py-1"
-                                value={fromDate}
-                                onChange={(e) => setFromDate(e.target.value)}
+                                value={customFromIso}
+                                onChange={(e) => {
+                                    setCustomFromIso(e.target.value);
+                                    if (e.target.value) {
+                                        setFromDate(
+                                            parseIsoToSpanish(e.target.value),
+                                        );
+                                    } else {
+                                        setFromDate('');
+                                    }
+                                }}
                             />
                         </div>
                         <div className="flex flex-col">
@@ -187,26 +220,29 @@ export default function Stats() {
                             <input
                                 type="date"
                                 className="border rounded px-2 py-1"
-                                value={toDate}
-                                onChange={(e) => setToDate(e.target.value)}
+                                value={customToIso}
+                                onChange={(e) => {
+                                    setCustomToIso(e.target.value);
+                                    if (e.target.value) {
+                                        setToDate(
+                                            parseIsoToSpanish(e.target.value),
+                                        );
+                                    } else {
+                                        setToDate('');
+                                    }
+                                }}
                             />
                         </div>
                     </>
                 )}
-                <button
-                    onClick={fetchData}
-                    className="bg-blue-600 text-white px-4 py-2 rounded">
-                    Filtrar
-                </button>
             </div>
-            {isLoading && (
-                <div className="flex items-center justify-center my-4">
-                    <ProgressSpinner
-                        style={{ width: '40px', height: '40px' }}
-                    />
+            {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {bentoItems.map((item) => (
+                        <ShimmerCard key={item.key} />
+                    ))}
                 </div>
-            )}
-            {!isLoading && (
+            ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {bentoItems.map((item) => {
                         const chartData = {
@@ -224,9 +260,7 @@ export default function Stats() {
                         const options = {
                             maintainAspectRatio: false,
                             scales: {
-                                y: {
-                                    beginAtZero: true,
-                                },
+                                y: { beginAtZero: true },
                             },
                             plugins: {
                                 legend: {
