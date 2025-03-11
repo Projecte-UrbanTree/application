@@ -38,7 +38,7 @@ const MyMap = () => {
     }, [viewport]);
 
     return (
-        <div className="w-full h-screen">
+        <div className="w-full h-full">
             <div ref={mapContainerRef} className="w-full h-full" />
         </div>
     );

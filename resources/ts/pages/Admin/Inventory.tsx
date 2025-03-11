@@ -4,20 +4,22 @@ import { Contract } from '@/types/contract';
 import { useSelector } from 'react-redux';
 
 export default function Inventory() {
-    //** EXAMPLE
     const state = useSelector((state: RootState) => state);
     const contracts: Contract[] = state.contract.allContracts;
+
     return (
-        <div>
-            {contracts.map((c) => {
-                return <p>{c.name}</p>;
-            })}
+        <div className="flex h-screen">
+            <div className="w-2/3 h-full">
+                <MyMap />
+            </div>
 
-            <hr />
-
-            <p>Selected: {state.contract.currentContract?.name}</p>
-
-            <MyMap />
+            <div className="w-1/3 h-full overflow-y-auto p-4 bg-gray-100">
+                {contracts.map((c) => (
+                    <p key={c.id} className="p-2 border-b">
+                        {c.name}
+                    </p>
+                ))}
+            </div>
         </div>
     );
 }
