@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'token' => 'This password reset token is invalid.',
-    'user' => 'We can\'t find a user with that email address.',
-    'throttled' => 'Please wait before retrying.',
-    'password' => 'Las contraseñas deben tener al menos seis caracteres y coincidir con la confirmación.',
+    'reset' => 'crwdns1938:0crwdne1938:0',
+    'sent' => 'crwdns1940:0crwdne1940:0',
+    'token' => 'crwdns1942:0crwdne1942:0',
+    'user' => 'crwdns1944:0crwdne1944:0',
+    'throttled' => 'crwdns1946:0crwdne1946:0',
+    'password' => 'crwdns1948:0crwdne1948:0',
 ];
