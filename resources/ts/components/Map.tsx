@@ -36,7 +36,7 @@ const MapComponent: React.FC = () => {
             ref={mapContainerRef}
             style={{
                 width: '60vw',
-                height: '62vh',
+                height: '100vh',
                 position: 'relative',
                 top: 0,
                 left: 0,

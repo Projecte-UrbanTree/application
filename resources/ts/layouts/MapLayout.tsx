@@ -21,7 +21,6 @@ interface AdminLayoutProps {
     children: React.ReactNode;
     contracts: Contract[];
     currentContract?: Contract;
-    padding?: string;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
@@ -29,7 +28,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     children,
     contracts,
     currentContract,
-    padding = 'max-w-7xl mx-auto pt-8 pb-16 px-8',
 }) => {
     const { t } = useI18n();
     const { user, logout } = useAuth();
@@ -349,7 +347,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 </div>
             </div>
 
-            <main className={padding}>{children}</main>
+            <main className="max-w-8xl mx-auto pt-8 pb-16 px-8">
+                {children}
+            </main>
         </div>
     );
 };

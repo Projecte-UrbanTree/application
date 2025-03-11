@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom'; // Importamos useLocation
 import { RootState } from '@/store/store';
 import { Contract } from '@/types/contract';
 import AdminLayout from '@/layouts/AdminLayout';
@@ -29,6 +30,7 @@ export default function AdminLayoutWrapper({
     const { allContracts, currentContract } = useSelector(
         (state: RootState) => state.contract,
     );
+    const location = useLocation();
 
     const contracts = [
         defaultContract,
@@ -47,11 +49,16 @@ export default function AdminLayoutWrapper({
         }
     }, [dispatch, allContracts.length]);
 
+    const padding = location.pathname.includes('/admin/inventory')
+        ? 'p-0'
+        : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
+
     return (
         <AdminLayout
             titleI18n={titleI18n}
             contracts={contracts}
-            currentContract={selectedContract ?? defaultContract}>
+            currentContract={selectedContract ?? defaultContract}
+            padding={padding}>
             {children}
         </AdminLayout>
     );

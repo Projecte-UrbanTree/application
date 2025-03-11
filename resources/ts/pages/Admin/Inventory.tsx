@@ -20,12 +20,12 @@ export default function Inventory() {
                 </div>
             )}
 
-            <div className="flex flex-grow">
-                <div className="w-2/3 h-full">
+            <div className="flex flex-grow h-full">
+                <div className="flex-1 h-full">
                     <MyMap />
                 </div>
 
-                <div className="w-1/3 h-full bg-gray-400">
+                <div className="flex-1 h-full bg-gray-400">
                     <Zones />
                 </div>
             </div>

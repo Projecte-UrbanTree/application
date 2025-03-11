@@ -1,3 +1,3 @@
 export const MapControl = () => {
-    return <div>MapControl</div>;
+    return <div className="bg-slate-500">MapControl</div>;
 };
