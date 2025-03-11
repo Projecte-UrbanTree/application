@@ -1,47 +1,48 @@
-import { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import useGeolocation from '@/hooks/useGeolocation';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const MyMap = () => {
-    const mapRef = useRef<mapboxgl.Map | null>(null);
+const MapComponent: React.FC = () => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
-    const [viewport, setViewport] = useState({
-        latitude: 40.4168,
-        longitude: -3.7038,
-        zoom: 12,
-    });
+    const { latitude, longitude, error } = useGeolocation();
+    const mapRef = useRef<mapboxgl.Map | null>(null);
 
     useEffect(() => {
-        if (!mapContainerRef.current) return;
+        if (!mapContainerRef.current || latitude === null || longitude === null)
+            return;
 
         mapboxgl.accessToken = MAPBOX_TOKEN;
 
+        if (mapRef.current) {
+            mapRef.current.setCenter([longitude, latitude]);
+            return;
+        }
+
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [viewport.longitude, viewport.latitude],
-            zoom: viewport.zoom,
+            style: 'mapbox://styles/mapbox/standard-satellite',
+            center: [longitude, latitude],
+            zoom: 12,
         });
 
-        const nav = new mapboxgl.NavigationControl();
-        mapRef.current.addControl(nav, 'top-right');
-
-        new mapboxgl.Marker({ color: 'red' })
-            .setLngLat([viewport.longitude, viewport.latitude])
-            .addTo(mapRef.current);
-
-        return () => {
-            mapRef.current?.remove();
-        };
-    }, [viewport]);
+        return () => mapRef.current?.remove();
+    }, [latitude, longitude]);
 
     return (
-        <div className="w-full h-full">
-            <div ref={mapContainerRef} className="w-full h-full" />
-        </div>
+        <div
+            ref={mapContainerRef}
+            style={{
+                width: '60vw',
+                height: '62vh',
+                position: 'relative',
+                top: 0,
+                left: 0,
+            }}
+        />
     );
 };
 
-export default MyMap;
+export default MapComponent;
