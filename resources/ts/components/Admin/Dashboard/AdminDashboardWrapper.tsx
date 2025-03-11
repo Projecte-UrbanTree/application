@@ -50,7 +50,7 @@ export default function AdminLayoutWrapper({
     }, [dispatch, allContracts.length]);
 
     const padding = location.pathname.includes('/admin/inventory')
-        ? 'p-0'
+        ? 'py-8 px-4'
         : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
     return (
