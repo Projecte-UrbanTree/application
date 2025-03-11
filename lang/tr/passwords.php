@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'reset' => 'crwdns574:0crwdne574:0',
-    'sent' => 'crwdns576:0crwdne576:0',
-    'token' => 'crwdns578:0crwdne578:0',
-    'user' => 'crwdns580:0crwdne580:0',
-    'throttled' => 'crwdns582:0crwdne582:0',
-    'password' => 'crwdns584:0crwdne584:0',
+    'reset' => 'crwdns1938:0crwdne1938:0',
+    'sent' => 'crwdns1940:0crwdne1940:0',
+    'token' => 'crwdns1942:0crwdne1942:0',
+    'user' => 'crwdns1944:0crwdne1944:0',
+    'throttled' => 'crwdns1946:0crwdne1946:0',
+    'password' => 'crwdns1948:0crwdne1948:0',
 ];

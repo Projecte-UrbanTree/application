@@ -1,399 +1,427 @@
 {
-  "admin": {
-    "buttons": {
-      "createNew": "Create New"
-    },
-    "fields": {
-      "company": "Company",
-      "description": "Description",
-      "dni": "DNI",
-      "email": "Email",
-      "family": "Family",
-      "genus": "Genus",
-      "name": "Name",
-      "password": "Password",
-      "role": "Role",
-      "species": "Species",
-      "status": "Status",
-      "final_price": "Final Price",
-      "start_date": "Start Date",
-      "end_date": "End Date"
-    },
-    "status": {
-      "active": "Active",
-      "inactive": "Inactive",
-      "completed": "Completed"
-    },
-    "pages": {
-      "contracts": {
-        "columns": {
-          "end_date": "End Date",
-          "invoice_agreed": "Invoice Agreed",
-          "invoice_paid": "Invoice Paid",
-          "invoice_proposed": "Invoice Proposed",
-          "name": "Contract",
-          "start_date": "Start Date"
+    "admin": {
+        "buttons": {
+            "createNew": "Create new"
         },
-        "title": "Contracts"
-      },
-      "dashboard": {
-        "title": "Dashboard",
-        "welcome": {
-          "greeting": "Welcome back, {{name}} {{surname}}.",
-          "message": "We are glad to see you again. Here is a quick overview of your data."
-        },
-        "stats": {
-          "widgets": {
-            "users": "Users",
-            "contracts": "Contracts",
-            "elements": "Elements",
-            "workOrders": "Work Orders"
-          }
-        }
-      },
-      "users": {
-        "title": "Users",
-        "list": {
-          "actions": {
-            "edit": "Edit User",
-            "delete": "Delete User",
-            "label": "Actions"
-          },
-          "messages": {
-            "deleteSuccess": "User deleted successfully",
-            "deleteConfirm": "Are you sure you want to delete this user?",
-            "createSuccess": "User created successfully",
-            "updateSuccess": "User updated successfully",
-            "error": "Error saving user"
-          },
-          "columns": {
-            "name": "Name",
-            "surname": "Surname",
-            "email": "Email",
+        "fields": {
             "company": "Company",
-            "dni": "DNI",
-            "role": "Role"
-          }
-        },
-        "form": {
-          "title": {
-            "create": "Create User",
-            "edit": "Edit User"
-          },
-          "placeholders": {
-            "role": "Select a role",
-            "password": "Password",
-            "passwordEdit": "Password (leave blank to keep unchanged)"
-          },
-          "validation": {
-            "name_required": "Name is required",
-            "surname_required": "Surname is required",
-            "invalid_email": "Invalid email address",
-            "email_required": "Email is required",
-            "role_invalid": "Invalid role",
-            "password_required": "Password is required",
-            "password_min": "Must be at least 8 characters",
-            "password_uppercase": "Must contain at least one uppercase letter",
-            "password_number": "Must contain at least one number",
-            "password_special": "Must contain at least one special character"
-          },
-          "returnButton": "Return to user list",
-          "submitButton": {
-            "create": "Create User",
-            "edit": "Save Changes"
-          },
-          "submittingText": {
-            "create": "Creating...",
-            "edit": "Saving..."
-          }
-        }
-      },
-      "contracts": {
-        "title": "Contracts",
-        "columns": {
-          "name": "Contract",
-          "start_date": "Start Date",
-          "end_date": "End Date",
-          "invoice_proposed": "Invoice Proposed",
-          "invoice_agreed": "Invoice Agreed",
-          "invoice_paid": "Invoice Paid",
-          "final_price": "Final Price",
-          "status": "Status"
-        },
-        "create": {
-          "title": "Create Contract",
-          "validations": {
-            "name_required": "Name is required",
-            "name_invalid": "Name is invalid",
-            "start_date_required": "Start date is required",
-            "end_date_required": "End date is required",
-            "end_date_after_start_date": "End date must be after start date",
-            "final_price_required": "Final price is required",
-            "status_invalid": "Invalid status",
-            "status_required": "Status is required"
-          },
-          "placeholders": {
-            "status": "Select a status"
-          },
-          "submittingText": "Creating...",
-          "submitButton": "Create Contract",
-          "success": "Contract created successfully"
-        },
-        "edit": {
-          "title": "Edit Contract",
-          "validations": {
-            "name_required": "Name is required",
-            "name_invalid": "Name is invalid",
-            "start_date_required": "Start date is required",
-            "end_date_required": "End date is required",
-            "end_date_after_start_date": "End date must be after start date",
-            "final_price_required": "Final price is required",
-            "status_invalid": "Invalid status",
-            "status_required": "Status is required"
-          },
-          "placeholders": {
-            "status": "Select a status"
-          },
-          "submittingText": "Saving...",
-          "submitButton": "Save Changes",
-          "update": "Contract updated successfully",
-          "error": "Error saving contract"
-        },
-        "loading": "Loading...",
-        "deleteConfirm": "Are you sure you want to delete this contract?",
-        "deletedSuccess": "Contract deleted successfully",
-        "actions": "Actions",
-        "editButton": "Edit Contract",
-        "deleteButton": "Delete Contract",
-        "list": {
-          "actions": {
-            "edit": "Edit contract",
-            "delete": "Delete contract",
-            "label": "Actions"
-          },
-          "messages": {
-            "deleteSuccess": "Contract deleted successfully",
-            "deleteConfirm": "Are you sure you want to delete this contract?",
-            "createSuccess": "Contract created successfully",
-            "updateSuccess": "Contract updated successfully",
-            "error": "Error saving contract"
-          },
-          "columns": {
-            "name": "Contract",
-            "start_date": "Start Date",
+            "dni": "ID card",
+            "email": "Email",
             "end_date": "End Date",
-            "final_price": "Final Price",
-            "status": "Status"
-          }
-        },
-        "form": {
-          "title": {
-            "create": "Create Contract",
-            "edit": "Edit Contract"
-          },
-          "placeholders": {
-            "status": "Select a status"
-          },
-          "validation": {
-            "name_required": "Name is required",
-            "name_invalid": "Name is invalid",
-            "start_date_required": "Start date is required",
-            "end_date_required": "End date is required",
-            "end_date_after_start_date": "End date must be after start date",
-            "final_price_required": "Final price is required",
-            "status_invalid": "Invalid status",
-            "status_required": "Status is required"
-          },
-          "returnButton": "Return to contract list",
-          "submitButton": {
-            "create": "Create Contract",
-            "edit": "Save Changes"
-          },
-          "submittingText": {
-            "create": "Creating...",
-            "edit": "Saving..."
-          }
-        }
-      },
-      "workOrders": {
-        "title": "Work Orders",
-        "columns": {
-          "date": "Date",
-          "status": "Status",
-          "contract_id": "Contract"
-        }
-      },
-      "elementTypes": {
-        "title": "Element Types",
-        "columns": {
-          "name": "Element Type",
-          "requires_tree_type": "Requires Tree Type",
-          "description": "Description",
-          "icon": "Icon",
-          "color": "Color"
-        }
-      },
-      "treeTypes": {
-        "title": "Tree Types",
-        "list": {
-          "title": "Tree Types",
-          "actions": {
-            "label": "Actions",
-            "edit": "Edit Tree Type",
-            "delete": "Delete Tree Type"
-          },
-          "messages": {
-            "deletedSuccess": "Tree type deleted successfully",
-            "deleteConfirm": "Are you sure you want to delete this tree type?",
-            "createSuccess": "Tree type created successfully",
-            "updateSuccess": "Tree type updated successfully",
-            "error": "Error saving tree type"
-          },
-          "columns": {
             "family": "Family",
+            "final_price": "Final Price",
             "genus": "Genus",
-            "species": "Species"
-          }
+            "name": "Name",
+            "password": "Password",
+            "role": "Role",
+            "species": "Species",
+            "start_date": "Start Date",
+            "status": "Status",
+            "surname": "Surname"
         },
-        "form": {
-          "title": {
-            "create": "Create Tree Type",
-            "edit": "Edit Tree Type"
-          },
-          "validation": {
-            "family": "Family is required",
-            "genus": "Genus is required",
-            "species": "Species is required",
-            "alphanumeric": {
-              "family": "Family must contain only alphanumeric characters",
-              "genus": "Genus must contain only alphanumeric characters",
-              "species": "Species must contain only alphanumeric characters"
+        "menu": {
+            "management": "Management",
+            "settings": "Settings"
+        },
+        "pages": {
+            "contracts": {
+                "form": {
+                    "placeholders": {
+                        "status": "Select a status"
+                    },
+                    "returnButton": "Return to contract list",
+                    "submitButton": {
+                        "create": "Create Contract",
+                        "edit": "Save Changes"
+                    },
+                    "submittingText": {
+                        "create": "Creating...",
+                        "edit": "Saving..."
+                    },
+                    "title": {
+                        "create": "Create Contract",
+                        "edit": "Edit Contract"
+                    },
+                    "validation": {
+                        "end_date_after_start_date": "End date must be after start date",
+                        "end_date_required": "End date is required",
+                        "final_price_required": "Final price is required",
+                        "name_invalid": "Name is invalid",
+                        "name_required": "Name is required",
+                        "start_date_required": "Start date is required",
+                        "status_invalid": "Invalid status",
+                        "status_required": "Status is required"
+                    }
+                },
+                "list": {
+                    "actions": {
+                        "delete": "Delete contract",
+                        "edit": "Edit contract",
+                        "label": "Actions"
+                    },
+                    "columns": {
+                        "end_date": "End Date",
+                        "final_price": "Final Price",
+                        "name": "Contract",
+                        "start_date": "Start Date",
+                        "status": "Status"
+                    },
+                    "messages": {
+                        "createSuccess": "Contract created successfully",
+                        "deleteConfirm": "Are you sure you want to delete this contract?",
+                        "deleteSuccess": "Contract deleted successfully",
+                        "error": "Error saving contract",
+                        "updateSuccess": "Contract updated successfully"
+                    }
+                },
+                "title": "Contracts"
+            },
+            "dashboard": {
+                "stats": {
+                    "widgets": {
+                        "contracts": "Contracts",
+                        "elements": "Elements",
+                        "users": "Users",
+                        "workOrders": "Work Orders"
+                    }
+                },
+                "title": "Dashboard",
+                "welcome": {
+                    "greeting": "Welcome back, {{name}} {{surname}}.",
+                    "message": "We are glad to see you again. Here is a quick overview of your data."
+                }
+            },
+            "elementTypes": {
+                "columns": {
+                    "color": "Color",
+                    "description": "Description",
+                    "icon": "Icon",
+                    "name": "Element Type",
+                    "requires_tree_type": "Requires Tree Type"
+                },
+                "title": "Element Types"
+            },
+            "resources": {
+                "form": {
+                    "fields": {
+                        "description": "Description",
+                        "name": "Name",
+                        "type": "Type"
+                    },
+                    "placeholders": {
+                        "description": "Enter description",
+                        "name": "Enter name",
+                        "type": "Select a type"
+                    },
+                    "returnButton": "Return to resource list",
+                    "submitButton": {
+                        "create": "Create Resource",
+                        "edit": "Save Changes"
+                    },
+                    "submittingText": {
+                        "create": "Creating...",
+                        "edit": "Saving..."
+                    },
+                    "title": {
+                        "create": "Create Resource",
+                        "edit": "Edit Resource"
+                    },
+                    "validation": {
+                        "name_required": "Name is required",
+                        "type_required": "Type is required"
+                    }
+                },
+                "list": {
+                    "actions": {
+                        "delete": "Delete resource",
+                        "edit": "Edit resource",
+                        "label": "Actions"
+                    },
+                    "columns": {
+                        "description": "Description",
+                        "name": "Name",
+                        "type": "Type"
+                    },
+                    "messages": {
+                        "createSuccess": "Resource created successfully",
+                        "deleteConfirm": "Are you sure you want to delete this resource?",
+                        "deleteSuccess": "Resource deleted successfully",
+                        "error": "Error saving resource",
+                        "updateSuccess": "Resource updated successfully"
+                    },
+                    "title": "Resources"
+                },
+                "title": "Resources"
+            },
+            "resourceTypes": {
+                "form": {
+                    "placeholders": {
+                        "description": "Enter description",
+                        "name": "Enter name"
+                    },
+                    "returnButton": "Return to resource type list",
+                    "submitButton": {
+                        "create": "Create Resource Type",
+                        "edit": "Save Changes"
+                    },
+                    "submittingText": {
+                        "create": "Creating...",
+                        "edit": "Saving..."
+                    },
+                    "title": {
+                        "create": "Create Resource Type",
+                        "edit": "Edit Resource Type"
+                    },
+                    "validation": {
+                        "description_required": "Description is required",
+                        "name_invalid": "Name can only contain letters, numbers, and spaces",
+                        "name_required": "Name is required"
+                    }
+                },
+                "list": {
+                    "actions": {
+                        "delete": "Delete resource type",
+                        "edit": "Edit resource type",
+                        "label": "Actions"
+                    },
+                    "columns": {
+                        "description": "Description",
+                        "name": "Name"
+                    },
+                    "messages": {
+                        "createSuccess": "Resource type created successfully",
+                        "deleteConfirm": "Are you sure you want to delete this resource type?",
+                        "deleteSuccess": "Resource type deleted successfully",
+                        "error": "Error saving the resource type",
+                        "updateSuccess": "Resource type updated successfully"
+                    }
+                },
+                "title": "Resource Types"
+            },
+            "stats": {
+                "title": "Statistics"
+            },
+            "taskTypes": {
+                "form": {
+                    "fields": {
+                        "description": "Description",
+                        "name": "Name"
+                    },
+                    "placeholders": {
+                        "description": "Enter description",
+                        "name": "Enter name"
+                    },
+                    "returnButton": "Return to task type list",
+                    "submitButton": {
+                        "create": "Create Task Type",
+                        "edit": "Save Changes"
+                    },
+                    "submittingText": {
+                        "create": "Creating...",
+                        "edit": "Saving..."
+                    },
+                    "title": {
+                        "create": "Create Task Type",
+                        "edit": "Edit Task Type"
+                    },
+                    "validation": {
+                        "error_numbers": "Name cannot contain numbers or special characters",
+                        "name_required": "Name is required"
+                    }
+                },
+                "list": {
+                    "actions": {
+                        "delete": "Delete task type",
+                        "edit": "Edit task type",
+                        "label": "Actions"
+                    },
+                    "columns": {
+                        "description": "Description",
+                        "name": "Task Type"
+                    },
+                    "messages": {
+                        "createSuccess": "Task type created successfully",
+                        "deleteConfirm": "Are you sure you want to delete this task type?",
+                        "deleteSuccess": "Task type deleted successfully",
+                        "error": "Error saving task type",
+                        "updateSuccess": "Task type updated successfully"
+                    },
+                    "title": "Task Types"
+                },
+                "title": "Task Types"
+            },
+            "treeTypes": {
+                "form": {
+                    "submitButton": {
+                        "create": "Create Tree Type",
+                        "edit": "Save Changes"
+                    },
+                    "submittingText": {
+                        "create": "Creating...",
+                        "edit": "Saving..."
+                    },
+                    "title": {
+                        "create": "Create Tree Type",
+                        "edit": "Edit Tree Type"
+                    },
+                    "validation": {
+                        "alphanumeric": {
+                            "family": "Family must contain only alphanumeric characters",
+                            "genus": "Genus must contain only alphanumeric characters",
+                            "species": "Species must contain only alphanumeric characters"
+                        },
+                        "family": "Family is required",
+                        "genus": "Genus is required",
+                        "species": "Species is required"
+                    }
+                },
+                "list": {
+                    "actions": {
+                        "delete": "Delete Tree Type",
+                        "edit": "Edit Tree Type",
+                        "label": "Actions"
+                    },
+                    "columns": {
+                        "family": "Family",
+                        "genus": "Genus",
+                        "species": "Species"
+                    },
+                    "messages": {
+                        "createSuccess": "Tree type created successfully",
+                        "deleteConfirm": "Are you sure you want to delete this tree type?",
+                        "deletedSuccess": "Tree type deleted successfully",
+                        "error": "Error saving tree type",
+                        "updateSuccess": "Tree type updated successfully"
+                    },
+                    "title": "Tree Types"
+                },
+                "title": "Tree Types"
+            },
+            "users": {
+                "form": {
+                    "placeholders": {
+                        "password": "Password",
+                        "passwordEdit": "Password (leave blank to keep unchanged)",
+                        "role": "Select a role"
+                    },
+                    "returnButton": "Return to user list",
+                    "submitButton": {
+                        "create": "Create User",
+                        "edit": "Save Changes"
+                    },
+                    "submittingText": {
+                        "create": "Creating...",
+                        "edit": "Saving..."
+                    },
+                    "title": {
+                        "create": "Create User",
+                        "edit": "Edit User"
+                    },
+                    "validation": {
+                        "email_required": "Email is required",
+                        "invalid_email": "Invalid email address",
+                        "name_required": "Name is required",
+                        "password_min": "Must be at least 8 characters",
+                        "password_number": "Must contain at least one number",
+                        "password_required": "Password is required",
+                        "password_special": "Must contain at least one special character",
+                        "password_uppercase": "Must contain at least one uppercase letter",
+                        "role_invalid": "Invalid role",
+                        "surname_required": "Surname is required"
+                    }
+                },
+                "list": {
+                    "actions": {
+                        "delete": "Delete User",
+                        "edit": "Edit User",
+                        "label": "Actions"
+                    },
+                    "columns": {
+                        "company": "Company",
+                        "dni": "ID card",
+                        "email": "Email",
+                        "name": "Name",
+                        "role": "Role",
+                        "surname": "Surname"
+                    },
+                    "messages": {
+                        "createSuccess": "User created successfully",
+                        "deleteConfirm": "Are you sure you want to delete this user?",
+                        "deleteSuccess": "User deleted successfully",
+                        "error": "Error saving user",
+                        "updateSuccess": "User updated successfully"
+                    }
+                },
+                "title": "Users"
+            },
+            "workOrders": {
+                "columns": {
+                    "contract_id": "Contract",
+                    "date": "Date",
+                    "status": "Status"
+                },
+                "title": "Work Orders"
             }
-          },
-          "submitButton": {
-            "create": "Create Tree Type",
-            "edit": "Save Changes"
-          },
-          "submittingText": {
-            "create": "Creating...",
-            "edit": "Saving..."
-          }
-        }
-      },
-      "taskTypes": {
-        "title": "Task Types",
-        "list": {
-          "actions": {
-            "edit": "Edit task type",
-            "delete": "Delete task type",
-            "label": "Actions"
-          },
-          "messages": {
-            "deleteSuccess": "Task type deleted successfully",
-            "deleteConfirm": "Are you sure you want to delete this task type?",
-            "updateSuccess": "Task type updated successfully",
-            "createSuccess": "Task type created successfully",
-            "error": "Error saving task type"
-          },
-          "columns": {
-            "name": "Task Type",
-            "description": "Description"
-          }
         },
-        "form": {
-          "title": {
-            "create": "Create Task Type",
-            "edit": "Edit Task Type"
-          },
-          "fields": {
-            "name": "Name",
-            "description": "Description"
-          },
-          "placeholders": {
-            "name": "Enter name",
-            "description": "Enter description"
-          },
-          "validation": {
-            "name_required": "Name is required",
-            "error_numbers": "Name cannot contain numbers or special characters"
-          },
-          "returnButton": "Return to task type list",
-          "submitButton": {
-            "create": "Create Task Type",
-            "edit": "Save Changes"
-          },
-          "submittingText": {
-            "create": "Creating...",
-            "edit": "Saving..."
-          }
-        }
-      },
-      "resources": {
-        "title": "Resources",
-        "columns": {
-          "name": "Resource",
-          "description": "Description",
-          "resource_type_id": "Resource Type"
-        }
-      },
-      "resourceTypes": {
-        "title": "Resource Types",
-        "list": {
-          "actions": {
-            "edit": "Edit resource type",
-            "delete": "Delete resource type",
-            "label": "Actions"
-          },
-          "messages": {
-            "deleteSuccess": "Resource type deleted successfully",
-            "deleteConfirm": "Are you sure you want to delete this resource type?",
-            "createSuccess": "Resource type created successfully",
-            "updateSuccess": "Resource type updated successfully",
-            "error": "Error saving the resource type"
-          },
-          "columns": {
-            "name": "Name",
-            "description": "Description"
-          }
+        "profileDropdown": {
+            "accountSettings": "Account settings",
+            "license": "License",
+            "logout": "Log out"
         },
-        "form": {
-          "title": {
-            "create": "Create Resource Type",
-            "edit": "Edit Resource Type"
-          },
-          "placeholders": {
-            "name": "Enter name",
-            "description": "Enter description"
-          },
-          "validation": {
-            "name_required": "Name is required",
-            "description_required": "Description is required",
-            "name_invalid": "Name can only contain letters, numbers, and spaces"
-          },
-          "returnButton": "Return to resource type list",
-          "submitButton": {
-            "create": "Create Resource Type",
-            "edit": "Save Changes"
-          },
-          "submittingText": {
-            "create": "Creating...",
-            "edit": "Saving..."
-          }
+        "roles": {
+            "admin": "Admin",
+            "customer": "Customer",
+            "unknown": "Unknown",
+            "worker": "Worker"
+        },
+        "status": {
+            "active": "Active",
+            "completed": "Completed",
+            "inactive": "Inactive"
+        },
+        "submenu": {
+            "manage": {
+                "dashboard": "Dashboard",
+                "inventory": "Inventory",
+                "resources": "Resources",
+                "stats": "Statistics",
+                "workers": "Workers",
+                "workOrders": "Work Orders"
+            },
+            "settings": {
+                "contracts": "Contracts",
+                "elementTypes": "Element Type",
+                "resourceTypes": "Resource Types",
+                "species": "Species",
+                "taskTypes": "Task Types",
+                "users": "Users"
+            }
         }
-      },
-      "stats": {
-        "title": "Statistics"
-      }
+    },
+    "general": {
+        "allContracts": "All contracts",
+        "genericError": "An error occurred. Please try again later.",
+        "loading": "Loading..."
+    },
+    "public": {
+        "error": {
+            "btnReturn": "Go back",
+            "descriptions": {
+                "404": "The page you are looking for does not exist.",
+                "unexpected": "An unexpected error occurred. Please try again later."
+            },
+            "title": "Error {{errorCode}}"
+        },
+        "login": {
+            "form": {
+                "btnLogin": "Log in",
+                "labelEmail": "Email",
+                "labelPassword": "Password",
+                "msgSuccess": "Logged in successfully",
+                "placeholderEmail": "youremail@example.com",
+                "rememberMe": "Remember me",
+                "titleSuccess": "Success"
+            }
+        }
     }
-  },
-  "general": {
-    "allContracts": "All contracts",
-    "genericError": "An error occurred. Please try again later.",
-    "loading": "Loading..."
-  },
-  "status": {
-    "active": "Active",
-    "inactive": "Inactive",
-    "completed": "Completed"
-  }
 }
