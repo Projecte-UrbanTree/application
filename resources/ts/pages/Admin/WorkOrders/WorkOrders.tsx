@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
 import CrudPanel from '@/components/Admin/CrudPanel'
 import { Accordion, AccordionTab } from 'primereact/accordion'
+import { useSelector } from "react-redux"
+import { RootState } from "@/store/store"
 
 interface WorkOrderBlockTask {
   id: number
@@ -54,6 +56,7 @@ export default function WorkOrders() {
   const errorMsg = location.state?.error
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null)
   const [msgSeverity, setMsgSeverity] = useState<'success' | 'error'>(successMsg ? 'success' : 'error')
+  const currentContract = useSelector((state: RootState) => state.contract.currentContract)
   useEffect(() => {
     if (location.state) window.history.replaceState({}, document.title)
   }, [location])
@@ -162,12 +165,15 @@ export default function WorkOrders() {
       </div>
     )
   }
+  const filteredWorkOrders = workOrders.filter(
+    (wo: any) => currentContract && wo.contract_id === currentContract.id
+  )
   return (
     <>
       {msg && <Message severity={msgSeverity} text={msg} className="mb-4 w-full" />}
       <CrudPanel title="admin.pages.workOrders.title" onCreate={() => navigate('/admin/work-orders/create')}>
         <DataTable
-          value={workOrders}
+          value={filteredWorkOrders}
           expandedRows={expandedRows}
           onRowToggle={(e) => setExpandedRows(e.data)}
           rowExpansionTemplate={rowExpansionTemplate}
