@@ -13,6 +13,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { Divider } from 'primereact/divider';
 import axiosClient from '@/api/axiosClient';
 import { RootState } from '@/store/store';
+import { useTranslation } from 'react-i18next';
+import { Message } from 'primereact/message';
 
 const CreateWorkOrder = () => {
     const navigate = useNavigate();
@@ -22,6 +24,9 @@ const CreateWorkOrder = () => {
     const [elementTypes, setElementTypes] = useState<any[]>([]);
     const [treeTypes, setTreeTypes] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
@@ -74,17 +79,59 @@ const CreateWorkOrder = () => {
     });
 
     const handleSubmit = async (values: any, { setSubmitting }: any) => {
+        setIsSubmitting(true);
+        setError(null);
+        
         try {
-            await axiosClient.post('/admin/work-orders', {
-                date: values.date,
-                users: values.selectedUsers,
+            // Format the date in ISO format
+            const formattedDate = values.date ? new Date(values.date).toISOString().split('T')[0] : null;
+            
+            // Extract just the IDs from the selectedUsers
+            const userIds = values.selectedUsers.map((user: any) => user.id);
+            
+            // Prepare blocks data with properly formatted objects
+            const formattedBlocks = values.blocks.map((block: any) => ({
+                notes: block.notes,
+                // Extract IDs from zones
+                zones: block.zones.map((zone: any) => zone.id),
+                tasks: block.tasks.map((task: any) => ({
+                    task_type_id: task.task_type_id,
+                    element_type_id: task.element_type_id,
+                    tree_type_id: task.tree_type_id
+                }))
+            }));
+            
+            // Log the formatted request data for debugging
+            console.log('Sending work order data:', {
+                date: formattedDate,
+                users: userIds,
                 contract_id: currentContract?.id,
-                blocks: values.blocks
+                blocks: formattedBlocks
             });
-            navigate('/admin/work-orders', { state: { success: 'Orden de trabajo creada correctamente' } });
-        } catch (error) {
+            
+            const response = await axiosClient.post('/admin/work-orders', {
+                date: formattedDate,
+                users: userIds,
+                contract_id: currentContract?.id,
+                blocks: formattedBlocks
+            });
+            
+            navigate('/admin/work-orders', { 
+                state: { 
+                    success: t('admin.pages.workOrders.createSuccess')
+                }
+            });
+        } catch (error: any) {
             console.error('Error creating work order:', error);
+            
+            // Provide more specific error information if available
+            setError(
+                error.response?.data?.message || error.response?.data?.error || 
+                t('admin.pages.workOrders.createError')
+            );
+            
             setSubmitting(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -155,6 +202,9 @@ const CreateWorkOrder = () => {
                     </h2>
                 </header>
                 <div className="p-6">
+                    {error && (
+                        <Message severity="error" text={error} className="mb-4 w-full" />
+                    )}
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
@@ -245,21 +295,14 @@ const CreateWorkOrder = () => {
                                                             display="chip"
                                                         />
                                                     </div>
-
-                                                    <Divider align="left">
-                                                        <div className="inline-flex align-items-center">
-                                                            <Icon icon="tabler:list-check" className="mr-2" />
-                                                            <span>Tareas</span>
-                                                        </div>
-                                                    </Divider>
                                                     
                                                     <FieldArray name={`blocks[${index}].tasks`}>
                                                         {({ remove: removeTask, push: pushTask }) => (
-                                                            <div className="space-y-3">
+                                                            <div className="space-y-3 mt-6">
                                                                 {values.blocks[index].tasks.map((task, taskIndex) => (
                                                                     <div key={taskIndex} className="p-2 border border-gray-200 rounded-lg">
                                                                         <div className="flex justify-between items-center mb-2">
-                                                                            <h5 className="text-sm font-medium">Tarea {taskIndex + 1}</h5>
+                                                                            <h5 className="text-lg font-medium">Tarea {taskIndex + 1}</h5>
                                                                             {values.blocks[index].tasks.length > 1 && (
                                                                                 <Button
                                                                                     icon={<Icon icon="tabler:trash" className="h-4 w-4" />}
@@ -383,6 +426,7 @@ const CreateWorkOrder = () => {
                                         icon="pi pi-check"
                                         label="Crear Orden de Trabajo"
                                         className="w-full md:w-auto"
+                                        loading={isSubmitting}
                                     />
                                 </div>
                             </Form>

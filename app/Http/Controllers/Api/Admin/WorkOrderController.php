@@ -54,20 +54,25 @@ class WorkOrderController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'date' => 'required|date',
-            'users' => 'required|array',
-            'contract_id' => 'required|exists:contracts,id',
-            'blocks' => 'required|array',
-            'blocks.*.notes' => 'nullable|string',
-            'blocks.*.zones' => 'nullable|array',
-            'blocks.*.tasks' => 'array',
-            'blocks.*.tasks.*.task_type_id' => 'required|exists:task_types,id',
-            'blocks.*.tasks.*.element_type_id' => 'required|exists:element_types,id',
-            'blocks.*.tasks.*.tree_type_id' => 'nullable|exists:tree_types,id',
-        ]);
-
         try {
+            // Log incoming request data for debugging
+            \Log::info('Work order creation request data:', [
+                'request' => $request->all()
+            ]);
+            
+            $validated = $request->validate([
+                'date' => 'required|date',
+                'users' => 'required|array',
+                'contract_id' => 'required|exists:contracts,id',
+                'blocks' => 'required|array',
+                'blocks.*.notes' => 'nullable|string',
+                'blocks.*.zones' => 'nullable|array',
+                'blocks.*.tasks' => 'array',
+                'blocks.*.tasks.*.task_type_id' => 'required|exists:task_types,id',
+                'blocks.*.tasks.*.element_type_id' => 'required|exists:element_types,id',
+                'blocks.*.tasks.*.tree_type_id' => 'nullable|exists:tree_types,id',
+            ]);
+
             // Start a database transaction
             DB::beginTransaction();
             
@@ -91,8 +96,12 @@ class WorkOrderController extends Controller
                 $block->save();
                 
                 // Attach zones to block if they exist
-                if (!empty($blockData['zones'])) {
-                    $zoneIds = collect($blockData['zones'])->pluck('id')->toArray();
+                if (!empty($blockData['zones']) && is_array($blockData['zones'])) {
+                    // Make sure we're dealing with an array of IDs
+                    $zoneIds = is_array($blockData['zones'][0]) 
+                        ? collect($blockData['zones'])->pluck('id')->toArray()
+                        : $blockData['zones'];
+                    
                     $block->zones()->attach($zoneIds);
                 }
                 
@@ -127,13 +136,32 @@ class WorkOrderController extends Controller
                     'workOrdersBlocks.blockTasks.treeType',
                 ]),
             ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors specifically
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
             // Rollback in case of error
-            DB::rollBack();
+            if (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
+            
+            // Log the detailed error
+            \Log::error('Work order creation failed: ' . $e->getMessage(), [
+                'exception' => $e,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
             
             return response()->json([
                 'message' => 'Error creating work order',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
             ], 500);
         }
     }

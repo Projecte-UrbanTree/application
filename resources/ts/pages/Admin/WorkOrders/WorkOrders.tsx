@@ -3,11 +3,11 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
-import { Message } from 'primereact/message'; // Added Message import
+import { Message } from 'primereact/message';
 import { Icon } from '@iconify/react';
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router-dom'; // Added useLocation
+import { useNavigate, useLocation } from 'react-router-dom';
 import CrudPanel from '@/components/Admin/CrudPanel';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 
@@ -40,7 +40,7 @@ interface WorkOrder {
   contract: { name: string };
   users: { id: number; name: string; surname: string }[];
   work_orders_blocks: WorkOrderBlock[];
-  work_reports?: WorkReport[]; // Add work_reports to the interface
+  work_reports?: WorkReport[];
 }
 
 export default function WorkOrders() {
@@ -54,6 +54,15 @@ export default function WorkOrders() {
   const successMsg = location.state?.success;
   const errorMsg = location.state?.error;
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+  const [msgSeverity, setMsgSeverity] = useState<'success' | 'error'>(
+    successMsg ? 'success' : 'error'
+  );
+
+  useEffect(() => {
+    if (location.state) {
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (msg) {
@@ -183,7 +192,7 @@ export default function WorkOrders() {
       {/* Add message display */}
       {msg && (
         <Message
-          severity={successMsg || msg === t('admin.pages.workOrders.deleteSuccess') ? 'success' : 'error'}
+          severity={msgSeverity}
           text={msg}
           className="mb-4 w-full"
         />
@@ -293,8 +302,8 @@ export default function WorkOrders() {
               if (!rowData.work_reports || rowData.work_reports.length === 0) {
                 return (
                   <Badge
-                    value={t('admin.pages.workReports.status.noReport')}
-                    severity="secondary"
+                    value={('Pendent')}
+                    severity="warning"
                   />
                 );
               }
