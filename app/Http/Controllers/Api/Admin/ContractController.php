@@ -10,8 +10,7 @@ use Illuminate\Validation\Rule;
 class ContractController extends Controller
 {
     public function index()
-    {
-        return response()->json(Contract::all());
+    {return response()->json(Contract::all());
     }
 
     public function store(Request $request)
