@@ -1,5 +1,5 @@
-import { MapControl } from '@/components/Admin/Inventory/MapControl';
 import { Zones } from '@/components/Admin/Inventory/Zones';
+import MapComponent from '@/components/Map';
 import MyMap from '@/components/Map';
 import { RootState } from '@/store/store';
 import { Contract } from '@/types/contract';
@@ -13,19 +13,13 @@ export default function Inventory() {
     const userValue: UserData = state.user;
 
     return (
-        <div className="flex flex-col w-full h-screen">
-            {userValue.role === Roles.admin && (
-                <div className="w-full p-2">
-                    <MapControl />
-                </div>
-            )}
-
-            <div className="flex flex-grow h-full">
-                <div className="flex-1 h-full">
-                    <MyMap />
+        <div className="flex flex-col w-full h-screen overflow-hidden">
+            <div className="flex flex-grow h-full overflow-hidden">
+                <div className="flex-2 h-96 overflow-hidden">
+                    <MapComponent />
                 </div>
 
-                <div className="flex-1 h-full bg-gray-400">
+                <div className="flex-1 h-full bg-gray-400 overflow-hidden">
                     <Zones />
                 </div>
             </div>
