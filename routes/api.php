@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Admin\ZoneController;
+use App\Http\Controllers\Api\Admin\PointController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -81,7 +82,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
 
         // Route for Zones
-        // Route::resource('zones', ZoneController::class);
         Route::resource('zones', ZoneController::class);
+        Route::resource('zones', ZoneController::class);
+
+
+        // Route for Point
+        Route::resource('points', PointController::class);
     });
 });
