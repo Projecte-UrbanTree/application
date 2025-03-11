@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Resource extends Model
 {
@@ -12,7 +14,7 @@ class Resource extends Model
         'resource_type_id',
     ];
 
-    public function resourceType()
+    public function resourceType(): BelongsTo
     {
         return $this->belongsTo(ResourceType::class, 'resource_type_id');
     }

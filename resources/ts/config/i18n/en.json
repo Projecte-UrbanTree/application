@@ -5,6 +5,7 @@
     },
     "fields": {
       "company": "Company",
+      "description": "Description",
       "dni": "ID card",
       "email": "Email",
       "end_date": "End Date",
@@ -13,7 +14,9 @@
       "genus": "Genus",
       "name": "Name",
       "password": "Password",
+      "resource_type": "Resource Type",
       "role": "Role",
+      "select_resource_type": "Select a resource type",
       "species": "Species",
       "start_date": "Start Date",
       "status": "Status",
@@ -128,7 +131,12 @@
           },
           "validation": {
             "name_required": "Name is required",
-            "type_required": "Type is required"
+            "type_required": "Type is required",
+            "name_min": "Name must be at least 3 characters",
+            "name_max": "Name cannot exceed 50 characters",
+            "name_format": "Name can only contain letters, numbers and spaces",
+            "description_max": "Description cannot exceed 255 characters",
+            "type_invalid": "Please select a valid resource type"
           }
         },
         "list": {

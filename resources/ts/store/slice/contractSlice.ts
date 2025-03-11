@@ -1,10 +1,10 @@
 import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
-import { Contract } from '@/types/contract';
+import { IContract } from '@/interfaces/IContract';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ContractState {
-    allContracts: Contract[];
-    currentContract: Contract | null;
+    allContracts: IContract[];
+    currentContract: IContract | null;
 }
 
 const initialContractState: ContractState = {

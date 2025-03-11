@@ -1,6 +1,6 @@
 import axiosClient from '@/api/axiosClient';
+import { IContract } from '@/interfaces/IContract';
 import { setContractState } from '@/store/slice/contractSlice';
-import { Contract } from '@/types/contract';
 import { useDispatch } from 'react-redux';
 
 export function useContracts() {
@@ -9,7 +9,7 @@ export function useContracts() {
     const fetchContracts = async () => {
         try {
             const response =
-                await axiosClient.get<Contract[]>('/admin/contracts/');
+                await axiosClient.get<IContract[]>('/admin/contracts/');
             console.log('RESPONSE hookContr: ', response);
 
             if (response.data.length > 0) {
