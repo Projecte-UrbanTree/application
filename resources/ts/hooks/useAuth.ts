@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setUserData, clearUserData } from '@/store/slice/userSlice';
 import axiosClient from '@/api/axiosClient';
-import { useNavigate } from 'react-router-dom';
-import { UserData } from '@/types/user';
+import { useContracts } from './useContracts';
 
 export function useAuth() {
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
     const [isLoading, setIsLoading] = useState(true);
     const isAuthenticated = Boolean(user.id);
-
+    const { fetchContracts } = useContracts();
     useEffect(() => {
         const token = localStorage.getItem('authToken');
 
@@ -33,6 +32,8 @@ export function useAuth() {
             console.log('RESPONSE fetchUser: ', response.data);
 
             dispatch(setUserData(response.data));
+
+            await fetchContracts();
 
             if (navigate) {
                 const userRole = response.data.role;
