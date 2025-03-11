@@ -1,3 +1,4 @@
+import MyMap from '@/components/Map';
 import { RootState } from '@/store/store';
 import { Contract } from '@/types/contract';
 import { useSelector } from 'react-redux';
@@ -15,6 +16,8 @@ export default function Inventory() {
             <hr />
 
             <p>Selected: {state.contract.currentContract?.name}</p>
+
+            <MyMap />
         </div>
     );
 }
