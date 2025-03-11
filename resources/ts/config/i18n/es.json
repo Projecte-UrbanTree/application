@@ -38,7 +38,7 @@
         "contracts": "Contratos",
         "elementTypes": "Tipos de elemento",
         "species": "Especies",
-        "taskTypes": "Tipos de tarea",
+        "taskTypes": "Tipus de tarea",
         "resourceTypes": "Tipos de recurso",
         "users": "Usuarios"
       }
@@ -166,7 +166,7 @@
             "name_invalid": "El nombre no es válido",
             "start_date_required": "La fecha de inicio es obligatoria",
             "end_date_required": "La fecha de fin es obligatoria",
-            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "end_date_after_start_date": "La fecha de fin no puede ser anterior a la fecha de inicio",
             "final_price_required": "El precio final es obligatorio",
             "status_invalid": "Estado no válido",
             "status_required": "El estado es obligatorio"
@@ -185,7 +185,7 @@
             "name_invalid": "El nombre no es válido",
             "start_date_required": "La fecha de inicio es obligatoria",
             "end_date_required": "La fecha de fin es obligatoria",
-            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "end_date_after_start_date": "La fecha de fin no puede ser anterior a la fecha de inicio",
             "final_price_required": "El precio final es obligatorio",
             "status_invalid": "Estado no válido",
             "status_required": "El estado es obligatorio"
@@ -200,10 +200,10 @@
         },
         "loading": "Cargando...",
         "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
-        "deletedSuccess": "Contrato eliminado exitosamente",
+        "deletedSuccess": "Contrato eliminado correctamente",
         "actions": "Acciones",
-        "editButton": "Editar Contrato",
-        "deleteButton": "Eliminar Contrato",
+        "editButton": "Editar contrato",
+        "deleteButton": "Eliminar contrato",
         "list": {
           "actions": {
             "edit": "Editar contrato",
@@ -211,7 +211,7 @@
             "label": "Acciones"
           },
           "messages": {
-            "deleteSuccess": "Contrato eliminado exitosamente",
+            "deleteSuccess": "Contrato eliminado correctamente",
             "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
             "createSuccess": "Contrato creado exitosamente",
             "updateSuccess": "Contrato actualizado exitosamente",
@@ -238,7 +238,7 @@
             "name_invalid": "El nombre no es válido",
             "start_date_required": "La fecha de inicio es obligatoria",
             "end_date_required": "La fecha de fin es obligatoria",
-            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
+            "end_date_after_start_date": "La fecha de fin no puede ser anterior a la fecha de inicio",
             "final_price_required": "El precio final es obligatorio",
             "status_invalid": "Estado no válido",
             "status_required": "El estado es obligatorio"
@@ -320,9 +320,9 @@
         }
       },
       "taskTypes": {
-        "title": "Tipos de tarea",
+        "title": "Tipus de tarea",
         "list": {
-          "title": "Tipos de tarea",
+          "title": "Tipus de tarea",
           "actions": {
             "edit": "Editar tipo de tarea",
             "delete": "Eliminar tipo de tarea",
