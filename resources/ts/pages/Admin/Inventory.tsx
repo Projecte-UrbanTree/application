@@ -8,8 +8,8 @@ export default function Inventory() {
     const contracts: Contract[] = state.contract.allContracts;
 
     return (
-        <div className="flex h-screen">
-            <div className="w-2/3 h-full">
+        <div className="flex h-screen min-h-0">
+            <div className="w-2/3 h-full relative overflow-hidden">
                 <MyMap />
             </div>
 
