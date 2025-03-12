@@ -26,16 +26,16 @@
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.6.1",
-        "@tailwindcss/vite": "^4.0.9",
+        "@tailwindcss/vite": "^4.0.12",
         "@types/yup": "^0.32.0",
         "chart.js": "^4.4.8",
         "i18next": "^24.2.2",
-        "primereact": "^10.9.2",
+        "primereact": "^10.9.3",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-i18next": "^15.4.0",
         "react-redux": "^9.2.0",
-        "react-router-dom": "^7.1.5",
+        "react-router-dom": "^7.3.0",
         "tailwindcss": "^4.0.3",
         "typescript-cookie": "^1.0.6"
     }
