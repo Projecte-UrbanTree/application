@@ -15,6 +15,5 @@ export interface SaveZoneForm {
 
 export const saveZone = async (data: Zone) => {
     console.log({ data });
-
-    // await axiosClient.post(`/admin/zones`, data);
+    await axiosClient.post(`/admin/zones`, data);
 };

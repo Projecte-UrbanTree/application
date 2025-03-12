@@ -9,7 +9,8 @@ import { saveZone } from '@/api/service/zoneService';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Contract } from '@/types/contract';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Toast } from 'primereact/toast';
 
 const schema = yup.object().shape({
     name: yup.string().required('El nombre es obligatorio'),
@@ -30,9 +31,13 @@ const schema = yup.object().shape({
 
 export interface SaveZoneProps {
     coordinates: number[][];
+    onClose: () => {};
 }
 
-export const SaveZoneForm = ({ coordinates }: SaveZoneProps) => {
+export const SaveZoneForm = ({
+    coordinates,
+    onClose: onCloseProp,
+}: SaveZoneProps) => {
     const currentContract: Contract | null = useSelector(
         (state: RootState) => state.contract.currentContract,
     );
@@ -42,7 +47,6 @@ export const SaveZoneForm = ({ coordinates }: SaveZoneProps) => {
         handleSubmit,
         formState: { errors },
         setValue,
-        watch,
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
@@ -53,6 +57,8 @@ export const SaveZoneForm = ({ coordinates }: SaveZoneProps) => {
             coordinates: coordinates,
         },
     });
+    const [isLoading, setIsLoading] = useState(false);
+    const toast = useRef<Toast>(null);
 
     useEffect(() => {
         setValue('coordinates', coordinates);
@@ -61,21 +67,36 @@ export const SaveZoneForm = ({ coordinates }: SaveZoneProps) => {
         }
     }, [coordinates, currentContract, setValue]);
 
-    function onSubmit(data: Zone) {
-        const formattedData = {
-            ...data,
-            coordinates: coordinates,
-        };
-
-        saveZone(formattedData);
+    async function onSubmit(data: Zone) {
+        setIsLoading(true);
+        try {
+            await saveZone({ ...data, contract_id: currentContract?.id });
+            toast.current?.show({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Zona guardada correctamente',
+            });
+            setTimeout(() => {
+                onClose();
+            }, 1000);
+        } catch (error) {
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo guardar la zona',
+            });
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     function onClose() {
-        window.history.back();
+        onCloseProp();
     }
 
     return (
         <div className="p-6 bg-white rounded-2xl shadow-lg w-96">
+            <Toast ref={toast} />
             <h2 className="text-xl font-semibold mb-4">Guardar Zona</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-4">
@@ -145,11 +166,15 @@ export const SaveZoneForm = ({ coordinates }: SaveZoneProps) => {
                     <Button
                         type="button"
                         onClick={onClose}
-                        className="p-button-secondary">
+                        className="p-button-secondary"
+                        disabled={isLoading}>
                         Cancelar
                     </Button>
-                    <Button type="submit" className="p-button-primary">
-                        Guardar
+                    <Button
+                        type="submit"
+                        className="p-button-primary"
+                        disabled={isLoading}>
+                        {isLoading ? 'Guardando...' : 'Guardar'}
                     </Button>
                 </div>
             </form>

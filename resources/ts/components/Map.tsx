@@ -194,7 +194,10 @@ const MapComponent: React.FC = () => {
                 header="Guardar Zona"
                 visible={modalVisible}
                 onHide={() => setModalVisible(false)}>
-                <SaveZoneForm coordinates={coordinates} />
+                <SaveZoneForm
+                    coordinates={coordinates}
+                    onClose={async () => setModalVisible(false)}
+                />
             </Dialog>
         </div>
     );
