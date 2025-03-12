@@ -24,6 +24,7 @@ const MapComponent: React.FC = () => {
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const userValue = useSelector((state: RootState) => state.user);
+    const [coordinates, setCoordinates] = useState<number[][]>([[]]);
 
     useEffect(() => {
         if (!mapContainerRef.current) return;
@@ -132,8 +133,23 @@ const MapComponent: React.FC = () => {
 
     function updateArea() {
         if (!drawRef.current) return;
+
         const data = drawRef.current.getAll();
-        setIsDrawingMode(data.features.length > 0);
+
+        if (data.features.length > 0) {
+            const polygon = data.features[0];
+            const coordinates =
+                polygon.geometry.type === 'Polygon'
+                    ? polygon.geometry.coordinates[0]
+                    : [];
+
+            console.log(coordinates);
+
+            setCoordinates(coordinates);
+            setIsDrawingMode(true);
+        } else {
+            setIsDrawingMode(false);
+        }
     }
 
     function openSaveModal() {
