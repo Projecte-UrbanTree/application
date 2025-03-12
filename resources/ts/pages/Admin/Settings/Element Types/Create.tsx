@@ -62,8 +62,8 @@ export default function CreateElementType() {
     });
 
     const booleanOptions = [
-        { label: t('admin.fields.true'), value: true },
-        { label: t('admin.fields.false'), value: false },
+        { label: t('admin.pages.elementTypes.true'), value: true },
+        { label: t('admin.pages.elementTypes.false'), value: false },
     ];
 
     const handleSubmit = async (values: typeof initialValues) => {
@@ -221,7 +221,7 @@ export default function CreateElementType() {
                                                     />
                                                     <span>
                                                         {t(
-                                                            'admin.icons.' +
+                                                            'admin.pages.elementTypes.icons.' +
                                                                 option,
                                                         )}
                                                     </span>

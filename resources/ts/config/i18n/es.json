@@ -92,55 +92,56 @@
         }
       },
       "elementTypes": {
-                "title": "Tipos de elemento",
-                "loading": "Cargando...",
-                "actions": "Acciones",
-                "editButton": "Editar tipo de elemento",
-                "deleteButton": "Eliminar tipo de elemento",
-                "deletedSuccess": "Tipo de elemento eliminado correctamente",
-                "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de elemento?",
-                "success": "Tipo de elemento creado correctamente",
-                "update": "Tipo de elemento actualizado correctamente",
-                "error": "Error guardando el tipo de elemento",
-                "create": {
-                    "title": "Crear Tipo de Elemento",
-                    "submittingText": "Creando...",
-                    "submitButton": "Crear Tipo de Elemento",
-                    "validations": {
-                        "name": "El nombre es obligatorio",
-                        "requires_tree_type": "Requiere tipo de árbol",
-                        "icon": "El icono es obligatorio",
-                        "color": "El color es obligatorio",
-                        "description": "La descripción es obligatoria"
-                    },
-                    "placeholders": {
-                        "name": "Nombre del tipo de elemento",
-                        "requires_tree_type": "Selecciona si requiere tipo de árbol",
-                        "description": "Descripción del tipo de elemento",
-                        "icon": "Selecciona un icono",
-                        "color": "Selecciona un color"
-                    }
-                },
-                "edit": {
-                    "title": "Editar Tipo de Elemento",
-                    "submittingText": "Guardando...",
-                    "submitButton": "Guardar Cambios",
-                    "validations": {
-                        "name": "El nombre es obligatorio",
-                        "requires_tree_type": "Requiere tipo de árbol",
-                        "icon": "El icono es obligatorio",
-                        "color": "El color es obligatorio",
-                        "description": "La descripción es obligatoria"
-                    }
-                },
-                "columns": {
-                    "name": "Nombre",
-                    "requires_tree_type": "Requiere tipo de árbol",
-                    "description": "Descripción",
-                    "icon": "Icono",
-                    "color": "Color"
-                }
-            },
+        "title": "Tipos de elemento",
+        "loading": "Cargando...",
+        "actions": "Acciones",
+        "editButton": "Editar tipo de elemento",
+        "deleteButton": "Eliminar tipo de elemento",
+        "deletedSuccess": "Tipo de elemento eliminado correctamente",
+        "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de elemento?",
+        "success": "Tipo de elemento creado correctamente",
+        "update": "Tipo de elemento actualizado correctamente",
+        "error": "Error guardando el tipo de elemento",
+        "create":  {
+          "title": "Crear Tipo de Elemento",
+          "submittingText": "Creando...",
+          "submitButton": "Crear Tipo de Elemento",
+          "validations": {
+            "name": "El nombre es obligatorio",
+            "requires_tree_type": "Requiere tipo de árbol",
+            "icon": "El icono es obligatorio",
+            "color": "El color es obligatorio",
+            "description": "La descripción es obligatoria"
+          },        
+          "placeholders": {
+            "name": "Nombre del tipo de elemento",
+            "requires_tree_type": "Selecciona si requiere tipo de árbol",
+            "description": "Descripción del tipo de elemento",
+            "icon": "Selecciona un icono",
+            "color": "Selecciona un color"
+          }         
+        }
+        },      
+        "edit": {
+          "title": "Editar Tipo de Elemento",
+          "submittingText": "Guardando...",
+          "submitButton": "Guardar Cambios", 
+          "validations": {
+            "name": "El nombre es obligatorio",
+            "requires_tree_type": "Requiere tipo de árbol",
+            "icon": "El icono es obligatorio",
+            "color": "El color es obligatorio",
+            "description": "La descripción es obligatoria"
+          }         
+        }
+        },      
+        "columns": {
+          "name": "Nombre", 
+          "requires_tree_type": "Requiere tipo de árbol",
+          "description": "Descripción",
+          "icon": "Icono", 
+          "color": "Color"
+        }  ,     
       "resources": {
         "form": {
           "fields": {
@@ -537,8 +538,7 @@
         "taskTypes": "Tipus de tarea",
         "users": "Usuarios"
       }
-    }
-  },
+    },
   "general": {
     "allContracts": "Todos los contratos",
     "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",

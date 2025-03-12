@@ -102,6 +102,8 @@
                 "success": "Element type created successfully",
                 "update": "Element type updated successfully",
                 "error": "Error saving element type",
+                "true": "Yes",
+                "false": "No",
                 "create": {
                     "title": "Create Element Type",
                     "submittingText": "Creating...",
@@ -131,6 +133,13 @@
                         "icon": "Icon is required",
                         "color": "Color is required",
                         "description": "Description is required"
+                    },
+                    "placeholders": {
+                        "name": "Element type name",
+                        "requires_tree_type": "Select if it requires tree type",
+                        "description": "Element type description",
+                        "icon": "Select an icon",
+                        "color": "Select a color"
                     }
                 },
                 "columns": {
@@ -139,6 +148,23 @@
                     "description": "Description",
                     "icon": "Icon",
                     "color": "Color"
+                },
+                "icons": {
+                  "tree": "Tree",
+                  "home": "Home",
+                  "post-lamp": "Post Lamp",
+                  "park": "Park",
+                  "fountain": "Fountain",
+                  "flower": "Flower",
+                  "mountain": "Mountain",
+                  "beach": "Beach",
+                  "volcano": "Volcano",
+                  "tap": "Tap",
+                  "water-drop": "Water Drop",
+                  "lightbulb": "Lightbulb",
+                  "lightning-bolt": "Lightning Bolt",
+                  "grass": "Grass",
+                  "cloud": "Cloud"
                 }
             },
       "resources": {

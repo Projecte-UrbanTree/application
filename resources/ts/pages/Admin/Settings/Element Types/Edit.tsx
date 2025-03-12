@@ -110,8 +110,8 @@ export default function EditElementType() {
     };
 
     const booleanOptions = [
-        { label: t('admin.fields.true'), value: true },
-        { label: t('admin.fields.false'), value: false },
+        { label: t('admin.pages.elementTypes.true'), value: true },
+        { label: t('admin.pages.elementTypes.false'), value: false },
     ];
 
     if (isLoading) {
@@ -182,7 +182,9 @@ export default function EditElementType() {
                                             icon="tabler:tree"
                                             className="h-5 w-5 mr-2"
                                         />
-                                        {t('admin.fields.requires_tree_type')}
+                                        {t(
+                                            'admin.pages.elementTypes.create.placeholders.requires_tree_type',
+                                        )}
                                     </label>
                                     <Field
                                         name="requires_tree_type"
@@ -225,14 +227,16 @@ export default function EditElementType() {
                                             icon="tabler:file-description"
                                             className="h-5 w-5 mr-2"
                                         />
-                                        {t('admin.fields.description')}
+                                        {t(
+                                            'admin.pages.elementTypes.create.placeholders.description',
+                                        )}
                                     </label>
                                     <Field
                                         name="description"
                                         as={InputTextarea}
                                         rows={5}
                                         placeholder={t(
-                                            'admin.fields.description',
+                                            'admin.pages.elementTypes.create.placeholders.description',
                                         )}
                                         className={
                                             errors.description &&
@@ -254,7 +258,9 @@ export default function EditElementType() {
                                             icon="tabler:icon"
                                             className="h-5 w-5 mr-2"
                                         />
-                                        {t('admin.fields.icon')}
+                                        {t(
+                                            'admin.pages.elementTypes.create.placeholders.icon',
+                                        )}
                                     </label>
                                     <Field
                                         name="icon"
@@ -271,7 +277,7 @@ export default function EditElementType() {
                                                 options={iconList.map(
                                                     (icon) => ({
                                                         label: t(
-                                                            'admin.icons.' +
+                                                            'admin.pages.elementTypes.icons.' +
                                                                 icon,
                                                         ),
                                                         value: icon,
@@ -338,7 +344,9 @@ export default function EditElementType() {
                                             icon="tabler:palette"
                                             className="h-5 w-5 mr-2"
                                         />
-                                        {t('admin.fields.color')}
+                                        {t(
+                                            'admin.pages.elementTypes.create.placeholders.color',
+                                        )}
                                     </label>
                                     <Field
                                         name="color"
