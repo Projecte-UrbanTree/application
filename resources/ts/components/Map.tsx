@@ -1,164 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import * as turf from '@turf/turf';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import useGeolocation from '@/hooks/useGeolocation';
+import React, { useRef, useState } from 'react';
+import { useInitializeMap } from '@/hooks/useInitializeMap';
+import { useLoadZones } from '@/hooks/useLoadZones';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Roles } from '@/types/role';
-import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import { fetchZones } from '@/api/service/zoneService';
-import { Zone } from '@/types/zone';
-import { fetchPoints } from '@/api/service/pointService';
-import { Point } from '@/types/point';
-
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const MapComponent: React.FC = () => {
-    const mapContainerRef = useRef<HTMLDivElement | null>(null);
-    const { latitude, longitude } = useGeolocation();
-    const mapRef = useRef<mapboxgl.Map | null>(null);
-    const drawRef = useRef<MapboxDraw | null>(null);
-    const [area, setArea] = useState<number | null>(null);
-    const [zones, setZones] = useState<Zone[]>([]);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const { mapRef, drawRef } = useInitializeMap(mapContainerRef);
+    const { zones } = useLoadZones(mapRef);
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const userValue = useSelector((state: RootState) => state.user);
-
-    useEffect(() => {
-        if (!mapContainerRef.current || latitude === null || longitude === null)
-            return;
-
-        mapboxgl.accessToken = MAPBOX_TOKEN;
-
-        mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/standard-satellite',
-            center: [longitude, latitude],
-            zoom: 12,
-        });
-
-        mapRef.current.addControl(
-            new mapboxgl.NavigationControl(),
-            'top-right',
-        );
-        mapRef.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-        mapRef.current.addControl(
-            new mapboxgl.FullscreenControl(),
-            'top-right',
-        );
-        mapRef.current.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: { enableHighAccuracy: true },
-                trackUserLocation: true,
-            }),
-            'top-right',
-        );
-
-        if (userValue.role === Roles.admin) {
-            drawRef.current = new MapboxDraw({
-                displayControlsDefault: false,
-                controls: {
-                    polygon: true,
-                    trash: true,
-                },
-            });
-            mapRef.current.addControl(drawRef.current);
-
-            mapRef.current.on('draw.create', updateArea);
-            mapRef.current.on('draw.delete', updateArea);
-            mapRef.current.on('draw.update', updateArea);
-        }
-
-        return () => mapRef.current?.remove();
-    }, [latitude, longitude, userValue.role]);
-
-    useEffect(() => {
-        if (!mapRef.current) return;
-
-        fetchZones().then((zonesData: Zone[]) => {
-            setZones(zonesData);
-            fetchPoints().then((allPoints: Point[]) => {
-                zonesData.forEach((zone) => {
-                    const zonePoints = allPoints
-                        .filter((point) => point.zone_id === zone.id)
-                        .filter(
-                            (point) =>
-                                point.longitude !== undefined &&
-                                point.latitude !== undefined,
-                        )
-                        .map((point) => [
-                            point.longitude as number,
-                            point.latitude as number,
-                        ]);
-
-                    if (zonePoints.length > 2) {
-                        zonePoints.push(zonePoints[0]);
-
-                        const geoJsonZone: GeoJSON.Feature = {
-                            type: 'Feature',
-                            properties: {
-                                id: zone.id,
-                                name: zone.name,
-                                description: zone.description,
-                                color: zone.color,
-                            },
-                            geometry: {
-                                type: 'Polygon',
-                                coordinates: [zonePoints],
-                            },
-                        };
-
-                        mapRef.current!.addSource(`zone-${zone.id}`, {
-                            type: 'geojson',
-                            data: geoJsonZone,
-                        });
-
-                        mapRef.current!.addLayer({
-                            id: `zone-layer-${zone.id}`,
-                            type: 'fill',
-                            source: `zone-${zone.id}`,
-                            layout: {},
-                            paint: {
-                                'fill-color': zone.color || '#ff0000',
-                                'fill-opacity': 0.5,
-                            },
-                        });
-
-                        mapRef.current!.addLayer({
-                            id: `zone-border-${zone.id}`,
-                            type: 'line',
-                            source: `zone-${zone.id}`,
-                            layout: {},
-                            paint: {
-                                'line-color': '#000000',
-                                'line-width': 2,
-                            },
-                        });
-                    }
-                });
-            });
-        });
-    }, [mapRef]);
-
-    function updateArea() {
-        if (!drawRef.current) return;
-        const data = drawRef.current.getAll();
-
-        console.log('Zona creada:', JSON.stringify(data, null, 2));
-
-        if (data.features.length > 0) {
-            const calculatedArea = turf.area(data);
-            setArea(Math.round(calculatedArea * 100) / 100);
-            setIsDrawingMode(true);
-        } else {
-            setArea(null);
-            setIsDrawingMode(false);
-        }
-    }
 
     function openSaveModal() {
         setModalVisible(true);
