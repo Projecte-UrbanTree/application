@@ -30,7 +30,8 @@ import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTy
 import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
 import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import AdminStats from '@/pages/Admin/Stats';
-import Eva from '@/pages/Admin/Eva';
+import Eva from '@/pages/Admin/Eva/Eva';
+import EditEva from '@/pages/Admin/Eva/Edit';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -62,28 +63,28 @@ const AdminRoutes: RouteObject[] = [
                         ),
                     },
                     {
-                      path: 'work-orders/create',
-                      element: (
-                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.create.title">
-                              <CreateWorkOrder />
-                          </AdminLayoutWrapper>
-                      ),
+                        path: 'work-orders/create',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.create.title">
+                                <CreateWorkOrder />
+                            </AdminLayoutWrapper>
+                        ),
                     },
                     {
-                      path: 'work-orders/edit/:id',
-                      element: (
-                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
-                              <EditWorkOrder />
-                          </AdminLayoutWrapper>
-                      ),
+                        path: 'work-orders/edit/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                                <EditWorkOrder />
+                            </AdminLayoutWrapper>
+                        ),
                     },
                     {
-                      path: 'work-reports/:id',
-                      element: (
-                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
-                              <WorkReport />
-                          </AdminLayoutWrapper>
-                      ),
+                        path: 'work-reports/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                                <WorkReport />
+                            </AdminLayoutWrapper>
+                        ),
                     },
                     {
                         path: 'inventory',
@@ -98,6 +99,22 @@ const AdminRoutes: RouteObject[] = [
                         element: (
                             <AdminLayoutWrapper titleI18n="admin.pages.evas.title">
                                 <Eva />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'evas/create',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.evas.create.title">
+                                <Eva />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'evas/edit/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.evas.edit.title">
+                                <EditEva />
                             </AdminLayoutWrapper>
                         ),
                     },

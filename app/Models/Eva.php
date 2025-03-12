@@ -32,6 +32,7 @@ class Eva extends Model
         'exposed_surface_roots',
         'wind',
         'drought',
+        'status',
     ];
 
     public function element()

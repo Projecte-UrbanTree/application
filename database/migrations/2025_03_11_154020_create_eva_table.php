@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('eva', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('element_id')->nullable()->constrained('elements');
+            $table->foreignId('element_id')->constrained('elements');
             $table->dateTime('date_birth');
 
             // Physical Characteristics
@@ -42,13 +42,17 @@ return new class extends Migration
             $table->integer('cut_damaged_roots');
             $table->integer('basal_rot');
             $table->integer('exposed_surface_roots');
-            $table->timestamps();
 
+            // Result
+            $table->string('status')->default('0');
+            
             // Wind
             $table->integer('wind');
 
             // Drought
             $table->integer('drought');
+
+            $table->timestamps();
         });
     }
 

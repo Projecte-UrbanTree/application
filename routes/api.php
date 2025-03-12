@@ -13,7 +13,6 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
-use App\Models\Eva;
 use App\Models\User;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
@@ -90,5 +89,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Route for eva
         Route::get('evas', [EvaController::class, 'index']);
+        Route::post('evas', [EvaController::class, 'store']);
+        Route::get('evas/{id}', [EvaController::class, 'show']);
+        Route::put('evas/{id}', [EvaController::class, 'update']);
+        Route::delete('evas/{id}', [EvaController::class, 'destroy']);
     });
 });
