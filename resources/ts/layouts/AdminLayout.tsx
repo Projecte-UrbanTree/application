@@ -13,13 +13,14 @@ import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContract, setContractState } from '@/store/slice/contractSlice';
-import { ContractProps } from '@/types/contract';
+import { Contract, ContractProps } from '@/types/contract';
+import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 
 interface AdminLayoutProps {
     titleI18n: string;
     children: React.ReactNode;
-    contracts: ContractProps[];
-    currentContract: ContractProps;
+    contracts: Contract[];
+    currentContract?: Contract;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
@@ -37,30 +38,26 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     const [menuOpen, setMenuOpen] = useState(false);
     const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
 
-    const allContractsOption: ContractProps = {
-        id: 'all',
-        name: t('general.allContracts'),
-    };
-
-    const contractsWithAll = contracts.some((c) => c.id === 'all')
-        ? contracts
-        : [...contracts, allContractsOption];
-
-    const [contract, setContract] = useState<ContractProps>(
-        currentContract ?? allContractsOption,
+    const [contract, setContract] = useState<Contract>(
+        currentContract ?? defaultContract,
     );
+
+    useEffect(() => {
+        if (currentContract) {
+            setContract(currentContract);
+        }
+    }, [currentContract]);
 
     const handleContractChange = useCallback(
         (e: DropdownChangeEvent) => {
-            const selectedContract = contractsWithAll.find(
-                (c) => c.id === e.value,
-            );
+            const selectedContract = contracts.find((c) => c.id === e.value);
+
             if (selectedContract) {
-                dispatch(selectContract(selectedContract.id));
+                dispatch(selectContract(selectedContract.id!));
                 setContract(selectedContract);
             }
         },
-        [contractsWithAll, dispatch],
+        [dispatch, contracts],
     );
 
     const handleProfileClick = () => setProfileDropdownVisible((prev) => !prev);
@@ -103,6 +100,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             to: '/admin/inventory',
             label: t('admin.submenu.manage.inventory'),
             icon: 'tabler:chart-treemap',
+        },
+        {
+            to: '/admin/eva',
+            label: t('admin.submenu.manage.eva'),
+            icon: 'tabler:chart-bar',
         },
         {
             to: '/admin/work-orders',
@@ -189,43 +191,41 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                 />
                             </Button>
                         </div>
-                        <a href="/" className="">
+                        <a href="/" className="flex-none">
                             <img className="w-48" src={logo} alt="Logo" />
                         </a>
-                        <div className="hidden lg:flex space-x-6">
-                            <Link
-                                to="/admin/dashboard"
-                                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
-                                    isManagementActive
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'hover:bg-gray-100'
-                                }`}>
-                                <Icon
-                                    inline={true}
-                                    width="24px"
-                                    icon="tabler:briefcase"
-                                />{' '}
-                                {t('admin.menu.management')}
-                            </Link>
-                            <Link
-                                to="/admin/settings/contracts"
-                                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
-                                    location.pathname.includes(
-                                        '/admin/settings',
-                                    )
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'hover:bg-gray-100'
-                                }`}>
-                                <Icon
-                                    inline={true}
-                                    width="24px"
-                                    icon="tabler:settings"
-                                />{' '}
-                                {t('admin.menu.settings')}
-                            </Link>
-                        </div>
                     </div>
 
+                    <div className="hidden lg:flex flex-1 justify-center items-center space-x-6">
+                        <Link
+                            to="/admin/dashboard"
+                            className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                                isManagementActive
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'hover:bg-gray-100'
+                            }`}>
+                            <Icon
+                                inline={true}
+                                width="24px"
+                                icon="tabler:briefcase"
+                            />{' '}
+                            {t('admin.menu.management')}
+                        </Link>
+                        <Link
+                            to="/admin/settings/contracts"
+                            className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${
+                                location.pathname.includes('/admin/settings')
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'hover:bg-gray-100'
+                            }`}>
+                            <Icon
+                                inline={true}
+                                width="24px"
+                                icon="tabler:settings"
+                            />{' '}
+                            {t('admin.menu.settings')}
+                        </Link>
+                    </div>
                     <div className="flex items-center gap-4">
                         <div className="hidden lg:flex gap-4">
                             {!isSettingsPage && (
@@ -233,8 +233,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                     id="contractBtn"
                                     name="contractBtn"
                                     className="w-32"
-                                    value={contract.id}
-                                    options={contractsWithAll}
+                                    value={contract.id ?? 0}
+                                    options={contracts}
                                     onChange={handleContractChange}
                                     optionLabel="name"
                                     optionValue="id"
@@ -301,9 +301,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                             <Dropdown
                                 id="contractBtn"
                                 name="contractBtn"
-                                className="w-32"
+                                className="w-full"
                                 value={contract.id}
-                                options={contractsWithAll}
+                                options={contracts}
                                 onChange={handleContractChange}
                                 optionLabel="name"
                                 optionValue="id"

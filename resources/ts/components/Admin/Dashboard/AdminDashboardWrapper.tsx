@@ -1,27 +1,24 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { ContractProps } from '@/types/contract';
+import { Contract } from '@/types/contract';
 import AdminLayout from '@/layouts/AdminLayout';
 import { setContractState } from '@/store/slice/contractSlice';
-import { t } from 'i18next';
 
 interface AdminLayoutWrapperProps {
     titleI18n: string;
     children: React.ReactNode;
 }
 
-const mockContracts: ContractProps[] = [
-    { id: '1', name: 'Tortosa' },
-    { id: '2', name: 'Barcelona' },
-    { id: '3', name: 'Valencia' },
-    { id: '4', name: 'Madrid' },
-    { id: '5', name: 'Sevilla' },
-];
-
-const allContractsOption: ContractProps = {
-    id: 'all',
-    name: t('general.allContracts'),
+export const defaultContract: Contract = {
+    id: 0,
+    name: 'Ver todos',
+    start_date: undefined,
+    end_date: undefined,
+    final_price: undefined,
+    status: undefined,
+    created_at: null,
+    updated_at: null,
 };
 
 export default function AdminLayoutWrapper({
@@ -29,31 +26,32 @@ export default function AdminLayoutWrapper({
     children,
 }: AdminLayoutWrapperProps) {
     const dispatch = useDispatch();
-
     const { allContracts, currentContract } = useSelector(
         (state: RootState) => state.contract,
     );
 
-    const contracts = allContracts.length > 0 ? allContracts : mockContracts;
-
-    const selectedContract = currentContract ?? allContractsOption;
+    const contracts = [
+        defaultContract,
+        ...allContracts.filter((c) => c.id !== 0),
+    ];
+    const selectedContract = currentContract;
 
     useEffect(() => {
         if (allContracts.length === 0) {
             dispatch(
                 setContractState({
-                    allContracts: contracts,
-                    currentContract: selectedContract,
+                    allContracts: [defaultContract],
+                    currentContract: currentContract ?? defaultContract,
                 }),
             );
         }
-    }, [dispatch, allContracts, contracts, selectedContract]);
+    }, [dispatch, allContracts.length]);
 
     return (
         <AdminLayout
             titleI18n={titleI18n}
-            contracts={mockContracts}
-            currentContract={selectedContract}>
+            contracts={contracts}
+            currentContract={selectedContract ?? defaultContract}>
             {children}
         </AdminLayout>
     );

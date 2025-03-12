@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'Aquestes credencials no coincideixen amb els nostres registres.',
-    'throttle' => 'Massa intents d\'accés. Si us plau, intenta-ho de nou en :seconds segons.',
+    'failed' => 'crwdns2607:0crwdne2607:0',
+    'throttle' => 'crwdns2609:0crwdne2609:0',
 
 ];

@@ -6,7 +6,15 @@ import AdminUsers from '@/pages/Admin/Settings/Users/Users';
 import CreateUser from '@/pages/Admin/Settings/Users/Create';
 import EditUser from '@/pages/Admin/Settings/Users/Edit';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
-import AdminWorkOrders from '@/pages/Admin/WorkOrders';
+import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
+import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
+
+import AdminWorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
+import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
+import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
+
+import WorkReport from '@/pages/Admin/WorkReport';
+
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
 import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
 import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
@@ -51,6 +59,30 @@ const AdminRoutes: RouteObject[] = [
                                 <AdminWorkOrders />
                             </AdminLayoutWrapper>
                         ),
+                    },
+                    {
+                      path: 'work-orders/create',
+                      element: (
+                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.create.title">
+                              <CreateWorkOrder />
+                          </AdminLayoutWrapper>
+                      ),
+                    },
+                    {
+                      path: 'work-orders/edit/:id',
+                      element: (
+                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                              <EditWorkOrder />
+                          </AdminLayoutWrapper>
+                      ),
+                    },
+                    {
+                      path: 'work-reports/:id',
+                      element: (
+                          <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                              <WorkReport />
+                          </AdminLayoutWrapper>
+                      ),
                     },
                     {
                         path: 'inventory',
@@ -122,6 +154,22 @@ const AdminRoutes: RouteObject[] = [
                                 element: (
                                     <AdminLayoutWrapper titleI18n="admin.pages.contracts.title">
                                         <AdminContracts />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'contracts/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.create.title">
+                                        <CreateContract />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'contracts/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.edit.title">
+                                        <EditContract />
                                     </AdminLayoutWrapper>
                                 ),
                             },
