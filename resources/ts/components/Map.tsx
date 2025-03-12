@@ -13,6 +13,7 @@ import { RootState } from '@/store/store';
 import { Roles } from '@/types/role';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -76,6 +77,8 @@ const MapComponent: React.FC = () => {
         if (!mapRef.current) return;
 
         fetchZones().then((zonesData: Zone[]) => {
+            console.log({ zonesData });
+
             setZones(zonesData);
             fetchPoints().then((allPoints: Point[]) => {
                 zonesData.forEach((zone) => {
@@ -184,19 +187,7 @@ const MapComponent: React.FC = () => {
                 header="Guardar Zona"
                 visible={modalVisible}
                 onHide={() => setModalVisible(false)}>
-                <p>¿Deseas guardar la zona seleccionada?</p>
-                <div className="flex gap-2 mt-4">
-                    <Button
-                        label="Cancelar"
-                        onClick={() => setModalVisible(false)}
-                        className="p-button-secondary"
-                    />
-                    <Button
-                        label="Guardar"
-                        onClick={saveZonesToDatabase}
-                        className="p-button-success"
-                    />
-                </div>
+                <SaveZoneForm />
             </Dialog>
         </div>
     );

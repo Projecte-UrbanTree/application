@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 
 class ZoneController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Zone::all();
+        $contract_id = $request->header('X-Contract-Id');
+        if(!$contract_id) return Zone::all();
+        return Zone::where('contract_id', $contract_id)->get();
     }
 
     public function store(Request $request)
