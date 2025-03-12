@@ -1,25 +1,4 @@
 {
-  "public": {
-    "login": {
-      "form": {
-        "labelEmail": "Correu electrònic",
-        "labelPassword": "Contrasenya",
-        "placeholderEmail": "elteucorreu@exemple.com",
-        "rememberMe": "Recorda'm",
-        "btnLogin": "Inicia sessió",
-        "titleSuccess": "Èxit",
-        "msgSuccess": "Sessió iniciada correctament"
-      }
-    },
-    "error": {
-      "title": "Error {{errorCode}}",
-      "descriptions": {
-        "unexpected": "Ha ocorregut un error inesperat. Si us plau, torna a intentar-ho més tard.",
-        "404": "La pàgina que busques no existeix."
-      },
-      "btnReturn": "Torna enrere"
-    }
-  },
   "admin": {
     "menu": {
       "management": "Gestió",
@@ -59,139 +38,30 @@
       "createNew": "Crear nou"
     },
     "fields": {
-      "name": "Nom",
-      "surname": "Cognom",
-      "email": "Correu",
       "company": "Empresa",
       "dni": "DNI",
-      "role": "Rol",
-      "password": "Contrasenya",
+      "email": "Correu",
+      "end_date": "Data de finalització",
       "family": "Família",
-      "genus": "Gènere",
-      "species": "Espècie",
-      "status": "Estat",
       "final_price": "Preu final",
+      "genus": "Gènere",
+      "name": "Nom",
+      "password": "Contrasenya",
+      "role": "Rol",
+      "species": "Espècie",
       "start_date": "Data d'inici",
-      "end_date": "Data de finalització"
+      "status": "Estat",
+      "surname": "Cognom"
     },
-    "status": {
-      "active": "Actiu",
-      "inactive": "Inactiu",
-      "completed": "Completat"
+    "menu": {
+      "management": "Gestió",
+      "settings": "Configuració"
     },
     "pages": {
-      "dashboard": {
-        "title": "Tauler",
-        "welcome": {
-          "greeting": "Benvingut de nou, {{name}} {{surname}}.",
-          "message": "Et donem la benvinguda al teu tauler. Aquí tens un resum ràpid de les teves dades."
-        },
-        "stats": {
-          "widgets": {
-            "users": "Usuaris",
-            "contracts": "Contractes",
-            "elements": "Elements",
-            "workOrders": "Ordres de treball"
-          }
-        }
-      },
-      "users": {
-        "title": "Usuaris",
-        "list": {
-          "actions": {
-            "edit": "Editar usuari",
-            "delete": "Eliminar usuari",
-            "label": "Accions"
-          },
-          "messages": {
-            "deleteSuccess": "Usuari eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
-            "createSuccess": "Usuari creat correctament",
-            "updateSuccess": "Usuari actualitzat correctament",
-            "error": "Error guardant l'usuari"
-          },
-          "columns": {
-            "name": "Nom",
-            "surname": "Cognom",
-            "email": "Correu electrònic",
-            "company": "Empresa",
-            "dni": "DNI",
-            "role": "Rol"
-          }
-        },
-        "form": {
-          "title": {
-            "create": "Crear Usuari",
-            "edit": "Editar Usuari"
-          },
-          "placeholders": {
-            "role": "Selecciona un rol",
-            "password": "Contrasenya",
-            "passwordEdit": "Contrasenya (deixar en blanc per no canviar)"
-          },
-          "validation": {
-            "name_required": "El nom és obligatori",
-            "surname_required": "El cognom és obligatori",
-            "invalid_email": "Correu invàlid",
-            "email_required": "El correu és obligatori",
-            "role_invalid": "Rol no vàlid",
-            "password_required": "La contrasenya és obligatòria",
-            "password_min": "Ha de tenir almenys 8 caràcters",
-            "password_uppercase": "Ha de contenir almenys una lletra majúscula",
-            "password_number": "Ha de contenir almenys un número",
-            "password_special": "Ha de contenir almenys un caràcter especial"
-          },
-          "returnButton": "Tornar a la llista d'usuaris",
-          "submitButton": {
-            "create": "Crear Usuari",
-            "edit": "Guardar Canvis"
-          },
-          "submittingText": {
-            "create": "Creant...",
-            "edit": "Guardant..."
-          }
-        }
-      },
       "contracts": {
-        "title": "Contractes",
-        "list": {
-          "actions": {
-            "edit": "Editar contracte",
-            "delete": "Eliminar contracte",
-            "label": "Accions"
-          },
-          "messages": {
-            "deleteSuccess": "Contracte eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
-            "createSuccess": "Contracte creat correctament",
-            "updateSuccess": "Contracte actualitzat correctament",
-            "error": "Error guardant el contracte"
-          },
-          "columns": {
-            "name": "Contracte",
-            "start_date": "Data d'inici",
-            "end_date": "Data de finalització",
-            "final_price": "Preu final",
-            "status": "Estat"
-          }
-        },
         "form": {
-          "title": {
-            "create": "Crear Contracte",
-            "edit": "Editar Contracte"
-          },
           "placeholders": {
             "status": "Selecciona un estat"
-          },
-          "validation": {
-            "name_required": "El nom es obligatori",
-            "name_invalid": "El nom no és vàlid",
-            "start_date_required": "La data d'inici es obligatòria",
-            "end_date_required": "La data de finalització es obligatòria",
-            "end_date_after_start_date": "La data de finalització ha de ser posterior a la data d'inici",
-            "final_price_required": "El preu final es obligatori",
-            "status_invalid": "Estat no vàlid",
-            "status_required": "L'estat es obligatori"
           },
           "returnButton": "Tornar a la llista de contractes",
           "submitButton": {
@@ -201,156 +71,127 @@
           "submittingText": {
             "create": "Creant...",
             "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Contracte",
+            "edit": "Editar Contracte"
+          },
+          "validation": {
+            "end_date_after_start_date": "La data de finalització ha de ser posterior a la data d'inici",
+            "end_date_required": "La data de finalització es obligatòria",
+            "final_price_required": "El preu final es obligatori",
+            "name_invalid": "El nom no és vàlid",
+            "name_required": "El nom es obligatori",
+            "start_date_required": "La data d'inici es obligatòria",
+            "status_invalid": "Estat no vàlid",
+            "status_required": "L'estat es obligatori"
           }
-        }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar contracte",
+            "edit": "Editar contracte",
+            "label": "Accions"
+          },
+          "columns": {
+            "end_date": "Data de finalització",
+            "final_price": "Preu final",
+            "name": "Contracte",
+            "start_date": "Data d'inici",
+            "status": "Estat"
+          },
+          "messages": {
+            "createSuccess": "Contracte creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
+            "deleteSuccess": "Contracte eliminat correctament",
+            "error": "Error guardant el contracte",
+            "updateSuccess": "Contracte actualitzat correctament"
+          }
+        },
+        "title": "Contractes"
       },
-      "workOrders": {
-        "title": "Ordres de treball",
-        "columns": {
-          "date": "Data",
-          "status": "Estat",
-          "contract_id": "Contracte"
+      "dashboard": {
+        "stats": {
+          "widgets": {
+            "contracts": "Contractes",
+            "elements": "Elements",
+            "users": "Usuaris",
+            "workOrders": "Ordres de treball"
+          }
+        },
+        "title": "Tauler",
+        "welcome": {
+          "greeting": "Benvingut de nou, {{name}} {{surname}}.",
+          "message": "Et donem la benvinguda al teu tauler. Aquí tens un resum ràpid de les teves dades."
         }
       },
       "elementTypes": {
-        "title": "Tipus d'element",
         "columns": {
-          "name": "Tipus d'element",
-          "requires_tree_type": "Requereix tipus d'arbre",
+          "color": "Color",
           "description": "Descripció",
           "icon": "Icona",
-          "color": "Color"
-        }
-      },
-      "treeTypes": {
-        "title": "Tipus d'arbre",
-        "list": {
-          "title": "Tipus d'arbre",
-          "actions": {
-            "label": "Accions",
-            "edit": "Editar Tipus d'Arbre",
-            "delete": "Eliminar Tipus d'Arbre"
-          },
-          "messages": {
-            "deletedSuccess": "Tipus d'arbre eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'arbre?",
-            "createSuccess": "Tipus d'arbre creat correctament",
-            "updateSuccess": "Tipus d'arbre actualitzat correctament",
-            "error": "Error guardant el tipus d'arbre"
-          },
-          "columns": {
-            "family": "Família",
-            "genus": "Gènere",
-            "species": "Espècie"
-          }
+          "name": "Tipus d'element",
+          "requires_tree_type": "Requereix tipus d'arbre"
         },
+        "title": "Tipus d'element"
+      },
+      "resources": {
         "form": {
-          "title": {
-            "create": "Crear Tipus d'Arbre",
-            "edit": "Editar Tipus d'Arbre"
+          "fields": {
+            "description": "Descripció",
+            "name": "Nom",
+            "type": "Tipus"
           },
-          "validation": {
-            "family": "La família és obligatòria",
-            "genus": "El gènere és obligatori",
-            "species": "L'espècie és obligatòria",
-            "alphanumeric": {
-              "family": "La família ha de contenir només caràcters alfanumèrics",
-              "genus": "El gènere ha de contenir només caràcters alfanumèrics",
-              "species": "L'espècie ha de contenir només caràcters alfanumèrics"
-            }
+          "placeholders": {
+            "description": "Introdueix la descripció",
+            "name": "Introdueix el nom",
+            "type": "Selecciona un tipus"
           },
+          "returnButton": "Tornar a la llista de recursos",
           "submitButton": {
-            "create": "Crear Tipus d'Arbre",
+            "create": "Crear Recurs",
             "edit": "Guardar Canvis"
           },
           "submittingText": {
             "create": "Creant...",
             "edit": "Guardant..."
-          }
-        }
-      },
-      "taskTypes": {
-        "title": "Tipus de tasca",
-        "list": {
-          "title": "Tipus de tasca",
-          "actions": {
-            "edit": "Editar tipus de tasca",
-            "delete": "Eliminar tipus de tasca",
-            "label": "Accions"
           },
-          "messages": {
-            "deleteSuccess": "Tipus de tasca eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
-            "createSuccess": "Tipus de tasca creat correctament",
-            "updateSuccess": "Tipus de tasca actualitzat correctament",
-            "error": "Error guardant el tipus de tasca"
-          },
-          "columns": {
-            "name": "Nom",
-            "description": "Descripció"
-          }
-        },
-        "form": {
           "title": {
-            "create": "Crear Tipus de tasca",
-            "edit": "Editar Tipus de tasca"
-          },
-          "fields": {
-            "name": "Nom",
-            "description": "Descripció"
-          },
-          "placeholders": {
-            "name": "Introdueix el nom",
-            "description": "Introdueix la descripció"
+            "create": "Crear Recurs",
+            "edit": "Editar Recurs"
           },
           "validation": {
             "name_required": "El nom és obligatori",
-            "error_numbers": "El nom no pot contenir números ni caràcters especials"
-          },
-          "returnButton": "Tornar a la llista de tipus de tasca",
-          "submitButton": {
-            "create": "Crear Tipus de tasca",
-            "edit": "Guardar canvis"
-          },
-          "submittingText": {
-            "create": "Creant...",
-            "edit": "Guardant..."
+            "type_required": "El tipus és obligatori"
           }
-        }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar recurs",
+            "edit": "Editar recurs",
+            "label": "Accions"
+          },
+          "columns": {
+            "description": "Descripció",
+            "name": "Nom",
+            "type": "Tipus"
+          },
+          "messages": {
+            "createSuccess": "Recurs creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest recurs?",
+            "deleteSuccess": "Recurs eliminat correctament",
+            "error": "Error guardant el recurs",
+            "updateSuccess": "Recurs actualitzat correctament"
+          },
+          "title": "Recursos"
+        },
+        "title": "Recursos"
       },
       "resourceTypes": {
-        "title": "Tipus de recurs",
-        "list": {
-          "actions": {
-            "edit": "Editar tipus de recurs",
-            "delete": "Eliminar tipus de recurs",
-            "label": "Accions"
-          },
-          "messages": {
-            "deleteSuccess": "Tipus de recurs eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
-            "createSuccess": "Tipus de recurs creat correctament",
-            "updateSuccess": "Tipus de recurs actualitzat correctament",
-            "error": "Error guardant el tipus de recurs"
-          },
-          "columns": {
-            "name": "Nom",
-            "description": "Descripció"
-          }
-        },
         "form": {
-          "title": {
-            "create": "Crear Tipus de recurs",
-            "edit": "Editar Tipus de recurs"
-          },
           "placeholders": {
-            "name": "Introdueix el nom",
-            "description": "Introdueix la descripció"
-          },
-          "validation": {
-            "name_required": "El nom és obligatori",
-            "description_required": "La descripció és obligatòria",
-            "name_invalid": "El nom només pot contenir lletres, números i espais"
+            "description": "Introdueix la descripció",
+            "name": "Introdueix el nom"
           },
           "returnButton": "Tornar a la llista de tipus de recurs",
           "submitButton": {
@@ -360,20 +201,336 @@
           "submittingText": {
             "create": "Creant...",
             "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Tipus de recurs",
+            "edit": "Editar Tipus de recurs"
+          },
+          "validation": {
+            "description_required": "La descripció és obligatòria",
+            "name_invalid": "El nom només pot contenir lletres, números i espais",
+            "name_required": "El nom és obligatori"
           }
-        }
-      },
-      "resources": {
-        "title": "Recursos",
-        "columns": {
-          "name": "Recurs",
-          "description": "Descripció",
-          "resource_type_id": "Tipus de recurs"
-        }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar tipus de recurs",
+            "edit": "Editar tipus de recurs",
+            "label": "Accions"
+          },
+          "columns": {
+            "description": "Descripció",
+            "name": "Nom"
+          },
+          "messages": {
+            "createSuccess": "Tipus de recurs creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
+            "deleteSuccess": "Tipus de recurs eliminat correctament",
+            "error": "Error guardant el tipus de recurs",
+            "updateSuccess": "Tipus de recurs actualitzat correctament"
+          }
+        },
+        "title": "Tipus de recurs"
       },
       "stats": {
         "title": "Estadístiques"
       },
+      "taskTypes": {
+        "form": {
+          "fields": {
+            "description": "Descripció",
+            "name": "Nom"
+          },
+          "placeholders": {
+            "description": "Introdueix la descripció",
+            "name": "Introdueix el nom"
+          },
+          "returnButton": "Tornar a la llista de tipus de tasca",
+          "submitButton": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Guardar canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Tipus de tasca",
+            "edit": "Editar Tipus de tasca"
+          },
+          "validation": {
+            "error_numbers": "El nom no pot contenir números ni caràcters especials",
+            "name_required": "El nom és obligatori"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar tipus de tasca",
+            "edit": "Editar tipus de tasca",
+            "label": "Accions"
+          },
+          "columns": {
+            "description": "Descripció",
+            "name": "Nom"
+          },
+          "messages": {
+            "createSuccess": "Tipus de tasca creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
+            "deleteSuccess": "Tipus de tasca eliminat correctament",
+            "error": "Error guardant el tipus de tasca",
+            "updateSuccess": "Tipus de tasca actualitzat correctament"
+          },
+          "title": "Tipus de tasca"
+        },
+        "title": "Tipus de tasca"
+      },
+      "treeTypes": {
+        "form": {
+          "submitButton": {
+            "create": "Crear Tipus d'Arbre",
+            "edit": "Guardar Canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Tipus d'Arbre",
+            "edit": "Editar Tipus d'Arbre"
+          },
+          "validation": {
+            "alphanumeric": {
+              "family": "La família ha de contenir només caràcters alfanumèrics",
+              "genus": "El gènere ha de contenir només caràcters alfanumèrics",
+              "species": "L'espècie ha de contenir només caràcters alfanumèrics"
+            },
+            "family": "La família és obligatòria",
+            "genus": "El gènere és obligatori",
+            "species": "L'espècie és obligatòria"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar Tipus d'Arbre",
+            "edit": "Editar Tipus d'Arbre",
+            "label": "Accions"
+          },
+          "columns": {
+            "family": "Família",
+            "genus": "Gènere",
+            "species": "Espècie"
+          },
+          "messages": {
+            "createSuccess": "Tipus d'arbre creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'arbre?",
+            "deletedSuccess": "Tipus d'arbre eliminat correctament",
+            "error": "Error guardant el tipus d'arbre",
+            "updateSuccess": "Tipus d'arbre actualitzat correctament"
+          },
+          "title": "Tipus d'arbre"
+        },
+        "title": "Tipus d'arbre"
+      },
+      "users": {
+        "form": {
+          "placeholders": {
+            "password": "Contrasenya",
+            "passwordEdit": "Contrasenya (deixar en blanc per no canviar)",
+            "role": "Selecciona un rol"
+          },
+          "returnButton": "Tornar a la llista d'usuaris",
+          "submitButton": {
+            "create": "Crear Usuari",
+            "edit": "Guardar Canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Usuari",
+            "edit": "Editar Usuari"
+          },
+          "validation": {
+            "email_required": "El correu és obligatori",
+            "invalid_email": "Correu invàlid",
+            "name_required": "El nom és obligatori",
+            "password_min": "Ha de tenir almenys 8 caràcters",
+            "password_number": "Ha de contenir almenys un número",
+            "password_required": "La contrasenya és obligatòria",
+            "password_special": "Ha de contenir almenys un caràcter especial",
+            "password_uppercase": "Ha de contenir almenys una lletra majúscula",
+            "role_invalid": "Rol no vàlid",
+            "surname_required": "El cognom és obligatori"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar usuari",
+            "edit": "Editar usuari",
+            "label": "Accions"
+          },
+          "columns": {
+            "company": "Empresa",
+            "dni": "DNI",
+            "email": "Correu electrònic",
+            "name": "Nom",
+            "role": "Rol",
+            "surname": "Cognom"
+          },
+          "messages": {
+            "createSuccess": "Usuari creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
+            "deleteSuccess": "Usuari eliminat correctament",
+            "error": "Error guardant l'usuari",
+            "updateSuccess": "Usuari actualitzat correctament"
+          }
+        },
+        "title": "Usuaris"
+      },
+      "workOrders": {
+        "title": "Ordres de treball",
+        "details": {
+          "block": "Bloc",
+          "zones": "Zones",
+          "tasks": "Tasques",
+          "notes": "Notes",
+          "noZones": "Cap zona assignada",
+          "noTasks": "Cap tasca assignada",
+          "noNotes": "N/A",
+          "noBlocks": "Cap bloc",
+          "noBlocksAvailable": "No hi ha blocs disponibles per aquesta ordre de treball",
+          "unknown": "Desconegut",
+          "noUsers": "Cap usuari assignat"
+        },
+        "status": {
+          "notStarted": "No iniciat",
+          "inProgress": "En progrés",
+          "completed": "Completat",
+          "reportSent": "Informe Enviat",
+          "unknown": "Desconegut"
+        },
+        "reportStatus": {
+          "pending": "Pendent",
+          "completed": "Completat",
+          "rejected": "Rebutjat",
+          "closedWithIncidents": "Tancat amb incidències",
+          "unknown": "Desconegut"
+        },
+        "form": {
+          "fields": {
+            "date": "Data",
+            "users": "Treballadors",
+            "block": "Bloc",
+            "zones": "Zones",
+            "task": "Tasca",
+            "taskType": "Nom",
+            "elementType": "Tipus d'element",
+            "treeType": "Espècie d'arbre",
+            "notes": "Notes"
+          },
+          "buttons": {
+            "addTask": "Afegir Tasca",
+            "addBlock": "Afegir Bloc"
+          },
+          "blocksTitle": "Blocs de Treball",
+          "removeBlock": "Eliminar bloc",
+          "removeTask": "Eliminar tasca",
+          "noContract": {
+            "title": "Cap contracte seleccionat",
+            "message": "Has de seleccionar un contracte al panell superior per crear una ordre de treball."
+          },
+          "placeholders": {
+            "status": "Selecciona un estat",
+            "users": "Selecciona treballadors",
+            "zones": "Selecciona zones per aquest bloc",
+            "taskType": "Selecciona tipus de tasca",
+            "elementType": "Selecciona tipus d'element",
+            "treeType": "Selecciona espècie d'arbre",
+            "notes": "Afegeix notes per aquest bloc de treball..."
+          },
+          "returnButton": "Tornar a la llista d'ordres de treball",
+          "submitButton": {
+            "create": "Crear Ordre de Treball",
+            "edit": "Guardar Canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Guardant..."
+          },
+          "title": {
+            "create": "Crear Ordre de Treball",
+            "edit": "Editar Ordre de Treball"
+          },
+          "validation": {
+            "date_required": "La data és obligatòria",
+            "users_required": "S'ha de seleccionar almenys un treballador",
+            "blocks_required": "Es requereix almenys un bloc",
+            "zones_required": "S'ha de seleccionar almenys una zona",
+            "tasks_required": "Es requereix almenys una tasca",
+            "task_type_required": "El tipus de tasca és obligatori",
+            "element_type_required": "El tipus d'element és obligatori"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar ordre de treball",
+            "edit": "Editar ordre de treball",
+            "viewReport": "Veure informe",
+            "label": "Accions"
+          },
+          "columns": {
+            "id": "ID",
+            "date": "Data",
+            "users": "Treballadors",
+            "status": "Estat",
+            "reportStatus": "Estat de l'informe",
+            "contract": "Contracte"
+          },
+          "messages": {
+            "createSuccess": "Ordre de treball creada correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquesta ordre de treball?",
+            "deleteSuccess": "Ordre de treball eliminada correctament",
+            "error": "Error guardant l'ordre de treball",
+            "updateSuccess": "Ordre de treball actualitzada correctament",
+            "noData": "No hi ha ordres de treball disponibles"
+          }
+        }
+      }
+    },
+    "profileDropdown": {
+      "accountSettings": "Configuració del compte",
+      "license": "Llicència",
+      "logout": "Tanca sessió"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "customer": "Client",
+      "unknown": "Desconegut",
+      "worker": "Treballador"
+    },
+    "status": {
+      "active": "Actiu",
+      "completed": "Completat",
+      "inactive": "Inactiu"
+    },
+    "submenu": {
+      "manage": {
+        "dashboard": "Tauler",
+        "inventory": "Inventari",
+        "resources": "Recursos",
+        "stats": "Estadístiques",
+        "workers": "Treballadors",
+        "workOrders": "Ordres de treball"
+      },
+      "settings": {
+        "contracts": "Contractes",
+        "elementTypes": "Tipus d'element",
+        "resourceTypes": "Tipus de recurs",
+        "species": "Espècies",
+        "taskTypes": "Tipus de tasca",
+        "users": "Usuaris"
+      }
       "evas": {
         "title": "Evas",
         "age": {
@@ -390,8 +547,29 @@
     }
   },
   "general": {
-    "genericError": "Hi ha hagut un error. Si us plau, torna a intentar-ho més tard.",
     "allContracts": "Tots els contractes",
+    "genericError": "Hi ha hagut un error. Si us plau, torna a intentar-ho més tard.",
     "loading": "Carregant..."
+  },
+  "public": {
+    "error": {
+      "btnReturn": "Torna enrere",
+      "descriptions": {
+        "404": "La pàgina que busques no existeix.",
+        "unexpected": "Ha ocorregut un error inesperat. Si us plau, torna a intentar-ho més tard."
+      },
+      "title": "Error {{errorCode}}"
+    },
+    "login": {
+      "form": {
+        "btnLogin": "Inicia sessió",
+        "labelEmail": "Correu electrònic",
+        "labelPassword": "Contrasenya",
+        "msgSuccess": "Sessió iniciada correctament",
+        "placeholderEmail": "elteucorreu@exemple.com",
+        "rememberMe": "Recorda'm",
+        "titleSuccess": "Èxit"
+      }
+    }
   }
 }

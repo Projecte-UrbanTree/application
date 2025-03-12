@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'previous' => 'crwdns1934:0crwdne1934:0',
-    'next' => 'crwdns1936:0crwdne1936:0',
+    'previous' => 'crwdns2611:0crwdne2611:0',
+    'next' => 'crwdns2613:0crwdne2613:0',
 
 ];
