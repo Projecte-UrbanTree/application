@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'crwdns1930:0crwdne1930:0',
-    'throttle' => 'crwdns1932:0crwdne1932:0',
+    'failed' => 'crwdns2607:0crwdne2607:0',
+    'throttle' => 'crwdns2609:0crwdne2609:0',
 
 ];

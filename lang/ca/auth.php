@@ -15,4 +15,5 @@ return [
 
     'failed' => 'Aquestes credencials no coincideixen amb els nostres registres.',
     'throttle' => 'Massa intents d\'accés. Si us plau, intenta-ho de nou en :seconds segons.',
+
 ];
