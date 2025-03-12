@@ -1,5 +1,5 @@
 import axiosClient from '@/api/axiosClient';
-import type { IResourceType } from '@/interfaces/IResourceType';
+import type { ResourceType } from '@/types/ResourceType';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
@@ -16,7 +16,7 @@ export default function CreateResource() {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [resourceTypes, setResourceTypes] = useState<IResourceType[]>([]);
+  const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
 
   useEffect(() => {
     const fetchResourceTypes = async () => {
@@ -45,10 +45,12 @@ export default function CreateResource() {
       .max(50, t('admin.pages.resources.form.validation.name_max'))
       .matches(
         /^[a-zA-Z0-9\s]+$/,
-        t('admin.pages.resources.form.validation.name_format')
+        t('admin.pages.resources.form.validation.name_format'),
       ),
-    description: Yup.string()
-      .max(255, t('admin.pages.resources.form.validation.description_max')),
+    description: Yup.string().max(
+      255,
+      t('admin.pages.resources.form.validation.description_max'),
+    ),
     resource_type_id: Yup.number()
       .required(t('admin.pages.resources.form.validation.type_required'))
       .positive(t('admin.pages.resources.form.validation.type_invalid')),

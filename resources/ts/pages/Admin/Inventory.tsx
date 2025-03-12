@@ -1,11 +1,11 @@
-import { IContract } from '@/interfaces/IContract';
 import { RootState } from '@/store/store';
+import { Contract } from '@/types/Contract';
 import { useSelector } from 'react-redux';
 
 export default function Inventory() {
   //** EXAMPLE
   const state = useSelector((state: RootState) => state);
-  const contracts: IContract[] = state.contract.allContracts;
+  const contracts: Contract[] = state.contract.allContracts;
   return (
     <div>
       {contracts.map((c) => {

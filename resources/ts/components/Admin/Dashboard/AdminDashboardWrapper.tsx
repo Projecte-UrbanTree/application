@@ -1,7 +1,7 @@
-import { IContract } from '@/interfaces/IContract';
 import AdminLayout from '@/layouts/AdminLayout';
 import { setContractState } from '@/store/slice/contractSlice';
 import { RootState } from '@/store/store';
+import { Contract } from '@/types/Contract';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,7 +10,7 @@ interface AdminLayoutWrapperProps {
   children: React.ReactNode;
 }
 
-export const defaultContract: IContract = {
+export const defaultContract: Contract = {
   id: 0,
   name: 'Ver todos',
   start_date: undefined,

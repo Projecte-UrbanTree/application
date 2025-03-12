@@ -1,9 +1,9 @@
-export interface IContractProps {
+export interface ContractProps {
     id: number;
     name?: string;
 }
 
-export interface IContract {
+export interface Contract {
     id?: number;
     name?: string;
     start_date?: Date;

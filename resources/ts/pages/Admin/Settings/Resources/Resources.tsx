@@ -1,6 +1,6 @@
 import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/Admin/CrudPanel';
-import type { IResource } from '@/interfaces/IResource';
+import type { Resource } from '@/types/Resource';
 import { Icon } from '@iconify/react';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
@@ -15,7 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
 
-  const [resources, setResources] = useState<IResource[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
   const location = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -103,7 +103,7 @@ export default function Resources() {
           <Column
             field="resource_type.name"
             header={t('admin.pages.resources.list.columns.type')}
-            body={(rowData: IResource) => (
+            body={(rowData: Resource) => (
               <Badge
                 value={rowData.resource_type?.name || '-'}
                 severity="info"

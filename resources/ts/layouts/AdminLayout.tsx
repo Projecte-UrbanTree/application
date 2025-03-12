@@ -11,16 +11,16 @@ import { Icon } from '@iconify/react';
 import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
-import { IContract } from '@/interfaces/IContract';
 import { selectContract } from '@/store/slice/contractSlice';
+import { Contract } from '@/types/Contract';
 import logo from '@images/logo.png';
 import { useDispatch } from 'react-redux';
 
 interface AdminLayoutProps {
   titleI18n: string;
   children: React.ReactNode;
-  contracts: IContract[];
-  currentContract?: IContract;
+  contracts: Contract[];
+  currentContract?: Contract;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
@@ -38,7 +38,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
 
-  const [contract, setContract] = useState<IContract>(
+  const [contract, setContract] = useState<Contract>(
     currentContract ?? defaultContract,
   );
 

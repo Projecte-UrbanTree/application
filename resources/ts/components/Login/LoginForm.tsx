@@ -9,13 +9,13 @@ import { Password } from 'primereact/password';
 import { useState } from 'react';
 
 import { useToast } from '@/hooks/useToast';
-import { IUser } from '@/interfaces/IUser';
+import { User } from '@/types/User';
 import { useNavigate } from 'react-router-dom';
 
 export interface LoginResponse {
   success?: boolean;
   accessToken?: string;
-  userData?: IUser;
+  userData?: User;
 }
 
 const LoginForm = () => {
