@@ -9,7 +9,7 @@ export default function Inventory() {
                     <MapComponent />
                 </div>
 
-                <div className="flex-1 h-full bg-gray-400 overflow-hidden">
+                <div className="flex-1 h-full bg-transparent overflow-hidden">
                     <Zones />
                 </div>
             </div>
