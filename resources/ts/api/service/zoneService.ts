@@ -13,7 +13,13 @@ export interface SaveZoneForm {
     contractId: number;
 }
 
-export const saveZone = async (data: Zone) => {
-    console.log({ data });
-    await axiosClient.post(`/admin/zones`, data);
+export const saveZone = async (data: Zone): Promise<Zone> => {
+    try {
+        console.log('Guardando zona:', data);
+        const response = await axiosClient.post(`/admin/zones`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Error al guardar la zona', error);
+        throw error;
+    }
 };

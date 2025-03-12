@@ -11,6 +11,8 @@ import { RootState } from '@/store/store';
 import { Contract } from '@/types/contract';
 import { useState, useEffect, useRef } from 'react';
 import { Toast } from 'primereact/toast';
+import { savePoints, SavePointsProps } from '@/api/service/pointService';
+import { TypePoint } from '@/types/point';
 
 const schema = yup.object().shape({
     name: yup.string().required('El nombre es obligatorio'),
@@ -70,16 +72,38 @@ export const SaveZoneForm = ({
     async function onSubmit(data: Zone) {
         setIsLoading(true);
         try {
-            await saveZone({ ...data, contract_id: currentContract?.id });
+            const createdZone = await saveZone({
+                ...data,
+                contract_id: currentContract?.id,
+            });
+
+            if (!createdZone?.id) {
+                throw new Error('No se pudo obtener el ID de la zona creada.');
+            }
+
+            const pointsData: SavePointsProps[] = coordinates.map((coord) => ({
+                latitude: coord[1],
+                longitude: coord[0],
+                type: TypePoint.zone_delimiter,
+                zone_id: createdZone.id!,
+            }));
+
+            await savePoints(pointsData);
+
             toast.current?.show({
                 severity: 'success',
                 summary: 'Éxito',
-                detail: 'Zona guardada correctamente',
+                detail: 'Zona y puntos guardados correctamente',
             });
+
             setTimeout(() => {
                 onClose();
             }, 1000);
         } catch (error) {
+            console.error(
+                'Error en la creación de la zona o los puntos',
+                error,
+            );
             toast.current?.show({
                 severity: 'error',
                 summary: 'Error',

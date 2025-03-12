@@ -130,11 +130,15 @@ const MapComponent: React.FC = () => {
         const data = drawRef.current.getAll();
         if (data.features.length > 0) {
             const polygon = data.features[0];
+
             setCoordinates(
                 polygon.geometry.type === 'Polygon'
                     ? polygon.geometry.coordinates[0]
                     : [],
             );
+
+            console.log(polygon.geometry);
+
             setIsDrawingMode(true);
             setEnabledButton(true);
         } else {
