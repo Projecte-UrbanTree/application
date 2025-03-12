@@ -1,19 +1,140 @@
-import React, { useRef, useState } from 'react';
-import { useInitializeMap } from '@/hooks/useInitializeMap';
-import { useLoadZones } from '@/hooks/useLoadZones';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
+import React, { useEffect, useRef, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import * as turf from '@turf/turf';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import { fetchZones } from '@/api/service/zoneService';
+import { fetchPoints } from '@/api/service/pointService';
+import { Zone } from '@/types/zone';
+import { Point } from '@/types/point';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Roles } from '@/types/role';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const MapComponent: React.FC = () => {
-    const mapContainerRef = useRef<HTMLDivElement>(null);
-    const { mapRef, drawRef } = useInitializeMap(mapContainerRef);
-    const { zones } = useLoadZones(mapRef);
+    const mapContainerRef = useRef<HTMLDivElement | null>(null);
+    const mapRef = useRef<mapboxgl.Map | null>(null);
+    const drawRef = useRef<MapboxDraw | null>(null);
+    const [zones, setZones] = useState<Zone[]>([]);
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const userValue = useSelector((state: RootState) => state.user);
+
+    useEffect(() => {
+        if (!mapContainerRef.current) return;
+
+        mapboxgl.accessToken = MAPBOX_TOKEN;
+
+        mapRef.current = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: 'mapbox://styles/mapbox/standard-satellite',
+            center: [-3.70379, 40.41678],
+            zoom: 12,
+        });
+
+        mapRef.current.addControl(
+            new mapboxgl.NavigationControl(),
+            'top-right',
+        );
+        mapRef.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+        mapRef.current.addControl(
+            new mapboxgl.FullscreenControl(),
+            'top-right',
+        );
+        mapRef.current.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: { enableHighAccuracy: true },
+                trackUserLocation: true,
+            }),
+            'top-right',
+        );
+
+        if (userValue.role === Roles.admin) {
+            drawRef.current = new MapboxDraw({
+                displayControlsDefault: false,
+                controls: {
+                    polygon: true,
+                    trash: true,
+                },
+            });
+            mapRef.current.addControl(drawRef.current);
+            mapRef.current.on('draw.create', updateArea);
+            mapRef.current.on('draw.delete', updateArea);
+            mapRef.current.on('draw.update', updateArea);
+        }
+
+        return () => mapRef.current?.remove();
+    }, []);
+
+    useEffect(() => {
+        if (!mapRef.current) return;
+
+        fetchZones().then((zonesData: Zone[]) => {
+            setZones(zonesData);
+            fetchPoints().then((allPoints: Point[]) => {
+                zonesData.forEach((zone) => {
+                    const zonePoints = allPoints
+                        .filter((point) => point.zone_id === zone.id)
+                        .map(
+                            (point) =>
+                                [
+                                    point.longitude as number,
+                                    point.latitude as number,
+                                ] as [number, number],
+                        );
+
+                    if (zonePoints.length > 2) {
+                        zonePoints.push(zonePoints[0]);
+                        addZoneToMap(zone, zonePoints);
+                    }
+                });
+            });
+        });
+    }, [mapRef]);
+
+    function addZoneToMap(zone: Zone, zonePoints: [number, number][]) {
+        const geoJsonZone: GeoJSON.Feature = {
+            type: 'Feature',
+            properties: {
+                id: zone.id,
+                name: zone.name,
+                description: zone.description,
+                color: zone.color,
+            },
+            geometry: { type: 'Polygon', coordinates: [zonePoints] },
+        };
+
+        mapRef.current!.addSource(`zone-${zone.id}`, {
+            type: 'geojson',
+            data: geoJsonZone,
+        });
+        mapRef.current!.addLayer({
+            id: `zone-layer-${zone.id}`,
+            type: 'fill',
+            source: `zone-${zone.id}`,
+            paint: {
+                'fill-color': zone.color || '#ff0000',
+                'fill-opacity': 0.5,
+            },
+        });
+        mapRef.current!.addLayer({
+            id: `zone-border-${zone.id}`,
+            type: 'line',
+            source: `zone-${zone.id}`,
+            paint: { 'line-color': '#000000', 'line-width': 2 },
+        });
+    }
+
+    function updateArea() {
+        if (!drawRef.current) return;
+        const data = drawRef.current.getAll();
+        setIsDrawingMode(data.features.length > 0);
+    }
 
     function openSaveModal() {
         setModalVisible(true);
