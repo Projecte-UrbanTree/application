@@ -357,67 +357,67 @@
       "workOrders": {
         "title": "Órdenes de trabajo",
         "details": {
-          "block": "Block",
-          "zones": "Zones",
-          "tasks": "Tasks",
-          "notes": "Notes",
-          "noZones": "No zones assigned",
-          "noTasks": "No tasks assigned",
+          "block": "Bloque",
+          "zones": "Zonas",
+          "tasks": "Tareas",
+          "notes": "Notas",
+          "noZones": "No hay zonas asignadas",
+          "noTasks": "No hay tareas asignadas",
           "noNotes": "N/A",
-          "noBlocks": "No blocks",
-          "noBlocksAvailable": "No blocks available for this work order",
+          "noBlocks": "No hay bloques",
+          "noBlocksAvailable": "No hay bloques disponibles para esta orden de trabajo",
           "unknown": "Desconocido",
-          "noUsers": "No users assigned"
+          "noUsers": "No hay usuarios asignados"
         },
         "status": {
           "notStarted": "No iniciado",
           "inProgress": "En progreso",
           "completed": "Completado",
-          "reportSent": "Report Sent",
+          "reportSent": "Informe enviado",
           "unknown": "Desconocido"
         },
         "reportStatus": {
-          "pending": "Pending",
+          "pending": "Pendiente",
           "completed": "Completado",
-          "rejected": "Rejected",
-          "closedWithIncidents": "Closed with Incidents",
+          "rejected": "Rechazado",
+          "closedWithIncidents": "Cerrado con incidencias",
           "unknown": "Desconocido"
         },
         "form": {
           "fields": {
-            "date": "Date",
+            "date": "Fecha",
             "users": "Trabajadores",
-            "block": "Block",
-            "zones": "Zones",
-            "task": "Task",
+            "block": "Bloque",
+            "zones": "Zonas",
+            "task": "Tarea",
             "taskType": "Nombre",
             "elementType": "Tipo de elemento",
-            "treeType": "Tree Species",
-            "notes": "Notes"
+            "treeType": "Especie de árbol",
+            "notes": "Notas"
           },
           "buttons": {
-            "addTask": "Add Task",
-            "addBlock": "Add Block"
+            "addTask": "Añadir Tarea",
+            "addBlock": "Añadir Bloque"
           },
-          "blocksTitle": "Work Blocks",
-          "removeBlock": "Remove block",
-          "removeTask": "Remove task",
+          "blocksTitle": "Bloques de Trabajo",
+          "removeBlock": "Eliminar bloque",
+          "removeTask": "Eliminar tarea",
           "noContract": {
-            "title": "No contract selected",
-            "message": "You must select a contract in the top panel to create a work order."
+            "title": "No hay contrato seleccionado",
+            "message": "Debes seleccionar un contrato en el panel superior para crear una orden de trabajo."
           },
           "placeholders": {
             "status": "Selecciona un estado",
-            "users": "Select workers",
-            "zones": "Select zones for this block",
-            "taskType": "Select task type",
-            "elementType": "Select element type",
-            "treeType": "Select tree species",
-            "notes": "Add notes for this work block..."
+            "users": "Selecciona trabajadores",
+            "zones": "Selecciona zonas para este bloque",
+            "taskType": "Selecciona tipo de tarea",
+            "elementType": "Selecciona tipo de elemento",
+            "treeType": "Selecciona especie de árbol",
+            "notes": "Añade notas para este bloque de trabajo..."
           },
-          "returnButton": "Return to work order list",
+          "returnButton": "Volver a la lista de órdenes de trabajo",
           "submitButton": {
-            "create": "Create Work Order",
+            "create": "Crear Orden de Trabajo",
             "edit": "Guardar Cambios"
           },
           "submittingText": {
@@ -425,41 +425,41 @@
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Create Work Order",
-            "edit": "Edit Work Order"
+            "create": "Crear Orden de Trabajo",
+            "edit": "Editar Orden de Trabajo"
           },
           "validation": {
-            "date_required": "Date is required",
-            "users_required": "At least one worker must be selected",
-            "blocks_required": "At least one block is required",
-            "zones_required": "At least one zone must be selected",
-            "tasks_required": "At least one task is required",
-            "task_type_required": "Task type is required",
-            "element_type_required": "Element type is required"
+            "date_required": "La fecha es obligatoria",
+            "users_required": "Se debe seleccionar al menos un trabajador",
+            "blocks_required": "Se requiere al menos un bloque",
+            "zones_required": "Se debe seleccionar al menos una zona",
+            "tasks_required": "Se requiere al menos una tarea",
+            "task_type_required": "El tipo de tarea es obligatorio",
+            "element_type_required": "El tipo de elemento es obligatorio"
           }
         },
         "list": {
           "actions": {
-            "delete": "Delete work order",
-            "edit": "Edit work order",
-            "viewReport": "View report",
+            "delete": "Eliminar orden de trabajo",
+            "edit": "Editar orden de trabajo",
+            "viewReport": "Ver informe",
             "label": "Acciones"
           },
           "columns": {
             "id": "ID",
-            "date": "Date",
+            "date": "Fecha",
             "users": "Trabajadores",
             "status": "Estado",
-            "reportStatus": "Report Status",
+            "reportStatus": "Estado del informe",
             "contract": "Contrato"
           },
           "messages": {
-            "createSuccess": "Work order created successfully",
-            "deleteConfirm": "Are you sure you want to delete this work order?",
-            "deleteSuccess": "Work order deleted successfully",
-            "error": "Error saving work order",
-            "updateSuccess": "Work order updated successfully",
-            "noData": "No work orders available"
+            "createSuccess": "Orden de trabajo creada correctamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar esta orden de trabajo?",
+            "deleteSuccess": "Orden de trabajo eliminada correctamente",
+            "error": "Error guardando la orden de trabajo",
+            "updateSuccess": "Orden de trabajo actualizada correctamente",
+            "noData": "No hay órdenes de trabajo disponibles"
           }
         }
       }

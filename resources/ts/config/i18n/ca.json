@@ -106,16 +106,16 @@
           "fields": {
             "description": "Descripció",
             "name": "Nom",
-            "type": "Type"
+            "type": "Tipus"
           },
           "placeholders": {
-            "description": "Enter description",
-            "name": "Enter name",
-            "type": "Select a type"
+            "description": "Introdueix la descripció",
+            "name": "Introdueix el nom",
+            "type": "Selecciona un tipus"
           },
-          "returnButton": "Return to resource list",
+          "returnButton": "Tornar a la llista de recursos",
           "submitButton": {
-            "create": "Create Resource",
+            "create": "Crear Recurs",
             "edit": "Guardar Canvis"
           },
           "submittingText": {
@@ -123,33 +123,33 @@
             "edit": "Guardant..."
           },
           "title": {
-            "create": "Create Resource",
-            "edit": "Edit Resource"
+            "create": "Crear Recurs",
+            "edit": "Editar Recurs"
           },
           "validation": {
-            "name_required": "El nom es obligatori",
-            "type_required": "Type is required"
+            "name_required": "El nom és obligatori",
+            "type_required": "El tipus és obligatori"
           }
         },
         "list": {
           "actions": {
-            "delete": "Delete resource",
-            "edit": "Edit resource",
+            "delete": "Eliminar recurs",
+            "edit": "Editar recurs",
             "label": "Accions"
           },
           "columns": {
             "description": "Descripció",
             "name": "Nom",
-            "type": "Type"
+            "type": "Tipus"
           },
           "messages": {
-            "createSuccess": "Resource created successfully",
-            "deleteConfirm": "Are you sure you want to delete this resource?",
-            "deleteSuccess": "Resource deleted successfully",
-            "error": "Error saving resource",
-            "updateSuccess": "Resource updated successfully"
+            "createSuccess": "Recurs creat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest recurs?",
+            "deleteSuccess": "Recurs eliminat correctament",
+            "error": "Error guardant el recurs",
+            "updateSuccess": "Recurs actualitzat correctament"
           },
-          "title": "Resources"
+          "title": "Recursos"
         },
         "title": "Recursos"
       },
@@ -357,67 +357,67 @@
       "workOrders": {
         "title": "Ordres de treball",
         "details": {
-          "block": "Block",
+          "block": "Bloc",
           "zones": "Zones",
-          "tasks": "Tasks",
+          "tasks": "Tasques",
           "notes": "Notes",
-          "noZones": "No zones assigned",
-          "noTasks": "No tasks assigned",
+          "noZones": "Cap zona assignada",
+          "noTasks": "Cap tasca assignada",
           "noNotes": "N/A",
-          "noBlocks": "No blocks",
-          "noBlocksAvailable": "No blocks available for this work order",
+          "noBlocks": "Cap bloc",
+          "noBlocksAvailable": "No hi ha blocs disponibles per aquesta ordre de treball",
           "unknown": "Desconegut",
-          "noUsers": "No users assigned"
+          "noUsers": "Cap usuari assignat"
         },
         "status": {
           "notStarted": "No iniciat",
           "inProgress": "En progrés",
           "completed": "Completat",
-          "reportSent": "Report Sent",
+          "reportSent": "Informe Enviat",
           "unknown": "Desconegut"
         },
         "reportStatus": {
-          "pending": "Pending",
+          "pending": "Pendent",
           "completed": "Completat",
-          "rejected": "Rejected",
-          "closedWithIncidents": "Closed with Incidents",
+          "rejected": "Rebutjat",
+          "closedWithIncidents": "Tancat amb incidències",
           "unknown": "Desconegut"
         },
         "form": {
           "fields": {
-            "date": "Date",
+            "date": "Data",
             "users": "Treballadors",
-            "block": "Block",
+            "block": "Bloc",
             "zones": "Zones",
-            "task": "Task",
+            "task": "Tasca",
             "taskType": "Nom",
             "elementType": "Tipus d'element",
-            "treeType": "Tree Species",
+            "treeType": "Espècie d'arbre",
             "notes": "Notes"
           },
           "buttons": {
-            "addTask": "Add Task",
-            "addBlock": "Add Block"
+            "addTask": "Afegir Tasca",
+            "addBlock": "Afegir Bloc"
           },
-          "blocksTitle": "Work Blocks",
-          "removeBlock": "Remove block",
-          "removeTask": "Remove task",
+          "blocksTitle": "Blocs de Treball",
+          "removeBlock": "Eliminar bloc",
+          "removeTask": "Eliminar tasca",
           "noContract": {
-            "title": "No contract selected",
-            "message": "You must select a contract in the top panel to create a work order."
+            "title": "Cap contracte seleccionat",
+            "message": "Has de seleccionar un contracte al panell superior per crear una ordre de treball."
           },
           "placeholders": {
             "status": "Selecciona un estat",
-            "users": "Select workers",
-            "zones": "Select zones for this block",
-            "taskType": "Select task type",
-            "elementType": "Select element type",
-            "treeType": "Select tree species",
-            "notes": "Add notes for this work block..."
+            "users": "Selecciona treballadors",
+            "zones": "Selecciona zones per aquest bloc",
+            "taskType": "Selecciona tipus de tasca",
+            "elementType": "Selecciona tipus d'element",
+            "treeType": "Selecciona espècie d'arbre",
+            "notes": "Afegeix notes per aquest bloc de treball..."
           },
-          "returnButton": "Return to work order list",
+          "returnButton": "Tornar a la llista d'ordres de treball",
           "submitButton": {
-            "create": "Create Work Order",
+            "create": "Crear Ordre de Treball",
             "edit": "Guardar Canvis"
           },
           "submittingText": {
@@ -425,41 +425,41 @@
             "edit": "Guardant..."
           },
           "title": {
-            "create": "Create Work Order",
-            "edit": "Edit Work Order"
+            "create": "Crear Ordre de Treball",
+            "edit": "Editar Ordre de Treball"
           },
           "validation": {
-            "date_required": "Date is required",
-            "users_required": "At least one worker must be selected",
-            "blocks_required": "At least one block is required",
-            "zones_required": "At least one zone must be selected",
-            "tasks_required": "At least one task is required",
-            "task_type_required": "Task type is required",
-            "element_type_required": "Element type is required"
+            "date_required": "La data és obligatòria",
+            "users_required": "S'ha de seleccionar almenys un treballador",
+            "blocks_required": "Es requereix almenys un bloc",
+            "zones_required": "S'ha de seleccionar almenys una zona",
+            "tasks_required": "Es requereix almenys una tasca",
+            "task_type_required": "El tipus de tasca és obligatori",
+            "element_type_required": "El tipus d'element és obligatori"
           }
         },
         "list": {
           "actions": {
-            "delete": "Delete work order",
-            "edit": "Edit work order",
-            "viewReport": "View report",
+            "delete": "Eliminar ordre de treball",
+            "edit": "Editar ordre de treball",
+            "viewReport": "Veure informe",
             "label": "Accions"
           },
           "columns": {
             "id": "ID",
-            "date": "Date",
+            "date": "Data",
             "users": "Treballadors",
             "status": "Estat",
-            "reportStatus": "Report Status",
+            "reportStatus": "Estat de l'informe",
             "contract": "Contracte"
           },
           "messages": {
-            "createSuccess": "Work order created successfully",
-            "deleteConfirm": "Are you sure you want to delete this work order?",
-            "deleteSuccess": "Work order deleted successfully",
-            "error": "Error saving work order",
-            "updateSuccess": "Work order updated successfully",
-            "noData": "No work orders available"
+            "createSuccess": "Ordre de treball creada correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquesta ordre de treball?",
+            "deleteSuccess": "Ordre de treball eliminada correctament",
+            "error": "Error guardant l'ordre de treball",
+            "updateSuccess": "Ordre de treball actualitzada correctament",
+            "noData": "No hi ha ordres de treball disponibles"
           }
         }
       }
