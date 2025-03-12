@@ -44,7 +44,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('contracts/{id}', [ContractController::class, 'update']);
         Route::delete('contracts/{id}', [ContractController::class, 'destroy']);
 
+        // Route for Work Orders
         Route::get('work-orders', [WorkOrderController::class, 'index']);
+        Route::get('work-orders/create', [WorkOrderController::class, 'create']);
+        Route::post('work-orders', [WorkOrderController::class, 'store']);
+        Route::get('work-orders/{id}', [WorkOrderController::class, 'show']);
+        Route::put('work-orders/{id}', [WorkOrderController::class, 'update']);
+        Route::delete('work-orders/{id}', [WorkOrderController::class, 'destroy']);
+
         Route::get('element-types', [ElementTypeController::class, 'index']);
 
         // Route for Tree Types

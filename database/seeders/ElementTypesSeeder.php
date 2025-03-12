@@ -14,21 +14,21 @@ class ElementTypesSeeder extends Seeder
     {
         DB::table('element_types')->insert([
             [
-                'name' => 'Element 1',
+                'name' => 'Arbol',
                 'requires_tree_type' => true,
                 'description' => 'A description for Element 1',
                 'icon' => 'icon1',
                 'color' => '#FF5733',
             ],
             [
-                'name' => 'Element 2',
+                'name' => 'Naranjo',
                 'requires_tree_type' => true,
                 'description' => 'A description for Element 2',
                 'icon' => 'icon2',
                 'color' => '#33FF57',
             ],
             [
-                'name' => 'Element 3',
+                'name' => 'Pino',
                 'requires_tree_type' => false,
                 'description' => 'A description for Element 3',
                 'icon' => 'icon3',
