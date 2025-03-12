@@ -205,10 +205,36 @@
       },
       "workOrders": {
         "title": "Ordres de treball",
+        "deleteConfirm": "Estàs segur que vols eliminar aquesta ordre de treball?",
+        "noData": "No hi ha ordres de treball disponibles.",
         "columns": {
+          "id": "ID",
+          "contract": "Contracte",
           "date": "Data",
-          "status": "Estat",
-          "contract_id": "Contracte"
+          "users": "Usuaris",
+          "contract_id": "Contracte",
+          "status": "Estat"
+        },
+        "status": {
+          "delivered": "Part lliurat",
+          "notStarted": "No iniciat",
+          "inProgress": "En progrés",
+          "completed": "Completat",
+          "unknown": "Desconegut"
+        },
+        "actions": {
+          "viewReport": "Veure informe",
+          "edit": "Editar",
+          "delete": "Eliminar"
+        },
+        "zones": "Zones",
+        "tasks": "Tasques",
+        "notes": "Notes",
+        "actions": "Accions",
+        "actionTypes": {
+          "viewReport": "Veure informe",
+          "edit": "Editar",
+          "delete": "Eliminar"
         }
       },
       "elementTypes": {

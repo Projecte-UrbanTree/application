@@ -1,9 +1,11 @@
 name: Laravel Pint
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types:
+      - ready_for_review
 
 permissions:
   contents: write
