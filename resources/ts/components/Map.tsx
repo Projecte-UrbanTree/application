@@ -26,6 +26,10 @@ const MapComponent: React.FC = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const userValue = useSelector((state: RootState) => state.user);
     const [coordinates, setCoordinates] = useState<number[][]>([[]]);
+    const [enabledButton, setEnabledButton] = useState<boolean>(false);
+    const currentContract = useSelector(
+        (state: RootState) => state.contract.currentContract,
+    );
 
     useEffect(() => {
         if (!mapContainerRef.current) return;
@@ -150,6 +154,8 @@ const MapComponent: React.FC = () => {
 
             setCoordinates(coordinates);
             setIsDrawingMode(true);
+
+            if (currentContract?.id) setEnabledButton(true);
         } else {
             setIsDrawingMode(false);
         }
@@ -180,6 +186,7 @@ const MapComponent: React.FC = () => {
                     label="Guardar Zona"
                     onClick={openSaveModal}
                     className="absolute bottom-16 left-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-10"
+                    disabled={!enabledButton}
                 />
             )}
 
@@ -187,7 +194,7 @@ const MapComponent: React.FC = () => {
                 header="Guardar Zona"
                 visible={modalVisible}
                 onHide={() => setModalVisible(false)}>
-                <SaveZoneForm />
+                <SaveZoneForm coordinates={coordinates} />
             </Dialog>
         </div>
     );

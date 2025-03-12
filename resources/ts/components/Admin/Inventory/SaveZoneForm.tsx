@@ -1,22 +1,78 @@
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { yupResolver } from '@yu';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { ColorPicker } from 'primereact/colorpicker';
+import { Zone } from '@/types/zone';
+import { saveZone } from '@/api/service/zoneService';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { Contract } from '@/types/contract';
+import { useState, useEffect } from 'react';
+
 const schema = yup.object().shape({
     name: yup.string().required('El nombre es obligatorio'),
     description: yup.string().required('La descripción es obligatoria'),
     color: yup
         .string()
-        .matches(/^#([0-9A-F]{3}){1,2}$/i, 'Debe ser un código de color válido')
+        .matches(
+            /^#([0-9A-F]{6})$/i,
+            'Debe ser un código de color válido en formato #RRGGBB',
+        )
         .required('El color es obligatorio'),
+    contractId: yup.number().required('El ID del contrato es obligatorio'),
+    coordinates: yup
+        .array()
+        .of(yup.array().of(yup.number()))
+        .min(1, 'Las coordenadas son obligatorias'),
 });
 
-export const SaveZoneForm = ({ onClose, onSubmit }) => {
+export interface SaveZoneProps {
+    coordinates: number[][];
+}
+
+export const SaveZoneForm = ({ coordinates }: SaveZoneProps) => {
+    const currentContract: Contract | null = useSelector(
+        (state: RootState) => state.contract.currentContract,
+    );
+
     const {
         control,
         handleSubmit,
         formState: { errors },
+        setValue,
+        watch,
     } = useForm({
         resolver: yupResolver(schema),
+        defaultValues: {
+            name: '',
+            description: '',
+            color: '#FF5733',
+            contractId: currentContract?.id || 0,
+            coordinates: coordinates,
+        },
     });
+
+    useEffect(() => {
+        setValue('coordinates', coordinates);
+        if (currentContract?.id) {
+            setValue('contractId', currentContract.id);
+        }
+    }, [coordinates, currentContract, setValue]);
+
+    function onSubmit(data: Zone) {
+        const formattedData = {
+            ...data,
+            coordinates: coordinates,
+        };
+
+        saveZone(formattedData);
+    }
+
+    function onClose() {
+        window.history.back();
+    }
 
     return (
         <div className="p-6 bg-white rounded-2xl shadow-lg w-96">
@@ -28,7 +84,10 @@ export const SaveZoneForm = ({ onClose, onSubmit }) => {
                         name="name"
                         control={control}
                         render={({ field }) => (
-                            <Input {...field} className="w-full" />
+                            <InputText
+                                {...field}
+                                className="w-full p-inputtext"
+                            />
                         )}
                     />
                     {errors.name && (
@@ -46,7 +105,10 @@ export const SaveZoneForm = ({ onClose, onSubmit }) => {
                         name="description"
                         control={control}
                         render={({ field }) => (
-                            <Input {...field} className="w-full" />
+                            <InputText
+                                {...field}
+                                className="w-full p-inputtext"
+                            />
                         )}
                     />
                     {errors.description && (
@@ -62,7 +124,14 @@ export const SaveZoneForm = ({ onClose, onSubmit }) => {
                         name="color"
                         control={control}
                         render={({ field }) => (
-                            <Input {...field} type="color" className="w-full" />
+                            <ColorPicker
+                                {...field}
+                                format="hex"
+                                className="w-full"
+                                onChange={(e) =>
+                                    setValue('color', `#${e.value}`)
+                                }
+                            />
                         )}
                     />
                     {errors.color && (
@@ -73,10 +142,13 @@ export const SaveZoneForm = ({ onClose, onSubmit }) => {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                    <Button type="button" onClick={onClose} variant="secondary">
+                    <Button
+                        type="button"
+                        onClick={onClose}
+                        className="p-button-secondary">
                         Cancelar
                     </Button>
-                    <Button type="submit" variant="primary">
+                    <Button type="submit" className="p-button-primary">
                         Guardar
                     </Button>
                 </div>
@@ -84,10 +156,3 @@ export const SaveZoneForm = ({ onClose, onSubmit }) => {
         </div>
     );
 };
-function useForm(arg0: { resolver: any }): {
-    control: any;
-    handleSubmit: any;
-    formState: { errors: any };
-} {
-    throw new Error('Function not implemented.');
-}
