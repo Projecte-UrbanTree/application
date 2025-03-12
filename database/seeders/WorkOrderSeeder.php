@@ -20,12 +20,12 @@ class WorkOrderSeeder extends Seeder
             ],
             [
                 'date' => '2015-01-29',
-                'status' => '0',
+                'status' => '1',
                 'contract_id' => 2,
             ],
             [
                 'date' => '2022-01-29',
-                'status' => '0',
+                'status' => '3',
                 'contract_id' => 3,
             ],
             [

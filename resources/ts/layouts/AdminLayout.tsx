@@ -102,6 +102,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             icon: 'tabler:chart-treemap',
         },
         {
+            to: '/admin/eva',
+            label: t('admin.submenu.manage.eva'),
+            icon: 'tabler:chart-bar',
+        },
+        {
             to: '/admin/work-orders',
             label: t('admin.submenu.manage.workOrders'),
             icon: 'tabler:clipboard-text',
@@ -190,7 +195,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                             <img className="w-48" src={logo} alt="Logo" />
                         </a>
                     </div>
-                    
+
                     <div className="hidden lg:flex flex-1 justify-center items-center space-x-6">
                         <Link
                             to="/admin/dashboard"
