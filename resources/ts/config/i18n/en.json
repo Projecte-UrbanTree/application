@@ -395,12 +395,113 @@
         "title": "Users"
       },
       "workOrders": {
-        "columns": {
-          "contract_id": "Contract",
-          "date": "Date",
-          "status": "Status"
+        "title": "Work Orders",
+        "details": {
+          "block": "Block",
+          "zones": "Zones",
+          "tasks": "Tasks",
+          "notes": "Notes",
+          "noZones": "No zones assigned",
+          "noTasks": "No tasks assigned",
+          "noNotes": "N/A",
+          "noBlocks": "No blocks",
+          "noBlocksAvailable": "No blocks available for this work order",
+          "unknown": "Unknown",
+          "noUsers": "No users assigned"
         },
-        "title": "Work Orders"
+        "status": {
+          "notStarted": "Not Started",
+          "inProgress": "In Progress",
+          "completed": "Completed",
+          "reportSent": "Report Sent",
+          "unknown": "Unknown"
+        },
+        "reportStatus": {
+          "pending": "Pending",
+          "completed": "Completed",
+          "rejected": "Rejected",
+          "closedWithIncidents": "Closed with Incidents",
+          "unknown": "Unknown"
+        },
+        "form": {
+          "fields": {
+            "date": "Date",
+            "users": "Workers",
+            "block": "Block",
+            "zones": "Zones",
+            "task": "Task",
+            "taskType": "Task Type",
+            "elementType": "Element Type",
+            "treeType": "Tree Species",
+            "notes": "Notes"
+          },
+          "buttons": {
+            "addTask": "Add Task",
+            "addBlock": "Add Block"
+          },
+          "blocksTitle": "Work Blocks",
+          "removeBlock": "Remove block",
+          "removeTask": "Remove task",
+          "noContract": {
+            "title": "No contract selected",
+            "message": "You must select a contract in the top panel to create a work order."
+          },
+          "placeholders": {
+            "status": "Select a status",
+            "users": "Select workers",
+            "zones": "Select zones for this block",
+            "taskType": "Select task type",
+            "elementType": "Select element type",
+            "treeType": "Select tree species",
+            "notes": "Add notes for this work block..."
+          },
+          "returnButton": "Return to work order list",
+          "submitButton": {
+            "create": "Create Work Order",
+            "edit": "Save Changes"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Saving..."
+          },
+          "title": {
+            "create": "Create Work Order",
+            "edit": "Edit Work Order"
+          },
+          "validation": {
+            "date_required": "Date is required",
+            "users_required": "At least one worker must be selected",
+            "blocks_required": "At least one block is required",
+            "zones_required": "At least one zone must be selected",
+            "tasks_required": "At least one task is required",
+            "task_type_required": "Task type is required",
+            "element_type_required": "Element type is required"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Delete work order",
+            "edit": "Edit work order",
+            "viewReport": "View report",
+            "label": "Actions"
+          },
+          "columns": {
+            "id": "ID",
+            "date": "Date",
+            "users": "Workers",
+            "status": "Status",
+            "reportStatus": "Report Status",
+            "contract": "Contract"
+          },
+          "messages": {
+            "createSuccess": "Work order created successfully",
+            "deleteConfirm": "Are you sure you want to delete this work order?",
+            "deleteSuccess": "Work order deleted successfully",
+            "error": "Error saving work order",
+            "updateSuccess": "Work order updated successfully",
+            "noData": "No work orders available"
+          }
+        }
       }
     },
     "profileDropdown": {

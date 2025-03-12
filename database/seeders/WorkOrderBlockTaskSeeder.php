@@ -37,6 +37,7 @@ class WorkOrderBlockTaskSeeder extends Seeder
                 'task_type_id' => 3,
                 'work_order_block_id' => 3,
             ],
+
         ]);
     }
 }
