@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
 import axiosClient from '@/api/axiosClient';
 import { Skeleton } from 'primereact/skeleton';
-
+import { differenceInYears, differenceInMonths, parseISO } from 'date-fns';
+import { date } from 'yup';
 function formatDateSpanish(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -203,6 +204,7 @@ export default function Stats() {
                                 type="date"
                                 className="border rounded px-2 py-1"
                                 value={customFromIso}
+                                max={new Date()}
                                 onChange={(e) => {
                                     setCustomFromIso(e.target.value);
                                     if (e.target.value) {
