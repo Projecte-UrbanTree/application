@@ -10,6 +10,8 @@ import { RootState } from '@/store/store';
 import { Roles } from '@/types/role';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { fetchZones } from '@/api/service/zoneService';
+import { Zone } from '@/types/zone';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 

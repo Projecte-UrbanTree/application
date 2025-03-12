@@ -7,17 +7,21 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { ListBox } from 'primereact/listbox';
 import { ToggleButton } from 'primereact/togglebutton';
 import { Icon } from '@iconify/react';
+import { fetchZones } from '@/api/service/zoneService';
 
 export const Zones = () => {
     const [zones, setZones] = useState<Zone[]>([]);
 
     useEffect(() => {
-        const fetchZones = async () => {
-            const response = await axiosClient.get<Zone[]>(`/admin/zones`);
-            setZones(response.data);
+        const getZones = async () => {
+            try {
+                const data = await fetchZones();
+                setZones(data);
+            } catch (error) {
+                console.error(error);
+            }
         };
-
-        fetchZones();
+        getZones();
     }, []);
 
     return (
