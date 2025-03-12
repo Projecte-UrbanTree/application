@@ -4,6 +4,7 @@ import { Column } from 'primereact/column'
 import { Button } from 'primereact/button'
 import { Badge } from 'primereact/badge'
 import { Message } from 'primereact/message'
+import { ProgressSpinner } from 'primereact/progressspinner'
 import { Icon } from '@iconify/react'
 import axiosClient from '@/api/axiosClient'
 import { useTranslation } from 'react-i18next'
@@ -57,15 +58,18 @@ export default function WorkOrders() {
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null)
   const [msgSeverity, setMsgSeverity] = useState<'success' | 'error'>(successMsg ? 'success' : 'error')
   const currentContract = useSelector((state: RootState) => state.contract.currentContract)
+  
   useEffect(() => {
     if (location.state) window.history.replaceState({}, document.title)
   }, [location])
+  
   useEffect(() => {
     if (msg) {
       const timer = setTimeout(() => setMsg(null), 4000)
       return () => clearTimeout(timer)
     }
   }, [msg])
+  
   useEffect(() => {
     const fetchWorkOrders = async () => {
       try {
@@ -83,22 +87,23 @@ export default function WorkOrders() {
     }
     fetchWorkOrders()
   }, [])
+  
   const handleDelete = (id: number) => {
-    if (window.confirm(t('admin.pages.workOrders.deleteConfirm'))) {
+    if (window.confirm(t('admin.pages.workOrders.list.messages.deleteConfirm'))) {
       axiosClient.delete(`/admin/work-orders/${id}`)
         .then(() => {
           setWorkOrders(workOrders.filter((wo: any) => wo.id !== id))
-          setMsg(t('admin.pages.workOrders.deleteSuccess'))
+          setMsg(t('admin.pages.workOrders.list.messages.deleteSuccess'))
+          setMsgSeverity('success')
         })
         .catch((error) => {
           console.error('Error deleting work order:', error)
-          setMsg(t('admin.pages.workOrders.deleteError'))
+          setMsg(t('admin.pages.workOrders.list.messages.error'))
+          setMsgSeverity('error')
         })
     }
   }
-  useEffect(() => {
-    console.log('Expanded rows:', expandedRows)
-  }, [expandedRows])
+  
   const rowExpansionTemplate = (data: WorkOrder) => {
     const activeTabs = data.work_orders_blocks.map((_, i) => i)
     return (
@@ -108,31 +113,31 @@ export default function WorkOrders() {
             data.work_orders_blocks.map((block, index) => {
               const tasks = block.block_tasks || block['block_tasks'] || []
               return (
-                <AccordionTab key={block.id} header={<>Bloque {index + 1}</>}>
+                <AccordionTab key={block.id} header={`${t('admin.pages.workOrders.details.block')} ${index + 1}`}>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <h4 className="font-medium flex items-center gap-2">
                         <Icon icon="tabler:map-pin" />
-                        {t('admin.pages.workOrders.zones')}
+                        {t('admin.pages.workOrders.details.zones')}
                       </h4>
                       <ul className="list-disc pl-5">
                         {block.zones && block.zones.length > 0 ? (
                           block.zones.map(zone => <li key={zone.id}>{zone.name}</li>)
                         ) : (
-                          <li>No zones assigned</li>
+                          <li>{t('admin.pages.workOrders.details.noZones')}</li>
                         )}
                       </ul>
                     </div>
                     <div>
                       <h4 className="font-medium flex items-center gap-2">
                         <Icon icon="tabler:clipboard-list" />
-                        {t('admin.pages.workOrders.tasks')}
+                        {t('admin.pages.workOrders.details.tasks')}
                       </h4>
                       <ul className="list-disc pl-5">
                         {tasks && tasks.length > 0 ? (
                           tasks.map(task => {
-                            const taskName = task.tasks_type?.name || 'Unknown'
-                            const elementName = task.element_type?.name || 'Unknown'
+                            const taskName = task.tasks_type?.name || t('admin.pages.workOrders.details.unknown')
+                            const elementName = task.element_type?.name || t('admin.pages.workOrders.details.unknown')
                             const speciesName = task.tree_type?.species ? `: ${task.tree_type.species}` : ''
                             return (
                               <li key={task.id}>
@@ -141,33 +146,44 @@ export default function WorkOrders() {
                             )
                           })
                         ) : (
-                          <li>No tasks assigned</li>
+                          <li>{t('admin.pages.workOrders.details.noTasks')}</li>
                         )}
                       </ul>
                     </div>
                     <div>
                       <h4 className="font-medium flex items-center gap-2">
                         <Icon icon="tabler:note" />
-                        {t('admin.pages.workOrders.notes')}
+                        {t('admin.pages.workOrders.details.notes')}
                       </h4>
-                      <p>{block.notes || 'N/A'}</p>
+                      <p>{block.notes || t('admin.pages.workOrders.details.noNotes')}</p>
                     </div>
                   </div>
                 </AccordionTab>
               )
             })
           ) : (
-            <AccordionTab header="No blocks">
-              <p>No blocks available for this work order</p>
+            <AccordionTab header={t('admin.pages.workOrders.details.noBlocks')}>
+              <p>{t('admin.pages.workOrders.details.noBlocksAvailable')}</p>
             </AccordionTab>
           )}
         </Accordion>
       </div>
     )
   }
+  
   const filteredWorkOrders = workOrders.filter(
     (wo: any) => currentContract && wo.contract_id === currentContract.id
   )
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <ProgressSpinner style={{ width: "50px", height: "50px" }} strokeWidth="4" />
+        <span className="mt-2 text-blue-600">{t("general.loading")}</span>
+      </div>
+    )
+  }
+
   return (
     <>
       {msg && <Message severity={msgSeverity} text={msg} className="mb-4 w-full" />}
@@ -182,19 +198,18 @@ export default function WorkOrders() {
           rows={10}
           stripedRows
           showGridlines
-          loading={isLoading}
-          emptyMessage={t('admin.pages.workOrders.noData')}
+          emptyMessage={t('admin.pages.workOrders.list.messages.noData')}
           className="p-datatable-sm"
         >
           <Column expander style={{ width: '3rem' }} className="expander-column" />
-          <Column field="id" header={t('admin.pages.workOrders.columns.id')} body={(rowData) => `OT-${rowData.id}`} />
-          <Column field="date" header={t('admin.pages.workOrders.columns.date')} body={(rowData) => new Date(rowData.date).toLocaleDateString()} />
-          <Column header={t('admin.pages.workOrders.columns.users')} body={(rowData) =>
+          <Column field="id" header={t('admin.pages.workOrders.list.columns.id')} body={(rowData) => `OT-${rowData.id}`} />
+          <Column field="date" header={t('admin.pages.workOrders.list.columns.date')} body={(rowData) => new Date(rowData.date).toLocaleDateString()} />
+          <Column header={t('admin.pages.workOrders.list.columns.users')} body={(rowData) =>
             rowData.users && rowData.users.length > 0
               ? rowData.users.map((user: { id: number; name: string; surname: string }) => `${user.name} ${user.surname}`).join(', ')
-              : 'No users assigned'
+              : t('admin.pages.workOrders.details.noUsers')
           } />
-          <Column header={t('admin.pages.workOrders.columns.status')} body={(rowData) => {
+          <Column header={t('admin.pages.workOrders.list.columns.status')} body={(rowData) => {
             switch (rowData.status) {
               case 0:
                 return <Badge value={t('admin.pages.workOrders.status.notStarted')} severity="danger" />
@@ -203,41 +218,41 @@ export default function WorkOrders() {
               case 2:
                 return <Badge value={t('admin.pages.workOrders.status.completed')} severity="success" />
               case 3:
-                return <Badge value={t('Work Report Sent')} severity="info" />
+                return <Badge value={t('admin.pages.workOrders.status.reportSent')} severity="info" />
               default:
                 return <Badge value={t('admin.pages.workOrders.status.unknown')} severity="secondary" />
             }
           }} />
-          <Column header="Estat del Parte" body={(rowData) => {
+          <Column header={t('admin.pages.workOrders.list.columns.reportStatus')} body={(rowData) => {
             if (!rowData.work_reports || rowData.work_reports.length === 0) {
-              return <Badge value="Pendent" severity="warning" />
+              return <Badge value={t('admin.pages.workOrders.reportStatus.pending')} severity="warning" />
             }
             const latestReport = rowData.work_reports[rowData.work_reports.length - 1]
             switch (latestReport.report_status) {
               case 0:
-                return <Badge value="Pendent" severity="warning" />
+                return <Badge value={t('admin.pages.workOrders.reportStatus.pending')} severity="warning" />
               case 1:
-                return <Badge value="Completat" severity="success" />
+                return <Badge value={t('admin.pages.workOrders.reportStatus.completed')} severity="success" />
               case 2:
-                return <Badge value="Rebutjat" severity="danger" />
+                return <Badge value={t('admin.pages.workOrders.reportStatus.rejected')} severity="danger" />
               case 3:
-                return <Badge value={t('Tancat amb Incidencies')} severity="danger" />
+                return <Badge value={t('admin.pages.workOrders.reportStatus.closedWithIncidents')} severity="danger" />
               default:
-                return <Badge value={t('admin.pages.workReports.status.unknown')} severity="secondary" />
+                return <Badge value={t('admin.pages.workOrders.reportStatus.unknown')} severity="secondary" />
             }
           }} />
-          <Column header={t('admin.pages.workOrders.actions')} body={(rowData) => {
+          <Column header={t('admin.pages.workOrders.list.actions.label')} body={(rowData) => {
             if (rowData.status === 3) {
               return (
                 <div className="flex justify-end gap-2">
-                  <Button icon={<Icon icon="tabler:eye" />} className="p-button-rounded p-button-info" onClick={() => navigate(`/admin/work-reports/${rowData.id}`)} title={t('admin.pages.workOrders.actionTypes.viewReport')} />
+                  <Button icon={<Icon icon="tabler:eye" />} className="p-button-rounded p-button-info" onClick={() => navigate(`/admin/work-reports/${rowData.id}`)} title={t('admin.pages.workOrders.list.actions.viewReport')} />
                 </div>
               )
             }
             return (
               <div className="flex justify-end gap-2">
-                <Button icon={<Icon icon="tabler:edit" />} className="p-button-rounded p-button-primary" onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)} title={t('admin.pages.workOrders.actionTypes.edit')} />
-                <Button icon={<Icon icon="tabler:trash" />} className="p-button-rounded p-button-danger" onClick={() => handleDelete(rowData.id)} title={t('admin.pages.workOrders.actionTypes.delete')} />
+                <Button icon={<Icon icon="tabler:edit" />} className="p-button-rounded p-button-primary" onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)} title={t('admin.pages.workOrders.list.actions.edit')} />
+                <Button icon={<Icon icon="tabler:trash" />} className="p-button-rounded p-button-danger" onClick={() => handleDelete(rowData.id)} title={t('admin.pages.workOrders.list.actions.delete')} />
               </div>
             )
           }} />

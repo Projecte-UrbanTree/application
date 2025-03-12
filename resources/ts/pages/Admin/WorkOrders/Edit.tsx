@@ -9,6 +9,7 @@ import { Button } from "primereact/button"
 import { Card } from "primereact/card"
 import { InputTextarea } from "primereact/inputtextarea"
 import { Dropdown } from "primereact/dropdown"
+import { ProgressSpinner } from "primereact/progressspinner"
 import { Icon } from "@iconify/react"
 import axiosClient from "@/api/axiosClient"
 import { RootState } from "@/store/store"
@@ -92,21 +93,21 @@ const EditWorkOrder = () => {
   }, [id])
 
   const validationSchema = Yup.object({
-    date: Yup.date().required("La fecha es obligatoria"),
-    selectedUsers: Yup.array().min(1, "Debes seleccionar al menos un operario"),
+    date: Yup.date().required(t("admin.pages.workOrders.form.validation.date_required")),
+    selectedUsers: Yup.array().min(1, t("admin.pages.workOrders.form.validation.users_required")),
     blocks: Yup.array().of(
       Yup.object({
         notes: Yup.string().nullable(),
-        zones: Yup.array().min(1, "Debes seleccionar al menos una zona"),
+        zones: Yup.array().min(1, t("admin.pages.workOrders.form.validation.zones_required")),
         tasks: Yup.array().of(
           Yup.object({
-            task_type_id: Yup.number().nullable().required("Tipo de tarea requerido"),
-            element_type_id: Yup.number().nullable().required("Tipo de elemento requerido"),
+            task_type_id: Yup.number().nullable().required(t("admin.pages.workOrders.form.validation.task_type_required")),
+            element_type_id: Yup.number().nullable().required(t("admin.pages.workOrders.form.validation.element_type_required")),
             tree_type_id: Yup.number().nullable()
           })
-        ).min(1, "Debe haber al menos una tarea")
+        ).min(1, t("admin.pages.workOrders.form.validation.tasks_required"))
       })
-    ).min(1, "Debe haber al menos un bloque")
+    ).min(1, t("admin.pages.workOrders.form.validation.blocks_required"))
   })
 
   const handleSubmit = async (values: EditWorkOrderValues, { setSubmitting }: any) => {
@@ -130,9 +131,9 @@ const EditWorkOrder = () => {
         contract_id: currentContract?.id,
         blocks: formattedBlocks
       })
-      navigate("/admin/work-orders", { state: { success: t("admin.pages.workOrders.updateSuccess") } })
+      navigate("/admin/work-orders", { state: { success: t("admin.pages.workOrders.list.messages.updateSuccess") } })
     } catch (error: any) {
-      setError(error.response?.data?.message || t("admin.pages.workOrders.updateError"))
+      setError(error.response?.data?.message || t("admin.pages.workOrders.list.messages.error"))
       setSubmitting(false)
       setIsSubmitting(false)
     }
@@ -158,8 +159,9 @@ const EditWorkOrder = () => {
 
   if (loading || !initialValues) {
     return (
-      <div className="flex items-center justify-center p-4">
-        <i className="pi pi-spin pi-spinner" style={{ fontSize: "2rem" }}></i>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <ProgressSpinner style={{ width: "50px", height: "50px" }} strokeWidth="4" />
+        <span className="mt-2 text-blue-600">{t("general.loading")}</span>
       </div>
     )
   }
@@ -170,9 +172,9 @@ const EditWorkOrder = () => {
         <Card className="w-full max-w-3xl shadow-lg">
           <div className="p-6 text-center">
             <Icon icon="tabler:alert-circle" className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-4">No hay contrato seleccionado</h2>
-            <p className="text-gray-600 mb-6">Debes seleccionar un contrato en el panel superior para editar una orden de trabajo.</p>
-            <Button label="Volver" icon="pi pi-arrow-left" onClick={() => navigate("/admin/work-orders")} />
+            <h2 className="text-2xl font-bold mb-4">{t('admin.pages.workOrders.form.noContract.title')}</h2>
+            <p className="text-gray-600 mb-6">{t('admin.pages.workOrders.form.noContract.message')}</p>
+            <Button label={t('admin.pages.workOrders.form.returnButton')} icon="pi pi-arrow-left" onClick={() => navigate("/admin/work-orders")} />
           </div>
         </Card>
       </div>
@@ -186,7 +188,7 @@ const EditWorkOrder = () => {
           <Button className="p-button-text mr-4" style={{ color: "#fff" }} onClick={() => navigate("/admin/work-orders")}>
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
-          <h2 className="text-white text-3xl font-bold">Editar Orden de Trabajo</h2>
+          <h2 className="text-white text-3xl font-bold">{t('admin.pages.workOrders.form.title.edit')}</h2>
         </header>
         <div className="p-6">
           {error && <Message severity="error" text={error} className="mb-4 w-full" />}
@@ -196,7 +198,7 @@ const EditWorkOrder = () => {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:calendar" className="h-5 w-5 mr-2" />
-                    Fecha
+                    {t('admin.pages.workOrders.form.fields.date')}
                   </label>
                   <Calendar
                     id="date"
@@ -211,14 +213,14 @@ const EditWorkOrder = () => {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
-                    Operarios
+                    {t('admin.pages.workOrders.form.fields.users')}
                   </label>
                   <MultiSelect
                     value={values.selectedUsers}
                     options={users}
                     onChange={(e) => setFieldValue("selectedUsers", e.value)}
                     optionLabel="name"
-                    placeholder="Selecciona operarios"
+                    placeholder={t('admin.pages.workOrders.form.placeholders.users')}
                     filter
                     itemTemplate={userTemplate}
                     className={errors.selectedUsers && touched.selectedUsers ? "p-invalid w-full" : "w-full"}
@@ -227,7 +229,7 @@ const EditWorkOrder = () => {
                   <ErrorMessage name="selectedUsers" component="small" className="p-error" />
                 </div>
                 <div className="my-6">
-                  <h3 className="text-2xl font-bold text-center mb-4">Bloques de Trabajo</h3>
+                  <h3 className="text-2xl font-bold text-center mb-4">{t('admin.pages.workOrders.form.blocksTitle')}</h3>
                 </div>
                 <FieldArray name="blocks">
                   {({ remove, push }) => (
@@ -237,7 +239,7 @@ const EditWorkOrder = () => {
                           <div className="flex justify-between items-center mb-3">
                             <h4 className="text-lg font-bold flex items-center">
                               <Icon icon="tabler:box" className="h-5 w-5 mr-2" />
-                              Bloque {index + 1}
+                              {t('admin.pages.workOrders.form.fields.block')} {index + 1}
                             </h4>
                             {values.blocks.length > 1 && (
                               <Button
@@ -245,21 +247,21 @@ const EditWorkOrder = () => {
                                 className="p-button-rounded p-button-danger"
                                 onClick={() => remove(index)}
                                 type="button"
-                                aria-label="Eliminar bloque"
+                                aria-label={t('admin.pages.workOrders.form.removeBlock')}
                               />
                             )}
                           </div>
                           <div className="flex flex-col mb-3">
                             <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                               <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                              Zonas
+                              {t('admin.pages.workOrders.form.fields.zones')}
                             </label>
                             <MultiSelect
                               value={values.blocks[index].zones}
                               options={zones}
                               onChange={(e) => setFieldValue(`blocks[${index}].zones`, e.value)}
                               optionLabel="name"
-                              placeholder="Selecciona zonas para este bloque"
+                              placeholder={t('admin.pages.workOrders.form.placeholders.zones')}
                               filter
                               itemTemplate={zoneTemplate}
                               className="w-full"
@@ -273,33 +275,33 @@ const EditWorkOrder = () => {
                                 {values.blocks[index].tasks.map((task: WorkTask, taskIndex: number) => (
                                   <div key={taskIndex} className="p-2 border border-gray-200 rounded-lg">
                                     <div className="flex justify-between items-center mb-2">
-                                      <h5 className="text-sm font-semibold">Tarea {taskIndex + 1}</h5>
+                                      <h5 className="text-sm font-semibold">{t('admin.pages.workOrders.form.fields.task')} {taskIndex + 1}</h5>
                                       {values.blocks[index].tasks.length > 1 && (
                                         <Button
                                           icon={<Icon icon="tabler:trash" className="h-4 w-4" />}
                                           className="p-button-rounded p-button-danger p-button-sm"
                                           onClick={() => removeTask(taskIndex)}
                                           type="button"
-                                          aria-label="Eliminar tarea"
+                                          aria-label={t('admin.pages.workOrders.form.removeTask')}
                                         />
                                       )}
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                                       <div className="flex flex-col">
-                                        <label className="text-xs font-medium text-gray-700 mb-1">Tipo de tarea</label>
+                                        <label className="text-xs font-medium text-gray-700 mb-1">{t('admin.pages.workOrders.form.fields.taskType')}</label>
                                         <Dropdown
                                           value={task.task_type_id}
                                           options={taskTypes}
                                           onChange={(e) => setFieldValue(`blocks[${index}].tasks[${taskIndex}].task_type_id`, e.value)}
                                           optionLabel="name"
                                           optionValue="id"
-                                          placeholder="Selecciona tipo"
+                                          placeholder={t('admin.pages.workOrders.form.placeholders.taskType')}
                                           className="w-full"
                                         />
                                         <ErrorMessage name={`blocks[${index}].tasks[${taskIndex}].task_type_id`} component="small" className="p-error" />
                                       </div>
                                       <div className="flex flex-col">
-                                        <label className="text-xs font-medium text-gray-700 mb-1">Tipo de elemento</label>
+                                        <label className="text-xs font-medium text-gray-700 mb-1">{t('admin.pages.workOrders.form.fields.elementType')}</label>
                                         <Dropdown
                                           value={task.element_type_id}
                                           options={elementTypes}
@@ -311,20 +313,20 @@ const EditWorkOrder = () => {
                                           }}
                                           optionLabel="name"
                                           optionValue="id"
-                                          placeholder="Selecciona tipo"
+                                          placeholder={t('admin.pages.workOrders.form.placeholders.elementType')}
                                           className="w-full"
                                         />
                                         <ErrorMessage name={`blocks[${index}].tasks[${taskIndex}].element_type_id`} component="small" className="p-error" />
                                       </div>
                                       <div className="flex flex-col">
-                                        <label className="text-xs font-medium text-gray-700 mb-1">Especie de árbol</label>
+                                        <label className="text-xs font-medium text-gray-700 mb-1">{t('admin.pages.workOrders.form.fields.treeType')}</label>
                                         <Dropdown
                                           value={task.tree_type_id}
                                           options={treeTypes}
                                           onChange={(e) => setFieldValue(`blocks[${index}].tasks[${taskIndex}].tree_type_id`, e.value)}
                                           optionLabel="species"
                                           optionValue="id"
-                                          placeholder="Selecciona especie"
+                                          placeholder={t('admin.pages.workOrders.form.placeholders.treeType')}
                                           className="w-full"
                                           disabled={!requiresTreeType(task.element_type_id)}
                                         />
@@ -336,7 +338,7 @@ const EditWorkOrder = () => {
                                   <Button
                                     type="button"
                                     icon="pi pi-plus"
-                                    label="Añadir Tarea"
+                                    label={t('admin.pages.workOrders.form.buttons.addTask')}
                                     className="p-button-outlined p-button-sm"
                                     onClick={() => pushTask({ task_type_id: null, element_type_id: null, tree_type_id: null })}
                                   />
@@ -347,14 +349,14 @@ const EditWorkOrder = () => {
                           <div className="flex flex-col mt-3">
                             <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                               <Icon icon="tabler:notes" className="h-5 w-5 mr-2" />
-                              Notas
+                              {t('admin.pages.workOrders.form.fields.notes')}
                             </label>
                             <InputTextarea
                               rows={3}
                               value={values.blocks[index].notes}
                               onChange={(e) => setFieldValue(`blocks[${index}].notes`, e.target.value)}
                               className="w-full"
-                              placeholder="Añade notas para este bloque de trabajo..."
+                              placeholder={t('admin.pages.workOrders.form.placeholders.notes')}
                             />
                           </div>
                         </Card>
@@ -363,7 +365,7 @@ const EditWorkOrder = () => {
                         <Button
                           type="button"
                           icon="pi pi-plus"
-                          label="Añadir Bloque"
+                          label={t('admin.pages.workOrders.form.buttons.addBlock')}
                           className="p-button-outlined"
                           onClick={() => push({ notes: "", zones: [], tasks: [{ task_type_id: null, element_type_id: null, tree_type_id: null }] })}
                         />
@@ -372,7 +374,13 @@ const EditWorkOrder = () => {
                   )}
                 </FieldArray>
                 <div className="flex justify-end mt-4">
-                  <Button type="submit" icon="pi pi-check" label="Actualizar Orden de Trabajo" className="w-full md:w-auto" loading={isSubmitting} />
+                  <Button 
+                    type="submit" 
+                    icon="pi pi-check" 
+                    label={t('admin.pages.workOrders.form.submitButton.edit')} 
+                    className="w-full md:w-auto" 
+                    loading={isSubmitting} 
+                  />
                 </div>
               </Form>
             )}
