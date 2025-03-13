@@ -92,8 +92,6 @@ export const SaveZoneForm = ({
                 zone_id: createdZone.id!,
             }));
 
-            console.log({ pointsData });
-
             await savePoints(pointsData);
             toast.current?.show({
                 severity: 'success',
