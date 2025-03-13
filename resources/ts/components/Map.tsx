@@ -13,13 +13,14 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { Zone } from '@/types/zone';
 import { fetchPoints } from '@/api/service/pointService';
 import { Point } from '@/types/point';
+import { fetchZones } from '@/api/service/zoneService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 interface MapProps {
     selectedZone: Zone | null;
 }
 
-const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
+export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<mapboxgl.Map | null>(null);
     const drawRef = useRef<MapboxDraw | null>(null);
@@ -45,6 +46,17 @@ const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
             'top-right',
         );
         mapRef.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+        mapRef.current.addControl(
+            new mapboxgl.FullscreenControl(),
+            'top-right',
+        );
+        mapRef.current.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: { enableHighAccuracy: true },
+                trackUserLocation: true,
+            }),
+            'top-right',
+        );
 
         const geocoder = new MapboxGeocoder({
             accessToken: mapboxgl.accessToken!,
@@ -52,7 +64,6 @@ const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
             placeholder: 'Buscar una ubicación...',
             zoom: 15,
         });
-
         mapRef.current.addControl(geocoder, 'top-left');
 
         if (userValue.role === Roles.admin) {
@@ -122,6 +133,71 @@ const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
         }
     }
 
+    function addZoneToMap(zone: Zone, zonePoints: [number, number][]) {
+        if (!mapRef.current) return;
+
+        mapRef.current.addSource(`zone-${zone.id}`, {
+            type: 'geojson',
+            data: {
+                type: 'Feature',
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: [zonePoints],
+                },
+                properties: {},
+            },
+        });
+
+        mapRef.current.addLayer({
+            id: `zone-${zone.id}`,
+            type: 'fill',
+            source: `zone-${zone.id}`,
+            layout: {},
+            paint: {
+                'fill-color': '#088',
+                'fill-opacity': 0.5,
+            },
+        });
+
+        mapRef.current.addLayer({
+            id: `zone-${zone.id}-outline`,
+            type: 'line',
+            source: `zone-${zone.id}`,
+            layout: {},
+            paint: {
+                'line-color': '#000',
+                'line-width': 2,
+            },
+        });
+    }
+
+    async function handleZoneSaved() {
+        setModalVisible(false);
+        setIsDrawingMode(false);
+        setEnabledButton(false);
+
+        fetchZones().then((zonesData: Zone[]) => {
+            fetchPoints().then((allPoints: Point[]) => {
+                zonesData.forEach((zone) => {
+                    const zonePoints = allPoints
+                        .filter((point) => point.zone_id === zone.id)
+                        .map(
+                            (point) =>
+                                [
+                                    point.longitude as number,
+                                    point.latitude as number,
+                                ] as [number, number],
+                        );
+
+                    if (zonePoints.length > 2) {
+                        zonePoints.push(zonePoints[0]);
+                        addZoneToMap(zone, zonePoints);
+                    }
+                });
+            });
+        });
+    }
+
     return (
         <div style={{ position: 'relative', width: '100%', height: '90%' }}>
             <div
@@ -144,11 +220,9 @@ const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
                 onHide={() => setModalVisible(false)}>
                 <SaveZoneForm
                     coordinates={coordinates}
-                    onClose={async () => setModalVisible(false)}
+                    onClose={handleZoneSaved}
                 />
             </Dialog>
         </div>
     );
 };
-
-export default MapComponent;

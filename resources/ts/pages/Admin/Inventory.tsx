@@ -1,5 +1,5 @@
 import { Zones } from '@/components/Admin/Inventory/Zones';
-import MapComponent from '@/components/Map';
+import { MapComponent } from '@/components/Map';
 import { Zone } from '@/types/zone';
 import { useState } from 'react';
 
