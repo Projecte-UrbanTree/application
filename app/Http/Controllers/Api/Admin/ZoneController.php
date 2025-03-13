@@ -32,7 +32,7 @@ class ZoneController extends Controller
         return response()->json($zone, 201);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $zone = Zone::findOrFail($id);
         $zone->delete();

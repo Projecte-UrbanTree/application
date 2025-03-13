@@ -89,7 +89,9 @@ const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
                         essential: true,
                     });
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.error(error);
+            }
         };
         fetchData();
     }, [selectedZone]);

@@ -83,10 +83,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Route for Zones
         Route::resource('zones', ZoneController::class);
-        Route::resource('zones', ZoneController::class);
 
         // Route for Point
-        Route::resource('points', PointController::class);
         Route::resource('points', PointController::class);
     });
 });

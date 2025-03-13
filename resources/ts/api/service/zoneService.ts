@@ -23,3 +23,7 @@ export const saveZone = async (data: Zone): Promise<Zone> => {
         throw error;
     }
 };
+
+export const deleteZone = async (zoneId: number): Promise<void> => {
+    await axiosClient.delete(`/admin/zones/${zoneId}`);
+};

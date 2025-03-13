@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store';
 import { Accordion, AccordionTab } from 'primereact/accordion';
@@ -8,6 +8,8 @@ import { Zone } from '@/types/zone';
 import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
 import { Dialog } from 'primereact/dialog';
+import { deleteZone } from '@/api/service/zoneService';
+import { Toast } from 'primereact/toast';
 
 interface ZoneProps {
     onSelectedZone: (zone: Zone) => void;
@@ -15,6 +17,7 @@ interface ZoneProps {
 
 export const Zones = ({ onSelectedZone }: ZoneProps) => {
     const dispatch = useDispatch<AppDispatch>();
+    const toast = useRef<Toast>(null);
     const { zones, loading } = useSelector((state: RootState) => state.zone);
     const currentContract = useSelector(
         (state: RootState) => state.contract.currentContract,
@@ -40,7 +43,33 @@ export const Zones = ({ onSelectedZone }: ZoneProps) => {
         setIsConfirmDialogVisible(true);
     };
 
-    const handleDeleteZone = (zoneId: number) => {};
+    const handleDeleteZone = async (zoneId: number) => {
+        try {
+            dispatch(showLoader());
+            await deleteZone(zoneId);
+
+            toast.current?.show({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Zona y puntos eliminados correctamente',
+            });
+
+            dispatch(fetchZonesAsync())
+                .unwrap()
+                .catch((error) =>
+                    console.error('Error al recargar zonas:', error),
+                );
+        } catch (error) {
+            console.error(error);
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo eliminar la zona',
+            });
+        } finally {
+            dispatch(hideLoader());
+        }
+    };
 
     return (
         <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
