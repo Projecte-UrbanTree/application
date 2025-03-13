@@ -29,10 +29,10 @@ return [
         ],
     ],
     'newsletter' => [
-        'title' => 'Subscriu-te al nostre butlletí',
-        'description' => 'Les últimes notícies, articles i recursos, enviats al teu correu electrònic setmanalment.',
-        'subscribe' => 'Subscriu-te',
-        'subscribe_alt' => 'Al nostre butlletí',
+        'title' => 'Sol·licita una demostració',
+        'description' => 'Descobreix com la nostra plataforma pot ajudar-te a millorar la gestió de l\'arbrat de la teva ciutat.',
+        'subscribe' => 'Enviar',
+        'subscribe_alt' => 'Sol·licita una demo',
         'placeholder' => 'Introdueix el teu correu electrònic',
     ],
     'testimonials' => [

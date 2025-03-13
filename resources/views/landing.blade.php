@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing 10 - {{ config('app.name') }}</title>
+    <title>{{ config('app.name') }}</title>
     @vite('resources/css/app.css')
     <style>
         html {
@@ -28,7 +28,7 @@
                 </div>
                 <div class="flex lg:flex-1 lg:justify-end">
                     <a href="/login" class="text-sm/6 font-semibold text-gray-900">
-                        {{ __('landings/landing10.common.login') }}
+                        {{ __('landing.common.login') }}
                         <span aria-hidden="true">&rarr;</span></a>
                 </div>
             </nav>
@@ -58,12 +58,9 @@
                         <div class="flex">
                             <div
                                 class="relative flex items-center gap-x-4 rounded-full bg-white px-4 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                                <span
-                                    class="font-semibold text-indigo-600">{{ __('landings/landing10.newsletter.subscribe') }}</span>
-                                <span class="h-4 w-px bg-gray-900/10" aria-hidden="true"></span>
                                 <a href="#newsletter" class="flex items-center gap-x-1">
-                                    <span class="absolute inset-0" aria-hidden="true"></span>
-                                    {{ __('landings/landing10.newsletter.subscribe_alt') }}
+                                    <span
+                                        class="font-semibold text-indigo-600">{{ __('landing.newsletter.subscribe_alt') }}</span>
                                     <svg class="-mr-2 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
                                         aria-hidden="true" data-slot="icon">
                                         <path fill-rule="evenodd"
@@ -74,16 +71,16 @@
                             </div>
                         </div>
                         <h1 class="mt-10 text-5xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-7xl">
-                            {{ __('landings/landing10.hero.title') }}
+                            {{ __('landing.hero.title') }}
                         </h1>
                         <p class="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
-                            {{ __('landings/landing10.hero.description') }}
+                            {{ __('landing.hero.description') }}
                         </p>
                         <div class="mt-10 flex items-center gap-x-6">
                             <a href="#testimonials"
-                                class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">{{ __('landings/landing10.hero.cta_reviews') }}</a>
+                                class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">{{ __('landing.hero.cta_reviews') }}</a>
                             <a href="#features" class="text-sm/6 font-semibold text-gray-900">
-                                {{ __('landings/landing10.hero.cta_learn_more') }}
+                                {{ __('landing.hero.cta_learn_more') }}
                                 <span aria-hidden="true">→</span></a>
                         </div>
                     </div>
@@ -101,8 +98,7 @@
                                 d="M16 59c0-23.748 19.252-43 43-43h246c23.748 0 43 19.252 43 43v615c0 23.196-18.804 42-42 42H58c-23.196 0-42-18.804-42-42V59Z" />
                             <foreignObject width="316" height="684" transform="translate(24 24)"
                                 clip-path="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)">
-                                <img src="{{ asset('images/landings/landing10/customer-view-mobile-ss.png') }}"
-                                    alt="" />
+                                <img src="{{ asset('images/landing/customer-view-mobile-ss.png') }}" alt="" />
                             </foreignObject>
                         </svg>
                     </div>
@@ -112,7 +108,7 @@
             <!-- Logo cloud -->
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div
-                    class="mx-auto grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:grid-cols-6">
+                    class="mx-auto grid max-w-lg grid-cols-3 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 sm:gap-y-14 lg:mx-0 lg:max-w-none">
                     <img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
                         src="{{ asset('images/external-logos/1-gobierno-spain-mefp.png') }}" alt="Transistor"
                         width="158" height="48">
@@ -121,29 +117,39 @@
                     <img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
                         src="{{ asset('images/external-logos/3-nextgenerationeu.jpg') }}" alt="Tuple" width="158"
                         height="48">
-                    <img class="col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1"
+                    <img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
                         src="{{ asset('images/external-logos/4-insmontsia.jpeg') }}" alt="SavvyCal" width="158"
                         height="48">
-                    <img class="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1"
+                    <img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
                         src="{{ asset('images/external-logos/5-efalamalvesia.jpg') }}" alt="Statamic" width="158"
                         height="48">
-                    <img class="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1"
+                    <img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
                         src="{{ asset('images/external-logos/6-projar.png') }}" alt="Statamic" width="158" height="48">
                 </div>
+            </div>
+
+            <!-- Feature section -->
+            <div class="mx-auto mt-32 max-w-7xl sm:mt-56 sm:px-6 lg:px-8">
+                <iframe
+                    class="relative max-w-xl min-w-full rounded-xl ring-1 shadow-xl ring-white/10 lg:row-span-4 lg:w-[64rem] lg:max-w-none"
+                    src="https://www.youtube.com/embed/M0VBcCEp10E"
+                    title="{{ __('landings/landing9.cta.video_title') }}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen height="684"></iframe>
             </div>
 
             <!-- Feature section -->
             <div class="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8" id="features">
                 <div class="mx-auto max-w-2xl lg:text-center">
                     <h2 class="text-base/7 font-semibold text-indigo-600">
-                        {{ __('landings/landing10.features.section_title') }}
+                        {{ __('landing.features.section_title') }}
                     </h2>
                     <p
                         class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance">
-                        {{ __('landings/landing10.features.title') }}
+                        {{ __('landing.features.title') }}
                     </p>
                     <p class="mt-6 text-lg/8 text-gray-600">
-                        {{ __('landings/landing10.features.description') }}
+                        {{ __('landing.features.description') }}
                     </p>
                 </div>
                 <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -156,11 +162,11 @@
                                         d="M5.5 17a4.5 4.5 0 0 1-1.44-8.765 4.5 4.5 0 0 1 8.302-3.046 3.5 3.5 0 0 1 4.504 4.272A4 4 0 0 1 15 17H5.5Zm3.75-2.75a.75.75 0 0 0 1.5 0V9.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0l-3.25 3.5a.75.75 0 1 0 1.1 1.02l1.95-2.1v4.59Z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                {{ __('landings/landing10.features.technical_assessment.title') }}
+                                {{ __('landing.features.technical_assessment.title') }}
                             </dt>
                             <dd class="mt-4 flex flex-auto flex-col text-base/7 text-gray-600">
                                 <p class="flex-auto">
-                                    {{ __('landings/landing10.features.technical_assessment.description') }}
+                                    {{ __('landing.features.technical_assessment.description') }}
                                 </p>
                             </dd>
                         </div>
@@ -172,10 +178,10 @@
                                         d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                {{ __('landings/landing10.features.iot_monitoring.title') }}
+                                {{ __('landing.features.iot_monitoring.title') }}
                             </dt>
                             <dd class="mt-4 flex flex-auto flex-col text-base/7 text-gray-600">
-                                <p class="flex-auto">{{ __('landings/landing10.features.iot_monitoring.description') }}
+                                <p class="flex-auto">{{ __('landing.features.iot_monitoring.description') }}
                                 </p>
                             </dd>
                         </div>
@@ -187,10 +193,10 @@
                                         d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                {{ __('landings/landing10.features.maintenance.title') }}
+                                {{ __('landing.features.maintenance.title') }}
                             </dt>
                             <dd class="mt-4 flex flex-auto flex-col text-base/7 text-gray-600">
-                                <p class="flex-auto">{{ __('landings/landing10.features.maintenance.description') }}</p>
+                                <p class="flex-auto">{{ __('landing.features.maintenance.description') }}</p>
                             </dd>
                         </div>
                     </dl>
@@ -203,20 +209,18 @@
                     class="relative isolate overflow-hidden bg-gray-900 px-6 py-24 shadow-2xl sm:rounded-3xl sm:px-24 xl:py-32">
                     <h2
                         class="mx-auto max-w-3xl text-center text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                        {{ __('landings/landing10.newsletter.title') }}
+                        {{ __('landing.newsletter.title') }}
                     </h2>
                     <p class="mx-auto mt-6 max-w-lg text-center text-lg text-gray-300">
-                        {{ __('landings/landing10.newsletter.description') }}
+                        {{ __('landing.newsletter.description') }}
                     </p>
-                    <form class="mx-auto mt-10 flex max-w-md gap-x-4"
-                        action="{{ route('landing.form', ['number' => 10]) }}" method="POST">@csrf
-                        <label for="email-address"
-                            class="sr-only">{{ __('landings/landing10.newsletter.placeholder') }}</label>
+                    <form class="mx-auto mt-10 flex max-w-md gap-x-4" method="POST">@csrf
+                        <label for="email-address" class="sr-only">{{ __('landing.newsletter.placeholder') }}</label>
                         <input id="email-address" name="email" type="email" autocomplete="email" required
                             class="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
-                            placeholder="{{ __('landings/landing10.newsletter.placeholder') }}">
+                            placeholder="{{ __('landing.newsletter.placeholder') }}">
                         <button type="submit"
-                            class="flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">{{ __('landings/landing10.newsletter.subscribe') }}</button>
+                            class="flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">{{ __('landing.newsletter.subscribe') }}</button>
                     </form>
                     <svg viewBox="0 0 1024 1024" class="absolute top-1/2 left-1/2 -z-10 size-[64rem] -translate-x-1/2"
                         aria-hidden="true">
@@ -268,11 +272,11 @@
                     <div class="mx-auto max-w-7xl px-6 lg:px-8">
                         <div class="mx-auto max-w-2xl sm:text-center">
                             <h2 class="text-base/7 font-semibold text-indigo-600">
-                                {{ __('landings/landing10.testimonials.section_title') }}
+                                {{ __('landing.testimonials.section_title') }}
                             </h2>
                             <p
                                 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl sm:text-balance">
-                                {{ __('landings/landing10.testimonials.title') }}
+                                {{ __('landing.testimonials.title') }}
                             </p>
                         </div>
                         <div
@@ -390,22 +394,20 @@
                 <div class="border-white/10 lg:flex lg:items-center lg:justify-between">
                     <div>
                         <h3 class="text-sm/6 font-semibold text-white">
-                            {{ __('landings/landing10.newsletter.title') }}
+                            {{ __('landing.newsletter.title') }}
                         </h3>
                         <p class="mt-2 text-sm/6 text-gray-300">
-                            {{ __('landings/landing10.newsletter.description') }}
+                            {{ __('landing.newsletter.description') }}
                         </p>
                     </div>
-                    <form class="mt-6 sm:flex sm:max-w-md lg:mt-0"
-                        action="{{ route('landing.form', ['number' => 10]) }}" method="POST">@csrf
-                        <label for="email-address"
-                            class="sr-only">{{ __('landings/landing10.newsletter.placeholder') }}</label>
+                    <form class="mt-6 sm:flex sm:max-w-md lg:mt-0" method="POST">@csrf
+                        <label for="email-address" class="sr-only">{{ __('landing.newsletter.placeholder') }}</label>
                         <input type="email" name="email" id="email-address" autocomplete="email" required
                             class="w-full min-w-0 rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:w-64 sm:text-sm/6"
-                            placeholder="{{ __('landings/landing10.newsletter.placeholder') }}">
+                            placeholder="{{ __('landing.newsletter.placeholder') }}">
                         <div class="mt-4 sm:mt-0 sm:ml-4 sm:shrink-0">
                             <button type="submit"
-                                class="flex w-full items-center justify-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">{{ __('landings/landing10.newsletter.subscribe') }}</button>
+                                class="flex w-full items-center justify-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">{{ __('landing.newsletter.subscribe') }}</button>
                         </div>
                     </form>
                 </div>
@@ -431,7 +433,7 @@
                         <img class="h-9 mr-4" src="{{ asset("images/logos/nobg-isotype.png") }}"
                             alt="{{ config('app.name') }}">
                         <p class="text-sm/6 text-gray-400">&copy; {{ date("Y") }} {{ config('app.name') }}.
-                            {{ __('landings/landing10.common.copyright') }}
+                            {{ __('landing.common.copyright') }}
                         </p>
                     </div>
                 </div>
