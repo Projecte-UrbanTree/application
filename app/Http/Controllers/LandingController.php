@@ -9,7 +9,7 @@ class LandingController extends Controller
 {
     public function index()
     {
-        return view("/landing");
+        return view('landing');
     }
 
     public function store(Request $request)
@@ -28,7 +28,6 @@ class LandingController extends Controller
         $landingForm->message = $request->message;
         $landingForm->save();
 
-
-        return redirect("/landing")->with('success', 'Mensaje enviado correctamente.');
+        return to_route('landing.index')->with('success', 'Mensaje enviado correctamente.');
     }
 }
