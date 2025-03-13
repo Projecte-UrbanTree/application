@@ -35,7 +35,7 @@ export default function CreateResource() {
   const initialValues = {
     name: '',
     description: '',
-    resource_type_id: '',
+    resource_type_id: 0,
   };
 
   const validationSchema = Yup.object({
