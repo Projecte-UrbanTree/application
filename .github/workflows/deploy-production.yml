@@ -1,0 +1,53 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - ".devcontainer/**"
+      - ".docker/**"
+      - ".github/**"
+      - ".vscode/**"
+      - "tests/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring,bcmath,pdo,pdo_sqlite,curl,dom,fileinfo,json,xml,tokenizer
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Run migrations and seed database
+        run: php artisan migrate --seed --force
+
+      - name: Clear and optimize Laravel
+        run: |
+          php artisan optimize:clear
+          php artisan config:cache
+          php artisan route:cache
+
+      - name: Deploy to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          rsync -avz --delete --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" -e 'ssh -i private_key.pem -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
