@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
+import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
+import { Button } from 'primereact/button';
 
 export const Zones = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -10,6 +12,10 @@ export const Zones = () => {
 
     useEffect(() => {
         dispatch(fetchZonesAsync());
+        dispatch(showLoader());
+
+        setTimeout(() => {}, 2000);
+        dispatch(hideLoader());
     }, [dispatch]);
 
     return (

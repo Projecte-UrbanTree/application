@@ -14,6 +14,7 @@ import { Toast } from 'primereact/toast';
 import { savePoints, SavePointsProps } from '@/api/service/pointService';
 import { TypePoint } from '@/types/point';
 import { saveZoneAsync } from '@/store/slice/zoneSlice';
+import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 
 const schema = yup.object().shape({
     name: yup.string().required('El nombre es obligatorio'),
@@ -44,6 +45,7 @@ export const SaveZoneForm = ({
     const currentContract: Contract | null = useSelector(
         (state: RootState) => state.contract.currentContract,
     );
+    const isLoading = useSelector((state: RootState) => state.loader.isLoading);
     const dispatch = useDispatch<AppDispatch>();
 
     const {
@@ -61,9 +63,8 @@ export const SaveZoneForm = ({
             coordinates: coordinates,
         },
     });
-    const [isLoading, setIsLoading] = useState(false);
-    const toast = useRef<Toast>(null);
 
+    const toast = useRef<Toast>(null);
     useEffect(() => {
         setValue('coordinates', coordinates);
         if (currentContract?.id) {
@@ -72,7 +73,7 @@ export const SaveZoneForm = ({
     }, [coordinates, currentContract, setValue]);
 
     async function onSubmit(data: Zone) {
-        setIsLoading(true);
+        dispatch(showLoader());
         try {
             const createdZone = await dispatch(
                 saveZoneAsync({ data, contractId: currentContract?.id || 0 }),
@@ -95,10 +96,7 @@ export const SaveZoneForm = ({
                 summary: 'Éxito',
                 detail: 'Zona y puntos guardados correctamente',
             });
-
-            setTimeout(() => {
-                onClose();
-            }, 1000);
+            onClose();
         } catch (error) {
             console.error(
                 'Error en la creación de la zona o los puntos',
@@ -110,7 +108,7 @@ export const SaveZoneForm = ({
                 detail: 'No se pudo guardar la zona',
             });
         } finally {
-            setIsLoading(false);
+            dispatch(hideLoader());
         }
     }
 
@@ -197,7 +195,9 @@ export const SaveZoneForm = ({
                     <Button
                         type="submit"
                         className="p-button-primary"
-                        disabled={isLoading}></Button>
+                        disabled={isLoading}>
+                        Guardar
+                    </Button>
                 </div>
             </form>
         </div>
