@@ -4,9 +4,9 @@
       "form": {
         "labelEmail": "Correu electrònic",
         "labelPassword": "Contrasenya",
-        "placeholderEmail": "elteucorreu@exemple.com",
+        "placeholderEmail": "elteuemail@exemple.com",
         "rememberMe": "Recorda'm",
-        "btnLogin": "Inicia sessió",
+        "btnLogin": "Inicia la sessió",
         "titleSuccess": "Èxit",
         "msgSuccess": "Sessió iniciada correctament"
       }
@@ -14,10 +14,10 @@
     "error": {
       "title": "Error {{errorCode}}",
       "descriptions": {
-        "unexpected": "Ha ocorregut un error inesperat. Si us plau, torna a intentar-ho més tard.",
-        "404": "La pàgina que busques no existeix."
+        "unexpected": "S'ha produït un error inesperat. Torna-ho a provar més tard.",
+        "404": "La pàgina que cerques no existeix."
       },
-      "btnReturn": "Torna enrere"
+      "btnReturn": "Tornar enrere"
     }
   },
   "admin": {
@@ -46,16 +46,16 @@
     "profileDropdown": {
       "accountSettings": "Configuració del compte",
       "license": "Llicència",
-      "logout": "Tanca sessió"
+      "logout": "Tanca la sessió"
     },
     "roles": {
       "admin": "Administrador",
-      "worker": "Treballador",
+      "worker": "Operari",
       "customer": "Client",
       "unknown": "Desconegut"
     },
     "buttons": {
-      "createNew": "Crear nou"
+      "createNew": "Crea nou"
     },
     "fields": {
       "name": "Nom",
@@ -71,7 +71,7 @@
       "status": "Estat",
       "final_price": "Preu final",
       "start_date": "Data d'inici",
-      "end_date": "Data de finalització"
+      "end_date": "Data de fi"
     },
     "status": {
       "active": "Actiu",
@@ -83,7 +83,7 @@
         "title": "Tauler",
         "welcome": {
           "greeting": "Benvingut de nou, {{name}} {{surname}}.",
-          "message": "Et donem la benvinguda al teu tauler. Aquí tens un resum ràpid de les teves dades."
+          "message": "Tens a la teva disposició un resum ràpid de les teves dades."
         },
         "stats": {
           "widgets": {
@@ -98,16 +98,16 @@
         "title": "Usuaris",
         "list": {
           "actions": {
-            "edit": "Editar usuari",
-            "delete": "Eliminar usuari",
+            "edit": "Edita usuari",
+            "delete": "Elimina usuari",
             "label": "Accions"
           },
           "messages": {
-            "deleteSuccess": "Usuari eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest usuari?",
-            "createSuccess": "Usuari creat correctament",
-            "updateSuccess": "Usuari actualitzat correctament",
-            "error": "Error guardant l'usuari"
+            "deleteSuccess": "Usuari eliminat amb èxit",
+            "deleteConfirm": "Estàs segur d'eliminar aquest usuari?",
+            "createSuccess": "Usuari creat amb èxit",
+            "updateSuccess": "Usuari actualitzat amb èxit",
+            "error": "Error en desar l'usuari"
           },
           "columns": {
             "name": "Nom",
@@ -120,8 +120,8 @@
         },
         "form": {
           "title": {
-            "create": "Crear Usuari",
-            "edit": "Editar Usuari"
+            "create": "Crea Usuari",
+            "edit": "Edita Usuari"
           },
           "placeholders": {
             "role": "Selecciona un rol",
@@ -142,34 +142,85 @@
           },
           "returnButton": "Tornar a la llista d'usuaris",
           "submitButton": {
-            "create": "Crear Usuari",
-            "edit": "Guardar Canvis"
+            "create": "Crea Usuari",
+            "edit": "Desa Canvis"
           },
           "submittingText": {
             "create": "Creant...",
-            "edit": "Guardant..."
+            "edit": "Desant..."
           }
         }
       },
       "contracts": {
         "title": "Contractes",
+        "columns": {
+          "name": "Contracte",
+          "start_date": "Data d'inici",
+          "end_date": "Data de fi",
+          "status": "Estat"
+        },
+        "create": {
+          "title": "Crear Contracte",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "name_invalid": "El nom no és vàlid",
+            "start_date_required": "La data d'inici és obligatòria",
+            "end_date_required": "La data de fi és obligatòria",
+            "end_date_after_start_date": "La data de fi ha de ser posterior a la data d'inici",
+            "final_price_required": "El preu final és obligatori",
+            "status_invalid": "Estat no vàlid",
+            "status_required": "L'estat és obligatori"
+          },
+          "placeholders": {
+            "status": "Selecciona un estat"
+          },
+          "submittingText": "Creant...",
+          "submitButton": "Crear Contracte",
+          "success": "Contracte creat amb èxit"
+        },
+        "edit": {
+          "title": "Edita Contracte",
+          "validations": {
+            "name_required": "El nom és obligatori",
+            "name_invalid": "El nom no és vàlid",
+            "start_date_required": "La data d'inici és obligatòria",
+            "end_date_required": "La data de fi és obligatòria",
+            "end_date_after_start_date": "La data de fi ha de ser posterior a la data d'inici",
+            "final_price_required": "El preu final és obligatori",
+            "status_invalid": "Estat no vàlid",
+            "status_required": "L'estat és obligatori"
+          },
+          "placeholders": {
+            "status": "Selecciona un estat"
+          },
+          "submittingText": "Desant...",
+          "submitButton": "Desa Canvis",
+          "update": "Contracte actualitzat amb èxit",
+          "error": "Error en desar el contracte"
+        },
+        "loading": "Carregant...",
+        "deleteConfirm": "Estàs segur d'eliminar aquest contracte?",
+        "deletedSuccess": "Contracte eliminat amb èxit",
+        "actions": "Accions",
+        "editButton": "Edita Contracte",
+        "deleteButton": "Elimina Contracte",
         "list": {
           "actions": {
-            "edit": "Editar contracte",
-            "delete": "Eliminar contracte",
+            "edit": "Edita contracte",
+            "delete": "Elimina contracte",
             "label": "Accions"
           },
           "messages": {
-            "deleteSuccess": "Contracte eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest contracte?",
-            "createSuccess": "Contracte creat correctament",
-            "updateSuccess": "Contracte actualitzat correctament",
-            "error": "Error guardant el contracte"
+            "deleteSuccess": "Contracte eliminat amb èxit",
+            "deleteConfirm": "Estàs segur d'eliminar aquest contracte?",
+            "createSuccess": "Contracte creat amb èxit",
+            "updateSuccess": "Contracte actualitzat amb èxit",
+            "error": "Error en desar el contracte"
           },
           "columns": {
             "name": "Contracte",
             "start_date": "Data d'inici",
-            "end_date": "Data de finalització",
+            "end_date": "Data de fi",
             "final_price": "Preu final",
             "status": "Estat"
           }
@@ -177,29 +228,29 @@
         "form": {
           "title": {
             "create": "Crear Contracte",
-            "edit": "Editar Contracte"
+            "edit": "Edita Contracte"
           },
           "placeholders": {
             "status": "Selecciona un estat"
           },
           "validation": {
-            "name_required": "El nom es obligatori",
+            "name_required": "El nom és obligatori",
             "name_invalid": "El nom no és vàlid",
-            "start_date_required": "La data d'inici es obligatòria",
-            "end_date_required": "La data de finalització es obligatòria",
-            "end_date_after_start_date": "La data de finalització ha de ser posterior a la data d'inici",
-            "final_price_required": "El preu final es obligatori",
+            "start_date_required": "La data d'inici és obligatòria",
+            "end_date_required": "La data de fi és obligatòria",
+            "end_date_after_start_date": "La data de fi ha de ser posterior a la data d'inici",
+            "final_price_required": "El preu final és obligatori",
             "status_invalid": "Estat no vàlid",
-            "status_required": "L'estat es obligatori"
+            "status_required": "L'estat és obligatori"
           },
           "returnButton": "Tornar a la llista de contractes",
           "submitButton": {
             "create": "Crear Contracte",
-            "edit": "Guardar Canvis"
+            "edit": "Desa Canvis"
           },
           "submittingText": {
             "create": "Creant...",
-            "edit": "Guardant..."
+            "edit": "Desant..."
           }
         }
       },
@@ -227,15 +278,15 @@
           "title": "Tipus d'arbre",
           "actions": {
             "label": "Accions",
-            "edit": "Editar Tipus d'Arbre",
-            "delete": "Eliminar Tipus d'Arbre"
+            "edit": "Edita Tipus d'Arbre",
+            "delete": "Elimina Tipus d'Arbre"
           },
           "messages": {
-            "deletedSuccess": "Tipus d'arbre eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'arbre?",
-            "createSuccess": "Tipus d'arbre creat correctament",
-            "updateSuccess": "Tipus d'arbre actualitzat correctament",
-            "error": "Error guardant el tipus d'arbre"
+            "deletedSuccess": "Tipus d'arbre eliminat amb èxit",
+            "deleteConfirm": "Estàs segur d'eliminar aquest tipus d'arbre?",
+            "createSuccess": "Tipus d'arbre creat amb èxit",
+            "updateSuccess": "Tipus d'arbre actualitzat amb èxit",
+            "error": "Error en desar el tipus d'arbre"
           },
           "columns": {
             "family": "Família",
@@ -246,7 +297,7 @@
         "form": {
           "title": {
             "create": "Crear Tipus d'Arbre",
-            "edit": "Editar Tipus d'Arbre"
+            "edit": "Edita Tipus d'Arbre"
           },
           "validation": {
             "family": "La família és obligatòria",
@@ -260,11 +311,11 @@
           },
           "submitButton": {
             "create": "Crear Tipus d'Arbre",
-            "edit": "Guardar Canvis"
+            "edit": "Desa Canvis"
           },
           "submittingText": {
             "create": "Creant...",
-            "edit": "Guardant..."
+            "edit": "Desant..."
           }
         }
       },
@@ -273,16 +324,16 @@
         "list": {
           "title": "Tipus de tasca",
           "actions": {
-            "edit": "Editar tipus de tasca",
-            "delete": "Eliminar tipus de tasca",
+            "edit": "Edita tipus de tasca",
+            "delete": "Elimina tipus de tasca",
             "label": "Accions"
           },
           "messages": {
-            "deleteSuccess": "Tipus de tasca eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de tasca?",
-            "createSuccess": "Tipus de tasca creat correctament",
-            "updateSuccess": "Tipus de tasca actualitzat correctament",
-            "error": "Error guardant el tipus de tasca"
+            "deleteSuccess": "Tipus de tasca eliminat amb èxit",
+            "deleteConfirm": "Estàs segur d'eliminar aquest tipus de tasca?",
+            "createSuccess": "Tipus de tasca creat amb èxit",
+            "updateSuccess": "Tipus de tasca actualitzat amb èxit",
+            "error": "Error en desar el tipus de tasca"
           },
           "columns": {
             "name": "Nom",
@@ -292,7 +343,7 @@
         "form": {
           "title": {
             "create": "Crear Tipus de tasca",
-            "edit": "Editar Tipus de tasca"
+            "edit": "Edita Tipus de tasca"
           },
           "fields": {
             "name": "Nom",
@@ -304,61 +355,16 @@
           },
           "validation": {
             "name_required": "El nom és obligatori",
-            "error_numbers": "El nom no pot contenir números ni caràcters especials"
+            "error_numbers": "El nom no pot contenir números o caràcters especials"
           },
-          "returnButton": "Tornar a la llista de tipus de tasca",
+          "returnButton": "Torna a la llista de tipus de tasca",
           "submitButton": {
             "create": "Crear Tipus de tasca",
-            "edit": "Guardar canvis"
+            "edit": "Desa Canvis"
           },
           "submittingText": {
             "create": "Creant...",
-            "edit": "Guardant..."
-          }
-        }
-      },
-      "resourceTypes": {
-        "title": "Tipus de recurs",
-        "list": {
-          "actions": {
-            "edit": "Editar tipus de recurs",
-            "delete": "Eliminar tipus de recurs",
-            "label": "Accions"
-          },
-          "messages": {
-            "deleteSuccess": "Tipus de recurs eliminat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
-            "createSuccess": "Tipus de recurs creat correctament",
-            "updateSuccess": "Tipus de recurs actualitzat correctament",
-            "error": "Error guardant el tipus de recurs"
-          },
-          "columns": {
-            "name": "Nom",
-            "description": "Descripció"
-          }
-        },
-        "form": {
-          "title": {
-            "create": "Crear Tipus de recurs",
-            "edit": "Editar Tipus de recurs"
-          },
-          "placeholders": {
-            "name": "Introdueix el nom",
-            "description": "Introdueix la descripció"
-          },
-          "validation": {
-            "name_required": "El nom és obligatori",
-            "description_required": "La descripció és obligatòria",
-            "name_invalid": "El nom només pot contenir lletres, números i espais"
-          },
-          "returnButton": "Tornar a la llista de tipus de recurs",
-          "submitButton": {
-            "create": "Crear Tipus de recurs",
-            "edit": "Guardar canvis"
-          },
-          "submittingText": {
-            "create": "Creant...",
-            "edit": "Guardant..."
+            "edit": "Desant..."
           }
         }
       },
@@ -372,12 +378,85 @@
       },
       "stats": {
         "title": "Estadístiques"
+      },
+      "resourceTypes": {
+        "title": "Tipus de recurs",
+        "list": {
+          "actions": {
+            "edit": "Edita tipus de recurs",
+            "delete": "Elimina tipus de recurs",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Tipus de recurs eliminat amb èxit",
+            "deleteConfirm": "Estàs segur d'eliminar aquest tipus de recurs?",
+            "createSuccess": "Tipus de recurs creat amb èxit",
+            "updateSuccess": "Tipus de recurs actualitzat amb èxit",
+            "error": "Error en desar el tipus de recurs"
+          },
+          "columns": {
+            "name": "Nom",
+            "description": "Descripció"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Tipus de recurs",
+            "edit": "Edita Tipus de recurs"
+          },
+          "placeholders": {
+            "name": "Introdueix el nom",
+            "description": "Introdueix la descripció"
+          },
+          "validation": {
+            "name_required": "El nom és obligatori",
+            "description_required": "La descripció és obligatòria",
+            "name_invalid": "El nom només pot contenir lletres, números i espais"
+          },
+          "returnButton": "Torna a la llista de tipus de recurs",
+          "submitButton": {
+            "create": "Crear Tipus de recurs",
+            "edit": "Desa Canvis"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Desant..."
+          }
+        }
+      },
+      "account": {
+        "title": "Configuració del Compte",
+        "basicInfo": "Informació Bàsica",
+        "security": "Seguretat",
+        "actions": {
+          "save": "Desar canvis",
+          "return": "Tornar",
+          "logout": "Tancar sessió"
+        },
+        "messages": {
+          "profileUpdated": "Perfil actualitzat correctament",
+          "passwordUpdated": "Perfil i contrasenya actualitzats correctament",
+          "passwordCurrentWrong": "La contrasenya actual no coincideix",
+          "errorSaving": "Error en desar els canvis."
+        },
+        "validation": {
+          "currentPasswordRequired": "Has d'introduir la contrasenya actual",
+          "newPasswordMinLength": "La contrasenya ha de tenir almenys 6 caràcters",
+          "newPasswordMismatch": "Les contrasenyes no coincideixen",
+          "name_invalid": "El nom no pot contenir símbols.",
+          "surname_invalid": "El cognom no pot contenir símbols."
+        }
       }
     }
   },
   "general": {
-    "genericError": "Hi ha hagut un error. Si us plau, torna a intentar-ho més tard.",
+    "genericError": "S'ha produït un error inesperat. Torna-ho a provar més tard.",
     "allContracts": "Tots els contractes",
     "loading": "Carregant..."
+  },
+  "status": {
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "completed": "Completat"
   }
 }

@@ -427,6 +427,30 @@
       },
       "stats": {
         "title": "Statistics"
+      },
+
+      "account": {
+        "title": "Account Settings",
+        "basicInfo": "Basic Information",
+        "security": "Security",
+        "actions": {
+          "save": "Save Changes",
+          "return": "Return",
+          "logout": "Log out"
+        },
+        "messages": {
+          "profileUpdated": "Profile updated successfully",
+          "passwordUpdated": "Profile and password updated successfully",
+          "passwordCurrentWrong": "The current password is incorrect",
+          "errorSaving": "Error saving changes."
+        },
+        "validation": {
+          "currentPasswordRequired": "You must enter your current password",
+          "newPasswordMinLength": "Password must be at least 6 characters",
+          "newPasswordMismatch": "Passwords do not match",
+          "name_invalid": "Name cannot contain symbols.",
+          "surname_invalid": "Surname cannot contain symbols."
+        }
       }
     }
   },
