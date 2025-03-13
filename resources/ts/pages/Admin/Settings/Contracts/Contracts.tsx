@@ -31,12 +31,6 @@ export default function Contracts() {
     const errorMsg = location.state?.error;
     const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
 
-    const statusOptions = [
-        { label: t("admin.status.active"), value: 0, color: "yellow" },
-        { label: t("admin.status.inactive"), value: 1, color: "red" },
-        { label: t("admin.status.completed"), value: 2, color: "green" }
-    ];
-
     useEffect(() => {
         const fetchContracts = async () => {
             try {
@@ -103,12 +97,18 @@ export default function Contracts() {
                     <Column field="start_date" header={t("admin.pages.contracts.list.columns.start_date")} />
                     <Column field="end_date" header={t("admin.pages.contracts.list.columns.end_date")} />
                     <Column field="final_price" header={t("admin.pages.contracts.list.columns.final_price")} />
-                    <Column field="status" header={t("admin.pages.contracts.list.columns.status")} body={(rowData: Contract) => (
-                        <Badge
-                            value={statusOptions.find(option => option.value === rowData.status)?.label}
-                            style={{ backgroundColor: statusOptions.find(option => option.value === rowData.status)?.color }}
-                        />
-                    )} />
+                    <Column field="status" header={t("admin.pages.contracts.list.columns.status")} body={(rowData: Contract) => {
+                        switch (rowData.status) {
+                            case 0:
+                                return <Badge value={t("admin.status.active")} severity="warning" />
+                            case 1:
+                                return <Badge value={t("admin.status.inactive")} severity="danger" />
+                            case 2:
+                                return <Badge value={t("admin.status.completed")} severity="success" />
+                            default:
+                                return <Badge value={t("admin.status.unknown")} severity="secondary" />
+                        }
+                    }} />
                     <Column
                         header={t("admin.pages.contracts.list.actions.label")}
                         body={(rowData: { id: number }) => (
