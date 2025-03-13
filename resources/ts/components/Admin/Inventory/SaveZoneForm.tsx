@@ -15,6 +15,7 @@ import { savePoints, SavePointsProps } from '@/api/service/pointService';
 import { TypePoint } from '@/types/point';
 import { saveZoneAsync } from '@/store/slice/zoneSlice';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
+import { point } from '@turf/turf';
 
 const schema = yup.object().shape({
     name: yup.string().required('El nombre es obligatorio'),
@@ -90,6 +91,8 @@ export const SaveZoneForm = ({
                 type: TypePoint.zone_delimiter,
                 zone_id: createdZone.id!,
             }));
+
+            console.log({ pointsData });
 
             await savePoints(pointsData);
             toast.current?.show({

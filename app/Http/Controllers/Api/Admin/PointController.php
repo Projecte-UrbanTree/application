@@ -14,15 +14,18 @@ class PointController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validate = $request->validate([
-            'latitude' => ['required', 'float', 'max:255'],
-            'longitude' => ['required', 'float', 'max:255'],
-            'type' => ['required', 'string', 'max:255'],
-            'zone_id' => ['required', 'integer', 'max:255'],
-        ]);
-        $point = Point::create($validate);
+{
+    $validate = $request->validate([
+        'points' => ['required', 'array', 'min:1'], 
+        'points.*.latitude' => ['required', 'numeric'], 
+        'points.*.longitude' => ['required', 'numeric'],
+        'points.*.type' => ['required', 'string', 'max:255'],
+        'points.*.zone_id' => ['required', 'integer'],
+    ]);
 
-        return response()->json($point, 201);
-    }
+    $createdPoints = Point::insert($validate['points']);
+
+    return response()->json(['message' => 'Puntos guardados correctamente'], 201);
+}
+
 }
