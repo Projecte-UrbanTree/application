@@ -1,6 +1,9 @@
 import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/Admin/CrudPanel';
+import { RootState } from '@/store/store';
+import type { Resource } from '@/types/Resource';
 import { Icon } from '@iconify/react';
+import { AxiosError } from 'axios';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
@@ -9,40 +12,38 @@ import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function Contracts() {
+export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
-  interface Contract {
-    id: number;
-    name: string;
-    start_date: string;
-    end_date: string;
-    final_price: string;
-    status: number;
-  }
-
-  const [contracts, setContracts] = useState<Contract[]>([]);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract?.id,
+  );
+  const [resources, setResources] = useState<Resource[]>([]);
   const location = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
   const successMsg = location.state?.success;
   const errorMsg = location.state?.error;
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchContracts = async () => {
+    const fetchResources = async () => {
       try {
-        const response = await axiosClient.get('/admin/contracts');
-        setContracts(response.data);
+        const response = await axiosClient.get('/admin/resources');
+        setResources(response.data);
         setIsLoading(false);
       } catch (error) {
-        console.error(error);
+        setError(
+          error instanceof AxiosError ? error.response?.data.message : error,
+        );
         setIsLoading(false);
       }
     };
-    fetchContracts();
+
+    fetchResources();
   }, []);
 
   useEffect(() => {
@@ -52,13 +53,13 @@ export default function Contracts() {
     }
   }, [msg]);
 
-  const handleDelete = async (contractId: number) => {
-    if (!window.confirm(t('admin.pages.contracts.list.messages.deleteConfirm')))
+  const handleDelete = async (resourceId: number) => {
+    if (!window.confirm(t('admin.pages.resources.list.messages.deleteConfirm')))
       return;
     try {
-      await axiosClient.delete(`/admin/contracts/${contractId}`);
-      setContracts(contracts.filter((contract) => contract.id !== contractId));
-      setMsg(t('admin.pages.contracts.list.messages.deleteSuccess'));
+      await axiosClient.delete(`/admin/resources/${resourceId}`);
+      setResources(resources.filter((resource) => resource.id !== resourceId));
+      setMsg(t('admin.pages.resources.list.messages.deleteSuccess'));
     } catch (error) {
       console.error(error);
     }
@@ -82,7 +83,7 @@ export default function Contracts() {
         <Message
           severity={
             successMsg ||
-            msg === t('admin.pages.contracts.list.messages.deleteSuccess')
+            msg === t('admin.pages.resources.list.messages.deleteSuccess')
               ? 'success'
               : 'error'
           }
@@ -90,11 +91,18 @@ export default function Contracts() {
           className="mb-4 w-full"
         />
       )}
+      {error && (
+        <Message severity="error" text={error} className="mb-4 w-full" />
+      )}
       <CrudPanel
-        title={t('admin.pages.contracts.title')}
-        onCreate={() => navigate('/admin/settings/contracts/create')}>
+        title="admin.pages.resources.title"
+        onCreate={() => navigate('/admin/resources/create')}
+        createDisabled={!currentContract}
+        createTooltip={
+          !currentContract ? t('admin.tooltips.selectContract') : undefined
+        }>
         <DataTable
-          value={contracts}
+          value={resources}
           paginator
           rows={10}
           stripedRows
@@ -102,73 +110,39 @@ export default function Contracts() {
           className="p-datatable-sm">
           <Column
             field="name"
-            header={t('admin.pages.contracts.list.columns.name')}
+            header={t('admin.pages.resources.list.columns.name')}
           />
           <Column
-            field="start_date"
-            header={t('admin.pages.contracts.list.columns.start_date')}
+            field="description"
+            header={t('admin.pages.resources.list.columns.description')}
           />
           <Column
-            field="end_date"
-            header={t('admin.pages.contracts.list.columns.end_date')}
+            field="resource_type.name"
+            header={t('admin.pages.resources.list.columns.type')}
+            body={(rowData: Resource) => (
+              <Badge
+                value={rowData.resource_type?.name || '-'}
+                severity="info"
+              />
+            )}
           />
           <Column
-            field="final_price"
-            header={t('admin.pages.contracts.list.columns.final_price')}
-          />
-          <Column
-            field="status"
-            header={t('admin.pages.contracts.list.columns.status')}
-            body={(rowData: Contract) => {
-              switch (rowData.status) {
-                case 0:
-                  return (
-                    <Badge
-                      value={t('admin.status.active')}
-                      severity="warning"
-                    />
-                  );
-                case 1:
-                  return (
-                    <Badge
-                      value={t('admin.status.inactive')}
-                      severity="danger"
-                    />
-                  );
-                case 2:
-                  return (
-                    <Badge
-                      value={t('admin.status.completed')}
-                      severity="success"
-                    />
-                  );
-                default:
-                  return (
-                    <Badge
-                      value={t('admin.status.unknown')}
-                      severity="secondary"
-                    />
-                  );
-              }
-            }}
-          />
-          <Column
-            header={t('admin.pages.contracts.list.actions.label')}
+            header={t('admin.pages.resources.list.actions.label')}
             body={(rowData: { id: number }) => (
               <div className="flex justify-center gap-2">
                 <Button
                   icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
                   className="p-button-rounded p-button-info"
-                  tooltip={t('admin.pages.contracts.list.actions.edit')}
+                  tooltip={t('admin.pages.resources.list.actions.edit')}
                   tooltipOptions={{ position: 'top' }}
                   onClick={() =>
-                    navigate(`/admin/settings/contracts/edit/${rowData.id}`)
+                    navigate(`/admin/resources/edit/${rowData.id}`)
                   }
                 />
                 <Button
                   icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
                   className="p-button-rounded p-button-danger"
-                  tooltip={t('admin.pages.contracts.list.actions.delete')}
+                  tooltip={t('admin.pages.resources.list.actions.delete')}
                   tooltipOptions={{ position: 'top' }}
                   onClick={() => handleDelete(rowData.id)}
                 />
