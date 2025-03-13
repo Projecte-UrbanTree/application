@@ -46,8 +46,9 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
           REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          rsync -avz --delete --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" -e 'ssh -i private_key.pem -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
+          rsync -avz --delete --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" -e 'ssh -i private_key.pem -o StrictHostKeyChecking=no -p $SSH_PORT' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
