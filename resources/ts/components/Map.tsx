@@ -129,15 +129,19 @@ const MapComponent: React.FC = () => {
         if (!drawRef.current) return;
         const data = drawRef.current.getAll();
         if (data.features.length > 0) {
-            const polygon = data.features[0];
+            const polygon = data?.features?.[0];
 
-            setCoordinates(
-                polygon.geometry.type === 'Polygon'
-                    ? polygon.geometry.coordinates[0]
-                    : [],
-            );
-
-            console.log(polygon.geometry);
+            if (
+                polygon?.geometry?.type === 'Polygon' &&
+                Array.isArray(polygon.geometry.coordinates)
+            ) {
+                setCoordinates(polygon.geometry.coordinates[0] ?? []);
+            } else {
+                console.error(
+                    'El objeto Polygon no tiene la estructura esperada',
+                    polygon,
+                );
+            }
 
             setIsDrawingMode(true);
             setEnabledButton(true);

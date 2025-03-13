@@ -5,7 +5,7 @@ export default function AdminProtectedRoute() {
     const { isAuthenticated, isLoading } = useAuth();
 
     if (isLoading) {
-        return <div>Loading...</div>; // Puedes mejorar esto con un <Preloader />
+        return <div>Loading...</div>;
     }
 
     return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
