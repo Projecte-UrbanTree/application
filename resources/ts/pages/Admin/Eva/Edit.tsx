@@ -20,6 +20,26 @@ export default function EditEva() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    interface DictionaryOption {
+        label: string;
+        value: number;
+    }
+
+    interface Dictionaries {
+        copaDesequilibrada: DictionaryOption[];
+        ramasSobreextendidas: DictionaryOption[];
+        grietas: DictionaryOption[];
+        ramasMuertas: DictionaryOption[];
+        inclinacion: DictionaryOption[];
+        bifurcacionesV: DictionaryOption[];
+        cavidades: DictionaryOption[];
+        danosCorteza: DictionaryOption[];
+        levantamientoSuelo: DictionaryOption[];
+        raicesCortadas: DictionaryOption[];
+        podredumbreBasal: DictionaryOption[];
+        raicesExpuestas: DictionaryOption[];
+        unbalanced_crown: DictionaryOption[];
+    }
 
     const [initialValues, setInitialValues] = useState({
         element_id: 0,
@@ -49,7 +69,21 @@ export default function EditEva() {
         drought: 0,
         status: 0,
     });
-
+    const [dictionaries, setDictionaries] = useState<Dictionaries>({
+        copaDesequilibrada: [],
+        ramasSobreextendidas: [],
+        grietas: [],
+        ramasMuertas: [],
+        inclinacion: [],
+        bifurcacionesV: [],
+        cavidades: [],
+        danosCorteza: [],
+        levantamientoSuelo: [],
+        raicesCortadas: [],
+        podredumbreBasal: [],
+        raicesExpuestas: [],
+        unbalanced_crown: [],
+    });
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -77,6 +111,18 @@ export default function EditEva() {
         };
         fetchEva();
     }, [id]);
+
+    useEffect(() => {
+        const fetchDictionaries = async () => {
+            try {
+                const response = await axiosClient.get('/admin/evas/create');
+                setDictionaries(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchDictionaries();
+    }, []);
 
     const validationSchema = Yup.object({
         element_id: Yup.number(),
@@ -266,7 +312,9 @@ export default function EditEva() {
                                             'admin.fields.unbalanced_crown',
                                         )}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={
+                                            dictionaries.copaDesequilibrada
+                                        }
                                     />
                                     <FormField
                                         name="overextended_branches"

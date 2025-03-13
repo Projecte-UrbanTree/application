@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EvaRequest;
 use App\Models\Eva;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class EvaController extends Controller
 {
@@ -13,72 +15,32 @@ class EvaController extends Controller
         return response()->json(Eva::all());
     }
 
+    public function create()
+    {
+        return response()->json(Config::get('dictionaries'));
+    }
+
     public function show($id)
     {
         return response()->json(Eva::findOrFail($id));
     }
 
-    public function store(Request $request)
+    public function store(EvaRequest $request)
     {
-        $request->validate([
-            'element_id' => 'nullable',
-            'date_birth' => 'nullable',
-            'height' => 'nullable',
-            'diameter' => 'nullable',
-            'crown_width' => 'nullable',
-            'crown_projection_area' => 'nullable',
-            'root_surface_diameter' => 'nullable',
-            'effective_root_area' => 'nullable',
-            'height_estimation' => 'nullable',
-            'unbalanced_crown' => 'nullable',
-            'overextended_branches' => 'nullable',
-            'cracks' => 'nullable',
-            'dead_branches' => 'nullable',
-            'inclination' => 'nullable',
-            'V_forks' => 'nullable',
-            'cavities' => 'nullable',
-            'bark_damage' => 'nullable',
-            'soil_lifting' => 'nullable',
-            'cut_damaged_roots' => 'nullable',
-            'basal_rot' => 'nullable',
-            'exposed_surface_roots' => 'nullable',
-            'wind' => 'nullable',
-            'drought' => 'nullable',
-            'status' => 'nullable',
-        ]);
+        $request->validated();
 
         Eva::create($request->all());
         return response()->json(['message' => 'Eva created successfully']);
     }
 
-    public function update(Request $request, $id)
+    public function edit($id)
     {
-        $request->validate([
-            'element_id' => 'nullable',
-            'date_birth' => 'nullable',
-            'height' => 'nullable',
-            'diameter' => 'nullable',
-            'crown_width' => 'nullable',
-            'crown_projection_area' => 'nullable',
-            'root_surface_diameter' => 'nullable',
-            'effective_root_area' => 'nullable',
-            'height_estimation' => 'nullable',
-            'unbalanced_crown' => 'nullable',
-            'overextended_branches' => 'nullable',
-            'cracks' => 'nullable',
-            'dead_branches' => 'nullable',
-            'inclination' => 'nullable',
-            'V_forks' => 'nullable',
-            'cavities' => 'nullable',
-            'bark_damage' => 'nullable',
-            'soil_lifting' => 'nullable',
-            'cut_damaged_roots' => 'nullable',
-            'basal_rot' => 'nullable',
-            'exposed_surface_roots' => 'nullable',
-            'wind' => 'nullable',
-            'drought' => 'nullable',
-            'status' => 'nullable',
-        ]);
+        return response()->json(Config::get('dictionaries'));
+    }
+
+    public function update(EvaRequest $request, $id)
+    {
+        $request->validated();
 
         Eva::findOrFail($id)->update($request->all());
         return response()->json(['message' => 'Eva updated successfully']);
@@ -88,5 +50,5 @@ class EvaController extends Controller
     {
         Eva::findOrFail($id)->delete();
         return response()->json(['message' => 'Eva deleted successfully']);
-    }
+    }    
 }

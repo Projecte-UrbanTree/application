@@ -89,6 +89,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Route for eva
         Route::get('evas', [EvaController::class, 'index']);
+        Route::get('evas/create', [EvaController::class, 'create']);
+        Route::get('evas/{id}/edit', [EvaController::class, 'edit']);
         Route::post('evas', [EvaController::class, 'store']);
         Route::get('evas/{id}', [EvaController::class, 'show']);
         Route::put('evas/{id}', [EvaController::class, 'update']);

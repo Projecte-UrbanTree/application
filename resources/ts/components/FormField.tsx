@@ -8,9 +8,13 @@ export interface FormFieldProps {
     name: string;
     label: string;
     as: string;
-    options?: { label: string; value: boolean }[];
+    options?: DictionaryOption[];
     min?: number;
     max?: number;
+}
+interface DictionaryOption {
+    label: string;
+    value: number;
 }
 
 const FormField = ({ name, label, as, options }: FormFieldProps) => {
@@ -36,8 +40,8 @@ const FormField = ({ name, label, as, options }: FormFieldProps) => {
         <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700">{label}</label>
             <Field
-                name={name}
                 as={Component}
+                {...field}
                 options={options}
                 optionLabel="label"
                 optionValue="value"
