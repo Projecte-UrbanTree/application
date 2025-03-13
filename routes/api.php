@@ -28,6 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* Admin protected routes */
     Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+        Route::post('select-contract', [ContractController::class, 'selectContract']);
+        Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
+
         Route::get('stats', function (Request $request) {
             return response()->json([
                 'users' => User::count(),

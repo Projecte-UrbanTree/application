@@ -8,6 +8,7 @@ import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 import { Icon } from '@iconify/react';
 
+import axiosClient from '@/api/axiosClient';
 import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
@@ -24,7 +25,6 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
-  titleI18n,
   children,
   contracts,
   currentContract,
@@ -42,6 +42,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     currentContract ?? defaultContract,
   );
 
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // Asegurarnos de que el valor del Dropdown sea un número válido
+  const dropdownValue = contract?.id ?? 0;
+
   useEffect(() => {
     if (currentContract) {
       setContract(currentContract);
@@ -49,12 +54,24 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   }, [currentContract]);
 
   const handleContractChange = useCallback(
-    (e: DropdownChangeEvent) => {
+    async (e: DropdownChangeEvent) => {
       const selectedContract = contracts.find((c) => c.id === e.value);
 
       if (selectedContract) {
-        dispatch(selectContract(selectedContract.id!));
-        setContract(selectedContract);
+        try {
+          await axiosClient.post('/admin/select-contract', {
+            contract_id: selectedContract.id,
+          });
+
+          dispatch(selectContract(selectedContract.id!));
+          setContract(selectedContract);
+          setRefreshKey((prev) => prev + 1); // Force children re-render
+        } catch (error: any) {
+          console.error(
+            'Error saving selected contract:',
+            error.response?.data || error,
+          );
+        }
       }
     },
     [dispatch, contracts],
@@ -217,16 +234,18 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex gap-4">
               {!isSettingsPage && (
-                <Dropdown
-                  id="contractBtn"
-                  name="contractBtn"
-                  className="w-32"
-                  value={contract.id ?? 0}
-                  options={contracts}
-                  onChange={handleContractChange}
-                  optionLabel="name"
-                  optionValue="id"
-                />
+                <>
+                  <Dropdown
+                    id="contractBtn"
+                    name="contractBtn"
+                    className="w-32"
+                    value={dropdownValue}
+                    options={contracts}
+                    onChange={handleContractChange}
+                    optionLabel="name"
+                    optionValue="id"
+                  />
+                </>
               )}
               <LangSelector />
             </div>
@@ -285,7 +304,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 id="contractBtn"
                 name="contractBtn"
                 className="w-full"
-                value={contract.id}
+                value={dropdownValue}
                 options={contracts}
                 onChange={handleContractChange}
                 optionLabel="name"
@@ -331,7 +350,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto pt-8 pb-16 px-8">{children}</main>
+      <main className="max-w-7xl mx-auto pt-8 pb-16 px-8" key={refreshKey}>
+        {children}
+      </main>
     </div>
   );
 };
