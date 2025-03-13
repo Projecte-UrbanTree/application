@@ -73,6 +73,7 @@ export const SaveZoneForm = ({
     }, [coordinates, currentContract, setValue]);
 
     async function onSubmit(data: Zone) {
+        onClose();
         dispatch(showLoader());
         try {
             const createdZone = await dispatch(
@@ -96,7 +97,6 @@ export const SaveZoneForm = ({
                 summary: 'Éxito',
                 detail: 'Zona y puntos guardados correctamente',
             });
-            onClose();
         } catch (error) {
             console.error(
                 'Error en la creación de la zona o los puntos',
