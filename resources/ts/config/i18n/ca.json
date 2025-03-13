@@ -199,7 +199,17 @@
         "title": "Tipus de recurs"
       },
       "stats": {
-        "title": "Estadístiques"
+        "title": "Estadístiques",
+        "week": "This Week",
+        "month": "This Month",
+        "custom": "Custom",
+        "startDate": "Data d'inici",
+        "endDate": "Data de finalització",
+        "tasksDone": "Tasks Done",
+        "tasksNotDone": "Pending Tasks",
+        "hoursWorked": "Hours Worked",
+        "fuelConsumption": "Fuel Consumption",
+        "noData": "No data to display"
       },
       "taskTypes": {
         "form": {
