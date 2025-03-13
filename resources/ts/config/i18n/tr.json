@@ -199,7 +199,17 @@
         "title": "crwdns3025:0crwdne3025:0"
       },
       "stats": {
-        "title": "crwdns3027:0crwdne3027:0"
+        "title": "crwdns3027:0crwdne3027:0",
+        "week": "crwdns3429:0crwdne3429:0",
+        "month": "crwdns3431:0crwdne3431:0",
+        "custom": "crwdns3433:0crwdne3433:0",
+        "startDate": "crwdns3435:0crwdne3435:0",
+        "endDate": "crwdns3437:0crwdne3437:0",
+        "tasksDone": "crwdns3439:0crwdne3439:0",
+        "tasksNotDone": "crwdns3441:0crwdne3441:0",
+        "hoursWorked": "crwdns3443:0crwdne3443:0",
+        "fuelConsumption": "crwdns3445:0crwdne3445:0",
+        "noData": "crwdns3447:0crwdne3447:0"
       },
       "taskTypes": {
         "form": {
