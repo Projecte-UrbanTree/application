@@ -85,7 +85,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         '/admin/inventory',
         '/admin/workers',
         '/admin/resources',
-        '/admin/stats',
+        '/admin/statistics',
     ].some((path) => location.pathname.startsWith(path));
 
     const isSettingsPage = location.pathname.includes('/admin/settings');
@@ -122,7 +122,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             icon: 'tabler:package',
         },
         {
-            to: '/admin/stats',
+            to: '/admin/statistics',
             label: t('admin.submenu.manage.stats'),
             icon: 'tabler:chart-pie-4',
         },

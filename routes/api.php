@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
+use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
@@ -85,5 +86,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('task-types/{id}', [TaskTypeController::class, 'show']);
         Route::put('task-types/{id}', [TaskTypeController::class, 'update']);
         Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
+
+        // Route for stats
+        Route::get('statistics', [StatisticsController::class, 'index']);
+
     });
 });
