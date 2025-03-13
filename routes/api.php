@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
+use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
@@ -27,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
         Route::post('select-contract', [ContractController::class, 'selectContract']);
         Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
 
@@ -39,6 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
                 'workOrders' => WorkOrder::count(),
             ]);
         });
+
+        // Route for stats
+        Route::get('statistics', [StatisticsController::class, 'index']);
 
         Route::resources([
             'contracts' => ContractController::class,

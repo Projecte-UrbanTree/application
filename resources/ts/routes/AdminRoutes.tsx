@@ -22,7 +22,7 @@ import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
 import CreateUser from '@/pages/Admin/Settings/Users/Create';
 import EditUser from '@/pages/Admin/Settings/Users/Edit';
 import AdminUsers from '@/pages/Admin/Settings/Users/Users';
-import AdminStats from '@/pages/Admin/Stats';
+import AdminStats from '@/pages/Admin/Statistics';
 import AdminWorkers from '@/pages/Admin/Workers';
 import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
 import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
@@ -123,7 +123,7 @@ const AdminRoutes: RouteObject[] = [
             ),
           },
           {
-            path: 'stats',
+            path: 'statistics',
             element: (
               <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
                 <AdminStats />

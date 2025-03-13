@@ -207,7 +207,17 @@
         "title": "Resource Types"
       },
       "stats": {
-        "title": "Statistics"
+        "title": "Statistics",
+        "week": "This Week",
+        "month": "This Month",
+        "custom": "Custom",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "tasksDone": "Tasks Done",
+        "tasksNotDone": "Pending Tasks",
+        "hoursWorked": "Hours Worked",
+        "fuelConsumption": "Fuel Consumption",
+        "noData": "No data to display"
       },
       "taskTypes": {
         "form": {
