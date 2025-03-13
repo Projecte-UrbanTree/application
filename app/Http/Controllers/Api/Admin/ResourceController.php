@@ -3,24 +3,62 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreResourceRequest;
+use App\Http\Requests\UpdateResourceRequest;
 use App\Models\Resource;
+use App\Models\ResourceType;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ResourceController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
     {
-        return response()->json(Resource::with('resourceType')->get());
+        try {
+            $contractId = $request->session()->get('selected_contract_id', 0);
+
+            $resources = Resource::when($contractId > 0, function ($query) use ($contractId) {
+                return $query->where('contract_id', $contractId);
+            })
+                ->with('resourceType')
+                ->get();
+
+            return response()->json($resources);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching resources',
+                'debug_message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
-    public function store(Request $request)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'resource_type_id' => ['required', 'exists:resource_types,id'],
-        ]);
+        $contractId = $request->session()->get('selected_contract_id', null);
+        if ($contractId <= 0) {
+            return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
+        }
+
+        return response()->json(['resource_types' => ResourceType::all()]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreResourceRequest $request)
+    {
+        $contractId = $request->session()->get('selected_contract_id', null);
+        if ($contractId <= 0) {
+            return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
+        }
+
+        $validated = $request->validated();
+        $validated['contract_id'] = $contractId;
 
         try {
             $resource = Resource::create($validated);
@@ -30,25 +68,30 @@ class ResourceController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error al crear el recurso'], 500);
         }
-
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Resource $resource)
     {
-        $resource = Resource::findOrFail($id);
-
         return response()->json($resource);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Resource $resource)
     {
-        $resource = Resource::findOrFail($id);
+        return response()->json(['resource' => $resource, 'resource_types' => ResourceType::all()]);
+    }
 
-        $validated = $request->validate([
-            'name' => ['sometimes', 'string', 'max:255', Rule::unique('resources', 'name')->ignore($resource->id)],
-            'description' => ['sometimes', 'string', 'max:255'],
-            'resource_type_id' => ['sometimes', 'exists:resource_types,id'],
-        ]);
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateResourceRequest $request, Resource $resource)
+    {
+        $validated = $request->validated();
 
         try {
             $resource->update($validated);
@@ -59,11 +102,17 @@ class ResourceController extends Controller
         }
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Resource $resource)
     {
-        $resource = Resource::findOrFail($id);
-        $resource->delete();
+        try {
+            $resource->delete();
 
-        return response()->json(['message' => 'Usuario eliminado'], 200);
+            return response()->json(['message' => 'Recurso eliminado'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Error al eliminar el recurso'], 500);
+        }
     }
 }
