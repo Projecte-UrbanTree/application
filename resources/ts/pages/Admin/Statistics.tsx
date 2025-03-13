@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
 import axiosClient from '@/api/axiosClient';
 import { Skeleton } from 'primereact/skeleton';
-import { differenceInYears, differenceInMonths, parseISO } from 'date-fns';
-import { date } from 'yup';
+import { differenceInMonths, parseISO } from 'date-fns';
+import { useTranslation } from 'react-i18next';
+
 function formatDateSpanish(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -44,6 +45,7 @@ function ShimmerCard() {
 }
 
 export default function Stats() {
+    const { t } = useTranslation();
     const [rangeOption, setRangeOption] = useState<
         'this_week' | 'this_month' | 'custom'
     >('this_week');
@@ -91,6 +93,21 @@ export default function Stats() {
         }
     }, [fromDate, toDate]);
 
+    useEffect(() => {
+        if (rangeOption === 'custom' && customFromIso && customToIso) {
+            const startDate = parseISO(customFromIso);
+            const endDate = parseISO(customToIso);
+            const totalMonths = differenceInMonths(endDate, startDate);
+            if (totalMonths > 12) {
+                const maxEndDate = new Date(startDate);
+                maxEndDate.setFullYear(maxEndDate.getFullYear() + 1);
+                const adjustedToIso = maxEndDate.toISOString().split('T')[0];
+                setCustomToIso(adjustedToIso);
+                setToDate(parseIsoToSpanish(adjustedToIso));
+            }
+        }
+    }, [customFromIso, customToIso, rangeOption]);
+
     const fetchData = async () => {
         setIsLoading(true);
         try {
@@ -122,7 +139,7 @@ export default function Stats() {
     const bentoItems = [
         {
             key: 'tasksDone',
-            label: 'Tareas Hechas',
+            label: t('admin.pages.stats.tasksDone'),
             total: summary.tasks_done_total,
             data: tasksDoneCount,
             backgroundColor: 'rgba(52,211,153,0.6)',
@@ -130,7 +147,7 @@ export default function Stats() {
         },
         {
             key: 'tasksNotDone',
-            label: 'Tareas Pendientes',
+            label: t('admin.pages.stats.tasksNotDone'),
             total: summary.tasks_not_done_total,
             data: tasksNotDoneCount,
             backgroundColor: 'rgba(248,113,113,0.6)',
@@ -138,7 +155,7 @@ export default function Stats() {
         },
         {
             key: 'hoursWorked',
-            label: 'Horas Trabajadas',
+            label: t('admin.pages.stats.hoursWorked'),
             total: summary.hours_worked_total,
             data: hoursWorked,
             backgroundColor: 'rgba(96,165,250,0.6)',
@@ -146,13 +163,23 @@ export default function Stats() {
         },
         {
             key: 'fuelConsumption',
-            label: 'Combustible Consumido',
+            label: t('admin.pages.stats.fuelConsumption'),
             total: summary.fuel_consumption_total,
             data: fuelConsumption,
             backgroundColor: 'rgba(251,191,36,0.6)',
             borderColor: '#FBBF24',
         },
     ];
+
+    const maxAllowedToDate = customFromIso
+        ? new Date(
+              new Date(customFromIso).setFullYear(
+                  new Date(customFromIso).getFullYear() + 1,
+              ),
+          )
+              .toISOString()
+              .split('T')[0]
+        : new Date().toISOString().split('T')[0];
 
     return (
         <div className="flex flex-col gap-4 p-4">
@@ -167,7 +194,7 @@ export default function Stats() {
                         onChange={() => setRangeOption('this_week')}
                     />
                     <label htmlFor="this_week" className="cursor-pointer">
-                        Esta Semana
+                        {t('admin.pages.stats.week')}
                     </label>
                 </div>
                 <div className="flex items-center gap-2">
@@ -180,7 +207,7 @@ export default function Stats() {
                         onChange={() => setRangeOption('this_month')}
                     />
                     <label htmlFor="this_month" className="cursor-pointer">
-                        Este Mes
+                        {t('admin.pages.stats.month')}
                     </label>
                 </div>
                 <div className="flex items-center gap-2">
@@ -193,18 +220,18 @@ export default function Stats() {
                         onChange={() => setRangeOption('custom')}
                     />
                     <label htmlFor="custom" className="cursor-pointer">
-                        Personalizado
+                        {t('admin.pages.stats.custom')}
                     </label>
                 </div>
                 {rangeOption === 'custom' && (
                     <>
                         <div className="flex flex-col">
-                            <label>Fecha inicio</label>
+                            <label>{t('admin.pages.stats.startDate')}</label>
                             <input
                                 type="date"
                                 className="border rounded px-2 py-1"
                                 value={customFromIso}
-                                max={new Date()}
+                                max={new Date().toISOString().split('T')[0]}
                                 onChange={(e) => {
                                     setCustomFromIso(e.target.value);
                                     if (e.target.value) {
@@ -218,11 +245,13 @@ export default function Stats() {
                             />
                         </div>
                         <div className="flex flex-col">
-                            <label>Fecha fin</label>
+                            <label>{t('admin.pages.stats.endDate')}</label>
                             <input
                                 type="date"
                                 className="border rounded px-2 py-1"
                                 value={customToIso}
+                                min={customFromIso || undefined}
+                                max={maxAllowedToDate}
                                 onChange={(e) => {
                                     setCustomToIso(e.target.value);
                                     if (e.target.value) {
@@ -286,7 +315,7 @@ export default function Stats() {
                                 </div>
                                 {item.data.length === 0 ? (
                                     <div className="text-center text-gray-500">
-                                        No hay datos para mostrar.
+                                        {t('admin.pages.stats.noData')}
                                     </div>
                                 ) : (
                                     <Chart
