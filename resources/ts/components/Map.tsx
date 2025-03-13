@@ -2,34 +2,32 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import { fetchZones } from '@/api/service/zoneService';
-import { fetchPoints } from '@/api/service/pointService';
-import { Zone } from '@/types/zone';
-import { Point } from '@/types/point';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { Roles } from '@/types/role';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import { Zone } from '@/types/zone';
+import { fetchPoints } from '@/api/service/pointService';
+import { Point } from '@/types/point';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+interface MapProps {
+    selectedZone: Zone | null;
+}
 
-const MapComponent: React.FC = () => {
+const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<mapboxgl.Map | null>(null);
     const drawRef = useRef<MapboxDraw | null>(null);
-    const [zones, setZones] = useState<Zone[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [coordinates, setCoordinates] = useState<number[][]>([]);
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const [enabledButton, setEnabledButton] = useState(false);
-
     const userValue = useSelector((state: RootState) => state.user);
-    const currentContract = useSelector(
-        (state: RootState) => state.contract.currentContract,
-    );
 
     useEffect(() => {
         if (!mapContainerRef.current) return;
@@ -48,6 +46,15 @@ const MapComponent: React.FC = () => {
         );
         mapRef.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
+        const geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken!,
+            marker: true,
+            placeholder: 'Buscar una ubicación...',
+            zoom: 15,
+        });
+
+        mapRef.current.addControl(geocoder, 'top-left');
+
         if (userValue.role === Roles.admin) {
             drawRef.current = new MapboxDraw({
                 displayControlsDefault: false,
@@ -63,67 +70,29 @@ const MapComponent: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (!mapRef.current || !currentContract) return;
+        const fetchData = async () => {
+            try {
+                const allPoints: Point[] = await fetchPoints();
+                if (selectedZone && mapRef.current) {
+                    const firstPoint: Point = allPoints.filter(
+                        (p: Point) => p.zone_id === selectedZone.id,
+                    )[0];
 
-        setZones([]);
+                    const coordinate: number[] = [
+                        firstPoint.longitude!,
+                        firstPoint.latitude!,
+                    ];
 
-        fetchZones().then((zonesData: Zone[]) => {
-            setZones(zonesData);
-            fetchPoints().then((allPoints: Point[]) => {
-                zonesData.forEach((zone) => {
-                    const zonePoints = allPoints
-                        .filter((point) => point.zone_id === zone.id)
-                        .map(
-                            (point) =>
-                                [
-                                    point.longitude as number,
-                                    point.latitude as number,
-                                ] as [number, number],
-                        );
-
-                    if (zonePoints.length > 2) {
-                        zonePoints.push(zonePoints[0]);
-                        addZoneToMap(zone, zonePoints);
-                    }
-                });
-            });
-        });
-    }, [currentContract]);
-
-    function addZoneToMap(zone: Zone, zonePoints: [number, number][]) {
-        if (!mapRef.current) return;
-        const geoJsonZone: GeoJSON.Feature = {
-            type: 'Feature',
-            properties: { id: zone.id, name: zone.name, color: zone.color },
-            geometry: { type: 'Polygon', coordinates: [zonePoints] },
+                    mapRef.current.flyTo({
+                        center: [coordinate[0], coordinate[1]],
+                        zoom: 18,
+                        essential: true,
+                    });
+                }
+            } catch (error) {}
         };
-
-        if (mapRef.current.getSource(`zone-${zone.id}`)) {
-            mapRef.current.removeSource(`zone-${zone.id}`);
-            mapRef.current.removeLayer(`zone-layer-${zone.id}`);
-            mapRef.current.removeLayer(`zone-border-${zone.id}`);
-        }
-
-        mapRef.current.addSource(`zone-${zone.id}`, {
-            type: 'geojson',
-            data: geoJsonZone,
-        });
-        mapRef.current.addLayer({
-            id: `zone-layer-${zone.id}`,
-            type: 'fill',
-            source: `zone-${zone.id}`,
-            paint: {
-                'fill-color': zone.color || '#ff0000',
-                'fill-opacity': 0.5,
-            },
-        });
-        mapRef.current.addLayer({
-            id: `zone-border-${zone.id}`,
-            type: 'line',
-            source: `zone-${zone.id}`,
-            paint: { 'line-color': '#000000', 'line-width': 2 },
-        });
-    }
+        fetchData();
+    }, [selectedZone]);
 
     function updateArea() {
         if (!drawRef.current) return;
@@ -151,38 +120,6 @@ const MapComponent: React.FC = () => {
         }
     }
 
-    async function handleZoneSaved() {
-        setModalVisible(false);
-        setIsDrawingMode(false);
-        setEnabledButton(false);
-
-        fetchZones().then((zonesData: Zone[]) => {
-            setZones(zonesData);
-            fetchPoints().then((allPoints: Point[]) => {
-                zonesData.forEach((zone) => {
-                    const zonePoints = allPoints
-                        .filter((point) => point.zone_id === zone.id)
-                        .map(
-                            (point) =>
-                                [
-                                    point.longitude as number,
-                                    point.latitude as number,
-                                ] as [number, number],
-                        );
-
-                    if (zonePoints.length > 2) {
-                        zonePoints.push(zonePoints[0]);
-                        addZoneToMap(zone, zonePoints);
-                    }
-                });
-            });
-        });
-
-        if (drawRef.current) {
-            drawRef.current.deleteAll();
-        }
-    }
-
     return (
         <div style={{ position: 'relative', width: '100%', height: '90%' }}>
             <div
@@ -205,7 +142,7 @@ const MapComponent: React.FC = () => {
                 onHide={() => setModalVisible(false)}>
                 <SaveZoneForm
                     coordinates={coordinates}
-                    onClose={handleZoneSaved}
+                    onClose={async () => setModalVisible(false)}
                 />
             </Dialog>
         </div>

@@ -5,8 +5,15 @@ import { Accordion, AccordionTab } from 'primereact/accordion';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import Preloader from '@/components/Preloader';
+import { Zone } from '@/types/zone';
+import { Button } from 'primereact/button';
+import { Icon } from '@iconify/react';
 
-export const Zones = () => {
+interface ZoneProps {
+    onSelectedZone: (zone: Zone) => void;
+}
+
+export const Zones = ({ onSelectedZone }: ZoneProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const { zones, loading } = useSelector((state: RootState) => state.zone);
     const currentContract = useSelector(
@@ -27,7 +34,7 @@ export const Zones = () => {
     return (
         <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
             <Accordion multiple activeIndex={null} className="w-full">
-                {zones.map((zone) => (
+                {zones.map((zone: Zone) => (
                     <AccordionTab
                         key={zone.id}
                         header={
@@ -43,6 +50,16 @@ export const Zones = () => {
                                         {zone.name}
                                     </span>
                                 </div>
+                                <Button
+                                    icon={
+                                        <Icon
+                                            icon="mdi:map-marker"
+                                            width="20"
+                                        />
+                                    }
+                                    className="p-button-text p-2"
+                                    onClick={() => onSelectedZone(zone)}
+                                />
                             </div>
                         }>
                         <div className="p-2 text-sm text-gray-700">
