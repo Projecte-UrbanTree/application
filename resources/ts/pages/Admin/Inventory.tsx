@@ -15,6 +15,7 @@ export default function Inventory() {
       <hr />
 
       <p>Selected: {state.contract.currentContract?.name}</p>
+      <p>Id: {state.contract.currentContract?.id}</p>
     </div>
   );
 }
