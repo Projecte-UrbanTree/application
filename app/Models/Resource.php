@@ -9,10 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Resource extends Model
 {
     protected $fillable = [
+        'contract_id',
         'name',
         'description',
         'resource_type_id',
     ];
+
+    public function contract(): BelongsTo
+    {
+        return $this->belongsTo(Contract::class);
+    }
 
     public function resourceType(): BelongsTo
     {
