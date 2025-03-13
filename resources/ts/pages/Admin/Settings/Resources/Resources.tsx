@@ -1,7 +1,9 @@
 import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/Admin/CrudPanel';
+import { RootState } from '@/store/store';
 import type { Resource } from '@/types/Resource';
 import { Icon } from '@iconify/react';
+import { AxiosError } from 'axios';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
@@ -10,11 +12,14 @@ import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
-
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract?.id,
+  );
   const [resources, setResources] = useState<Resource[]>([]);
   const location = useLocation();
   const { t } = useTranslation();
@@ -22,6 +27,7 @@ export default function Resources() {
   const successMsg = location.state?.success;
   const errorMsg = location.state?.error;
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -30,10 +36,13 @@ export default function Resources() {
         setResources(response.data);
         setIsLoading(false);
       } catch (error) {
-        console.error(error);
+        setError(
+          error instanceof AxiosError ? error.response?.data.message : error,
+        );
         setIsLoading(false);
       }
     };
+
     fetchResources();
   }, []);
 
@@ -82,9 +91,16 @@ export default function Resources() {
           className="mb-4 w-full"
         />
       )}
+      {error && (
+        <Message severity="error" text={error} className="mb-4 w-full" />
+      )}
       <CrudPanel
         title="admin.pages.resources.title"
-        onCreate={() => navigate('/admin/resources/create')}>
+        onCreate={() => navigate('/admin/resources/create')}
+        createDisabled={!currentContract}
+        createTooltip={
+          !currentContract ? t('admin.tooltips.selectContract') : undefined
+        }>
         <DataTable
           value={resources}
           paginator

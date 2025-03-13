@@ -21,8 +21,8 @@ export default function CreateResource() {
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const response = await axiosClient.get('/admin/resource-types');
-        setResourceTypes(response.data);
+        const { data } = await axiosClient.get(`/admin/resources/create`);
+        setResourceTypes(data.resource_types);
       } catch (error) {
         console.error(error);
       } finally {

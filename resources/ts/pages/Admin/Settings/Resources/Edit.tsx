@@ -28,19 +28,16 @@ export default function EditResource() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [resourceResponse, typesResponse] = await Promise.all([
-          axiosClient.get(`/admin/resources/${id}`),
-          axiosClient.get('/admin/resource-types'),
-        ]);
+        const { data } = await axiosClient.get(`/admin/resources/${id}/edit`);
 
         setInitialValues({
-          id: resourceResponse.data.id,
-          name: resourceResponse.data.name,
-          description: resourceResponse.data.description,
-          resource_type_id: resourceResponse.data.resource_type_id,
+          id: data.resource.id,
+          name: data.resource.name,
+          description: data.resource.description,
+          resource_type_id: data.resource.resource_type_id,
         });
 
-        setResourceTypes(typesResponse.data);
+        setResourceTypes(data.resource_types);
       } catch (error) {
         console.error(error);
       } finally {
