@@ -163,18 +163,53 @@ export default function EditEva() {
                 values.months,
             );
             const formattedDate = format(birthDate, 'yyyy-MM-dd'); // Formato para el backend
-
-            // Actualizar los valores con la fecha convertida
+            const status =
+                Number(values.unbalanced_crown) +
+                Number(values.overextended_branches) +
+                Number(values.cracks) +
+                Number(values.dead_branches) +
+                Number(values.inclination) +
+                Number(values.V_forks) +
+                Number(values.cavities) +
+                Number(values.bark_damage) +
+                Number(values.soil_lifting) +
+                Number(values.cut_damaged_roots) +
+                Number(values.basal_rot) +
+                Number(values.exposed_surface_roots);
+                
             const updatedValues = {
                 ...values,
                 date_birth: formattedDate,
+                height: values.height,
+                diameter: values.diameter,
+                crown_width: values.crown_width,
+                crown_projection_area: values.crown_projection_area,
+                root_surface_diameter: values.root_surface_diameter,
+                effective_root_area: values.effective_root_area,
+                height_estimation: values.height_estimation,
+                unbalanced_crown: values.unbalanced_crown,
+                overextended_branches: values.overextended_branches,
+                cracks: values.cracks,
+                dead_branches: values.dead_branches,
+                inclination: values.inclination,
+                V_forks: values.V_forks,
+                cavities: values.cavities,
+                bark_damage: values.bark_damage,
+                soil_lifting: values.soil_lifting,
+                cut_damaged_roots: values.cut_damaged_roots,
+                basal_rot: values.basal_rot,
+                exposed_surface_roots: values.exposed_surface_roots,
+                wind: values.wind,
+                drought: values.drought, 
+                status: status,
             };
 
-            await axiosClient.put(`/admin/evas/${id}`, updatedValues); // Use updatedValues here
+            await axiosClient.put(`/admin/evas/${id}`, updatedValues); 
             navigate('/admin/evas', {
                 state: { success: t('messages.updateSuccess') },
             });
         } catch (error) {
+            console.error("Error en handleSubmit:", error);
             navigate('/admin/evas', { state: { error: t('messages.error') } });
         }
     };
@@ -192,11 +227,6 @@ export default function EditEva() {
             </div>
         );
     }
-
-    const booleanOptions = [
-        { label: 'True', value: true },
-        { label: 'False', value: false },
-    ];
 
     return (
         <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
