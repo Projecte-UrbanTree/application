@@ -60,7 +60,7 @@
                                 class="relative flex items-center gap-x-4 rounded-full bg-white px-4 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                                 <a href="#newsletter" class="flex items-center gap-x-1">
                                     <span
-                                        class="font-semibold text-indigo-600">{{ __('landing.newsletter.subscribe_alt') }}</span>
+                                        class="font-semibold text-indigo-600">{{ __('landing.newsletter.request') }}</span>
                                     <svg class="-mr-2 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
                                         aria-hidden="true" data-slot="icon">
                                         <path fill-rule="evenodd"
@@ -220,7 +220,7 @@
                             class="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-white sm:text-sm/6"
                             placeholder="{{ __('landing.newsletter.placeholder') }}">
                         <button type="submit"
-                            class="flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">{{ __('landing.newsletter.subscribe') }}</button>
+                            class="flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">{{ __('landing.common.send') }}</button>
                     </form>
                     <svg viewBox="0 0 1024 1024" class="absolute top-1/2 left-1/2 -z-10 size-[64rem] -translate-x-1/2"
                         aria-hidden="true">
@@ -407,7 +407,7 @@
                             placeholder="{{ __('landing.newsletter.placeholder') }}">
                         <div class="mt-4 sm:mt-0 sm:ml-4 sm:shrink-0">
                             <button type="submit"
-                                class="flex w-full items-center justify-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">{{ __('landing.newsletter.subscribe') }}</button>
+                                class="flex w-full items-center justify-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">{{ __('landing.common.send') }}</button>
                         </div>
                     </form>
                 </div>

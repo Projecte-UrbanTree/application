@@ -4,6 +4,7 @@ return [
     'common' => [
         'copyright' => 'Tots els drets reservats.',
         'login' => 'Iniciar sessió',
+        'send' => 'Enviar',
     ],
     'hero' => [
         'title' => 'Tecnologia per a ciutats més verdes',
@@ -31,8 +32,7 @@ return [
     'newsletter' => [
         'title' => 'Sol·licita una demostració',
         'description' => 'Descobreix com la nostra plataforma pot ajudar-te a millorar la gestió de l\'arbrat de la teva ciutat.',
-        'subscribe' => 'Enviar',
-        'subscribe_alt' => 'Sol·licita una demo',
+        'request' => 'Sol·licita una demo',
         'placeholder' => 'Introdueix el teu correu electrònic',
     ],
     'testimonials' => [

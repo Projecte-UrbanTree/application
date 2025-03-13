@@ -4,6 +4,7 @@ return [
     'common' => [
         'copyright' => 'Todos los derechos reservados.',
         'login' => 'Iniciar sesión',
+        'send' => 'Enviar',
     ],
     'hero' => [
         'title' => 'Tecnología para ciudades más verdes',
@@ -29,10 +30,9 @@ return [
         ],
     ],
     'newsletter' => [
-        'title' => 'Suscríbete a nuestro boletín',
-        'description' => 'Las últimas noticias, artículos y recursos, enviados a tu correo electrónico semanalmente.',
-        'subscribe' => 'Suscríbete',
-        'subscribe_alt' => 'A nuestro boletín',
+        'title' => 'Solicita una demostración',
+        'description' => 'Descubre cómo nuestra plataforma puede ayudarte a mejorar la gestión del arbolado de tu ciudad.',
+        'request' => 'Solicita una demo',
         'placeholder' => 'Introduce tu correo electrónico',
     ],
     'testimonials' => [

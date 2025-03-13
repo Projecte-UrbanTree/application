@@ -4,6 +4,7 @@ return [
     'common' => [
         'copyright' => 'All rights reserved.',
         'login' => 'Log in',
+        'send' => 'Send',
     ],
     'hero' => [
         'title' => 'Technology for greener cities',
@@ -29,11 +30,10 @@ return [
         ],
     ],
     'newsletter' => [
-        'title' => 'Subscribe to our newsletter',
-        'description' => 'The latest news, articles, and resources, sent to your inbox weekly.',
-        'subscribe' => 'Subscribe',
-        'subscribe_alt' => 'To our newsletter',
-        'placeholder' => 'Enter your email',
+        'title' => 'Request a demo',
+        'description' => 'Discover how our platform can help you improve tree management in your city.',
+        'request' => 'Request a demo',
+        'placeholder' => 'Enter your email address',
     ],
     'testimonials' => [
         'section_title' => 'Our thoughts',
