@@ -23,7 +23,7 @@ class UpdateResourceRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'description' => ['sometimes', 'required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
             'resource_type_id' => ['sometimes', 'required', 'integer'],
         ];
     }

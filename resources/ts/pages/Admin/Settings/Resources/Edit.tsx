@@ -33,7 +33,7 @@ export default function EditResource() {
         setInitialValues({
           id: data.resource.id,
           name: data.resource.name,
-          description: data.resource.description,
+          description: data.resource.description || '',
           resource_type_id: data.resource.resource_type_id,
         });
 
