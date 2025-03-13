@@ -487,6 +487,7 @@
         "resources": "crwdns3231:0crwdne3231:0",
         "stats": "crwdns3233:0crwdne3233:0",
         "workers": "crwdns3235:0crwdne3235:0",
+        "eva": "crwdns3427:0crwdne3427:0",
         "workOrders": "crwdns3237:0crwdne3237:0"
       },
       "settings": {
