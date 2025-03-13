@@ -73,4 +73,16 @@ return [
         ['label' => 'Varias raíces expuestas', 'value' => 2],
         ['label' => 'Raíces expuestas y debilitadas', 'value' => 3],
     ],
+    'viento' => [
+        ['label' => 'Árbol protegido por barreras naturales o edificios, sin viento fuerte constante.', 'value' => 0],
+        ['label' => 'Árbol con viento ocasional pero sin impacto significativo en su estabilidad.', 'value' => 1],
+        ['label' => 'Árbol expuesto a vientos fuertes frecuentes, lo que puede afectar su estructura.', 'value' => 2],
+        ['label' => 'Árbol en zonas abiertas o en pendientes donde el viento sopla con fuerza extrema.', 'value' => 3],
+    ],
+    'sequia' => [
+        ['label' => 'Árbol en zona con humedad estable y acceso a agua constante, sin estrés hídrico.', 'value' => 0],
+        ['label' => 'Árbol con acceso moderado al agua, pero con períodos de sequía ocasionales.', 'value' => 1],
+        ['label' => 'Árbol en zona con sequías recurrentes, afectando su desarrollo y resistencia.', 'value' => 2],
+        ['label' => 'Árbol en zona árida o con sequías prolongadas, alto riesgo de debilitamiento.', 'value' => 3],
+    ],
 ];

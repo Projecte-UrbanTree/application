@@ -38,7 +38,8 @@ export default function EditEva() {
         raicesCortadas: DictionaryOption[];
         podredumbreBasal: DictionaryOption[];
         raicesExpuestas: DictionaryOption[];
-        unbalanced_crown: DictionaryOption[];
+        viento: DictionaryOption[];
+        sequia: DictionaryOption[];
     }
 
     const [initialValues, setInitialValues] = useState({
@@ -82,7 +83,8 @@ export default function EditEva() {
         raicesCortadas: [],
         podredumbreBasal: [],
         raicesExpuestas: [],
-        unbalanced_crown: [],
+        viento: [],
+        sequia: [],
     });
     const [isLoading, setIsLoading] = useState(true);
 
@@ -168,7 +170,7 @@ export default function EditEva() {
                 date_birth: formattedDate,
             };
 
-            await axiosClient.put(`/admin/evas/${id}`, values);
+            await axiosClient.put(`/admin/evas/${id}`, updatedValues); // Use updatedValues here
             navigate('/admin/evas', {
                 state: { success: t('messages.updateSuccess') },
             });
@@ -207,7 +209,7 @@ export default function EditEva() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t('admin.eva.editTitle')}
+                        {t('admin.pages.evas.edit.title')}
                     </h2>
                 </header>
                 <div className="p-6">
@@ -225,18 +227,18 @@ export default function EditEva() {
                                     </h1>
                                     <FormField
                                         name="element_id"
-                                        label={t('admin.fields.element_id')}
+                                        label={t('admin.pages.evas.form.element_id')}
                                         as="InputText"
                                     />
                                     <FormField
                                         name="years"
-                                        label={t('admin.fields.years')}
+                                        label={t('admin.pages.evas.form.years')}
                                         as="InputNumber"
                                         min={0}
                                     />
                                     <FormField
                                         name="months"
-                                        label={t('admin.fields.months')}
+                                        label={t('admin.pages.evas.form.months')}
                                         as="InputNumber"
                                         min={0}
                                         max={11}
@@ -255,44 +257,44 @@ export default function EditEva() {
                                     </h2>
                                     <FormField
                                         name="height"
-                                        label={t('admin.fields.height')}
+                                        label={t('admin.pages.evas.form.height')}
                                         as="InputNumber"
                                     />
                                     <FormField
                                         name="diameter"
-                                        label={t('admin.fields.diameter')}
+                                        label={t('admin.pages.evas.form.diameter')}
                                         as="InputNumber"
                                     />
                                     <FormField
                                         name="crown_width"
-                                        label={t('admin.fields.crown_width')}
+                                        label={t('admin.pages.evas.form.crown_width')}
                                         as="InputNumber"
                                     />
                                     <FormField
                                         name="crown_projection_area"
                                         label={t(
-                                            'admin.fields.crown_projection_area',
+                                            'admin.pages.evas.form.crown_projection_area',
                                         )}
                                         as="InputNumber"
                                     />
                                     <FormField
                                         name="root_surface_diameter"
                                         label={t(
-                                            'admin.fields.root_surface_diameter',
+                                            'admin.pages.evas.form.root_surface_diameter',
                                         )}
                                         as="InputNumber"
                                     />
                                     <FormField
                                         name="effective_root_area"
                                         label={t(
-                                            'admin.fields.effective_root_area',
+                                            'admin.pages.evas.form.effective_root_area',
                                         )}
                                         as="InputNumber"
                                     />
                                     <FormField
                                         name="height_estimation"
                                         label={t(
-                                            'admin.fields.height_estimation',
+                                            'admin.pages.evas.form.height_estimation',
                                         )}
                                         as="InputNumber"
                                     />
@@ -309,32 +311,30 @@ export default function EditEva() {
                                     <FormField
                                         name="unbalanced_crown"
                                         label={t(
-                                            'admin.fields.unbalanced_crown',
+                                            'admin.pages.evas.form.unbalanced_crown',
                                         )}
                                         as="Dropdown"
-                                        options={
-                                            dictionaries.copaDesequilibrada
-                                        }
+                                        options={dictionaries.copaDesequilibrada.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="overextended_branches"
                                         label={t(
-                                            'admin.fields.overextended_branches',
+                                            'admin.pages.evas.form.overextended_branches',
                                         )}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.ramasSobreextendidas.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="cracks"
-                                        label={t('admin.fields.cracks')}
+                                        label={t('admin.pages.evas.form.cracks')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.grietas.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="dead_branches"
-                                        label={t('admin.fields.dead_branches')}
+                                        label={t('admin.pages.evas.form.dead_branches')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.ramasMuertas.map(option => ({ label: option.label, value: option.value }))}
                                     />
 
                                     {/* Subsubsección: Tronco */}
@@ -343,27 +343,27 @@ export default function EditEva() {
                                     </h3>
                                     <FormField
                                         name="inclination"
-                                        label={t('admin.fields.inclination')}
+                                        label={t('admin.pages.evas.form.inclination')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.inclinacion.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="V_forks"
-                                        label={t('admin.fields.V_forks')}
+                                        label={t('admin.pages.evas.form.V_forks')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.bifurcacionesV.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="cavities"
-                                        label={t('admin.fields.cavities')}
+                                        label={t('admin.pages.evas.form.cavities')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.cavidades.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="bark_damage"
-                                        label={t('admin.fields.bark_damage')}
+                                        label={t('admin.pages.evas.form.bark_damage')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.danosCorteza.map(option => ({ label: option.label, value: option.value }))}
                                     />
 
                                     {/* Subsubsección: Raíces */}
@@ -372,31 +372,31 @@ export default function EditEva() {
                                     </h3>
                                     <FormField
                                         name="soil_lifting"
-                                        label={t('admin.fields.soil_lifting')}
+                                        label={t('admin.pages.evas.form.soil_lifting')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.levantamientoSuelo.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="cut_damaged_roots"
                                         label={t(
-                                            'admin.fields.cut_damaged_roots',
+                                            'admin.pages.evas.form.cut_damaged_roots',
                                         )}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.raicesCortadas.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="basal_rot"
-                                        label={t('admin.fields.basal_rot')}
+                                        label={t('admin.pages.evas.form.basal_rot')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.podredumbreBasal.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                     <FormField
                                         name="exposed_surface_roots"
                                         label={t(
-                                            'admin.fields.exposed_surface_roots',
+                                            'admin.pages.evas.form.exposed_surface_roots',
                                         )}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.raicesExpuestas.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                 </div>
 
@@ -417,9 +417,9 @@ export default function EditEva() {
                                     </h3>
                                     <FormField
                                         name="wind"
-                                        label={t('admin.fields.wind')}
+                                        label={t('admin.pages.evas.form.wind')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.viento.map(option => ({ label: option.label, value: option.value }))}
                                     />
 
                                     {/* Subsubsección: Exposición a la sequía */}
@@ -428,9 +428,9 @@ export default function EditEva() {
                                     </h3>
                                     <FormField
                                         name="drought"
-                                        label={t('admin.fields.drought')}
+                                        label={t('admin.pages.evas.form.drought')}
                                         as="Dropdown"
-                                        options={booleanOptions}
+                                        options={dictionaries.sequia.map(option => ({ label: option.label, value: option.value }))}
                                     />
                                 </div>
                                 <div className="md:col-span-2 flex justify-end mt-4">
@@ -445,8 +445,8 @@ export default function EditEva() {
                                         }
                                         label={
                                             isSubmitting
-                                                ? t('admin.eva.saving')
-                                                : t('admin.eva.save')
+                                                ? t('admin.pages.evas.form.saving')
+                                                : t('admin.pages.evas.form.save')
                                         }
                                     />
                                 </div>
