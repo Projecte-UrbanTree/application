@@ -11,7 +11,10 @@ class ResourceController extends Controller
     public function index(Request $request)
     {
         $contract_id = $request->header('X-Contract-Id');
-        if(!$contract_id) return Resource::all();
+        if (! $contract_id) {
+            return Resource::all();
+        }
+
         return Resource::where('contract_id', $contract_id)->get();
     }
 }

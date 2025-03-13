@@ -11,7 +11,10 @@ class ZoneController extends Controller
     public function index(Request $request)
     {
         $contract_id = $request->header('X-Contract-Id');
-        if(!$contract_id) return Zone::all();
+        if (! $contract_id) {
+            return Zone::all();
+        }
+
         return Zone::where('contract_id', $contract_id)->get();
     }
 
@@ -27,5 +30,13 @@ class ZoneController extends Controller
         $zone = Zone::create($validate);
 
         return response()->json($zone, 201);
+    }
+
+    public function destroy($id)
+    {
+        $zone = Zone::findOrFail($id);
+        $zone->delete();
+
+        return response()->json(['message' => 'Zona eliminada']);
     }
 }
