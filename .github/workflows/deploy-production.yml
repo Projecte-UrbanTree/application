@@ -50,4 +50,4 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          rsync -avz --delete --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" -e 'ssh -i private_key.pem -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
+          rsync -avz --delete --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" -e 'ssh -i private_key.pem -p 21222 -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
