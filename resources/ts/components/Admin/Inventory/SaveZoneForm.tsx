@@ -6,13 +6,14 @@ import { InputText } from 'primereact/inputtext';
 import { ColorPicker } from 'primereact/colorpicker';
 import { Zone } from '@/types/zone';
 import { saveZone } from '@/api/service/zoneService';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
 import { Contract } from '@/types/contract';
 import { useState, useEffect, useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import { savePoints, SavePointsProps } from '@/api/service/pointService';
 import { TypePoint } from '@/types/point';
+import { saveZoneAsync } from '@/store/slice/zoneSlice';
 
 const schema = yup.object().shape({
     name: yup.string().required('El nombre es obligatorio'),
@@ -43,6 +44,7 @@ export const SaveZoneForm = ({
     const currentContract: Contract | null = useSelector(
         (state: RootState) => state.contract.currentContract,
     );
+    const dispatch = useDispatch<AppDispatch>();
 
     const {
         control,
@@ -72,10 +74,9 @@ export const SaveZoneForm = ({
     async function onSubmit(data: Zone) {
         setIsLoading(true);
         try {
-            const createdZone = await saveZone({
-                ...data,
-                contract_id: currentContract?.id,
-            });
+            const createdZone = await dispatch(
+                saveZoneAsync({ data, contractId: currentContract?.id || 0 }),
+            ).unwrap();
 
             if (!createdZone?.id) {
                 throw new Error('No se pudo obtener el ID de la zona creada.');
@@ -89,7 +90,6 @@ export const SaveZoneForm = ({
             }));
 
             await savePoints(pointsData);
-
             toast.current?.show({
                 severity: 'success',
                 summary: 'Éxito',
@@ -197,9 +197,7 @@ export const SaveZoneForm = ({
                     <Button
                         type="submit"
                         className="p-button-primary"
-                        disabled={isLoading}>
-                        {isLoading ? 'Guardando...' : 'Guardar'}
-                    </Button>
+                        disabled={isLoading}></Button>
                 </div>
             </form>
         </div>
