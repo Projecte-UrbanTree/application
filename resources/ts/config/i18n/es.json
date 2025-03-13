@@ -4,7 +4,7 @@
       "createNew": "Crear nuevo"
     },
     "fields": {
-      "company": "Compañía",
+      "company": "Empresa",
       "dni": "DNI",
       "email": "Correo",
       "end_date": "Fecha de fin",
@@ -246,7 +246,7 @@
             "error": "Error guardando el tipo de tarea",
             "updateSuccess": "Tipo de tarea actualizado exitosamente"
           },
-          "title": "Tipo de tarea"
+          "title": "Tipos de tarea"
         },
         "title": "Tipos de tarea"
       },
@@ -337,7 +337,7 @@
             "label": "Acciones"
           },
           "columns": {
-            "company": "Compañía",
+            "company": "Empresa",
             "dni": "DNI",
             "email": "Correo electrónico",
             "name": "Nombre",
@@ -355,12 +355,113 @@
         "title": "Usuarios"
       },
       "workOrders": {
-        "columns": {
-          "contract_id": "Contrato",
-          "date": "Fecha",
-          "status": "Estado"
+        "title": "Órdenes de trabajo",
+        "details": {
+          "block": "Bloque",
+          "zones": "Zonas",
+          "tasks": "Tareas",
+          "notes": "Notas",
+          "noZones": "No hay zonas asignadas",
+          "noTasks": "No hay tareas asignadas",
+          "noNotes": "N/A",
+          "noBlocks": "No hay bloques",
+          "noBlocksAvailable": "No hay bloques disponibles para esta orden de trabajo",
+          "unknown": "Desconocido",
+          "noUsers": "No hay usuarios asignados"
         },
-        "title": "Órdenes de trabajo"
+        "status": {
+          "notStarted": "No iniciado",
+          "inProgress": "En progreso",
+          "completed": "Completado",
+          "reportSent": "Informe enviado",
+          "unknown": "Desconocido"
+        },
+        "reportStatus": {
+          "pending": "Pendiente",
+          "completed": "Completado",
+          "rejected": "Rechazado",
+          "closedWithIncidents": "Cerrado con incidencias",
+          "unknown": "Desconocido"
+        },
+        "form": {
+          "fields": {
+            "date": "Fecha",
+            "users": "Trabajadores",
+            "block": "Bloque",
+            "zones": "Zonas",
+            "task": "Tarea",
+            "taskType": "Nombre",
+            "elementType": "Tipo de elemento",
+            "treeType": "Especie de árbol",
+            "notes": "Notas"
+          },
+          "buttons": {
+            "addTask": "Añadir Tarea",
+            "addBlock": "Añadir Bloque"
+          },
+          "blocksTitle": "Bloques de Trabajo",
+          "removeBlock": "Eliminar bloque",
+          "removeTask": "Eliminar tarea",
+          "noContract": {
+            "title": "No hay contrato seleccionado",
+            "message": "Debes seleccionar un contrato en el panel superior para crear una orden de trabajo."
+          },
+          "placeholders": {
+            "status": "Selecciona un estado",
+            "users": "Selecciona trabajadores",
+            "zones": "Selecciona zonas para este bloque",
+            "taskType": "Selecciona tipo de tarea",
+            "elementType": "Selecciona tipo de elemento",
+            "treeType": "Selecciona especie de árbol",
+            "notes": "Añade notas para este bloque de trabajo..."
+          },
+          "returnButton": "Volver a la lista de órdenes de trabajo",
+          "submitButton": {
+            "create": "Crear Orden de Trabajo",
+            "edit": "Guardar Cambios"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Guardando..."
+          },
+          "title": {
+            "create": "Crear Orden de Trabajo",
+            "edit": "Editar Orden de Trabajo"
+          },
+          "validation": {
+            "date_required": "La fecha es obligatoria",
+            "users_required": "Se debe seleccionar al menos un trabajador",
+            "blocks_required": "Se requiere al menos un bloque",
+            "zones_required": "Se debe seleccionar al menos una zona",
+            "tasks_required": "Se requiere al menos una tarea",
+            "task_type_required": "El tipo de tarea es obligatorio",
+            "element_type_required": "El tipo de elemento es obligatorio"
+          }
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar orden de trabajo",
+            "edit": "Editar orden de trabajo",
+            "viewReport": "Ver informe",
+            "label": "Acciones"
+          },
+          "columns": {
+            "id": "ID",
+            "date": "Fecha",
+            "users": "Trabajadores",
+            "status": "Estado",
+            "reportStatus": "Estado del informe",
+            "contract": "Contrato"
+          },
+          "messages": {
+            "createSuccess": "Orden de trabajo creada correctamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar esta orden de trabajo?",
+            "deleteSuccess": "Orden de trabajo eliminada correctamente",
+            "error": "Error guardando la orden de trabajo",
+            "updateSuccess": "Orden de trabajo actualizada correctamente",
+            "noData": "No hay órdenes de trabajo disponibles"
+          }
+        }
       }
     },
     "profileDropdown": {
@@ -372,7 +473,7 @@
       "admin": "Administrador",
       "customer": "Cliente",
       "unknown": "Desconocido",
-      "worker": "Trabajador"
+      "worker": "Operario"
     },
     "status": {
       "active": "Activo",
@@ -386,14 +487,15 @@
         "resources": "Recursos",
         "stats": "Estadísticas",
         "workers": "Trabajadores",
+        "eva": "EVA",
         "workOrders": "Órdenes de trabajo"
       },
       "settings": {
         "contracts": "Contratos",
-        "elementTypes": "Tipo de elemento",
+        "elementTypes": "Tipos de elemento",
         "resourceTypes": "Tipos de recurso",
         "species": "Especies",
-        "taskTypes": "Tipos de tarea",
+        "taskTypes": "Tipus de tarea",
         "users": "Usuarios"
       }
     }
@@ -417,7 +519,7 @@
         "btnLogin": "Iniciar sesión",
         "labelEmail": "Correo electrónico",
         "labelPassword": "Contraseña",
-        "msgSuccess": "Sesión iniciada correctamente",
+        "msgSuccess": "Inicio de sesión correcto",
         "placeholderEmail": "tucorreo@ejemplo.com",
         "rememberMe": "Recuérdame",
         "titleSuccess": "Éxito"
