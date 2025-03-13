@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrderBlockTask;
 use App\Models\WorkReport;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
 {
@@ -28,6 +28,7 @@ class StatisticsController extends Controller
 
         $filtered = $tasks->filter(function ($t) use ($fromDate, $toDate) {
             $d = Carbon::parse($t->workOrderBlock->workOrder->date);
+
             return $d->between($fromDate, $toDate);
         });
 
@@ -64,6 +65,7 @@ class StatisticsController extends Controller
         // WorkReport (fuel used)
         $reports = WorkReport::with('workOrder')->get()->filter(function ($r) use ($fromDate, $toDate) {
             $d = Carbon::parse($r->workOrder->date);
+
             return $d->between($fromDate, $toDate);
         });
 
@@ -76,7 +78,7 @@ class StatisticsController extends Controller
             $fuelConsumption[] = $f;
         }
 
-        // Total 
+        // Total
         $tasks_done_total = $done->count();
         $tasks_not_done_total = $notDone->count();
         $hours_worked_total = $filtered->sum('spent_time');
