@@ -5,6 +5,7 @@
     },
     "fields": {
       "company": "crwdns2807:0crwdne2807:0",
+      "description": "crwdns3595:0crwdne3595:0",
       "dni": "crwdns2809:0crwdne2809:0",
       "email": "crwdns2811:0crwdne2811:0",
       "end_date": "crwdns2813:0crwdne2813:0",
@@ -13,7 +14,9 @@
       "genus": "crwdns2819:0crwdne2819:0",
       "name": "crwdns2821:0crwdne2821:0",
       "password": "crwdns2823:0crwdne2823:0",
+      "resource_type": "crwdns3597:0crwdne3597:0",
       "role": "crwdns2825:0crwdne2825:0",
+      "select_resource_type": "crwdns3599:0crwdne3599:0",
       "species": "crwdns2827:0crwdne2827:0",
       "start_date": "crwdns2829:0crwdne2829:0",
       "status": "crwdns2831:0crwdne2831:0",
@@ -127,7 +130,12 @@
             "edit": "crwdns2949:0crwdne2949:0"
           },
           "validation": {
+            "description_max": "crwdns3601:0crwdne3601:0",
+            "name_format": "crwdns3603:0crwdne3603:0",
+            "name_max": "crwdns3605:0crwdne3605:0",
+            "name_min": "crwdns3607:0crwdne3607:0",
             "name_required": "crwdns2951:0crwdne2951:0",
+            "type_invalid": "crwdns3609:0crwdne3609:0",
             "type_required": "crwdns2953:0crwdne2953:0"
           }
         },
@@ -199,7 +207,17 @@
         "title": "crwdns3025:0crwdne3025:0"
       },
       "stats": {
-        "title": "crwdns3027:0crwdne3027:0"
+        "title": "crwdns3027:0crwdne3027:0",
+        "week": "crwdns3429:0crwdne3429:0",
+        "month": "crwdns3431:0crwdne3431:0",
+        "custom": "crwdns3433:0crwdne3433:0",
+        "startDate": "crwdns3435:0crwdne3435:0",
+        "endDate": "crwdns3437:0crwdne3437:0",
+        "tasksDone": "crwdns3439:0crwdne3439:0",
+        "tasksNotDone": "crwdns3441:0crwdne3441:0",
+        "hoursWorked": "crwdns3443:0crwdne3443:0",
+        "fuelConsumption": "crwdns3445:0crwdne3445:0",
+        "noData": "crwdns3447:0crwdne3447:0"
       },
       "taskTypes": {
         "form": {
@@ -355,66 +373,51 @@
         "title": "crwdns3197:0crwdne3197:0"
       },
       "workOrders": {
-        "title": "crwdns3205:0crwdne3205:0",
         "details": {
           "block": "crwdns3279:0crwdne3279:0",
-          "zones": "crwdns3281:0crwdne3281:0",
-          "tasks": "crwdns3283:0crwdne3283:0",
-          "notes": "crwdns3285:0crwdne3285:0",
-          "noZones": "crwdns3287:0crwdne3287:0",
-          "noTasks": "crwdns3289:0crwdne3289:0",
-          "noNotes": "crwdns3291:0crwdne3291:0",
           "noBlocks": "crwdns3293:0crwdne3293:0",
           "noBlocksAvailable": "crwdns3295:0crwdne3295:0",
+          "noNotes": "crwdns3291:0crwdne3291:0",
+          "noTasks": "crwdns3289:0crwdne3289:0",
+          "notes": "crwdns3285:0crwdne3285:0",
+          "noUsers": "crwdns3299:0crwdne3299:0",
+          "noZones": "crwdns3287:0crwdne3287:0",
+          "tasks": "crwdns3283:0crwdne3283:0",
           "unknown": "crwdns3297:0crwdne3297:0",
-          "noUsers": "crwdns3299:0crwdne3299:0"
-        },
-        "status": {
-          "notStarted": "crwdns3301:0crwdne3301:0",
-          "inProgress": "crwdns3303:0crwdne3303:0",
-          "completed": "crwdns3305:0crwdne3305:0",
-          "reportSent": "crwdns3307:0crwdne3307:0",
-          "unknown": "crwdns3309:0crwdne3309:0"
-        },
-        "reportStatus": {
-          "pending": "crwdns3311:0crwdne3311:0",
-          "completed": "crwdns3313:0crwdne3313:0",
-          "rejected": "crwdns3315:0crwdne3315:0",
-          "closedWithIncidents": "crwdns3317:0crwdne3317:0",
-          "unknown": "crwdns3319:0crwdne3319:0"
+          "zones": "crwdns3281:0crwdne3281:0"
         },
         "form": {
+          "blocksTitle": "crwdns3343:0crwdne3343:0",
+          "buttons": {
+            "addBlock": "crwdns3341:0crwdne3341:0",
+            "addTask": "crwdns3339:0crwdne3339:0"
+          },
           "fields": {
-            "date": "crwdns3321:0crwdne3321:0",
-            "users": "crwdns3323:0crwdne3323:0",
             "block": "crwdns3325:0crwdne3325:0",
-            "zones": "crwdns3327:0crwdne3327:0",
+            "date": "crwdns3321:0crwdne3321:0",
+            "elementType": "crwdns3333:0crwdne3333:0",
+            "notes": "crwdns3337:0crwdne3337:0",
             "task": "crwdns3329:0crwdne3329:0",
             "taskType": "crwdns3331:0crwdne3331:0",
-            "elementType": "crwdns3333:0crwdne3333:0",
             "treeType": "crwdns3335:0crwdne3335:0",
-            "notes": "crwdns3337:0crwdne3337:0"
+            "users": "crwdns3323:0crwdne3323:0",
+            "zones": "crwdns3327:0crwdne3327:0"
           },
-          "buttons": {
-            "addTask": "crwdns3339:0crwdne3339:0",
-            "addBlock": "crwdns3341:0crwdne3341:0"
-          },
-          "blocksTitle": "crwdns3343:0crwdne3343:0",
-          "removeBlock": "crwdns3345:0crwdne3345:0",
-          "removeTask": "crwdns3347:0crwdne3347:0",
           "noContract": {
-            "title": "crwdns3349:0crwdne3349:0",
-            "message": "crwdns3351:0crwdne3351:0"
+            "message": "crwdns3351:0crwdne3351:0",
+            "title": "crwdns3349:0crwdne3349:0"
           },
           "placeholders": {
-            "status": "crwdns3353:0crwdne3353:0",
-            "users": "crwdns3355:0crwdne3355:0",
-            "zones": "crwdns3357:0crwdne3357:0",
-            "taskType": "crwdns3359:0crwdne3359:0",
             "elementType": "crwdns3361:0crwdne3361:0",
+            "notes": "crwdns3365:0crwdne3365:0",
+            "status": "crwdns3353:0crwdne3353:0",
+            "taskType": "crwdns3359:0crwdne3359:0",
             "treeType": "crwdns3363:0crwdne3363:0",
-            "notes": "crwdns3365:0crwdne3365:0"
+            "users": "crwdns3355:0crwdne3355:0",
+            "zones": "crwdns3357:0crwdne3357:0"
           },
+          "removeBlock": "crwdns3345:0crwdne3345:0",
+          "removeTask": "crwdns3347:0crwdne3347:0",
           "returnButton": "crwdns3367:0crwdne3367:0",
           "submitButton": {
             "create": "crwdns3369:0crwdne3369:0",
@@ -429,39 +432,54 @@
             "edit": "crwdns3379:0crwdne3379:0"
           },
           "validation": {
-            "date_required": "crwdns3381:0crwdne3381:0",
-            "users_required": "crwdns3383:0crwdne3383:0",
             "blocks_required": "crwdns3385:0crwdne3385:0",
-            "zones_required": "crwdns3387:0crwdne3387:0",
-            "tasks_required": "crwdns3389:0crwdne3389:0",
+            "date_required": "crwdns3381:0crwdne3381:0",
+            "element_type_required": "crwdns3393:0crwdne3393:0",
             "task_type_required": "crwdns3391:0crwdne3391:0",
-            "element_type_required": "crwdns3393:0crwdne3393:0"
+            "tasks_required": "crwdns3389:0crwdne3389:0",
+            "users_required": "crwdns3383:0crwdne3383:0",
+            "zones_required": "crwdns3387:0crwdne3387:0"
           }
         },
         "list": {
           "actions": {
             "delete": "crwdns3395:0crwdne3395:0",
             "edit": "crwdns3397:0crwdne3397:0",
-            "viewReport": "crwdns3399:0crwdne3399:0",
-            "label": "crwdns3401:0crwdne3401:0"
+            "label": "crwdns3401:0crwdne3401:0",
+            "viewReport": "crwdns3399:0crwdne3399:0"
           },
           "columns": {
-            "id": "crwdns3403:0crwdne3403:0",
+            "contract": "crwdns3413:0crwdne3413:0",
             "date": "crwdns3405:0crwdne3405:0",
-            "users": "crwdns3407:0crwdne3407:0",
-            "status": "crwdns3409:0crwdne3409:0",
+            "id": "crwdns3403:0crwdne3403:0",
             "reportStatus": "crwdns3411:0crwdne3411:0",
-            "contract": "crwdns3413:0crwdne3413:0"
+            "status": "crwdns3409:0crwdne3409:0",
+            "users": "crwdns3407:0crwdne3407:0"
           },
           "messages": {
             "createSuccess": "crwdns3415:0crwdne3415:0",
             "deleteConfirm": "crwdns3417:0crwdne3417:0",
             "deleteSuccess": "crwdns3419:0crwdne3419:0",
             "error": "crwdns3421:0crwdne3421:0",
-            "updateSuccess": "crwdns3423:0crwdne3423:0",
-            "noData": "crwdns3425:0crwdne3425:0"
+            "noData": "crwdns3425:0crwdne3425:0",
+            "updateSuccess": "crwdns3423:0crwdne3423:0"
           }
-        }
+        },
+        "reportStatus": {
+          "closedWithIncidents": "crwdns3317:0crwdne3317:0",
+          "completed": "crwdns3313:0crwdne3313:0",
+          "pending": "crwdns3311:0crwdne3311:0",
+          "rejected": "crwdns3315:0crwdne3315:0",
+          "unknown": "crwdns3319:0crwdne3319:0"
+        },
+        "status": {
+          "completed": "crwdns3305:0crwdne3305:0",
+          "inProgress": "crwdns3303:0crwdne3303:0",
+          "notStarted": "crwdns3301:0crwdne3301:0",
+          "reportSent": "crwdns3307:0crwdne3307:0",
+          "unknown": "crwdns3309:0crwdne3309:0"
+        },
+        "title": "crwdns3205:0crwdne3205:0"
       }
     },
     "profileDropdown": {
@@ -498,6 +516,9 @@
         "taskTypes": "crwdns3247:0crwdne3247:0",
         "users": "crwdns3249:0crwdne3249:0"
       }
+    },
+    "tooltips": {
+      "selectContract": "crwdns3611:0crwdne3611:0"
     }
   },
   "general": {

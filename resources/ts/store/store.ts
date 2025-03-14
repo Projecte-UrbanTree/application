@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { userSlice } from './slice/userSlice';
 import { contractSlice } from './slice/contractSlice';
+import { userSlice } from './slice/userSlice';
 
 const store = configureStore({
-    reducer: {
-        user: userSlice.reducer,
-        contract: contractSlice.reducer,
-    },
+  reducer: {
+    user: userSlice.reducer,
+    contract: contractSlice.reducer,
+  },
 });
 
 export default store;

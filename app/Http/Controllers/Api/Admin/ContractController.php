@@ -70,4 +70,40 @@ class ContractController extends Controller
 
         return response()->json(['message' => 'Contract deleted'], 200);
     }
+
+    public function selectContract(Request $request)
+    {
+        $validated = $request->validate([
+            'contract_id' => [
+                'nullable',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    if ($value !== 0 && ! Contract::find($value)) {
+                        $fail('The selected contract does not exist.');
+                    }
+                },
+            ],
+        ]);
+
+        $contractId = $validated['contract_id'] ?? 0;
+        $request->session()->put('selected_contract_id', $contractId);
+
+        $contract = $contractId > 0 ? Contract::find($contractId) : null;
+
+        return response()->json([
+            'message' => 'Contract selected successfully',
+            'contract' => $contract,
+        ]);
+    }
+
+    public function getSelectedContract(Request $request)
+    {
+        $contractId = $request->session()->get('selected_contract_id', null);
+        $contract = $contractId > 0 ? Contract::find($contractId) : null;
+
+        return response()->json([
+            'contract_id' => $contractId,
+            'contract' => $contract,
+        ]);
+    }
 }
