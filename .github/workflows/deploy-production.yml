@@ -44,22 +44,28 @@ jobs:
             set -e
 
             echo "Setting permissions..."
-            sudo chown -R frontendweb:www-data /var/www/urbantree
-            sudo chmod -R u+rwX,g+rwX,o+rX /var/www/urbantree
-            sudo chmod -R 775 /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
-            sudo chown -R www-data:www-data /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+            echo "$SSH_PASSWORD" | sudo -S chown -R frontendweb:www-data /var/www/urbantree
+            echo "$SSH_PASSWORD" | sudo -S chmod -R u+rwX,g+rwX,o+rX /var/www/urbantree
+            echo "$SSH_PASSWORD" | sudo -S chmod -R 775 /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+            echo "$SSH_PASSWORD" | sudo -S chown -R www-data:www-data /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+
+            echo "Installing dependencies..."
+            cd /var/www/urbantree
+            echo "$SSH_PASSWORD" | sudo -S composer install --no-dev --optimize-autoloader
+            echo "$SSH_PASSWORD" | sudo -S npm install
+            echo "$SSH_PASSWORD" | sudo -S npm run build
 
             echo "Running migrations..."
-            sudo php /var/www/urbantree/artisan migrate --seed --force
+            echo "$SSH_PASSWORD" | sudo -S php artisan migrate --seed --force
 
             echo "Clearing and caching..."
-            sudo php /var/www/urbantree/artisan optimize:clear
-            sudo php /var/www/urbantree/artisan config:cache
-            sudo php /var/www/urbantree/artisan route:cache
+            echo "$SSH_PASSWORD" | sudo -S php artisan optimize:clear
+            echo "$SSH_PASSWORD" | sudo -S php artisan config:cache
+            echo "$SSH_PASSWORD" | sudo -S php artisan route:cache
 
             echo "Restarting services..."
-            sudo systemctl restart nginx
-            sudo systemctl restart php8.3-fpm
-            
+            echo "$SSH_PASSWORD" | sudo -S systemctl restart nginx
+            echo "$SSH_PASSWORD" | sudo -S systemctl restart php8.3-fpm
+
             echo "Deployment finished!"
           EOF
