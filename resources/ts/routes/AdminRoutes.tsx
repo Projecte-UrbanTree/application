@@ -28,6 +28,7 @@ import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
 import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
 import WorkReport from '@/pages/Admin/WorkReport';
+import Account from '@/pages/Admin/Account/Account';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -130,6 +131,14 @@ const AdminRoutes: RouteObject[] = [
               </AdminLayoutWrapper>
             ),
           },
+                    {
+                        path: 'account',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.account.title">
+                                <Account />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
           {
             path: 'settings',
             children: [
