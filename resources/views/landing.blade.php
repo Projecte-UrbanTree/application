@@ -132,8 +132,7 @@
             <div class="mx-auto mt-32 max-w-7xl sm:mt-56 sm:px-6 lg:px-8">
                 <iframe
                     class="relative max-w-xl min-w-full rounded-xl ring-1 shadow-xl ring-white/10 lg:row-span-4 lg:w-[64rem] lg:max-w-none"
-                    src="https://www.youtube.com/embed/M0VBcCEp10E"
-                    title="{{ __('landings/landing9.cta.video_title') }}"
+                    src="{{ __('landing.video.url') }}" title="{{ __('landing.video.title') }}"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen height="684"></iframe>
             </div>

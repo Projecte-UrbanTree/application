@@ -12,6 +12,10 @@ return [
         'cta_reviews' => 'Read reviews',
         'cta_learn_more' => 'Learn more',
     ],
+    'video' => [
+        'url' => 'https://www.youtube.com/embed/j9q3OyJEbxk',
+        'title' => 'Introduction to Urban Tree 5.0',
+    ],
     'features' => [
         'section_title' => 'Smart Management',
         'title' => 'Everything you need for tree management',

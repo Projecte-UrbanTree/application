@@ -12,6 +12,10 @@ return [
         'cta_reviews' => 'Leer opiniones',
         'cta_learn_more' => 'Conoce más',
     ],
+    'video' => [
+        'url' => 'https://www.youtube.com/embed/M0VBcCEp10E',
+        'title' => 'Introducción a Urban Tree 5.0',
+    ],
     'features' => [
         'section_title' => 'Gestión inteligente',
         'title' => 'Todo lo que necesitas para la gestión del arbolado',
