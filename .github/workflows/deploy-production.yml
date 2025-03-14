@@ -57,7 +57,7 @@ jobs:
             sudo -u frontendweb npm run build
 
             echo "🔄 Running migrations..."
-            sudo php artisan migrate --seed --force
+            sudo php artisan migrate --step --force
 
             echo "🧹 Clearing and caching..."
             sudo php artisan optimize:clear
