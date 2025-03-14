@@ -174,15 +174,15 @@ export default function CreateUser() {
                                     <Field
                                         name="password"
                                         as={Password}
-                                        placeholder={t("admin.pages.users.form.placeholders.password")}
-                                        toggleMask
-                                        className={errors.password && touched.password ? "p-invalid" : ""}
-                                    />
-                                    {errors.password && touched.password && (
-                                        <small className="p-error">{errors.password}</small>
-                                    )}
-                                </div>
-                                <div className="md:col-span-2 flex justify-end mt-4">
+                                          placeholder={t("admin.pages.users.form.placeholders.password")}
+                                          toggleMask
+                                          className={errors.password && touched.password ? "p-invalid" : ""}
+                                      />
+                                      {errors.password && touched.password && (
+                                          <small className="p-error">{errors.password}</small>
+                                      )}
+                                  </div>
+                                  <div className="md:col-span-2 flex justify-end mt-4">
                                     <Button
                                         type="submit"
                                         disabled={isSubmitting}

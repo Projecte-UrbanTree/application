@@ -50,6 +50,15 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('demopass'),
                 'role' => 'customer',
             ],
+            [
+                'name' => 'Victor',
+                'surname' => 'Test',
+                'email' => 'cascascas@urbantere.com',
+                'company' => 'Urban Tree 5.0',
+                'dni' => '12345678E',
+                'password' => Hash::make('demopass'),
+                'role' => 'worker',
+            ],
         ]);
     }
 }
