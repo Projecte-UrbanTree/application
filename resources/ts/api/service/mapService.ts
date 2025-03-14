@@ -61,6 +61,10 @@ export class MapService {
     this.map.on('draw.delete', () => this.handleDraw(onDrawUpdate));
   }
 
+  public clearDraw(): void {
+    this.draw?.deleteAll();
+  }
+
   private handleDraw(onDrawUpdate: (coords: number[][]) => void) {
     if (!this.draw) return;
     const data = this.draw.getAll();

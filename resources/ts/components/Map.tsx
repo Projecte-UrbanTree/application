@@ -34,27 +34,29 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
+  const zonesRedux = useSelector((state: RootState) => state.zone.zones);
 
   // api data
   const [zones, setZones] = useState<Zone[]>([]);
   const [points, setPoints] = useState<Point[]>([]);
 
   useEffect(() => {
-    async function loadData() {
-      try {
-        const zonesData = await fetchZones();
-        setZones(zonesData);
+    if (!currentContract) return;
 
-        const pointsData = await fetchPoints();
-        setPoints(pointsData);
-      } catch (error) {
-        console.error('Error al cargar zonas y puntos:', error);
-      }
-    }
-    if (currentContract) {
-      loadData();
-    }
+    loadData();
   }, [currentContract]);
+
+  async function loadData() {
+    try {
+      const zonesData = await fetchZones();
+      setZones(zonesData);
+
+      const pointsData = await fetchPoints();
+      setPoints(pointsData);
+    } catch (error) {
+      console.error('Error al cargar zonas y puntos:', error);
+    }
+  }
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -126,6 +128,11 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     setModalVisible(false);
     setIsDrawingMode(false);
     setEnabledButton(false);
+
+    const service: MapService | null = mapServiceRef.current;
+    service?.clearDraw();
+
+    await loadData();
   }
 
   function detectCollision(
