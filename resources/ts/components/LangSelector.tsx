@@ -1,6 +1,6 @@
 import { useI18n } from '@/hooks/useI18n';
-import { Dropdown } from 'primereact/dropdown';
 import { Icon } from '@iconify/react';
+import { Dropdown } from 'primereact/dropdown';
 
 interface LangSelectorProps {
   className?: string;
