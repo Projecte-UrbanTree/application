@@ -17,30 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: mbstring,bcmath,pdo,pdo_sqlite,curl,dom,fileinfo,json,xml,tokenizer
-
-      - name: Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
-
-      - name: Install Node dependencies
-        run: npm install
-
-      - name: Build assets
-        run: npm run build
-
-      - name: Run migrations and seed database
-        run: php artisan migrate --seed --force
-
-      - name: Clear and optimize Laravel
-        run: |
-          php artisan optimize:clear
-          php artisan config:cache
-          php artisan route:cache
-
       - name: Install sshpass (for password authentication)
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
@@ -51,9 +27,39 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
           REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
         run: |
-          sudo apt-get update && sudo apt-get install -y sshpass
           sshpass -p "$SSH_PASSWORD" rsync -avz --delete \
             --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" \
             --exclude=".env" --exclude="database/database.sqlite" \
             --no-perms --no-group --chmod=ugo=rwX \
             -e 'ssh -p 21222 -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
+
+      - name: Execute setup commands on server
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -p 21222 -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+            set -e
+
+            echo "Setting permissions..."
+            sudo chown -R frontendweb:www-data /var/www/urbantree
+            sudo chmod -R u+rwX,g+rwX,o+rX /var/www/urbantree
+            sudo chmod -R 775 /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+            sudo chown -R www-data:www-data /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+
+            echo "Running migrations..."
+            sudo php /var/www/urbantree/artisan migrate --seed --force
+
+            echo "Clearing and caching..."
+            sudo php /var/www/urbantree/artisan optimize:clear
+            sudo php /var/www/urbantree/artisan config:cache
+            sudo php /var/www/urbantree/artisan route:cache
+
+            echo "Restarting services..."
+            sudo systemctl restart nginx
+            sudo systemctl restart php8.3-fpm
+            
+            echo "Deployment finished!"
+          EOF
