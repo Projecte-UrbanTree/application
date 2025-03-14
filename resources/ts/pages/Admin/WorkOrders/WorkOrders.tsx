@@ -187,7 +187,13 @@ export default function WorkOrders() {
   return (
     <>
       {msg && <Message severity={msgSeverity} text={msg} className="mb-4 w-full" />}
-      <CrudPanel title="admin.pages.workOrders.title" onCreate={() => navigate('/admin/work-orders/create')}>
+      <CrudPanel 
+        title="admin.pages.workOrders.title" 
+        onCreate={() => navigate('/admin/work-orders/create')}
+        createDisabled={!currentContract}
+        createTooltip={
+          !currentContract ? t('admin.tooltips.selectContract') : undefined
+        }>
         <DataTable
           value={filteredWorkOrders}
           expandedRows={expandedRows}
