@@ -15,16 +15,19 @@ class ResourceSeeder extends Seeder
         DB::table('resources')->insert([
             [
                 'name' => 'Resource 1',
+                'contract_id' => 1,
                 'description' => 'Description for Resource 1',
                 'resource_type_id' => 1,
             ],
             [
                 'name' => 'Resource 2',
+                'contract_id' => 2,
                 'description' => 'Description for Resource 2',
                 'resource_type_id' => 2,
             ],
             [
                 'name' => 'Resource 3',
+                'contract_id' => 3,
                 'description' => 'Description for Resource 3',
                 'resource_type_id' => 3,
             ],

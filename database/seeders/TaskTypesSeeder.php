@@ -14,15 +14,15 @@ class TaskTypesSeeder extends Seeder
     {
         DB::table('task_types')->insert([
             [
-                'name' => 'Task 1',
+                'name' => 'Podar',
                 'description' => 'Task 1 description',
             ],
             [
-                'name' => 'Task 2',
+                'name' => 'Regar',
                 'description' => 'Task 2 description',
             ],
             [
-                'name' => 'Task 3',
+                'name' => 'Cortar',
                 'description' => 'Task 3 description',
             ],
         ]);
