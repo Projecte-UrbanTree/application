@@ -156,7 +156,8 @@
             "deleteSuccess": "Recurs eliminat correctament",
             "error": "Error guardant el recurs",
             "updateSuccess": "Recurs actualitzat correctament"
-          }
+          },
+          "title": "Recursos"
         },
         "title": "Recursos"
       },
@@ -517,7 +518,6 @@
       }
     },
     "tooltips": {
-      "selectContract": "Primer, selecciona un contracte"
       "selectContract": "Primer, selecciona un contracte"
     }
   },
