@@ -1,6 +1,5 @@
 import { MapService } from '@/api/service/mapService';
 import { fetchPoints } from '@/api/service/pointService';
-import { fetchZones } from '@/api/service/zoneService';
 import { RootState } from '@/store/store';
 import { Point } from '@/types/Point';
 import { Roles } from '@/types/Role';
@@ -19,53 +18,41 @@ interface MapProps {
 }
 
 export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
-  // Refs
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapServiceRef = useRef<MapService | null>(null);
 
-  // states
   const [modalVisible, setModalVisible] = useState(false);
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
   const [enabledButton, setEnabledButton] = useState(false);
 
-  // redux
   const userValue = useSelector((state: RootState) => state.user);
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
   const zonesRedux = useSelector((state: RootState) => state.zone.zones);
 
-  // api data
-  const [zones, setZones] = useState<Zone[]>([]);
   const [points, setPoints] = useState<Point[]>([]);
 
   useEffect(() => {
     if (!currentContract) return;
-
-    loadData();
+    loadPoints();
   }, [currentContract]);
 
-  async function loadData() {
+  async function loadPoints() {
     try {
-      const zonesData = await fetchZones();
-      setZones(zonesData);
-
       const pointsData = await fetchPoints();
       setPoints(pointsData);
     } catch (error) {
-      console.error('Error al cargar zonas y puntos:', error);
+      console.error('Error al cargar puntos:', error);
     }
   }
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
-
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
-
     service.addBasicControls();
     service.addGeocoder();
-
     service.enableDraw(userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
@@ -76,14 +63,12 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
         setEnabledButton(false);
       }
     });
-
     mapServiceRef.current = service;
   }, []);
 
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !selectedZone) return;
-
     async function flyToSelectedZone() {
       const allPoints = await fetchPoints();
       const firstPoint = allPoints.find((p) => p.zone_id === selectedZone!.id);
@@ -91,48 +76,42 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
         service!.flyTo([firstPoint.longitude, firstPoint.latitude]);
       }
     }
-
     flyToSelectedZone();
   }, [selectedZone]);
 
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service || !zones.length || !points.length) return;
-
+    if (!service || !zonesRedux.length || !points.length) return;
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => updateZones(service));
     } else {
       updateZones(service);
     }
-  }, [zones, points, currentContract]);
+  }, [zonesRedux, points, currentContract]);
 
   function updateZones(service: MapService) {
     service.removeLayersAndSources('zone-');
-
-    const filteredZones = zones.filter(
+    const filteredZones = zonesRedux.filter(
       (z) => z.contract_id === currentContract?.id,
     );
-
     filteredZones.forEach((zone) => {
       const zonePoints = points
         .filter((p) => p.zone_id === zone.id)
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
-
       if (zonePoints.length > 2) {
         zonePoints.push(zonePoints[0]);
         service.addZoneToMap(`zone-${zone.id}`, zonePoints);
       }
     });
   }
+
   async function handleZoneSaved() {
     setModalVisible(false);
     setIsDrawingMode(false);
     setEnabledButton(false);
-
-    const service: MapService | null = mapServiceRef.current;
+    const service = mapServiceRef.current;
     service?.clearDraw();
-
-    await loadData();
+    await loadPoints();
   }
 
   function detectCollision(
@@ -166,7 +145,6 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
   return (
     <div style={{ position: 'relative', width: '100%', height: '90%' }}>
       <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
-
       {userValue.role === Roles.admin && isDrawingMode && (
         <Button
           label="Guardar Zona"
@@ -175,7 +153,6 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
           disabled={!enabledButton}
         />
       )}
-
       <Dialog
         header="Guardar Zona"
         visible={modalVisible}
