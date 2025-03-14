@@ -14,7 +14,7 @@
       "genus": "Gènere",
       "name": "Nom",
       "password": "Contrasenya",
-      "resource_type": "Resource Type",
+      "resource_type": "Tipus de recurs",
       "role": "Rol",
       "select_resource_type": "Select a resource type",
       "species": "Espècie",
