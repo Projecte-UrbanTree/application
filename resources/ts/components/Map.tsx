@@ -5,17 +5,12 @@ import { RootState } from '@/store/store';
 import { Point } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { Zone } from '@/types/Zone';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
-import { Zone } from '@/types/zone';
-import { Point } from '@/types/point';
-import { fetchPoints } from '@/api/service/pointService';
-import { fetchZones } from '@/api/service/zoneService';
-import { MapService } from '@/api/service/mapService';
 import * as turf from '@turf/turf';
+import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -130,56 +125,35 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     setModalVisible(false);
     setIsDrawingMode(false);
     setEnabledButton(false);
-
-    try {
-      const zonesData = await fetchZones();
-      setZones(zonesData);
-      const pointsData = await fetchPoints();
-      setPoints(pointsData);
-    } catch (error) {
-      console.error('Error al recargar la data tras guardar zona:', error);
-    }
   }
-        try {
-            const zonesData = await fetchZones();
-            setZones(zonesData);
-            const pointsData = await fetchPoints();
-            setPoints(pointsData);
-        } catch (error) {
-            console.error(
-                'Error al recargar la data tras guardar zona:',
-                error,
-            );
-        }
-    }
 
-    function detectCollision(
-        allPoints: Point[],
-        contractId: number,
-        zones: Zone[],
-        newPolygonCoords: number[][],
-    ): boolean {
-        if (contractId === 0) return false;
-        const filteredZones = zones.filter((z) => z.contract_id === contractId);
-        const createdPoly = turf.polygon([newPolygonCoords]);
-        for (let i = 0; i < filteredZones.length; i++) {
-            const existingPoly = getZonePolygon(filteredZones[i], allPoints);
-            const polyIntersection = turf.intersect(createdPoly, existingPoly);
-            if (polyIntersection) {
-                return true;
-            }
-        }
-        return false;
+  function detectCollision(
+    allPoints: Point[],
+    contractId: number,
+    zones: Zone[],
+    newPolygonCoords: number[][],
+  ): boolean {
+    if (contractId === 0) return false;
+    const filteredZones = zones.filter((z) => z.contract_id === contractId);
+    const createdPoly = turf.polygon([newPolygonCoords]);
+    for (let i = 0; i < filteredZones.length; i++) {
+      const existingPoly = getZonePolygon(filteredZones[i], allPoints);
+      const polyIntersection = turf.intersect(createdPoly, existingPoly);
+      if (polyIntersection) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    function getZonePolygon(zone: Zone, allPoints: Point[]) {
-        const zonePoints = allPoints.filter((p) => p.zone_id === zone.id);
-        const coords: number[][] = [];
-        for (let i = 0; i < zonePoints.length; i++) {
-            coords.push([zonePoints[i].longitude!, zonePoints[i].latitude!]);
-        }
-        return turf.polygon([coords]);
+  function getZonePolygon(zone: Zone, allPoints: Point[]) {
+    const zonePoints = allPoints.filter((p) => p.zone_id === zone.id);
+    const coords: number[][] = [];
+    for (let i = 0; i < zonePoints.length; i++) {
+      coords.push([zonePoints[i].longitude!, zonePoints[i].latitude!]);
     }
+    return turf.polygon([coords]);
+  }
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '90%' }}>
