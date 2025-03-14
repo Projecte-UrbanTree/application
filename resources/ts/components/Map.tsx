@@ -10,6 +10,7 @@ import { Point } from '@/types/point';
 import { fetchPoints } from '@/api/service/pointService';
 import { fetchZones } from '@/api/service/zoneService';
 import { MapService } from '@/api/service/mapService';
+import * as turf from '@turf/turf';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -138,6 +139,34 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
                 error,
             );
         }
+    }
+
+    function detectCollision(
+        allPoints: Point[],
+        contractId: number,
+        zones: Zone[],
+        newPolygonCoords: number[][],
+    ): boolean {
+        if (contractId === 0) return false;
+        const filteredZones = zones.filter((z) => z.contract_id === contractId);
+        const createdPoly = turf.polygon([newPolygonCoords]);
+        for (let i = 0; i < filteredZones.length; i++) {
+            const existingPoly = getZonePolygon(filteredZones[i], allPoints);
+            const polyIntersection = turf.intersect(createdPoly, existingPoly);
+            if (polyIntersection) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getZonePolygon(zone: Zone, allPoints: Point[]) {
+        const zonePoints = allPoints.filter((p) => p.zone_id === zone.id);
+        const coords: number[][] = [];
+        for (let i = 0; i < zonePoints.length; i++) {
+            coords.push([zonePoints[i].longitude!, zonePoints[i].latitude!]);
+        }
+        return turf.polygon([coords]);
     }
 
     return (
