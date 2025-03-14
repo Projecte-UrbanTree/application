@@ -14,6 +14,7 @@
       "name": "Nom",
       "password": "Contrasenya",
       "role": "Rol",
+      "select_resource_type": "Triar un tipus de recurs",
       "species": "Espècie",
       "start_date": "Data d'inici",
       "status": "Estat",
@@ -127,7 +128,12 @@
             "edit": "Editar Recurs"
           },
           "validation": {
+            "description_max": "La descripció not pot superar els 255 caràcters",
+            "name_format": "El nom només pot contenir lletres, números i espais",
+            "name_max": "El nom no pot superar els 50 caràcters",
+            "name_min": "El nom ha de tenir almenys 3 caràcters",
             "name_required": "El nom és obligatori",
+            "type_invalid": "Si us plau, tria un tipus de recurs vàlid",
             "type_required": "El tipus és obligatori"
           }
         },
@@ -199,7 +205,17 @@
         "title": "Tipus de recurs"
       },
       "stats": {
-        "title": "Estadístiques"
+        "title": "Estadístiques",
+        "week": "Aquesta setmana",
+        "month": "Aquest mes",
+        "custom": "Personalitzat",
+        "startDate": "Data d'inici",
+        "endDate": "Data de finalització",
+        "tasksDone": "Tasques completades",
+        "tasksNotDone": "Tasques pendents",
+        "hoursWorked": "Hores treballades",
+        "fuelConsumption": "Consum de combustible",
+        "noData": "No hi ha dades a mostrar"
       },
       "taskTypes": {
         "form": {
