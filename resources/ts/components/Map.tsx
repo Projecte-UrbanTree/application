@@ -62,6 +62,7 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
 
     service.addBasicControls();
+    service.addGeocoder();
 
     service.enableDraw(userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
