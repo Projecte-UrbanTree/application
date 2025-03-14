@@ -28,7 +28,28 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     const [coordinates, setCoordinates] = useState<number[][]>([]);
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const [enabledButton, setEnabledButton] = useState(false);
+    const [zones, setZones] = useState<Zone[]>([]);
+    const [points, setPoints] = useState<Point[]>([]);
     const userValue = useSelector((state: RootState) => state.user);
+    const currentContract = useSelector(
+        (state: RootState) => state.contract.currentContract,
+    );
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const zonesData = await fetchZones();
+                setZones(zonesData);
+
+                const pointsData = await fetchPoints();
+                setPoints(pointsData);
+            } catch (error) {
+                console.error('Error al cargar zonas y puntos:', error);
+            }
+        };
+
+        loadData();
+    }, [currentContract]);
 
     useEffect(() => {
         if (!mapContainerRef.current) return;
@@ -107,6 +128,57 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
         fetchData();
     }, [selectedZone]);
 
+    useEffect(() => {
+        if (!mapRef.current || !zones.length || !points.length) return;
+
+        if (!mapRef.current.isStyleLoaded()) {
+            mapRef.current.once('style.load', () => {
+                actualizarZonasEnMapa();
+            });
+        } else {
+            actualizarZonasEnMapa();
+        }
+    }, [zones, points, currentContract]);
+
+    function actualizarZonasEnMapa() {
+        if (!mapRef.current) return;
+
+        const style = mapRef.current.getStyle();
+        if (style?.layers) {
+            style.layers.forEach((layer) => {
+                if (layer.id.startsWith('zone-')) {
+                    if (mapRef.current?.getLayer(layer.id)) {
+                        mapRef.current.removeLayer(layer.id);
+                    }
+                    if (mapRef.current?.getSource(layer.id)) {
+                        mapRef.current.removeSource(layer.id);
+                    }
+                }
+            });
+        }
+
+        const filteredZones = zones.filter(
+            (zone) => zone.contract_id === currentContract?.id,
+        );
+
+        filteredZones.forEach((zone) => {
+            const zonePoints = points
+                .filter((p) => p.zone_id === zone.id)
+                .map(
+                    (p) =>
+                        [p.longitude as number, p.latitude as number] as [
+                            number,
+                            number,
+                        ],
+                );
+
+            if (zonePoints.length > 2) {
+                zonePoints.push(zonePoints[0]);
+                addZoneToMap(zone, zonePoints);
+            }
+        });
+    }
+
     function updateArea() {
         if (!drawRef.current) return;
         const data = drawRef.current.getAll();
@@ -135,6 +207,20 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
 
     function addZoneToMap(zone: Zone, zonePoints: [number, number][]) {
         if (!mapRef.current) return;
+
+        const sourceId = `zone-${zone.id}`;
+        const fillLayerId = `zone-${zone.id}`;
+        const outlineLayerId = `zone-${zone.id}-outline`;
+
+        if (mapRef.current.getSource(sourceId)) {
+            if (mapRef.current.getLayer(fillLayerId)) {
+                mapRef.current.removeLayer(fillLayerId);
+            }
+            if (mapRef.current.getLayer(outlineLayerId)) {
+                mapRef.current.removeLayer(outlineLayerId);
+            }
+            mapRef.current.removeSource(sourceId);
+        }
 
         mapRef.current.addSource(`zone-${zone.id}`, {
             type: 'geojson',
