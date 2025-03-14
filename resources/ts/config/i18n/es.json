@@ -16,7 +16,7 @@
       "password": "Contraseña",
       "resource_type": "Resource Type",
       "role": "Rol",
-      "select_resource_type": "Selecciona un tipo de recurso",
+      "select_resource_type": "Select a resource type",
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
@@ -130,12 +130,12 @@
             "edit": "Editar Recurso"
           },
           "validation": {
-            "description_max": "La descripción no puede exceder los 255 caracteres",
-            "name_format": "El nombre solo puede contener letras, números y espacios",
-            "name_max": "El nombre no puede exceder los 50 caracteres",
-            "name_min": "El nombre debe tener al menos 3 caracteres",
+            "description_max": "Description cannot exceed 255 characters",
+            "name_format": "Name can only contain letters, numbers and spaces",
+            "name_max": "Name cannot exceed 50 characters",
+            "name_min": "Name must be at least 3 characters",
             "name_required": "El nombre es obligatorio",
-            "type_invalid": "Por favor, selecciona un tipo de recurso válido",
+            "type_invalid": "Please select a valid resource type",
             "type_required": "El tipo es obligatorio"
           }
         },
@@ -156,7 +156,8 @@
             "deleteSuccess": "Recurso eliminado exitosamente",
             "error": "Error guardando el recurso",
             "updateSuccess": "Recurso actualizado exitosamente"
-          }
+          },
+          "title": "Recursos"
         },
         "title": "Recursos"
       },
@@ -207,16 +208,16 @@
       },
       "stats": {
         "title": "Estadísticas",
-        "week": "Esta Semana",
-        "month": "Este Mes",
-        "custom": "Personalizado",
+        "week": "This Week",
+        "month": "This Month",
+        "custom": "Custom",
         "startDate": "Fecha de inicio",
         "endDate": "Fecha de fin",
-        "tasksDone": "Tareas Completadas",
-        "tasksNotDone": "Tareas Pendientes",
-        "hoursWorked": "Horas Trabajadas",
-        "fuelConsumption": "Consumo de Combustible",
-        "noData": "No hay datos para mostrar"
+        "tasksDone": "Tasks Done",
+        "tasksNotDone": "Pending Tasks",
+        "hoursWorked": "Hours Worked",
+        "fuelConsumption": "Fuel Consumption",
+        "noData": "No data to display"
       },
       "taskTypes": {
         "form": {
@@ -517,7 +518,7 @@
       }
     },
     "tooltips": {
-      "selectContract": "Primero, selecciona un contrato"
+      "selectContract": "First, select a contract"
     }
   },
   "general": {
