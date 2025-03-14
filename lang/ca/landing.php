@@ -4,12 +4,17 @@ return [
     'common' => [
         'copyright' => 'Tots els drets reservats.',
         'login' => 'Iniciar sessió',
+        'send' => 'Enviar',
     ],
     'hero' => [
         'title' => 'Tecnologia per a ciutats més verdes',
         'description' => 'Revolucionem la gestió de l\'arbrat urbà i periurbà combinant tecnologia web i sensors IoT. Construint junts les ciutats verdes i resilients del futur.',
         'cta_reviews' => 'Llegir opinions',
         'cta_learn_more' => 'Coneix més',
+    ],
+    'video' => [
+        'url' => 'https://www.youtube.com/embed/3eCPW5mGKhw',
+        'title' => 'Introducció a Urban Tree 5.0',
     ],
     'features' => [
         'section_title' => 'Gestió intel·ligent',
@@ -29,10 +34,9 @@ return [
         ],
     ],
     'newsletter' => [
-        'title' => 'Subscriu-te al nostre butlletí',
-        'description' => 'Les últimes notícies, articles i recursos, enviats al teu correu electrònic setmanalment.',
-        'subscribe' => 'Subscriu-te',
-        'subscribe_alt' => 'Al nostre butlletí',
+        'title' => 'Sol·licita una demostració',
+        'description' => 'Descobreix com la nostra plataforma pot ajudar-te a millorar la gestió de l\'arbrat de la teva ciutat.',
+        'request' => 'Sol·licita una demo',
         'placeholder' => 'Introdueix el teu correu electrònic',
     ],
     'testimonials' => [

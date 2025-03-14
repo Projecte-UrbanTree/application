@@ -171,9 +171,9 @@ export default function WorkOrders() {
     )
   }
   
-  const filteredWorkOrders = workOrders.filter(
-    (wo: any) => currentContract && wo.contract_id === currentContract.id
-  )
+  const filteredWorkOrders = currentContract && currentContract.id !== 0
+    ? workOrders.filter((wo: any) => wo.contract_id === currentContract.id)
+    : workOrders
 
   if (isLoading) {
     return (
@@ -200,9 +200,16 @@ export default function WorkOrders() {
           showGridlines
           emptyMessage={t('admin.pages.workOrders.list.messages.noData')}
           className="p-datatable-sm"
-        >
+        > 
           <Column expander style={{ width: '3rem' }} className="expander-column" />
           <Column field="id" header={t('admin.pages.workOrders.list.columns.id')} body={(rowData) => `OT-${rowData.id}`} />
+          {(!currentContract || currentContract.id === 0) && (
+            <Column 
+              field="contract.name" 
+              header={t('admin.pages.workOrders.list.columns.contract')} 
+              body={(rowData) => rowData.contract?.name || '-'} 
+            />
+          )}
           <Column field="date" header={t('admin.pages.workOrders.list.columns.date')} body={(rowData) => new Date(rowData.date).toLocaleDateString()} />
           <Column header={t('admin.pages.workOrders.list.columns.users')} body={(rowData) =>
             rowData.users && rowData.users.length > 0

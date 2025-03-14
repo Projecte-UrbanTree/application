@@ -4,9 +4,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LangController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/landing{number}', [LandingController::class, 'index'])->where('number', '[0-9]+')->name('landing');
-
-Route::post('/landing{number}/form', [LandingController::class, 'store'])->where('number', '[0-9]+')->name('landing.form');
+Route::resource('/', LandingController::class)->only(['index', 'store'])->names('landing');
 
 Route::get('/set-language/{lang}', [LangController::class, 'setLanguage'])->name('set-language');
 

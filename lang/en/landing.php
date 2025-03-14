@@ -4,12 +4,17 @@ return [
     'common' => [
         'copyright' => 'All rights reserved.',
         'login' => 'Log in',
+        'send' => 'Send',
     ],
     'hero' => [
         'title' => 'Technology for greener cities',
         'description' => 'Revolutionizing urban and peri-urban tree management by combining web technology and IoT sensors. Building together the green and resilient cities of the future.',
         'cta_reviews' => 'Read reviews',
         'cta_learn_more' => 'Learn more',
+    ],
+    'video' => [
+        'url' => 'https://www.youtube.com/embed/j9q3OyJEbxk',
+        'title' => 'Introduction to Urban Tree 5.0',
     ],
     'features' => [
         'section_title' => 'Smart Management',
@@ -29,11 +34,10 @@ return [
         ],
     ],
     'newsletter' => [
-        'title' => 'Subscribe to our newsletter',
-        'description' => 'The latest news, articles, and resources, sent to your inbox weekly.',
-        'subscribe' => 'Subscribe',
-        'subscribe_alt' => 'To our newsletter',
-        'placeholder' => 'Enter your email',
+        'title' => 'Request a demo',
+        'description' => 'Discover how our platform can help you improve tree management in your city.',
+        'request' => 'Request a demo',
+        'placeholder' => 'Enter your email address',
     ],
     'testimonials' => [
         'section_title' => 'Our thoughts',
