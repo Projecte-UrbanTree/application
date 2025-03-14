@@ -4,12 +4,17 @@ return [
     'common' => [
         'copyright' => 'Todos los derechos reservados.',
         'login' => 'Iniciar sesión',
+        'send' => 'Enviar',
     ],
     'hero' => [
         'title' => 'Tecnología para ciudades más verdes',
         'description' => 'Revolucionamos la gestión del arbolado urbano y periurbano combinando tecnología web y sensores IoT. Construyendo juntos las ciudades verdes y resilientes del futuro.',
         'cta_reviews' => 'Leer opiniones',
         'cta_learn_more' => 'Conoce más',
+    ],
+    'video' => [
+        'url' => 'https://www.youtube.com/embed/M0VBcCEp10E',
+        'title' => 'Introducción a Urban Tree 5.0',
     ],
     'features' => [
         'section_title' => 'Gestión inteligente',
@@ -29,10 +34,9 @@ return [
         ],
     ],
     'newsletter' => [
-        'title' => 'Suscríbete a nuestro boletín',
-        'description' => 'Las últimas noticias, artículos y recursos, enviados a tu correo electrónico semanalmente.',
-        'subscribe' => 'Suscríbete',
-        'subscribe_alt' => 'A nuestro boletín',
+        'title' => 'Solicita una demostración',
+        'description' => 'Descubre cómo nuestra plataforma puede ayudarte a mejorar la gestión del arbolado de tu ciudad.',
+        'request' => 'Solicita una demo',
         'placeholder' => 'Introduce tu correo electrónico',
     ],
     'testimonials' => [
