@@ -156,8 +156,7 @@
             "deleteSuccess": "Resource deleted successfully",
             "error": "Error saving resource",
             "updateSuccess": "Resource updated successfully"
-          },
-          "title": "Resources"
+          }
         },
         "title": "Resources"
       },
