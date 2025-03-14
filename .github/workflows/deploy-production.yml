@@ -54,5 +54,6 @@ jobs:
           sudo apt-get update && sudo apt-get install -y sshpass
           sshpass -p "$SSH_PASSWORD" rsync -avz --delete \
             --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" \
+            --exclude=".env" --exclude="database/database.sqlite" \
             --no-perms --no-group --chmod=ugo=rwX \
             -e 'ssh -p 21222 -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
