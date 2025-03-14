@@ -1,19 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Validation Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines contain the default error messages used by
-    | the validator class. Some of these rules have multiple versions such
-    | as the size rules. Feel free to tweak each of these messages here.
-    |
-    */
-
     'accepted' => 'crwdns2627:0crwdne2627:0',
+    'accepted_if' => 'crwdns3455:0crwdne3455:0',
     'active_url' => 'crwdns2629:0crwdne2629:0',
     'after' => 'crwdns2631:0crwdne2631:0',
     'after_or_equal' => 'crwdns2633:0crwdne2633:0',
@@ -21,41 +12,53 @@ return [
     'alpha_dash' => 'crwdns2637:0crwdne2637:0',
     'alpha_num' => 'crwdns2639:0crwdne2639:0',
     'array' => 'crwdns2641:0crwdne2641:0',
+    'ascii' => 'crwdns3457:0crwdne3457:0',
     'before' => 'crwdns2643:0crwdne2643:0',
     'before_or_equal' => 'crwdns2645:0crwdne2645:0',
     'between' => [
-        'numeric' => 'crwdns2647:0crwdne2647:0',
-        'file' => 'crwdns2649:0crwdne2649:0',
-        'string' => 'crwdns2651:0crwdne2651:0',
         'array' => 'crwdns2653:0crwdne2653:0',
+        'file' => 'crwdns2649:0crwdne2649:0',
+        'numeric' => 'crwdns2647:0crwdne2647:0',
+        'string' => 'crwdns2651:0crwdne2651:0',
     ],
     'boolean' => 'crwdns2655:0crwdne2655:0',
+    'can' => 'crwdns3459:0crwdne3459:0',
     'confirmed' => 'crwdns2657:0crwdne2657:0',
+    'contains' => 'crwdns3461:0crwdne3461:0',
+    'current_password' => 'crwdns3463:0crwdne3463:0',
     'date' => 'crwdns2659:0crwdne2659:0',
     'date_equals' => 'crwdns2661:0crwdne2661:0',
     'date_format' => 'crwdns2663:0crwdne2663:0',
+    'decimal' => 'crwdns3465:0crwdne3465:0',
+    'declined' => 'crwdns3467:0crwdne3467:0',
+    'declined_if' => 'crwdns3469:0crwdne3469:0',
     'different' => 'crwdns2665:0crwdne2665:0',
     'digits' => 'crwdns2667:0crwdne2667:0',
     'digits_between' => 'crwdns2669:0crwdne2669:0',
     'dimensions' => 'crwdns2671:0crwdne2671:0',
     'distinct' => 'crwdns2673:0crwdne2673:0',
+    'doesnt_end_with' => 'crwdns3471:0crwdne3471:0',
+    'doesnt_start_with' => 'crwdns3473:0crwdne3473:0',
     'email' => 'crwdns2675:0crwdne2675:0',
-    'ends_with' => 'crwdns2677:0crwdne2677:0',
+    'ends_with' => 'crwdns3475:0crwdne3475:0',
+    'enum' => 'crwdns3477:0crwdne3477:0',
     'exists' => 'crwdns2679:0crwdne2679:0',
+    'extensions' => 'crwdns3479:0crwdne3479:0',
     'file' => 'crwdns2681:0crwdne2681:0',
     'filled' => 'crwdns2683:0crwdne2683:0',
     'gt' => [
-        'numeric' => 'crwdns2685:0crwdne2685:0',
-        'file' => 'crwdns2687:0crwdne2687:0',
-        'string' => 'crwdns2689:0crwdne2689:0',
         'array' => 'crwdns2691:0crwdne2691:0',
+        'file' => 'crwdns2687:0crwdne2687:0',
+        'numeric' => 'crwdns2685:0crwdne2685:0',
+        'string' => 'crwdns2689:0crwdne2689:0',
     ],
     'gte' => [
-        'numeric' => 'crwdns2693:0crwdne2693:0',
-        'file' => 'crwdns2695:0crwdne2695:0',
-        'string' => 'crwdns2697:0crwdne2697:0',
         'array' => 'crwdns2699:0crwdne2699:0',
+        'file' => 'crwdns2695:0crwdne2695:0',
+        'numeric' => 'crwdns2693:0crwdne2693:0',
+        'string' => 'crwdns2697:0crwdne2697:0',
     ],
+    'hex_color' => 'crwdns3481:0crwdne3481:0',
     'image' => 'crwdns2701:0crwdne2701:0',
     'in' => 'crwdns2703:0crwdne2703:0',
     'in_array' => 'crwdns2705:0crwdne2705:0',
@@ -64,40 +67,70 @@ return [
     'ipv4' => 'crwdns2711:0crwdne2711:0',
     'ipv6' => 'crwdns2713:0crwdne2713:0',
     'json' => 'crwdns2715:0crwdne2715:0',
+    'list' => 'crwdns3483:0crwdne3483:0',
+    'lowercase' => 'crwdns3485:0crwdne3485:0',
     'lt' => [
-        'numeric' => 'crwdns2717:0crwdne2717:0',
-        'file' => 'crwdns2719:0crwdne2719:0',
-        'string' => 'crwdns2721:0crwdne2721:0',
         'array' => 'crwdns2723:0crwdne2723:0',
+        'file' => 'crwdns2719:0crwdne2719:0',
+        'numeric' => 'crwdns2717:0crwdne2717:0',
+        'string' => 'crwdns2721:0crwdne2721:0',
     ],
     'lte' => [
-        'numeric' => 'crwdns2725:0crwdne2725:0',
-        'file' => 'crwdns2727:0crwdne2727:0',
-        'string' => 'crwdns2729:0crwdne2729:0',
         'array' => 'crwdns2731:0crwdne2731:0',
+        'file' => 'crwdns2727:0crwdne2727:0',
+        'numeric' => 'crwdns2725:0crwdne2725:0',
+        'string' => 'crwdns2729:0crwdne2729:0',
     ],
+    'mac_address' => 'crwdns3487:0crwdne3487:0',
     'max' => [
-        'numeric' => 'crwdns2733:0crwdne2733:0',
-        'file' => 'crwdns2735:0crwdne2735:0',
-        'string' => 'crwdns2737:0crwdne2737:0',
         'array' => 'crwdns2739:0crwdne2739:0',
+        'file' => 'crwdns2735:0crwdne2735:0',
+        'numeric' => 'crwdns2733:0crwdne2733:0',
+        'string' => 'crwdns2737:0crwdne2737:0',
     ],
+    'max_digits' => 'crwdns3489:0crwdne3489:0',
     'mimes' => 'crwdns2741:0crwdne2741:0',
     'mimetypes' => 'crwdns2743:0crwdne2743:0',
     'min' => [
-        'numeric' => 'crwdns2745:0crwdne2745:0',
-        'file' => 'crwdns2747:0crwdne2747:0',
-        'string' => 'crwdns2749:0crwdne2749:0',
         'array' => 'crwdns2751:0crwdne2751:0',
+        'file' => 'crwdns2747:0crwdne2747:0',
+        'numeric' => 'crwdns2745:0crwdne2745:0',
+        'string' => 'crwdns2749:0crwdne2749:0',
     ],
+    'min_digits' => 'crwdns3491:0crwdne3491:0',
+    'missing' => 'crwdns3493:0crwdne3493:0',
+    'missing_if' => 'crwdns3495:0crwdne3495:0',
+    'missing_unless' => 'crwdns3497:0crwdne3497:0',
+    'missing_with' => 'crwdns3499:0crwdne3499:0',
+    'missing_with_all' => 'crwdns3501:0crwdne3501:0',
+    'multiple_of' => 'crwdns3503:0crwdne3503:0',
     'not_in' => 'crwdns2753:0crwdne2753:0',
     'not_regex' => 'crwdns2755:0crwdne2755:0',
     'numeric' => 'crwdns2757:0crwdne2757:0',
-    'password' => 'crwdns2759:0crwdne2759:0',
+    'password' => [
+        'letters' => 'crwdns3505:0crwdne3505:0',
+        'mixed' => 'crwdns3507:0crwdne3507:0',
+        'numbers' => 'crwdns3509:0crwdne3509:0',
+        'symbols' => 'crwdns3511:0crwdne3511:0',
+        'uncompromised' => 'crwdns3513:0crwdne3513:0',
+    ],
     'present' => 'crwdns2761:0crwdne2761:0',
+    'present_if' => 'crwdns3515:0crwdne3515:0',
+    'present_unless' => 'crwdns3517:0crwdne3517:0',
+    'present_with' => 'crwdns3519:0crwdne3519:0',
+    'present_with_all' => 'crwdns3521:0crwdne3521:0',
+    'prohibited' => 'crwdns3523:0crwdne3523:0',
+    'prohibited_if' => 'crwdns3525:0crwdne3525:0',
+    'prohibited_if_accepted' => 'crwdns3527:0crwdne3527:0',
+    'prohibited_if_declined' => 'crwdns3529:0crwdne3529:0',
+    'prohibited_unless' => 'crwdns3531:0crwdne3531:0',
+    'prohibits' => 'crwdns3533:0crwdne3533:0',
     'regex' => 'crwdns2763:0crwdne2763:0',
     'required' => 'crwdns2765:0crwdne2765:0',
+    'required_array_keys' => 'crwdns3535:0crwdne3535:0',
     'required_if' => 'crwdns2767:0crwdne2767:0',
+    'required_if_accepted' => 'crwdns3537:0crwdne3537:0',
+    'required_if_declined' => 'crwdns3539:0crwdne3539:0',
     'required_unless' => 'crwdns2769:0crwdne2769:0',
     'required_with' => 'crwdns2771:0crwdne2771:0',
     'required_with_all' => 'crwdns2773:0crwdne2773:0',
@@ -105,47 +138,18 @@ return [
     'required_without_all' => 'crwdns2777:0crwdne2777:0',
     'same' => 'crwdns2779:0crwdne2779:0',
     'size' => [
-        'numeric' => 'crwdns2781:0crwdne2781:0',
-        'file' => 'crwdns2783:0crwdne2783:0',
-        'string' => 'crwdns2785:0crwdne2785:0',
         'array' => 'crwdns2787:0crwdne2787:0',
+        'file' => 'crwdns2783:0crwdne2783:0',
+        'numeric' => 'crwdns2781:0crwdne2781:0',
+        'string' => 'crwdns2785:0crwdne2785:0',
     ],
-    'starts_with' => 'crwdns2789:0crwdne2789:0',
+    'starts_with' => 'crwdns3541:0crwdne3541:0',
     'string' => 'crwdns2791:0crwdne2791:0',
     'timezone' => 'crwdns2793:0crwdne2793:0',
+    'ulid' => 'crwdns3543:0crwdne3543:0',
     'unique' => 'crwdns2795:0crwdne2795:0',
     'uploaded' => 'crwdns2797:0crwdne2797:0',
+    'uppercase' => 'crwdns3545:0crwdne3545:0',
     'url' => 'crwdns2799:0crwdne2799:0',
     'uuid' => 'crwdns2801:0crwdne2801:0',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Custom Validation Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify custom validation messages for attributes using the
-    | convention "attribute.rule" to name the lines. This makes it quick to
-    | specify a specific custom language line for a given attribute rule.
-    |
-    */
-
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'crwdns2803:0crwdne2803:0',
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Custom Validation Attributes
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used to swap attribute place-holders
-    | with something more reader friendly such as E-Mail Address instead
-    | of "email". This simply helps us make messages a little cleaner.
-    |
-    */
-
-    'attributes' => [],
-
 ];
