@@ -231,7 +231,7 @@
           },
           "returnButton": "Volver a la lista de tipos de tarea",
           "submitButton": {
-            "create": "Crear Tipo de tarea",
+            "create": "Crear Tipo de Tarea",
             "edit": "Guardar cambios"
           },
           "submittingText": {
