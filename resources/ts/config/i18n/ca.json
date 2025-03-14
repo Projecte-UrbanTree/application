@@ -16,7 +16,7 @@
       "password": "Contrasenya",
       "resource_type": "Tipus de recurs",
       "role": "Rol",
-      "select_resource_type": "Select a resource type",
+      "select_resource_type": "Triar un tipus de recurs",
       "species": "Espècie",
       "start_date": "Data d'inici",
       "status": "Estat",
@@ -130,12 +130,12 @@
             "edit": "Editar Recurs"
           },
           "validation": {
-            "description_max": "Description cannot exceed 255 characters",
-            "name_format": "Name can only contain letters, numbers and spaces",
-            "name_max": "Name cannot exceed 50 characters",
-            "name_min": "Name must be at least 3 characters",
+            "description_max": "La descripció not pot superar els 255 caràcters",
+            "name_format": "El nom només pot contenir lletres, números i espais",
+            "name_max": "El nom no pot superar els 50 caràcters",
+            "name_min": "El nom ha de tenir almenys 3 caràcters",
             "name_required": "El nom és obligatori",
-            "type_invalid": "Please select a valid resource type",
+            "type_invalid": "Si us plau, tria un tipus de recurs vàlid",
             "type_required": "El tipus és obligatori"
           }
         },
@@ -208,16 +208,16 @@
       },
       "stats": {
         "title": "Estadístiques",
-        "week": "This Week",
-        "month": "This Month",
-        "custom": "Custom",
+        "week": "Aquesta setmana",
+        "month": "Aquest mes",
+        "custom": "Personalitzat",
         "startDate": "Data d'inici",
         "endDate": "Data de finalització",
-        "tasksDone": "Tasks Done",
-        "tasksNotDone": "Pending Tasks",
-        "hoursWorked": "Hours Worked",
-        "fuelConsumption": "Fuel Consumption",
-        "noData": "No data to display"
+        "tasksDone": "Tasques completades",
+        "tasksNotDone": "Tasques pendents",
+        "hoursWorked": "Hores treballades",
+        "fuelConsumption": "Consum de combustible",
+        "noData": "No hi ha dades a mostrar"
       },
       "taskTypes": {
         "form": {
@@ -518,7 +518,7 @@
       }
     },
     "tooltips": {
-      "selectContract": "First, select a contract"
+      "selectContract": "Primer, selecciona un contracte"
     }
   },
   "general": {
