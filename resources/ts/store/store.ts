@@ -3,6 +3,7 @@ import { contractSlice } from './slice/contractSlice';
 import loaderSlice from './slice/loaderSlice';
 import { userSlice } from './slice/userSlice';
 import zoneSlice from './slice/zoneSlice';
+import pointSlice from './slice/pointSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     contract: contractSlice.reducer,
     zone: zoneSlice.reducer,
     loader: loaderSlice.reducer,
+    points: pointSlice.reducer,
   },
 });
 

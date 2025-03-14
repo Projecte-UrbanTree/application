@@ -1,11 +1,11 @@
 import { MapService } from '@/api/service/mapService';
-import { fetchPoints } from '@/api/service/pointService';
-import { RootState } from '@/store/store';
+import { RootState, AppDispatch } from '@/store/store';
+import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { Point } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { Zone } from '@/types/Zone';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as turf from '@turf/turf';
 import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
 import { Dialog } from 'primereact/dialog';
@@ -25,28 +25,21 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
   const [enabledButton, setEnabledButton] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const userValue = useSelector((state: RootState) => state.user);
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
   const zonesRedux = useSelector((state: RootState) => state.zone.zones);
-
-  const [points, setPoints] = useState<Point[]>([]);
+  const { points, loading, error } = useSelector(
+    (state: RootState) => state.points,
+  );
 
   useEffect(() => {
     if (!currentContract) return;
-    loadPoints();
-  }, [currentContract]);
-
-  async function loadPoints() {
-    try {
-      const pointsData = await fetchPoints();
-      setPoints(pointsData);
-    } catch (error) {
-      console.error('Error al cargar puntos:', error);
-    }
-  }
+    dispatch(fetchPointsAsync());
+  }, [currentContract, dispatch]);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -64,24 +57,22 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
       }
     });
     mapServiceRef.current = service;
-  }, []);
+  }, [userValue.role]);
 
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service || !selectedZone) return;
-    async function flyToSelectedZone() {
-      const allPoints = await fetchPoints();
-      const firstPoint = allPoints.find((p) => p.zone_id === selectedZone!.id);
-      if (firstPoint?.longitude && firstPoint?.latitude) {
-        service!.flyTo([firstPoint.longitude, firstPoint.latitude]);
-      }
+    if (!service || !selectedZone || !points.length) return;
+
+    const firstPoint = points.find((p) => p.zone_id === selectedZone.id);
+    if (firstPoint?.longitude && firstPoint?.latitude) {
+      service.flyTo([firstPoint.longitude, firstPoint.latitude]);
     }
-    flyToSelectedZone();
-  }, [selectedZone]);
+  }, [selectedZone, points]);
 
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !zonesRedux.length || !points.length) return;
+
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => updateZones(service));
     } else {
@@ -98,6 +89,7 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
       const zonePoints = points
         .filter((p) => p.zone_id === zone.id)
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
+
       if (zonePoints.length > 2) {
         zonePoints.push(zonePoints[0]);
         service.addZoneToMap(`zone-${zone.id}`, zonePoints);
@@ -111,7 +103,7 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     setEnabledButton(false);
     const service = mapServiceRef.current;
     service?.clearDraw();
-    await loadPoints();
+    dispatch(fetchPointsAsync());
   }
 
   function detectCollision(

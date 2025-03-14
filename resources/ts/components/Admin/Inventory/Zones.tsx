@@ -1,5 +1,6 @@
 import { deleteZone } from '@/api/service/zoneService';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
+import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Zone } from '@/types/Zone';
@@ -18,7 +19,12 @@ interface ZoneProps {
 export const Zones = ({ onSelectedZone }: ZoneProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
-  const { zones, loading } = useSelector((state: RootState) => state.zone);
+  const { zones, loading: zonesLoading } = useSelector(
+    (state: RootState) => state.zone,
+  );
+  const { points, loading: pointsLoading } = useSelector(
+    (state: RootState) => state.points,
+  );
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
@@ -37,6 +43,10 @@ export const Zones = ({ onSelectedZone }: ZoneProps) => {
       .unwrap()
       .catch((error) => console.error('Error al cargar zonas:', error))
       .finally(() => dispatch(hideLoader()));
+
+    dispatch(fetchPointsAsync())
+      .unwrap()
+      .catch((error) => console.error(error));
   }, [dispatch, currentContract]);
 
   const confirmDeleteZone = (zone: Zone) => {
@@ -58,6 +68,10 @@ export const Zones = ({ onSelectedZone }: ZoneProps) => {
       dispatch(fetchZonesAsync())
         .unwrap()
         .catch((error) => console.error('Error al recargar zonas:', error));
+
+      dispatch(fetchPointsAsync())
+        .unwrap()
+        .catch((error) => console.error('error al recargar puntos:', error));
     } catch (error) {
       console.error(error);
       toast.current?.show({
