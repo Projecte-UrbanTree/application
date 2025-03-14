@@ -5,6 +5,7 @@
     },
     "fields": {
       "company": "Empresa",
+      "description": "Descripción",
       "dni": "DNI",
       "email": "Correo",
       "end_date": "Fecha de fin",
@@ -13,7 +14,9 @@
       "genus": "Género",
       "name": "Nombre",
       "password": "Contraseña",
+      "resource_type": "Resource Type",
       "role": "Rol",
+      "select_resource_type": "Select a resource type",
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
@@ -127,7 +130,12 @@
             "edit": "Editar Recurso"
           },
           "validation": {
+            "description_max": "Description cannot exceed 255 characters",
+            "name_format": "Name can only contain letters, numbers and spaces",
+            "name_max": "Name cannot exceed 50 characters",
+            "name_min": "Name must be at least 3 characters",
             "name_required": "El nombre es obligatorio",
+            "type_invalid": "Please select a valid resource type",
             "type_required": "El tipo es obligatorio"
           }
         },
@@ -199,7 +207,17 @@
         "title": "Tipos de recurso"
       },
       "stats": {
-        "title": "Estadísticas"
+        "title": "Estadísticas",
+        "week": "This Week",
+        "month": "This Month",
+        "custom": "Custom",
+        "startDate": "Fecha de inicio",
+        "endDate": "Fecha de fin",
+        "tasksDone": "Tasks Done",
+        "tasksNotDone": "Pending Tasks",
+        "hoursWorked": "Hours Worked",
+        "fuelConsumption": "Fuel Consumption",
+        "noData": "No data to display"
       },
       "taskTypes": {
         "form": {
@@ -355,66 +373,51 @@
         "title": "Usuarios"
       },
       "workOrders": {
-        "title": "Órdenes de trabajo",
         "details": {
           "block": "Bloque",
-          "zones": "Zonas",
-          "tasks": "Tareas",
-          "notes": "Notas",
-          "noZones": "No hay zonas asignadas",
-          "noTasks": "No hay tareas asignadas",
-          "noNotes": "N/A",
           "noBlocks": "No hay bloques",
           "noBlocksAvailable": "No hay bloques disponibles para esta orden de trabajo",
+          "noNotes": "N/A",
+          "noTasks": "No hay tareas asignadas",
+          "notes": "Notas",
+          "noUsers": "No hay usuarios asignados",
+          "noZones": "No hay zonas asignadas",
+          "tasks": "Tareas",
           "unknown": "Desconocido",
-          "noUsers": "No hay usuarios asignados"
-        },
-        "status": {
-          "notStarted": "No iniciado",
-          "inProgress": "En progreso",
-          "completed": "Completado",
-          "reportSent": "Informe enviado",
-          "unknown": "Desconocido"
-        },
-        "reportStatus": {
-          "pending": "Pendiente",
-          "completed": "Completado",
-          "rejected": "Rechazado",
-          "closedWithIncidents": "Cerrado con incidencias",
-          "unknown": "Desconocido"
+          "zones": "Zonas"
         },
         "form": {
+          "blocksTitle": "Bloques de Trabajo",
+          "buttons": {
+            "addBlock": "Añadir Bloque",
+            "addTask": "Añadir Tarea"
+          },
           "fields": {
-            "date": "Fecha",
-            "users": "Trabajadores",
             "block": "Bloque",
-            "zones": "Zonas",
+            "date": "Fecha",
+            "elementType": "Tipo de elemento",
+            "notes": "Notas",
             "task": "Tarea",
             "taskType": "Nombre",
-            "elementType": "Tipo de elemento",
             "treeType": "Especie de árbol",
-            "notes": "Notas"
+            "users": "Trabajadores",
+            "zones": "Zonas"
           },
-          "buttons": {
-            "addTask": "Añadir Tarea",
-            "addBlock": "Añadir Bloque"
-          },
-          "blocksTitle": "Bloques de Trabajo",
-          "removeBlock": "Eliminar bloque",
-          "removeTask": "Eliminar tarea",
           "noContract": {
-            "title": "No hay contrato seleccionado",
-            "message": "Debes seleccionar un contrato en el panel superior para crear una orden de trabajo."
+            "message": "Debes seleccionar un contrato en el panel superior para crear una orden de trabajo.",
+            "title": "No hay contrato seleccionado"
           },
           "placeholders": {
-            "status": "Selecciona un estado",
-            "users": "Selecciona trabajadores",
-            "zones": "Selecciona zonas para este bloque",
-            "taskType": "Selecciona tipo de tarea",
             "elementType": "Selecciona tipo de elemento",
+            "notes": "Añade notas para este bloque de trabajo...",
+            "status": "Selecciona un estado",
+            "taskType": "Selecciona tipo de tarea",
             "treeType": "Selecciona especie de árbol",
-            "notes": "Añade notas para este bloque de trabajo..."
+            "users": "Selecciona trabajadores",
+            "zones": "Selecciona zonas para este bloque"
           },
+          "removeBlock": "Eliminar bloque",
+          "removeTask": "Eliminar tarea",
           "returnButton": "Volver a la lista de órdenes de trabajo",
           "submitButton": {
             "create": "Crear Orden de Trabajo",
@@ -429,39 +432,54 @@
             "edit": "Editar Orden de Trabajo"
           },
           "validation": {
-            "date_required": "La fecha es obligatoria",
-            "users_required": "Se debe seleccionar al menos un trabajador",
             "blocks_required": "Se requiere al menos un bloque",
-            "zones_required": "Se debe seleccionar al menos una zona",
-            "tasks_required": "Se requiere al menos una tarea",
+            "date_required": "La fecha es obligatoria",
+            "element_type_required": "El tipo de elemento es obligatorio",
             "task_type_required": "El tipo de tarea es obligatorio",
-            "element_type_required": "El tipo de elemento es obligatorio"
+            "tasks_required": "Se requiere al menos una tarea",
+            "users_required": "Se debe seleccionar al menos un trabajador",
+            "zones_required": "Se debe seleccionar al menos una zona"
           }
         },
         "list": {
           "actions": {
             "delete": "Eliminar orden de trabajo",
             "edit": "Editar orden de trabajo",
-            "viewReport": "Ver informe",
-            "label": "Acciones"
+            "label": "Acciones",
+            "viewReport": "Ver informe"
           },
           "columns": {
-            "id": "ID",
+            "contract": "Contrato",
             "date": "Fecha",
-            "users": "Trabajadores",
-            "status": "Estado",
+            "id": "ID",
             "reportStatus": "Estado del informe",
-            "contract": "Contrato"
+            "status": "Estado",
+            "users": "Trabajadores"
           },
           "messages": {
             "createSuccess": "Orden de trabajo creada correctamente",
             "deleteConfirm": "¿Estás seguro de que quieres eliminar esta orden de trabajo?",
             "deleteSuccess": "Orden de trabajo eliminada correctamente",
             "error": "Error guardando la orden de trabajo",
-            "updateSuccess": "Orden de trabajo actualizada correctamente",
-            "noData": "No hay órdenes de trabajo disponibles"
+            "noData": "No hay órdenes de trabajo disponibles",
+            "updateSuccess": "Orden de trabajo actualizada correctamente"
           }
-        }
+        },
+        "reportStatus": {
+          "closedWithIncidents": "Cerrado con incidencias",
+          "completed": "Completado",
+          "pending": "Pendiente",
+          "rejected": "Rechazado",
+          "unknown": "Desconocido"
+        },
+        "status": {
+          "completed": "Completado",
+          "inProgress": "En progreso",
+          "notStarted": "No iniciado",
+          "reportSent": "Informe enviado",
+          "unknown": "Desconocido"
+        },
+        "title": "Órdenes de trabajo"
       }
     },
     "profileDropdown": {
@@ -498,6 +516,9 @@
         "taskTypes": "Tipus de tarea",
         "users": "Usuarios"
       }
+    },
+    "tooltips": {
+      "selectContract": "First, select a contract"
     }
   },
   "general": {
