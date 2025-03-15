@@ -165,6 +165,24 @@ export default function Evas() {
                                     }
                                     className="p-button-rounded p-button-info"
                                     tooltip={t(
+                                        'admin.pages.evas.list.actions.show',
+                                    )}
+                                    tooltipOptions={{ position: 'top' }}
+                                    onClick={() =>
+                                        navigate(
+                                            `/admin/evas/show/${rowData.id}`,
+                                        )
+                                    }
+                                />
+                                <Button
+                                    icon={
+                                        <Icon
+                                            icon="tabler:edit"
+                                            className="h-5 w-5"
+                                        />
+                                    }
+                                    className="p-button-rounded p-button-info"
+                                    tooltip={t(
                                         'admin.pages.evas.list.actions.edit',
                                     )}
                                     tooltipOptions={{ position: 'top' }}
