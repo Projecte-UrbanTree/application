@@ -55,18 +55,100 @@ export default function ShowEva() {
         fetchEva();
     }, [id]);
 
-    const factorEstadoArbol = [
-        { range: [0, 24], message: t('Bajo'), color: '#6AA84F' },
-        { range: [25, 49], message: t('Moderado'), color: '#00FF00' },
-        { range: [50, 74], message: t('Alto'), color: '#FFFF00' },
-        { range: [75, 100], message: t('Critico'), color: '#FF0000' },
-    ];
     const getStatusMessage = (status: number) => {
         const percentage = (status / 36) * 100;
-        const factor = factorEstadoArbol.find(
-            (f) => percentage >= f.range[0] && percentage <= f.range[1],
-        );
-        return factor ? factor : { message: t('Pendiente'), color: 'gray' };
+        if (percentage == 0 && percentage <= 24) {
+            return { message: t('Bajo'), color: '#6AA84F' };
+        }
+        if (percentage >= 25 && percentage <= 49) {
+            return { message: t('Moderado'), color: '#00FF00' };
+        }
+        if (percentage >= 50 && percentage <= 74) {
+            return { message: t('Alto'), color: '#FFFF00' };
+        }
+        if (percentage >= 75 && percentage <= 100) {
+            return { message: t('Critico'), color: '#FF0000' };
+        }
+        return { message: t('Pendiente'), color: 'gray' };
+    };
+
+    const calculateStabilityIndex = (height: number, diameter: number) => {
+        const index = height / diameter;
+        if (index < 50) {
+            return { message: t('Estable'), color: '#6AA84F' };
+        } else if (index >= 50 && index <= 80) {
+            return { message: t('Moderada'), color: '#FFFF00' };
+        } else if (index > 80 && index <= 100) {
+            return { message: t('Riesgo alto'), color: '#FF0000' };
+        } else {
+            return { message: t('Pendiente'), color: 'gray' };
+        }
+    };
+
+    const calculateGravityHeightRatio = (
+        heightEstimation: number,
+        height: number,
+    ) => {
+        const ratio = heightEstimation / height;
+        if (ratio < 0.3) {
+            return { message: t('Muy estable'), color: '#6AA84F' };
+        } else if (ratio >= 0.3 && ratio <= 0.5) {
+            return { message: t('Riesgo moderado'), color: '#FFFF00' };
+        } else if (ratio > 0.5) {
+            return { message: t('Alto riesgo de caída'), color: '#FF0000' };
+        } else {
+            return { message: t('Pendiente'), color: 'gray' };
+        }
+    };
+
+    const calculateRootCrownRatio = (
+        rootSurfaceDiameter: number,
+        crownProjectionArea: number,
+    ) => {
+        const ratio = rootSurfaceDiameter / crownProjectionArea;
+        if (ratio > 2) {
+            return { message: t('Muy estable'), color: '#6AA84F' };
+        } else if (ratio > 1.5 && ratio <= 2) {
+            return { message: t('Estable'), color: '#00FF00' };
+        } else if (ratio > 1 && ratio <= 1.5) {
+            return { message: t('Estabilidad moderada'), color: '#FFFF00' };
+        } else if (ratio <= 1) {
+            return { message: t('Riesgo alto de caída'), color: '#FF0000' };
+        } else {
+            return { message: t('Pendiente'), color: 'gray' };
+        }
+    };
+
+    const calculateWindStabilityIndex = (
+        height: number,
+        wind: number,
+        rootSurfaceDiameter: number,
+    ) => {
+        const index = (height * wind) / rootSurfaceDiameter;
+        if (index < 0.5) {
+            return { message: t('Muy estable'), color: '#6AA84F' };
+        } else if (index >= 0.5 && index <= 1) {
+            return { message: t('Estabilidad moderada'), color: '#FFFF00' };
+        } else if (index > 1) {
+            return { message: t('Alto riesgo de vuelco'), color: '#FF0000' };
+        } else {
+            return { message: t('Pendiente'), color: 'gray' };
+        }
+    };
+
+    const getSeverityMessage = (value: number) => {
+        switch (value) {
+            case 0:
+                return { message: t('Bajo'), color: '#6AA84F' };
+            case 1:
+                return { message: t('Moderado'), color: '#00FF00' };
+            case 2:
+                return { message: t('Alto'), color: '#FFFF00' };
+            case 3:
+                return { message: t('Extremo'), color: '#FF0000' };
+            default:
+                return { message: t('Pendiente'), color: 'gray' };
+        }
     };
 
     if (isLoading) {
@@ -87,6 +169,21 @@ export default function ShowEva() {
         return <p>{t('not_found')}</p>;
     }
     const { message, color } = getStatusMessage(eva.status);
+    const stabilityIndex = calculateStabilityIndex(eva.height, eva.diameter);
+    const gravityHeightRatio = calculateGravityHeightRatio(
+        eva.height_estimation,
+        eva.height,
+    );
+    const rootCrownRatio = calculateRootCrownRatio(
+        eva.root_surface_diameter,
+        eva.crown_projection_area,
+    );
+    const windStabilityIndex = calculateWindStabilityIndex(
+        eva.height,
+        eva.wind,
+        eva.root_surface_diameter,
+    );
+
     return (
         <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
             <Card className="w-full max-w-3xl shadow-lg">
@@ -98,10 +195,13 @@ export default function ShowEva() {
                         <Icon icon="tabler:arrow-left" className="h-6 w-6" />
                     </Button>
                     <h2 className="text-white text-3xl font-bold">
-                        {t('Calculo de Indices')} - {eva.element_id}
+                        {t('Show')} - {eva.element_id}
                     </h2>
                 </header>
                 <div className="p-6">
+                    <h1 className="text-xl font-bold mb-4">
+                        Calculo de Indices
+                    </h1>
                     <p>
                         <strong>{t('Factor estado del arbol')}:</strong>{' '}
                         <span
@@ -115,82 +215,90 @@ export default function ShowEva() {
                         </span>{' '}
                     </p>
                     <p>
-                        <strong>{t('date_birth')}:</strong> {eva.date_birth}
+                        <strong>{t('Índice de esbeltez (H/D)')}:</strong>{' '}
+                        <span
+                            style={{
+                                backgroundColor: stabilityIndex.color,
+                                color: 'black',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                            }}>
+                            {stabilityIndex.message}
+                        </span>{' '}
                     </p>
                     <p>
-                        <strong>{t('height')}:</strong> {eva.height}
+                        <strong>
+                            {t('Relación Centro de Gravedad / Altura (CG/H)')}:
+                        </strong>{' '}
+                        <span
+                            style={{
+                                backgroundColor: gravityHeightRatio.color,
+                                color: 'black',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                            }}>
+                            {gravityHeightRatio.message}
+                        </span>{' '}
                     </p>
                     <p>
-                        <strong>{t('diameter')}:</strong> {eva.diameter}
+                        <strong>
+                            {t(
+                                'Relación Superficie Radicular vs. Proyección de Copa (SR/SC)',
+                            )}
+                            :
+                        </strong>{' '}
+                        <span
+                            style={{
+                                backgroundColor: rootCrownRatio.color,
+                                color: 'black',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                            }}>
+                            {rootCrownRatio.message}
+                        </span>{' '}
                     </p>
                     <p>
-                        <strong>{t('crown_width')}:</strong> {eva.crown_width}
+                        <strong>
+                            {t('Índice de Vulnerabilidad al Viento (WSI)')}:
+                        </strong>{' '}
+                        <span
+                            style={{
+                                backgroundColor: windStabilityIndex.color,
+                                color: 'black',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                            }}>
+                            {windStabilityIndex.message}
+                        </span>{' '}
+                    </p>
+                    <h1 className="text-xl font-bold mt-6 mb-4">
+                        Factores Ambientales
+                    </h1>
+                    <p>
+                        <strong>{t('Exposicion al viento')}:</strong>{' '}
+                        <span
+                            style={{
+                                backgroundColor: getSeverityMessage(eva.wind)
+                                    .color,
+                                color: 'black',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                            }}>
+                            {getSeverityMessage(eva.wind).message}
+                        </span>{' '}
                     </p>
                     <p>
-                        <strong>{t('crown_projection_area')}:</strong>{' '}
-                        {eva.crown_projection_area}
-                    </p>
-                    <p>
-                        <strong>{t('root_surface_diameter')}:</strong>{' '}
-                        {eva.root_surface_diameter}
-                    </p>
-                    <p>
-                        <strong>{t('effective_root_area')}:</strong>{' '}
-                        {eva.effective_root_area}
-                    </p>
-                    <p>
-                        <strong>{t('height_estimation')}:</strong>{' '}
-                        {eva.height_estimation}
-                    </p>
-                    <p>
-                        <strong>{t('unbalanced_crown')}:</strong>{' '}
-                        {eva.unbalanced_crown}
-                    </p>
-                    <p>
-                        <strong>{t('overextended_branches')}:</strong>{' '}
-                        {eva.overextended_branches}
-                    </p>
-                    <p>
-                        <strong>{t('cracks')}:</strong> {eva.cracks}
-                    </p>
-                    <p>
-                        <strong>{t('dead_branches')}:</strong>{' '}
-                        {eva.dead_branches}
-                    </p>
-                    <p>
-                        <strong>{t('inclination')}:</strong> {eva.inclination}
-                    </p>
-                    <p>
-                        <strong>{t('V_forks')}:</strong> {eva.V_forks}
-                    </p>
-                    <p>
-                        <strong>{t('cavities')}:</strong> {eva.cavities}
-                    </p>
-                    <p>
-                        <strong>{t('bark_damage')}:</strong> {eva.bark_damage}
-                    </p>
-                    <p>
-                        <strong>{t('soil_lifting')}:</strong> {eva.soil_lifting}
-                    </p>
-                    <p>
-                        <strong>{t('cut_damaged_roots')}:</strong>{' '}
-                        {eva.cut_damaged_roots}
-                    </p>
-                    <p>
-                        <strong>{t('basal_rot')}:</strong> {eva.basal_rot}
-                    </p>
-                    <p>
-                        <strong>{t('exposed_surface_roots')}:</strong>{' '}
-                        {eva.exposed_surface_roots}
-                    </p>
-                    <p>
-                        <strong>{t('wind')}:</strong> {eva.wind}
-                    </p>
-                    <p>
-                        <strong>{t('drought')}:</strong> {eva.drought}
-                    </p>
-                    <p>
-                        <strong>{t('status')}:</strong> {eva.status}
+                        <strong>{t('Exposicion a la sequia')}:</strong>{' '}
+                        <span
+                            style={{
+                                backgroundColor: getSeverityMessage(eva.drought)
+                                    .color,
+                                color: 'black',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                            }}>
+                            {getSeverityMessage(eva.drought).message}
+                        </span>{' '}
                     </p>
                 </div>
             </Card>
