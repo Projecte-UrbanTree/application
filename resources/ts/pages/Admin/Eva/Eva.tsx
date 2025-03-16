@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { Badge } from 'primereact/badge';
 import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import axiosClient from '@/api/axiosClient';
@@ -42,10 +41,11 @@ export default function Evas() {
     status: number;
     element: {
       point: {
-        coordinates: string;
+        latitude: string;
+        longitude: string;
       };
-      treeType: {
-        species: string;
+      elementType: {
+        name: string;
       };
     };
   }
@@ -58,12 +58,6 @@ export default function Evas() {
   const successMsg = location.state?.success;
   const errorMsg = location.state?.error;
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
-
-  const statusOptions = [
-    { label: t('admin.status.active'), value: 0, color: 'yellow' },
-    { label: t('admin.status.inactive'), value: 1, color: 'red' },
-    { label: t('admin.status.completed'), value: 2, color: 'green' },
-  ];
 
   useEffect(() => {
     const fetchEvas = async () => {
@@ -261,8 +255,22 @@ export default function Evas() {
           stripedRows
           showGridlines
           className="p-datatable-sm">
-          <Column field="element.treeType.species" header={'Especie'} />
-          <Column field="element.point.coordinates" header={'Coordenadas'} />
+          <Column
+            header={'Nombre'}
+            body={(rowData: Eva) => (
+              <span>{rowData.element?.elementType?.name || 'N/A'}</span>
+            )}
+          />
+          <Column
+            header={'Coordenadas'}
+            body={(rowData: Eva) => (
+              <span>
+                {rowData.element?.point
+                  ? `${rowData.element.point.latitude}, ${rowData.element.point.longitude}`
+                  : 'N/A'}
+              </span>
+            )}
+          />
           <Column
             header={'Age'}
             body={(rowData: { date_birth: string }) => (
@@ -279,7 +287,10 @@ export default function Evas() {
                   borderRadius: '50%',
                   width: '20px',
                   height: '20px',
-                  display: 'inline-block',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  margin: 'auto',
                 }}
               />
             )}

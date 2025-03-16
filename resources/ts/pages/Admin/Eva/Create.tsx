@@ -1,35 +1,20 @@
 import { useState, useEffect } from 'react';
-import { Icon } from '@iconify/react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import {
-  differenceInYears,
-  differenceInMonths,
-  subYears,
-  subMonths,
-  format,
-} from 'date-fns';
+import { Calendar } from 'primereact/calendar';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { Icon } from '@iconify/react';
+import axiosClient from '@/api/axiosClient';
+import { useTranslation } from 'react-i18next';
+import { Message } from 'primereact/message';
+import { subYears, subMonths, format } from 'date-fns';
 
-interface FormFieldProps {
-  as: React.ElementType;
-  name: string;
-  label: string;
-  [key: string]: any;
-}
-
-const FormField = ({
-  as: Component,
-  name,
-  label,
-  ...props
-}: FormFieldProps) => {
+const FormField = ({ as: Component, name, label, ...props }: any) => {
   const [field, meta, helpers] = useField(name);
 
   if (Component === InputNumber) {
@@ -89,36 +74,29 @@ const FormField = ({
   );
 };
 
-export default function EditEva() {
-  const { id } = useParams();
+const CreateEva = () => {
   const navigate = useNavigate();
+  const [elements, setElements] = useState<any[]>([]);
+  const [dictionaries, setDictionaries] = useState<any>({});
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  interface DictionaryOption {
-    label: string;
-    value: number;
-  }
+  useEffect(() => {
+    axiosClient
+      .get('/admin/evas/create')
+      .then((response) => {
+        setElements(response.data.elements);
+        setDictionaries(response.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
-  interface Dictionaries {
-    copaDesequilibrada: DictionaryOption[];
-    ramasSobreextendidas: DictionaryOption[];
-    grietas: DictionaryOption[];
-    ramasMuertas: DictionaryOption[];
-    inclinacion: DictionaryOption[];
-    bifurcacionesV: DictionaryOption[];
-    cavidades: DictionaryOption[];
-    danosCorteza: DictionaryOption[];
-    levantamientoSuelo: DictionaryOption[];
-    raicesCortadas: DictionaryOption[];
-    podredumbreBasal: DictionaryOption[];
-    raicesExpuestas: DictionaryOption[];
-    viento: DictionaryOption[];
-    sequia: DictionaryOption[];
-  }
-
-  const [initialValues, setInitialValues] = useState({
-    element_id: 0,
-    date_birth: '',
+  const initialValues = {
+    element_id: null,
+    date_birth: null,
     years: 0,
     months: 0,
     height: 0,
@@ -143,65 +121,15 @@ export default function EditEva() {
     wind: 0,
     drought: 0,
     status: 0,
-  });
-
-  const [dictionaries, setDictionaries] = useState<Dictionaries>({
-    copaDesequilibrada: [],
-    ramasSobreextendidas: [],
-    grietas: [],
-    ramasMuertas: [],
-    inclinacion: [],
-    bifurcacionesV: [],
-    cavidades: [],
-    danosCorteza: [],
-    levantamientoSuelo: [],
-    raicesCortadas: [],
-    podredumbreBasal: [],
-    raicesExpuestas: [],
-    viento: [],
-    sequia: [],
-  });
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchEva = async () => {
-      try {
-        const response = await axiosClient.get(`/admin/evas/${id}`);
-        const data = response.data;
-        const today = new Date();
-        const birthDate = new Date(data.date_birth);
-        const years = differenceInYears(today, birthDate);
-        const months = differenceInMonths(today, birthDate) % 12;
-        setInitialValues({
-          ...data,
-          years,
-          months,
-        });
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-    fetchEva();
-  }, [id]);
-
-  useEffect(() => {
-    const fetchDictionaries = async () => {
-      try {
-        const response = await axiosClient.get('/admin/evas/create');
-        setDictionaries(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchDictionaries();
-  }, []);
+  };
 
   const validationSchema = Yup.object({
-    element_id: Yup.number(),
-    date_birth: Yup.date(),
+    element_id: Yup.number().required(
+      t('admin.pages.evas.form.validation.element_required'),
+    ),
+    date_birth: Yup.date().required(
+      t('admin.pages.evas.form.validation.date_required'),
+    ),
     years: Yup.number().min(0),
     months: Yup.number().min(0).max(11),
     height: Yup.number(),
@@ -228,48 +156,52 @@ export default function EditEva() {
     status: Yup.number(),
   });
 
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async (values: any) => {
+    setIsSubmitting(true);
+    setError(null);
     try {
       const today = new Date();
       const birthDate = subMonths(subYears(today, values.years), values.months);
       const formattedDate = format(birthDate, 'yyyy-MM-dd');
-
       const status =
-        Number(values.unbalanced_crown) +
-        Number(values.overextended_branches) +
-        Number(values.cracks) +
-        Number(values.dead_branches) +
-        Number(values.inclination) +
-        Number(values.V_forks) +
-        Number(values.cavities) +
-        Number(values.bark_damage) +
-        Number(values.soil_lifting) +
-        Number(values.cut_damaged_roots) +
-        Number(values.basal_rot) +
-        Number(values.exposed_surface_roots);
+        values.unbalanced_crown +
+        values.overextended_branches +
+        values.cracks +
+        values.dead_branches +
+        values.inclination +
+        values.V_forks +
+        values.cavities +
+        values.bark_damage +
+        values.soil_lifting +
+        values.cut_damaged_roots +
+        values.basal_rot +
+        values.exposed_surface_roots;
 
       const updatedValues = {
         ...values,
         date_birth: formattedDate,
-        status: status,
+        status,
       };
 
-      await axiosClient.put(`/admin/evas/${id}`, updatedValues);
-      navigate(`/admin/evas/${id}`, {
-        state: { success: t('messages.updateSuccess') },
+      await axiosClient.post('/admin/evas', updatedValues);
+      navigate('/admin/evas', {
+        state: { success: t('admin.pages.evas.list.messages.createSuccess') },
       });
-    } catch (error) {
-      console.error('Error en handleSubmit:', error);
-      navigate(`/admin/evas/${id}`, { state: { error: t('messages.error') } });
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message ||
+          t('admin.pages.evas.list.messages.error'),
+      );
+      setIsSubmitting(false);
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
         />
         <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
@@ -283,24 +215,30 @@ export default function EditEva() {
           <Button
             className="p-button-text mr-4"
             style={{ color: '#fff' }}
-            onClick={() => navigate(`/admin/evas/${id}`)}>
+            onClick={() => navigate('/admin/evas')}>
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
           <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.evas.edit.title')}
+            {t('admin.pages.evas.form.title.create')}
           </h2>
         </header>
         <div className="p-6">
+          {error && (
+            <Message severity="error" text={error} className="mb-4 w-full" />
+          )}
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-            enableReinitialize>
+            onSubmit={handleSubmit}>
             {({ isSubmitting }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Sección: Identificación */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mb-4">Identificación</h1>
+                  <FormField
+                    name="element_id"
+                    label={t('admin.pages.evas.form.element_id')}
+                    as="input"
+                  />
                   <FormField
                     name="years"
                     label={t('admin.pages.evas.form.years')}
@@ -315,14 +253,10 @@ export default function EditEva() {
                     max={11}
                   />
                 </div>
-
-                {/* Sección: Condición del árbol */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mb-4">
                     Condición del árbol
                   </h1>
-
-                  {/* Subsección: Dimensiones */}
                   <h2 className="text-lg font-semibold mb-2">Dimensiones</h2>
                   <FormField
                     name="height"
@@ -359,11 +293,7 @@ export default function EditEva() {
                     label={t('admin.pages.evas.form.height_estimation')}
                     as={InputNumber}
                   />
-
-                  {/* Subsección: Estado */}
                   <h2 className="text-lg font-semibold mt-4 mb-2">Estado</h2>
-
-                  {/* Subsubsección: Copa y Ramas */}
                   <h3 className="text-md font-medium mb-2">Copa y Ramas</h3>
                   <FormField
                     name="unbalanced_crown"
@@ -389,8 +319,6 @@ export default function EditEva() {
                     as={Dropdown}
                     options={dictionaries.ramasMuertas}
                   />
-
-                  {/* Subsubsección: Tronco */}
                   <h3 className="text-md font-medium mt-4 mb-2">Tronco</h3>
                   <FormField
                     name="inclination"
@@ -416,8 +344,6 @@ export default function EditEva() {
                     as={Dropdown}
                     options={dictionaries.danosCorteza}
                   />
-
-                  {/* Subsubsección: Raíces */}
                   <h3 className="text-md font-medium mt-4 mb-2">Raíces</h3>
                   <FormField
                     name="soil_lifting"
@@ -444,19 +370,13 @@ export default function EditEva() {
                     options={dictionaries.raicesExpuestas}
                   />
                 </div>
-
-                {/* Sección: Condición del entorno */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mt-6 mb-4">
                     Condición del entorno
                   </h1>
-
-                  {/* Subsección: Factores Ambientales */}
                   <h2 className="text-lg font-semibold mb-2">
                     Factores Ambientales
                   </h2>
-
-                  {/* Subsubsección: Exposición al viento */}
                   <h3 className="text-md font-medium mb-2">
                     Exposición al viento
                   </h3>
@@ -466,8 +386,6 @@ export default function EditEva() {
                     as={Dropdown}
                     options={dictionaries.viento}
                   />
-
-                  {/* Subsubsección: Exposición a la sequía */}
                   <h3 className="text-md font-medium mt-4 mb-2">
                     Exposición a la sequía
                   </h3>
@@ -500,4 +418,6 @@ export default function EditEva() {
       </Card>
     </div>
   );
-}
+};
+
+export default CreateEva;

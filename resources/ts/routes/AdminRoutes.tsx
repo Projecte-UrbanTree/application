@@ -33,6 +33,7 @@ import WorkReport from '@/pages/Admin/WorkReport';
 import Eva from '@/pages/Admin/Eva/Eva';
 import EditEva from '@/pages/Admin/Eva/Edit';
 import ShowEva from '@/pages/Admin/Eva/Show';
+import CreateEva from '@/pages/Admin/Eva/Create';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -67,7 +68,7 @@ const AdminRoutes: RouteObject[] = [
             path: 'evas/create',
             element: (
               <AdminLayoutWrapper titleI18n="admin.pages.evas.create.title">
-                <Eva />
+                <CreateEva />
               </AdminLayoutWrapper>
             ),
           },
