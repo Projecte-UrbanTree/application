@@ -93,14 +93,73 @@
         }
       },
       "elementTypes": {
+        "title": "Tipus d'element",
+        "loading": "Carregant...",
+        "actions": "Accions",
+        "editButton": "Editar tipus d'element",
+        "deleteButton": "Eliminar tipus d'element",
+        "deletedSuccess": "Tipus d'element eliminat correctament",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'element?",
+        "success": "Tipus d'element creat correctament",
+        "update": "Tipus d'element actualitzat correctament",
+        "error": "Error guardant el tipus d'element",
+        "true": "Sí",
+        "false": "No",
+        "create": {
+          "title": "Crear Tipus d'Element",
+          "submittingText": "Creant...",
+          "submitButton": "Crear Tipus d'Element",
+          "validations": {
+            "name": "El nom és obligatori",
+            "requires_tree_type": "Requereix tipus d'arbre",
+            "icon": "La icona és obligatòria",
+            "color": "El color és obligatori",
+            "description": "La descripció és obligatòria"
+          },
+          "placeholders": {
+            "name": "Nom del tipus d'element",
+            "requires_tree_type": "Selecciona si requereix tipus d'arbre",
+            "description": "Descripció del tipus d'element",
+            "icon": "Selecciona una icona",
+            "color": "Selecciona un color"
+          }
+        },
+        "edit": {
+          "title": "Editar Tipus d'Element",
+          "submittingText": "Guardant...",
+          "submitButton": "Guardar Canvis",
+          "validations": {
+            "name": "El nom és obligatori",
+            "requires_tree_type": "Requereix tipus d'arbre",
+            "icon": "La icona és obligatòria",
+            "color": "El color és obligatori",
+            "description": "La descripció és obligatòria"
+          }
+        },
         "columns": {
-          "color": "Color",
+          "name": "Nom",
+          "requires_tree_type": "Requereix tipus d'arbre",
           "description": "Descripció",
           "icon": "Icona",
-          "name": "Tipus d'element",
-          "requires_tree_type": "Requereix tipus d'arbre"
+          "color": "Color"
         },
-        "title": "Tipus d'element"
+        "icons": {
+          "tree": "Arbre",
+          "home": "Casa",
+          "post-lamp": "Fanals",
+          "park": "Parc",
+          "fountain": "Font",
+          "flower": "Flor",
+          "mountain": "Muntanya",
+          "beach": "Platja",
+          "volcano": "Volcà",
+          "tap": "Aixeta",
+          "water-drop": "Gota d'aigua",
+          "lightbulb": "Bombeta",
+          "lightning-bolt": "Raig",
+          "grass": "Gespa",
+          "cloud": "Núvol"
+        }
       },
       "resources": {
         "form": {

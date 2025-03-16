@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         // Route for stats
+        Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
         Route::get('statistics', [StatisticsController::class, 'index']);
 
         Route::resources([
