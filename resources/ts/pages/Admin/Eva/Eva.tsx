@@ -40,6 +40,14 @@ export default function Evas() {
         wind: string;
         drought: string;
         status: number;
+        element: {
+            point: {
+                coordinates: string;
+            };
+            treeType: {
+                species: string;
+            };
+        };
     }
 
     const [evas, setEvas] = useState<Eva[]>([]);
@@ -104,6 +112,124 @@ export default function Evas() {
         return `${years} ${t('admin.pages.evas.age.years')}, ${months} ${t('admin.pages.evas.age.months')}`;
     };
 
+    const getStatusColor = (eva: Eva) => {
+        const statusValues = [
+            eva.unbalanced_crown,
+            eva.overextended_branches,
+            eva.cracks,
+            eva.dead_branches,
+            eva.inclination,
+            eva.V_forks,
+            eva.cavities,
+            eva.bark_damage,
+            eva.soil_lifting,
+            eva.cut_damaged_roots,
+            eva.basal_rot,
+            eva.exposed_surface_roots,
+            eva.wind,
+            eva.drought,
+            eva.status,
+        ];
+
+        const calculateStabilityIndex = (height: number, diameter: number) => {
+            const index = height / diameter;
+            if (index < 50) {
+                return 0;
+            } else if (index >= 50 && index <= 80) {
+                return 2;
+            } else if (index > 80 && index <= 100) {
+                return 3;
+            } else {
+                return -1;
+            }
+        };
+
+        const calculateGravityHeightRatio = (
+            heightEstimation: number,
+            height: number,
+        ) => {
+            const ratio = heightEstimation / height;
+            if (ratio < 0.3) {
+                return 0;
+            } else if (ratio >= 0.3 && ratio <= 0.5) {
+                return 2;
+            } else if (ratio > 0.5) {
+                return 3;
+            } else {
+                return -1;
+            }
+        };
+
+        const calculateRootCrownRatio = (
+            rootSurfaceDiameter: number,
+            crownProjectionArea: number,
+        ) => {
+            const ratio = rootSurfaceDiameter / crownProjectionArea;
+            if (ratio > 2) {
+                return 0;
+            } else if (ratio > 1.5 && ratio <= 2) {
+                return 1;
+            } else if (ratio > 1 && ratio <= 1.5) {
+                return 2;
+            } else if (ratio <= 1) {
+                return 3;
+            } else {
+                return -1;
+            }
+        };
+
+        const calculateWindStabilityIndex = (
+            height: number,
+            wind: number,
+            rootSurfaceDiameter: number,
+        ) => {
+            const index = (height * wind) / rootSurfaceDiameter;
+            if (index < 0.5) {
+                return 0;
+            } else if (index >= 0.5 && index <= 1) {
+                return 2;
+            } else if (index > 1) {
+                return 3;
+            } else {
+                return -1;
+            }
+        };
+
+        const indices = [
+            calculateStabilityIndex(
+                parseFloat(eva.height),
+                parseFloat(eva.diameter),
+            ),
+            calculateGravityHeightRatio(
+                parseFloat(eva.height_estimation),
+                parseFloat(eva.height),
+            ),
+            calculateRootCrownRatio(
+                parseFloat(eva.root_surface_diameter),
+                parseFloat(eva.crown_projection_area),
+            ),
+            calculateWindStabilityIndex(
+                parseFloat(eva.height),
+                parseFloat(eva.wind),
+                parseFloat(eva.root_surface_diameter),
+            ),
+        ];
+
+        const allValues = [...statusValues, ...indices];
+
+        if (allValues.some((element) => String(element) === '3')) {
+            return '#FF0000';
+        } else if (allValues.some((element) => String(element) === '2')) {
+            return '#FFFF00';
+        } else if (allValues.some((element) => String(element) === '1')) {
+            return '#00FF00';
+        } else if (allValues.some((element) => String(element) === '0')) {
+            return '#6AA84F';
+        } else {
+            return 'gray';
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
@@ -143,15 +269,35 @@ export default function Evas() {
                     stripedRows
                     showGridlines
                     className="p-datatable-sm">
-                    <Column field="element_id" header={'Especie'} />
-                    <Column field="height" header={'Coordenadas'} />
+                    <Column
+                        field="element.treeType.species"
+                        header={'Especie'}
+                    />
+                    <Column
+                        field="element.point.coordinates"
+                        header={'Coordenadas'}
+                    />
                     <Column
                         header={'Age'}
                         body={(rowData: { date_birth: string }) => (
                             <span>{calculateAge(rowData.date_birth)}</span>
                         )}
                     />
-                    <Column field="" header={'Status'} />
+                    <Column
+                        field="status"
+                        header={'Status'}
+                        body={(rowData: Eva) => (
+                            <div
+                                style={{
+                                    backgroundColor: getStatusColor(rowData),
+                                    borderRadius: '50%',
+                                    width: '20px',
+                                    height: '20px',
+                                    display: 'inline-block',
+                                }}
+                            />
+                        )}
+                    />
                     <Column
                         header={'Actions'}
                         body={(rowData: { id: number }) => (
@@ -171,24 +317,6 @@ export default function Evas() {
                                     onClick={() =>
                                         navigate(
                                             `/admin/evas/show/${rowData.id}`,
-                                        )
-                                    }
-                                />
-                                <Button
-                                    icon={
-                                        <Icon
-                                            icon="tabler:edit"
-                                            className="h-5 w-5"
-                                        />
-                                    }
-                                    className="p-button-rounded p-button-info"
-                                    tooltip={t(
-                                        'admin.pages.evas.list.actions.edit',
-                                    )}
-                                    tooltipOptions={{ position: 'top' }}
-                                    onClick={() =>
-                                        navigate(
-                                            `/admin/evas/edit/${rowData.id}`,
                                         )
                                     }
                                 />

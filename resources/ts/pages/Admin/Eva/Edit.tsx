@@ -93,9 +93,6 @@ export default function EditEva() {
             try {
                 const response = await axiosClient.get(`/admin/evas/${id}`);
                 const data = response.data;
-                setInitialValues(data);
-                setIsLoading(false);
-
                 const today = new Date();
                 const birthDate = new Date(data.date_birth);
                 const years = differenceInYears(today, birthDate);

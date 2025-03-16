@@ -42,7 +42,8 @@ class EvaController extends Controller
     {
         $request->validated();
 
-        Eva::findOrFail($id)->update($request->all());
+        $eva = Eva::findOrFail($id);
+        $eva->update($request->all());
         return response()->json(['message' => 'Eva updated successfully']);
     }
 

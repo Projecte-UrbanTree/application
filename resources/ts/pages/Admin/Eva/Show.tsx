@@ -187,16 +187,29 @@ export default function ShowEva() {
     return (
         <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
             <Card className="w-full max-w-3xl shadow-lg">
-                <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
+                <header className="bg-blue-700 px-6 py-4 flex items-center justify-between -mt-6 -mx-6 rounded-t-lg">
+                    <div className="flex items-center">
+                        <Button
+                            className="p-button-text mr-4"
+                            style={{ color: '#fff' }}
+                            onClick={() => navigate('/admin/evas')}>
+                            <Icon
+                                icon="tabler:arrow-left"
+                                className="h-6 w-6"
+                            />
+                        </Button>
+                        <h2 className="text-white text-3xl font-bold">
+                            {t('Show')} - {eva.element_id}
+                        </h2>
+                    </div>
                     <Button
-                        className="p-button-text mr-4"
+                        className="p-button-text"
                         style={{ color: '#fff' }}
-                        onClick={() => navigate('/admin/evas')}>
-                        <Icon icon="tabler:arrow-left" className="h-6 w-6" />
+                        onClick={() =>
+                            navigate(`/admin/evas/edit/${eva.element_id}`)
+                        }>
+                        <Icon icon="tabler:edit" className="h-6 w-6" />
                     </Button>
-                    <h2 className="text-white text-3xl font-bold">
-                        {t('Show')} - {eva.element_id}
-                    </h2>
                 </header>
                 <div className="p-6">
                     <h1 className="text-xl font-bold mb-4">

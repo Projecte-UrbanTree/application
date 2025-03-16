@@ -9,6 +9,9 @@ use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
+use App\Http\Controllers\Api\Admin\ZoneController;
+use App\Http\Controllers\Api\Admin\ElementController;
+use App\Http\Controllers\Api\Admin\PointController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
@@ -37,63 +40,19 @@ Route::middleware('auth:sanctum')->group(function () {
                 'workOrders' => WorkOrder::count(),
             ]);
         });
-
-        // Route for Contracts
-        Route::get('contracts', [ContractController::class, 'index']);
-        Route::post('contracts', [ContractController::class, 'store']);
-        Route::get('contracts/{id}', [ContractController::class, 'show']);
-        Route::put('contracts/{id}', [ContractController::class, 'update']);
-        Route::delete('contracts/{id}', [ContractController::class, 'destroy']);
-
-        // Route for Work Orders
-        Route::get('work-orders', [WorkOrderController::class, 'index']);
-        Route::get('work-orders/create', [WorkOrderController::class, 'create']);
-        Route::post('work-orders', [WorkOrderController::class, 'store']);
-        Route::get('work-orders/{id}', [WorkOrderController::class, 'show']);
-        Route::put('work-orders/{id}', [WorkOrderController::class, 'update']);
-        Route::delete('work-orders/{id}', [WorkOrderController::class, 'destroy']);
-
-        Route::get('element-types', [ElementTypeController::class, 'index']);
-
-        // Route for Tree Types
-        Route::get('tree-types', [TreeTypeController::class, 'index']);
-        Route::post('tree-types', [TreeTypeController::class, 'store']);
-        Route::get('tree-types/{id}', [TreeTypeController::class, 'show']);
-        Route::put('tree-types/{id}', [TreeTypeController::class, 'update']);
-        Route::delete('tree-types/{id}', [TreeTypeController::class, 'destroy']);
-
-        Route::get('task-types', [TaskTypeController::class, 'index']);
-        Route::get('resources', [ResourceController::class, 'index']);
-        Route::get('resource-types', [ResourceTypeController::class, 'index']);
-
-        // Route for Users
-        Route::get('users', [UserController::class, 'index']);
-        Route::post('users', [UserController::class, 'store']);
-        Route::get('users/{id}', [UserController::class, 'show']);
-        Route::put('users/{id}', [UserController::class, 'update']);
-        Route::delete('users/{id}', [UserController::class, 'destroy']);
-
-        // Route for resource types
-        Route::get('resource-types', [ResourceTypeController::class, 'index']);
-        Route::post('resource-types', [ResourceTypeController::class, 'store']);
-        Route::get('resource-types/{id}', [ResourceTypeController::class, 'show']);
-        Route::put('resource-types/{id}', [ResourceTypeController::class, 'update']);
-        Route::delete('resource-types/{id}', [ResourceTypeController::class, 'destroy']);
-
-        // Route for task types
-        Route::get('task-types', [TaskTypeController::class, 'index']);
-        Route::post('task-types', [TaskTypeController::class, 'store']);
-        Route::get('task-types/{id}', [TaskTypeController::class, 'show']);
-        Route::put('task-types/{id}', [TaskTypeController::class, 'update']);
-        Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
-
-        // Route for eva
-        Route::get('evas', [EvaController::class, 'index']);
-        Route::get('evas/create', [EvaController::class, 'create']);
-        Route::get('evas/{id}/edit', [EvaController::class, 'edit']);
-        Route::post('evas', [EvaController::class, 'store']);
-        Route::get('evas/{id}', [EvaController::class, 'show']);
-        Route::put('evas/{id}', [EvaController::class, 'update']);
-        Route::delete('evas/{id}', [EvaController::class, 'destroy']);
+        Route::resources([
+            'contracts' => ContractController::class,
+            'element-types' => ElementTypeController::class,
+            'elements' => ElementController::class,
+            'points' => PointController::class,
+            'resources' => ResourceController::class,
+            'resource-types' => ResourceTypeController::class,
+            'task-types' => TaskTypeController::class,
+            'tree-types' => TreeTypeController::class,
+            'users' => UserController::class,
+            'work-orders' => WorkOrderController::class,
+            'zones' => ZoneController::class,
+            'evas' => EvaController::class,
+        ]);
     });
 });

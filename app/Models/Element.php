@@ -35,6 +35,6 @@ class Element extends Model
 
     public function eva()
     {
-        return $this->hasOne(Eva::class)->nullable();
+        return $this->hasOne(Eva::class);
     }
 }
