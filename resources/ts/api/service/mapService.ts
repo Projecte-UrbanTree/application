@@ -183,17 +183,14 @@ export class MapService {
 
   public addElementMarkers(elements: Element[], points: Point[]) {
     this.removeElementMarkers();
-    for (let i = 0; i < elements.length; i++) {
-      const { lat, lng } = this.getCoordElement(elements[i], points);
-      if (!lat && !lng) return;
-      const marker: Marker = new mapboxgl.Marker({
-        color: '#FF0000',
-      })
-        .setLngLat([lng, lat])
+    elements.forEach((element) => {
+      const coords = this.getCoordElement(element, points);
+      if (!coords) return;
+      const marker = new mapboxgl.Marker({ color: '#FF0000' })
+        .setLngLat([coords.lng, coords.lat])
         .addTo(this.map);
-
       this.elementMarkers.push(marker);
-    }
+    });
   }
 
   public removeElementMarkers() {
@@ -204,9 +201,16 @@ export class MapService {
   public getCoordElement(
     element: Element,
     points: Point[],
-  ): { lat: number; lng: number } {
-    const point: Point = points.filter((p) => p.id === element.point_id)[0];
-    return { lat: point.latitude!, lng: point.longitude! };
+  ): { lat: number; lng: number } | null {
+    const point = points.find((p) => p.id === element.point_id);
+    if (
+      !point ||
+      point.latitude === undefined ||
+      point.longitude === undefined
+    ) {
+      return null;
+    }
+    return { lat: point.latitude, lng: point.longitude };
   }
 
   public flyTo(coord: [number, number], zoom = 18) {

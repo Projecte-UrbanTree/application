@@ -11,6 +11,8 @@ import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
 import { SaveElementForm } from './Admin/Inventory/SaveElementForm';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { TreeTypes } from '@/types/TreeTypes';
+import { fetchTreeTypes } from '@/api/service/treeTypesService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -39,6 +41,7 @@ export const MapComponent: React.FC<MapProps> = ({
     null,
   );
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
+  const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
 
   // redux store
   const dispatch = useDispatch<AppDispatch>();
@@ -49,6 +52,15 @@ export const MapComponent: React.FC<MapProps> = ({
   const zonesRedux = useSelector((state: RootState) => state.zone.zones);
   const { points } = useSelector((state: RootState) => state.points);
   const { elements } = useSelector((state: RootState) => state.element);
+
+  // load data
+  useEffect(() => {
+    const loadData = async () => {
+      const treeTypesFetch = await fetchTreeTypes();
+      setTreeTypes(treeTypesFetch);
+    };
+    loadData();
+  }, []);
 
   // incialize the map
   useEffect(() => {
@@ -159,7 +171,7 @@ export const MapComponent: React.FC<MapProps> = ({
     dispatch(fetchPointsAsync());
   }
 
-  const handleSavePoint = async () => {
+  async function handleSavePoint() {
     if (!newPointCoord || !zoneToAddElement) return;
     await dispatch(
       savePointsAsync([
@@ -177,7 +189,7 @@ export const MapComponent: React.FC<MapProps> = ({
     setNewPointCoord(null);
     mapServiceRef.current?.disableSingleClick();
     onElementAdd();
-  };
+  }
 
   function detectCollision(
     allPoints: Point[],
@@ -242,10 +254,10 @@ export const MapComponent: React.FC<MapProps> = ({
             { label: 'Tipo de Elemento 1', value: 1 },
             { label: 'Tipo de Elemento 2', value: 2 },
           ]}
-          treeTypes={[
-            { label: 'Tipo de Árbol 1', value: 1 },
-            { label: 'Tipo de Árbol 2', value: 2 },
-          ]}
+          treeTypes={treeTypes.map((item) => ({
+            label: `${item.family} ${item.genus} ${item.species}`,
+            value: item.id!,
+          }))}
         />
       </Dialog>
     </div>
