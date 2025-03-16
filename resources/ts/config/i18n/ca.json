@@ -5,7 +5,6 @@
     },
     "fields": {
       "company": "Empresa",
-      "description": "Descripció",
       "dni": "DNI",
       "email": "Correu",
       "end_date": "Data de finalització",
@@ -14,7 +13,6 @@
       "genus": "Gènere",
       "name": "Nom",
       "password": "Contrasenya",
-      "resource_type": "Tipus de recurs",
       "role": "Rol",
       "select_resource_type": "Triar un tipus de recurs",
       "species": "Espècie",
@@ -413,51 +411,66 @@
         "title": "Usuaris"
       },
       "workOrders": {
+        "title": "Ordres de treball",
         "details": {
           "block": "Bloc",
+          "zones": "Zones",
+          "tasks": "Tasques",
+          "notes": "Notes",
+          "noZones": "Cap zona assignada",
+          "noTasks": "Cap tasca assignada",
+          "noNotes": "N/A",
           "noBlocks": "Cap bloc",
           "noBlocksAvailable": "No hi ha blocs disponibles per aquesta ordre de treball",
-          "noNotes": "N/A",
-          "noTasks": "Cap tasca assignada",
-          "notes": "Notes",
-          "noUsers": "Cap usuari assignat",
-          "noZones": "Cap zona assignada",
-          "tasks": "Tasques",
           "unknown": "Desconegut",
-          "zones": "Zones"
+          "noUsers": "Cap usuari assignat"
+        },
+        "status": {
+          "notStarted": "No iniciat",
+          "inProgress": "En progrés",
+          "completed": "Completat",
+          "reportSent": "Informe Enviat",
+          "unknown": "Desconegut"
+        },
+        "reportStatus": {
+          "pending": "Pendent",
+          "completed": "Completat",
+          "rejected": "Rebutjat",
+          "closedWithIncidents": "Tancat amb incidències",
+          "unknown": "Desconegut"
         },
         "form": {
-          "blocksTitle": "Blocs de Treball",
-          "buttons": {
-            "addBlock": "Afegir Bloc",
-            "addTask": "Afegir Tasca"
-          },
           "fields": {
-            "block": "Bloc",
             "date": "Data",
-            "elementType": "Tipus d'element",
-            "notes": "Notes",
+            "users": "Treballadors",
+            "block": "Bloc",
+            "zones": "Zones",
             "task": "Tasca",
             "taskType": "Nom",
+            "elementType": "Tipus d'element",
             "treeType": "Espècie d'arbre",
-            "users": "Treballadors",
-            "zones": "Zones"
+            "notes": "Notes"
           },
-          "noContract": {
-            "message": "Has de seleccionar un contracte al panell superior per crear una ordre de treball.",
-            "title": "Cap contracte seleccionat"
+          "buttons": {
+            "addTask": "Afegir Tasca",
+            "addBlock": "Afegir Bloc"
           },
-          "placeholders": {
-            "elementType": "Selecciona tipus d'element",
-            "notes": "Afegeix notes per aquest bloc de treball...",
-            "status": "Selecciona un estat",
-            "taskType": "Selecciona tipus de tasca",
-            "treeType": "Selecciona espècie d'arbre",
-            "users": "Selecciona treballadors",
-            "zones": "Selecciona zones per aquest bloc"
-          },
+          "blocksTitle": "Blocs de Treball",
           "removeBlock": "Eliminar bloc",
           "removeTask": "Eliminar tasca",
+          "noContract": {
+            "title": "Cap contracte seleccionat",
+            "message": "Has de seleccionar un contracte al panell superior per crear una ordre de treball."
+          },
+          "placeholders": {
+            "status": "Selecciona un estat",
+            "users": "Selecciona treballadors",
+            "zones": "Selecciona zones per aquest bloc",
+            "taskType": "Selecciona tipus de tasca",
+            "elementType": "Selecciona tipus d'element",
+            "treeType": "Selecciona espècie d'arbre",
+            "notes": "Afegeix notes per aquest bloc de treball..."
+          },
           "returnButton": "Tornar a la llista d'ordres de treball",
           "submitButton": {
             "create": "Crear Ordre de Treball",
@@ -472,54 +485,39 @@
             "edit": "Editar Ordre de Treball"
           },
           "validation": {
-            "blocks_required": "Es requereix almenys un bloc",
             "date_required": "La data és obligatòria",
-            "element_type_required": "El tipus d'element és obligatori",
-            "task_type_required": "El tipus de tasca és obligatori",
-            "tasks_required": "Es requereix almenys una tasca",
             "users_required": "S'ha de seleccionar almenys un treballador",
-            "zones_required": "S'ha de seleccionar almenys una zona"
+            "blocks_required": "Es requereix almenys un bloc",
+            "zones_required": "S'ha de seleccionar almenys una zona",
+            "tasks_required": "Es requereix almenys una tasca",
+            "task_type_required": "El tipus de tasca és obligatori",
+            "element_type_required": "El tipus d'element és obligatori"
           }
         },
         "list": {
           "actions": {
             "delete": "Eliminar ordre de treball",
             "edit": "Editar ordre de treball",
-            "label": "Accions",
-            "viewReport": "Veure informe"
+            "viewReport": "Veure informe",
+            "label": "Accions"
           },
           "columns": {
-            "contract": "Contracte",
-            "date": "Data",
             "id": "ID",
-            "reportStatus": "Estat de l'informe",
+            "date": "Data",
+            "users": "Treballadors",
             "status": "Estat",
-            "users": "Treballadors"
+            "reportStatus": "Estat de l'informe",
+            "contract": "Contracte"
           },
           "messages": {
             "createSuccess": "Ordre de treball creada correctament",
             "deleteConfirm": "Estàs segur que vols eliminar aquesta ordre de treball?",
             "deleteSuccess": "Ordre de treball eliminada correctament",
             "error": "Error guardant l'ordre de treball",
-            "noData": "No hi ha ordres de treball disponibles",
-            "updateSuccess": "Ordre de treball actualitzada correctament"
+            "updateSuccess": "Ordre de treball actualitzada correctament",
+            "noData": "No hi ha ordres de treball disponibles"
           }
-        },
-        "reportStatus": {
-          "closedWithIncidents": "Tancat amb incidències",
-          "completed": "Completat",
-          "pending": "Pendent",
-          "rejected": "Rebutjat",
-          "unknown": "Desconegut"
-        },
-        "status": {
-          "completed": "Completat",
-          "inProgress": "En progrés",
-          "notStarted": "No iniciat",
-          "reportSent": "Informe Enviat",
-          "unknown": "Desconegut"
-        },
-        "title": "Ordres de treball"
+        }
       }
     },
     "profileDropdown": {
@@ -556,9 +554,6 @@
         "taskTypes": "Tipus de tasca",
         "users": "Usuaris"
       }
-    },
-    "tooltips": {
-      "selectContract": "Primer, selecciona un contracte"
     }
   },
   "general": {
