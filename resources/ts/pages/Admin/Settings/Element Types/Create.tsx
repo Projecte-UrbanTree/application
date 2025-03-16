@@ -40,7 +40,7 @@ export default function CreateElementType() {
     requires_tree_type: false,
     description: '',
     icon: '',
-    color: '#FF0000',
+    color: 'FF0000',
   };
 
   const validationSchema = Yup.object({

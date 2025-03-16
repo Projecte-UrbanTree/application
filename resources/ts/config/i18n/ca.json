@@ -103,6 +103,8 @@
         "success": "Tipus d'element creat correctament",
         "update": "Tipus d'element actualitzat correctament",
         "error": "Error guardant el tipus d'element",
+        "true": "Sí",
+        "false": "No",
         "create": {
           "title": "Crear Tipus d'Element",
           "submittingText": "Creant...",
@@ -140,6 +142,23 @@
           "description": "Descripció",
           "icon": "Icona",
           "color": "Color"
+        },
+        "icons": {
+          "tree": "Arbre",
+          "home": "Casa",
+          "post-lamp": "Fanals",
+          "park": "Parc",
+          "fountain": "Font",
+          "flower": "Flor",
+          "mountain": "Muntanya",
+          "beach": "Platja",
+          "volcano": "Volcà",
+          "tap": "Aixeta",
+          "water-drop": "Gota d'aigua",
+          "lightbulb": "Bombeta",
+          "lightning-bolt": "Raig",
+          "grass": "Gespa",
+          "cloud": "Núvol"
         }
       },
       "resources": {
