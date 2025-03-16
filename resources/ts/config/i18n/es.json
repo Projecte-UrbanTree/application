@@ -95,14 +95,73 @@
         }
       },
       "elementTypes": {
+        "title": "Tipos de elemento",
+        "loading": "Cargando...",
+        "actions": "Acciones",
+        "editButton": "Editar tipo de elemento",
+        "deleteButton": "Eliminar tipo de elemento",
+        "deletedSuccess": "Tipo de elemento eliminado exitosamente",
+        "deleteConfirm": "¿Estás seguro de eliminar este tipo de elemento?",
+        "success": "Tipo de elemento creado exitosamente",
+        "update": "Tipo de elemento actualizado exitosamente",
+        "error": "Error guardando el tipo de elemento",
+        "true": "Sí",
+        "false": "No",
+        "create": {
+          "title": "Crear Tipo de Elemento",
+          "submittingText": "Creando...",
+          "submitButton": "Crear Tipo de Elemento",
+          "validations": {
+            "name": "El nombre es obligatorio",
+            "requires_tree_type": "Requiere tipo de árbol",
+            "icon": "El ícono es obligatorio",
+            "color": "El color es obligatorio",
+            "description": "La descripción es obligatoria"
+          },
+          "placeholders": {
+            "name": "Nombre del tipo de elemento",
+            "requires_tree_type": "Selecciona si requiere tipo de árbol",
+            "description": "Descripción del tipo de elemento",
+            "icon": "Selecciona un ícono",
+            "color": "Selecciona un color"
+          }
+        },
+        "edit": {
+          "title": "Editar Tipo de Elemento",
+          "submittingText": "Guardando...",
+          "submitButton": "Guardar Cambios",
+          "validations": {
+            "name": "El nombre es obligatorio",
+            "requires_tree_type": "Requiere tipo de árbol",
+            "icon": "El ícono es obligatorio",
+            "color": "El color es obligatorio",
+            "description": "La descripción es obligatoria"
+          }
+        },
         "columns": {
-          "color": "Color",
+          "name": "Nombre",
+          "requires_tree_type": "Requiere tipo de árbol",
           "description": "Descripción",
           "icon": "Ícono",
-          "name": "Tipo de elemento",
-          "requires_tree_type": "Requiere tipo de árbol"
+          "color": "Color"
         },
-        "title": "Tipos de elemento"
+        "icons": {
+          "tree": "Árbol",
+          "home": "Casa",
+          "post-lamp": "Farola",
+          "park": "Parque",
+          "fountain": "Fuente",
+          "flower": "Flor",
+          "mountain": "Montaña",
+          "beach": "Playa",
+          "volcano": "Volcán",
+          "tap": "Grifo",
+          "water-drop": "Gota de agua",
+          "lightbulb": "Bombilla",
+          "lightning-bolt": "Rayo",
+          "grass": "Césped",
+          "cloud": "Nube"
+        }
       },
       "resources": {
         "form": {
@@ -231,7 +290,7 @@
           },
           "returnButton": "Volver a la lista de tipos de tarea",
           "submitButton": {
-            "create": "Crear Tipo de tarea",
+            "create": "Crear Tipo de Tarea",
             "edit": "Guardar cambios"
           },
           "submittingText": {

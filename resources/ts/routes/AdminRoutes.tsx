@@ -6,6 +6,8 @@ import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
 import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
 import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
+import CreateElementTypes from '@/pages/Admin/Settings/Element Types/Create';
+import EditElementTypes from '@/pages/Admin/Settings/Element Types/Edit';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
 import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
@@ -184,6 +186,22 @@ const AdminRoutes: RouteObject[] = [
                 element: (
                   <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.title">
                     <AdminElementTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'element-types/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.create.title">
+                    <CreateElementTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'element-types/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.edit.title">
+                    <EditElementTypes />
                   </AdminLayoutWrapper>
                 ),
               },
