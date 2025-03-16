@@ -1,6 +1,7 @@
-import { fetchElements } from '@/api/service/elementService';
+import { fetchElements, saveElements } from '@/api/service/elementService';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Element } from '@/types/Element';
+
 interface ElementState {
   elements: Element[];
   loading: boolean;
@@ -19,6 +20,19 @@ export const fetchElementsAsync = createAsyncThunk(
   },
 );
 
+export const saveElementAsync = createAsyncThunk<
+  Element,
+  Element,
+  { rejectValue: string }
+>('elements/saveElement', async (elementData, { rejectWithValue }) => {
+  try {
+    const response: Element = await saveElements(elementData);
+    return response;
+  } catch (error) {
+    return rejectWithValue('error al guardar el elemento');
+  }
+});
+
 const elementSlice = createSlice({
   name: 'element',
   initialState,
@@ -36,7 +50,17 @@ const elementSlice = createSlice({
         state.elements = action.payload;
         state.loading = false;
       })
-      .addCase(fetchElementsAsync.rejected, (state, action) => {
+      .addCase(fetchElementsAsync.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(saveElementAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(saveElementAsync.fulfilled, (state, action) => {
+        state.elements.push(action.payload);
+        state.loading = false;
+      })
+      .addCase(saveElementAsync.rejected, (state) => {
         state.loading = false;
       });
   },

@@ -31,12 +31,13 @@ export const fetchPointsAsync = createAsyncThunk<
 });
 
 export const savePointsAsync = createAsyncThunk<
-  void,
+  Point,
   SavePointsProps[],
   { rejectValue: string }
 >('points/savePoints', async (pointsData, { rejectWithValue }) => {
   try {
-    await savePoints(pointsData);
+    const response = await savePoints(pointsData);
+    return response;
   } catch (error) {
     return rejectWithValue('error al guardar los puntos');
   }

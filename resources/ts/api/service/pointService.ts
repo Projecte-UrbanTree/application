@@ -15,11 +15,13 @@ export interface SavePointsProps {
   zone_id: number;
 }
 
-export const savePoints = async (points: SavePointsProps[]) => {
+export const savePoints = async (points: SavePointsProps[]): Promise<Point> => {
   try {
-    await axiosClient.post(`/admin/points`, { points });
+    const response = await axiosClient.post(`/admin/points`, { points });
     console.log('Puntos guardados:', points);
+    return response.data;
   } catch (error) {
     console.error('Error guardando los puntos', error);
+    throw error;
   }
 };
