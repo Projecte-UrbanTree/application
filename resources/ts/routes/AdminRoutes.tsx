@@ -1,6 +1,7 @@
 import AdminLayoutWrapper from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
 
+import Account from '@/pages/Admin/Account/Account';
 import AdminDashboard from '@/pages/Admin/Dashboard';
 import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
@@ -28,7 +29,6 @@ import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
 import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
 import WorkReport from '@/pages/Admin/WorkReport';
-import Account from '@/pages/Admin/Account/Account';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -131,14 +131,14 @@ const AdminRoutes: RouteObject[] = [
               </AdminLayoutWrapper>
             ),
           },
-                    {
-                        path: 'account',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.account.title">
-                                <Account />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
+          {
+            path: 'account',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.account.title">
+                <Account />
+              </AdminLayoutWrapper>
+            ),
+          },
           {
             path: 'settings',
             children: [
