@@ -15,7 +15,7 @@ class PointController extends Controller
 
     public function store(Request $request)
     {
-        $validate = $request->validate([
+        $validated = $request->validate([
             'points' => ['required', 'array', 'min:1'],
             'points.*.latitude' => ['required', 'numeric'],
             'points.*.longitude' => ['required', 'numeric'],
@@ -23,10 +23,14 @@ class PointController extends Controller
             'points.*.zone_id' => ['required', 'integer'],
         ]);
 
-        $createdPoints = Point::insert($validate['points']);
+        $createdPoints = [];
+        foreach ($validated['points'] as $pointData) {
+            $createdPoints[] = Point::create($pointData);
+        }
 
-        return response()->json(['message' => 'Puntos guardados correctamente'], 201);
+        return response()->json($createdPoints, 201);
     }
+
 
     public function destroy(Request $request, $id)
     {

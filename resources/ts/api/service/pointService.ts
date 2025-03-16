@@ -19,7 +19,9 @@ export const savePoints = async (points: SavePointsProps[]): Promise<Point> => {
   try {
     const response = await axiosClient.post(`/admin/points`, { points });
     console.log('Puntos guardados:', points);
-    return response.data;
+    console.log('DATA POINTS: ', response.data[0]);
+
+    return response.data[0];
   } catch (error) {
     console.error('Error guardando los puntos', error);
     throw error;

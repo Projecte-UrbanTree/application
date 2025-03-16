@@ -54,6 +54,8 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       tree_type_id: selectedTreeType,
       point_id: pointId!,
     };
+    console.log({ elementData });
+
     await dispatch(saveElementAsync(elementData)).unwrap();
     await dispatch(fetchPointsAsync());
     await dispatch(fetchElementsAsync());

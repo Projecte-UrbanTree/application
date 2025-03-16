@@ -13,6 +13,8 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { TreeTypes } from '@/types/TreeTypes';
 import { fetchTreeTypes } from '@/api/service/treeTypesService';
+import { fetchElementType } from '@/api/service/elementTypeService';
+import { ElementType } from '@/types/ElementType';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -42,6 +44,7 @@ export const MapComponent: React.FC<MapProps> = ({
   );
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
+  const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
 
   // redux store
   const dispatch = useDispatch<AppDispatch>();
@@ -57,7 +60,10 @@ export const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     const loadData = async () => {
       const treeTypesFetch = await fetchTreeTypes();
+      const elementTypeFetch = await fetchElementType();
+
       setTreeTypes(treeTypesFetch);
+      setElementTypes(elementTypeFetch);
     };
     loadData();
   }, []);
@@ -250,10 +256,10 @@ export const MapComponent: React.FC<MapProps> = ({
             mapServiceRef.current?.disableSingleClick();
             onElementAdd();
           }}
-          elementTypes={[
-            { label: 'Tipo de Elemento 1', value: 1 },
-            { label: 'Tipo de Elemento 2', value: 2 },
-          ]}
+          elementTypes={elementTypes.map((item) => ({
+            label: `${item.name}`,
+            value: item.id!,
+          }))}
           treeTypes={treeTypes.map((item) => ({
             label: `${item.family} ${item.genus} ${item.species}`,
             value: item.id!,
