@@ -28,6 +28,43 @@ class WorkOrderSeeder extends Seeder
                 'status' => '3',
                 'contract_id' => 3,
             ],
+            [
+                'date' => '2025-03-15',
+                'status' => '1',
+                'contract_id' => 1,
+            ],
+            [
+                'date' => '2025-2-03',
+                'status' => '1',
+                'contract_id' => 2,
+            ],
+            [
+                'date' => '2025-03-19',
+                'status' => '0',
+                'contract_id' => 2,
+            ],
+            [
+                'date' => '2021-03-12',
+                'status' => '1',
+                'contract_id' => 2,
+            ],
+            [
+                'date' => '2020-03-07',
+                'status' => '2',
+                'contract_id' => 2,
+            ],
+            [
+                'date' => '2024-02-19',
+                'status' => '0',
+                'contract_id' => 2,
+            ],
+            [
+                'date' => '2021-03-28',
+                'status' => '1',
+                'contract_id' => 2,
+            ],
+
         ]);
+
     }
 }

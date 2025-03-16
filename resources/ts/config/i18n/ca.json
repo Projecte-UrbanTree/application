@@ -48,6 +48,7 @@
       "name": "Nom",
       "password": "Contrasenya",
       "role": "Rol",
+      "select_resource_type": "Triar un tipus de recurs",
       "species": "Espècie",
       "start_date": "Data d'inici",
       "status": "Estat",
@@ -126,14 +127,73 @@
         }
       },
       "elementTypes": {
+        "title": "Tipus d'element",
+        "loading": "Carregant...",
+        "actions": "Accions",
+        "editButton": "Editar tipus d'element",
+        "deleteButton": "Eliminar tipus d'element",
+        "deletedSuccess": "Tipus d'element eliminat correctament",
+        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'element?",
+        "success": "Tipus d'element creat correctament",
+        "update": "Tipus d'element actualitzat correctament",
+        "error": "Error guardant el tipus d'element",
+        "true": "Sí",
+        "false": "No",
+        "create": {
+          "title": "Crear Tipus d'Element",
+          "submittingText": "Creant...",
+          "submitButton": "Crear Tipus d'Element",
+          "validations": {
+            "name": "El nom és obligatori",
+            "requires_tree_type": "Requereix tipus d'arbre",
+            "icon": "La icona és obligatòria",
+            "color": "El color és obligatori",
+            "description": "La descripció és obligatòria"
+          },
+          "placeholders": {
+            "name": "Nom del tipus d'element",
+            "requires_tree_type": "Selecciona si requereix tipus d'arbre",
+            "description": "Descripció del tipus d'element",
+            "icon": "Selecciona una icona",
+            "color": "Selecciona un color"
+          }
+        },
+        "edit": {
+          "title": "Editar Tipus d'Element",
+          "submittingText": "Guardant...",
+          "submitButton": "Guardar Canvis",
+          "validations": {
+            "name": "El nom és obligatori",
+            "requires_tree_type": "Requereix tipus d'arbre",
+            "icon": "La icona és obligatòria",
+            "color": "El color és obligatori",
+            "description": "La descripció és obligatòria"
+          }
+        },
         "columns": {
-          "color": "Color",
+          "name": "Nom",
+          "requires_tree_type": "Requereix tipus d'arbre",
           "description": "Descripció",
           "icon": "Icona",
-          "name": "Tipus d'element",
-          "requires_tree_type": "Requereix tipus d'arbre"
+          "color": "Color"
         },
-        "title": "Tipus d'element"
+        "icons": {
+          "tree": "Arbre",
+          "home": "Casa",
+          "post-lamp": "Fanals",
+          "park": "Parc",
+          "fountain": "Font",
+          "flower": "Flor",
+          "mountain": "Muntanya",
+          "beach": "Platja",
+          "volcano": "Volcà",
+          "tap": "Aixeta",
+          "water-drop": "Gota d'aigua",
+          "lightbulb": "Bombeta",
+          "lightning-bolt": "Raig",
+          "grass": "Gespa",
+          "cloud": "Núvol"
+        }
       },
       "resources": {
         "form": {
@@ -161,7 +221,12 @@
             "edit": "Editar Recurs"
           },
           "validation": {
+            "description_max": "La descripció not pot superar els 255 caràcters",
+            "name_format": "El nom només pot contenir lletres, números i espais",
+            "name_max": "El nom no pot superar els 50 caràcters",
+            "name_min": "El nom ha de tenir almenys 3 caràcters",
             "name_required": "El nom és obligatori",
+            "type_invalid": "Si us plau, tria un tipus de recurs vàlid",
             "type_required": "El tipus és obligatori"
           }
         },
@@ -233,7 +298,17 @@
         "title": "Tipus de recurs"
       },
       "stats": {
-        "title": "Estadístiques"
+        "title": "Estadístiques",
+        "week": "Aquesta setmana",
+        "month": "Aquest mes",
+        "custom": "Personalitzat",
+        "startDate": "Data d'inici",
+        "endDate": "Data de finalització",
+        "tasksDone": "Tasques completades",
+        "tasksNotDone": "Tasques pendents",
+        "hoursWorked": "Hores treballades",
+        "fuelConsumption": "Consum de combustible",
+        "noData": "No hi ha dades a mostrar"
       },
       "taskTypes": {
         "form": {
@@ -521,6 +596,7 @@
         "resources": "Recursos",
         "stats": "Estadístiques",
         "workers": "Treballadors",
+        "eva": "EVA",
         "workOrders": "Ordres de treball"
       },
       "settings": {

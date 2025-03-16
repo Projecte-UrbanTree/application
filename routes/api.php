@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\EvaController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
+use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
@@ -32,6 +33,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* Admin protected routes */
     Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+        Route::post('select-contract', [ContractController::class, 'selectContract']);
+        Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
+
         Route::get('stats', function (Request $request) {
             return response()->json([
                 'users' => User::count(),
@@ -40,19 +44,21 @@ Route::middleware('auth:sanctum')->group(function () {
                 'workOrders' => WorkOrder::count(),
             ]);
         });
+
+        // Route for stats
+        Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
+        Route::get('statistics', [StatisticsController::class, 'index']);
+
         Route::resources([
             'contracts' => ContractController::class,
             'element-types' => ElementTypeController::class,
-            'elements' => ElementController::class,
-            'points' => PointController::class,
+            'evas' => EvaController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,
             'task-types' => TaskTypeController::class,
             'tree-types' => TreeTypeController::class,
             'users' => UserController::class,
             'work-orders' => WorkOrderController::class,
-            'zones' => ZoneController::class,
-            'evas' => EvaController::class,
         ]);
     });
 });
