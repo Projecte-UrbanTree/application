@@ -46,9 +46,16 @@ export const MapComponent: React.FC<MapProps> = ({
     (state: RootState) => state.contract.currentContract,
   );
   const zonesRedux = useSelector((state: RootState) => state.zone.zones);
-  const { points, loading, error } = useSelector(
-    (state: RootState) => state.points,
+  const {
+    points,
+    loading: loadingPoint,
+    error,
+  } = useSelector((state: RootState) => state.points);
+  const { elements, loading: loadingElement } = useSelector(
+    (state: RootState) => state.element,
   );
+
+  console.log({ elements });
 
   // incialize the map
   useEffect(() => {
@@ -144,6 +151,12 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     });
   }
+
+  // draw elements
+  useEffect(() => {
+    const service = mapServiceRef.current;
+    // TODO: draw elements
+  });
 
   // save drawed zone
   async function handleZoneSaved() {

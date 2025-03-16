@@ -1,4 +1,5 @@
 import { deleteZone } from '@/api/service/zoneService';
+import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
@@ -45,12 +46,16 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
 
     dispatch(fetchZonesAsync())
       .unwrap()
-      .catch((error) => console.error('Error al cargar zonas:', error))
-      .finally(() => dispatch(hideLoader()));
+      .catch((error) => console.error('Error al cargar zonas:', error));
 
     dispatch(fetchPointsAsync())
       .unwrap()
       .catch((error) => console.error(error));
+
+    dispatch(fetchElementsAsync())
+      .unwrap()
+      .catch((error) => console.error(error))
+      .finally(() => dispatch(hideLoader()));
   }, [dispatch, currentContract]);
 
   const confirmDeleteZone = (zone: Zone) => {

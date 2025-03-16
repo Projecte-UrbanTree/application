@@ -1,14 +1,17 @@
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { Marker } from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import { Element } from '@/types/Element';
+import { Point } from '@/types/Point';
 
 export class MapService {
   public map!: mapboxgl.Map;
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
+  private elementMarkers: mapboxgl.Marker[] = [];
 
   constructor(container: HTMLDivElement, token: string) {
     mapboxgl.accessToken = token;
@@ -176,6 +179,34 @@ export class MapService {
         'line-width': 2,
       },
     });
+  }
+
+  public addElementMarkers(elements: Element[], points: Point[]) {
+    this.removeElementMarkers();
+    for (let i = 0; i < elements.length; i++) {
+      const { lat, lng } = this.getCoordElement(elements[i], points);
+      if (!lat && !lng) return;
+      const marker: Marker = new mapboxgl.Marker({
+        color: '#FF0000',
+      })
+        .setLngLat([lng, lat])
+        .addTo(this.map);
+
+      this.elementMarkers.push(marker);
+    }
+  }
+
+  public removeElementMarkers() {
+    this.elementMarkers.forEach((marker) => marker.remove());
+    this.elementMarkers = [];
+  }
+
+  public getCoordElement(
+    element: Element,
+    points: Point[],
+  ): { lat: number; lng: number } {
+    const point: Point = points.filter((p) => p.id === element.point_id)[0];
+    return { lat: point.latitude!, lng: point.longitude! };
   }
 
   public flyTo(coord: [number, number], zoom = 18) {
