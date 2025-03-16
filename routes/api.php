@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\ZoneController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ElementController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -49,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::resources([
             'contracts' => ContractController::class,
             'element-types' => ElementTypeController::class,
+            'elements' => ElementController::class,
             'points' => PointController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,

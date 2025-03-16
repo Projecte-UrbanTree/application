@@ -14,9 +14,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 interface ZoneProps {
   onSelectedZone: (zone: Zone) => void;
+  onAddElementZone: (zone: Zone) => void;
 }
 
-export const Zones = ({ onSelectedZone }: ZoneProps) => {
+export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
+  const addElementZone = (zone: Zone) => {
+    onAddElementZone(zone);
+  };
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
   const { zones, loading: zonesLoading } = useSelector(
@@ -84,6 +88,8 @@ export const Zones = ({ onSelectedZone }: ZoneProps) => {
     }
   };
 
+  const handleAddElement = (zoneId: number) => {};
+
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
       <Accordion multiple activeIndex={null} className="w-full">
@@ -115,6 +121,14 @@ export const Zones = ({ onSelectedZone }: ZoneProps) => {
                 icon={<Icon icon="mdi:trash-can-outline" width="20" />}
                 className="p-button-danger p-button-text p-2"
                 onClick={() => confirmDeleteZone(zone)}
+              />
+            </div>
+            <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
+              <strong>Añadir elemento</strong>
+              <Button
+                className="p-button p-button-text p-2"
+                icon={<Icon icon="mdi:add" />}
+                onClick={() => addElementZone(zone)}
               />
             </div>
           </AccordionTab>

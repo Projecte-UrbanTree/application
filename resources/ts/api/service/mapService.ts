@@ -6,8 +6,9 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 export class MapService {
-  private map!: mapboxgl.Map;
+  public map!: mapboxgl.Map;
   private draw?: MapboxDraw;
+  private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
 
   constructor(container: HTMLDivElement, token: string) {
     mapboxgl.accessToken = token;
@@ -34,6 +35,7 @@ export class MapService {
       'top-right',
     );
   }
+
   public addGeocoder() {
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken!,
@@ -49,6 +51,7 @@ export class MapService {
     isAdmin: boolean,
     onDrawUpdate: (coords: number[][]) => void,
   ) {
+    if (!isAdmin) return;
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: { polygon: true, trash: true },
@@ -86,6 +89,25 @@ export class MapService {
       }
     } else {
       onDrawUpdate([]);
+    }
+  }
+
+  public enableSingleClick(
+    callback: (lngLat: { lng: number; lat: number }) => void,
+  ) {
+    this.disableSingleClick();
+
+    this.singleClickListener = (e) => {
+      callback(e.lngLat);
+    };
+
+    this.map.on('click', this.singleClickListener);
+  }
+
+  public disableSingleClick() {
+    if (this.singleClickListener) {
+      this.map.off('click', this.singleClickListener);
+      this.singleClickListener = undefined;
     }
   }
 
@@ -155,6 +177,7 @@ export class MapService {
       },
     });
   }
+
   public flyTo(coord: [number, number], zoom = 18) {
     this.map.flyTo({ center: coord, zoom, essential: true });
   }

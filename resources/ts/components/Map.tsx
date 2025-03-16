@@ -1,7 +1,7 @@
 import { MapService } from '@/api/service/mapService';
 import { RootState, AppDispatch } from '@/store/store';
-import { fetchPointsAsync } from '@/store/slice/pointSlice';
-import { Point } from '@/types/Point';
+import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
+import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { Zone } from '@/types/Zone';
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,18 +15,32 @@ const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 interface MapProps {
   selectedZone: Zone | null;
+  zoneToAddElement: Zone | null;
+  onElementAdd: () => void;
 }
 
-export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
+export const MapComponent: React.FC<MapProps> = ({
+  selectedZone,
+  zoneToAddElement,
+  onElementAdd,
+}) => {
+  // refs
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapServiceRef = useRef<MapService | null>(null);
 
+  // states
   const [modalVisible, setModalVisible] = useState(false);
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
   const [enabledButton, setEnabledButton] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const [isAddingPoint, setIsAddingPoint] = useState(false);
+  const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(
+    null,
+  );
+  const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
 
+  // redux store
+  const dispatch = useDispatch<AppDispatch>();
   const userValue = useSelector((state: RootState) => state.user);
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
@@ -36,11 +50,7 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     (state: RootState) => state.points,
   );
 
-  useEffect(() => {
-    if (!currentContract) return;
-    dispatch(fetchPointsAsync());
-  }, [currentContract, dispatch]);
-
+  // incialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
@@ -59,6 +69,13 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     mapServiceRef.current = service;
   }, [userValue.role]);
 
+  // load points if contract is active
+  useEffect(() => {
+    if (!currentContract) return;
+    dispatch(fetchPointsAsync());
+  }, [currentContract, dispatch]);
+
+  // fly to a selected zone
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !selectedZone || !points.length) return;
@@ -69,6 +86,37 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     }
   }, [selectedZone, points]);
 
+  // if "zoneToAddElement" change, enter on mode "add point"
+  useEffect(() => {
+    const service = mapServiceRef.current;
+    if (!service) return;
+
+    if (!zoneToAddElement) {
+      setIsAddingPoint(false);
+      service.disableSingleClick();
+      return;
+    }
+
+    setIsAddingPoint(true);
+
+    // enable single click on mapService
+    service.enableSingleClick((lngLat) => {
+      setNewPointCoord([lngLat.lng, lngLat.lat]);
+      setModalAddPointVisible(true);
+    });
+
+    // fly to zone if have points
+    const firstPoint = points.find(
+      (p: Point) => p.zone_id === zoneToAddElement.id,
+    );
+    if (firstPoint?.longitude && firstPoint?.latitude) {
+      service.flyTo([firstPoint.longitude, firstPoint.latitude]);
+    } else {
+      // TODO: make default values to zone if lat, long are null
+    }
+  }, [zoneToAddElement, points]);
+
+  // draw zones
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !zonesRedux.length || !points.length) return;
@@ -97,6 +145,7 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     });
   }
 
+  // save drawed zone
   async function handleZoneSaved() {
     setModalVisible(false);
     setIsDrawingMode(false);
@@ -106,6 +155,32 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     dispatch(fetchPointsAsync());
   }
 
+  // save new point (when we are in "add element" mode)
+  const handleSavePoint = async () => {
+    if (!newPointCoord || !zoneToAddElement) return;
+    const [longitude, latitude] = newPointCoord;
+
+    await dispatch(
+      savePointsAsync([
+        {
+          latitude,
+          longitude,
+          type: TypePoint.element,
+          zone_id: zoneToAddElement.id!,
+        },
+      ]),
+    ).unwrap();
+
+    dispatch(fetchPointsAsync());
+    setModalAddPointVisible(false);
+    setIsAddingPoint(false);
+    setNewPointCoord(null);
+    mapServiceRef.current?.disableSingleClick();
+
+    onElementAdd();
+  };
+
+  // TODO: IMPLEMENT FUNCTION TO DETECT COLLISION
   function detectCollision(
     allPoints: Point[],
     contractId: number,
@@ -150,6 +225,19 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
         visible={modalVisible}
         onHide={() => setModalVisible(false)}>
         <SaveZoneForm coordinates={coordinates} onClose={handleZoneSaved} />
+      </Dialog>
+
+      <Dialog
+        header="Guardar Punto"
+        visible={modalAddPointVisible}
+        onHide={() => setModalAddPointVisible(false)}>
+        <p>coordenadas seleccionadas: {JSON.stringify(newPointCoord)}</p>
+        <Button label="Guardar Punto" onClick={handleSavePoint} />
+        <Button
+          label="Cancelar"
+          className="p-button-secondary"
+          onClick={() => setModalAddPointVisible(false)}
+        />
       </Dialog>
     </div>
   );
