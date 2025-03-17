@@ -172,10 +172,10 @@ export default function Evas() {
 
     const calculateWindStabilityIndex = (
       height: number,
-      wind: number,
+      crown_width: number,
       rootSurfaceDiameter: number,
     ) => {
-      const index = (height * wind) / rootSurfaceDiameter;
+      const index = (height * crown_width) / rootSurfaceDiameter;
       if (index < 0.5) {
         return 0;
       } else if (index >= 0.5 && index <= 1) {
@@ -196,7 +196,7 @@ export default function Evas() {
       ),
       calculateWindStabilityIndex(
         eva.height,
-        parseFloat(eva.wind),
+        eva.crown_width,
         eva.root_surface_diameter,
       ),
     ];

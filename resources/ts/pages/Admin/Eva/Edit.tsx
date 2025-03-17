@@ -353,37 +353,37 @@ export default function EditEva() {
                   </h2>
                   <FormField
                     name="height"
-                    label={t('admin.pages.evas.form.height')}
+                    label={`${t('admin.pages.evas.form.height')} (m)`}
                     as={InputNumber}
                   />
                   <FormField
                     name="diameter"
-                    label={t('admin.pages.evas.form.diameter')}
+                    label={`${t('admin.pages.evas.form.diameter')} (cm)`}
                     as={InputNumber}
                   />
                   <FormField
                     name="crown_width"
-                    label={t('admin.pages.evas.form.crown_width')}
+                    label={`${t('admin.pages.evas.form.crown_width')} (m)`}
                     as={InputNumber}
                   />
                   <FormField
                     name="crown_projection_area"
-                    label={t('admin.pages.evas.form.crown_projection_area')}
+                    label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
                     as={InputNumber}
                   />
                   <FormField
                     name="root_surface_diameter"
-                    label={t('admin.pages.evas.form.root_surface_diameter')}
+                    label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
                     as={InputNumber}
                   />
                   <FormField
                     name="effective_root_area"
-                    label={t('admin.pages.evas.form.effective_root_area')}
+                    label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
                     as={InputNumber}
                   />
                   <FormField
                     name="height_estimation"
-                    label={t('admin.pages.evas.form.height_estimation')}
+                    label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
                     as={InputNumber}
                   />
 
