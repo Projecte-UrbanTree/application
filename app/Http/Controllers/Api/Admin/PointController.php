@@ -13,30 +13,23 @@ class PointController extends Controller
         return Point::all();
     }
 
-    public function store(Request $request)
+     public function store(Request $request)
     {
-        $request->validate([
-            '*.latitude' => 'required|numeric',
-            '*.longitude' => 'required|numeric',
-            '*.type' => 'required|string|max:255',
-            '*.zone_id' => 'required|integer|exists:zones,id',
+        $validated = $request->validate([
+            'points' => ['required', 'array', 'min:1'],
+            'points.*.latitude' => ['required', 'numeric'],
+            'points.*.longitude' => ['required', 'numeric'],
+            'points.*.type' => ['required', 'string', 'max:255'],
+            'points.*.zone_id' => ['required', 'integer'],
         ]);
 
-        $points = $request->all();
-
-        if (!is_array($points) || count($points) < 1) {
-            return response()->json(['error' => 'Se requiere un arreglo de puntos con al menos un elemento.'], 422);
-        }
-
         $createdPoints = [];
-
-        foreach ($points as $point) {
-            $createdPoints[] = Point::create($point);
+        foreach ($validated['points'] as $pointData) {
+            $createdPoints[] = Point::create($pointData);
         }
 
         return response()->json($createdPoints, 201);
     }
-
 
     public function destroy(Request $request, $id)
     {
