@@ -51,16 +51,17 @@ jobs:
             echo "📦 Installing dependencies..."
             cd /var/www/urbantree
             sudo -u frontendweb composer install --no-dev --optimize-autoloader
-            sudo -u frontendweb npm install
+            sudo -u frontendweb npm ci --legacy-peer-deps
             sudo -u frontendweb npm run build
 
+
             echo "🔄 Running migrations..."
-            sudo php artisan migrate --step --force
+            sudo -u frontendweb php artisan migrate --step --force
 
             echo "🧹 Clearing and caching..."
-            sudo php artisan optimize:clear
-            sudo php artisan config:cache
-            sudo php artisan route:cache
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
 
             echo "🔄 Restarting services..."
             sudo systemctl restart nginx
