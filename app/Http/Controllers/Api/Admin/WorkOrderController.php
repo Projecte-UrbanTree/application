@@ -36,14 +36,14 @@ class WorkOrderController extends Controller
     public function create(Request $request)
     {
         $contract_id = $request->query('contract_id');
-        
+
         $users = User::where('role', 'worker');
         $zones = Zone::select('id', 'name');
         if ($contract_id) {
             $users->where('contract_id', $contract_id);
             $zones->where('contract_id', $contract_id);
         }
-        
+
         return response()->json([
             'task_types' => TaskType::all(),
             'users' => $users->get(),
