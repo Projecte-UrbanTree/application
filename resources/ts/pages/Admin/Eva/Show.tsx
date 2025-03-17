@@ -79,7 +79,7 @@ export default function ShowEva() {
   };
 
   const calculateStabilityIndex = (height: number, diameter: number) => {
-    const index = height / diameter;
+    const index = (height / diameter) * 100;
     if (index < 50) {
       return {
         message: t('admin.pages.evas.stability.stable'),
@@ -88,9 +88,9 @@ export default function ShowEva() {
     } else if (index >= 50 && index <= 80) {
       return {
         message: t('admin.pages.evas.stability.moderate'),
-        color: '#FFFF00',
+        color: '#00FF00',
       };
-    } else if (index > 80 && index <= 100) {
+    } else if (index > 80) {
       return {
         message: t('admin.pages.evas.stability.highRisk'),
         color: '#FF0000',
@@ -116,7 +116,7 @@ export default function ShowEva() {
     } else if (ratio >= 0.3 && ratio <= 0.5) {
       return {
         message: t('admin.pages.evas.gravityHeight.moderateRisk'),
-        color: '#FFFF00',
+        color: '#00FF00',
       };
     } else if (ratio > 0.5) {
       return {
@@ -132,10 +132,10 @@ export default function ShowEva() {
   };
 
   const calculateRootCrownRatio = (
-    rootSurfaceDiameter: number,
-    crownProjectionArea: number,
+    effective_root_area: number,
+    crown_projection_area: number,
   ) => {
-    const ratio = rootSurfaceDiameter / crownProjectionArea;
+    const ratio = effective_root_area / crown_projection_area;
     if (ratio > 2) {
       return {
         message: t('admin.pages.evas.rootCrown.veryStable'),
@@ -245,13 +245,13 @@ export default function ShowEva() {
     eva.height,
   );
   const rootCrownRatio = calculateRootCrownRatio(
-    eva.root_surface_diameter,
+    eva.effective_root_area,
     eva.crown_projection_area,
   );
   const windStabilityIndex = calculateWindStabilityIndex(
     eva.height,
-    eva.wind,
-    eva.root_surface_diameter,
+    eva.crown_width,
+    eva.effective_root_area,
   );
 
   return (
