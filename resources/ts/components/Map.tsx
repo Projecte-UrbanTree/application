@@ -129,7 +129,7 @@ export const MapComponent: React.FC<MapProps> = ({
   // draw zones
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service || !zonesRedux.length || !points.length) return;
+    if (!service) return;
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => updateZones(service));
     } else {

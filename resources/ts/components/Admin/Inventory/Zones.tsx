@@ -140,6 +140,36 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
           </AccordionTab>
         ))}
       </Accordion>
+
+      <Dialog
+        header="Confirmar eliminación"
+        visible={isConfirmDialogVisible}
+        onHide={() => setIsConfirmDialogVisible(false)}
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button
+              label="Cancelar"
+              className="p-button-secondary"
+              onClick={() => setIsConfirmDialogVisible(false)}
+            />
+            <Button
+              label="Eliminar"
+              className="p-button-danger"
+              onClick={() => {
+                if (selectedZoneToDelete) {
+                  handleDeleteZone(selectedZoneToDelete.id!);
+                  setIsConfirmDialogVisible(false);
+                }
+              }}
+            />
+          </div>
+        }>
+        <p>
+          ¿Estás seguro de que quieres eliminar la zona?{' '}
+          <strong>{selectedZoneToDelete?.name}</strong>?
+        </p>
+        <p>Al eliminar la zona se eliminarán todas las coordenadas.</p>
+      </Dialog>
     </div>
   );
 };
