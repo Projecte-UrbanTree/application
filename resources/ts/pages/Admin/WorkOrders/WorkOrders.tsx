@@ -266,15 +266,7 @@ export default function WorkOrders() {
             }
             return (
               <div className="flex justify-end gap-2">
-                  <span className="p-overlay-badge" data-pr-tooltip={!currentContract || currentContract.id === 0 ? t('admin.tooltips.selectContract') : ''}>
-                    <Button 
-                    icon={<Icon icon="tabler:edit" />} 
-                    className="p-button-rounded p-button-primary" 
-                    onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)} 
-                    title={t('admin.pages.workOrders.list.actions.edit')} 
-                    disabled={!currentContract || currentContract.id === 0}
-                    />
-                </span>
+                <Button icon={<Icon icon="tabler:edit" />} className="p-button-rounded p-button-primary" onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)} title={t('admin.pages.workOrders.list.actions.edit')} />
                 <Button icon={<Icon icon="tabler:trash" />} className="p-button-rounded p-button-danger" onClick={() => handleDelete(rowData.id)} title={t('admin.pages.workOrders.list.actions.delete')} />
               </div>
             )
