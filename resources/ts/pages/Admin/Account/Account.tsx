@@ -41,6 +41,13 @@ export default function Account() {
           newPassword: '',
           confirmNewPassword: ''
         });
+
+        const successMessage = sessionStorage.getItem('accountUpdateSuccess');
+        if (successMessage) {
+          showToast('success', t('general.success'), t(successMessage));
+          sessionStorage.removeItem('accountUpdateSuccess');
+        }
+        
         setIsLoading(false);
       } catch (error) {
         showToast('error', t('general.error'), t('admin.pages.account.messages.errorSaving'));
@@ -79,7 +86,10 @@ export default function Account() {
           newPassword_confirmation: values.confirmNewPassword
         });
       }
-      showToast('success', t('general.success'), t('admin.pages.account.messages.profileUpdated'));
+
+      sessionStorage.setItem('accountUpdateSuccess', 'admin.pages.account.messages.profileUpdated');
+      navigate(0);
+      
     } catch (error: any) {
       if (error.response?.data?.error === 'La contraseña actual no es correcta') {
         showToast('error', t('general.error'), t('admin.pages.account.messages.passwordCurrentWrong'));
@@ -167,8 +177,7 @@ export default function Account() {
                     className={errors.confirmNewPassword && touched.confirmNewPassword ? "p-invalid" : ""}
                   />
                   {errors.confirmNewPassword && touched.confirmNewPassword && <small className="p-error">{errors.confirmNewPassword}</small>}
-                </div>
-                <div className="md:col-span-2 flex justify-end mt-4">
+                </div>                <div className="md:col-span-2 flex justify-end mt-4">
                   <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto" icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"} label={isSubmitting ? t('admin.pages.account.actions.saving') : t('admin.pages.account.actions.save')} />
                 </div>
               </Form>
