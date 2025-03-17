@@ -7,6 +7,8 @@ import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
 import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
 import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
+import CreateElementTypes from '@/pages/Admin/Settings/Element Types/Create';
+import EditElementTypes from '@/pages/Admin/Settings/Element Types/Edit';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
 import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
@@ -39,10 +41,7 @@ const AdminRoutes: RouteObject[] = [
       {
         path: '/admin',
         children: [
-          {
-            index: true,
-            element: <Navigate to="/admin/dashboard" />,
-          },
+          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
           {
             path: 'dashboard',
             element: (
@@ -142,10 +141,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'settings',
             children: [
-              {
-                index: true,
-                element: <Navigate to="/admin/settings/users" />,
-              },
+              { index: true, element: <Navigate to="/admin/settings/users" replace /> },
               {
                 path: 'users',
                 element: (
@@ -203,26 +199,26 @@ const AdminRoutes: RouteObject[] = [
                 ),
               },
               {
+                path: 'element-types/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.create.title">
+                    <CreateElementTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'element-types/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.edit.title">
+                    <EditElementTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
                 path: 'tree-types',
                 element: (
                   <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.title">
                     <AdminTreeTypes />
-                  </AdminLayoutWrapper>
-                ),
-              },
-              {
-                path: 'tree-types/create',
-                element: (
-                  <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.create.title">
-                    <CreateTreeType />
-                  </AdminLayoutWrapper>
-                ),
-              },
-              {
-                path: 'tree-types/edit/:id',
-                element: (
-                  <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.edit.title">
-                    <EditTreeType />
                   </AdminLayoutWrapper>
                 ),
               },
@@ -295,6 +291,10 @@ const AdminRoutes: RouteObject[] = [
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <Navigate to="/login" replace />,
   },
 ];
 
