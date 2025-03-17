@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EvaRequest;
-use App\Models\Eva;
 use App\Models\Element;
-use Illuminate\Http\Request;
+use App\Models\Eva;
 use Illuminate\Support\Facades\Config;
 
 class EvaController extends Controller
@@ -14,12 +13,12 @@ class EvaController extends Controller
     public function index()
     {
         $evas = Eva::with(['element.point', 'element.elementType'])->get();
+
         return response()->json($evas);
     }
 
     public function create()
     {
-        // Obtener los diccionarios
         $dictionaries = Config::get('dictionaries');
 
         $elements = Element::with(['elementType'])->get()->map(function ($element) {
@@ -38,6 +37,7 @@ class EvaController extends Controller
     public function show($id)
     {
         $eva = Eva::with(['element.point', 'element.elementType'])->findOrFail($id);
+
         return response()->json($eva);
     }
 
@@ -46,6 +46,7 @@ class EvaController extends Controller
         $validatedData = $request->validated();
 
         Eva::create($validatedData);
+
         return response()->json(['message' => 'Eva created successfully']);
     }
 
@@ -55,6 +56,7 @@ class EvaController extends Controller
             'dictionaries' => Config::get('dictionaries'),
             'eva' => Eva::with(['element.point', 'element.elementType'])->findOrFail($id),
         ];
+
         return response()->json($data);
     }
 
@@ -64,12 +66,14 @@ class EvaController extends Controller
 
         $eva = Eva::findOrFail($id);
         $eva->update($validatedData);
+
         return response()->json(['message' => 'Eva updated successfully']);
     }
 
     public function destroy($id)
     {
         Eva::findOrFail($id)->delete();
+
         return response()->json(['message' => 'Eva deleted successfully']);
     }
 }

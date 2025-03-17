@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Point;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
 
 class PointController extends Controller
 {
@@ -31,6 +30,7 @@ class PointController extends Controller
     public function store(Request $request)
     {
         $point = Point::create($request->all());
+
         return response()->json($point, 201);
     }
 
@@ -40,6 +40,7 @@ class PointController extends Controller
     public function show(string $id)
     {
         $point = Point::findOrFail($id);
+
         return response()->json($point);
     }
 
@@ -58,6 +59,7 @@ class PointController extends Controller
     {
         $point = Point::findOrFail($id);
         $point->update($request->all());
+
         return response()->json($point);
     }
 
@@ -67,6 +69,7 @@ class PointController extends Controller
     public function destroy(string $id)
     {
         Point::destroy($id);
+
         return response()->json(null, 204);
     }
 }

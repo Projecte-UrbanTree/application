@@ -45,7 +45,7 @@ return new class extends Migration
 
             // Result
             $table->string('status')->default('0');
-            
+
             // Wind
             $table->integer('wind');
 

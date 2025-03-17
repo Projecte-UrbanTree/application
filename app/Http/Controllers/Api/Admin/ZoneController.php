@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Zone;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ZoneController extends Controller
 {
@@ -30,6 +30,7 @@ class ZoneController extends Controller
     public function store(Request $request)
     {
         $zone = Zone::create($request->all());
+
         return response()->json($zone, 201);
     }
 
@@ -39,6 +40,7 @@ class ZoneController extends Controller
     public function show(string $id)
     {
         $zone = Zone::findOrFail($id);
+
         return response()->json($zone);
     }
 
@@ -57,6 +59,7 @@ class ZoneController extends Controller
     {
         $zone = Zone::findOrFail($id);
         $zone->update($request->all());
+
         return response()->json($zone);
     }
 
@@ -66,6 +69,7 @@ class ZoneController extends Controller
     public function destroy(string $id)
     {
         Zone::destroy($id);
+
         return response()->json(null, 204);
     }
 }

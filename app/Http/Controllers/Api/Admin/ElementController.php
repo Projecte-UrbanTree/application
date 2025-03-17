@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Element;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ElementController extends Controller
 {
@@ -30,6 +30,7 @@ class ElementController extends Controller
     public function store(Request $request)
     {
         $element = Element::create($request->all());
+
         return response()->json($element, 201);
     }
 
@@ -39,6 +40,7 @@ class ElementController extends Controller
     public function show(string $id)
     {
         $element = Element::with(['eva', 'point', 'treeType'])->findOrFail($id);
+
         return response()->json($element);
     }
 
@@ -57,6 +59,7 @@ class ElementController extends Controller
     {
         $element = Element::findOrFail($id);
         $element->update($request->all());
+
         return response()->json($element);
     }
 
@@ -66,6 +69,7 @@ class ElementController extends Controller
     public function destroy(string $id)
     {
         Element::destroy($id);
+
         return response()->json(null, 204);
     }
 }

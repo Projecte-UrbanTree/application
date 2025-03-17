@@ -75,7 +75,6 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
   );
 };
 
-// Componente principal CreateEva
 const CreateEva = () => {
   const navigate = useNavigate();
   const [elements, setElements] = useState<any[]>([]);
@@ -85,19 +84,17 @@ const CreateEva = () => {
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  // Cargar datos iniciales (diccionarios y elementos)
   useEffect(() => {
     axiosClient
       .get('/admin/evas/create')
       .then((response) => {
-        setElements(response.data.elements); // Guardar los elementos
-        setDictionaries(response.data.dictionaries); // Guardar los diccionarios
+        setElements(response.data.elements); 
+        setDictionaries(response.data.dictionaries); 
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
-  // Valores iniciales del formulario
   const initialValues = {
     element_id: null,
     date_birth: null,
@@ -127,7 +124,6 @@ const CreateEva = () => {
     status: 0,
   };
 
-  // Esquema de validación con Yup
   const validationSchema = Yup.object({
     element_id: Yup.number().required(
       t('admin.pages.evas.form.validation.element_required'),
