@@ -177,7 +177,8 @@ export default function Account() {
                     className={errors.confirmNewPassword && touched.confirmNewPassword ? "p-invalid" : ""}
                   />
                   {errors.confirmNewPassword && touched.confirmNewPassword && <small className="p-error">{errors.confirmNewPassword}</small>}
-                </div>                <div className="md:col-span-2 flex justify-end mt-4">
+                </div>
+                <div className="md:col-span-2 flex justify-end mt-4">
                   <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto" icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"} label={isSubmitting ? t('admin.pages.account.actions.saving') : t('admin.pages.account.actions.save')} />
                 </div>
               </Form>
