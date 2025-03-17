@@ -54,21 +54,13 @@ const EditWorkOrder = () => {
   const [loading, setLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    axiosClient.get("/admin/work-orders/create").then(response => {
-      setUsers(response.data.users.map((u: any) => ({ id: u.id, name: u.name, surname: u.surname })))
-      setZones(response.data.zones.map((z: any) => ({ id: z.id, name: z.name })))
-      setTaskTypes(response.data.task_types)
-      setElementTypes(response.data.element_types)
-      setTreeTypes(response.data.tree_types)
-    })
-  }, [])
+  const [workOrderContract, setWorkOrderContract] = useState<number | null>(null);
 
   useEffect(() => {
     axiosClient.get(`/admin/work-orders/${id}`)
       .then(response => {
         const data = response.data
+        setWorkOrderContract(data.contract_id);
         const transformed: EditWorkOrderValues = {
           date: data.date ? new Date(data.date) : null,
           selectedUsers: data.users.map((u: any) => ({
@@ -91,6 +83,23 @@ const EditWorkOrder = () => {
       })
       .catch(() => setLoading(false))
   }, [id])
+
+  useEffect(() => {
+    const contractIdToUse = (!currentContract || currentContract.id === 0) && workOrderContract 
+      ? workOrderContract 
+      : currentContract?.id;
+      
+    if (contractIdToUse) {
+      axiosClient.get(`/admin/work-orders/create?contract_id=${contractIdToUse}`)
+        .then(response => {
+          setUsers(response.data.users.map((u: any) => ({ id: u.id, name: u.name, surname: u.surname })))
+          setZones(response.data.zones.map((z: any) => ({ id: z.id, name: z.name })))
+          setTaskTypes(response.data.task_types)
+          setElementTypes(response.data.element_types)
+          setTreeTypes(response.data.tree_types)
+        })
+    }
+  }, [currentContract, workOrderContract])
 
   const validationSchema = Yup.object({
     date: Yup.date().required(t("admin.pages.workOrders.form.validation.date_required")),
@@ -128,7 +137,6 @@ const EditWorkOrder = () => {
       await axiosClient.put(`/admin/work-orders/${id}`, {
         date: formattedDate,
         users: userIds,
-        contract_id: currentContract?.id,
         blocks: formattedBlocks
       })
       navigate("/admin/work-orders", { state: { success: t("admin.pages.workOrders.list.messages.updateSuccess") } })
@@ -166,7 +174,7 @@ const EditWorkOrder = () => {
     )
   }
 
-  if (!currentContract) {
+  if (!currentContract && !workOrderContract) {
     return (
       <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
         <Card className="w-full max-w-3xl shadow-lg">
