@@ -13,7 +13,7 @@ class PointController extends Controller
         return Point::all();
     }
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             '*.latitude' => ['required', 'numeric'],
