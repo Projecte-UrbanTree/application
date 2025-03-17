@@ -28,10 +28,8 @@ jobs:
           REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
         run: |
           sshpass -p "$SSH_PASSWORD" rsync -avz --delete \
-            --exclude=".devcontainer" --exclude=".docker" --exclude=".github" --exclude=".vscode" --exclude="tests" \
-            --exclude=".env" --exclude="database/database.sqlite" \
-            --exclude="bootstrap/cache" --exclude="vendor" --exclude="node_modules" \
-            --no-perms --no-group --chmod=ugo=rwX \
+            --exclude={".devcontainer",".docker",".github",".vscode","tests",".env","database/database.sqlite","bootstrap/cache","vendor","node_modules"} \
+            --chown=frontendweb:www-data \
             -e 'ssh -p 21222 -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
 
       - name: Execute setup commands on server
@@ -46,10 +44,10 @@ jobs:
             
             echo "💡 Setting permissions..."
             sudo chown -R frontendweb:www-data /var/www/urbantree
-            sudo chmod -R u+rwX,g+rwX,o+rX /var/www/urbantree
-            sudo chmod -R 775 /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
-            sudo chown -R www-data:www-data /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
-
+            sudo chmod -R 775 /var/www/urbantree
+            sudo chown -R frontendweb:www-data /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+            sudo chmod -R 770 /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+            
             echo "📦 Installing dependencies..."
             cd /var/www/urbantree
             sudo -u frontendweb composer install --no-dev --optimize-autoloader
