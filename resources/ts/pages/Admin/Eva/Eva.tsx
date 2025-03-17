@@ -44,7 +44,7 @@ export default function Evas() {
         latitude: number;
         longitude: number;
       };
-      elementType: {
+      element_type: {
         name: string;
       };
     };
@@ -255,7 +255,7 @@ export default function Evas() {
           <Column
             header={t('admin.pages.evas.columns.name')}
             body={(rowData: Eva) => (
-              <span>{rowData.element?.elementType?.name || 'N/A'}</span>
+              <span>{rowData.element?.element_type?.name || 'N/A'}</span>
             )}
           />
           <Column

@@ -88,8 +88,32 @@ const CreateEva = () => {
     axiosClient
       .get('/admin/evas/create')
       .then((response) => {
-        setElements(response.data.elements); 
-        setDictionaries(response.data.dictionaries); 
+        setElements(response.data.elements);
+        const translatedDictionaries: any = {
+          copaDesequilibrada: [],
+          ramasSobreextendidas: [],
+          grietas: [],
+          ramasMuertas: [],
+          inclinacion: [],
+          bifurcacionesV: [],
+          cavidades: [],
+          danosCorteza: [],
+          levantamientoSuelo: [],
+          raicesCortadas: [],
+          podredumbreBasal: [],
+          raicesExpuestas: [],
+          viento: [],
+          sequia: [],
+        };
+        for (const key in response.data.dictionaries) {
+          translatedDictionaries[key] = response.data.dictionaries[key].map(
+            (option: any) => ({
+              ...option,
+              label: t(option.label),
+            }),
+          );
+        }
+        setDictionaries(translatedDictionaries);
         setLoading(false);
       })
       .catch(() => setLoading(false));

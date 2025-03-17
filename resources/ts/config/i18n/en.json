@@ -676,6 +676,7 @@
           "status": "Status"
         },
         "form": {
+          "name": "Name",
           "element_id": "Element ID",
           "years": "Years",
           "months": "Months",
