@@ -94,11 +94,12 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   };
 
   const handleAddElement = (zoneId: number) => {};
+  const uniqueZones = Array.from(new Map(zones.map((z) => [z.id, z])).values());
 
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
       <Accordion multiple activeIndex={null} className="w-full">
-        {zones.map((zone: Zone) => (
+        {uniqueZones.map((zone: Zone) => (
           <AccordionTab
             key={zone.id}
             header={
@@ -139,37 +140,6 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
           </AccordionTab>
         ))}
       </Accordion>
-
-      <Dialog
-        header="Confirmar eliminación"
-        visible={isConfirmDialogVisible}
-        onHide={() => setIsConfirmDialogVisible(false)}
-        footer={
-          <div className="flex justify-end gap-2">
-            <Button
-              label="Cancelar"
-              className="p-button-secondary"
-              onClick={() => setIsConfirmDialogVisible(false)}
-            />
-            <Button
-              label="Eliminar"
-              className="p-button-danger"
-              onClick={() => {
-                if (selectedZoneToDelete) {
-                  handleDeleteZone(selectedZoneToDelete.id!);
-                  setIsConfirmDialogVisible(false);
-                }
-              }}
-            />
-          </div>
-        }>
-        <p>
-          ¿Estás seguro de que quieres eliminar la zona?{' '}
-          <strong>{selectedZoneToDelete?.name}</strong>?
-        </p>
-
-        <p>Al eliminar la zona se eliminaran todas las coordenadas.</p>
-      </Dialog>
     </div>
   );
 };
