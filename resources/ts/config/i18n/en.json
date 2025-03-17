@@ -751,5 +751,91 @@
         "titleSuccess": "Success"
       }
     }
+  },
+  "dictionaries": {
+    "copaDesequilibrada": {
+      "no_inclinacion": "No inclination or uneven growth",
+      "leve_inclinacion": "Slight crown inclination",
+      "visiblemente_inclinada": "Visibly inclined crown",
+      "extremadamente_inclinada": "Extremely inclined crown"
+    },
+    "ramasSobreextendidas": {
+      "bien_estructuradas": "Well-structured branches",
+      "pocas_sobreextendidas": "Few overextended branches",
+      "varias_sobreextendidas": "Several overextended branches",
+      "sobreextendidas_pesadas": "Overextended and heavy branches"
+    },
+    "grietas": {
+      "no_grietas": "No cracks",
+      "pequenas_grietas": "Small cracks in the trunk",
+      "visibles_varias_partes": "Visible cracks in several parts",
+      "profundas_tronco": "Deep cracks in the trunk"
+    },
+    "ramasMuertas": {
+      "sin_ramas_muertas": "No dead branches",
+      "algunas_ramas_muertas": "Some dead branches",
+      "multiples_ramas_muertas": "Multiple dead branches",
+      "gran_cantidad_ramas_muertas": "Large number of dead branches"
+    },
+    "inclinacion": {
+      "totalmente_vertical": "Completely vertical",
+      "leve": "Slight inclination (<5°)",
+      "moderada": "Moderate inclination (5-15°)",
+      "alta": "High inclination (>15°)"
+    },
+    "bifurcacionesV": {
+      "normales": "Normal bifurcations",
+      "leve": "Slight V bifurcation",
+      "pronunciada": "Pronounced V bifurcation",
+      "peligrosa": "Dangerous V bifurcation"
+    },
+    "cavidades": {
+      "sin_cavidades": "No cavities",
+      "pequena": "Small cavity",
+      "intermedia": "Intermediate cavity",
+      "profundas_estructural": "Deep and structural cavity"
+    },
+    "danosCorteza": {
+      "intacta": "Intact bark",
+      "heridas_leves": "Bark with slight wounds",
+      "significativos": "Significant bark damage",
+      "muy_danada": "Very damaged bark"
+    },
+    "levantamientoSuelo": {
+      "sin_alteraciones": "Soil without alterations",
+      "ligera_elevacion": "Slight soil elevation",
+      "visible": "Visible soil elevation",
+      "severamente_levantado": "Severely lifted soil"
+    },
+    "raicesCortadas": {
+      "intactas": "Intact roots",
+      "cortes_leves": "Roots with slight cuts",
+      "parcialmente_danadas": "Partially damaged roots",
+      "severamente_cortadas": "Severely cut roots"
+    },
+    "podredumbreBasal": {
+      "sin_podredumbre": "No rot",
+      "inicial": "Initial rot",
+      "visible": "Visible rot",
+      "avanzada": "Advanced rot"
+    },
+    "raicesExpuestas": {
+      "bajo_tierra": "Roots underground",
+      "algunas_expuestas": "Some exposed roots",
+      "varias_expuestas": "Several exposed roots",
+      "expuestas_debilitadas": "Exposed and weakened roots"
+    },
+    "viento": {
+      "protegido": "Tree protected by natural barriers or buildings, no strong constant wind.",
+      "ocasional": "Tree with occasional wind but no significant impact on its stability.",
+      "fuertes_frecuentes": "Tree exposed to frequent strong winds, which may affect its structure.",
+      "extrema": "Tree in open areas or slopes where the wind blows with extreme force."
+    },
+    "sequia": {
+      "humedad_estable": "Tree in an area with stable humidity and constant access to water, no water stress.",
+      "moderado": "Tree with moderate access to water, but with occasional drought periods.",
+      "recurrentes": "Tree in an area with recurrent droughts, affecting its development and resistance.",
+      "prolongadas": "Tree in an arid area or with prolonged droughts, high risk of weakening."
+    }
   }
 }
