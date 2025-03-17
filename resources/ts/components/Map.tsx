@@ -16,6 +16,8 @@ import { fetchTreeTypes } from '@/api/service/treeTypesService';
 import { fetchElementType } from '@/api/service/elementTypeService';
 import { ElementType } from '@/types/ElementType';
 import { SavePointsProps } from '@/api/service/pointService';
+import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
+import { data } from 'react-router-dom';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -27,7 +29,7 @@ interface MapProps {
 
 export const MapComponent: React.FC<MapProps> = ({
   selectedZone,
-  zoneToAddElement,
+  // zoneToAddElement,
   onElementAdd,
 }) => {
   // refs
@@ -46,6 +48,8 @@ export const MapComponent: React.FC<MapProps> = ({
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
+
+  const [zoneToAddElement, setSelectedZoneToAdd] = useState<Zone>();
 
   // redux store
   const dispatch = useDispatch<AppDispatch>();
@@ -108,23 +112,33 @@ export const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service) return;
-    if (!zoneToAddElement) {
-      setIsAddingPoint(false);
-      service.disableSingleClick();
-      return;
-    }
-    setIsAddingPoint(true);
-    service.enableSingleClick((lngLat) => {
-      setNewPointCoord([lngLat.lng, lngLat.lat]);
-      setModalAddPointVisible(true);
+
+    const subscription = eventSubject.subscribe({
+      next: (data: ZoneEvent) => {
+        const { isCreatingElement, zone } = data;
+        setSelectedZoneToAdd(zone);
+
+        if (!isCreatingElement) {
+          setIsAddingPoint(false);
+          service.disableSingleClick();
+          return;
+        }
+        setIsAddingPoint(true);
+        service.enableSingleClick((lngLat) => {
+          setNewPointCoord([lngLat.lng, lngLat.lat]);
+          setModalAddPointVisible(true);
+        });
+        const firstPoint = points.find((p: Point) => p.zone_id === zone?.id);
+        if (firstPoint?.longitude && firstPoint?.latitude) {
+          service.flyTo([firstPoint.longitude, firstPoint.latitude]);
+        }
+      },
+      error: (err: Error) => console.log('ERROR STREAM: ', err.message),
+      complete: () => console.log('STREAM COMPLETADO'),
     });
-    const firstPoint = points.find(
-      (p: Point) => p.zone_id === zoneToAddElement.id,
-    );
-    if (firstPoint?.longitude && firstPoint?.latitude) {
-      service.flyTo([firstPoint.longitude, firstPoint.latitude]);
-    }
-  }, [zoneToAddElement, points]);
+
+    return () => subscription.unsubscribe();
+  }, [zoneToAddElement]);
 
   // draw zones
   useEffect(() => {

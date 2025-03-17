@@ -12,18 +12,32 @@ import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Subject } from 'rxjs';
 
 interface ZoneProps {
   onSelectedZone: (zone: Zone) => void;
   onAddElementZone: (zone: Zone) => void;
 }
 
+interface AddElementProps {
+  zone?: Zone;
+  isCreatingElement: boolean;
+}
+
+export interface ZoneEvent {
+  zone?: Zone;
+  isCreatingElement: boolean;
+}
+
+export const eventSubject = new Subject<ZoneEvent>();
 export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   const [selectedZoneToAdd, setSelectedZoneToAdd] = useState<Zone | null>(null);
+  const [createActive, setIsCreatingElement] = useState<boolean>(false);
 
-  const addElementZone = (zone: Zone) => {
-    onAddElementZone(zone);
-    setSelectedZoneToAdd(zone);
+  const addElementZone = ({ isCreatingElement, zone }: AddElementProps) => {
+    eventSubject.next({ isCreatingElement, zone });
+    onAddElementZone(zone!);
+    setSelectedZoneToAdd(zone!);
   };
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -66,6 +80,17 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
     setIsConfirmDialogVisible(true);
   };
 
+  useEffect(() => {
+    const subscription = eventSubject.subscribe({
+      next: (data: AddElementProps) => {
+        setIsCreatingElement(data.isCreatingElement);
+      },
+      error: (err: Error) => console.error('error en el stream:', err.message),
+      complete: () => console.log('stream completado'),
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   const handleDeleteZone = async (zoneId: number) => {
     try {
       dispatch(showLoader());
@@ -101,12 +126,14 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
 
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
-      {selectedZoneToAdd !== null ? (
+      {createActive ? (
         <div>
           <div>
             <Button
               label="Salir del modo creacion de elementos"
-              onClick={() => setSelectedZoneToAdd(null)}
+              onClick={() =>
+                addElementZone({ isCreatingElement: false, zone: undefined })
+              }
               className="p-button-text p-2 mt-8"
             />
           </div>
@@ -151,7 +178,9 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
                 <Button
                   className="p-button p-button-text p-2"
                   icon={<Icon icon="mdi:add" />}
-                  onClick={() => addElementZone(zone)}
+                  onClick={() =>
+                    addElementZone({ isCreatingElement: true, zone: zone })
+                  }
                 />
               </div>
             </AccordionTab>

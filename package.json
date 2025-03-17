@@ -47,6 +47,7 @@
         "react-redux": "^9.2.0",
         "react-router-dom": "^7.3.0",
         "redux-persist": "^6.0.0",
+        "rxjs": "^7.8.2",
         "tailwindcss": "^4.0.3",
         "typescript-cookie": "^1.0.6"
     }
