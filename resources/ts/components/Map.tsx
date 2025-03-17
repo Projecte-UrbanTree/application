@@ -1,4 +1,3 @@
-import { MapService } from '@/api/service/mapService';
 import { RootState, AppDispatch } from '@/store/store';
 import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
 import { Point, TypePoint } from '@/types/Point';
@@ -18,6 +17,7 @@ import { ElementType } from '@/types/ElementType';
 import { SavePointsProps } from '@/api/service/pointService';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
 import { data } from 'react-router-dom';
+import { MapService } from '@/api/service/mapService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -156,9 +156,10 @@ export const MapComponent: React.FC<MapProps> = ({
     const filteredZones = zonesRedux.filter(
       (z) => z.contract_id === currentContract?.id,
     );
-    filteredZones.forEach((zone) => {
+    filteredZones.forEach((zone: Zone) => {
       const zonePoints = points
-        .filter((p) => p.zone_id === zone.id)
+        .filter((p) => p.zone_id === zone.id && p.type == TypePoint.element)
+
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
       if (zonePoints.length > 2) {
         zonePoints.push(zonePoints[0]);
@@ -179,7 +180,15 @@ export const MapComponent: React.FC<MapProps> = ({
   }, [elements, currentContract]);
 
   function updateElements(service: MapService) {
-    service.addElementMarkers(elements, points);
+    if (!service.isStyleLoaded()) {
+      service.onceStyleLoad(() => {
+        console.log('Estilo cargado, añadiendo marcadores...');
+        service.addElementMarkers(elements, points);
+      });
+    } else {
+      console.log('Mapa listo, añadiendo marcadores...');
+      service.addElementMarkers(elements, points);
+    }
   }
 
   // save drawed zone
@@ -201,26 +210,6 @@ export const MapComponent: React.FC<MapProps> = ({
       zonePoints.push(zonePoints[0]);
       service.addZoneToMap(`zone-${newZone.id}`, zonePoints);
     }
-  }
-
-  async function handleSavePoint() {
-    if (!newPointCoord || !zoneToAddElement) return;
-    await dispatch(
-      savePointsAsync([
-        {
-          latitude: newPointCoord[1],
-          longitude: newPointCoord[0],
-          type: TypePoint.element,
-          zone_id: zoneToAddElement.id!,
-        },
-      ]),
-    ).unwrap();
-    dispatch(fetchPointsAsync());
-    setModalAddPointVisible(false);
-    setIsAddingPoint(false);
-    setNewPointCoord(null);
-    mapServiceRef.current?.disableSingleClick();
-    onElementAdd();
   }
 
   function detectCollision(

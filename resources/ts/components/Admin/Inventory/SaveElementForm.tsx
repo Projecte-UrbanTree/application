@@ -10,8 +10,9 @@ import {
   fetchElementsAsync,
 } from '@/store/slice/elementSlice';
 import { Element } from '@/types/Element';
-import { Point, TypePoint } from '@/types/Point';
+import { TypePoint } from '@/types/Point';
 import { SavePointsProps } from '@/api/service/pointService';
+import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 
 interface SaveElementFormProps {
   zoneId: number;
@@ -37,33 +38,42 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
 
   const handleSave = async () => {
     if (!selectedElementType || !selectedTreeType) return;
-    const [longitude, latitude] = coordinate;
-
-    const pointToSave: SavePointsProps = {
-      latitude: latitude,
-      longitude: longitude,
-      type: TypePoint.element,
-      zone_id: zoneId,
-    };
-
-    console.log(pointToSave);
-
-    const savedPoint = await dispatch(savePointsAsync([pointToSave])).unwrap();
-    const pointId = savedPoint.id;
-    console.log(pointId);
-
-    const elementData: Element = {
-      description,
-      element_type_id: selectedElementType,
-      tree_type_id: selectedTreeType,
-      point_id: 0!,
-    };
-    console.log({ elementData });
-
-    await dispatch(saveElementAsync(elementData)).unwrap();
-    await dispatch(fetchPointsAsync());
-    await dispatch(fetchElementsAsync());
     onClose();
+    try {
+      dispatch(showLoader());
+      const [longitude, latitude] = coordinate;
+
+      const pointToSave: SavePointsProps = {
+        latitude: latitude,
+        longitude: longitude,
+        type: TypePoint.element,
+        zone_id: zoneId,
+      };
+
+      console.log(pointToSave);
+
+      const savedPoint = await dispatch(
+        savePointsAsync([pointToSave]),
+      ).unwrap();
+      const pointId = savedPoint.id;
+      console.log(pointId);
+
+      const elementData: Element = {
+        description,
+        element_type_id: selectedElementType,
+        tree_type_id: selectedTreeType,
+        point_id: 0!,
+      };
+      console.log({ elementData });
+
+      await dispatch(saveElementAsync(elementData)).unwrap();
+      await dispatch(fetchPointsAsync());
+      await dispatch(fetchElementsAsync());
+    } catch (error) {
+      throw error;
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   return (
