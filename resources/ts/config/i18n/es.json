@@ -539,6 +539,29 @@
           "unknown": "Desconocido"
         },
         "title": "Órdenes de trabajo"
+      },
+      "account": {
+        "title": "Configuración de la cuenta",
+        "basicInfo": "Información básica",
+        "security": "Seguridad",
+        "actions": {
+          "save": "Guardar Cambios",
+          "saving": "Guardando..."
+        },
+        "validation": {
+          "name_invalid": "El nombre no es válido",
+          "name_required": "El nombre es obligatorio",
+          "surname_invalid": "El apellido no es válido",
+          "surname_required": "El apellido es obligatorio",
+          "currentPasswordRequired": "La contraseña actual es obligatoria",
+          "newPasswordMinLength": "La nueva contraseña debe tener al menos 6 caracteres",
+          "newPasswordMismatch": "Las nuevas contraseñas no coinciden"
+        },
+        "messages": {
+          "profileUpdated": "Perfil actualizado correctamente",
+          "errorSaving": "Error guardando el perfil",
+          "passwordCurrentWrong": "La contraseña actual no es correcta"
+        }
       }
     },
     "profileDropdown": {

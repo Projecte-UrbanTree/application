@@ -14,6 +14,9 @@
       "genus": "Genus",
       "name": "Name",
       "password": "Password",
+      "currentPassword": "Password (Current)",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
       "resource_type": "Resource Type",
       "role": "Role",
       "select_resource_type": "Select a resource type",
@@ -546,6 +549,30 @@
           "unknown": "Unknown"
         },
         "title": "Work Orders"
+      },
+      "account": {
+        "title": "Account Settings",
+        "basicInfo": "Basic Information",
+        "security": "Security",
+        "actions": {
+          "save": "Save Changes",
+          "saving": "Saving..."
+        },
+        "validation": {
+          "name_invalid": "Name is invalid",
+          "name_required": "Name is required",
+          "surname_invalid": "Surname is invalid",
+          "surname_required": "Surname is required",
+          "currentPasswordRequired": "Current password is required",
+          "newPasswordMinLength": "New password must be at least 8 characters",
+          "newPasswordMismatch": "New passwords do not match",
+          "newPasswordComplexity": "New password must contain at least one uppercase letter, one lowercase letter, and one number"
+        },
+        "messages": {
+          "profileUpdated": "Profile updated successfully",
+          "errorSaving": "Error saving profile",
+          "passwordCurrentWrong": "Current password is incorrect"
+        }
       }
     },
     "profileDropdown": {
@@ -590,7 +617,9 @@
   "general": {
     "allContracts": "All contracts",
     "genericError": "An error occurred. Please try again later.",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "error": "Error",
+    "success":"Success"
   },
   "public": {
     "error": {

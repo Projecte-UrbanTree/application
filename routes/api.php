@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\ResourceController;
@@ -41,6 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
             ]);
         });
 
+        Route::get('account', [AccountController::class, 'show']);
+        Route::put('account', [AccountController::class, 'update']);
+        Route::put('account/password', [AccountController::class, 'updatePassword']);
         // Route for stats
         Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
         Route::get('statistics', [StatisticsController::class, 'index']);

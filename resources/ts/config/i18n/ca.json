@@ -537,6 +537,29 @@
             "noData": "No hi ha ordres de treball disponibles"
           }
         }
+      },
+      "account": {
+        "title": "Configuració del compte",
+        "basicInfo": "Informació bàsica",
+        "security": "Seguretat",
+        "actions": {
+          "save": "Guardar Canvis",
+          "saving": "Guardant..."
+        },
+        "validation": {
+          "name_invalid": "El nom no és vàlid",
+          "name_required": "El nom és obligatori",
+          "surname_invalid": "El cognom no és vàlid",
+          "surname_required": "El cognom és obligatori",
+          "currentPasswordRequired": "La contrasenya actual és obligatòria",
+          "newPasswordMinLength": "La nova contrasenya ha de tenir almenys 6 caràcters",
+          "newPasswordMismatch": "Les noves contrasenyes no coincideixen"
+        },
+        "messages": {
+          "profileUpdated": "Perfil actualitzat correctament",
+          "errorSaving": "Error guardant el perfil",
+          "passwordCurrentWrong": "La contrasenya actual no és correcta"
+        }
       }
     },
     "profileDropdown": {
