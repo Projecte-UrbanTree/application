@@ -190,9 +190,11 @@ export default function WorkOrders() {
       <CrudPanel 
         title="admin.pages.workOrders.title" 
         onCreate={() => navigate('/admin/work-orders/create')}
-        createDisabled={!currentContract}
+        createDisabled={!currentContract || currentContract.id === 0}
         createTooltip={
-          !currentContract ? t('admin.tooltips.selectContract') : undefined
+          !currentContract || currentContract.id === 0 
+            ? t('admin.tooltips.selectContract') 
+            : undefined
         }>
         <DataTable
           value={filteredWorkOrders}
