@@ -107,10 +107,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   ].some((path) => location.pathname.startsWith(path));
 
   const isSettingsPage = location.pathname.includes('/admin/settings');
-  const isWorkOrderEditPage = location.pathname.includes('/admin/work-orders/edit/');
-  const isResourceEditPage = location.pathname.includes('/admin/resources/edit/');
+  const isWorkOrderEditPage = location.pathname.includes(
+    '/admin/work-orders/edit/',
+  );
+  const isResourceEditPage = location.pathname.includes(
+    '/admin/resources/edit/',
+  );
 
-  const hideContractSelector = isSettingsPage || isWorkOrderEditPage || isResourceEditPage;
+  const hideContractSelector =
+    isSettingsPage || isWorkOrderEditPage || isResourceEditPage;
 
   const managementSubmenuItems = [
     {
@@ -144,7 +149,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       icon: 'tabler:package',
     },
     {
-      to: '/admin/stats',
+      to: '/admin/statistics',
       label: t('admin.submenu.manage.stats'),
       icon: 'tabler:chart-pie-4',
     },
