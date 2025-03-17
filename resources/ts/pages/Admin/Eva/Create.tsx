@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Message } from 'primereact/message';
 import { subYears, subMonths, format } from 'date-fns';
 
+// Componente FormField para manejar campos del formulario
 const FormField = ({ as: Component, name, label, ...props }: any) => {
   const [field, meta, helpers] = useField(name);
 
@@ -74,6 +75,7 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
   );
 };
 
+// Componente principal CreateEva
 const CreateEva = () => {
   const navigate = useNavigate();
   const [elements, setElements] = useState<any[]>([]);
@@ -83,17 +85,19 @@ const CreateEva = () => {
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
 
+  // Cargar datos iniciales (diccionarios y elementos)
   useEffect(() => {
     axiosClient
       .get('/admin/evas/create')
       .then((response) => {
-        setElements(response.data.elements);
-        setDictionaries(response.data);
+        setElements(response.data.elements); // Guardar los elementos
+        setDictionaries(response.data.dictionaries); // Guardar los diccionarios
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
+  // Valores iniciales del formulario
   const initialValues = {
     element_id: null,
     date_birth: null,
@@ -123,12 +127,10 @@ const CreateEva = () => {
     status: 0,
   };
 
+  // Esquema de validación con Yup
   const validationSchema = Yup.object({
     element_id: Yup.number().required(
       t('admin.pages.evas.form.validation.element_required'),
-    ),
-    date_birth: Yup.date().required(
-      t('admin.pages.evas.form.validation.date_required'),
     ),
     years: Yup.number().min(0),
     months: Yup.number().min(0).max(11),
@@ -232,12 +234,19 @@ const CreateEva = () => {
             onSubmit={handleSubmit}>
             {({ isSubmitting }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Sección: Identificación */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mb-4">Identificación</h1>
                   <FormField
                     name="element_id"
                     label={t('admin.pages.evas.form.element_id')}
-                    as="input"
+                    as={Dropdown}
+                    options={elements.map((element) => ({
+                      label: element.name,
+                      value: element.id,
+                    }))}
+                    optionLabel="label"
+                    optionValue="value"
                   />
                   <FormField
                     name="years"
@@ -253,10 +262,14 @@ const CreateEva = () => {
                     max={11}
                   />
                 </div>
+
+                {/* Sección: Condición del árbol */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mb-4">
                     Condición del árbol
                   </h1>
+
+                  {/* Subsección: Dimensiones */}
                   <h2 className="text-lg font-semibold mb-2">Dimensiones</h2>
                   <FormField
                     name="height"
@@ -293,7 +306,11 @@ const CreateEva = () => {
                     label={t('admin.pages.evas.form.height_estimation')}
                     as={InputNumber}
                   />
+
+                  {/* Subsección: Estado */}
                   <h2 className="text-lg font-semibold mt-4 mb-2">Estado</h2>
+
+                  {/* Subsubsección: Copa y Ramas */}
                   <h3 className="text-md font-medium mb-2">Copa y Ramas</h3>
                   <FormField
                     name="unbalanced_crown"
@@ -319,6 +336,8 @@ const CreateEva = () => {
                     as={Dropdown}
                     options={dictionaries.ramasMuertas}
                   />
+
+                  {/* Subsubsección: Tronco */}
                   <h3 className="text-md font-medium mt-4 mb-2">Tronco</h3>
                   <FormField
                     name="inclination"
@@ -344,6 +363,8 @@ const CreateEva = () => {
                     as={Dropdown}
                     options={dictionaries.danosCorteza}
                   />
+
+                  {/* Subsubsección: Raíces */}
                   <h3 className="text-md font-medium mt-4 mb-2">Raíces</h3>
                   <FormField
                     name="soil_lifting"
@@ -370,13 +391,19 @@ const CreateEva = () => {
                     options={dictionaries.raicesExpuestas}
                   />
                 </div>
+
+                {/* Sección: Condición del entorno */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mt-6 mb-4">
                     Condición del entorno
                   </h1>
+
+                  {/* Subsección: Factores Ambientales */}
                   <h2 className="text-lg font-semibold mb-2">
                     Factores Ambientales
                   </h2>
+
+                  {/* Subsubsección: Exposición al viento */}
                   <h3 className="text-md font-medium mb-2">
                     Exposición al viento
                   </h3>
@@ -386,6 +413,8 @@ const CreateEva = () => {
                     as={Dropdown}
                     options={dictionaries.viento}
                   />
+
+                  {/* Subsubsección: Exposición a la sequía */}
                   <h3 className="text-md font-medium mt-4 mb-2">
                     Exposición a la sequía
                   </h3>
@@ -396,6 +425,8 @@ const CreateEva = () => {
                     options={dictionaries.sequia}
                   />
                 </div>
+
+                {/* Botón de envío */}
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <Button
                     type="submit"

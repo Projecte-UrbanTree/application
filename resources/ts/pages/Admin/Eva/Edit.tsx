@@ -191,7 +191,7 @@ export default function EditEva() {
     const fetchDictionaries = async () => {
       try {
         const response = await axiosClient.get('/admin/evas/create');
-        setDictionaries(response.data);
+        setDictionaries(response.data.dictionaries); // Ensure dictionaries are set correctly
       } catch (error) {
         console.error(error);
       }

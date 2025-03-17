@@ -15,15 +15,15 @@ export default function Evas() {
   const [isLoading, setIsLoading] = useState(true);
   interface Eva {
     id: number;
-    element_id: string;
+    element_id: number;
     date_birth: string;
-    height: string;
-    diameter: string;
-    crown_width: string;
-    crown_projection_area: string;
-    root_surface_diameter: string;
-    effective_root_area: string;
-    height_estimation: string;
+    height: number;
+    diameter: number;
+    crown_width: number;
+    crown_projection_area: number;
+    root_surface_diameter: number;
+    effective_root_area: number;
+    height_estimation: number;
     unbalanced_crown: string;
     overextended_branches: string;
     cracks: string;
@@ -41,8 +41,8 @@ export default function Evas() {
     status: number;
     element: {
       point: {
-        latitude: string;
-        longitude: string;
+        latitude: number;
+        longitude: number;
       };
       elementType: {
         name: string;
@@ -188,19 +188,16 @@ export default function Evas() {
     };
 
     const indices = [
-      calculateStabilityIndex(parseFloat(eva.height), parseFloat(eva.diameter)),
-      calculateGravityHeightRatio(
-        parseFloat(eva.height_estimation),
-        parseFloat(eva.height),
-      ),
+      calculateStabilityIndex(eva.height, eva.diameter),
+      calculateGravityHeightRatio(eva.height_estimation, eva.height),
       calculateRootCrownRatio(
-        parseFloat(eva.root_surface_diameter),
-        parseFloat(eva.crown_projection_area),
+        eva.root_surface_diameter,
+        eva.crown_projection_area,
       ),
       calculateWindStabilityIndex(
-        parseFloat(eva.height),
+        eva.height,
         parseFloat(eva.wind),
-        parseFloat(eva.root_surface_diameter),
+        eva.root_surface_diameter,
       ),
     ];
 
@@ -273,7 +270,7 @@ export default function Evas() {
           />
           <Column
             header={'Age'}
-            body={(rowData: { date_birth: string }) => (
+            body={(rowData: Eva) => (
               <span>{calculateAge(rowData.date_birth)}</span>
             )}
           />
@@ -297,7 +294,7 @@ export default function Evas() {
           />
           <Column
             header={'Actions'}
-            body={(rowData: { id: number }) => (
+            body={(rowData: Eva) => (
               <div className="flex justify-center gap-2">
                 <Button
                   icon={<Icon icon="tabler:eye" className="h-5 w-5" />}
