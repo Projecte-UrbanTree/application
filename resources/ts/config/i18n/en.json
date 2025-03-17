@@ -548,6 +548,9 @@
         "title": "Work Orders"
       },
       "evas": {
+        "show": {
+          "title": "Eva Details"
+        },
         "dictionaries": {
           "copaDesequilibrada": {
             "0": "No inclination or uneven growth",
