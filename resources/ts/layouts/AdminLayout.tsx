@@ -113,9 +113,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const isResourceEditPage = location.pathname.includes(
     '/admin/resources/edit/',
   );
+  const isAccountPage = location.pathname.includes('/admin/account');
 
   const hideContractSelector =
-    isSettingsPage || isWorkOrderEditPage || isResourceEditPage;
+    isSettingsPage ||
+    isWorkOrderEditPage ||
+    isResourceEditPage ||
+    isAccountPage;
 
   const managementSubmenuItems = [
     {
@@ -327,38 +331,40 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       </header>
 
-      <div
-        id="submenu"
-        className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-50 shadow-md">
-        <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
-          {isManagementActive &&
-            managementSubmenuItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`px-2 py-3 rounded flex items-center gap-1 ${
-                  location.pathname === item.to
-                    ? 'bg-gray-100 text-indigo-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}>
-                <Icon width="22px" icon={item.icon} /> {item.label}
-              </Link>
-            ))}
-          {location.pathname.includes('/admin/settings') &&
-            settingsSubmenuItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`px-2 py-3 rounded flex items-center gap-1 ${
-                  location.pathname === item.to
-                    ? 'bg-gray-100 text-indigo-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}>
-                <Icon width="22px" icon={item.icon} /> {item.label}
-              </Link>
-            ))}
+      {!isAccountPage && (
+        <div
+          id="submenu"
+          className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-50 shadow-md">
+          <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
+            {isManagementActive &&
+              managementSubmenuItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${
+                    location.pathname === item.to
+                      ? 'bg-gray-100 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}>
+                  <Icon width="22px" icon={item.icon} /> {item.label}
+                </Link>
+              ))}
+            {location.pathname.includes('/admin/settings') &&
+              settingsSubmenuItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${
+                    location.pathname === item.to
+                      ? 'bg-gray-100 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}>
+                  <Icon width="22px" icon={item.icon} /> {item.label}
+                </Link>
+              ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <main className="max-w-7xl mx-auto pt-8 pb-16 px-8" key={refreshKey}>
         {children}

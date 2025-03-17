@@ -1,6 +1,7 @@
 import AdminLayoutWrapper from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
 
+import Account from '@/pages/Admin/Account/Account';
 import AdminDashboard from '@/pages/Admin/Dashboard';
 import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
@@ -162,6 +163,14 @@ const AdminRoutes: RouteObject[] = [
             element: (
               <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
                 <AdminStats />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'account',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.account.title">
+                <Account />
               </AdminLayoutWrapper>
             ),
           },
