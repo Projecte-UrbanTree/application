@@ -17,7 +17,9 @@ export interface SavePointsProps {
 
 export const savePoints = async (points: SavePointsProps[]): Promise<Point> => {
   try {
-    const response = await axiosClient.post(`/admin/points`, { points });
+    console.log('PUNTOS: ', points);
+
+    const response = await axiosClient.post(`/admin/points`, points);
     console.log('Puntos guardados:', points);
     console.log('DATA POINTS: ', response.data[0]);
 
