@@ -27,7 +27,6 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
           REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
         run: |
-          # Evita problemas con tiempos de acceso
           sshpass -p "$SSH_PASSWORD" rsync -avz --delete --no-times \
             --exclude={".devcontainer",".docker",".github",".vscode","tests",".env","database/database.sqlite","bootstrap/cache","vendor","node_modules","storage"} \
             --chown=frontendweb:www-data \
