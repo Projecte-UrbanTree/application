@@ -34,7 +34,7 @@ const schema = yup.object().shape({
 
 export interface SaveZoneProps {
   coordinates: number[][];
-  onClose: () => {};
+  onClose: (newZone: Zone, newPoints: SavePointsProps[]) => void;
 }
 
 export const SaveZoneForm = ({
@@ -72,8 +72,8 @@ export const SaveZoneForm = ({
   }, [coordinates, currentContract, setValue]);
 
   async function onSubmit(data: Zone) {
-    onClose();
     dispatch(showLoader());
+
     try {
       const createdZone = await dispatch(
         saveZoneAsync({ data, contractId: currentContract?.id || 0 }),
@@ -91,11 +91,14 @@ export const SaveZoneForm = ({
       }));
 
       await savePoints(pointsData);
+
       toast.current?.show({
         severity: 'success',
         summary: 'Éxito',
         detail: 'Zona y puntos guardados correctamente',
       });
+
+      onCloseProp(createdZone, pointsData);
     } catch (error) {
       console.error('Error en la creación de la zona o los puntos', error);
       toast.current?.show({
@@ -106,10 +109,6 @@ export const SaveZoneForm = ({
     } finally {
       dispatch(hideLoader());
     }
-  }
-
-  function onClose() {
-    onCloseProp();
   }
 
   return (
@@ -167,7 +166,7 @@ export const SaveZoneForm = ({
         <div className="flex justify-end gap-2">
           <Button
             type="button"
-            onClick={onClose}
+            onClick={() => onCloseProp}
             className="p-button-secondary"
             disabled={isLoading}>
             Cancelar

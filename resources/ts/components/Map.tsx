@@ -15,6 +15,7 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { fetchTreeTypes } from '@/api/service/treeTypesService';
 import { fetchElementType } from '@/api/service/elementTypeService';
 import { ElementType } from '@/types/ElementType';
+import { SavePointsProps } from '@/api/service/pointService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -168,13 +169,24 @@ export const MapComponent: React.FC<MapProps> = ({
   }
 
   // save drawed zone
-  async function handleZoneSaved() {
+  async function handleZoneSaved(newZone: Zone, newPoints: SavePointsProps[]) {
     setModalVisible(false);
     setIsDrawingMode(false);
     setEnabledButton(false);
+
     const service = mapServiceRef.current;
-    service?.clearDraw();
-    dispatch(fetchPointsAsync());
+    if (!service) return;
+
+    service.clearDraw();
+
+    const zonePoints = newPoints.map(
+      (p) => [p.longitude, p.latitude] as [number, number],
+    );
+
+    if (zonePoints.length > 2) {
+      zonePoints.push(zonePoints[0]);
+      service.addZoneToMap(`zone-${newZone.id}`, zonePoints);
+    }
   }
 
   async function handleSavePoint() {
