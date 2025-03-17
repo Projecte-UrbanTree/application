@@ -58,7 +58,9 @@ export default function Account() {
       .matches(/^[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ]*$/, t('admin.pages.account.validation.surname_invalid'))
       .required(t('admin.pages.account.validation.surname_required')),
     currentPassword: Yup.string(),
-    newPassword: Yup.string().min(6, t('admin.pages.account.validation.newPasswordMinLength')),
+    newPassword: Yup.string()
+      .min(8, t('admin.pages.account.validation.newPasswordMinLength'))
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, t('admin.pages.account.validation.newPasswordComplexity')),
     confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), undefined], t('admin.pages.account.validation.newPasswordMismatch'))
   });
 
@@ -135,18 +137,35 @@ export default function Account() {
                 </div>
                 <h3 className="col-span-2 text-lg font-bold mt-4">{t('admin.pages.account.security')}</h3>
                 <div className="flex flex-col col-span-2">
-                  <label>{t('admin.fields.password')}</label>
-                  <Field name="currentPassword" as={Password} feedback={false} className={errors.currentPassword && touched.currentPassword ? "p-invalid" : ""} />
+                  <label>{t('admin.fields.currentPassword')}</label>
+                  <Field
+                    name="currentPassword"
+                    as={Password}
+                    feedback={false}
+                    className={errors.currentPassword && touched.currentPassword ? "p-invalid" : ""}
+                  />
                   {errors.currentPassword && touched.currentPassword && <small className="p-error">{errors.currentPassword}</small>}
                 </div>
                 <div className="flex flex-col">
-                  <label>{t('admin.fields.password')} (nueva)</label>
-                  <Field name="newPassword" as={Password} feedback={false} className={errors.newPassword && touched.newPassword ? "p-invalid" : ""} />
+                  <label>{t('admin.fields.newPassword')}</label>
+                  <Field
+                    name="newPassword"
+                    as={Password}
+                    toggleMask={true}
+                    feedback={false}
+                    className={errors.newPassword && touched.newPassword ? "p-invalid" : ""}
+                  />
                   {errors.newPassword && touched.newPassword && <small className="p-error">{errors.newPassword}</small>}
                 </div>
                 <div className="flex flex-col">
-                  <label>{t('admin.fields.password')} (confirmar)</label>
-                  <Field name="confirmNewPassword" as={Password} feedback={false} className={errors.confirmNewPassword && touched.confirmNewPassword ? "p-invalid" : ""} />
+                  <label>{t('admin.fields.confirmPassword')}</label>
+                  <Field
+                    name="confirmNewPassword"
+                    as={Password}
+                    toggleMask={true}
+                    feedback={false}
+                    className={errors.confirmNewPassword && touched.confirmNewPassword ? "p-invalid" : ""}
+                  />
                   {errors.confirmNewPassword && touched.confirmNewPassword && <small className="p-error">{errors.confirmNewPassword}</small>}
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
