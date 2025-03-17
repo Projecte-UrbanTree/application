@@ -14,6 +14,9 @@
       "genus": "crwdns2819:0crwdne2819:0",
       "name": "crwdns2821:0crwdne2821:0",
       "password": "crwdns2823:0crwdne2823:0",
+      "currentPassword": "crwdns3723:0crwdne3723:0",
+      "newPassword": "crwdns3725:0crwdne3725:0",
+      "confirmPassword": "crwdns3727:0crwdne3727:0",
       "resource_type": "crwdns3597:0crwdne3597:0",
       "role": "crwdns2825:0crwdne2825:0",
       "select_resource_type": "crwdns3599:0crwdne3599:0",
@@ -546,6 +549,30 @@
           "unknown": "crwdns3309:0crwdne3309:0"
         },
         "title": "crwdns3205:0crwdne3205:0"
+      },
+      "account": {
+        "title": "crwdns3729:0crwdne3729:0",
+        "basicInfo": "crwdns3731:0crwdne3731:0",
+        "security": "crwdns3733:0crwdne3733:0",
+        "actions": {
+          "save": "crwdns3735:0crwdne3735:0",
+          "saving": "crwdns3737:0crwdne3737:0"
+        },
+        "validation": {
+          "name_invalid": "crwdns3739:0crwdne3739:0",
+          "name_required": "crwdns3741:0crwdne3741:0",
+          "surname_invalid": "crwdns3743:0crwdne3743:0",
+          "surname_required": "crwdns3745:0crwdne3745:0",
+          "currentPasswordRequired": "crwdns3747:0crwdne3747:0",
+          "newPasswordMinLength": "crwdns3749:0crwdne3749:0",
+          "newPasswordMismatch": "crwdns3751:0crwdne3751:0",
+          "newPasswordComplexity": "crwdns3753:0crwdne3753:0"
+        },
+        "messages": {
+          "profileUpdated": "crwdns3755:0crwdne3755:0",
+          "errorSaving": "crwdns3757:0crwdne3757:0",
+          "passwordCurrentWrong": "crwdns3759:0crwdne3759:0"
+        }
       }
     },
     "profileDropdown": {
@@ -590,7 +617,9 @@
   "general": {
     "allContracts": "crwdns3251:0crwdne3251:0",
     "genericError": "crwdns3253:0crwdne3253:0",
-    "loading": "crwdns3255:0crwdne3255:0"
+    "loading": "crwdns3255:0crwdne3255:0",
+    "error": "crwdns3761:0crwdne3761:0",
+    "success": "crwdns3763:0crwdne3763:0"
   },
   "public": {
     "error": {
