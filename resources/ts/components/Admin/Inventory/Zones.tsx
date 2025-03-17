@@ -19,8 +19,11 @@ interface ZoneProps {
 }
 
 export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
+  const [selectedZoneToAdd, setSelectedZoneToAdd] = useState<Zone | null>(null);
+
   const addElementZone = (zone: Zone) => {
     onAddElementZone(zone);
+    setSelectedZoneToAdd(zone);
   };
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -98,6 +101,19 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
 
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
+      {selectedZoneToAdd !== null ? (
+        <div>
+          <div>
+            <Button
+              label="Salir del modo creacion de elementos"
+              onClick={() => setSelectedZoneToAdd(null)}
+              className="p-button-text p-2 mt-8"
+            />
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
       {uniqueZones.length > 0 ? (
         <Accordion multiple activeIndex={null} className="w-full">
           {uniqueZones.map((zone: Zone) => (
