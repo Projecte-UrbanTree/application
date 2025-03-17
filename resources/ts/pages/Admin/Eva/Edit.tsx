@@ -191,7 +191,30 @@ export default function EditEva() {
     const fetchDictionaries = async () => {
       try {
         const response = await axiosClient.get('/admin/evas/create');
-        setDictionaries(response.data.dictionaries);
+        const translatedDictionaries: Dictionaries = {
+          copaDesequilibrada: [],
+          ramasSobreextendidas: [],
+          grietas: [],
+          ramasMuertas: [],
+          inclinacion: [],
+          bifurcacionesV: [],
+          cavidades: [],
+          danosCorteza: [],
+          levantamientoSuelo: [],
+          raicesCortadas: [],
+          podredumbreBasal: [],
+          raicesExpuestas: [],
+          viento: [],
+          sequia: [],
+        };
+        for (const key in response.data.dictionaries) {
+          translatedDictionaries[key as keyof Dictionaries] =
+            response.data.dictionaries[key].map((option: DictionaryOption) => ({
+              ...option,
+              label: t(option.label),
+            }));
+        }
+        setDictionaries(translatedDictionaries);
       } catch (error) {
         console.error(error);
       }
