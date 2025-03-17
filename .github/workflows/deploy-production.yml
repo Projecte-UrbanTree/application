@@ -27,10 +27,19 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
           REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
         run: |
-          sshpass -p "$SSH_PASSWORD" rsync -avz --delete \
-            --exclude={".devcontainer",".docker",".github",".vscode","tests",".env","database/database.sqlite","bootstrap/cache","vendor","node_modules"} \
+          sshpass -p "$SSH_PASSWORD" rsync -avz --delete --no-times \
+            --exclude={".devcontainer",".docker",".github",".vscode","tests",".env","database/database.sqlite","bootstrap/cache","vendor","node_modules","storage"} \
             --chown=frontendweb:www-data \
             -e 'ssh -p 21222 -o StrictHostKeyChecking=no' ./ $SSH_USER@$SSH_HOST:$REMOTE_PATH
+
+      - name: Fix permissions for Laravel
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -p 21222 -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+          echo "💡 Fixing permissions..."
+          sudo chown -R frontendweb:www-data /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+          sudo chmod -R 775 /var/www/urbantree
+          sudo chmod -R 770 /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
+          EOF
 
       - name: Execute setup commands on server
         env:
@@ -40,32 +49,25 @@ jobs:
           REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -p 21222 -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-            set -e
-            
-            echo "💡 Setting permissions..."
-            sudo chown -R frontendweb:www-data /var/www/urbantree
-            sudo chmod -R 775 /var/www/urbantree
-            sudo chown -R frontendweb:www-data /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
-            sudo chmod -R 770 /var/www/urbantree/storage /var/www/urbantree/bootstrap/cache
-            
-            echo "📦 Installing dependencies..."
-            cd /var/www/urbantree
-            sudo -u frontendweb composer install --no-dev --optimize-autoloader
-            sudo -u frontendweb npm ci --legacy-peer-deps
-            sudo -u frontendweb npm run build
+          set -e
 
+          echo "📦 Installing dependencies..."
+          cd /var/www/urbantree
+          sudo -u frontendweb composer install --no-dev --optimize-autoloader
+          sudo -u frontendweb npm ci --legacy-peer-deps --no-audit --no-fund
+          sudo -u frontendweb npm run build
 
-            echo "🔄 Running migrations..."
-            sudo -u frontendweb php artisan migrate --step --force
+          echo "🔄 Running migrations..."
+          sudo -u frontendweb php artisan migrate --step --force
 
-            echo "🧹 Clearing and caching..."
-            sudo -u frontendweb php artisan optimize:clear
-            sudo -u frontendweb php artisan config:cache
-            sudo -u frontendweb php artisan route:cache
+          echo "🧹 Clearing and caching..."
+          sudo -u frontendweb php artisan optimize:clear
+          sudo -u frontendweb php artisan config:cache
+          sudo -u frontendweb php artisan route:cache 
 
-            echo "🔄 Restarting services..."
-            sudo systemctl restart nginx
-            sudo systemctl restart php8.3-fpm
+          echo "🔄 Restarting services..."
+          sudo systemctl restart nginx
+          sudo systemctl restart php8.3-fpm
 
-            echo "🚀 Deployment finished!"
+          echo "🚀 Deployment finished!"
           EOF
