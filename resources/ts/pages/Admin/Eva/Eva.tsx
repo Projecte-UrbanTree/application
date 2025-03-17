@@ -253,13 +253,13 @@ export default function Evas() {
           showGridlines
           className="p-datatable-sm">
           <Column
-            header={'Nombre'}
+            header={t('admin.pages.evas.columns.name')}
             body={(rowData: Eva) => (
               <span>{rowData.element?.elementType?.name || 'N/A'}</span>
             )}
           />
           <Column
-            header={'Coordenadas'}
+            header={t('admin.pages.evas.columns.coordinates')}
             body={(rowData: Eva) => (
               <span>
                 {rowData.element?.point
@@ -269,14 +269,14 @@ export default function Evas() {
             )}
           />
           <Column
-            header={'Age'}
+            header={t('admin.pages.evas.columns.age')}
             body={(rowData: Eva) => (
               <span>{calculateAge(rowData.date_birth)}</span>
             )}
           />
           <Column
             field="status"
-            header={'Status'}
+            header={t('admin.pages.evas.columns.status')}
             body={(rowData: Eva) => (
               <div
                 style={{
@@ -293,7 +293,7 @@ export default function Evas() {
             )}
           />
           <Column
-            header={'Actions'}
+            header={t('admin.pages.evas.columns.actions')}
             body={(rowData: Eva) => (
               <div className="flex justify-center gap-2">
                 <Button

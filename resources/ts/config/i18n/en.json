@@ -557,8 +557,134 @@
           "element_id": "Element ID",
           "age": "Age",
           "height": "Height",
-          "actions": "Actions"
-        }
+          "actions": "Actions",
+          "name": "Name",
+          "coordinates": "Coordinates",
+          "status": "Status"
+        },
+        "form": {
+          "element_id": "Element ID",
+          "years": "Years",
+          "months": "Months",
+          "height": "Height",
+          "diameter": "Diameter",
+          "crown_width": "Crown Width",
+          "crown_projection_area": "Crown Projection Area",
+          "root_surface_diameter": "Root Surface Diameter",
+          "effective_root_area": "Effective Root Area",
+          "height_estimation": "Height Estimation",
+          "unbalanced_crown": "Unbalanced Crown",
+          "overextended_branches": "Overextended Branches",
+          "cracks": "Cracks",
+          "dead_branches": "Dead Branches",
+          "inclination": "Inclination",
+          "V_forks": "V Forks",
+          "cavities": "Cavities",
+          "bark_damage": "Bark Damage",
+          "soil_lifting": "Soil Lifting",
+          "cut_damaged_roots": "Cut/Damaged Roots",
+          "basal_rot": "Basal Rot",
+          "exposed_surface_roots": "Exposed Surface Roots",
+          "wind": "Wind",
+          "drought": "Drought",
+          "validation": {
+            "element_required": "Element is required"
+          },
+          "title": {
+            "create": "Create Eva",
+            "edit": "Edit Eva"
+          },
+          "saving": "Saving...",
+          "save": "Save"
+        },
+        "list": {
+          "actions": {
+            "show": "Show Eva",
+            "delete": "Delete Eva"
+          },
+          "messages": {
+            "createSuccess": "Eva created successfully",
+            "deleteConfirm": "Are you sure you want to delete this Eva?",
+            "deleteSuccess": "Eva deleted successfully",
+            "error": "Error saving Eva",
+            "updateSuccess": "Eva updated successfully"
+          }
+        },
+        "status": {
+          "low": "Low",
+          "moderate": "Moderate",
+          "high": "High",
+          "critical": "Critical",
+          "pending": "Pending"
+        },
+        "stability": {
+          "stable": "Stable",
+          "moderate": "Moderate",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "gravityHeight": {
+          "veryStable": "Very Stable",
+          "moderateRisk": "Moderate Risk",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "rootCrown": {
+          "veryStable": "Very Stable",
+          "stable": "Stable",
+          "moderateStability": "Moderate Stability",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "windStability": {
+          "veryStable": "Very Stable",
+          "moderateStability": "Moderate Stability",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "severity": {
+          "low": "Low",
+          "moderate": "Moderate",
+          "high": "High",
+          "extreme": "Extreme",
+          "pending": "Pending"
+        },
+        "indexCalculation": "Index Calculation",
+        "treeStatusFactor": "Tree Status Factor",
+        "stabilityIndex": "Stability Index (H/D)",
+        "gravityHeightRatio": "Gravity Height Ratio (CG/H)",
+        "rootCrownRatio": "Root Crown Ratio (SR/SC)",
+        "windStabilityIndex": "Wind Stability Index (WSI)",
+        "environmentalFactors": "Environmental Factors",
+        "windExposure": "Wind Exposure",
+        "droughtExposure": "Drought Exposure"
+      },
+      "edit": {
+        "title": "Edit Eva",
+        "identification": "Identification",
+        "treeCondition": "Tree Condition",
+        "dimensions": "Dimensions",
+        "state": "State",
+        "crownBranches": "Crown and Branches",
+        "trunk": "Trunk",
+        "roots": "Roots",
+        "environmentCondition": "Environment Condition",
+        "environmentalFactors": "Environmental Factors",
+        "windExposure": "Wind Exposure",
+        "droughtExposure": "Drought Exposure"
+      },
+      "create": {
+        "identification": "Identification",
+        "treeCondition": "Tree Condition",
+        "dimensions": "Dimensions",
+        "state": "State",
+        "crownBranches": "Crown and Branches",
+        "trunk": "Trunk",
+        "roots": "Roots",
+        "environmentCondition": "Environment Condition",
+        "environmentalFactors": "Environmental Factors",
+        "windExposure": "Wind Exposure",
+        "droughtExposure": "Drought Exposure"
       }
     },
     "profileDropdown": {
@@ -582,7 +708,6 @@
         "dashboard": "Dashboard",
         "inventory": "Inventory",
         "resources": "Resources",
-        "eva": "EVA",
         "stats": "Statistics",
         "workers": "Workers",
         "eva": "EVA",

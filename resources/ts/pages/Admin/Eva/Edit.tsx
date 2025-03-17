@@ -300,7 +300,9 @@ export default function EditEva() {
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Sección: Identificación */}
                 <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mb-4">Identificación</h1>
+                  <h1 className="text-xl font-bold mb-4">
+                    {t('admin.pages.evas.edit.identification')}
+                  </h1>
                   <FormField
                     name="years"
                     label={t('admin.pages.evas.form.years')}
@@ -319,11 +321,13 @@ export default function EditEva() {
                 {/* Sección: Condición del árbol */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mb-4">
-                    Condición del árbol
+                    {t('admin.pages.evas.edit.treeCondition')}
                   </h1>
 
                   {/* Subsección: Dimensiones */}
-                  <h2 className="text-lg font-semibold mb-2">Dimensiones</h2>
+                  <h2 className="text-lg font-semibold mb-2">
+                    {t('admin.pages.evas.edit.dimensions')}
+                  </h2>
                   <FormField
                     name="height"
                     label={t('admin.pages.evas.form.height')}
@@ -361,10 +365,14 @@ export default function EditEva() {
                   />
 
                   {/* Subsección: Estado */}
-                  <h2 className="text-lg font-semibold mt-4 mb-2">Estado</h2>
+                  <h2 className="text-lg font-semibold mt-4 mb-2">
+                    {t('admin.pages.evas.edit.state')}
+                  </h2>
 
                   {/* Subsubsección: Copa y Ramas */}
-                  <h3 className="text-md font-medium mb-2">Copa y Ramas</h3>
+                  <h3 className="text-md font-medium mb-2">
+                    {t('admin.pages.evas.edit.crownBranches')}
+                  </h3>
                   <FormField
                     name="unbalanced_crown"
                     label={t('admin.pages.evas.form.unbalanced_crown')}
@@ -391,7 +399,9 @@ export default function EditEva() {
                   />
 
                   {/* Subsubsección: Tronco */}
-                  <h3 className="text-md font-medium mt-4 mb-2">Tronco</h3>
+                  <h3 className="text-md font-medium mt-4 mb-2">
+                    {t('admin.pages.evas.edit.trunk')}
+                  </h3>
                   <FormField
                     name="inclination"
                     label={t('admin.pages.evas.form.inclination')}
@@ -418,7 +428,9 @@ export default function EditEva() {
                   />
 
                   {/* Subsubsección: Raíces */}
-                  <h3 className="text-md font-medium mt-4 mb-2">Raíces</h3>
+                  <h3 className="text-md font-medium mt-4 mb-2">
+                    {t('admin.pages.evas.edit.roots')}
+                  </h3>
                   <FormField
                     name="soil_lifting"
                     label={t('admin.pages.evas.form.soil_lifting')}
@@ -448,17 +460,17 @@ export default function EditEva() {
                 {/* Sección: Condición del entorno */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mt-6 mb-4">
-                    Condición del entorno
+                    {t('admin.pages.evas.edit.environmentCondition')}
                   </h1>
 
                   {/* Subsección: Factores Ambientales */}
                   <h2 className="text-lg font-semibold mb-2">
-                    Factores Ambientales
+                    {t('admin.pages.evas.edit.environmentalFactors')}
                   </h2>
 
                   {/* Subsubsección: Exposición al viento */}
                   <h3 className="text-md font-medium mb-2">
-                    Exposición al viento
+                    {t('admin.pages.evas.edit.windExposure')}
                   </h3>
                   <FormField
                     name="wind"
@@ -469,7 +481,7 @@ export default function EditEva() {
 
                   {/* Subsubsección: Exposición a la sequía */}
                   <h3 className="text-md font-medium mt-4 mb-2">
-                    Exposición a la sequía
+                    {t('admin.pages.evas.edit.droughtExposure')}
                   </h3>
                   <FormField
                     name="drought"

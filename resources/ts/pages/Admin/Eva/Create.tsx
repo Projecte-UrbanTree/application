@@ -236,10 +236,12 @@ const CreateEva = () => {
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Sección: Identificación */}
                 <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mb-4">Identificación</h1>
+                  <h1 className="text-xl font-bold mb-4">
+                    {t('admin.pages.evas.create.identification')}
+                  </h1>
                   <FormField
                     name="element_id"
-                    label={t('admin.pages.evas.form.element_id')}
+                    label={t('admin.pages.evas.form.name')}
                     as={Dropdown}
                     options={elements.map((element) => ({
                       label: element.name,
@@ -266,11 +268,13 @@ const CreateEva = () => {
                 {/* Sección: Condición del árbol */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mb-4">
-                    Condición del árbol
+                    {t('admin.pages.evas.create.treeCondition')}
                   </h1>
 
                   {/* Subsección: Dimensiones */}
-                  <h2 className="text-lg font-semibold mb-2">Dimensiones</h2>
+                  <h2 className="text-lg font-semibold mb-2">
+                    {t('admin.pages.evas.create.dimensions')}
+                  </h2>
                   <FormField
                     name="height"
                     label={t('admin.pages.evas.form.height')}
@@ -308,10 +312,14 @@ const CreateEva = () => {
                   />
 
                   {/* Subsección: Estado */}
-                  <h2 className="text-lg font-semibold mt-4 mb-2">Estado</h2>
+                  <h2 className="text-lg font-semibold mt-4 mb-2">
+                    {t('admin.pages.evas.create.state')}
+                  </h2>
 
                   {/* Subsubsección: Copa y Ramas */}
-                  <h3 className="text-md font-medium mb-2">Copa y Ramas</h3>
+                  <h3 className="text-md font-medium mb-2">
+                    {t('admin.pages.evas.create.crownBranches')}
+                  </h3>
                   <FormField
                     name="unbalanced_crown"
                     label={t('admin.pages.evas.form.unbalanced_crown')}
@@ -338,7 +346,9 @@ const CreateEva = () => {
                   />
 
                   {/* Subsubsección: Tronco */}
-                  <h3 className="text-md font-medium mt-4 mb-2">Tronco</h3>
+                  <h3 className="text-md font-medium mt-4 mb-2">
+                    {t('admin.pages.evas.create.trunk')}
+                  </h3>
                   <FormField
                     name="inclination"
                     label={t('admin.pages.evas.form.inclination')}
@@ -365,7 +375,9 @@ const CreateEva = () => {
                   />
 
                   {/* Subsubsección: Raíces */}
-                  <h3 className="text-md font-medium mt-4 mb-2">Raíces</h3>
+                  <h3 className="text-md font-medium mt-4 mb-2">
+                    {t('admin.pages.evas.create.roots')}
+                  </h3>
                   <FormField
                     name="soil_lifting"
                     label={t('admin.pages.evas.form.soil_lifting')}
@@ -395,17 +407,17 @@ const CreateEva = () => {
                 {/* Sección: Condición del entorno */}
                 <div className="md:col-span-2">
                   <h1 className="text-xl font-bold mt-6 mb-4">
-                    Condición del entorno
+                    {t('admin.pages.evas.create.environmentCondition')}
                   </h1>
 
                   {/* Subsección: Factores Ambientales */}
                   <h2 className="text-lg font-semibold mb-2">
-                    Factores Ambientales
+                    {t('admin.pages.evas.create.environmentalFactors')}
                   </h2>
 
                   {/* Subsubsección: Exposición al viento */}
                   <h3 className="text-md font-medium mb-2">
-                    Exposición al viento
+                    {t('admin.pages.evas.create.windExposure')}
                   </h3>
                   <FormField
                     name="wind"
@@ -416,7 +428,7 @@ const CreateEva = () => {
 
                   {/* Subsubsección: Exposición a la sequía */}
                   <h3 className="text-md font-medium mt-4 mb-2">
-                    Exposición a la sequía
+                    {t('admin.pages.evas.create.droughtExposure')}
                   </h3>
                   <FormField
                     name="drought"

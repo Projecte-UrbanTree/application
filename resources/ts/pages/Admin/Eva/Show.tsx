@@ -58,30 +58,48 @@ export default function ShowEva() {
   const getStatusMessage = (status: number) => {
     const percentage = (status / 36) * 100;
     if (percentage == 0 && percentage <= 24) {
-      return { message: t('Bajo'), color: '#6AA84F' };
+      return { message: t('admin.pages.evas.status.low'), color: '#6AA84F' };
     }
     if (percentage >= 25 && percentage <= 49) {
-      return { message: t('Moderado'), color: '#00FF00' };
+      return {
+        message: t('admin.pages.evas.status.moderate'),
+        color: '#00FF00',
+      };
     }
     if (percentage >= 50 && percentage <= 74) {
-      return { message: t('Alto'), color: '#FFFF00' };
+      return { message: t('admin.pages.evas.status.high'), color: '#FFFF00' };
     }
     if (percentage >= 75 && percentage <= 100) {
-      return { message: t('Critico'), color: '#FF0000' };
+      return {
+        message: t('admin.pages.evas.status.critical'),
+        color: '#FF0000',
+      };
     }
-    return { message: t('Pendiente'), color: 'gray' };
+    return { message: t('admin.pages.evas.status.pending'), color: 'gray' };
   };
 
   const calculateStabilityIndex = (height: number, diameter: number) => {
     const index = height / diameter;
     if (index < 50) {
-      return { message: t('Estable'), color: '#6AA84F' };
+      return {
+        message: t('admin.pages.evas.stability.stable'),
+        color: '#6AA84F',
+      };
     } else if (index >= 50 && index <= 80) {
-      return { message: t('Moderada'), color: '#FFFF00' };
+      return {
+        message: t('admin.pages.evas.stability.moderate'),
+        color: '#FFFF00',
+      };
     } else if (index > 80 && index <= 100) {
-      return { message: t('Riesgo alto'), color: '#FF0000' };
+      return {
+        message: t('admin.pages.evas.stability.highRisk'),
+        color: '#FF0000',
+      };
     } else {
-      return { message: t('Pendiente'), color: 'gray' };
+      return {
+        message: t('admin.pages.evas.stability.pending'),
+        color: 'gray',
+      };
     }
   };
 
@@ -91,13 +109,25 @@ export default function ShowEva() {
   ) => {
     const ratio = heightEstimation / height;
     if (ratio < 0.3) {
-      return { message: t('Muy estable'), color: '#6AA84F' };
+      return {
+        message: t('admin.pages.evas.gravityHeight.veryStable'),
+        color: '#6AA84F',
+      };
     } else if (ratio >= 0.3 && ratio <= 0.5) {
-      return { message: t('Riesgo moderado'), color: '#FFFF00' };
+      return {
+        message: t('admin.pages.evas.gravityHeight.moderateRisk'),
+        color: '#FFFF00',
+      };
     } else if (ratio > 0.5) {
-      return { message: t('Alto riesgo de caída'), color: '#FF0000' };
+      return {
+        message: t('admin.pages.evas.gravityHeight.highRisk'),
+        color: '#FF0000',
+      };
     } else {
-      return { message: t('Pendiente'), color: 'gray' };
+      return {
+        message: t('admin.pages.evas.gravityHeight.pending'),
+        color: 'gray',
+      };
     }
   };
 
@@ -107,15 +137,30 @@ export default function ShowEva() {
   ) => {
     const ratio = rootSurfaceDiameter / crownProjectionArea;
     if (ratio > 2) {
-      return { message: t('Muy estable'), color: '#6AA84F' };
+      return {
+        message: t('admin.pages.evas.rootCrown.veryStable'),
+        color: '#6AA84F',
+      };
     } else if (ratio > 1.5 && ratio <= 2) {
-      return { message: t('Estable'), color: '#00FF00' };
+      return {
+        message: t('admin.pages.evas.rootCrown.stable'),
+        color: '#00FF00',
+      };
     } else if (ratio > 1 && ratio <= 1.5) {
-      return { message: t('Estabilidad moderada'), color: '#FFFF00' };
+      return {
+        message: t('admin.pages.evas.rootCrown.moderateStability'),
+        color: '#FFFF00',
+      };
     } else if (ratio <= 1) {
-      return { message: t('Riesgo alto de caída'), color: '#FF0000' };
+      return {
+        message: t('admin.pages.evas.rootCrown.highRisk'),
+        color: '#FF0000',
+      };
     } else {
-      return { message: t('Pendiente'), color: 'gray' };
+      return {
+        message: t('admin.pages.evas.rootCrown.pending'),
+        color: 'gray',
+      };
     }
   };
 
@@ -126,28 +171,55 @@ export default function ShowEva() {
   ) => {
     const index = (height * wind) / rootSurfaceDiameter;
     if (index < 0.5) {
-      return { message: t('Muy estable'), color: '#6AA84F' };
+      return {
+        message: t('admin.pages.evas.windStability.veryStable'),
+        color: '#6AA84F',
+      };
     } else if (index >= 0.5 && index <= 1) {
-      return { message: t('Estabilidad moderada'), color: '#FFFF00' };
+      return {
+        message: t('admin.pages.evas.windStability.moderateStability'),
+        color: '#FFFF00',
+      };
     } else if (index > 1) {
-      return { message: t('Alto riesgo de vuelco'), color: '#FF0000' };
+      return {
+        message: t('admin.pages.evas.windStability.highRisk'),
+        color: '#FF0000',
+      };
     } else {
-      return { message: t('Pendiente'), color: 'gray' };
+      return {
+        message: t('admin.pages.evas.windStability.pending'),
+        color: 'gray',
+      };
     }
   };
 
   const getSeverityMessage = (value: number) => {
     switch (value) {
       case 0:
-        return { message: t('Bajo'), color: '#6AA84F' };
+        return {
+          message: t('admin.pages.evas.severity.low'),
+          color: '#6AA84F',
+        };
       case 1:
-        return { message: t('Moderado'), color: '#00FF00' };
+        return {
+          message: t('admin.pages.evas.severity.moderate'),
+          color: '#00FF00',
+        };
       case 2:
-        return { message: t('Alto'), color: '#FFFF00' };
+        return {
+          message: t('admin.pages.evas.severity.high'),
+          color: '#FFFF00',
+        };
       case 3:
-        return { message: t('Extremo'), color: '#FF0000' };
+        return {
+          message: t('admin.pages.evas.severity.extreme'),
+          color: '#FF0000',
+        };
       default:
-        return { message: t('Pendiente'), color: 'gray' };
+        return {
+          message: t('admin.pages.evas.severity.pending'),
+          color: 'gray',
+        };
     }
   };
 
@@ -194,7 +266,7 @@ export default function ShowEva() {
               <Icon icon="tabler:arrow-left" className="h-6 w-6" />
             </Button>
             <h2 className="text-white text-3xl font-bold">
-              {t('Show')} - {id}
+              {t('admin.pages.evas.show')}
             </h2>
           </div>
           <Button
@@ -205,9 +277,11 @@ export default function ShowEva() {
           </Button>
         </header>
         <div className="p-6">
-          <h1 className="text-xl font-bold mb-4">Calculo de Indices</h1>
+          <h1 className="text-xl font-bold mb-4">
+            {t('admin.pages.evas.indexCalculation')}
+          </h1>
           <p>
-            <strong>{t('Factor estado del arbol')}:</strong>{' '}
+            <strong>{t('admin.pages.evas.treeStatusFactor')}:</strong>{' '}
             <span
               style={{
                 backgroundColor: color,
@@ -219,7 +293,7 @@ export default function ShowEva() {
             </span>{' '}
           </p>
           <p>
-            <strong>{t('Índice de esbeltez (H/D)')}:</strong>{' '}
+            <strong>{t('admin.pages.evas.stabilityIndex')}:</strong>{' '}
             <span
               style={{
                 backgroundColor: stabilityIndex.color,
@@ -231,7 +305,7 @@ export default function ShowEva() {
             </span>{' '}
           </p>
           <p>
-            <strong>{t('Relación Centro de Gravedad / Altura (CG/H)')}:</strong>{' '}
+            <strong>{t('admin.pages.evas.gravityHeightRatio')}:</strong>{' '}
             <span
               style={{
                 backgroundColor: gravityHeightRatio.color,
@@ -243,12 +317,7 @@ export default function ShowEva() {
             </span>{' '}
           </p>
           <p>
-            <strong>
-              {t(
-                'Relación Superficie Radicular vs. Proyección de Copa (SR/SC)',
-              )}
-              :
-            </strong>{' '}
+            <strong>{t('admin.pages.evas.rootCrownRatio')}:</strong>{' '}
             <span
               style={{
                 backgroundColor: rootCrownRatio.color,
@@ -260,7 +329,7 @@ export default function ShowEva() {
             </span>{' '}
           </p>
           <p>
-            <strong>{t('Índice de Vulnerabilidad al Viento (WSI)')}:</strong>{' '}
+            <strong>{t('admin.pages.evas.windStabilityIndex')}:</strong>{' '}
             <span
               style={{
                 backgroundColor: windStabilityIndex.color,
@@ -271,9 +340,11 @@ export default function ShowEva() {
               {windStabilityIndex.message}
             </span>{' '}
           </p>
-          <h1 className="text-xl font-bold mt-6 mb-4">Factores Ambientales</h1>
+          <h1 className="text-xl font-bold mt-6 mb-4">
+            {t('admin.pages.evas.environmentalFactors')}
+          </h1>
           <p>
-            <strong>{t('Exposicion al viento')}:</strong>{' '}
+            <strong>{t('admin.pages.evas.windExposure')}:</strong>{' '}
             <span
               style={{
                 backgroundColor: getSeverityMessage(eva.wind).color,
@@ -285,7 +356,7 @@ export default function ShowEva() {
             </span>{' '}
           </p>
           <p>
-            <strong>{t('Exposicion a la sequia')}:</strong>{' '}
+            <strong>{t('admin.pages.evas.droughtExposure')}:</strong>{' '}
             <span
               style={{
                 backgroundColor: getSeverityMessage(eva.drought).color,
