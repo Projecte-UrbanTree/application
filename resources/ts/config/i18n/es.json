@@ -17,7 +17,7 @@
       "currentPassword": "Contraseña actual",
       "newPassword": "Nueva contraseña",
       "confirmPassword": "Confirmar contraseña",
-      "resource_type": "Resource Type",
+      "resource_type": "Tipo de Recurso",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipo de recurso",
       "species": "Especie",
