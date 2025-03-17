@@ -78,11 +78,11 @@ class ContractController extends Controller
                 'nullable',
                 'integer',
                 function ($attribute, $value, $fail) {
-                    if ($value !== 0 && !Contract::find($value)) {
+                    if ($value !== 0 && ! Contract::find($value)) {
                         $fail('The selected contract does not exist.');
                     }
-                }
-            ]
+                },
+            ],
         ]);
 
         $contractId = $validated['contract_id'] ?? 0;
@@ -92,7 +92,7 @@ class ContractController extends Controller
 
         return response()->json([
             'message' => 'Contract selected successfully',
-            'contract' => $contract
+            'contract' => $contract,
         ]);
     }
 
@@ -103,7 +103,7 @@ class ContractController extends Controller
 
         return response()->json([
             'contract_id' => $contractId,
-            'contract' => $contract
+            'contract' => $contract,
         ]);
     }
 }
