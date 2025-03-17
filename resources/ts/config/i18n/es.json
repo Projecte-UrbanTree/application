@@ -14,6 +14,9 @@
       "genus": "Género",
       "name": "Nombre",
       "password": "Contraseña",
+      "currentPassword": "Password (Current)",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
       "resource_type": "Resource Type",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipo de recurso",
@@ -546,6 +549,30 @@
           "unknown": "Desconocido"
         },
         "title": "Órdenes de trabajo"
+      },
+      "account": {
+        "title": "Configuración de la Cuenta",
+        "basicInfo": "Información Básica",
+        "security": "Seguridad",
+        "actions": {
+          "save": "Guardar cambios",
+          "saving": "Guardando..."
+        },
+        "validation": {
+          "name_invalid": "El nombre no puede contener símbolos.",
+          "name_required": "El nombre es obligatorio",
+          "surname_invalid": "El apellido no puede contener símbolos.",
+          "surname_required": "El apellido es obligatorio",
+          "currentPasswordRequired": "Debe ingresar la contraseña actual",
+          "newPasswordMinLength": "La contraseña debe tener al menos 6 caracteres",
+          "newPasswordMismatch": "Las contraseñas no coinciden",
+          "newPasswordComplexity": "New password must contain at least one uppercase letter, one lowercase letter, and one number"
+        },
+        "messages": {
+          "profileUpdated": "Perfil actualizado correctamente",
+          "errorSaving": "Error al guardar los cambios.",
+          "passwordCurrentWrong": "La contraseña actual no coincide"
+        }
       }
     },
     "profileDropdown": {
@@ -590,7 +617,9 @@
   "general": {
     "allContracts": "Todos los contratos",
     "genericError": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
   },
   "public": {
     "error": {
