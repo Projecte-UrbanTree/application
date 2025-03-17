@@ -35,10 +35,19 @@ class WorkOrderController extends Controller
 
     public function create(Request $request)
     {
+        $contract_id = $request->query('contract_id');
+        
+        $users = User::where('role', 'worker');
+        $zones = Zone::select('id', 'name');
+        if ($contract_id) {
+            $users->where('contract_id', $contract_id);
+            $zones->where('contract_id', $contract_id);
+        }
+        
         return response()->json([
             'task_types' => TaskType::all(),
-            'users' => User::where('role', 'worker')->get(),
-            'zones' => Zone::all(),
+            'users' => $users->get(),
+            'zones' => $zones->get(),
             'tree_types' => TreeType::all(),
             'element_types' => ElementType::all(),
             'contracts' => Contract::all(),
@@ -143,7 +152,6 @@ class WorkOrderController extends Controller
             $validated = $request->validate([
                 'date' => 'required|date',
                 'users' => 'required|array',
-                'contract_id' => 'required|exists:contracts,id',
                 'blocks' => 'required|array',
                 'blocks.*.notes' => 'nullable|string',
                 'blocks.*.zones' => 'required|array',
@@ -158,7 +166,6 @@ class WorkOrderController extends Controller
             $workOrder = WorkOrder::findOrFail($id);
             $workOrder->update([
                 'date' => $validated['date'],
-                'contract_id' => $validated['contract_id'],
             ]);
 
             $workOrder->users()->sync($validated['users']);

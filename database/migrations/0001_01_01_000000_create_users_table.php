@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('customer');
+            $table->foreignId('contract_id')->nullable()->constrained('contracts')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

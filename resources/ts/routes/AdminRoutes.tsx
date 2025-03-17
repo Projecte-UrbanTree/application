@@ -44,10 +44,7 @@ const AdminRoutes: RouteObject[] = [
       {
         path: '/admin',
         children: [
-          {
-            index: true,
-            element: <Navigate to="/admin/dashboard" />,
-          },
+          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
           {
             path: 'dashboard',
             element: (
@@ -171,10 +168,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'settings',
             children: [
-              {
-                index: true,
-                element: <Navigate to="/admin/settings/users" />,
-              },
+              { index: true, element: <Navigate to="/admin/settings/users" replace /> },
               {
                 path: 'users',
                 element: (
@@ -272,22 +266,6 @@ const AdminRoutes: RouteObject[] = [
                 ),
               },
               {
-                path: 'tree-types/create',
-                element: (
-                  <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.create.title">
-                    <CreateTreeType />
-                  </AdminLayoutWrapper>
-                ),
-              },
-              {
-                path: 'tree-types/edit/:id',
-                element: (
-                  <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.edit.title">
-                    <EditTreeType />
-                  </AdminLayoutWrapper>
-                ),
-              },
-              {
                 path: 'task-types',
                 element: (
                   <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.title">
@@ -340,6 +318,10 @@ const AdminRoutes: RouteObject[] = [
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <Navigate to="/login" replace />,
   },
 ];
 

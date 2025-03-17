@@ -107,6 +107,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   ].some((path) => location.pathname.startsWith(path));
 
   const isSettingsPage = location.pathname.includes('/admin/settings');
+  const isWorkOrderEditPage = location.pathname.includes('/admin/work-orders/edit/');
+  const isResourceEditPage = location.pathname.includes('/admin/resources/edit/');
+
+  const hideContractSelector = isSettingsPage || isWorkOrderEditPage || isResourceEditPage;
 
   const managementSubmenuItems = [
     {
@@ -234,7 +238,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex gap-4">
-              {!isSettingsPage && (
+              {!hideContractSelector && (
                 <>
                   <Dropdown
                     id="contractBtn"
@@ -300,7 +304,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             </Link>
           ))}
           <div className="mt-4 flex flex-col gap-4">
-            {!isSettingsPage && (
+            {!hideContractSelector && (
               <Dropdown
                 id="contractBtn"
                 name="contractBtn"
