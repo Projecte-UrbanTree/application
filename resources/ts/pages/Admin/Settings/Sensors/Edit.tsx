@@ -35,8 +35,8 @@ export default function EditSensor() {
   useEffect(() => {
     const fetchSensor = async () => {
       try {
-        const response = await axiosClient.get(`/admin/sensor/${id}`); // Ruta correcta per obtenir el sensor
-        setInitialValues(response.data); // Assignem les dades del sensor
+        const response = await axiosClient.get(`/admin/sensor/${id}`);
+        setInitialValues(response.data); 
       } catch (error) {
         console.error("Error fetching sensor:", error);
         navigate("/admin/sensors", { state: { error: t("admin.pages.sensors.list.messages.error") } });

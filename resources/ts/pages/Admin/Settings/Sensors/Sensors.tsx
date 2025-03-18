@@ -154,7 +154,7 @@ export default function Sensors() {
           severity={
             msg === t("admin.pages.sensors.list.messages.createSuccess") || 
             msg === t("admin.pages.sensors.list.messages.deleteSuccess") || 
-            msg === t("admin.pages.sensors.list.messages.updateSuccess") // Afegim updateSuccess com a success
+            msg === t("admin.pages.sensors.list.messages.updateSuccess") 
                 ? "success" 
                 : "error"
         }
