@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -56,6 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'evas' => EvaController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,
+            'sensors' => SensorController::class,
             'task-types' => TaskTypeController::class,
             'tree-types' => TreeTypeController::class,
             'users' => UserController::class,

@@ -12,7 +12,8 @@
         "inventory": "Inventari",
         "workers": "Treballadors",
         "resources": "Recursos",
-        "stats": "Estadístiques"
+        "stats": "Estadístiques",
+        "sensors": "Sensors"
       },
       "settings": {
         "contracts": "Contractes",
