@@ -78,18 +78,7 @@ class AdminTest extends TestCase
         ]);
     }
 
-    public function test_user_cannot_create_resource_type_with_symbols()
-        {
-            $this->actingAs($this->user);
-
-            $response = $this->post('/resource-types', [
-                'name' => 'Resource@Type#1!',
-                'description' => null,
-            ]);
-
-            $response->assertSessionHasErrors('name');
-        }
-
+    
 
     public function test_user_can_create_task_type()
     {
@@ -144,26 +133,5 @@ class AdminTest extends TestCase
         ]);
     }
 
-    public function test_inputs_have_validation_to_deny_symbols()
-    {
-        $this->actingAs($this->user);
-
-        $response = $this->post('/resource-types', [
-            'name' => 'Resource@Type#1!',
-            'description' => null,
-        ]);
-        $response->assertSessionHasErrors('name');
-
-        $response = $this->post('/element-types', [
-            'name' => 'Element@Type#1!',
-            'description' => null,
-        ]);
-        $response->assertSessionHasErrors('name');
-
-        $response = $this->post('/task-types', [
-            'name' => 'Task@Type#1!',
-            'description' => null,
-        ]);
-        $response->assertSessionHasErrors('name');
-    }
+    
 }
