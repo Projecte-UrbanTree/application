@@ -158,7 +158,9 @@ export const MapComponent: React.FC<MapProps> = ({
     );
     filteredZones.forEach((zone: Zone) => {
       const zonePoints = points
-        .filter((p) => p.zone_id === zone.id && p.type == TypePoint.element)
+        .filter(
+          (p) => p.zone_id === zone.id && p.type == TypePoint.zone_delimiter,
+        )
 
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
       if (zonePoints.length > 2) {
@@ -180,14 +182,30 @@ export const MapComponent: React.FC<MapProps> = ({
   }, [elements, currentContract]);
 
   function updateElements(service: MapService) {
+    if (!currentContract) return;
+    const filteredZones = zonesRedux.filter(
+      (zone) => zone.contract_id === currentContract.id,
+    );
+    const zoneIds = new Set(filteredZones.map((zone) => zone.id));
+    const filteredPoints = points.filter(
+      (point) => point.zone_id && zoneIds.has(point.zone_id),
+    );
+    const pointIds = new Set(filteredPoints.map((point) => point.id));
+    const filteredElements = elements.filter(
+      (element) => element.point_id && pointIds.has(element.point_id),
+    );
+
+    console.log(
+      'Elementos filtrados para el contrato actual:',
+      filteredElements.length,
+    );
+
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => {
-        console.log('Estilo cargado, añadiendo marcadores...');
-        service.addElementMarkers(elements, points);
+        service.addElementMarkers(filteredElements, filteredPoints);
       });
     } else {
-      console.log('Mapa listo, añadiendo marcadores...');
-      service.addElementMarkers(elements, points);
+      service.addElementMarkers(filteredElements, filteredPoints);
     }
   }
 

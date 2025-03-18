@@ -62,7 +62,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
         description,
         element_type_id: selectedElementType,
         tree_type_id: selectedTreeType,
-        point_id: 0!,
+        point_id: pointId,
       };
       console.log({ elementData });
 
