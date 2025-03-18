@@ -17,3 +17,8 @@ export const saveElements = async (element: Element): Promise<Element> => {
     throw error;
   }
 };
+
+export const deleteElements = async (elements: Element[]): Promise<void> => {
+  try {
+  } catch (error) {}
+};

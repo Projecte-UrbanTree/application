@@ -4,6 +4,7 @@ import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
+import { Point, TypePoint } from '@/types/Point';
 import { Zone } from '@/types/Zone';
 import { Icon } from '@iconify/react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
@@ -94,6 +95,15 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   const handleDeleteZone = async (zoneId: number) => {
     try {
       dispatch(showLoader());
+
+      // TODO: verify if the zones have elements
+      const filteredPoints: Point[] = points.filter(
+        (p: Point) => p.zone_id === zoneId,
+      );
+      const elementPoints = filteredPoints.filter(
+        (p) => p.type === TypePoint.element,
+      );
+
       await deleteZone(zoneId);
 
       toast.current?.show({
