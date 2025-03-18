@@ -8,68 +8,35 @@ use Illuminate\Http\Request;
 
 class ZoneController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Zone::all());
+        $contract_id = $request->header('X-Contract-Id');
+        if (! $contract_id) {
+            return Zone::all();
+        }
+
+        return Zone::where('contract_id', $contract_id)->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Not needed for API
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $zone = Zone::create($request->all());
+        $validate = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'color' => ['required', 'string', 'max:255'],
+            'contract_id' => ['required', 'integer', 'max:255'],
+        ]);
+
+        $zone = Zone::create($validate);
 
         return response()->json($zone, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Request $request, $id)
     {
         $zone = Zone::findOrFail($id);
+        $zone->delete();
 
-        return response()->json($zone);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        // Not needed for API
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $zone = Zone::findOrFail($id);
-        $zone->update($request->all());
-
-        return response()->json($zone);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        Zone::destroy($id);
-
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Zona eliminada']);
     }
 }
