@@ -12,13 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sensors', function (Blueprint $table) {
-            $table->unsignedBigInteger('contract_id'); 
-            $table->string('device_eui')->unique();
-            $table->string('name');
-            $table->float('latitude');
-            $table->float('longitude');
-
-            $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
+            if (!Schema::hasColumn('sensors', 'contract_id')) {
+                $table->unsignedBigInteger('contract_id');
+                $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
+            }
+            if (!Schema::hasColumn('sensors', 'device_eui')) {
+                $table->string('device_eui')->unique();
+            }
+            if (!Schema::hasColumn('sensors', 'name')) {
+                $table->string('name');
+            }
+            if (!Schema::hasColumn('sensors', 'latitude')) {
+                $table->float('latitude');
+            }
+            if (!Schema::hasColumn('sensors', 'longitude')) {
+                $table->float('longitude');
+            }
         });
     }
 
@@ -28,8 +37,22 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('sensors', function (Blueprint $table) {
-            $table->dropForeign(['contract_id']);
-            $table->dropColumn(['contract_id', 'device_eui', 'name', 'latitude', 'longitude']);
+            if (Schema::hasColumn('sensors', 'contract_id')) {
+                $table->dropForeign(['contract_id']);
+                $table->dropColumn('contract_id');
+            }
+            if (Schema::hasColumn('sensors', 'device_eui')) {
+                $table->dropColumn('device_eui');
+            }
+            if (Schema::hasColumn('sensors', 'name')) {
+                $table->dropColumn('name');
+            }
+            if (Schema::hasColumn('sensors', 'latitude')) {
+                $table->dropColumn('latitude');
+            }
+            if (Schema::hasColumn('sensors', 'longitude')) {
+                $table->dropColumn('longitude');
+            }
         });
     }
 };

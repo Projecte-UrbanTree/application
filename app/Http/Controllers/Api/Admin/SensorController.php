@@ -11,6 +11,7 @@ class SensorController extends Controller
     public function index()
     {
         $sensors = Sensor::select('id', 'device_eui', 'name', 'latitude', 'longitude', 'contract_id')->get(); 
+        \Log::info('Sensors fetched:', $sensors->toArray()); // Agrega este log para depurar
         return response()->json($sensors, 200); 
     }
     

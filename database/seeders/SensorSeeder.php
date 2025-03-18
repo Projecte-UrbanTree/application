@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -8,6 +7,9 @@ use Illuminate\Support\Facades\Schema;
 
 class SensorSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         Schema::disableForeignKeyConstraints();

@@ -39,7 +39,7 @@ export default function Sensors() {
   const fetchSensors = async () => {
     try {
       const response = await axiosClient.get('/admin/sensor'); 
-      console.log('Sensors fetched:', response.data); 
+      console.log('Sensors fetched:', response.data); // Agrega este log para depurar
       setSensors(Array.isArray(response.data) ? response.data : []); 
       setHasError(false); 
     } catch (error) {
