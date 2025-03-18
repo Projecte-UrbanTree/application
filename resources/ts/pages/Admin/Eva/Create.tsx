@@ -20,10 +20,11 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
 
   if (Component === InputNumber) {
     return (
-      <div className="mb-4">
+      <div className="flex flex-col mb-4">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700">
+          className="flex items-center text-sm font-medium text-gray-700 mb-1">
+          <Icon icon="tabler:input-number" className="h-5 w-5 mr-2" />
           {label}
         </label>
         <InputNumber
@@ -31,9 +32,10 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
           value={field.value}
           onValueChange={(e) => helpers.setValue(e.value)}
           {...props}
+          className="w-full"
         />
         {meta.touched && meta.error ? (
-          <div className="text-red-500 text-sm">{meta.error}</div>
+          <small className="p-error">{meta.error}</small>
         ) : null}
       </div>
     );
@@ -41,10 +43,11 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
 
   if (Component === Dropdown) {
     return (
-      <div className="mb-4">
+      <div className="flex flex-col mb-4">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700">
+          className="flex items-center text-sm font-medium text-gray-700 mb-1">
+          <Icon icon="tabler:dropdown" className="h-5 w-5 mr-2" />
           {label}
         </label>
         <Dropdown
@@ -54,22 +57,26 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
           optionLabel="label"
           optionValue="value"
           {...props}
+          className="w-full"
         />
         {meta.touched && meta.error ? (
-          <div className="text-red-500 text-sm">{meta.error}</div>
+          <small className="p-error">{meta.error}</small>
         ) : null}
       </div>
     );
   }
 
   return (
-    <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+    <div className="flex flex-col mb-4">
+      <label
+        htmlFor={name}
+        className="flex items-center text-sm font-medium text-gray-700 mb-1">
+        <Icon icon="tabler:input" className="h-5 w-5 mr-2" />
         {label}
       </label>
-      <Component id={name} {...field} {...props} />
+      <Component id={name} {...field} {...props} className="w-full" />
       {meta.touched && meta.error ? (
-        <div className="text-red-500 text-sm">{meta.error}</div>
+        <small className="p-error">{meta.error}</small>
       ) : null}
     </div>
   );
@@ -231,8 +238,8 @@ const CreateEva = () => {
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
+    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6 min-h-screen">
+      <Card className="w-full max-w-3xl shadow-lg rounded-lg overflow-hidden">
         <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
           <Button
             className="p-button-text mr-4"
@@ -244,7 +251,7 @@ const CreateEva = () => {
             {t('admin.pages.evas.form.title.create')}
           </h2>
         </header>
-        <div className="p-6">
+        <div className="p-6 bg-white">
           {error && (
             <Message severity="error" text={error} className="mb-4 w-full" />
           )}

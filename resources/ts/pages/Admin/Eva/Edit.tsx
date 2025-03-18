@@ -34,10 +34,11 @@ const FormField = ({
 
   if (Component === InputNumber) {
     return (
-      <div className="mb-4">
+      <div className="flex flex-col mb-4">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700">
+          className="flex items-center text-sm font-medium text-gray-700 mb-1">
+          <Icon icon="tabler:input-number" className="h-5 w-5 mr-2" />
           {label}
         </label>
         <InputNumber
@@ -45,9 +46,10 @@ const FormField = ({
           value={field.value}
           onValueChange={(e) => helpers.setValue(e.value)}
           {...props}
+          className="w-full"
         />
         {meta.touched && meta.error ? (
-          <div className="text-red-500 text-sm">{meta.error}</div>
+          <small className="p-error">{meta.error}</small>
         ) : null}
       </div>
     );
@@ -55,10 +57,11 @@ const FormField = ({
 
   if (Component === Dropdown) {
     return (
-      <div className="mb-4">
+      <div className="flex flex-col mb-4">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700">
+          className="flex items-center text-sm font-medium text-gray-700 mb-1">
+          <Icon icon="tabler:dropdown" className="h-5 w-5 mr-2" />
           {label}
         </label>
         <Dropdown
@@ -68,22 +71,26 @@ const FormField = ({
           optionLabel="label"
           optionValue="value"
           {...props}
+          className="w-full"
         />
         {meta.touched && meta.error ? (
-          <div className="text-red-500 text-sm">{meta.error}</div>
+          <small className="p-error">{meta.error}</small>
         ) : null}
       </div>
     );
   }
 
   return (
-    <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+    <div className="flex flex-col mb-4">
+      <label
+        htmlFor={name}
+        className="flex items-center text-sm font-medium text-gray-700 mb-1">
+        <Icon icon="tabler:input" className="h-5 w-5 mr-2" />
         {label}
       </label>
-      <Component id={name} {...field} {...props} />
+      <Component id={name} {...field} {...props} className="w-full" />
       {meta.touched && meta.error ? (
-        <div className="text-red-500 text-sm">{meta.error}</div>
+        <small className="p-error">{meta.error}</small>
       ) : null}
     </div>
   );
