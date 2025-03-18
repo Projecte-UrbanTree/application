@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
+use App\Http\Controllers\Api\Admin\EvaController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
 use App\Http\Controllers\Api\Admin\StatisticsController;
@@ -52,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::resources([
             'contracts' => ContractController::class,
             'element-types' => ElementTypeController::class,
+            'evas' => EvaController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,
             'task-types' => TaskTypeController::class,

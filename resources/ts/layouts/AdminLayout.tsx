@@ -100,17 +100,26 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     '/admin/dashboard',
     '/admin/work-orders',
     '/admin/inventory',
+    '/admin/eva',
     '/admin/workers',
     '/admin/resources',
     '/admin/statistics',
   ].some((path) => location.pathname.startsWith(path));
 
   const isSettingsPage = location.pathname.includes('/admin/settings');
-  const isWorkOrderEditPage = location.pathname.includes('/admin/work-orders/edit/');
-  const isResourceEditPage = location.pathname.includes('/admin/resources/edit/');
+  const isWorkOrderEditPage = location.pathname.includes(
+    '/admin/work-orders/edit/',
+  );
+  const isResourceEditPage = location.pathname.includes(
+    '/admin/resources/edit/',
+  );
   const isAccountPage = location.pathname.includes('/admin/account');
 
-  const hideContractSelector = isSettingsPage || isWorkOrderEditPage || isResourceEditPage || isAccountPage;
+  const hideContractSelector =
+    isSettingsPage ||
+    isWorkOrderEditPage ||
+    isResourceEditPage ||
+    isAccountPage;
 
   const managementSubmenuItems = [
     {
@@ -124,7 +133,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       icon: 'tabler:chart-treemap',
     },
     {
-      to: '/admin/eva',
+      to: '/admin/evas',
       label: t('admin.submenu.manage.eva'),
       icon: 'tabler:chart-bar',
     },

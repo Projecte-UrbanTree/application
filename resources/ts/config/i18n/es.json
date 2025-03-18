@@ -173,6 +173,19 @@
           "cloud": "Nube"
         }
       },
+      "evas": {
+        "title": "Evas",
+        "age": {
+          "years": "Años",
+          "months": "Meses"
+        },
+        "columns": {
+          "element_id": "ID del elemento",
+          "age": "Edad",
+          "height": "Altura",
+          "actions": "Acciones"
+        }
+      },
       "resources": {
         "form": {
           "fields": {
@@ -595,6 +608,7 @@
       "manage": {
         "dashboard": "Panel",
         "inventory": "Inventario",
+        "eva": "EVA",
         "resources": "Recursos",
         "stats": "Estadísticas",
         "workers": "Trabajadores",

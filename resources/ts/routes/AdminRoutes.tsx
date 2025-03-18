@@ -31,6 +31,10 @@ import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
 import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
 import WorkReport from '@/pages/Admin/WorkReport';
+import Eva from '@/pages/Admin/Eva/Eva';
+import EditEva from '@/pages/Admin/Eva/Edit';
+import ShowEva from '@/pages/Admin/Eva/Show';
+import CreateEva from '@/pages/Admin/Eva/Create';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -47,6 +51,38 @@ const AdminRoutes: RouteObject[] = [
             element: (
               <AdminLayoutWrapper titleI18n="admin.pages.dashboard.title">
                 <AdminDashboard />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.title">
+                <Eva />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas/create',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.create.title">
+                <CreateEva />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas/edit/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.edit.title">
+                <EditEva />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.show.title">
+                <ShowEva />
               </AdminLayoutWrapper>
             ),
           },
