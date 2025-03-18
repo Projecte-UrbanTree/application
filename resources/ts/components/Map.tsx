@@ -194,12 +194,6 @@ export const MapComponent: React.FC<MapProps> = ({
     const filteredElements = elements.filter(
       (element) => element.point_id && pointIds.has(element.point_id),
     );
-
-    console.log(
-      'Elementos filtrados para el contrato actual:',
-      filteredElements.length,
-    );
-
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => {
         service.addElementMarkers(filteredElements, filteredPoints);

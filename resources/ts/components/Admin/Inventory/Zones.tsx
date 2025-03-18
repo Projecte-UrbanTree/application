@@ -95,15 +95,6 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   const handleDeleteZone = async (zoneId: number) => {
     try {
       dispatch(showLoader());
-
-      // TODO: verify if the zones have elements
-      const filteredPoints: Point[] = points.filter(
-        (p: Point) => p.zone_id === zoneId,
-      );
-      const elementPoints = filteredPoints.filter(
-        (p) => p.type === TypePoint.element,
-      );
-
       await deleteZone(zoneId);
 
       toast.current?.show({
