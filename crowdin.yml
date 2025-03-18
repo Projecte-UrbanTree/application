@@ -1,5 +1,8 @@
+append_commit_message: false
+commit_message: "chore(i18n): new translations %original_file_name% (%language%)"
+pull_request_title: "chore(i18n): update translations"
 files:
-  - source: /lang/es/*.php
+  - source: /lang/en/*.php
     translation: /lang/%two_letters_code%/%original_file_name%
-  - source: /resources/ts/config/i18n/es.json
+  - source: /resources/ts/config/i18n/en.json
     translation: /resources/ts/config/i18n/%two_letters_code%.json

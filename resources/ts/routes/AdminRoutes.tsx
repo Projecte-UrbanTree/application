@@ -1,29 +1,40 @@
 import AdminLayoutWrapper from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import AdminProtectedRoute from '@/middlewares/AdminProtectedRoute';
 
+import Account from '@/pages/Admin/Account/Account';
 import AdminDashboard from '@/pages/Admin/Dashboard';
-import AdminUsers from '@/pages/Admin/Settings/Users/Users';
-import CreateUser from '@/pages/Admin/Settings/Users/Create';
-import EditUser from '@/pages/Admin/Settings/Users/Edit';
+import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
 import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
 import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
-import AdminWorkOrders from '@/pages/Admin/WorkOrders';
+import CreateElementTypes from '@/pages/Admin/Settings/Element Types/Create';
+import EditElementTypes from '@/pages/Admin/Settings/Element Types/Edit';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
-import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
-import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
-import EditTreeType from '@/pages/Admin/Settings/Tree Types/Edit';
-
-import AdminTaskTypes from '@/pages/Admin/Settings/Task Types/TaskTypes';
+import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
+import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
+import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTypes';
+import CreateResource from '@/pages/Admin/Settings/Resources/Create';
+import EditResource from '@/pages/Admin/Settings/Resources/Edit';
+import AdminResources from '@/pages/Admin/Settings/Resources/Resources';
 import CreateTaskType from '@/pages/Admin/Settings/Task Types/Create';
 import EditTaskType from '@/pages/Admin/Settings/Task Types/Edit';
-import AdminInventory from '@/pages/Admin/Inventory';
+import AdminTaskTypes from '@/pages/Admin/Settings/Task Types/TaskTypes';
+import CreateTreeType from '@/pages/Admin/Settings/Tree Types/Create';
+import EditTreeType from '@/pages/Admin/Settings/Tree Types/Edit';
+import AdminTreeTypes from '@/pages/Admin/Settings/Tree Types/TreeTypes';
+import CreateUser from '@/pages/Admin/Settings/Users/Create';
+import EditUser from '@/pages/Admin/Settings/Users/Edit';
+import AdminUsers from '@/pages/Admin/Settings/Users/Users';
+import AdminStats from '@/pages/Admin/Statistics';
 import AdminWorkers from '@/pages/Admin/Workers';
-import AdminResources from '@/pages/Admin/Resources';
-import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTypes';
-import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
-import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
-import AdminStats from '@/pages/Admin/Stats';
+import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
+import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
+import AdminWorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
+import WorkReport from '@/pages/Admin/WorkReport';
+import Eva from '@/pages/Admin/Eva/Eva';
+import EditEva from '@/pages/Admin/Eva/Edit';
+import ShowEva from '@/pages/Admin/Eva/Show';
+import CreateEva from '@/pages/Admin/Eva/Create';
 import AdminSensors from '@/pages/Admin/Settings/Sensors/Sensors';
 import CreateSensor from '@/pages/Admin/Settings/Sensors/Create';
 import EditSensor from '@/pages/Admin/Settings/Sensors/Edit';
@@ -37,10 +48,7 @@ const AdminRoutes: RouteObject[] = [
             {
                 path: '/admin',
                 children: [
-                    {
-                        index: true,
-                        element: <Navigate to="/admin/dashboard" />,
-                    },
+                    { index: true, element: <Navigate to="/admin/dashboard" replace /> },
                     {
                         path: 'dashboard',
                         element: (
@@ -50,10 +58,66 @@ const AdminRoutes: RouteObject[] = [
                         ),
                     },
                     {
+                        path: 'evas',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.evas.title">
+                                <Eva />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'evas/create',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.evas.create.title">
+                                <CreateEva />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'evas/edit/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.evas.edit.title">
+                                <EditEva />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'evas/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.evas.show.title">
+                                <ShowEva />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
                         path: 'work-orders',
                         element: (
                             <AdminLayoutWrapper titleI18n="admin.pages.workOrders.title">
                                 <AdminWorkOrders />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'work-orders/create',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.create.title">
+                                <CreateWorkOrder />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'work-orders/edit/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                                <EditWorkOrder />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'work-reports/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                                <WorkReport />
                             </AdminLayoutWrapper>
                         ),
                     },
@@ -82,10 +146,34 @@ const AdminRoutes: RouteObject[] = [
                         ),
                     },
                     {
-                        path: 'stats',
+                        path: 'resources/create',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.resources.create.title">
+                                <CreateResource />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'resources/edit/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.resources.edit.title">
+                                <EditResource />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'statistics',
                         element: (
                             <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
                                 <AdminStats />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'account',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.account.title">
+                                <Account />
                             </AdminLayoutWrapper>
                         ),
                     },
@@ -118,9 +206,7 @@ const AdminRoutes: RouteObject[] = [
                         children: [
                             {
                                 index: true,
-                                element: (
-                                    <Navigate to="/admin/settings/users" />
-                                ),
+                                element: <Navigate to="/admin/settings/users" replace />,
                             },
                             {
                                 path: 'users',
@@ -179,26 +265,26 @@ const AdminRoutes: RouteObject[] = [
                                 ),
                             },
                             {
+                                path: 'element-types/create',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.create.title">
+                                        <CreateElementTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
+                                path: 'element-types/edit/:id',
+                                element: (
+                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.edit.title">
+                                        <EditElementTypes />
+                                    </AdminLayoutWrapper>
+                                ),
+                            },
+                            {
                                 path: 'tree-types',
                                 element: (
                                     <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.title">
                                         <AdminTreeTypes />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'tree-types/create',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.create.title">
-                                        <CreateTreeType />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'tree-types/edit/:id',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.edit.title">
-                                        <EditTreeType />
                                     </AdminLayoutWrapper>
                                 ),
                             },
@@ -266,12 +352,15 @@ const AdminRoutes: RouteObject[] = [
                                     </AdminLayoutWrapper>
                                 ),
                             },
-                            
                         ],
                     },
                 ],
             },
         ],
+    },
+    {
+        path: '*',
+        element: <Navigate to="/login" replace />,
     },
 ];
 

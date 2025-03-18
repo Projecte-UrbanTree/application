@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
                 'dni' => '12345678A',
                 'password' => Hash::make('demopass'),
                 'role' => 'admin',
+                'contract_id' => null,
             ],
             [
                 'name' => 'Worker',
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
                 'dni' => '12345678B',
                 'password' => Hash::make('demopass'),
                 'role' => 'worker',
+                'contract_id' => 1,
             ],
             [
                 'name' => 'Worker',
@@ -40,6 +42,7 @@ class UserSeeder extends Seeder
                 'dni' => '12345678C',
                 'password' => Hash::make('demopass'),
                 'role' => 'worker',
+                'contract_id' => 2,
             ],
             [
                 'name' => 'Customer',
@@ -49,6 +52,17 @@ class UserSeeder extends Seeder
                 'dni' => '12345678D',
                 'password' => Hash::make('demopass'),
                 'role' => 'customer',
+                'contract_id' => null,
+            ],
+            [
+                'name' => 'Victor',
+                'surname' => 'Test',
+                'email' => 'cascascas@urbantere.com',
+                'company' => 'Urban Tree 5.0',
+                'dni' => '12345678E',
+                'password' => Hash::make('demopass'),
+                'role' => 'worker',
+                'contract_id' => 1,
             ],
         ]);
     }
