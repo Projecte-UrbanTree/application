@@ -48,9 +48,9 @@
       "genus": "Gènere",
       "name": "Nom",
       "password": "Contrasenya",
-      "currentPassword": "Password (Current)",
-      "newPassword": "New Password",
-      "confirmPassword": "Confirm Password",
+      "currentPassword": "Contrasenya actual",
+      "newPassword": "Nova contrasenya",
+      "confirmPassword": "Confirmar contrasenya",
       "resource_type": "Tipus de recurs",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipus de recurs",
@@ -600,7 +600,7 @@
           "currentPasswordRequired": "Has d'introduir la contrasenya actual",
           "newPasswordMinLength": "La contrasenya ha de tenir almenys 6 caràcters",
           "newPasswordMismatch": "Les contrasenyes no coincideixen",
-          "newPasswordComplexity": "New password must contain at least one uppercase letter, one lowercase letter, and one number"
+          "newPasswordComplexity": "La nova contrasenya ha de contenir almenys una lletra majúscula, una lletra minúscula i un número"
         },
         "messages": {
           "profileUpdated": "Perfil actualitzat correctament",

@@ -14,10 +14,10 @@
       "genus": "Género",
       "name": "Nombre",
       "password": "Contraseña",
-      "currentPassword": "Password (Current)",
-      "newPassword": "New Password",
-      "confirmPassword": "Confirm Password",
-      "resource_type": "Resource Type",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "resource_type": "Tipo de Recurso",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipo de recurso",
       "species": "Especie",
@@ -579,7 +579,7 @@
           "currentPasswordRequired": "Debe ingresar la contraseña actual",
           "newPasswordMinLength": "La contraseña debe tener al menos 6 caracteres",
           "newPasswordMismatch": "Las contraseñas no coinciden",
-          "newPasswordComplexity": "New password must contain at least one uppercase letter, one lowercase letter, and one number"
+          "newPasswordComplexity": "La nueva contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número"
         },
         "messages": {
           "profileUpdated": "Perfil actualizado correctamente",
