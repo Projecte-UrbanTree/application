@@ -8,68 +8,42 @@ use Illuminate\Http\Request;
 
 class PointController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return response()->json(Point::all());
+        return Point::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Not needed for API
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $point = Point::create($request->all());
+        $validated = $request->validate([
+            '*.latitude' => ['required', 'numeric'],
+            '*.longitude' => ['required', 'numeric'],
+            '*.type' => ['required', 'string', 'max:255'],
+            '*.zone_id' => ['required', 'integer'],
+        ]);
 
-        return response()->json($point, 201);
+        $createdPoints = [];
+        foreach ($validated as $pointData) {
+            $createdPoints[] = Point::create($pointData);
+        }
+
+        return response()->json($createdPoints, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Request $request, $id)
     {
-        $point = Point::findOrFail($id);
+        $points = Point::where('zone_id', $id);
 
-        return response()->json($point);
-    }
+        if ($points->count() === 0) {
+            return response()->json([
+                'message' => 'No se encontraron puntos para eliminar en esta zona.',
+            ], 404);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        // Not needed for API
-    }
+        $points->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $point = Point::findOrFail($id);
-        $point->update($request->all());
-
-        return response()->json($point);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        Point::destroy($id);
-
-        return response()->json(null, 204);
+        return response()->json([
+            'message' => 'Todos los puntos de la zona han sido eliminados correctamente.',
+        ], 200);
     }
 }

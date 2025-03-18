@@ -13,7 +13,7 @@ import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrap
 import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 import { selectContract } from '@/store/slice/contractSlice';
-import { Contract } from '@/types/Contract';
+import type { Contract } from '@/types/Contract';
 import logo from '@images/logo.png';
 import { useDispatch } from 'react-redux';
 
@@ -22,12 +22,14 @@ interface AdminLayoutProps {
   children: React.ReactNode;
   contracts: Contract[];
   currentContract?: Contract;
+  padding?: string;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
   children,
   contracts,
   currentContract,
+  padding = 'max-w-7xl mx-auto pt-8 pb-16 px-8',
 }) => {
   const { t } = useI18n();
   const { user, logout } = useAuth();
@@ -366,7 +368,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       )}
 
-      <main className="max-w-7xl mx-auto pt-8 pb-16 px-8" key={refreshKey}>
+      <main className={padding} key={refreshKey}>
         {children}
       </main>
     </div>
