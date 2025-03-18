@@ -473,6 +473,9 @@
             "name_required": "Name is required",
             "latitude_required": "Latitude is required",
             "longitude_required": "Longitude is required"
+          },
+          "submittingText": {
+            "edit": "Saving..."
           }
         }
       }

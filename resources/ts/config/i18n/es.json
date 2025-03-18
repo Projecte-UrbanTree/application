@@ -469,6 +469,9 @@
             "name_required": "El nombre es obligatorio",
             "latitude_required": "La latitud es obligatoria",
             "longitude_required": "La longitud es obligatoria"
+          },
+          "submittingText": {
+            "edit": "Guardando..."
           }
         }
       }

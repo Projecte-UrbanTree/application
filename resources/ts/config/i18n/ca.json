@@ -418,6 +418,9 @@
             "name_required": "El nom és obligatori",
             "latitude_required": "La latitud és obligatòria",
             "longitude_required": "La longitud és obligatòria"
+          },
+          "submittingText": {
+            "edit": "Guardant..."
           }
         }
       }
