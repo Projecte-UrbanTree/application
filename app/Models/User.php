@@ -25,6 +25,7 @@ class User extends Authenticatable
         'dni',
         'role',
         'password',
+        'contract_id',
     ];
 
     /**
@@ -53,5 +54,10 @@ class User extends Authenticatable
     public function workOrderUsers()
     {
         return $this->hasMany(WorkOrderUser::class, 'user_id');
+    }
+
+    public function contract()
+    {
+        return $this->belongsTo(Contract::class, 'contract_id');
     }
 }

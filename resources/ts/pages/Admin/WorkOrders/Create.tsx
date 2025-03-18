@@ -30,7 +30,7 @@ const CreateWorkOrder = () => {
   const currentContract = useSelector((state: RootState) => state.contract.currentContract)
 
   useEffect(() => {
-    axiosClient.get("/admin/work-orders/create")
+    axiosClient.get(`/admin/work-orders/create${currentContract ? `?contract_id=${currentContract.id}` : ''}`)
       .then(response => {
         setUsers(response.data.users)
         setZones(response.data.zones)
@@ -40,7 +40,7 @@ const CreateWorkOrder = () => {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [])
+  }, [currentContract])
 
   const initialValues = {
     date: null,

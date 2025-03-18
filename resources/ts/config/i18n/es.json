@@ -4,17 +4,20 @@
       "createNew": "Crear nuevo"
     },
     "fields": {
-      "company": "Empresa",
+      "company": "Efmpresa",
       "description": "Descripción",
       "dni": "DNI",
       "email": "Correo",
-      "end_date": "Fecha de fin",
+      "end_date": "Fecha de finalización",
       "family": "Familia",
       "final_price": "Precio final",
       "genus": "Género",
       "name": "Nombre",
       "password": "Contraseña",
-      "resource_type": "Resource Type",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "resource_type": "Tipo de Recurso",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipo de recurso",
       "species": "Especie",
@@ -46,10 +49,10 @@
             "edit": "Editar Contrato"
           },
           "validation": {
-            "end_date_after_start_date": "La fecha de fin debe ser posterior a la fecha de inicio",
-            "end_date_required": "La fecha de fin es obligatoria",
+            "end_date_after_start_date": "La fecha de finalización debe ser posterior a la fecha de inicio",
+            "end_date_required": "La fecha de finalización es obligatoria",
             "final_price_required": "El precio final es obligatorio",
-            "name_invalid": "El nombre no es válido",
+            "name_invalid": "Nombre no válido",
             "name_required": "El nombre es obligatorio",
             "start_date_required": "La fecha de inicio es obligatoria",
             "status_invalid": "Estado no válido",
@@ -63,18 +66,18 @@
             "label": "Acciones"
           },
           "columns": {
-            "end_date": "Fecha de fin",
+            "end_date": "Fecha de finalización",
             "final_price": "Precio final",
             "name": "Contrato",
             "start_date": "Fecha de inicio",
             "status": "Estado"
           },
           "messages": {
-            "createSuccess": "Contrato creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este contrato?",
-            "deleteSuccess": "Contrato eliminado exitosamente",
+            "createSuccess": "Contrato creado correctamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar este contrato?",
+            "deleteSuccess": "Contrato eliminado correctamente",
             "error": "Error guardando el contrato",
-            "updateSuccess": "Contrato actualizado exitosamente"
+            "updateSuccess": "Contrato actualizado correctamente"
           }
         },
         "title": "Contratos"
@@ -88,10 +91,10 @@
             "workOrders": "Órdenes de trabajo"
           }
         },
-        "title": "Tablero",
+        "title": "Panel",
         "welcome": {
           "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
-          "message": "Te damos la bienvenida a tu tablero. Aquí tienes un resumen rápido de tus datos."
+          "message": "Te damos la bienvenida a tu panel. Aquí tienes un resumen rápido de tus datos."
         }
       },
       "elementTypes": {
@@ -100,10 +103,10 @@
         "actions": "Acciones",
         "editButton": "Editar tipo de elemento",
         "deleteButton": "Eliminar tipo de elemento",
-        "deletedSuccess": "Tipo de elemento eliminado exitosamente",
-        "deleteConfirm": "¿Estás seguro de eliminar este tipo de elemento?",
-        "success": "Tipo de elemento creado exitosamente",
-        "update": "Tipo de elemento actualizado exitosamente",
+        "deletedSuccess": "Tipo de elemento eliminado correctamente",
+        "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de elemento?",
+        "success": "Tipo de elemento creado correctamente",
+        "update": "Tipo de elemento actualizado correctamente",
         "error": "Error guardando el tipo de elemento",
         "true": "Sí",
         "false": "No",
@@ -114,7 +117,7 @@
           "validations": {
             "name": "El nombre es obligatorio",
             "requires_tree_type": "Requiere tipo de árbol",
-            "icon": "El ícono es obligatorio",
+            "icon": "El icono es obligatorio",
             "color": "El color es obligatorio",
             "description": "La descripción es obligatoria"
           },
@@ -122,7 +125,7 @@
             "name": "Nombre del tipo de elemento",
             "requires_tree_type": "Selecciona si requiere tipo de árbol",
             "description": "Descripción del tipo de elemento",
-            "icon": "Selecciona un ícono",
+            "icon": "Selecciona un icono",
             "color": "Selecciona un color"
           }
         },
@@ -133,16 +136,23 @@
           "validations": {
             "name": "El nombre es obligatorio",
             "requires_tree_type": "Requiere tipo de árbol",
-            "icon": "El ícono es obligatorio",
+            "icon": "El icono es obligatorio",
             "color": "El color es obligatorio",
             "description": "La descripción es obligatoria"
+          },
+          "placeholders": {
+            "name": "Nombre del tipo de elemento",
+            "requires_tree_type": "Selecciona si requiere tipo de árbol",
+            "description": "Descripción del tipo de elemento",
+            "icon": "Selecciona un icono",
+            "color": "Selecciona un color"
           }
         },
         "columns": {
-          "name": "Nombre",
+          "name": "Tipo de elemento",
           "requires_tree_type": "Requiere tipo de árbol",
           "description": "Descripción",
-          "icon": "Ícono",
+          "icon": "Icono",
           "color": "Color"
         },
         "icons": {
@@ -161,6 +171,19 @@
           "lightning-bolt": "Rayo",
           "grass": "Césped",
           "cloud": "Nube"
+        }
+      },
+      "evas": {
+        "title": "Evas",
+        "age": {
+          "years": "Años",
+          "months": "Meses"
+        },
+        "columns": {
+          "element_id": "ID del elemento",
+          "age": "Edad",
+          "height": "Altura",
+          "actions": "Acciones"
         }
       },
       "resources": {
@@ -228,7 +251,7 @@
           },
           "returnButton": "Volver a la lista de tipos de recurso",
           "submitButton": {
-            "create": "Crear Tipo de recurso",
+            "create": "Crear Tipo de Recurso",
             "edit": "Guardar cambios"
           },
           "submittingText": {
@@ -236,8 +259,8 @@
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Tipo de recurso",
-            "edit": "Editar Tipo de recurso"
+            "create": "Crear Tipo de Recurso",
+            "edit": "Editar Tipo de Recurso"
           },
           "validation": {
             "description_required": "La descripción es obligatoria",
@@ -256,11 +279,11 @@
             "name": "Nombre"
           },
           "messages": {
-            "createSuccess": "Tipo de recurso creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este tipo de recurso?",
-            "deleteSuccess": "Tipo de recurso eliminado exitosamente",
+            "createSuccess": "Tipo de recurso creado correctamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de recurso?",
+            "deleteSuccess": "Tipo de recurso eliminado correctamente",
             "error": "Error guardando el tipo de recurso",
-            "updateSuccess": "Tipo de recurso actualizado exitosamente"
+            "updateSuccess": "Tipo de recurso actualizado correctamente"
           }
         },
         "title": "Tipos de recurso"
@@ -298,11 +321,11 @@
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Tipo de tarea",
-            "edit": "Editar Tipo de tarea"
+            "create": "Crear Tipo de Tarea",
+            "edit": "Editar Tipo de Tarea"
           },
           "validation": {
-            "error_numbers": "El nombre no puede contener números o caracteres especiales",
+            "error_numbers": "El nombre no puede contener números ni caracteres especiales",
             "name_required": "El nombre es obligatorio"
           }
         },
@@ -317,11 +340,11 @@
             "name": "Nombre"
           },
           "messages": {
-            "createSuccess": "Tipo de tarea creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este tipo de tarea?",
-            "deleteSuccess": "Tipo de tarea eliminado exitosamente",
+            "createSuccess": "Tipo de tarea creado correctamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de tarea?",
+            "deleteSuccess": "Tipo de tarea eliminado correctamente",
             "error": "Error guardando el tipo de tarea",
-            "updateSuccess": "Tipo de tarea actualizado exitosamente"
+            "updateSuccess": "Tipo de tarea actualizado correctamente"
           },
           "title": "Tipos de tarea"
         },
@@ -364,11 +387,11 @@
             "species": "Especie"
           },
           "messages": {
-            "createSuccess": "Tipo de árbol creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este tipo de árbol?",
-            "deletedSuccess": "Tipo de árbol eliminado exitosamente",
+            "createSuccess": "Tipo de árbol creado correctamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de árbol?",
+            "deletedSuccess": "Tipo de árbol eliminado correctamente",
             "error": "Error guardando el tipo de árbol",
-            "updateSuccess": "Tipo de árbol actualizado exitosamente"
+            "updateSuccess": "Tipo de árbol actualizado correctamente"
           },
           "title": "Tipos de árbol"
         },
@@ -422,11 +445,11 @@
             "surname": "Apellido"
           },
           "messages": {
-            "createSuccess": "Usuario creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de eliminar este usuario?",
-            "deleteSuccess": "Usuario eliminado exitosamente",
+            "createSuccess": "Usuario creado correctamente",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar este usuario?",
+            "deleteSuccess": "Usuario eliminado correctamente",
             "error": "Error guardando el usuario",
-            "updateSuccess": "Usuario actualizado exitosamente"
+            "updateSuccess": "Usuario actualizado correctamente"
           }
         },
         "title": "Usuarios"
@@ -539,6 +562,30 @@
           "unknown": "Desconocido"
         },
         "title": "Órdenes de trabajo"
+      },
+      "account": {
+        "title": "Configuración de la Cuenta",
+        "basicInfo": "Información Básica",
+        "security": "Seguridad",
+        "actions": {
+          "save": "Guardar cambios",
+          "saving": "Guardando..."
+        },
+        "validation": {
+          "name_invalid": "El nombre no puede contener símbolos.",
+          "name_required": "El nombre es obligatorio",
+          "surname_invalid": "El apellido no puede contener símbolos.",
+          "surname_required": "El apellido es obligatorio",
+          "currentPasswordRequired": "Debe ingresar la contraseña actual",
+          "newPasswordMinLength": "La contraseña debe tener al menos 6 caracteres",
+          "newPasswordMismatch": "Las contraseñas no coinciden",
+          "newPasswordComplexity": "La nueva contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número"
+        },
+        "messages": {
+          "profileUpdated": "Perfil actualizado correctamente",
+          "errorSaving": "Error al guardar los cambios.",
+          "passwordCurrentWrong": "La contraseña actual no coincide"
+        }
       }
     },
     "profileDropdown": {
@@ -559,8 +606,9 @@
     },
     "submenu": {
       "manage": {
-        "dashboard": "Tablero",
+        "dashboard": "Panel",
         "inventory": "Inventario",
+        "eva": "EVA",
         "resources": "Recursos",
         "stats": "Estadísticas",
         "workers": "Trabajadores",
@@ -582,15 +630,17 @@
   },
   "general": {
     "allContracts": "Todos los contratos",
-    "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde.",
-    "loading": "Cargando..."
+    "genericError": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
   },
   "public": {
     "error": {
       "btnReturn": "Volver atrás",
       "descriptions": {
         "404": "La página que buscas no existe.",
-        "unexpected": "Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."
+        "unexpected": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde."
       },
       "title": "Error {{errorCode}}"
     },

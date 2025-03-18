@@ -14,6 +14,9 @@
       "genus": "crwdns2819:0crwdne2819:0",
       "name": "crwdns2821:0crwdne2821:0",
       "password": "crwdns2823:0crwdne2823:0",
+      "currentPassword": "crwdns3723:0crwdne3723:0",
+      "newPassword": "crwdns3725:0crwdne3725:0",
+      "confirmPassword": "crwdns3727:0crwdne3727:0",
       "resource_type": "crwdns3597:0crwdne3597:0",
       "role": "crwdns2825:0crwdne2825:0",
       "select_resource_type": "crwdns3599:0crwdne3599:0",
@@ -95,14 +98,80 @@
         }
       },
       "elementTypes": {
+        "title": "crwdns2923:0crwdne2923:0",
+        "loading": "crwdns3613:0crwdne3613:0",
+        "actions": "crwdns3615:0crwdne3615:0",
+        "editButton": "crwdns3617:0crwdne3617:0",
+        "deleteButton": "crwdns3619:0crwdne3619:0",
+        "deletedSuccess": "crwdns3621:0crwdne3621:0",
+        "deleteConfirm": "crwdns3623:0crwdne3623:0",
+        "success": "crwdns3625:0crwdne3625:0",
+        "update": "crwdns3627:0crwdne3627:0",
+        "error": "crwdns3629:0crwdne3629:0",
+        "true": "crwdns3631:0crwdne3631:0",
+        "false": "crwdns3633:0crwdne3633:0",
+        "create": {
+          "title": "crwdns3635:0crwdne3635:0",
+          "submittingText": "crwdns3637:0crwdne3637:0",
+          "submitButton": "crwdns3639:0crwdne3639:0",
+          "validations": {
+            "name": "crwdns3641:0crwdne3641:0",
+            "requires_tree_type": "crwdns3643:0crwdne3643:0",
+            "icon": "crwdns3645:0crwdne3645:0",
+            "color": "crwdns3647:0crwdne3647:0",
+            "description": "crwdns3649:0crwdne3649:0"
+          },
+          "placeholders": {
+            "name": "crwdns3651:0crwdne3651:0",
+            "requires_tree_type": "crwdns3653:0crwdne3653:0",
+            "description": "crwdns3655:0crwdne3655:0",
+            "icon": "crwdns3657:0crwdne3657:0",
+            "color": "crwdns3659:0crwdne3659:0"
+          }
+        },
+        "edit": {
+          "title": "crwdns3661:0crwdne3661:0",
+          "submittingText": "crwdns3663:0crwdne3663:0",
+          "submitButton": "crwdns3665:0crwdne3665:0",
+          "validations": {
+            "name": "crwdns3667:0crwdne3667:0",
+            "requires_tree_type": "crwdns3669:0crwdne3669:0",
+            "icon": "crwdns3671:0crwdne3671:0",
+            "color": "crwdns3673:0crwdne3673:0",
+            "description": "crwdns3675:0crwdne3675:0"
+          },
+          "placeholders": {
+            "name": "crwdns3677:0crwdne3677:0",
+            "requires_tree_type": "crwdns3679:0crwdne3679:0",
+            "description": "crwdns3681:0crwdne3681:0",
+            "icon": "crwdns3683:0crwdne3683:0",
+            "color": "crwdns3685:0crwdne3685:0"
+          }
+        },
         "columns": {
-          "color": "crwdns2913:0crwdne2913:0",
+          "name": "crwdns3687:0crwdne3687:0",
+          "requires_tree_type": "crwdns3689:0crwdne3689:0",
           "description": "crwdns2915:0crwdne2915:0",
           "icon": "crwdns2917:0crwdne2917:0",
-          "name": "crwdns2919:0crwdne2919:0",
-          "requires_tree_type": "crwdns2921:0crwdne2921:0"
+          "color": "crwdns2913:0crwdne2913:0"
         },
-        "title": "crwdns2923:0crwdne2923:0"
+        "icons": {
+          "tree": "crwdns3691:0crwdne3691:0",
+          "home": "crwdns3693:0crwdne3693:0",
+          "post-lamp": "crwdns3695:0crwdne3695:0",
+          "park": "crwdns3697:0crwdne3697:0",
+          "fountain": "crwdns3699:0crwdne3699:0",
+          "flower": "crwdns3701:0crwdne3701:0",
+          "mountain": "crwdns3703:0crwdne3703:0",
+          "beach": "crwdns3705:0crwdne3705:0",
+          "volcano": "crwdns3707:0crwdne3707:0",
+          "tap": "crwdns3709:0crwdne3709:0",
+          "water-drop": "crwdns3711:0crwdne3711:0",
+          "lightbulb": "crwdns3713:0crwdne3713:0",
+          "lightning-bolt": "crwdns3715:0crwdne3715:0",
+          "grass": "crwdns3717:0crwdne3717:0",
+          "cloud": "crwdns3719:0crwdne3719:0"
+        }
       },
       "resources": {
         "form": {
@@ -232,7 +301,7 @@
           "returnButton": "crwdns3037:0crwdne3037:0",
           "submitButton": {
             "create": "crwdns3039:0crwdne3039:0",
-            "edit": "crwdns3041:0crwdne3041:0"
+            "edit": "crwdns3721:0crwdne3721:0"
           },
           "submittingText": {
             "create": "crwdns3043:0crwdne3043:0",
@@ -480,6 +549,30 @@
           "unknown": "crwdns3309:0crwdne3309:0"
         },
         "title": "crwdns3205:0crwdne3205:0"
+      },
+      "account": {
+        "title": "crwdns3729:0crwdne3729:0",
+        "basicInfo": "crwdns3731:0crwdne3731:0",
+        "security": "crwdns3733:0crwdne3733:0",
+        "actions": {
+          "save": "crwdns3735:0crwdne3735:0",
+          "saving": "crwdns3737:0crwdne3737:0"
+        },
+        "validation": {
+          "name_invalid": "crwdns3739:0crwdne3739:0",
+          "name_required": "crwdns3741:0crwdne3741:0",
+          "surname_invalid": "crwdns3743:0crwdne3743:0",
+          "surname_required": "crwdns3745:0crwdne3745:0",
+          "currentPasswordRequired": "crwdns3747:0crwdne3747:0",
+          "newPasswordMinLength": "crwdns3749:0crwdne3749:0",
+          "newPasswordMismatch": "crwdns3751:0crwdne3751:0",
+          "newPasswordComplexity": "crwdns3753:0crwdne3753:0"
+        },
+        "messages": {
+          "profileUpdated": "crwdns3755:0crwdne3755:0",
+          "errorSaving": "crwdns3757:0crwdne3757:0",
+          "passwordCurrentWrong": "crwdns3759:0crwdne3759:0"
+        }
       }
     },
     "profileDropdown": {
@@ -524,7 +617,9 @@
   "general": {
     "allContracts": "crwdns3251:0crwdne3251:0",
     "genericError": "crwdns3253:0crwdne3253:0",
-    "loading": "crwdns3255:0crwdne3255:0"
+    "loading": "crwdns3255:0crwdne3255:0",
+    "error": "crwdns3761:0crwdne3761:0",
+    "success": "crwdns3763:0crwdne3763:0"
   },
   "public": {
     "error": {
