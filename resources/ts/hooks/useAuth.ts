@@ -19,7 +19,7 @@ export function useAuth() {
         } else {
             setIsLoading(false);
         }
-    }, [user.id]);
+    }, []);
 
     const fetchUser = async (navigate?: (path: string) => void) => {
         try {
