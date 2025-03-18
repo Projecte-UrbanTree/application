@@ -86,6 +86,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         '/admin/workers',
         '/admin/resources',
         '/admin/stats',
+        '/admin/sensors', // Asegúrate de incluir esta ruta
     ].some((path) => location.pathname.startsWith(path));
 
     const isSettingsPage = location.pathname.includes('/admin/settings');
@@ -120,6 +121,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             to: '/admin/stats',
             label: t('admin.submenu.manage.stats'),
             icon: 'tabler:chart-pie-4',
+        },
+
+        {
+            to: '/admin/sensors',
+            label: t('admin.submenu.manage.sensors'),
+            icon: 'tabler:device-analytics',
         },
     ];
     const settingsSubmenuItems = [
@@ -328,7 +335,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                                 {item.label}
                             </Link>
                         ))}
-                    {location.pathname.includes('/admin/settings') &&
+                    {isSettingsPage &&
                         settingsSubmenuItems.map((item) => (
                             <Link
                                 key={item.to}

@@ -32,7 +32,8 @@
         "inventory": "Inventory",
         "workers": "Workers",
         "resources": "Resources",
-        "stats": "Statistics"
+        "stats": "Statistics",
+        "sensors": "Sensors"
       },
       "settings": {
         "contracts": "Contracts",
@@ -71,7 +72,12 @@
       "status": "Status",
       "final_price": "Final Price",
       "start_date": "Start Date",
-      "end_date": "End Date"
+      "end_date": "End Date",
+      "id": "ID",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "device_eui": "Device EUI",
+      "contract_id": "Contract ID"
     },
     "status": {
       "active": "Active",
@@ -427,6 +433,48 @@
       },
       "stats": {
         "title": "Statistics"
+      },
+      "sensors": {
+        "title": "Sensors",
+        "list": {
+          "columns": {
+            "id": "ID",
+            "name": "Name",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "deviceEui": "EUI",
+            "status": "Status"
+          },
+          "actions": {
+            "edit": "Edit Sensor",
+            "delete": "Delete Sensor",
+            "view": "View",
+            "label": "Actions"
+          },
+          "messages": {
+            "deleteSuccess": "Sensor deleted successfully",
+            "deleteConfirm": "Are you sure you want to delete this sensor?",
+            "createSuccess": "Sensor created successfully",
+            "updateSuccess": "Sensor updated successfully",
+            "error": "Error saving sensor"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Create Sensor",
+            "edit": "Edit Sensor"
+          },
+          "submitButton": {
+            "create": "Create Sensor",
+            "edit": "Save Changes"
+          },
+          "validation": {
+            "id_required": "ID is required",
+            "name_required": "Name is required",
+            "latitude_required": "Latitude is required",
+            "longitude_required": "Longitude is required"
+          }
+        }
       }
     }
   },

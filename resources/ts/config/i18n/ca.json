@@ -32,7 +32,8 @@
         "inventory": "Inventari",
         "workers": "Treballadors",
         "resources": "Recursos",
-        "stats": "Estadístiques"
+        "stats": "Estadístiques",
+        "sensors": "Sensors"
       },
       "settings": {
         "contracts": "Contractes",
@@ -71,7 +72,12 @@
       "status": "Estat",
       "final_price": "Preu final",
       "start_date": "Data d'inici",
-      "end_date": "Data de finalització"
+      "end_date": "Data de finalització",
+      "id": "ID",
+      "latitude": "Latitud",
+      "longitude": "Longitud",
+      "device_eui": "EUI del dispositiu",
+      "contract_id": "ID del contracte"
     },
     "status": {
       "active": "Actiu",
@@ -372,6 +378,48 @@
       },
       "stats": {
         "title": "Estadístiques"
+      },
+      "sensors": {
+        "title": "Sensors",
+        "list": {
+          "columns": {
+            "id": "ID",
+            "name": "Nom",
+            "latitude": "Latitud",
+            "longitude": "Longitud",
+            "deviceEui": "EUI",
+            "status": "Estat"
+          },
+          "actions": {
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor",
+            "view": "Veure",
+            "label": "Accions"
+          },
+          "messages": {
+            "deleteSuccess": "Sensor eliminat correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest sensor?",
+            "createSuccess": "Sensor creat correctament",
+            "updateSuccess": "Sensor actualitzat correctament",
+            "error": "Error guardant el sensor"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor"
+          },
+          "submitButton": {
+            "create": "Crear Sensor",
+            "edit": "Guardar Canvis"
+          },
+          "validation": {
+            "id_required": "L'ID és obligatori",
+            "name_required": "El nom és obligatori",
+            "latitude_required": "La latitud és obligatòria",
+            "longitude_required": "La longitud és obligatòria"
+          }
+        }
       }
     }
   },

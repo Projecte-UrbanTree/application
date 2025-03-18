@@ -32,7 +32,8 @@
         "inventory": "Inventario",
         "workers": "Trabajadores",
         "resources": "Recursos",
-        "stats": "Estadísticas"
+        "stats": "Estadísticas",
+        "sensors": "Sensores"
       },
       "settings": {
         "contracts": "Contratos",
@@ -71,7 +72,12 @@
       "status": "Estado",
       "final_price": "Precio final",
       "start_date": "Fecha de inicio",
-      "end_date": "Fecha de fin"
+      "end_date": "Fecha de fin",
+      "id": "ID",
+      "latitude": "Latitud",
+      "longitude": "Longitud",
+      "device_eui": "EUI del dispositivo",
+      "contract_id": "ID del contrato"
     },
     "status": {
       "active": "Activo",
@@ -421,6 +427,48 @@
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
+          }
+        }
+      },
+      "sensors": {
+        "title": "Sensores",
+        "list": {
+          "columns": {
+            "id": "ID",
+            "name": "Nombre",
+            "latitude": "Latitud",
+            "longitude": "Longitud",
+            "deviceEui": "EUI",
+            "status": "Estado"
+          },
+          "actions": {
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor",
+            "view": "Ver",
+            "label": "Acciones"
+          },
+          "messages": {
+            "deleteSuccess": "Sensor eliminado correctamente",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este sensor?",
+            "createSuccess": "Sensor creado correctamente",
+            "updateSuccess": "Sensor actualizado correctamente",
+            "error": "Error guardando el sensor"
+          }
+        },
+        "form": {
+          "title": {
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor"
+          },
+          "submitButton": {
+            "create": "Crear Sensor",
+            "edit": "Guardar Cambios"
+          },
+          "validation": {
+            "id_required": "El ID es obligatorio",
+            "name_required": "El nombre es obligatorio",
+            "latitude_required": "La latitud es obligatoria",
+            "longitude_required": "La longitud es obligatoria"
           }
         }
       }

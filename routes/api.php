@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -78,5 +79,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('task-types/{id}', [TaskTypeController::class, 'show']);
         Route::put('task-types/{id}', [TaskTypeController::class, 'update']);
         Route::delete('task-types/{id}', [TaskTypeController::class, 'destroy']);
+
+        // Routes for Sensors
+        Route::get('sensor', [SensorController::class, 'index']);
+        Route::post('sensor', [SensorController::class, 'store']);
+        Route::get('sensor/{id}', [SensorController::class, 'show']); // Ruta per obtenir un sensor per ID
+        Route::put('sensor/{id}', [SensorController::class, 'update']); 
+        Route::delete('sensor/{id}', [SensorController::class, 'destroy']); 
+
     });
 });

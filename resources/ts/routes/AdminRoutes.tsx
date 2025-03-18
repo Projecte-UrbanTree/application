@@ -24,6 +24,9 @@ import AdminResourceTypes from '@/pages/Admin/Settings/Resource Types/ResourceTy
 import EditResourceType from '@/pages/Admin/Settings/Resource Types/Edit';
 import CreateResourceType from '@/pages/Admin/Settings/Resource Types/Create';
 import AdminStats from '@/pages/Admin/Stats';
+import AdminSensors from '@/pages/Admin/Settings/Sensors/Sensors';
+import CreateSensor from '@/pages/Admin/Settings/Sensors/Create';
+import EditSensor from '@/pages/Admin/Settings/Sensors/Edit';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -83,6 +86,30 @@ const AdminRoutes: RouteObject[] = [
                         element: (
                             <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
                                 <AdminStats />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'sensors',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.sensors.title">
+                                <AdminSensors />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'sensors/create',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.sensors.create.title">
+                                <CreateSensor />
+                            </AdminLayoutWrapper>
+                        ),
+                    },
+                    {
+                        path: 'sensors/edit/:id',
+                        element: (
+                            <AdminLayoutWrapper titleI18n="admin.pages.sensors.edit.title">
+                                <EditSensor />
                             </AdminLayoutWrapper>
                         ),
                     },
@@ -239,6 +266,7 @@ const AdminRoutes: RouteObject[] = [
                                     </AdminLayoutWrapper>
                                 ),
                             },
+                            
                         ],
                     },
                 ],
