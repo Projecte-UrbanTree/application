@@ -11,7 +11,7 @@ class SensorController extends Controller
     public function index()
     {
         $sensors = Sensor::select('id', 'device_eui', 'name', 'latitude', 'longitude', 'contract_id')->get(); 
-        \Log::info('Sensors fetched:', $sensors->toArray()); // Agrega este log para depurar
+        \Log::info('Sensors fetched:', $sensors->toArray());
         return response()->json($sensors, 200); 
     }
     
@@ -32,8 +32,8 @@ class SensorController extends Controller
 
     public function show($id)
     {
-        $sensor = Sensor::findOrFail($id); // Retorna un error 404 si no troba el sensor
-        return response()->json($sensor, 200); // Retorna les dades del sensor
+        $sensor = Sensor::findOrFail($id); 
+        return response()->json($sensor, 200);
     }
 
     public function update(Request $request, $id)
