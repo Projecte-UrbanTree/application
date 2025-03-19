@@ -1,12 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
-import { fetchElementType } from '@/api/service/elementTypeService';
 import { ElementType } from '@/types/ElementType';
-import { fetchTreeTypes } from '@/api/service/treeTypesService';
 import { TreeTypes } from '@/types/TreeTypes';
-import { deleteElement } from '@/api/service/elementService';
 import { Toast } from 'primereact/toast';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
