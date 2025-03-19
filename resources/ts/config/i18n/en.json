@@ -576,17 +576,17 @@
             "updateSuccess": "Sensor updated successfully"
           }
         },
+        "stats": {
+          "week": "This Week",
+          "month": "This Month",
+          "custom": "Custom",
+          "startDate": "Start Date",
+          "endDate": "End Date"
+        },
         "title": "Sensors"
       },
       "stats": {
         "custom": "Custom",
-        "endDate": "End Date",
-        "fuelConsumption": "Fuel Consumption",
-        "hoursWorked": "Hours Worked",
-        "month": "This Month",
-        "noData": "No data to display",
-        "startDate": "Start Date",
-        "tasksDone": "Tasks Done",
         "tasksNotDone": "Pending Tasks",
         "title": "Statistics",
         "week": "This Week"

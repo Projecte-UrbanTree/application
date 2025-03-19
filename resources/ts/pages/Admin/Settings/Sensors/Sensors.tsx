@@ -8,6 +8,7 @@ import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Dialog } from 'primereact/dialog';
 import { Chart } from 'primereact/chart'; // Importa el componente de gráficos de PrimeReact
+import { Calendar } from 'primereact/calendar'; // Importa el componente de calendario para el rango personalizado
 
 import { Icon } from '@iconify/react';
 
@@ -40,6 +41,13 @@ export default function Sensors() {
     labels: string[];
     datasets: any[];
   } | null>(null);
+  const [selectedRange, setSelectedRange] = useState<
+    'week' | 'month' | 'custom'
+  >('week');
+  const [customRange, setCustomRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
 
   const fetchSensors = async () => {
     try {
@@ -153,6 +161,15 @@ export default function Sensors() {
   const closeDialog = () => {
     setIsDialogVisible(false);
     setSelectedSensor(null);
+  };
+
+  const handleRangeChange = (range: 'week' | 'month' | 'custom') => {
+    setSelectedRange(range);
+    if (range !== 'custom') {
+      setCustomRange([null, null]); // Resetea el rango personalizado si no es "custom"
+    }
+    // Aquí puedes actualizar los datos de las gráficas según el rango seleccionado
+    console.log(`Rango seleccionado: ${range}`);
   };
 
   if (isLoading) {
@@ -274,6 +291,51 @@ export default function Sensors() {
         <div className="p-6 bg-gray-50">
           {selectedSensor && (
             <>
+              <div className="flex justify-center gap-4 mb-6">
+                <Button
+                  label={t('admin.pages.sensors.stats.week')}
+                  className={
+                    selectedRange === 'week'
+                      ? 'p-button-primary'
+                      : 'p-button-outlined'
+                  }
+                  onClick={() => handleRangeChange('week')}
+                />
+                <Button
+                  label={t('admin.pages.sensors.stats.month')}
+                  className={
+                    selectedRange === 'month'
+                      ? 'p-button-primary'
+                      : 'p-button-outlined'
+                  }
+                  onClick={() => handleRangeChange('month')}
+                />
+                <Button
+                  label={t('admin.pages.sensors.stats.custom')}
+                  className={
+                    selectedRange === 'custom'
+                      ? 'p-button-primary'
+                      : 'p-button-outlined'
+                  }
+                  onClick={() => handleRangeChange('custom')}
+                />
+              </div>
+              {selectedRange === 'custom' && (
+                <div className="flex justify-center gap-4 mb-6">
+                  <Calendar
+                    value={customRange[0]}
+                    onChange={(e) => setCustomRange([e.value, customRange[1]])}
+                    placeholder={t('admin.pages.sensors.stats.startDate')}
+                    showIcon
+                  />
+                  <Calendar
+                    value={customRange[1]}
+                    onChange={(e) => setCustomRange([customRange[0], e.value])}
+                    placeholder={t('admin.pages.sensors.stats.startDate')}
+                    showIcon
+                  />
+                </div>
+              )}
               {chartData && (
                 <div className="mt-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
