@@ -44,9 +44,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     currentContract ?? defaultContract,
   );
 
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  // Asegurarnos de que el valor del Dropdown sea un número válido
   const dropdownValue = contract?.id ?? 0;
 
   useEffect(() => {
@@ -67,7 +64,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
           dispatch(selectContract(selectedContract.id!));
           setContract(selectedContract);
-          setRefreshKey((prev) => prev + 1); // Force children re-render
         } catch (error: any) {
           console.error(
             'Error saving selected contract:',
@@ -368,7 +364,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       )}
 
-      <main className={padding} key={refreshKey}>
+      <main className={padding}>
         {children}
       </main>
     </div>
