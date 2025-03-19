@@ -329,7 +329,7 @@ export default function EditEva() {
             {({ isSubmitting }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Sección: Identificación */}
-                <div className="md:col-span-2">
+                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
                   <h1 className="text-xl font-bold mb-4">
                     {t('admin.pages.evas.edit.identification')}
                   </h1>
@@ -347,178 +347,182 @@ export default function EditEva() {
                     max={11}
                   />
                 </div>
-
                 {/* Sección: Condición del árbol */}
                 <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mb-4">
-                    {t('admin.pages.evas.edit.treeCondition')}
-                  </h1>
+                  <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50 mb-6">
+                    <h1 className="text-xl font-bold mb-4">
+                      {t('admin.pages.evas.edit.treeCondition')}
+                    </h1>
 
-                  {/* Subsección: Dimensiones */}
-                  <h2 className="text-lg font-semibold mb-2">
-                    {t('admin.pages.evas.edit.dimensions')}
-                  </h2>
-                  <FormField
-                    name="height"
-                    label={`${t('admin.pages.evas.form.height')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="diameter"
-                    label={`${t('admin.pages.evas.form.diameter')} (cm)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="crown_width"
-                    label={`${t('admin.pages.evas.form.crown_width')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="crown_projection_area"
-                    label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="root_surface_diameter"
-                    label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="effective_root_area"
-                    label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="height_estimation"
-                    label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
-                    as={InputNumber}
-                  />
+                    {/* Subsección: Dimensiones */}
+                    <h2 className="text-lg font-semibold mb-2">
+                      {t('admin.pages.evas.edit.dimensions')}
+                    </h2>
+                    <FormField
+                      name="height"
+                      label={`${t('admin.pages.evas.form.height')} (m)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="diameter"
+                      label={`${t('admin.pages.evas.form.diameter')} (cm)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="crown_width"
+                      label={`${t('admin.pages.evas.form.crown_width')} (m)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="crown_projection_area"
+                      label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="root_surface_diameter"
+                      label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="effective_root_area"
+                      label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="height_estimation"
+                      label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
+                      as={InputNumber}
+                    />
+                  </div>
 
-                  {/* Subsección: Estado */}
-                  <h2 className="text-lg font-semibold mt-4 mb-2">
-                    {t('admin.pages.evas.edit.state')}
-                  </h2>
+                  <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50 mb-6">
+                    {/* Subsección: Estado */}
+                    <h2 className="text-lg font-semibold mb-2">
+                      {t('admin.pages.evas.edit.state')}
+                    </h2>
 
-                  {/* Subsubsección: Copa y Ramas */}
-                  <h3 className="text-md font-medium mb-2">
-                    {t('admin.pages.evas.edit.crownBranches')}
-                  </h3>
-                  <FormField
-                    name="unbalanced_crown"
-                    label={t('admin.pages.evas.form.unbalanced_crown')}
-                    as={Dropdown}
-                    options={dictionaries.copaDesequilibrada}
-                  />
-                  <FormField
-                    name="overextended_branches"
-                    label={t('admin.pages.evas.form.overextended_branches')}
-                    as={Dropdown}
-                    options={dictionaries.ramasSobreextendidas}
-                  />
-                  <FormField
-                    name="cracks"
-                    label={t('admin.pages.evas.form.cracks')}
-                    as={Dropdown}
-                    options={dictionaries.grietas}
-                  />
-                  <FormField
-                    name="dead_branches"
-                    label={t('admin.pages.evas.form.dead_branches')}
-                    as={Dropdown}
-                    options={dictionaries.ramasMuertas}
-                  />
+                    {/* Subsubsección: Copa y Ramas */}
+                    <h3 className="text-md font-medium mb-2">
+                      {t('admin.pages.evas.edit.crownBranches')}
+                    </h3>
+                    <FormField
+                      name="unbalanced_crown"
+                      label={t('admin.pages.evas.form.unbalanced_crown')}
+                      as={Dropdown}
+                      options={dictionaries.copaDesequilibrada}
+                    />
+                    <FormField
+                      name="overextended_branches"
+                      label={t('admin.pages.evas.form.overextended_branches')}
+                      as={Dropdown}
+                      options={dictionaries.ramasSobreextendidas}
+                    />
+                    <FormField
+                      name="cracks"
+                      label={t('admin.pages.evas.form.cracks')}
+                      as={Dropdown}
+                      options={dictionaries.grietas}
+                    />
+                    <FormField
+                      name="dead_branches"
+                      label={t('admin.pages.evas.form.dead_branches')}
+                      as={Dropdown}
+                      options={dictionaries.ramasMuertas}
+                    />
 
-                  {/* Subsubsección: Tronco */}
-                  <h3 className="text-md font-medium mt-4 mb-2">
-                    {t('admin.pages.evas.edit.trunk')}
-                  </h3>
-                  <FormField
-                    name="inclination"
-                    label={t('admin.pages.evas.form.inclination')}
-                    as={Dropdown}
-                    options={dictionaries.inclinacion}
-                  />
-                  <FormField
-                    name="V_forks"
-                    label={t('admin.pages.evas.form.V_forks')}
-                    as={Dropdown}
-                    options={dictionaries.bifurcacionesV}
-                  />
-                  <FormField
-                    name="cavities"
-                    label={t('admin.pages.evas.form.cavities')}
-                    as={Dropdown}
-                    options={dictionaries.cavidades}
-                  />
-                  <FormField
-                    name="bark_damage"
-                    label={t('admin.pages.evas.form.bark_damage')}
-                    as={Dropdown}
-                    options={dictionaries.danosCorteza}
-                  />
+                    {/* Subsubsección: Tronco */}
+                    <h3 className="text-md font-medium mt-4 mb-2">
+                      {t('admin.pages.evas.edit.trunk')}
+                    </h3>
+                    <FormField
+                      name="inclination"
+                      label={t('admin.pages.evas.form.inclination')}
+                      as={Dropdown}
+                      options={dictionaries.inclinacion}
+                    />
+                    <FormField
+                      name="V_forks"
+                      label={t('admin.pages.evas.form.V_forks')}
+                      as={Dropdown}
+                      options={dictionaries.bifurcacionesV}
+                    />
+                    <FormField
+                      name="cavities"
+                      label={t('admin.pages.evas.form.cavities')}
+                      as={Dropdown}
+                      options={dictionaries.cavidades}
+                    />
+                    <FormField
+                      name="bark_damage"
+                      label={t('admin.pages.evas.form.bark_damage')}
+                      as={Dropdown}
+                      options={dictionaries.danosCorteza}
+                    />
 
-                  {/* Subsubsección: Raíces */}
-                  <h3 className="text-md font-medium mt-4 mb-2">
-                    {t('admin.pages.evas.edit.roots')}
-                  </h3>
-                  <FormField
-                    name="soil_lifting"
-                    label={t('admin.pages.evas.form.soil_lifting')}
-                    as={Dropdown}
-                    options={dictionaries.levantamientoSuelo}
-                  />
-                  <FormField
-                    name="cut_damaged_roots"
-                    label={t('admin.pages.evas.form.cut_damaged_roots')}
-                    as={Dropdown}
-                    options={dictionaries.raicesCortadas}
-                  />
-                  <FormField
-                    name="basal_rot"
-                    label={t('admin.pages.evas.form.basal_rot')}
-                    as={Dropdown}
-                    options={dictionaries.podredumbreBasal}
-                  />
-                  <FormField
-                    name="exposed_surface_roots"
-                    label={t('admin.pages.evas.form.exposed_surface_roots')}
-                    as={Dropdown}
-                    options={dictionaries.raicesExpuestas}
-                  />
+                    {/* Subsubsección: Raíces */}
+                    <h3 className="text-md font-medium mt-4 mb-2">
+                      {t('admin.pages.evas.edit.roots')}
+                    </h3>
+                    <FormField
+                      name="soil_lifting"
+                      label={t('admin.pages.evas.form.soil_lifting')}
+                      as={Dropdown}
+                      options={dictionaries.levantamientoSuelo}
+                    />
+                    <FormField
+                      name="cut_damaged_roots"
+                      label={t('admin.pages.evas.form.cut_damaged_roots')}
+                      as={Dropdown}
+                      options={dictionaries.raicesCortadas}
+                    />
+                    <FormField
+                      name="basal_rot"
+                      label={t('admin.pages.evas.form.basal_rot')}
+                      as={Dropdown}
+                      options={dictionaries.podredumbreBasal}
+                    />
+                    <FormField
+                      name="exposed_surface_roots"
+                      label={t('admin.pages.evas.form.exposed_surface_roots')}
+                      as={Dropdown}
+                      options={dictionaries.raicesExpuestas}
+                    />
+                  </div>
                 </div>
+                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                  {/* Sección: Condición del entorno */}
+                  <div className="md:col-span-2">
+                    <h1 className="text-xl font-bold mb-4">
+                      {t('admin.pages.evas.edit.environmentCondition')}
+                    </h1>
 
-                {/* Sección: Condición del entorno */}
-                <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mt-6 mb-4">
-                    {t('admin.pages.evas.edit.environmentCondition')}
-                  </h1>
+                    {/* Subsección: Factores Ambientales */}
+                    <h2 className="text-lg font-semibold mb-2">
+                      {t('admin.pages.evas.edit.environmentalFactors')}
+                    </h2>
 
-                  {/* Subsección: Factores Ambientales */}
-                  <h2 className="text-lg font-semibold mb-2">
-                    {t('admin.pages.evas.edit.environmentalFactors')}
-                  </h2>
+                    {/* Subsubsección: Exposición al viento */}
+                    <h3 className="text-md font-medium mb-2">
+                      {t('admin.pages.evas.edit.windExposure')}
+                    </h3>
+                    <FormField
+                      name="wind"
+                      label={t('admin.pages.evas.form.wind')}
+                      as={Dropdown}
+                      options={dictionaries.viento}
+                    />
 
-                  {/* Subsubsección: Exposición al viento */}
-                  <h3 className="text-md font-medium mb-2">
-                    {t('admin.pages.evas.edit.windExposure')}
-                  </h3>
-                  <FormField
-                    name="wind"
-                    label={t('admin.pages.evas.form.wind')}
-                    as={Dropdown}
-                    options={dictionaries.viento}
-                  />
-
-                  {/* Subsubsección: Exposición a la sequía */}
-                  <h3 className="text-md font-medium mt-4 mb-2">
-                    {t('admin.pages.evas.edit.droughtExposure')}
-                  </h3>
-                  <FormField
-                    name="drought"
-                    label={t('admin.pages.evas.form.drought')}
-                    as={Dropdown}
-                    options={dictionaries.sequia}
-                  />
+                    {/* Subsubsección: Exposición a la sequía */}
+                    <h3 className="text-md font-medium mt-4 mb-2">
+                      {t('admin.pages.evas.edit.droughtExposure')}
+                    </h3>
+                    <FormField
+                      name="drought"
+                      label={t('admin.pages.evas.form.drought')}
+                      as={Dropdown}
+                      options={dictionaries.sequia}
+                    />
+                  </div>
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <Button

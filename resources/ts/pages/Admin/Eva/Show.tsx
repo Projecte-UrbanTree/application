@@ -277,96 +277,104 @@ export default function ShowEva() {
           </Button>
         </header>
         <div className="p-6">
-          <h1 className="text-xl font-bold mb-4">
-            {t('admin.pages.evas.indexCalculation')}
-          </h1>
-          <p>
-            <strong>{t('admin.pages.evas.treeStatusFactor')}:</strong>{' '}
-            <span
-              style={{
-                backgroundColor: color,
-                color: 'black',
-                padding: '2px 4px',
-                borderRadius: '4px',
-              }}>
-              {message}
-            </span>{' '}
-          </p>
-          <p>
-            <strong>{t('admin.pages.evas.stabilityIndex')}:</strong>{' '}
-            <span
-              style={{
-                backgroundColor: stabilityIndex.color,
-                color: 'black',
-                padding: '2px 4px',
-                borderRadius: '4px',
-              }}>
-              {stabilityIndex.message}
-            </span>{' '}
-          </p>
-          <p>
-            <strong>{t('admin.pages.evas.gravityHeightRatio')}:</strong>{' '}
-            <span
-              style={{
-                backgroundColor: gravityHeightRatio.color,
-                color: 'black',
-                padding: '2px 4px',
-                borderRadius: '4px',
-              }}>
-              {gravityHeightRatio.message}
-            </span>{' '}
-          </p>
-          <p>
-            <strong>{t('admin.pages.evas.rootCrownRatio')}:</strong>{' '}
-            <span
-              style={{
-                backgroundColor: rootCrownRatio.color,
-                color: 'black',
-                padding: '2px 4px',
-                borderRadius: '4px',
-              }}>
-              {rootCrownRatio.message}
-            </span>{' '}
-          </p>
-          <p>
-            <strong>{t('admin.pages.evas.windStabilityIndex')}:</strong>{' '}
-            <span
-              style={{
-                backgroundColor: windStabilityIndex.color,
-                color: 'black',
-                padding: '2px 4px',
-                borderRadius: '4px',
-              }}>
-              {windStabilityIndex.message}
-            </span>{' '}
-          </p>
-          <h1 className="text-xl font-bold mt-6 mb-4">
-            {t('admin.pages.evas.environmentalFactors')}
-          </h1>
-          <p>
-            <strong>{t('admin.pages.evas.windExposure')}:</strong>{' '}
-            <span
-              style={{
-                backgroundColor: getSeverityMessage(eva.wind).color,
-                color: 'black',
-                padding: '2px 4px',
-                borderRadius: '4px',
-              }}>
-              {getSeverityMessage(eva.wind).message}
-            </span>{' '}
-          </p>
-          <p>
-            <strong>{t('admin.pages.evas.droughtExposure')}:</strong>{' '}
-            <span
-              style={{
-                backgroundColor: getSeverityMessage(eva.drought).color,
-                color: 'black',
-                padding: '2px 4px',
-                borderRadius: '4px',
-              }}>
-              {getSeverityMessage(eva.drought).message}
-            </span>{' '}
-          </p>
+          <div className="bg-gray-200 rounded-lg border-2 border-gray-300">
+            <div className="p-4">
+              <h1 className="text-xl font-bold mb-4 underline">
+                {t('admin.pages.evas.indexCalculation')}
+              </h1>
+              <p className="mb-4">
+                <strong>{t('admin.pages.evas.treeStatusFactor')}:</strong>{' '}
+                <span
+                  style={{
+                    backgroundColor: color,
+                    color: 'black',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                  {message}
+                </span>{' '}
+              </p>
+              <p className="mb-4">
+                <strong>{t('admin.pages.evas.stabilityIndex')}:</strong>{' '}
+                <span
+                  style={{
+                    backgroundColor: stabilityIndex.color,
+                    color: 'black',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                  {stabilityIndex.message}
+                </span>{' '}
+              </p>
+              <p className="mb-4">
+                <strong>{t('admin.pages.evas.gravityHeightRatio')}:</strong>{' '}
+                <span
+                  style={{
+                    backgroundColor: gravityHeightRatio.color,
+                    color: 'black',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                  {gravityHeightRatio.message}
+                </span>{' '}
+              </p>
+              <p className="mb-4">
+                <strong>{t('admin.pages.evas.rootCrownRatio')}:</strong>{' '}
+                <span
+                  style={{
+                    backgroundColor: rootCrownRatio.color,
+                    color: 'black',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                  {rootCrownRatio.message}
+                </span>{' '}
+              </p>
+              <p className="mb-4">
+                <strong>{t('admin.pages.evas.windStabilityIndex')}:</strong>{' '}
+                <span
+                  style={{
+                    backgroundColor: windStabilityIndex.color,
+                    color: 'black',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                  {windStabilityIndex.message}
+                </span>{' '}
+              </p>
+            </div>
+          </div>
+          <div className="bg-gray-200 rounded-lg mt-4 border-2 border-gray-300">
+            <div className="p-4">
+              <h1 className="text-xl font-bold mb-4 underline">
+                {t('admin.pages.evas.environmentalFactors')}
+              </h1>
+              <p className="mb-4">
+                <strong>{t('admin.pages.evas.windExposure')}:</strong>{' '}
+                <span
+                  style={{
+                    backgroundColor: getSeverityMessage(eva.wind).color,
+                    color: 'black',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                  {getSeverityMessage(eva.wind).message}
+                </span>{' '}
+              </p>
+              <p className="mb-4">
+                <strong>{t('admin.pages.evas.droughtExposure')}:</strong>{' '}
+                <span
+                  style={{
+                    backgroundColor: getSeverityMessage(eva.drought).color,
+                    color: 'black',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                  {getSeverityMessage(eva.drought).message}
+                </span>{' '}
+              </p>
+            </div>
+          </div>
         </div>
       </Card>
     </div>

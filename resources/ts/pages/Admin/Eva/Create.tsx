@@ -263,33 +263,35 @@ const CreateEva = () => {
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Sección: Identificación */}
                 <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mb-4">
-                    {t('admin.pages.evas.create.identification')}
-                  </h1>
-                  <FormField
-                    name="element_id"
-                    label={t('admin.pages.evas.form.name')}
-                    as={Dropdown}
-                    options={elements.map((element) => ({
-                      label: element.name,
-                      value: element.id,
-                    }))}
-                    optionLabel="label"
-                    optionValue="value"
-                  />
-                  <FormField
-                    name="years"
-                    label={t('admin.pages.evas.form.years')}
-                    as={InputNumber}
-                    min={0}
-                  />
-                  <FormField
-                    name="months"
-                    label={t('admin.pages.evas.form.months')}
-                    as={InputNumber}
-                    min={0}
-                    max={11}
-                  />
+                  <div className="bg-gray-200 rounded-lg mt-4 border-2 border-gray-300">
+                    <h1 className="text-xl font-bold mb-4">
+                      {t('admin.pages.evas.create.identification')}
+                    </h1>
+                    <FormField
+                      name="element_id"
+                      label={t('admin.pages.evas.form.name')}
+                      as={Dropdown}
+                      options={elements.map((element) => ({
+                        label: element.name,
+                        value: element.id,
+                      }))}
+                      optionLabel="label"
+                      optionValue="value"
+                    />
+                    <FormField
+                      name="years"
+                      label={t('admin.pages.evas.form.years')}
+                      as={InputNumber}
+                      min={0}
+                    />
+                    <FormField
+                      name="months"
+                      label={t('admin.pages.evas.form.months')}
+                      as={InputNumber}
+                      min={0}
+                      max={11}
+                    />
+                  </div>
                 </div>
 
                 {/* Sección: Condición del árbol */}
