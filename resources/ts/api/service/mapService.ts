@@ -6,6 +6,7 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { Element } from '@/types/Element';
 import { Point, TypePoint } from '@/types/Point';
+import { renderElementPopup } from '@/components/ElementComponent';
 
 export class MapService {
   public map!: mapboxgl.Map;
@@ -186,21 +187,20 @@ export class MapService {
 
     const filteredPoints = points.filter((p) => p.type === TypePoint.element);
 
-    console.log(
-      'Añadiendo marcadores, puntos filtrados:',
-      filteredPoints.length,
-    );
-
     elements.forEach((element) => {
       const coords = this.getCoordElement(element, filteredPoints);
       if (!coords) {
         console.warn('Elemento sin coordenadas:', element);
         return;
       }
-      console.log('Agregando marcador en:', coords);
+
+      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+        renderElementPopup(element),
+      );
 
       const marker = new mapboxgl.Marker({ color: '#FF0000' })
         .setLngLat([coords.lng, coords.lat])
+        .setPopup(popup)
         .addTo(this.map);
 
       this.elementMarkers.push(marker);
