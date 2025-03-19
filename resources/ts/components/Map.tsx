@@ -18,6 +18,7 @@ import { SavePointsProps } from '@/api/service/pointService';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
 import { data } from 'react-router-dom';
 import { MapService } from '@/api/service/mapService';
+import { Toast } from 'primereact/toast';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -35,6 +36,7 @@ export const MapComponent: React.FC<MapProps> = ({
   // refs
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapServiceRef = useRef<MapService | null>(null);
+  const toast = useRef<Toast>(null);
 
   // states
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,11 +66,21 @@ export const MapComponent: React.FC<MapProps> = ({
   // load data
   useEffect(() => {
     const loadData = async () => {
-      const treeTypesFetch = await fetchTreeTypes();
-      const elementTypeFetch = await fetchElementType();
-
-      setTreeTypes(treeTypesFetch);
-      setElementTypes(elementTypeFetch);
+      try {
+        const [treeTypesFetch, elementTypeFetch] = await Promise.all([
+          fetchTreeTypes(),
+          fetchElementType(),
+        ]);
+        setTreeTypes(treeTypesFetch);
+        setElementTypes(elementTypeFetch);
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al cargar los tipos de elementos',
+        });
+      }
     };
     loadData();
   }, []);
@@ -179,7 +191,7 @@ export const MapComponent: React.FC<MapProps> = ({
     } else {
       updateElements(service);
     }
-  }, [elements, currentContract]);
+  }, [elements, currentContract, treeTypes, elementTypes]);
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
@@ -196,15 +208,46 @@ export const MapComponent: React.FC<MapProps> = ({
     );
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => {
-        service.addElementMarkers(filteredElements, filteredPoints);
+        service.addElementMarkers(
+          filteredElements,
+          filteredPoints,
+          treeTypes,
+          elementTypes,
+        );
       });
     } else {
-      service.addElementMarkers(filteredElements, filteredPoints);
+      service.addElementMarkers(
+        filteredElements,
+        filteredPoints,
+        treeTypes,
+        elementTypes,
+      );
     }
   }
 
   // save drawed zone
   async function handleZoneSaved(newZone: Zone, newPoints: SavePointsProps[]) {
+    // Verificar colisiones una vez más antes de guardar
+    const hasCollision = detectCollision(
+      points,
+      currentContract?.id || 0,
+      zonesRedux,
+      coordinates,
+    );
+
+    if (hasCollision) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo guardar la zona',
+      });
+      setModalVisible(false);
+      setIsDrawingMode(false);
+      setEnabledButton(false);
+      mapServiceRef.current?.clearDraw();
+      return;
+    }
+
     setModalVisible(false);
     setIsDrawingMode(false);
     setEnabledButton(false);
@@ -223,7 +266,6 @@ export const MapComponent: React.FC<MapProps> = ({
       service.addZoneToMap(`zone-${newZone.id}`, zonePoints);
     }
   }
-
   function detectCollision(
     allPoints: Point[],
     contractId: number,

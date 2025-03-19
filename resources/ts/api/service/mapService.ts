@@ -7,6 +7,8 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { Element } from '@/types/Element';
 import { Point, TypePoint } from '@/types/Point';
 import { renderElementPopup } from '@/components/ElementComponent';
+import { TreeTypes } from '@/types/TreeTypes';
+import { ElementType } from '@/types/ElementType';
 
 export class MapService {
   public map!: mapboxgl.Map;
@@ -182,22 +184,22 @@ export class MapService {
     });
   }
 
-  public addElementMarkers(elements: Element[], points: Point[]) {
+  public addElementMarkers(
+    elements: Element[],
+    points: Point[],
+    treeTypes: TreeTypes[],
+    elementTypes: ElementType[],
+  ) {
     this.removeElementMarkers();
-
     const filteredPoints = points.filter((p) => p.type === TypePoint.element);
-
     elements.forEach((element) => {
       const coords = this.getCoordElement(element, filteredPoints);
       if (!coords) {
-        console.warn('Elemento sin coordenadas:', element);
         return;
       }
-
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-        renderElementPopup(element),
+        renderElementPopup(element, treeTypes, elementTypes),
       );
-
       const marker = new mapboxgl.Marker({ color: '#FF0000' })
         .setLngLat([coords.lng, coords.lat])
         .setPopup(popup)
