@@ -286,7 +286,8 @@
         "tasksNotDone": "crwdns3441:0crwdne3441:0",
         "hoursWorked": "crwdns3443:0crwdne3443:0",
         "fuelConsumption": "crwdns3445:0crwdne3445:0",
-        "noData": "crwdns3447:0crwdne3447:0"
+        "noData": "crwdns3447:0crwdne3447:0",
+        "exportCSV": "crwdns4091:0crwdne4091:0"
       },
       "taskTypes": {
         "form": {
@@ -574,234 +575,234 @@
           "passwordCurrentWrong": "crwdns3759:0crwdne3759:0"
         }
       },
-      "evas": {
+      "eva": {
         "show": {
-          "title": "crwdns3765:0crwdne3765:0"
+          "title": "crwdns4093:0crwdne4093:0"
         },
         "dictionaries": {
           "copaDesequilibrada": {
-            "0": "crwdns3767:0crwdne3767:0",
-            "1": "crwdns3769:0crwdne3769:0",
-            "2": "crwdns3771:0crwdne3771:0",
-            "3": "crwdns3773:0crwdne3773:0"
+            "0": "crwdns4095:0crwdne4095:0",
+            "1": "crwdns4097:0crwdne4097:0",
+            "2": "crwdns4099:0crwdne4099:0",
+            "3": "crwdns4101:0crwdne4101:0"
           },
           "ramasSobreextendidas": {
-            "0": "crwdns3775:0crwdne3775:0",
-            "1": "crwdns3777:0crwdne3777:0",
-            "2": "crwdns3779:0crwdne3779:0",
-            "3": "crwdns3781:0crwdne3781:0"
+            "0": "crwdns4103:0crwdne4103:0",
+            "1": "crwdns4105:0crwdne4105:0",
+            "2": "crwdns4107:0crwdne4107:0",
+            "3": "crwdns4109:0crwdne4109:0"
           },
           "grietas": {
-            "0": "crwdns3783:0crwdne3783:0",
-            "1": "crwdns3785:0crwdne3785:0",
-            "2": "crwdns3787:0crwdne3787:0",
-            "3": "crwdns3789:0crwdne3789:0"
+            "0": "crwdns4111:0crwdne4111:0",
+            "1": "crwdns4113:0crwdne4113:0",
+            "2": "crwdns4115:0crwdne4115:0",
+            "3": "crwdns4117:0crwdne4117:0"
           },
           "ramasMuertas": {
-            "0": "crwdns3791:0crwdne3791:0",
-            "1": "crwdns3793:0crwdne3793:0",
-            "2": "crwdns3795:0crwdne3795:0",
-            "3": "crwdns3797:0crwdne3797:0"
+            "0": "crwdns4119:0crwdne4119:0",
+            "1": "crwdns4121:0crwdne4121:0",
+            "2": "crwdns4123:0crwdne4123:0",
+            "3": "crwdns4125:0crwdne4125:0"
           },
           "inclinacion": {
-            "0": "crwdns3799:0crwdne3799:0",
-            "1": "crwdns3801:0crwdne3801:0",
-            "2": "crwdns3803:0crwdne3803:0",
-            "3": "crwdns3805:0crwdne3805:0"
+            "0": "crwdns4127:0crwdne4127:0",
+            "1": "crwdns4129:0crwdne4129:0",
+            "2": "crwdns4131:0crwdne4131:0",
+            "3": "crwdns4133:0crwdne4133:0"
           },
           "bifurcacionesV": {
-            "0": "crwdns3807:0crwdne3807:0",
-            "1": "crwdns3809:0crwdne3809:0",
-            "2": "crwdns3811:0crwdne3811:0",
-            "3": "crwdns3813:0crwdne3813:0"
+            "0": "crwdns4135:0crwdne4135:0",
+            "1": "crwdns4137:0crwdne4137:0",
+            "2": "crwdns4139:0crwdne4139:0",
+            "3": "crwdns4141:0crwdne4141:0"
           },
           "cavidades": {
-            "0": "crwdns3815:0crwdne3815:0",
-            "1": "crwdns3817:0crwdne3817:0",
-            "2": "crwdns3819:0crwdne3819:0",
-            "3": "crwdns3821:0crwdne3821:0"
+            "0": "crwdns4143:0crwdne4143:0",
+            "1": "crwdns4145:0crwdne4145:0",
+            "2": "crwdns4147:0crwdne4147:0",
+            "3": "crwdns4149:0crwdne4149:0"
           },
           "danosCorteza": {
-            "0": "crwdns3823:0crwdne3823:0",
-            "1": "crwdns3825:0crwdne3825:0",
-            "2": "crwdns3827:0crwdne3827:0",
-            "3": "crwdns3829:0crwdne3829:0"
+            "0": "crwdns4151:0crwdne4151:0",
+            "1": "crwdns4153:0crwdne4153:0",
+            "2": "crwdns4155:0crwdne4155:0",
+            "3": "crwdns4157:0crwdne4157:0"
           },
           "levantamientoSuelo": {
-            "0": "crwdns3831:0crwdne3831:0",
-            "1": "crwdns3833:0crwdne3833:0",
-            "2": "crwdns3835:0crwdne3835:0",
-            "3": "crwdns3837:0crwdne3837:0"
+            "0": "crwdns4159:0crwdne4159:0",
+            "1": "crwdns4161:0crwdne4161:0",
+            "2": "crwdns4163:0crwdne4163:0",
+            "3": "crwdns4165:0crwdne4165:0"
           },
           "raicesCortadas": {
-            "0": "crwdns3839:0crwdne3839:0",
-            "1": "crwdns3841:0crwdne3841:0",
-            "2": "crwdns3843:0crwdne3843:0",
-            "3": "crwdns3845:0crwdne3845:0"
+            "0": "crwdns4167:0crwdne4167:0",
+            "1": "crwdns4169:0crwdne4169:0",
+            "2": "crwdns4171:0crwdne4171:0",
+            "3": "crwdns4173:0crwdne4173:0"
           },
           "podredumbreBasal": {
-            "0": "crwdns3847:0crwdne3847:0",
-            "1": "crwdns3849:0crwdne3849:0",
-            "2": "crwdns3851:0crwdne3851:0",
-            "3": "crwdns3853:0crwdne3853:0"
+            "0": "crwdns4175:0crwdne4175:0",
+            "1": "crwdns4177:0crwdne4177:0",
+            "2": "crwdns4179:0crwdne4179:0",
+            "3": "crwdns4181:0crwdne4181:0"
           },
           "raicesExpuestas": {
-            "0": "crwdns3855:0crwdne3855:0",
-            "1": "crwdns3857:0crwdne3857:0",
-            "2": "crwdns3859:0crwdne3859:0",
-            "3": "crwdns3861:0crwdne3861:0"
+            "0": "crwdns4183:0crwdne4183:0",
+            "1": "crwdns4185:0crwdne4185:0",
+            "2": "crwdns4187:0crwdne4187:0",
+            "3": "crwdns4189:0crwdne4189:0"
           },
           "viento": {
-            "0": "crwdns3863:0crwdne3863:0",
-            "1": "crwdns3865:0crwdne3865:0",
-            "2": "crwdns3867:0crwdne3867:0",
-            "3": "crwdns3869:0crwdne3869:0"
+            "0": "crwdns4191:0crwdne4191:0",
+            "1": "crwdns4193:0crwdne4193:0",
+            "2": "crwdns4195:0crwdne4195:0",
+            "3": "crwdns4197:0crwdne4197:0"
           },
           "sequia": {
-            "0": "crwdns3871:0crwdne3871:0",
-            "1": "crwdns3873:0crwdne3873:0",
-            "2": "crwdns3875:0crwdne3875:0",
-            "3": "crwdns3877:0crwdne3877:0"
+            "0": "crwdns4199:0crwdne4199:0",
+            "1": "crwdns4201:0crwdne4201:0",
+            "2": "crwdns4203:0crwdne4203:0",
+            "3": "crwdns4205:0crwdne4205:0"
           }
         },
         "edit": {
-          "title": "crwdns3879:0crwdne3879:0",
-          "identification": "crwdns3881:0crwdne3881:0",
-          "treeCondition": "crwdns3883:0crwdne3883:0",
-          "dimensions": "crwdns3885:0crwdne3885:0",
-          "state": "crwdns3887:0crwdne3887:0",
-          "crownBranches": "crwdns3889:0crwdne3889:0",
-          "trunk": "crwdns3891:0crwdne3891:0",
-          "roots": "crwdns3893:0crwdne3893:0",
-          "environmentCondition": "crwdns3895:0crwdne3895:0",
-          "environmentalFactors": "crwdns3897:0crwdne3897:0",
-          "windExposure": "crwdns3899:0crwdne3899:0",
-          "droughtExposure": "crwdns3901:0crwdne3901:0"
+          "title": "crwdns4207:0crwdne4207:0",
+          "identification": "crwdns4209:0crwdne4209:0",
+          "treeCondition": "crwdns4211:0crwdne4211:0",
+          "dimensions": "crwdns4213:0crwdne4213:0",
+          "state": "crwdns4215:0crwdne4215:0",
+          "crownBranches": "crwdns4217:0crwdne4217:0",
+          "trunk": "crwdns4219:0crwdne4219:0",
+          "roots": "crwdns4221:0crwdne4221:0",
+          "environmentCondition": "crwdns4223:0crwdne4223:0",
+          "environmentalFactors": "crwdns4225:0crwdne4225:0",
+          "windExposure": "crwdns4227:0crwdne4227:0",
+          "droughtExposure": "crwdns4229:0crwdne4229:0"
         },
         "create": {
-          "identification": "crwdns3903:0crwdne3903:0",
-          "treeCondition": "crwdns3905:0crwdne3905:0",
-          "dimensions": "crwdns3907:0crwdne3907:0",
-          "state": "crwdns3909:0crwdne3909:0",
-          "crownBranches": "crwdns3911:0crwdne3911:0",
-          "trunk": "crwdns3913:0crwdne3913:0",
-          "roots": "crwdns3915:0crwdne3915:0",
-          "environmentCondition": "crwdns3917:0crwdne3917:0",
-          "environmentalFactors": "crwdns3919:0crwdne3919:0",
-          "windExposure": "crwdns3921:0crwdne3921:0",
-          "droughtExposure": "crwdns3923:0crwdne3923:0"
+          "identification": "crwdns4231:0crwdne4231:0",
+          "treeCondition": "crwdns4233:0crwdne4233:0",
+          "dimensions": "crwdns4235:0crwdne4235:0",
+          "state": "crwdns4237:0crwdne4237:0",
+          "crownBranches": "crwdns4239:0crwdne4239:0",
+          "trunk": "crwdns4241:0crwdne4241:0",
+          "roots": "crwdns4243:0crwdne4243:0",
+          "environmentCondition": "crwdns4245:0crwdne4245:0",
+          "environmentalFactors": "crwdns4247:0crwdne4247:0",
+          "windExposure": "crwdns4249:0crwdne4249:0",
+          "droughtExposure": "crwdns4251:0crwdne4251:0"
         },
-        "title": "crwdns3925:0crwdne3925:0",
+        "title": "crwdns4253:0crwdne4253:0",
         "age": {
-          "years": "crwdns3927:0crwdne3927:0",
-          "months": "crwdns3929:0crwdne3929:0"
+          "years": "crwdns4255:0crwdne4255:0",
+          "months": "crwdns4257:0crwdne4257:0"
         },
         "columns": {
-          "element_id": "crwdns3931:0crwdne3931:0",
-          "age": "crwdns3933:0crwdne3933:0",
-          "height": "crwdns3935:0crwdne3935:0",
-          "actions": "crwdns3937:0crwdne3937:0",
-          "name": "crwdns3939:0crwdne3939:0",
-          "coordinates": "crwdns3941:0crwdne3941:0",
-          "status": "crwdns3943:0crwdne3943:0"
+          "element_id": "crwdns4259:0crwdne4259:0",
+          "age": "crwdns4261:0crwdne4261:0",
+          "height": "crwdns4263:0crwdne4263:0",
+          "actions": "crwdns4265:0crwdne4265:0",
+          "name": "crwdns4267:0crwdne4267:0",
+          "coordinates": "crwdns4269:0crwdne4269:0",
+          "status": "crwdns4271:0crwdne4271:0"
         },
         "form": {
-          "name": "crwdns3945:0crwdne3945:0",
-          "element_id": "crwdns3947:0crwdne3947:0",
-          "years": "crwdns3949:0crwdne3949:0",
-          "months": "crwdns3951:0crwdne3951:0",
-          "height": "crwdns3953:0crwdne3953:0",
-          "diameter": "crwdns3955:0crwdne3955:0",
-          "crown_width": "crwdns3957:0crwdne3957:0",
-          "crown_projection_area": "crwdns3959:0crwdne3959:0",
-          "root_surface_diameter": "crwdns3961:0crwdne3961:0",
-          "effective_root_area": "crwdns3963:0crwdne3963:0",
-          "height_estimation": "crwdns3965:0crwdne3965:0",
-          "unbalanced_crown": "crwdns3967:0crwdne3967:0",
-          "overextended_branches": "crwdns3969:0crwdne3969:0",
-          "cracks": "crwdns3971:0crwdne3971:0",
-          "dead_branches": "crwdns3973:0crwdne3973:0",
-          "inclination": "crwdns3975:0crwdne3975:0",
-          "V_forks": "crwdns3977:0crwdne3977:0",
-          "cavities": "crwdns3979:0crwdne3979:0",
-          "bark_damage": "crwdns3981:0crwdne3981:0",
-          "soil_lifting": "crwdns3983:0crwdne3983:0",
-          "cut_damaged_roots": "crwdns3985:0crwdne3985:0",
-          "basal_rot": "crwdns3987:0crwdne3987:0",
-          "exposed_surface_roots": "crwdns3989:0crwdne3989:0",
-          "wind": "crwdns3991:0crwdne3991:0",
-          "drought": "crwdns3993:0crwdne3993:0",
+          "name": "crwdns4273:0crwdne4273:0",
+          "element_id": "crwdns4275:0crwdne4275:0",
+          "years": "crwdns4277:0crwdne4277:0",
+          "months": "crwdns4279:0crwdne4279:0",
+          "height": "crwdns4281:0crwdne4281:0",
+          "diameter": "crwdns4283:0crwdne4283:0",
+          "crown_width": "crwdns4285:0crwdne4285:0",
+          "crown_projection_area": "crwdns4287:0crwdne4287:0",
+          "root_surface_diameter": "crwdns4289:0crwdne4289:0",
+          "effective_root_area": "crwdns4291:0crwdne4291:0",
+          "height_estimation": "crwdns4293:0crwdne4293:0",
+          "unbalanced_crown": "crwdns4295:0crwdne4295:0",
+          "overextended_branches": "crwdns4297:0crwdne4297:0",
+          "cracks": "crwdns4299:0crwdne4299:0",
+          "dead_branches": "crwdns4301:0crwdne4301:0",
+          "inclination": "crwdns4303:0crwdne4303:0",
+          "V_forks": "crwdns4305:0crwdne4305:0",
+          "cavities": "crwdns4307:0crwdne4307:0",
+          "bark_damage": "crwdns4309:0crwdne4309:0",
+          "soil_lifting": "crwdns4311:0crwdne4311:0",
+          "cut_damaged_roots": "crwdns4313:0crwdne4313:0",
+          "basal_rot": "crwdns4315:0crwdne4315:0",
+          "exposed_surface_roots": "crwdns4317:0crwdne4317:0",
+          "wind": "crwdns4319:0crwdne4319:0",
+          "drought": "crwdns4321:0crwdne4321:0",
           "validation": {
-            "element_required": "crwdns3995:0crwdne3995:0"
+            "element_required": "crwdns4323:0crwdne4323:0"
           },
           "title": {
-            "create": "crwdns3997:0crwdne3997:0",
-            "edit": "crwdns3999:0crwdne3999:0"
+            "create": "crwdns4325:0crwdne4325:0",
+            "edit": "crwdns4327:0crwdne4327:0"
           },
-          "saving": "crwdns4001:0crwdne4001:0",
-          "save": "crwdns4003:0crwdne4003:0"
+          "saving": "crwdns4329:0crwdne4329:0",
+          "save": "crwdns4331:0crwdne4331:0"
         },
         "list": {
           "actions": {
-            "show": "crwdns4005:0crwdne4005:0",
-            "delete": "crwdns4007:0crwdne4007:0"
+            "show": "crwdns4333:0crwdne4333:0",
+            "delete": "crwdns4335:0crwdne4335:0"
           },
           "messages": {
-            "createSuccess": "crwdns4009:0crwdne4009:0",
-            "deleteConfirm": "crwdns4011:0crwdne4011:0",
-            "deleteSuccess": "crwdns4013:0crwdne4013:0",
-            "error": "crwdns4015:0crwdne4015:0",
-            "updateSuccess": "crwdns4017:0crwdne4017:0"
+            "createSuccess": "crwdns4337:0crwdne4337:0",
+            "deleteConfirm": "crwdns4339:0crwdne4339:0",
+            "deleteSuccess": "crwdns4341:0crwdne4341:0",
+            "error": "crwdns4343:0crwdne4343:0",
+            "updateSuccess": "crwdns4345:0crwdne4345:0"
           }
         },
         "status": {
-          "low": "crwdns4019:0crwdne4019:0",
-          "moderate": "crwdns4021:0crwdne4021:0",
-          "high": "crwdns4023:0crwdne4023:0",
-          "critical": "crwdns4025:0crwdne4025:0",
-          "pending": "crwdns4027:0crwdne4027:0"
+          "low": "crwdns4347:0crwdne4347:0",
+          "moderate": "crwdns4349:0crwdne4349:0",
+          "high": "crwdns4351:0crwdne4351:0",
+          "critical": "crwdns4353:0crwdne4353:0",
+          "pending": "crwdns4355:0crwdne4355:0"
         },
         "stability": {
-          "stable": "crwdns4029:0crwdne4029:0",
-          "moderate": "crwdns4031:0crwdne4031:0",
-          "highRisk": "crwdns4033:0crwdne4033:0",
-          "pending": "crwdns4035:0crwdne4035:0"
+          "stable": "crwdns4357:0crwdne4357:0",
+          "moderate": "crwdns4359:0crwdne4359:0",
+          "highRisk": "crwdns4361:0crwdne4361:0",
+          "pending": "crwdns4363:0crwdne4363:0"
         },
         "gravityHeight": {
-          "veryStable": "crwdns4037:0crwdne4037:0",
-          "moderateRisk": "crwdns4039:0crwdne4039:0",
-          "highRisk": "crwdns4041:0crwdne4041:0",
-          "pending": "crwdns4043:0crwdne4043:0"
+          "veryStable": "crwdns4365:0crwdne4365:0",
+          "moderateRisk": "crwdns4367:0crwdne4367:0",
+          "highRisk": "crwdns4369:0crwdne4369:0",
+          "pending": "crwdns4371:0crwdne4371:0"
         },
         "rootCrown": {
-          "veryStable": "crwdns4045:0crwdne4045:0",
-          "stable": "crwdns4047:0crwdne4047:0",
-          "moderateStability": "crwdns4049:0crwdne4049:0",
-          "highRisk": "crwdns4051:0crwdne4051:0",
-          "pending": "crwdns4053:0crwdne4053:0"
+          "veryStable": "crwdns4373:0crwdne4373:0",
+          "stable": "crwdns4375:0crwdne4375:0",
+          "moderateStability": "crwdns4377:0crwdne4377:0",
+          "highRisk": "crwdns4379:0crwdne4379:0",
+          "pending": "crwdns4381:0crwdne4381:0"
         },
         "windStability": {
-          "veryStable": "crwdns4055:0crwdne4055:0",
-          "moderateStability": "crwdns4057:0crwdne4057:0",
-          "highRisk": "crwdns4059:0crwdne4059:0",
-          "pending": "crwdns4061:0crwdne4061:0"
+          "veryStable": "crwdns4383:0crwdne4383:0",
+          "moderateStability": "crwdns4385:0crwdne4385:0",
+          "highRisk": "crwdns4387:0crwdne4387:0",
+          "pending": "crwdns4389:0crwdne4389:0"
         },
         "severity": {
-          "low": "crwdns4063:0crwdne4063:0",
-          "moderate": "crwdns4065:0crwdne4065:0",
-          "high": "crwdns4067:0crwdne4067:0",
-          "extreme": "crwdns4069:0crwdne4069:0",
-          "pending": "crwdns4071:0crwdne4071:0"
+          "low": "crwdns4391:0crwdne4391:0",
+          "moderate": "crwdns4393:0crwdne4393:0",
+          "high": "crwdns4395:0crwdne4395:0",
+          "extreme": "crwdns4397:0crwdne4397:0",
+          "pending": "crwdns4399:0crwdne4399:0"
         },
-        "indexCalculation": "crwdns4073:0crwdne4073:0",
-        "treeStatusFactor": "crwdns4075:0crwdne4075:0",
-        "stabilityIndex": "crwdns4077:0crwdne4077:0",
-        "gravityHeightRatio": "crwdns4079:0crwdne4079:0",
-        "rootCrownRatio": "crwdns4081:0crwdne4081:0",
-        "windStabilityIndex": "crwdns4083:0crwdne4083:0",
-        "environmentalFactors": "crwdns4085:0crwdne4085:0",
-        "windExposure": "crwdns4087:0crwdne4087:0",
-        "droughtExposure": "crwdns4089:0crwdne4089:0"
+        "indexCalculation": "crwdns4401:0crwdne4401:0",
+        "treeStatusFactor": "crwdns4403:0crwdne4403:0",
+        "stabilityIndex": "crwdns4405:0crwdne4405:0",
+        "gravityHeightRatio": "crwdns4407:0crwdne4407:0",
+        "rootCrownRatio": "crwdns4409:0crwdne4409:0",
+        "windStabilityIndex": "crwdns4411:0crwdne4411:0",
+        "environmentalFactors": "crwdns4413:0crwdne4413:0",
+        "windExposure": "crwdns4415:0crwdne4415:0",
+        "droughtExposure": "crwdns4417:0crwdne4417:0"
       }
     },
     "profileDropdown": {
