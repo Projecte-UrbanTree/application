@@ -217,7 +217,9 @@
           "columns": {
             "description": "Description",
             "name": "Name",
-            "type": "Type"
+            "type": "Type",
+            "unit_type": "Unit Type",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
             "createSuccess": "Resource created successfully",

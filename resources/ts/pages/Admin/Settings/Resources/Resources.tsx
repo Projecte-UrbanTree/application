@@ -127,6 +127,20 @@ export default function Resources() {
             )}
           />
           <Column
+            field="unit_type"
+            header={t('admin.pages.resources.list.columns.unit_type')}
+            body={(rowData: Resource) => (
+              <Badge value={rowData.unit_type || '-'} severity="info" />
+            )}
+          />
+          <Column
+            field="unit_cost"
+            header={t('admin.pages.resources.list.columns.unit_cost')}
+            body={(rowData: Resource) => (
+              <Badge value={rowData.unit_cost || '-'} severity="info" />
+            )}
+          />
+          <Column
             header={t('admin.pages.resources.list.actions.label')}
             body={(rowData: { id: number }) => (
               <div className="flex justify-center gap-2">

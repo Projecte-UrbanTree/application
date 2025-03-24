@@ -13,6 +13,8 @@ class Resource extends Model
         'name',
         'description',
         'resource_type_id',
+        'unit_type',
+        'unit_price',
     ];
 
     public function contract(): BelongsTo
