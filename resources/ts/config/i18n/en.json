@@ -286,7 +286,8 @@
         "tasksNotDone": "Pending Tasks",
         "hoursWorked": "Hours Worked",
         "fuelConsumption": "Fuel Consumption",
-        "noData": "No data to display"
+        "noData": "No data to display",
+        "exportCSV": "Export to CSV"
       },
       "taskTypes": {
         "form": {
@@ -574,90 +575,90 @@
           "passwordCurrentWrong": "Current password is incorrect"
         }
       },
-      "evas": {
+      "eva": {
         "show": {
           "title": "Eva Details"
         },
         "dictionaries": {
-          "copaDesequilibrada": {
+          "unbalancedCrown": {
             "0": "No inclination or uneven growth",
             "1": "Slight crown inclination",
             "2": "Visibly inclined crown",
             "3": "Extremely inclined crown"
           },
-          "ramasSobreextendidas": {
+          "overextendedBranches": {
             "0": "Well-structured branches",
             "1": "Few overextended branches",
             "2": "Several overextended branches",
             "3": "Overextended and heavy branches"
           },
-          "grietas": {
+          "cracks": {
             "0": "No cracks",
             "1": "Small cracks in the trunk",
             "2": "Visible cracks in several parts",
             "3": "Deep cracks in the trunk"
           },
-          "ramasMuertas": {
+          "deadBranches": {
             "0": "No dead branches",
             "1": "Some dead branches",
             "2": "Multiple dead branches",
             "3": "Large number of dead branches"
           },
-          "inclinacion": {
+          "inclination": {
             "0": "Completely vertical",
             "1": "Slight inclination (<5°)",
             "2": "Moderate inclination (5-15°)",
             "3": "High inclination (>15°)"
           },
-          "bifurcacionesV": {
+          "VForks": {
             "0": "Normal bifurcations",
             "1": "Slight V bifurcation",
             "2": "Pronounced V bifurcation",
             "3": "Dangerous V bifurcation"
           },
-          "cavidades": {
+          "cavities": {
             "0": "No cavities",
             "1": "Small cavity",
             "2": "Intermediate cavity",
             "3": "Deep and structural cavity"
           },
-          "danosCorteza": {
+          "barkDamage": {
             "0": "Intact bark",
             "1": "Bark with slight wounds",
             "2": "Significant bark damage",
             "3": "Very damaged bark"
           },
-          "levantamientoSuelo": {
+          "soilLifting": {
             "0": "Soil without alterations",
             "1": "Slight soil elevation",
             "2": "Visible soil elevation",
             "3": "Severely lifted soil"
           },
-          "raicesCortadas": {
+          "cutRoots": {
             "0": "Intact roots",
             "1": "Roots with slight cuts",
             "2": "Partially damaged roots",
             "3": "Severely cut roots"
           },
-          "podredumbreBasal": {
+          "basalRot": {
             "0": "No rot",
             "1": "Initial rot",
             "2": "Visible rot",
             "3": "Advanced rot"
           },
-          "raicesExpuestas": {
+          "exposedRoots": {
             "0": "Roots underground",
             "1": "Some exposed roots",
             "2": "Several exposed roots",
             "3": "Exposed and weakened roots"
           },
-          "viento": {
+          "wind": {
             "0": "Tree protected by natural barriers or buildings, no strong constant wind.",
             "1": "Tree with occasional wind but no significant impact on its stability.",
             "2": "Tree exposed to frequent strong winds, which may affect its structure.",
             "3": "Tree in open areas or slopes where the wind blows with extreme force."
           },
-          "sequia": {
+          "drought": {
             "0": "Tree in an area with stable humidity and constant access to water, no water stress.",
             "1": "Tree with moderate access to water, but with occasional drought periods.",
             "2": "Tree in an area with recurrent droughts, affecting its development and resistance.",
