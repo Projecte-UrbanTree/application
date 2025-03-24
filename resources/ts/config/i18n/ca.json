@@ -1,39 +1,5 @@
 {
   "admin": {
-    "menu": {
-      "management": "Gestió",
-      "settings": "Configuració"
-    },
-    "submenu": {
-      "manage": {
-        "dashboard": "Tauler",
-        "workOrders": "Ordres de treball",
-        "eva": "EVA",
-        "inventory": "Inventari",
-        "workers": "Treballadors",
-        "resources": "Recursos",
-        "stats": "Estadístiques"
-      },
-      "settings": {
-        "contracts": "Contractes",
-        "elementTypes": "Tipus d'element",
-        "species": "Espècies",
-        "taskTypes": "Tipus de tasca",
-        "resourceTypes": "Tipus de recurs",
-        "users": "Usuaris"
-      }
-    },
-    "profileDropdown": {
-      "accountSettings": "Configuració del compte",
-      "license": "Llicència",
-      "logout": "Tanca sessió"
-    },
-    "roles": {
-      "admin": "Administrador",
-      "worker": "Treballador",
-      "customer": "Client",
-      "unknown": "Desconegut"
-    },
     "buttons": {
       "createNew": "Crea nou"
     },
@@ -320,7 +286,8 @@
         "tasksNotDone": "Tasques Pendents",
         "hoursWorked": "Hores Treballades",
         "fuelConsumption": "Consum de Combustible",
-        "noData": "No hi ha dades per mostrar"
+        "noData": "No hi ha dades per mostrar",
+        "exportCSV": "Export to CSV"
       },
       "taskTypes": {
         "form": {
@@ -770,7 +737,7 @@
           },
           "title": {
             "create": "Create Eva",
-            "edit": "Edit Eva"
+            "edit": "Edita Eva"
           },
           "saving": "Desant...",
           "save": "Save"
@@ -833,9 +800,9 @@
         "gravityHeightRatio": "Gravity Height Ratio (CG/H)",
         "rootCrownRatio": "Root Crown Ratio (SR/SC)",
         "windStabilityIndex": "Wind Stability Index (WSI)",
-        "environmentalFactors": "Environmental Factors",
-        "windExposure": "Wind Exposure",
-        "droughtExposure": "Drought Exposure"
+        "environmentalFactors": "Factors Ambientals",
+        "windExposure": "Exposició al Vent",
+        "droughtExposure": "Exposició a la Sequera"
       }
     },
     "profileDropdown": {
@@ -871,19 +838,6 @@
         "species": "Espècies",
         "taskTypes": "Tipus de tasca",
         "users": "Usuaris"
-      },
-      "evas": {
-        "title": "Evas",
-        "age": {
-          "years": "Anys",
-          "months": "Mesos"
-        },
-        "columns": {
-          "element_id": "ID de l'element",
-          "age": "Edat",
-          "height": "Alçada",
-          "actions": "Accions"
-        }
       }
     },
     "tooltips": {
