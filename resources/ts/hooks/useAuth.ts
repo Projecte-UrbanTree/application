@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setUserData, clearUserData } from '@/store/slice/userSlice';
@@ -21,7 +21,7 @@ export function useAuth() {
         }
     }, []);
 
-    const fetchUser = async (navigate?: (path: string) => void) => {
+    const fetchUser = useCallback(async (navigate?: (path: string) => void) => {
         try {
             const response = await axiosClient.get('/user', {
                 headers: {
@@ -50,7 +50,7 @@ export function useAuth() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [dispatch, fetchContracts]);
 
     const login = async (token: string, navigate?: (path: string) => void) => {
         if (!token) {

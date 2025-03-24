@@ -286,7 +286,8 @@
         "tasksNotDone": "Pending Tasks",
         "hoursWorked": "Hours Worked",
         "fuelConsumption": "Fuel Consumption",
-        "noData": "No data to display"
+        "noData": "No data to display",
+        "exportCSV": "Export to CSV"
       },
       "taskTypes": {
         "form": {
@@ -574,7 +575,7 @@
           "passwordCurrentWrong": "Current password is incorrect"
         }
       },
-      "evas": {
+      "eva": {
         "show": {
           "title": "Eva Details"
         },
