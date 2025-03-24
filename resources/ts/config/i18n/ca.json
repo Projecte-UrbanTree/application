@@ -575,9 +575,9 @@
           "passwordCurrentWrong": "La contrasenya actual no coincideix"
         }
       },
-      "eva": {
+      "evas": {
         "show": {
-          "title": "Detalls de l'Eva"
+          "title": "Eva Details"
         },
         "dictionaries": {
           "unbalancedCrown": {
@@ -666,41 +666,41 @@
           }
         },
         "edit": {
-          "title": "Edita Eva",
-          "identification": "Identificació",
-          "treeCondition": "Condició de l'Arbre",
+          "title": "Edit Eva",
+          "identification": "Identification",
+          "treeCondition": "Tree Condition",
           "dimensions": "Dimensions",
-          "state": "Estat",
-          "crownBranches": "Capçada i Branques",
-          "trunk": "Tronc",
-          "roots": "Arrels",
-          "environmentCondition": "Condició de l'Entorn",
-          "environmentalFactors": "Factors Ambientals",
-          "windExposure": "Exposició al Vent",
-          "droughtExposure": "Exposició a la Sequera"
+          "state": "State",
+          "crownBranches": "Crown and Branches",
+          "trunk": "Trunk",
+          "roots": "Roots",
+          "environmentCondition": "Environment Condition",
+          "environmentalFactors": "Environmental Factors",
+          "windExposure": "Wind Exposure",
+          "droughtExposure": "Drought Exposure"
         },
         "create": {
-          "identification": "Identificació",
-          "treeCondition": "Condició de l'Arbre",
+          "identification": "Identification",
+          "treeCondition": "Tree Condition",
           "dimensions": "Dimensions",
-          "state": "Estat",
-          "crownBranches": "Capçada i Branques",
-          "trunk": "Tronc",
-          "roots": "Arrels",
-          "environmentCondition": "Condició de l'Entorn",
-          "environmentalFactors": "Factors Ambientals",
-          "windExposure": "Exposició al Vent",
-          "droughtExposure": "Exposició a la Sequera"
+          "state": "State",
+          "crownBranches": "Crown and Branches",
+          "trunk": "Trunk",
+          "roots": "Roots",
+          "environmentCondition": "Environment Condition",
+          "environmentalFactors": "Environmental Factors",
+          "windExposure": "Wind Exposure",
+          "droughtExposure": "Drought Exposure"
         },
         "title": "Evas",
         "age": {
-          "years": "Anys",
-          "months": "Mesos"
+          "years": "Years",
+          "months": "Months"
         },
         "columns": {
-          "element_id": "ID de l'element",
-          "age": "Edat",
-          "height": "Alçada",
+          "element_id": "Element ID",
+          "age": "Age",
+          "height": "Height",
           "actions": "Accions",
           "name": "Nom",
           "coordinates": "Coordinates",
@@ -708,10 +708,10 @@
         },
         "form": {
           "name": "Nom",
-          "element_id": "ID de l'element",
-          "years": "Anys",
-          "months": "Mesos",
-          "height": "Alçada",
+          "element_id": "Element ID",
+          "years": "Years",
+          "months": "Months",
+          "height": "Height",
           "diameter": "Diameter",
           "crown_width": "Crown Width",
           "crown_projection_area": "Crown Projection Area",
@@ -737,7 +737,7 @@
           },
           "title": {
             "create": "Create Eva",
-            "edit": "Edita Eva"
+            "edit": "Edit Eva"
           },
           "saving": "Desant...",
           "save": "Save"
@@ -800,9 +800,9 @@
         "gravityHeightRatio": "Gravity Height Ratio (CG/H)",
         "rootCrownRatio": "Root Crown Ratio (SR/SC)",
         "windStabilityIndex": "Wind Stability Index (WSI)",
-        "environmentalFactors": "Factors Ambientals",
-        "windExposure": "Exposició al Vent",
-        "droughtExposure": "Exposició a la Sequera"
+        "environmentalFactors": "Environmental Factors",
+        "windExposure": "Wind Exposure",
+        "droughtExposure": "Drought Exposure"
       }
     },
     "profileDropdown": {
