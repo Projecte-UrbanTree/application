@@ -37,17 +37,21 @@ class WorkOrderController extends Controller
     {
         $contract_id = $request->query('contract_id');
 
-        $users = User::where('role', 'worker');
-        $zones = Zone::select('id', 'name');
         if ($contract_id) {
-            $users->where('contract_id', $contract_id);
-            $zones->where('contract_id', $contract_id);
+            $contract = Contract::findOrFail($contract_id);
+            $users = $contract->workers()->where('role', 'worker')->get();
+            $zones = Zone::select('id', 'name')
+                        ->where('contract_id', $contract_id)
+                        ->get();
+        } else {
+            $users = collect([]);
+            $zones = collect([]);
         }
 
         return response()->json([
             'task_types' => TaskType::all(),
-            'users' => $users->get(),
-            'zones' => $zones->get(),
+            'users' => $users,
+            'zones' => $zones,
             'tree_types' => TreeType::all(),
             'element_types' => ElementType::all(),
             'contracts' => Contract::all(),

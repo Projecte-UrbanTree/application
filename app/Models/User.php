@@ -3,11 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -25,7 +30,6 @@ class User extends Authenticatable
         'dni',
         'role',
         'password',
-        'contract_id',
     ];
 
     /**
@@ -51,13 +55,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function workOrderUsers()
+    public function workOrderUsers(): HasMany
     {
         return $this->hasMany(WorkOrderUser::class, 'user_id');
     }
 
-    public function contract()
+    public function contracts(): BelongsToMany
     {
-        return $this->belongsTo(Contract::class, 'contract_id');
+        return $this->belongsToMany(Contract::class, 'contract_user');
     }
 }
