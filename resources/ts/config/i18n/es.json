@@ -173,19 +173,6 @@
           "cloud": "Nube"
         }
       },
-      "evas": {
-        "title": "Evas",
-        "age": {
-          "years": "Años",
-          "months": "Meses"
-        },
-        "columns": {
-          "element_id": "ID del elemento",
-          "age": "Edad",
-          "height": "Altura",
-          "actions": "Acciones"
-        }
-      },
       "resources": {
         "form": {
           "fields": {
@@ -299,7 +286,8 @@
         "tasksNotDone": "Tareas Pendientes",
         "hoursWorked": "Horas Trabajadas",
         "fuelConsumption": "Consumo de Combustible",
-        "noData": "No hay datos para mostrar"
+        "noData": "No hay datos para mostrar",
+        "exportCSV": "Export to CSV"
       },
       "taskTypes": {
         "form": {
@@ -837,7 +825,6 @@
       "manage": {
         "dashboard": "Panel",
         "inventory": "Inventario",
-        "eva": "EVA",
         "resources": "Recursos",
         "stats": "Estadísticas",
         "workers": "Trabajadores",
