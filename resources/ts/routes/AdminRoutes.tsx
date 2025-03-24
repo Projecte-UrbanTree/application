@@ -81,7 +81,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'evas/:id',
             element: (
-              <AdminLayoutWrapper titleI18n="admin.pages.evas.show.title">
+              <AdminLayoutWrapper titleI18n="admin.pages.eva.show.title">
                 <ShowEva />
               </AdminLayoutWrapper>
             ),
