@@ -21,6 +21,8 @@ export default function EditResource() {
     name: '',
     description: '',
     resource_type_id: 0,
+    unit_cost: 0,
+    unit_type: '',
   });
   const [isLoading, setIsLoading] = useState(true);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
@@ -30,12 +32,7 @@ export default function EditResource() {
       try {
         const { data } = await axiosClient.get(`/admin/resources/${id}/edit`);
 
-        setInitialValues({
-          id: data.resource.id,
-          name: data.resource.name,
-          description: data.resource.description || '',
-          resource_type_id: data.resource.resource_type_id,
-        });
+        setInitialValues(data.resource);
 
         setResourceTypes(data.resource_types);
       } catch (error) {
@@ -63,6 +60,12 @@ export default function EditResource() {
     resource_type_id: Yup.number()
       .required(t('admin.pages.resources.form.validation.type_required'))
       .positive(t('admin.pages.resources.form.validation.type_invalid')),
+    unit_cost: Yup.number()
+      .min(0, t('admin.pages.resources.form.validation.unit_cost_min'))
+      .required(t('admin.pages.resources.form.validation.unit_cost_required')),
+    unit_type: Yup.string().required(
+      t('admin.pages.resources.form.validation.unit_type_required'),
+    ),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -128,6 +131,7 @@ export default function EditResource() {
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:note" className="h-5 w-5 mr-2" />
@@ -139,6 +143,7 @@ export default function EditResource() {
                     placeholder={t('admin.fields.description')}
                   />
                 </div>
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:category" className="h-5 w-5 mr-2" />
@@ -161,6 +166,47 @@ export default function EditResource() {
                     <small className="p-error">{errors.resource_type_id}</small>
                   )}
                 </div>
+
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon
+                      icon="tabler:currency-euro"
+                      className="h-5 w-5 mr-2"
+                    />
+                    {t('admin.fields.unit_cost')}
+                  </label>
+                  <Field
+                    name="unit_cost"
+                    as={InputText}
+                    type="number"
+                    placeholder={t('admin.fields.unit_cost')}
+                    className={
+                      errors.unit_cost && touched.unit_cost ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.unit_cost && touched.unit_cost && (
+                    <small className="p-error">{errors.unit_cost}</small>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:ruler" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.unit_type')}
+                  </label>
+                  <Field
+                    name="unit_type"
+                    as={InputText}
+                    placeholder={t('admin.fields.unit_type')}
+                    className={
+                      errors.unit_type && touched.unit_type ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.unit_type && touched.unit_type && (
+                    <small className="p-error">{errors.unit_type}</small>
+                  )}
+                </div>
+
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <Button
                     type="submit"
