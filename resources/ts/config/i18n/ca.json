@@ -580,89 +580,89 @@
           "title": "Detalls de l'Eva"
         },
         "dictionaries": {
-          "copaDesequilibrada": {
-            "0": "Sense inclinació ni creixement desigual",
-            "1": "Lleugera inclinació de la capçada",
-            "2": "Capçada visiblement inclinada",
-            "3": "Capçada extremadament inclinada"
+          "unbalancedCrown": {
+            "0": "No inclination or uneven growth",
+            "1": "Slight crown inclination",
+            "2": "Visibly inclined crown",
+            "3": "Extremely inclined crown"
           },
-          "ramasSobreextendidas": {
-            "0": "Branques ben estructurades",
-            "1": "Poques branques sobreesteses",
-            "2": "Diverses branques sobreesteses",
-            "3": "Branques sobreesteses i pesades"
+          "overextendedBranches": {
+            "0": "Well-structured branches",
+            "1": "Few overextended branches",
+            "2": "Several overextended branches",
+            "3": "Overextended and heavy branches"
           },
-          "grietas": {
-            "0": "Sense esquerdes",
-            "1": "Petites esquerdes al tronc",
-            "2": "Esquerdes visibles en diverses parts",
-            "3": "Esquerdes profundes al tronc"
+          "cracks": {
+            "0": "No cracks",
+            "1": "Small cracks in the trunk",
+            "2": "Visible cracks in several parts",
+            "3": "Deep cracks in the trunk"
           },
-          "ramasMuertas": {
-            "0": "Sense branques mortes",
-            "1": "Algunes branques mortes",
-            "2": "Múltiples branques mortes",
-            "3": "Gran quantitat de branques mortes"
+          "deadBranches": {
+            "0": "No dead branches",
+            "1": "Some dead branches",
+            "2": "Multiple dead branches",
+            "3": "Large number of dead branches"
           },
-          "inclinacion": {
-            "0": "Completament vertical",
-            "1": "Lleugera inclinació (<5°)",
-            "2": "Inclinació moderada (5-15°)",
-            "3": "Alta inclinació (>15°)"
+          "inclination": {
+            "0": "Completely vertical",
+            "1": "Slight inclination (<5°)",
+            "2": "Moderate inclination (5-15°)",
+            "3": "High inclination (>15°)"
           },
-          "bifurcacionesV": {
-            "0": "Bifurcacions normals",
-            "1": "Lleugera bifurcació en V",
-            "2": "Bifurcació en V pronunciada",
-            "3": "Bifurcació en V perillosa"
+          "VForks": {
+            "0": "Normal bifurcations",
+            "1": "Slight V bifurcation",
+            "2": "Pronounced V bifurcation",
+            "3": "Dangerous V bifurcation"
           },
-          "cavidades": {
-            "0": "Sense cavitats",
-            "1": "Cavitat petita",
-            "2": "Cavitat intermèdia",
-            "3": "Cavitat profunda i estructural"
+          "cavities": {
+            "0": "No cavities",
+            "1": "Small cavity",
+            "2": "Intermediate cavity",
+            "3": "Deep and structural cavity"
           },
-          "danosCorteza": {
-            "0": "Escorça intacta",
-            "1": "Escorça amb ferides lleus",
-            "2": "Dany significatiu a l'escorça",
-            "3": "Escorça molt danyada"
+          "barkDamage": {
+            "0": "Intact bark",
+            "1": "Bark with slight wounds",
+            "2": "Significant bark damage",
+            "3": "Very damaged bark"
           },
-          "levantamientoSuelo": {
-            "0": "Sòl sense alteracions",
-            "1": "Lleu elevació del sòl",
-            "2": "Elevació visible del sòl",
-            "3": "Sòl severament aixecat"
+          "soilLifting": {
+            "0": "Soil without alterations",
+            "1": "Slight soil elevation",
+            "2": "Visible soil elevation",
+            "3": "Severely lifted soil"
           },
-          "raicesCortadas": {
-            "0": "Arrels intactes",
-            "1": "Arrels amb talls lleus",
-            "2": "Arrels parcialment danyades",
-            "3": "Arrels severament tallades"
+          "cutRoots": {
+            "0": "Intact roots",
+            "1": "Roots with slight cuts",
+            "2": "Partially damaged roots",
+            "3": "Severely cut roots"
           },
-          "podredumbreBasal": {
-            "0": "Sense podridura",
-            "1": "Podridura inicial",
-            "2": "Podridura visible",
-            "3": "Podridura avançada"
+          "basalRot": {
+            "0": "No rot",
+            "1": "Initial rot",
+            "2": "Visible rot",
+            "3": "Advanced rot"
           },
-          "raicesExpuestas": {
-            "0": "Arrels sota terra",
-            "1": "Algunes arrels exposades",
-            "2": "Diverses arrels exposades",
-            "3": "Arrels exposades i debilitades"
+          "exposedRoots": {
+            "0": "Roots underground",
+            "1": "Some exposed roots",
+            "2": "Several exposed roots",
+            "3": "Exposed and weakened roots"
           },
-          "viento": {
-            "0": "Arbre protegit per barreres naturals o edificis, sense vent constant fort.",
-            "1": "Arbre amb vent ocasional però sense impacte significatiu en la seva estabilitat.",
-            "2": "Arbre exposat a vents forts freqüents, que poden afectar la seva estructura.",
-            "3": "Arbre en zones obertes o pendents on el vent bufa amb força extrema."
+          "wind": {
+            "0": "Tree protected by natural barriers or buildings, no strong constant wind.",
+            "1": "Tree with occasional wind but no significant impact on its stability.",
+            "2": "Tree exposed to frequent strong winds, which may affect its structure.",
+            "3": "Tree in open areas or slopes where the wind blows with extreme force."
           },
-          "sequia": {
-            "0": "Arbre en una zona amb humitat estable i accés constant a l'aigua, sense estrès hídric.",
-            "1": "Arbre amb accés moderat a l'aigua, però amb períodes ocasionals de sequera.",
-            "2": "Arbre en una zona amb sequeres recurrents, afectant el seu desenvolupament i resistència.",
-            "3": "Arbre en una zona àrida o amb sequeres prolongades, alt risc de debilitament."
+          "drought": {
+            "0": "Tree in an area with stable humidity and constant access to water, no water stress.",
+            "1": "Tree with moderate access to water, but with occasional drought periods.",
+            "2": "Tree in an area with recurrent droughts, affecting its development and resistance.",
+            "3": "Tree in an arid area or with prolonged droughts, high risk of weakening."
           }
         },
         "edit": {
