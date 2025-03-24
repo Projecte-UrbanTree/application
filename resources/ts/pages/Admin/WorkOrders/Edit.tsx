@@ -61,6 +61,25 @@ const EditWorkOrder = () => {
       .then(response => {
         const data = response.data
         setWorkOrderContract(data.contract_id);
+        
+        // Usar los trabajadores disponibles del contrato
+        setUsers(data.available_workers.map((u: any) => ({
+          id: u.id,
+          name: u.name,
+          surname: u.surname || ''
+        })));
+        
+        // Usar las zonas disponibles del contrato
+        setZones(data.available_zones.map((z: any) => ({ 
+          id: z.id, 
+          name: z.name 
+        })));
+        
+        // Configurar tipos de tareas, elementos y árboles
+        setTaskTypes(data.task_types);
+        setElementTypes(data.element_types);
+        setTreeTypes(data.tree_types);
+        
         const transformed: EditWorkOrderValues = {
           date: data.date ? new Date(data.date) : null,
           selectedUsers: data.users.map((u: any) => ({
@@ -83,23 +102,6 @@ const EditWorkOrder = () => {
       })
       .catch(() => setLoading(false))
   }, [id])
-
-  useEffect(() => {
-    const contractIdToUse = (!currentContract || currentContract.id === 0) && workOrderContract 
-      ? workOrderContract 
-      : currentContract?.id;
-      
-    if (contractIdToUse) {
-      axiosClient.get(`/admin/work-orders/create?contract_id=${contractIdToUse}`)
-        .then(response => {
-          setUsers(response.data.users.map((u: any) => ({ id: u.id, name: u.name, surname: u.surname })))
-          setZones(response.data.zones.map((z: any) => ({ id: z.id, name: z.name })))
-          setTaskTypes(response.data.task_types)
-          setElementTypes(response.data.element_types)
-          setTreeTypes(response.data.tree_types)
-        })
-    }
-  }, [currentContract, workOrderContract])
 
   const validationSchema = Yup.object({
     date: Yup.date().required(t("admin.pages.workOrders.form.validation.date_required")),
