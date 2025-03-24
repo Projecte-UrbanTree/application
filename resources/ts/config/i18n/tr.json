@@ -580,89 +580,89 @@
           "title": "crwdns4093:0crwdne4093:0"
         },
         "dictionaries": {
-          "copaDesequilibrada": {
-            "0": "crwdns4095:0crwdne4095:0",
-            "1": "crwdns4097:0crwdne4097:0",
-            "2": "crwdns4099:0crwdne4099:0",
-            "3": "crwdns4101:0crwdne4101:0"
+          "unbalancedCrown": {
+            "0": "crwdns4419:0crwdne4419:0",
+            "1": "crwdns4421:0crwdne4421:0",
+            "2": "crwdns4423:0crwdne4423:0",
+            "3": "crwdns4425:0crwdne4425:0"
           },
-          "ramasSobreextendidas": {
-            "0": "crwdns4103:0crwdne4103:0",
-            "1": "crwdns4105:0crwdne4105:0",
-            "2": "crwdns4107:0crwdne4107:0",
-            "3": "crwdns4109:0crwdne4109:0"
+          "overextendedBranches": {
+            "0": "crwdns4427:0crwdne4427:0",
+            "1": "crwdns4429:0crwdne4429:0",
+            "2": "crwdns4431:0crwdne4431:0",
+            "3": "crwdns4433:0crwdne4433:0"
           },
-          "grietas": {
-            "0": "crwdns4111:0crwdne4111:0",
-            "1": "crwdns4113:0crwdne4113:0",
-            "2": "crwdns4115:0crwdne4115:0",
-            "3": "crwdns4117:0crwdne4117:0"
+          "cracks": {
+            "0": "crwdns4435:0crwdne4435:0",
+            "1": "crwdns4437:0crwdne4437:0",
+            "2": "crwdns4439:0crwdne4439:0",
+            "3": "crwdns4441:0crwdne4441:0"
           },
-          "ramasMuertas": {
-            "0": "crwdns4119:0crwdne4119:0",
-            "1": "crwdns4121:0crwdne4121:0",
-            "2": "crwdns4123:0crwdne4123:0",
-            "3": "crwdns4125:0crwdne4125:0"
+          "deadBranches": {
+            "0": "crwdns4443:0crwdne4443:0",
+            "1": "crwdns4445:0crwdne4445:0",
+            "2": "crwdns4447:0crwdne4447:0",
+            "3": "crwdns4449:0crwdne4449:0"
           },
-          "inclinacion": {
-            "0": "crwdns4127:0crwdne4127:0",
-            "1": "crwdns4129:0crwdne4129:0",
-            "2": "crwdns4131:0crwdne4131:0",
-            "3": "crwdns4133:0crwdne4133:0"
+          "inclination": {
+            "0": "crwdns4451:0crwdne4451:0",
+            "1": "crwdns4453:0crwdne4453:0",
+            "2": "crwdns4455:0crwdne4455:0",
+            "3": "crwdns4457:0crwdne4457:0"
           },
-          "bifurcacionesV": {
-            "0": "crwdns4135:0crwdne4135:0",
-            "1": "crwdns4137:0crwdne4137:0",
-            "2": "crwdns4139:0crwdne4139:0",
-            "3": "crwdns4141:0crwdne4141:0"
+          "VForks": {
+            "0": "crwdns4459:0crwdne4459:0",
+            "1": "crwdns4461:0crwdne4461:0",
+            "2": "crwdns4463:0crwdne4463:0",
+            "3": "crwdns4465:0crwdne4465:0"
           },
-          "cavidades": {
-            "0": "crwdns4143:0crwdne4143:0",
-            "1": "crwdns4145:0crwdne4145:0",
-            "2": "crwdns4147:0crwdne4147:0",
-            "3": "crwdns4149:0crwdne4149:0"
+          "cavities": {
+            "0": "crwdns4467:0crwdne4467:0",
+            "1": "crwdns4469:0crwdne4469:0",
+            "2": "crwdns4471:0crwdne4471:0",
+            "3": "crwdns4473:0crwdne4473:0"
           },
-          "danosCorteza": {
-            "0": "crwdns4151:0crwdne4151:0",
-            "1": "crwdns4153:0crwdne4153:0",
-            "2": "crwdns4155:0crwdne4155:0",
-            "3": "crwdns4157:0crwdne4157:0"
+          "barkDamage": {
+            "0": "crwdns4475:0crwdne4475:0",
+            "1": "crwdns4477:0crwdne4477:0",
+            "2": "crwdns4479:0crwdne4479:0",
+            "3": "crwdns4481:0crwdne4481:0"
           },
-          "levantamientoSuelo": {
-            "0": "crwdns4159:0crwdne4159:0",
-            "1": "crwdns4161:0crwdne4161:0",
-            "2": "crwdns4163:0crwdne4163:0",
-            "3": "crwdns4165:0crwdne4165:0"
+          "soilLifting": {
+            "0": "crwdns4483:0crwdne4483:0",
+            "1": "crwdns4485:0crwdne4485:0",
+            "2": "crwdns4487:0crwdne4487:0",
+            "3": "crwdns4489:0crwdne4489:0"
           },
-          "raicesCortadas": {
-            "0": "crwdns4167:0crwdne4167:0",
-            "1": "crwdns4169:0crwdne4169:0",
-            "2": "crwdns4171:0crwdne4171:0",
-            "3": "crwdns4173:0crwdne4173:0"
+          "cutRoots": {
+            "0": "crwdns4491:0crwdne4491:0",
+            "1": "crwdns4493:0crwdne4493:0",
+            "2": "crwdns4495:0crwdne4495:0",
+            "3": "crwdns4497:0crwdne4497:0"
           },
-          "podredumbreBasal": {
-            "0": "crwdns4175:0crwdne4175:0",
-            "1": "crwdns4177:0crwdne4177:0",
-            "2": "crwdns4179:0crwdne4179:0",
-            "3": "crwdns4181:0crwdne4181:0"
+          "basalRot": {
+            "0": "crwdns4499:0crwdne4499:0",
+            "1": "crwdns4501:0crwdne4501:0",
+            "2": "crwdns4503:0crwdne4503:0",
+            "3": "crwdns4505:0crwdne4505:0"
           },
-          "raicesExpuestas": {
-            "0": "crwdns4183:0crwdne4183:0",
-            "1": "crwdns4185:0crwdne4185:0",
-            "2": "crwdns4187:0crwdne4187:0",
-            "3": "crwdns4189:0crwdne4189:0"
+          "exposedRoots": {
+            "0": "crwdns4507:0crwdne4507:0",
+            "1": "crwdns4509:0crwdne4509:0",
+            "2": "crwdns4511:0crwdne4511:0",
+            "3": "crwdns4513:0crwdne4513:0"
           },
-          "viento": {
-            "0": "crwdns4191:0crwdne4191:0",
-            "1": "crwdns4193:0crwdne4193:0",
-            "2": "crwdns4195:0crwdne4195:0",
-            "3": "crwdns4197:0crwdne4197:0"
+          "wind": {
+            "0": "crwdns4515:0crwdne4515:0",
+            "1": "crwdns4517:0crwdne4517:0",
+            "2": "crwdns4519:0crwdne4519:0",
+            "3": "crwdns4521:0crwdne4521:0"
           },
-          "sequia": {
-            "0": "crwdns4199:0crwdne4199:0",
-            "1": "crwdns4201:0crwdne4201:0",
-            "2": "crwdns4203:0crwdne4203:0",
-            "3": "crwdns4205:0crwdne4205:0"
+          "drought": {
+            "0": "crwdns4523:0crwdne4523:0",
+            "1": "crwdns4525:0crwdne4525:0",
+            "2": "crwdns4527:0crwdne4527:0",
+            "3": "crwdns4529:0crwdne4529:0"
           }
         },
         "edit": {
