@@ -580,89 +580,89 @@
           "title": "Detalles de Eva"
         },
         "dictionaries": {
-          "copaDesequilibrada": {
-            "0": "Sin inclinación ni crecimiento desigual",
-            "1": "Ligera inclinación de la copa",
-            "2": "Copa visiblemente inclinada",
-            "3": "Copa extremadamente inclinada"
+          "unbalancedCrown": {
+            "0": "No inclination or uneven growth",
+            "1": "Slight crown inclination",
+            "2": "Visibly inclined crown",
+            "3": "Extremely inclined crown"
           },
-          "ramasSobreextendidas": {
-            "0": "Ramas bien estructuradas",
-            "1": "Pocas ramas sobreextendidas",
-            "2": "Varias ramas sobreextendidas",
-            "3": "Ramas sobreextendidas y pesadas"
+          "overextendedBranches": {
+            "0": "Well-structured branches",
+            "1": "Few overextended branches",
+            "2": "Several overextended branches",
+            "3": "Overextended and heavy branches"
           },
-          "grietas": {
-            "0": "Sin grietas",
-            "1": "Pequeñas grietas en el tronco",
-            "2": "Grietas visibles en varias partes",
-            "3": "Grietas profundas en el tronco"
+          "cracks": {
+            "0": "No cracks",
+            "1": "Small cracks in the trunk",
+            "2": "Visible cracks in several parts",
+            "3": "Deep cracks in the trunk"
           },
-          "ramasMuertas": {
-            "0": "Sin ramas muertas",
-            "1": "Algunas ramas muertas",
-            "2": "Múltiples ramas muertas",
-            "3": "Gran cantidad de ramas muertas"
+          "deadBranches": {
+            "0": "No dead branches",
+            "1": "Some dead branches",
+            "2": "Multiple dead branches",
+            "3": "Large number of dead branches"
           },
-          "inclinacion": {
-            "0": "Completamente vertical",
-            "1": "Ligera inclinación (<5°)",
-            "2": "Inclinación moderada (5-15°)",
-            "3": "Alta inclinación (>15°)"
+          "inclination": {
+            "0": "Completely vertical",
+            "1": "Slight inclination (<5°)",
+            "2": "Moderate inclination (5-15°)",
+            "3": "High inclination (>15°)"
           },
-          "bifurcacionesV": {
-            "0": "Bifurcaciones normales",
-            "1": "Ligera bifurcación en V",
-            "2": "Bifurcación en V pronunciada",
-            "3": "Bifurcación en V peligrosa"
+          "VForks": {
+            "0": "Normal bifurcations",
+            "1": "Slight V bifurcation",
+            "2": "Pronounced V bifurcation",
+            "3": "Dangerous V bifurcation"
           },
-          "cavidades": {
-            "0": "Sin cavidades",
-            "1": "Cavidad pequeña",
-            "2": "Cavidad intermedia",
-            "3": "Cavidad profunda y estructural"
+          "cavities": {
+            "0": "No cavities",
+            "1": "Small cavity",
+            "2": "Intermediate cavity",
+            "3": "Deep and structural cavity"
           },
-          "danosCorteza": {
-            "0": "Corteza intacta",
-            "1": "Corteza con heridas leves",
-            "2": "Daño significativo en la corteza",
-            "3": "Corteza muy dañada"
+          "barkDamage": {
+            "0": "Intact bark",
+            "1": "Bark with slight wounds",
+            "2": "Significant bark damage",
+            "3": "Very damaged bark"
           },
-          "levantamientoSuelo": {
-            "0": "Suelo sin alteraciones",
-            "1": "Leve elevación del suelo",
-            "2": "Elevación visible del suelo",
-            "3": "Suelo severamente levantado"
+          "soilLifting": {
+            "0": "Soil without alterations",
+            "1": "Slight soil elevation",
+            "2": "Visible soil elevation",
+            "3": "Severely lifted soil"
           },
-          "raicesCortadas": {
-            "0": "Raíces intactas",
-            "1": "Raíces con cortes leves",
-            "2": "Raíces parcialmente dañadas",
-            "3": "Raíces severamente cortadas"
+          "cutRoots": {
+            "0": "Intact roots",
+            "1": "Roots with slight cuts",
+            "2": "Partially damaged roots",
+            "3": "Severely cut roots"
           },
-          "podredumbreBasal": {
-            "0": "Sin podredumbre",
-            "1": "Podredumbre inicial",
-            "2": "Podredumbre visible",
-            "3": "Podredumbre avanzada"
+          "basalRot": {
+            "0": "No rot",
+            "1": "Initial rot",
+            "2": "Visible rot",
+            "3": "Advanced rot"
           },
-          "raicesExpuestas": {
-            "0": "Raíces bajo tierra",
-            "1": "Algunas raíces expuestas",
-            "2": "Varias raíces expuestas",
-            "3": "Raíces expuestas y debilitadas"
+          "exposedRoots": {
+            "0": "Roots underground",
+            "1": "Some exposed roots",
+            "2": "Several exposed roots",
+            "3": "Exposed and weakened roots"
           },
-          "viento": {
-            "0": "Árbol protegido por barreras naturales o edificios, sin viento constante fuerte.",
-            "1": "Árbol con viento ocasional pero sin impacto significativo en su estabilidad.",
-            "2": "Árbol expuesto a vientos fuertes frecuentes, lo que puede afectar su estructura.",
-            "3": "Árbol en áreas abiertas o pendientes donde el viento sopla con fuerza extrema."
+          "wind": {
+            "0": "Tree protected by natural barriers or buildings, no strong constant wind.",
+            "1": "Tree with occasional wind but no significant impact on its stability.",
+            "2": "Tree exposed to frequent strong winds, which may affect its structure.",
+            "3": "Tree in open areas or slopes where the wind blows with extreme force."
           },
-          "sequia": {
-            "0": "Árbol en un área con humedad estable y acceso constante al agua, sin estrés hídrico.",
-            "1": "Árbol con acceso moderado al agua, pero con períodos ocasionales de sequía.",
-            "2": "Árbol en un área con sequías recurrentes, afectando su desarrollo y resistencia.",
-            "3": "Árbol en un área árida o con sequías prolongadas, alto riesgo de debilitamiento."
+          "drought": {
+            "0": "Tree in an area with stable humidity and constant access to water, no water stress.",
+            "1": "Tree with moderate access to water, but with occasional drought periods.",
+            "2": "Tree in an area with recurrent droughts, affecting its development and resistance.",
+            "3": "Tree in an arid area or with prolonged droughts, high risk of weakening."
           }
         },
         "edit": {
