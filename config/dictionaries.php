@@ -1,88 +1,88 @@
 <?php
 
 return [
-    'copaDesequilibrada' => [
-        ['label' => 'admin.pages.evas.dictionaries.copaDesequilibrada.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.copaDesequilibrada.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.copaDesequilibrada.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.copaDesequilibrada.3', 'value' => 3],
+    'unbalancedCrown' => [
+        ['label' => 'admin.pages.evas.dictionaries.unbalancedCrown.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.unbalancedCrown.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.unbalancedCrown.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.unbalancedCrown.3', 'value' => 3],
     ],
-    'ramasSobreextendidas' => [
-        ['label' => 'admin.pages.evas.dictionaries.ramasSobreextendidas.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.ramasSobreextendidas.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.ramasSobreextendidas.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.ramasSobreextendidas.3', 'value' => 3],
+    'overextendedBranches' => [
+        ['label' => 'admin.pages.evas.dictionaries.overextendedBranches.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.overextendedBranches.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.overextendedBranches.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.overextendedBranches.3', 'value' => 3],
     ],
-    'grietas' => [
-        ['label' => 'admin.pages.evas.dictionaries.grietas.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.grietas.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.grietas.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.grietas.3', 'value' => 3],
+    'cracks' => [
+        ['label' => 'admin.pages.evas.dictionaries.cracks.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.cracks.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.cracks.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.cracks.3', 'value' => 3],
     ],
-    'ramasMuertas' => [
-        ['label' => 'admin.pages.evas.dictionaries.ramasMuertas.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.ramasMuertas.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.ramasMuertas.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.ramasMuertas.3', 'value' => 3],
+    'deadBranches' => [
+        ['label' => 'admin.pages.evas.dictionaries.deadBranches.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.deadBranches.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.deadBranches.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.deadBranches.3', 'value' => 3],
     ],
-    'inclinacion' => [
-        ['label' => 'admin.pages.evas.dictionaries.inclinacion.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.inclinacion.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.inclinacion.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.inclinacion.3', 'value' => 3],
+    'inclination' => [
+        ['label' => 'admin.pages.evas.dictionaries.inclination.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.inclination.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.inclination.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.inclination.3', 'value' => 3],
     ],
-    'bifurcacionesV' => [
-        ['label' => 'admin.pages.evas.dictionaries.bifurcacionesV.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.bifurcacionesV.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.bifurcacionesV.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.bifurcacionesV.3', 'value' => 3],
+    'VForks' => [
+        ['label' => 'admin.pages.evas.dictionaries.VForks.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.VForks.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.VForks.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.VForks.3', 'value' => 3],
     ],
-    'cavidades' => [
-        ['label' => 'admin.pages.evas.dictionaries.cavidades.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.cavidades.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.cavidades.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.cavidades.3', 'value' => 3],
+    'cavities' => [
+        ['label' => 'admin.pages.evas.dictionaries.cavities.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.cavities.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.cavities.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.cavities.3', 'value' => 3],
     ],
-    'danosCorteza' => [
-        ['label' => 'admin.pages.evas.dictionaries.danosCorteza.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.danosCorteza.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.danosCorteza.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.danosCorteza.3', 'value' => 3],
+    'barkDamage' => [
+        ['label' => 'admin.pages.evas.dictionaries.barkDamage.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.barkDamage.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.barkDamage.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.barkDamage.3', 'value' => 3],
     ],
-    'levantamientoSuelo' => [
-        ['label' => 'admin.pages.evas.dictionaries.levantamientoSuelo.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.levantamientoSuelo.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.levantamientoSuelo.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.levantamientoSuelo.3', 'value' => 3],
+    'soilLifting' => [
+        ['label' => 'admin.pages.evas.dictionaries.soilLifting.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.soilLifting.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.soilLifting.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.soilLifting.3', 'value' => 3],
     ],
-    'raicesCortadas' => [
-        ['label' => 'admin.pages.evas.dictionaries.raicesCortadas.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.raicesCortadas.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.raicesCortadas.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.raicesCortadas.3', 'value' => 3],
+    'cutRoots' => [
+        ['label' => 'admin.pages.evas.dictionaries.cutRoots.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.cutRoots.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.cutRoots.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.cutRoots.3', 'value' => 3],
     ],
-    'podredumbreBasal' => [
-        ['label' => 'admin.pages.evas.dictionaries.podredumbreBasal.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.podredumbreBasal.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.podredumbreBasal.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.podredumbreBasal.3', 'value' => 3],
+    'basalRot' => [
+        ['label' => 'admin.pages.evas.dictionaries.basalRot.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.basalRot.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.basalRot.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.basalRot.3', 'value' => 3],
     ],
-    'raicesExpuestas' => [
-        ['label' => 'admin.pages.evas.dictionaries.raicesExpuestas.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.raicesExpuestas.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.raicesExpuestas.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.raicesExpuestas.3', 'value' => 3],
+    'exposedRoots' => [
+        ['label' => 'admin.pages.evas.dictionaries.exposedRoots.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.exposedRoots.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.exposedRoots.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.exposedRoots.3', 'value' => 3],
     ],
-    'viento' => [
-        ['label' => 'admin.pages.evas.dictionaries.viento.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.viento.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.viento.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.viento.3', 'value' => 3],
+    'wind' => [
+        ['label' => 'admin.pages.evas.dictionaries.wind.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.wind.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.wind.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.wind.3', 'value' => 3],
     ],
-    'sequia' => [
-        ['label' => 'admin.pages.evas.dictionaries.sequia.0', 'value' => 0],
-        ['label' => 'admin.pages.evas.dictionaries.sequia.1', 'value' => 1],
-        ['label' => 'admin.pages.evas.dictionaries.sequia.2', 'value' => 2],
-        ['label' => 'admin.pages.evas.dictionaries.sequia.3', 'value' => 3],
+    'drought' => [
+        ['label' => 'admin.pages.evas.dictionaries.drought.0', 'value' => 0],
+        ['label' => 'admin.pages.evas.dictionaries.drought.1', 'value' => 1],
+        ['label' => 'admin.pages.evas.dictionaries.drought.2', 'value' => 2],
+        ['label' => 'admin.pages.evas.dictionaries.drought.3', 'value' => 3],
     ],
 ];
