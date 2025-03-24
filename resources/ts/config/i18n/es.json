@@ -575,9 +575,9 @@
           "passwordCurrentWrong": "La contraseña actual no coincide"
         }
       },
-      "eva": {
+      "evas": {
         "show": {
-          "title": "Detalles de Eva"
+          "title": "Eva Details"
         },
         "dictionaries": {
           "unbalancedCrown": {
@@ -694,13 +694,13 @@
         },
         "title": "Evas",
         "age": {
-          "years": "Años",
-          "months": "Meses"
+          "years": "Years",
+          "months": "Months"
         },
         "columns": {
-          "element_id": "ID del elemento",
-          "age": "Edad",
-          "height": "Altura",
+          "element_id": "Element ID",
+          "age": "Age",
+          "height": "Height",
           "actions": "Acciones",
           "name": "Nombre",
           "coordinates": "Coordinates",
@@ -708,10 +708,10 @@
         },
         "form": {
           "name": "Nombre",
-          "element_id": "ID del elemento",
-          "years": "Años",
-          "months": "Meses",
-          "height": "Altura",
+          "element_id": "Element ID",
+          "years": "Years",
+          "months": "Months",
+          "height": "Height",
           "diameter": "Diameter",
           "crown_width": "Crown Width",
           "crown_projection_area": "Crown Projection Area",
