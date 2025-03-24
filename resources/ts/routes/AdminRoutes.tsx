@@ -113,7 +113,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'work-reports/:id',
             element: (
-              <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+              <AdminLayoutWrapper titleI18n="admin.pages.workReports.show.title">
                 <WorkReport />
               </AdminLayoutWrapper>
             ),
@@ -177,7 +177,10 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'settings',
             children: [
-              { index: true, element: <Navigate to="/admin/settings/users" replace /> },
+              {
+                index: true,
+                element: <Navigate to="/admin/settings/users" replace />,
+              },
               {
                 path: 'users',
                 element: (
