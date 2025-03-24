@@ -81,7 +81,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'evas/:id',
             element: (
-              <AdminLayoutWrapper titleI18n="admin.pages.eva.show.title">
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.show.title">
                 <ShowEva />
               </AdminLayoutWrapper>
             ),
@@ -177,7 +177,10 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'settings',
             children: [
-              { index: true, element: <Navigate to="/admin/settings/users" replace /> },
+              {
+                index: true,
+                element: <Navigate to="/admin/settings/users" replace />,
+              },
               {
                 path: 'users',
                 element: (
