@@ -266,7 +266,7 @@ export default function ShowEva() {
               <Icon icon="tabler:arrow-left" className="h-6 w-6" />
             </Button>
             <h2 className="text-white text-3xl font-bold">
-              {t('admin.pages.evas.show.title')}
+              {t('admin.pages.eva.show.title')}
             </h2>
           </div>
           <Button
