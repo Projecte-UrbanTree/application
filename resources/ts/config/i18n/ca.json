@@ -20,6 +20,8 @@
       "resource_type": "Tipus de recurs",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipus de recurs",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
       "species": "Espècie",
       "start_date": "Data d'inici",
       "status": "Estat",
@@ -205,7 +207,10 @@
             "name_min": "El nom ha de tenir almenys 3 caràcters",
             "name_required": "El nom és obligatori",
             "type_invalid": "Si us plau, selecciona un tipus de recurs vàlid",
-            "type_required": "El tipus és obligatori"
+            "type_required": "El tipus és obligatori",
+            "unit_cost_min": "Unit cost must be greater than 0",
+            "unit_cost_required": "Unit cost is required",
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
@@ -217,7 +222,10 @@
           "columns": {
             "description": "Descripció",
             "name": "Nom",
-            "type": "Tipus"
+            "type": "Tipus",
+            "unit": "Unit",
+            "unit_name": "Unit Name",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
             "createSuccess": "Tipus de recurs creat correctament",
