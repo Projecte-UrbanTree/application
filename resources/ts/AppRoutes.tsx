@@ -1,5 +1,7 @@
+import React from 'react';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import Error from '@/pages/Error';
+import ErrorBoundary from './components/ErrorBoundary';
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -25,7 +27,9 @@ export default function AppRoutes() {
 
     return (
         <Router>
-            <RoutesComponent />
+            <ErrorBoundary>
+                <RoutesComponent />
+            </ErrorBoundary>
         </Router>
     );
 }

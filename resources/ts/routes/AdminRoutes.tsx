@@ -7,6 +7,7 @@ import AdminInventory from '@/pages/Admin/Inventory';
 import AdminContracts from '@/pages/Admin/Settings/Contracts/Contracts';
 import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
 import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
+import DuplicateContractForm from '@/pages/Admin/Settings/Contracts/DuplicateContractForm';
 import CreateElementTypes from '@/pages/Admin/Settings/Element Types/Create';
 import EditElementTypes from '@/pages/Admin/Settings/Element Types/Edit';
 import AdminElementTypes from '@/pages/Admin/Settings/Element Types/ElementTypes';
@@ -226,6 +227,14 @@ const AdminRoutes: RouteObject[] = [
                 element: (
                   <AdminLayoutWrapper titleI18n="admin.pages.contracts.edit.title">
                     <EditContract />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'contracts/:id/duplicate',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.contracts.duplicate.title">
+                    <DuplicateContractForm />
                   </AdminLayoutWrapper>
                 ),
               },
