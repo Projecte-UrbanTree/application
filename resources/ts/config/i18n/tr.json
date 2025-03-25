@@ -20,6 +20,8 @@
       "resource_type": "crwdns3597:0crwdne3597:0",
       "role": "crwdns2825:0crwdne2825:0",
       "select_resource_type": "crwdns3599:0crwdne3599:0",
+      "unit_cost": "crwdns4857:0crwdne4857:0",
+      "unit_name": "crwdns4859:0crwdne4859:0",
       "species": "crwdns2827:0crwdne2827:0",
       "start_date": "crwdns2829:0crwdne2829:0",
       "status": "crwdns2831:0crwdne2831:0",
@@ -205,7 +207,10 @@
             "name_min": "crwdns3607:0crwdne3607:0",
             "name_required": "crwdns2951:0crwdne2951:0",
             "type_invalid": "crwdns3609:0crwdne3609:0",
-            "type_required": "crwdns2953:0crwdne2953:0"
+            "type_required": "crwdns2953:0crwdne2953:0",
+            "unit_cost_min": "crwdns4861:0crwdne4861:0",
+            "unit_cost_required": "crwdns4863:0crwdne4863:0",
+            "unit_name_required": "crwdns4865:0crwdne4865:0"
           }
         },
         "list": {
@@ -217,7 +222,10 @@
           "columns": {
             "description": "crwdns2961:0crwdne2961:0",
             "name": "crwdns2963:0crwdne2963:0",
-            "type": "crwdns2965:0crwdne2965:0"
+            "type": "crwdns2965:0crwdne2965:0",
+            "unit": "crwdns4867:0crwdne4867:0",
+            "unit_name": "crwdns4869:0crwdne4869:0",
+            "unit_cost": "crwdns4871:0crwdne4871:0"
           },
           "messages": {
             "createSuccess": "crwdns2967:0crwdne2967:0",
