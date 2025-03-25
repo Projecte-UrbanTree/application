@@ -127,17 +127,12 @@ export default function Resources() {
             )}
           />
           <Column
-            field="unit_name"
-            header={t('admin.pages.resources.list.columns.unit_name')}
+            field="unit"
+            header={t('admin.pages.resources.list.columns.unit')}
             body={(rowData: Resource) => (
-              <Badge value={rowData.unit_name || '-'} severity="info" />
-            )}
-          />
-          <Column
-            field="unit_cost"
-            header={t('admin.pages.resources.list.columns.unit_cost')}
-            body={(rowData: Resource) => (
-              <Badge value={rowData.unit_cost || '-'} severity="info" />
+              <span>
+                {rowData.unit_cost} {rowData.unit_name.toLowerCase()}
+              </span>
             )}
           />
           <Column

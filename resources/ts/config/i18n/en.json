@@ -223,6 +223,7 @@
             "description": "Description",
             "name": "Name",
             "type": "Type",
+            "unit": "Unit",
             "unit_name": "Unit Name",
             "unit_cost": "Unit Cost"
           },
