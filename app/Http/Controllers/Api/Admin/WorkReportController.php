@@ -29,7 +29,15 @@ class WorkReportController extends Controller
     }
     public function show($id)
     {
-        $workReport = WorkReport::find($id);
+        $workReport = WorkReport::with(
+            'workOrders',
+            'workOrders.contract',
+            'workOrders.workOrdersBlocks',
+            'workOrders.workOrdersBlocks.zones',
+            'workOrders.workOrdersBlocks.blockTasks.elementType',
+            'workOrders.workOrdersBlocks.blockTasks.treeType',
+            'workOrders.workOrdersBlocks.blockTasks.tasksType'
+        )->find($id);
 
         if ($workReport === null) {
             return response()->json([

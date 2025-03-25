@@ -14,7 +14,7 @@ class WorkReport extends Model
         'report_incidents',
     ];
 
-    public function workOrder()
+    public function workOrders()
     {
         return $this->belongsTo(WorkOrder::class, 'work_order_id');
     }

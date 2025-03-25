@@ -8,6 +8,51 @@ import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
 import { SplitButton } from 'primereact/splitbutton';
 import { Toast } from 'primereact/toast';
+import { Tag } from 'primereact/tag';
+import { Timeline } from 'primereact/timeline';
+import { Divider } from 'primereact/divider';
+import { Badge } from 'primereact/badge';
+
+interface Zone {
+  id: number;
+  name: string;
+  description: string;
+  color: string;
+}
+
+interface BlockTask {
+  id: number;
+  status: number;
+  spent_time: number;
+  element_type: {
+    id: number;
+    name: string;
+    description: string;
+    icon: string;
+    color: string;
+  };
+  tree_type: {
+    id: number;
+    family: string;
+    genus: string;
+    species: string;
+  } | null;
+  tasks_type: { id: number; name: string; description: string };
+}
+
+interface WorkOrderBlock {
+  id: number;
+  notes: string;
+  zones: Zone[];
+  block_tasks: BlockTask[];
+}
+
+interface WorkOrder {
+  id: number;
+  date: string;
+  status: number;
+  work_orders_blocks: WorkOrderBlock[];
+}
 
 interface WorkReport {
   id: number;
@@ -16,6 +61,7 @@ interface WorkReport {
   report_status: number;
   report_incidents: string;
   work_order_id: number;
+  work_orders: WorkOrder;
 }
 
 const WorkReportDetail = () => {
@@ -27,41 +73,45 @@ const WorkReportDetail = () => {
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
 
-  const items = [
+  const actions = [
     {
-      label: 'Update',
-      icon: 'pi pi-refresh',
+      label: t('general.actions.edit'),
+      icon: 'pi pi-pencil',
       command: () => {
         toast.current?.show({
-          severity: 'success',
-          summary: 'Updated',
-          detail: 'Data Updated',
+          severity: 'info',
+          summary: t('general.messages.edit'),
+          detail: t('admin.pages.work_reports.messages.editing'),
         });
       },
     },
     {
-      label: 'Delete',
-      icon: 'pi pi-times',
+      label: t('general.actions.delete'),
+      icon: 'pi pi-trash',
       command: () => {
         toast.current?.show({
           severity: 'warn',
-          summary: 'Delete',
-          detail: 'Data Deleted',
+          summary: t('general.messages.delete'),
+          detail: t('admin.pages.work_reports.messages.deleting'),
         });
       },
     },
     {
-      label: 'React Website',
-      icon: 'pi pi-external-link',
+      label: t('general.actions.print'),
+      icon: 'pi pi-print',
       command: () => {
-        window.location.href = 'https://reactjs.org/';
+        window.print();
       },
     },
     {
-      label: 'Upload',
-      icon: 'pi pi-upload',
+      label: t('general.actions.export'),
+      icon: 'pi pi-download',
       command: () => {
-        //router.push('/fileupload');
+        toast.current?.show({
+          severity: 'success',
+          summary: t('general.messages.export'),
+          detail: t('admin.pages.work_reports.messages.exporting'),
+        });
       },
     },
   ];
@@ -80,7 +130,22 @@ const WorkReportDetail = () => {
     };
 
     fetchWorkReport();
-  }, [id]);
+  }, [id, t]);
+
+  const getStatusSeverity = (status: number) => {
+    switch (status) {
+      case 0:
+        return 'warning';
+      case 1:
+        return 'info';
+      case 2:
+        return 'success';
+      case 3:
+        return 'danger';
+      default:
+        return null;
+    }
+  };
 
   const getStatusText = (status: number) => {
     switch (status) {
@@ -97,22 +162,169 @@ const WorkReportDetail = () => {
     }
   };
 
-  if (loading)
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const renderBlockTask = (task: BlockTask) => {
+    return (
+      <div
+        className="p-3 border-round-md mb-2"
+        style={{ backgroundColor: 'var(--surface-ground)' }}>
+        <div className="flex align-items-center gap-3">
+          <Icon
+            icon={task.element_type.icon}
+            className="text-xl"
+            style={{ color: task.element_type.color }}
+          />
+          <div>
+            <h4 className="m-0">{task.tasks_type.name}</h4>
+            <p className="text-sm m-0">
+              {task.element_type.name}
+              {task.tree_type && ` • ${task.tree_type.species}`}
+            </p>
+          </div>
+          <Tag
+            value={`${task.spent_time} h`}
+            severity="info"
+            className="ml-auto"
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const renderWorkOrderBlock = (block: WorkOrderBlock, index: number) => {
+    return (
+      <div className="bg-gray-100 m-5 border-round-md p-5">
+        <div key={block.id} className="mb-5">
+          <div className="flex align-items-center gap-2 mb-3">
+            <Badge value={index + 1} className="mr-2" />
+            <h3 className="m-0 text-left">
+              {t('admin.pages.work_orders.columns.block')} {index + 1}
+            </h3>
+          </div>
+
+          {block.notes && (
+            <div
+              className="p-3 border-round-md mb-3 text-left"
+              style={{ backgroundColor: 'var(--surface-ground)' }}>
+              <p className="m-0">
+                <strong>{t('admin.pages.work_orders.columns.notes')}:</strong>{' '}
+                {block.notes}
+              </p>
+            </div>
+          )}
+
+          <div className="mb-3 text-left">
+            <h4 className="m-0 mb-2">
+              {t('admin.pages.work_orders.columns.zones')}
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {block.zones.map((zone) => (
+                <Tag
+                  key={zone.id}
+                  value={zone.name}
+                  style={{ backgroundColor: zone.color, color: 'white' }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <h4 className="m-0 mb-2 text-left">
+            {t('admin.pages.work_orders.columns.tasks')}
+          </h4>
+          <div className="grid">
+            {block.block_tasks.map((task, taskIndex) => (
+              <div key={taskIndex} className="col-12 md:col-6">
+                {renderBlockTask(task)}
+              </div>
+            ))}
+          </div>
+
+          {/* Report Details Section */}
+          <div className="mt-4 text-left">
+            <h4 className="m-0 mb-4">
+              {t('admin.pages.work_reports.details')}
+            </h4>
+
+            <div className="grid">
+              <div className="col-12 md:col-6">
+                <div
+                  className="p-3 border-round-md mb-3"
+                  style={{ backgroundColor: 'var(--surface-ground)' }}>
+                  <h4 className="m-0 mb-2">
+                    {t('admin.pages.work_reports.columns.observation')}
+                  </h4>
+                  <p className="m-0">
+                    {workReport?.observation || (
+                      <span className="text-400">
+                        {t('general.not_available')}
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              <div className="col-12 md:col-6">
+                <div
+                  className="p-3 border-round-md mb-3"
+                  style={{ backgroundColor: 'var(--surface-ground)' }}>
+                  <h4 className="m-0 mb-2">
+                    {t('admin.pages.work_reports.columns.spent_fuel')}
+                  </h4>
+                  <p className="m-0">{workReport?.spent_fuel} L</p>
+                </div>
+              </div>
+
+              <div className="col-12 md:col-6">
+                <div
+                  className="p-3 border-round-md"
+                  style={{ backgroundColor: 'var(--surface-ground)' }}>
+                  <h4 className="m-0 mb-2">
+                    {t('admin.pages.work_reports.columns.incidents')}
+                  </h4>
+                  <p className="m-0">
+                    {workReport?.report_incidents || (
+                      <span className="text-400">
+                        {t('general.not_available')}
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <ProgressSpinner
           style={{ width: '50px', height: '50px' }}
           strokeWidth="4"
+          animationDuration=".5s"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
+        <span className="mt-4 text-600 font-medium">
+          {t('general.loading')}
+        </span>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
-      <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-        <Card className="w-full max-w-3xl shadow-lg">
-          <div className="p-6 text-center">
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-3xl">
+          <div className="text-center p-6">
             <Icon
               icon="tabler:alert-circle"
               className="h-16 w-16 text-red-500 mx-auto mb-4"
@@ -120,22 +332,24 @@ const WorkReportDetail = () => {
             <h2 className="text-2xl font-bold mb-4">
               {t('admin.pages.error.error')}
             </h2>
-            <p className="text-gray-600 mb-6">{error}</p>
+            <p className="text-600 mb-6">{error}</p>
             <Button
               label={t('admin.pages.general.returnButton')}
               icon="pi pi-arrow-left"
               onClick={() => navigate('/admin/work-reports')}
+              className="p-button-outlined"
             />
           </div>
         </Card>
       </div>
     );
+  }
 
-  if (!workReport)
+  if (!workReport) {
     return (
-      <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-        <Card className="w-full max-w-3xl shadow-lg">
-          <div className="p-6 text-center">
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-3xl">
+          <div className="text-center p-6">
             <Icon
               icon="tabler:alert-circle"
               className="h-16 w-16 text-yellow-500 mx-auto mb-4"
@@ -147,14 +361,16 @@ const WorkReportDetail = () => {
               label={t('admin.pages.general.returnButton')}
               icon="pi pi-arrow-left"
               onClick={() => navigate('/admin/work-reports')}
+              className="p-button-outlined"
             />
           </div>
         </Card>
       </div>
     );
+  }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 md:p-6">
+    <div className=" bg-gray-50 md:p-6">
       <Card className="w-full max-w-3xl shadow-lg">
         <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
           <Button
@@ -167,71 +383,24 @@ const WorkReportDetail = () => {
             {t('admin.pages.work_reports.title')} #{workReport.id}
           </h2>
         </header>
-        <div className="pt-6">
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                {t('admin.pages.work_reports.details')}
-              </h3>
-            </div>
-            <div className="px-4 py-5 sm:p-6">
-              <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">
-                    {t('admin.pages.work_reports.columns.observation')}
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {workReport.observation || 'N/A'}
-                  </dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">
-                    {t('admin.pages.work_reports.columns.spent_fuel')}
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {workReport.spent_fuel} L
-                  </dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">
-                    {t('admin.pages.work_reports.columns.status')}
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    <span
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        workReport.report_status === 0
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : workReport.report_status === 1
-                            ? 'bg-blue-100 text-blue-800'
-                            : workReport.report_status === 2
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
-                      }`}>
-                      {getStatusText(workReport.report_status)}
-                    </span>
-                  </dd>
-                </div>
-                <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-gray-500">
-                    {t('admin.pages.work_reports.columns.incidents')}
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {workReport.report_incidents || 'N/A'}
-                  </dd>
-                </div>
-              </dl>
-            </div>
+        {/* Work Order Section */}
+        <div className="mb-6">
+          <div className="flex align-items-center justify-content-between mb-4 mt-6">
+            <span className="text-600">
+              {formatDate(workReport.work_orders.date)}
+            </span>
           </div>
-          <div className="card flex justify-end mt-4">
-            <Toast ref={toast}></Toast>
-            <SplitButton
-              label="Save"
-              icon="pi pi-plus"
-              model={items}
-              severity="contrast"
-              rounded
-            />
-          </div>
+
+          <Divider />
+
+          {workReport.work_orders.work_orders_blocks.map((block, index) => (
+            <div key={block.id}>
+              {renderWorkOrderBlock(block, index)}
+              {index < workReport.work_orders.work_orders_blocks.length - 1 && (
+                <Divider />
+              )}
+            </div>
+          ))}
         </div>
       </Card>
     </div>
