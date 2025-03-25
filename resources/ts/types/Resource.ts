@@ -1,6 +1,7 @@
 import type { ResourceType } from './ResourceType';
 
 export interface Resource {
+  contract_id: number | undefined;
   id: number;
   name: string;
   description?: string;

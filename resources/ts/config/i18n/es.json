@@ -446,7 +446,8 @@
           "columns": {
             "description": "Descripción",
             "name": "Nombre",
-            "type": "Tipo"
+            "type": "Tipo",
+            "unit": "Unidad"
           },
           "messages": {
             "createSuccess": "Recurso creado exitosamente",
