@@ -127,10 +127,10 @@ export default function Resources() {
             )}
           />
           <Column
-            field="unit_type"
-            header={t('admin.pages.resources.list.columns.unit_type')}
+            field="unit_name"
+            header={t('admin.pages.resources.list.columns.unit_name')}
             body={(rowData: Resource) => (
-              <Badge value={rowData.unit_type || '-'} severity="info" />
+              <Badge value={rowData.unit_name || '-'} severity="info" />
             )}
           />
           <Column

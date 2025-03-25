@@ -22,7 +22,7 @@ export default function EditResource() {
     description: '',
     resource_type_id: 0,
     unit_cost: 0,
-    unit_type: '',
+    unit_name: '',
   });
   const [isLoading, setIsLoading] = useState(true);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
@@ -63,8 +63,8 @@ export default function EditResource() {
     unit_cost: Yup.number()
       .min(0, t('admin.pages.resources.form.validation.unit_cost_min'))
       .required(t('admin.pages.resources.form.validation.unit_cost_required')),
-    unit_type: Yup.string().required(
-      t('admin.pages.resources.form.validation.unit_type_required'),
+    unit_name: Yup.string().required(
+      t('admin.pages.resources.form.validation.unit_name_required'),
     ),
   });
 
@@ -192,18 +192,18 @@ export default function EditResource() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:ruler" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.unit_type')}
+                    {t('admin.fields.unit_name')}
                   </label>
                   <Field
-                    name="unit_type"
+                    name="unit_name"
                     as={InputText}
-                    placeholder={t('admin.fields.unit_type')}
+                    placeholder={t('admin.fields.unit_name')}
                     className={
-                      errors.unit_type && touched.unit_type ? 'p-invalid' : ''
+                      errors.unit_name && touched.unit_name ? 'p-invalid' : ''
                     }
                   />
-                  {errors.unit_type && touched.unit_type && (
-                    <small className="p-error">{errors.unit_type}</small>
+                  {errors.unit_name && touched.unit_name && (
+                    <small className="p-error">{errors.unit_name}</small>
                   )}
                 </div>
 

@@ -21,7 +21,7 @@
       "role": "Role",
       "select_resource_type": "Select a resource type",
       "unit_cost": "Edit the unit cost",
-      "unit_type": "Select a resource unit",
+      "unit_name": "Select a resource unit",
       "species": "Species",
       "start_date": "Start Date",
       "status": "Status",
@@ -210,7 +210,7 @@
             "type_required": "Type is required",
             "unit_cost_min": "Unit cost must be greater than 0",
             "unit_cost_required": "Unit cost is required",
-            "unit_type_required": "Unit type is required"
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
@@ -223,7 +223,7 @@
             "description": "Description",
             "name": "Name",
             "type": "Type",
-            "unit_type": "Unit Type",
+            "unit_name": "Unit Name",
             "unit_cost": "Unit Cost"
           },
           "messages": {

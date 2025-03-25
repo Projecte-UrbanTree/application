@@ -36,6 +36,8 @@ export default function CreateResource() {
     name: '',
     description: '',
     resource_type_id: 0,
+    unit_cost: 0,
+    unit_name: '',
   };
 
   const validationSchema = Yup.object({
@@ -54,6 +56,12 @@ export default function CreateResource() {
     resource_type_id: Yup.number()
       .required(t('admin.pages.resources.form.validation.type_required'))
       .positive(t('admin.pages.resources.form.validation.type_invalid')),
+    unit_cost: Yup.number()
+      .min(0, t('admin.pages.resources.form.validation.unit_cost_min'))
+      .required(t('admin.pages.resources.form.validation.unit_cost_required')),
+    unit_name: Yup.string().required(
+      t('admin.pages.resources.form.validation.unit_name_required'),
+    ),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
