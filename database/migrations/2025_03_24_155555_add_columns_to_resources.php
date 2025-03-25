@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::table('resources', function (Blueprint $table) {
             $table->string('unit_name');
-            $table->decimal('unit_price', 10, 2);
+            $table->decimal('unit_cost', 10, 2);
 
             //
         });

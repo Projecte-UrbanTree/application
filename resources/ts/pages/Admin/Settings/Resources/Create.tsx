@@ -162,6 +162,45 @@ export default function CreateResource() {
                     <small className="p-error">{errors.resource_type_id}</small>
                   )}
                 </div>
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon
+                      icon="tabler:currency-euro"
+                      className="h-5 w-5 mr-2"
+                    />
+                    {t('admin.fields.unit_cost')}
+                  </label>
+                  <Field
+                    name="unit_cost"
+                    as={InputText}
+                    type="number"
+                    placeholder={t('admin.fields.unit_cost')}
+                    className={
+                      errors.unit_cost && touched.unit_cost ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.unit_cost && touched.unit_cost && (
+                    <small className="p-error">{errors.unit_cost}</small>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:ruler" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.unit_name')}
+                  </label>
+                  <Field
+                    name="unit_name"
+                    as={InputText}
+                    placeholder={t('admin.fields.unit_name')}
+                    className={
+                      errors.unit_name && touched.unit_name ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.unit_name && touched.unit_name && (
+                    <small className="p-error">{errors.unit_name}</small>
+                  )}
+                </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <Button
                     type="submit"

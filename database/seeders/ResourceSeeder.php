@@ -19,7 +19,7 @@ class ResourceSeeder extends Seeder
                 'description' => 'Description for Resource 1',
                 'resource_type_id' => 1,
                 'unit_name' => 'Gasolina',
-                'unit_price' => 10.5,
+                'unit_cost' => 10.5,
 
             ],
             [
@@ -28,7 +28,7 @@ class ResourceSeeder extends Seeder
                 'description' => 'Description for Resource 2',
                 'resource_type_id' => 2,
                 'unit_name' => 'Hores',
-                'unit_price' => 20.5,
+                'unit_cost' => 20.5,
 
             ],
             [
@@ -37,7 +37,7 @@ class ResourceSeeder extends Seeder
                 'description' => 'Description for Resource 3',
                 'resource_type_id' => 3,
                 'unit_name' => 'Gasolina',
-                'unit_price' => 10.5,
+                'unit_cost' => 10.5,
 
             ],
 
