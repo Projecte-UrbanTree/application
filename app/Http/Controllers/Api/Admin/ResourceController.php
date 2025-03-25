@@ -95,7 +95,6 @@ class ResourceController extends Controller
         try {
             $validated = $request->validated();
 
-            // Make sure the fields are properly validated in UpdateResourceRequest
             $resource->update([
                 'name' => $validated['name'],
                 'description' => $validated['description'],
