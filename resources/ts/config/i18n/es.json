@@ -20,6 +20,8 @@
       "resource_type": "Tipo de Recurso",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipo de recurso",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
@@ -205,7 +207,10 @@
             "name_min": "El nombre debe tener al menos 3 caracteres",
             "name_required": "El nombre es obligatorio",
             "type_invalid": "Por favor, selecciona un tipo de recurso válido",
-            "type_required": "El tipo es obligatorio"
+            "type_required": "El tipo es obligatorio",
+            "unit_cost_min": "Unit cost must be greater than 0",
+            "unit_cost_required": "Unit cost is required",
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
@@ -217,7 +222,10 @@
           "columns": {
             "description": "Descripción",
             "name": "Nombre",
-            "type": "Tipo"
+            "type": "Tipo",
+            "unit": "Unit",
+            "unit_name": "Unit Name",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
             "createSuccess": "Recurso creado exitosamente",
