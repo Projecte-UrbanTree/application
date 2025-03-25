@@ -251,7 +251,8 @@
           "columns": {
             "description": "Descripció",
             "name": "Nom",
-            "type": "Tipus"
+            "type": "Tipus",
+            "unit": "Unitat"
           },
           "messages": {
             "createSuccess": "Tipus de recurs creat correctament",

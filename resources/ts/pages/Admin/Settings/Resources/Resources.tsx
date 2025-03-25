@@ -18,7 +18,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
   const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract?.id,
+    (state: RootState) => state.contract.currentContract,
   );
   const [resources, setResources] = useState<Resource[]>([]);
   const location = useLocation();
@@ -52,6 +52,13 @@ export default function Resources() {
       return () => clearTimeout(timer);
     }
   }, [msg]);
+
+  const filteredResources =
+    currentContract && currentContract.id !== 0
+      ? resources.filter(
+          (resource) => resource.contract_id === currentContract.id,
+        )
+      : resources;
 
   const handleDelete = async (resourceId: number) => {
     if (!window.confirm(t('admin.pages.resources.list.messages.deleteConfirm')))
@@ -97,12 +104,14 @@ export default function Resources() {
       <CrudPanel
         title="admin.pages.resources.title"
         onCreate={() => navigate('/admin/resources/create')}
-        createDisabled={!currentContract}
+        createDisabled={!currentContract || currentContract.id === 0}
         createTooltip={
-          !currentContract ? t('admin.tooltips.selectContract') : undefined
+          !currentContract || currentContract.id === 0
+            ? t('admin.tooltips.selectContract')
+            : undefined
         }>
         <DataTable
-          value={resources}
+          value={filteredResources}
           paginator
           rows={10}
           stripedRows
