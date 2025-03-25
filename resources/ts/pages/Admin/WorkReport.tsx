@@ -174,7 +174,7 @@ const WorkReportDetail = () => {
   const renderBlockTask = (task: BlockTask) => {
     return (
       <div
-        className="p-3 border-round-md mb-2"
+        className="p-3 rounded-t-md mb-2"
         style={{ backgroundColor: 'var(--surface-ground)' }}>
         <div className="flex align-items-center gap-3">
           <Icon
@@ -201,8 +201,8 @@ const WorkReportDetail = () => {
 
   const renderWorkOrderBlock = (block: WorkOrderBlock, index: number) => {
     return (
-      <div className="bg-gray-100 m-5 border-round-md p-5">
-        <div key={block.id} className="mb-5">
+      <div className="bg-gray-100 p-5 rounded-t-lg mb-5">
+        <div key={block.id}>
           <div className="flex align-items-center gap-2 mb-3">
             <Badge value={index + 1} className="mr-2" />
             <h3 className="m-0 text-left">
@@ -212,7 +212,7 @@ const WorkReportDetail = () => {
 
           {block.notes && (
             <div
-              className="p-3 border-round-md mb-3 text-left"
+              className="p-3 rounded-t-lg mb-3 text-left"
               style={{ backgroundColor: 'var(--surface-ground)' }}>
               <p className="m-0">
                 <strong>{t('admin.pages.work_orders.columns.notes')}:</strong>{' '}
@@ -239,7 +239,7 @@ const WorkReportDetail = () => {
           <h4 className="m-0 mb-2 text-left">
             {t('admin.pages.work_orders.columns.tasks')}
           </h4>
-          <div className="grid">
+          <div className="grid justify-content-start">
             {block.block_tasks.map((task, taskIndex) => (
               <div key={taskIndex} className="col-12 md:col-6">
                 {renderBlockTask(task)}
@@ -253,10 +253,10 @@ const WorkReportDetail = () => {
               {t('admin.pages.work_reports.details')}
             </h4>
 
-            <div className="grid">
+            <div className="grid justify-content-start">
               <div className="col-12 md:col-6">
                 <div
-                  className="p-3 border-round-md mb-3"
+                  className="p-3 rounded-t-md mb-3"
                   style={{ backgroundColor: 'var(--surface-ground)' }}>
                   <h4 className="m-0 mb-2">
                     {t('admin.pages.work_reports.columns.observation')}
@@ -273,7 +273,7 @@ const WorkReportDetail = () => {
 
               <div className="col-12 md:col-6">
                 <div
-                  className="p-3 border-round-md mb-3"
+                  className="p-3 rounded-t-md mb-3"
                   style={{ backgroundColor: 'var(--surface-ground)' }}>
                   <h4 className="m-0 mb-2">
                     {t('admin.pages.work_reports.columns.spent_fuel')}
@@ -284,7 +284,7 @@ const WorkReportDetail = () => {
 
               <div className="col-12 md:col-6">
                 <div
-                  className="p-3 border-round-md"
+                  className="p-3 rounded-t-md"
                   style={{ backgroundColor: 'var(--surface-ground)' }}>
                   <h4 className="m-0 mb-2">
                     {t('admin.pages.work_reports.columns.incidents')}
@@ -370,8 +370,8 @@ const WorkReportDetail = () => {
   }
 
   return (
-    <div className=" bg-gray-50 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
+    <div className="bg-gray-50 md:p-6 min-h-screen flex items-center justify-center">
+      <Card className="w-full max-w-3xl shadow-lg ml-0">
         <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
           <Button
             className="p-button-text mr-4"
@@ -383,6 +383,7 @@ const WorkReportDetail = () => {
             {t('admin.pages.work_reports.title')} #{workReport.id}
           </h2>
         </header>
+
         {/* Work Order Section */}
         <div className="mb-6">
           <div className="flex align-items-center justify-content-between mb-4 mt-6">
@@ -396,9 +397,7 @@ const WorkReportDetail = () => {
           {workReport.work_orders.work_orders_blocks.map((block, index) => (
             <div key={block.id}>
               {renderWorkOrderBlock(block, index)}
-              {index < workReport.work_orders.work_orders_blocks.length - 1 && (
-                <Divider />
-              )}
+              {index < workReport.work_orders.work_orders_blocks.length - 1}
             </div>
           ))}
         </div>
