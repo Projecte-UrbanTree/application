@@ -29,6 +29,10 @@ class ContractUserSeeder extends Seeder
                 'user_id' => 3,
                 'contract_id' => 3,
             ],
+            [
+                'user_id' => 3,
+                'contract_id' => 2,
+            ],
         ]);
     }
 }
