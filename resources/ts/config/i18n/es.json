@@ -811,6 +811,31 @@
         "environmentalFactors": "Factores Ambientales",
         "windExposure": "Exposición al Viento",
         "droughtExposure": "Exposición a Sequía"
+      },
+      "work_reports": {
+        "title": "Informe de Trabajo",
+        "not_found": "Informe de Trabajo no encontrado",
+        "details": "Detalles",
+        "columns": {
+          "observation": "Observación",
+          "spent_fuel": "Combustible Gastado",
+          "incidents": "Incidentes",
+          "zones": "Zonas",
+          "tasks": "Tareas",
+          "notes": "Notas",
+          "block": "Bloque",
+          "resources": "Recursos"
+        },
+        "messages": {
+          "closing_part": "Cerrando parte...",
+          "part_closed": "Parte cerrado con éxito",
+          "closing_block": "Cerrando bloque...",
+          "close_block": "Bloque cerrado con éxito",
+          "closing_with_incidents": "Cerrando bloque con incidentes...",
+          "close_with_incidents": "Bloque cerrado con incidentes",
+          "rejecting": "Rechazando bloque...",
+          "reject": "Bloque rechazado"
+        }
       }
     },
     "profileDropdown": {
@@ -857,7 +882,18 @@
     "genericError": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
     "loading": "Cargando...",
     "error": "Error",
-    "success": "Éxito"
+    "success": "Éxito",
+    "actions": {
+      "close_block": "Cerrar Bloque",
+      "close_with_incidents": "Cerrar con Incidentes",
+      "reject": "Rechazar"
+    },
+    "messages": {
+      "close_block": "Bloque cerrado con éxito",
+      "close_with_incidents": "Bloque cerrado con incidentes",
+      "reject": "Bloque rechazado"
+    },
+    "not_available": "No disponible"
   },
   "public": {
     "error": {

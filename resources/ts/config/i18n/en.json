@@ -811,6 +811,30 @@
         "environmentalFactors": "Environmental Factors",
         "windExposure": "Wind Exposure",
         "droughtExposure": "Drought Exposure"
+      },
+      "work_reports": {
+        "title": "Work Report",
+        "not_found": "Work Report not found",
+        "details": "Details",
+        "columns": {
+          "observation": "Observation",
+          "spent_fuel": "Spent Fuel",
+          "incidents": "Incidents",
+          "zones": "Zones",
+          "tasks": "Tasks",
+          "notes": "Notes",
+          "block": "Block"
+        },
+        "messages": {
+          "closing_part": "Closing part...",
+          "part_closed": "Part successfully closed",
+          "closing_block": "Closing block...",
+          "close_block": "Block successfully closed",
+          "closing_with_incidents": "Closing block with incidents...",
+          "close_with_incidents": "Block closed with incidents",
+          "rejecting": "Rejecting block...",
+          "reject": "Block rejected"
+        }
       }
     },
     "profileDropdown": {
@@ -857,7 +881,18 @@
     "genericError": "An error occurred. Please try again later.",
     "loading": "Loading...",
     "error": "Error",
-    "success":"Success"
+    "success":"Success",
+    "actions": {
+      "close_block": "Close Block",
+      "close_with_incidents": "Close with Incidents",
+      "reject": "Reject"
+    },
+    "messages": {
+      "close_block": "Block closed successfully",
+      "close_with_incidents": "Block closed with incidents",
+      "reject": "Block rejected"
+    },
+    "not_available": "Not available"
   },
   "public": {
     "error": {
