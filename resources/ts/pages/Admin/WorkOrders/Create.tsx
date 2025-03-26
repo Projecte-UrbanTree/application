@@ -74,7 +74,9 @@ const CreateWorkOrder = () => {
     setIsSubmitting(true)
     setError(null)
     try {
-      const formattedDate = values.date ? new Date(values.date).toISOString().split("T")[0] : null
+      const formattedDate = values.date 
+        ? `${values.date.getFullYear()}-${String(values.date.getMonth() + 1).padStart(2, '0')}-${String(values.date.getDate()).padStart(2, '0')}`
+        : null;
       const userIds = values.selectedUsers.map((user: any) => user.id)
       const formattedBlocks = values.blocks.map((block: any) => ({
         notes: block.notes,
