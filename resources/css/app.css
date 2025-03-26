@@ -22,3 +22,17 @@
 .fade-animation {
   animation: fadeInOut 1.5s infinite ease-in-out;
 }
+.p-button-warning {
+  background: #ffc107 !important;
+  border-color: #ffc107 !important;
+}
+
+.p-button-success {
+  background: #4caf50 !important;
+  border-color: #4caf50 !important;
+}
+.p-button-gray {
+  background: #6c757d !important;
+  border-color: #6c757d !important;
+}
+

@@ -12,6 +12,7 @@ import { Tag } from 'primereact/tag';
 import { Timeline } from 'primereact/timeline';
 import { Divider } from 'primereact/divider';
 import { Badge } from 'primereact/badge';
+import '/resources/css/app.css';
 
 interface Zone {
   id: number;
@@ -88,46 +89,47 @@ const WorkReportDetail = () => {
 
   const actions = [
     {
-      label: t('general.actions.edit'),
-      icon: 'pi pi-pencil',
-      command: () => {
-        toast.current?.show({
-          severity: 'info',
-          summary: t('general.messages.edit'),
-          detail: t('admin.pages.work_reports.messages.editing'),
-        });
-      },
-    },
-    {
-      label: t('general.actions.delete'),
-      icon: 'pi pi-trash',
-      command: () => {
-        toast.current?.show({
-          severity: 'warn',
-          summary: t('general.messages.delete'),
-          detail: t('admin.pages.work_reports.messages.deleting'),
-        });
-      },
-    },
-    {
-      label: t('general.actions.print'),
-      icon: 'pi pi-print',
-      command: () => {
-        window.print();
-      },
-    },
-    {
-      label: t('general.actions.export'),
-      icon: 'pi pi-download',
+      label: t('general.actions.close_block'),
+      icon: 'pi pi-check',
       command: () => {
         toast.current?.show({
           severity: 'success',
-          summary: t('general.messages.export'),
-          detail: t('admin.pages.work_reports.messages.exporting'),
+          summary: t('general.messages.close_block'),
+          detail: t('admin.pages.work_reports.messages.closing_block'),
+        });
+      },
+    },
+    {
+      label: t('general.actions.close_with_incidents'),
+      icon: 'pi pi-exclamation-triangle',
+      command: () => {
+        toast.current?.show({
+          severity: 'warn',
+          summary: t('general.messages.close_with_incidents'),
+          detail: t('admin.pages.work_reports.messages.closing_with_incidents'),
+        });
+      },
+    },
+    {
+      label: t('general.actions.reject'),
+      icon: 'pi pi-times',
+      command: () => {
+        toast.current?.show({
+          severity: 'error',
+          summary: t('general.messages.reject'),
+          detail: t('admin.pages.work_reports.messages.rejecting'),
         });
       },
     },
   ];
+  const handleClosePart = () => {
+    toast.current?.show({
+      severity: 'success',
+      summary: t('admin.pages.work_reports.messages.closing_part'),
+      detail: t('admin.pages.work_reports.messages.part_closed'),
+    });
+    // Aquí iría la lógica para cerrar la parte
+  };
 
   useEffect(() => {
     const fetchWorkReport = async () => {
@@ -156,18 +158,20 @@ const WorkReportDetail = () => {
 
   const renderBlockTask = (task: BlockTask) => {
     return (
-      <div
-        className="p-3 rounded-t-md mb-2"
-        style={{ backgroundColor: 'var(--surface-ground)' }}>
-        <div className="flex align-items-center gap-3">
+      <div className="p-3 rounded-lg mb-2 bg-white border border-gray-200 hover:border-blue-300 transition-colors">
+        <div className="flex items-center gap-3">
           <Icon
             icon={task.element_type.icon}
             className="text-xl"
             style={{ color: task.element_type.color }}
           />
-          <div>
-            <h4 className="m-0">{task.tasks_type.name}</h4>
-            <p className="text-sm m-0">
+          <div className="flex-1 min-w-0">
+            {' '}
+            {/* Added min-w-0 for text truncation */}
+            <h4 className="m-0 text-gray-800 truncate">
+              {task.tasks_type.name}
+            </h4>
+            <p className="text-sm m-0 text-gray-600 truncate">
               {task.element_type.name}
               {task.tree_type && ` • ${task.tree_type.species}`}
             </p>
@@ -175,111 +179,176 @@ const WorkReportDetail = () => {
           <Tag
             value={`${task.spent_time} h`}
             severity="info"
-            className="ml-auto"
+            className="ml-auto flex-shrink-0"
           />
         </div>
       </div>
     );
   };
-
+  const getTaskStatus = (status: number) => {
+    switch (status) {
+      case 0:
+        return {
+          label: t('status.pending'),
+          color: 'p-button-gray',
+          icon: 'pi pi-clock',
+        };
+      case 1:
+        return {
+          label: t('status.in_progress'),
+          color: 'p-button-warning',
+          icon: 'pi pi-spinner pi-spin',
+        };
+      case 2:
+        return {
+          label: t('status.completed'),
+          color: 'p-button-success',
+          icon: 'pi pi-check',
+        };
+      default:
+        return {
+          label: t('status.unknown'),
+          color: 'p-button-gray',
+          icon: 'pi pi-question',
+        };
+    }
+  };
   const renderWorkOrderBlock = (block: WorkOrderBlock, index: number) => {
     return (
-      <div className="bg-gray-100 p-5 rounded-lg border-2 border-gray-300 mb-5">
-        <div>
-          <div className="flex align-items-center gap-2 mb-3">
-            <Badge value={index + 1} className="mr-2" />
-            <h3 className="m-0 text-left">
+      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-4">
+        {/* Block Header - Stacked on mobile */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 pb-2 border-b border-gray-100">
+          <div className="flex items-center gap-2 mb-2 sm:mb-0">
+            <Badge
+              value={index + 1}
+              className="bg-blue-500 text-white font-bold flex-shrink-0"
+            />
+            <h3 className="m-0 text-gray-800 font-semibold text-lg">
               {t('admin.pages.work_orders.columns.block')} {index + 1}
             </h3>
           </div>
+        </div>
 
-          {block.notes && (
-            <div
-              className="p-3 rounded-t-lg mb-3 text-left"
-              style={{ backgroundColor: 'var(--surface-ground)' }}>
-              <p className="m-0">
-                <strong>{t('admin.pages.work_orders.columns.notes')}:</strong>{' '}
-                {block.notes}
-              </p>
-            </div>
-          )}
-
-          <div className="mb-3 text-left">
-            <h4 className="m-0 mb-2">
+        {/* Block Notes - Full width on mobile */}
+        {block.notes && (
+          <div className="p-3 rounded-lg mb-3 bg-blue-50 border border-blue-100 w-full">
+            <p className="m-0 text-blue-800 text-sm sm:text-base">
+              <strong className="font-semibold">
+                {t('admin.pages.work_orders.columns.notes')}:
+              </strong>{' '}
+              {block.notes}
+            </p>
+          </div>
+        )}
+        {/* Users Section - Wrap on mobile */}
+        <div className="mb-3">
+          <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
+            {t('admin.pages.work_orders.columns.users')}
+          </h4>
+          <div className="flex flex-wrap gap-1 sm:gap-2">
+            {workReport?.work_orders.users.map((user) => (
+              <Tag
+                key={user.id}
+                value={`${user.name} ${user.surname}`}
+                className="bg-indigo-100 text-indigo-800 border-indigo-200 text-xs sm:text-sm"
+              />
+            ))}
+          </div>
+        </div>
+        {/* Zones Section - Wrap on mobile */}
+        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-4">
+          <div className="mb-3">
+            <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
               {t('admin.pages.work_orders.columns.zones')}
             </h4>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1 sm:gap-2">
               {block.zones.map((zone) => (
                 <Tag
                   key={zone.id}
                   value={zone.name}
                   style={{ backgroundColor: zone.color, color: 'white' }}
+                  className="text-xs sm:text-sm"
                 />
               ))}
             </div>
           </div>
 
-          <h4 className="m-0 mb-2 text-left">
-            {t('admin.pages.work_orders.columns.tasks')}
+          {/* Tasks Section - Full width on mobile */}
+          <div className="mb-3">
+            <h4 className="m-0 mb-2 text-gray-700 font-medium text-sm sm:text-base">
+              {t('admin.pages.work_orders.columns.tasks')}
+            </h4>
+            <div className={`mb-2`}>
+              {workReport && (
+                <Tag
+                  value={getTaskStatus(workReport.report_status).label}
+                  icon={getTaskStatus(workReport.report_status).icon}
+                  className={`${getTaskStatus(workReport.report_status).color} border-none`}
+                />
+              )}
+            </div>
+
+            <div className="space-y-2">
+              {block.block_tasks.map((task) => (
+                <div key={task.id}>{renderBlockTask(task)}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* Resources Section - Wrap on mobile */}
+        <div className="mb-3">
+          <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
+            {t('admin.pages.work_orders.columns.resources')}
           </h4>
-          <div className="grid justify-content-start">
-            {block.block_tasks.map((task, taskIndex) => (
-              <div key={task.id} className="col-12 md:col-6">
-                {renderBlockTask(task)}
-              </div>
+          <div className="flex flex-wrap gap-1 sm:gap-2">
+            {workReport?.resources.map((resource) => (
+              <Tag
+                key={resource.id}
+                value={`${resource.name} (${resource.unit_name})`}
+                className="bg-purple-100 text-purple-800 border-purple-200 text-xs sm:text-sm"
+              />
             ))}
           </div>
-
-          {/* Report Details Section */}
-          <div className="mt-4 text-left">
-            <h4 className="m-0 mb-4">
+          {/* Report Details Section - Stacked on mobile */}
+          <div className="mt-4 pt-3 border-t border-gray-100">
+            <h4 className="m-0 mb-3 text-gray-800 font-semibold text-sm sm:text-base">
               {t('admin.pages.work_reports.details')}
             </h4>
 
-            <div className="grid justify-content-start">
-              <div className="col-12 md:col-6">
-                <div
-                  className="p-3 rounded-t-md mb-3"
-                  style={{ backgroundColor: 'var(--surface-ground)' }}>
-                  <h4 className="m-0 mb-2">
-                    {t('admin.pages.work_reports.columns.observation')}
-                  </h4>
-                  <p className="m-0">
-                    {workReport?.observation || (
-                      <span className="text-400">
-                        {t('general.not_available')}
-                      </span>
-                    )}
-                  </p>
-                </div>
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
+                <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
+                  {t('admin.pages.work_reports.columns.observation')}
+                </h4>
+                <p className="m-0 text-gray-600 text-sm sm:text-base">
+                  {workReport?.observation || (
+                    <span className="text-gray-400 italic">
+                      {t('general.not_available')}
+                    </span>
+                  )}
+                </p>
               </div>
 
-              <div className="col-12 md:col-6">
-                <div
-                  className="p-3 rounded-t-md mb-3"
-                  style={{ backgroundColor: 'var(--surface-ground)' }}>
-                  <h4 className="m-0 mb-2">
-                    {t('admin.pages.work_reports.columns.spent_fuel')}
-                  </h4>
-                  <p className="m-0">{workReport?.spent_fuel} L</p>
-                </div>
+              <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
+                <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
+                  {t('admin.pages.work_reports.columns.spent_fuel')}
+                </h4>
+                <p className="m-0 text-gray-600 text-sm sm:text-base">
+                  {workReport?.spent_fuel || 0} L
+                </p>
               </div>
 
-              <div className="col-12 md:col-6">
-                <div
-                  className="p-3 rounded-t-md"
-                  style={{ backgroundColor: 'var(--surface-ground)' }}>
-                  <h4 className="m-0 mb-2">
-                    {t('admin.pages.work_reports.columns.incidents')}
-                  </h4>
-                  <p className="m-0">
-                    {workReport?.report_incidents || (
-                      <span className="text-400">
-                        {t('general.not_available')}
-                      </span>
-                    )}
-                  </p>
-                </div>
+              <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
+                <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
+                  {t('admin.pages.work_reports.columns.incidents')}
+                </h4>
+                <p className="m-0 text-gray-600 text-sm sm:text-base">
+                  {workReport?.report_incidents || (
+                    <span className="text-gray-400 italic">
+                      {t('general.not_available')}
+                    </span>
+                  )}
+                </p>
               </div>
             </div>
           </div>
@@ -288,103 +357,63 @@ const WorkReportDetail = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-          animationDuration=".5s"
-        />
-        <span className="mt-4 text-600 font-medium">
-          {t('general.loading')}
-        </span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-3xl">
-          <div className="text-center p-6">
-            <Icon
-              icon="tabler:alert-circle"
-              className="h-16 w-16 text-red-500 mx-auto mb-4"
-            />
-            <h2 className="text-2xl font-bold mb-4">
-              {t('admin.pages.error.error')}
-            </h2>
-            <p className="text-600 mb-6">{error}</p>
-            <Button
-              label={t('admin.pages.general.returnButton')}
-              icon="pi pi-arrow-left"
-              onClick={() => navigate('/admin/work-reports')}
-              className="p-button-outlined"
-            />
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
-  if (!workReport) {
-    return (
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-3xl">
-          <div className="text-center p-6">
-            <Icon
-              icon="tabler:alert-circle"
-              className="h-16 w-16 text-yellow-500 mx-auto mb-4"
-            />
-            <h2 className="text-2xl font-bold mb-4">
-              {t('admin.pages.work_reports.not_found')}
-            </h2>
-            <Button
-              label={t('admin.pages.general.returnButton')}
-              icon="pi pi-arrow-left"
-              onClick={() => navigate('/admin/work-reports')}
-              className="p-button-outlined"
-            />
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-gray-50 md:p-6 min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-3xl shadow-lg ml-0">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/work-reports')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.work_reports.title')} #{workReport.id}
-          </h2>
-        </header>
-
-        {/* Work Order Section */}
-        <div className="mb-6">
-          <div className="flex align-items-center justify-content-between mb-4 mt-4">
-            <span className="text-600">
-              {formatDate(workReport.work_orders.date)}
-            </span>
-          </div>
-
-          <Divider />
-
-          {workReport.work_orders.work_orders_blocks.map((block, index) => (
-            <div key={block.id}>
-              {renderWorkOrderBlock(block, index)}
-              {index < workReport.work_orders.work_orders_blocks.length - 1}
+    <div className="bg-gray-50 p-2 sm:p-4 min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        <Card className="w-full shadow-sm">
+          {/* Header - Stacked on mobile */}
+          <header className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row items-center sm:justify-between -mt-2 sm:-mt-4 -mx-2 sm:-mx-4 rounded-t-lg">
+            <div className="flex items-center w-full sm:w-auto">
+              <Button
+                className="p-button-text mr-4"
+                style={{ color: '#fff' }}
+                onClick={() => navigate('/admin/work-orders')}>
+                <Icon icon="tabler:arrow-left" className="h-6 w-6" />
+              </Button>
+              <div>
+                <h2 className="text-white text-xl sm:text-2xl font-bold">
+                  {t('admin.pages.work_reports.title')} #{workReport?.id}
+                </h2>
+                <p className="text-blue-100 m-0 text-xs sm:text-sm">
+                  {workReport && formatDate(workReport.work_orders.date)}
+                </p>
+              </div>
             </div>
-          ))}
-        </div>
-      </Card>
+          </header>
+
+          {/* Main Content - Full width on mobile */}
+          <div className="p-2 sm:p-4">
+            {/* Work Order Section */}
+            <div className="space-y-4">
+              {workReport?.work_orders.work_orders_blocks.map(
+                (block, index) => (
+                  <div key={block.id}>
+                    {renderWorkOrderBlock(block, index)}
+                    {index <
+                      workReport.work_orders.work_orders_blocks.length - 1 && (
+                      <Divider className="my-4" />
+                    )}
+                  </div>
+                ),
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 p-4 rounded-b-lg">
+            <SplitButton
+              label={t('general.actions.close_block')}
+              icon="pi pi-plus"
+              onClick={handleClosePart}
+              model={actions}
+              className="p-button-plain ml-auto"
+              severity="info"
+              buttonClassName="p-1 sm:p-2"
+              menuButtonClassName="p-1 sm:p-2"
+              raised
+            />
+          </div>
+        </Card>
+      </div>
+      <Toast ref={toast} position="top-center" />
     </div>
   );
 };
