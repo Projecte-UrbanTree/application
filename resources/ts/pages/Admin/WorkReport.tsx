@@ -19,7 +19,18 @@ interface Zone {
   description: string;
   color: string;
 }
-
+interface Users {
+  id: number;
+  name: string;
+  surname: string;
+}
+interface Rescources {
+  id: number;
+  name: string;
+  description: string;
+  unit_name: number;
+  unit_cost: string;
+}
 interface BlockTask {
   id: number;
   status: number;
@@ -52,6 +63,7 @@ interface WorkOrder {
   date: string;
   status: number;
   work_orders_blocks: WorkOrderBlock[];
+  users: Users[];
 }
 
 interface WorkReport {
@@ -62,6 +74,7 @@ interface WorkReport {
   report_incidents: string;
   work_order_id: number;
   work_orders: WorkOrder;
+  resources: Rescources[];
 }
 
 const WorkReportDetail = () => {
@@ -132,36 +145,6 @@ const WorkReportDetail = () => {
     fetchWorkReport();
   }, [id, t]);
 
-  const getStatusSeverity = (status: number) => {
-    switch (status) {
-      case 0:
-        return 'warning';
-      case 1:
-        return 'info';
-      case 2:
-        return 'success';
-      case 3:
-        return 'danger';
-      default:
-        return null;
-    }
-  };
-
-  const getStatusText = (status: number) => {
-    switch (status) {
-      case 0:
-        return t('admin.pages.work_reports.status.pending');
-      case 1:
-        return t('admin.pages.work_reports.status.in_progress');
-      case 2:
-        return t('admin.pages.work_reports.status.completed');
-      case 3:
-        return t('admin.pages.work_reports.status.cancelled');
-      default:
-        return t('admin.pages.work_reports.status.unknown');
-    }
-  };
-
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -201,8 +184,8 @@ const WorkReportDetail = () => {
 
   const renderWorkOrderBlock = (block: WorkOrderBlock, index: number) => {
     return (
-      <div className="bg-gray-100 p-5 rounded-t-lg mb-5">
-        <div key={block.id}>
+      <div className="bg-gray-100 p-5 rounded-lg border-2 border-gray-300 mb-5">
+        <div>
           <div className="flex align-items-center gap-2 mb-3">
             <Badge value={index + 1} className="mr-2" />
             <h3 className="m-0 text-left">
@@ -241,7 +224,7 @@ const WorkReportDetail = () => {
           </h4>
           <div className="grid justify-content-start">
             {block.block_tasks.map((task, taskIndex) => (
-              <div key={taskIndex} className="col-12 md:col-6">
+              <div key={task.id} className="col-12 md:col-6">
                 {renderBlockTask(task)}
               </div>
             ))}
@@ -386,7 +369,7 @@ const WorkReportDetail = () => {
 
         {/* Work Order Section */}
         <div className="mb-6">
-          <div className="flex align-items-center justify-content-between mb-4 mt-6">
+          <div className="flex align-items-center justify-content-between mb-4 mt-4">
             <span className="text-600">
               {formatDate(workReport.work_orders.date)}
             </span>
