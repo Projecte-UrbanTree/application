@@ -10,7 +10,7 @@ cd /var/www
 git config core.filemode false
 
 # Install dependencies and run vite dev server
-npm install && npm run dev &
+npm install &
 
 # Set permissions for Laravel directories
 chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache

@@ -1,45 +1,46 @@
-import axiosClient from '@/api/axiosClient';
-import { setContractState } from '@/store/slice/contractSlice';
-import { Contract } from '@/types/Contract';
-import { useDispatch } from 'react-redux';
+import api from '@/services/api';
+import { type Contract } from '@/types/Contract';
+import { useEffect, useState } from 'react';
+interface UseContractsResult {
+  contracts: Contract[];
+  loading: boolean;
+}
 
-export function useContracts() {
-  const dispatch = useDispatch();
+export function useContracts(): UseContractsResult {
+  const [loading, setLoading] = useState(true);
+  const [contracts, setContracts] = useState<Contract[]>([]);
 
-  const fetchContracts = async () => {
-    try {
-      const response = await axiosClient.get<Contract[]>('/admin/contracts');
-      console.log('RESPONSE hookContr: ', response);
+  // Load contracts on mount
+  useEffect(() => {
+    const loadContracts = async (retryCount = 0) => {
+      api
+        .get<Contract[]>('/me/contract/edit')
+        .then(({ data }) => {
+          setContracts([
+            {
+              id: null,
+              name: 'All Contracts',
+              status: 0,
+            },
+            ...data.filter((contract) => contract.status === 0),
+          ]);
+        })
+        .catch((error) => {
+          if (error && retryCount < 2) {
+            console.error('Failed to load contracts, retrying...', error);
+            setTimeout(() => loadContracts(retryCount + 1), 1000);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
 
-      if (response.data.length > 0) {
-        try {
-          const sessionResponse = await axiosClient.get<{
-            contract_id: number | null;
-            contract: Contract | null;
-          }>('/admin/get-selected-contract');
+    loadContracts();
+  }, []);
 
-          let selectedContract: Contract | null =
-            sessionResponse.data.contract || null;
-
-          dispatch(
-            setContractState({
-              allContracts: response.data,
-              currentContract: selectedContract,
-            }),
-          );
-        } catch (sessionError) {
-          dispatch(
-            setContractState({
-              allContracts: response.data,
-              currentContract: null,
-            }),
-          );
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching contracts:', error);
-    }
+  return {
+    contracts,
+    loading,
   };
-
-  return { fetchContracts };
 }

@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Formik, Form, useField } from 'formik';
-import * as Yup from 'yup';
+import api from '@/services/api';
+import { Icon } from '@iconify/react';
+import { format, subMonths, subYears } from 'date-fns';
+import { Form, Formik, useField } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import { Calendar } from 'primereact/calendar';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import { InputNumber } from 'primereact/inputnumber';
 import { Message } from 'primereact/message';
-import { subYears, subMonths, format } from 'date-fns';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
 // Componente FormField para manejar campos del formulario
 const FormField = ({ as: Component, name, label, ...props }: any) => {
@@ -85,7 +84,7 @@ const CreateEva = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    axiosClient
+    api
       .get('/admin/evas/create')
       .then((response) => {
         setElements(response.data.elements);
@@ -205,7 +204,7 @@ const CreateEva = () => {
         status,
       };
 
-      await axiosClient.post('/admin/evas', updatedValues);
+      await api.post('/admin/evas', updatedValues);
       navigate('/admin/evas', {
         state: { success: t('admin.pages.evas.list.messages.createSuccess') },
       });

@@ -37,6 +37,7 @@
         "chart.js": "^4.4.8",
         "date-fns": "^4.1.0",
         "i18next": "^24.2.3",
+        "i18next-intervalplural-postprocessor": "^3.0.0",
         "mapbox-gl": "^3.10.0",
         "primereact": "^10.9.3",
         "react": "^19.0.0",

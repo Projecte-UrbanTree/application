@@ -1,12 +1,12 @@
-import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/Admin/CrudPanel';
+import Preloader from '@/components/Preloader';
+import api from '@/services/api';
 import { Icon } from '@iconify/react';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -34,7 +34,7 @@ export default function Contracts() {
   useEffect(() => {
     const fetchContracts = async () => {
       try {
-        const response = await axiosClient.get('/admin/contracts');
+        const response = await api.get('/admin/contracts');
         setContracts(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -56,7 +56,7 @@ export default function Contracts() {
     if (!window.confirm(t('admin.pages.contracts.list.messages.deleteConfirm')))
       return;
     try {
-      await axiosClient.delete(`/admin/contracts/${contractId}`);
+      await api.delete(`/admin/contracts/${contractId}`);
       setContracts(contracts.filter((contract) => contract.id !== contractId));
       setMsg(t('admin.pages.contracts.list.messages.deleteSuccess'));
     } catch (error) {
@@ -64,17 +64,7 @@ export default function Contracts() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Preloader bg_white={false} />;
 
   return (
     <>

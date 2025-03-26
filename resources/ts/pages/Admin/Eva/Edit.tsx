@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react';
+import api from '@/services/api';
 import { Icon } from '@iconify/react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, useField } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import {
+  differenceInMonths,
+  differenceInYears,
+  format,
+  subMonths,
+  subYears,
+} from 'date-fns';
+import { Form, Formik, useField } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import {
-  differenceInYears,
-  differenceInMonths,
-  subYears,
-  subMonths,
-  format,
-} from 'date-fns';
+import { InputNumber } from 'primereact/inputnumber';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 
 interface FormFieldProps {
   as: React.ElementType;
@@ -167,7 +167,7 @@ export default function EditEva() {
   useEffect(() => {
     const fetchEva = async () => {
       try {
-        const response = await axiosClient.get(`/admin/evas/${id}`);
+        const response = await api.get(`/admin/evas/${id}`);
         const data = response.data;
         const today = new Date();
         const birthDate = new Date(data.date_birth);
@@ -190,7 +190,7 @@ export default function EditEva() {
   useEffect(() => {
     const fetchDictionaries = async () => {
       try {
-        const response = await axiosClient.get('/admin/evas/create');
+        const response = await api.get('/admin/evas/create');
         const translatedDictionaries: Dictionaries = {
           copaDesequilibrada: [],
           ramasSobreextendidas: [],
@@ -277,7 +277,7 @@ export default function EditEva() {
         status: status,
       };
 
-      await axiosClient.put(`/admin/evas/${id}`, updatedValues);
+      await api.put(`/admin/evas/${id}`, updatedValues);
       navigate(`/admin/evas/${id}`, {
         state: { success: t('messages.updateSuccess') },
       });

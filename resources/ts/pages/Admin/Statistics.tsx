@@ -1,9 +1,9 @@
-import axiosClient from '@/api/axiosClient';
-import { differenceInMonths, parseISO } from 'date-fns';
-import { Chart } from 'primereact/chart';
-import { Skeleton } from 'primereact/skeleton';
-import { SelectButton } from 'primereact/selectbutton';
+import api from '@/services/api';
+import { differenceInMonths } from 'date-fns';
 import { Calendar } from 'primereact/calendar';
+import { Chart } from 'primereact/chart';
+import { SelectButton } from 'primereact/selectbutton';
+import { Skeleton } from 'primereact/skeleton';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -73,7 +73,7 @@ export default function Stats() {
   const rangeOptions = [
     { label: t('admin.pages.stats.week'), value: 'this_week' },
     { label: t('admin.pages.stats.month'), value: 'this_month' },
-    { label: t('admin.pages.stats.custom'), value: 'custom' }
+    { label: t('admin.pages.stats.custom'), value: 'custom' },
   ];
 
   useEffect(() => {
@@ -107,12 +107,12 @@ export default function Stats() {
     if (rangeOption === 'custom' && customFromDate && customToDate) {
       const fromIso = customFromDate.toISOString().split('T')[0];
       const toIso = customToDate.toISOString().split('T')[0];
-      
+
       setCustomFromIso(fromIso);
       setCustomToIso(toIso);
       setFromDate(parseIsoToSpanish(fromIso));
       setToDate(parseIsoToSpanish(toIso));
-      
+
       const totalMonths = differenceInMonths(customToDate, customFromDate);
       if (totalMonths > 12) {
         const maxEndDate = new Date(customFromDate);
@@ -125,7 +125,7 @@ export default function Stats() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const res = await axiosClient.get('/admin/statistics', {
+      const res = await api.get('/admin/statistics', {
         params: { from_date: fromDate, to_date: toDate },
       });
       const daysRaw = res.data.days || [];
@@ -185,24 +185,30 @@ export default function Stats() {
     },
   ];
 
-  const maxDate = customFromDate ? new Date(customFromDate.getFullYear() + 1, customFromDate.getMonth(), customFromDate.getDate()) : new Date();
+  const maxDate = customFromDate
+    ? new Date(
+        customFromDate.getFullYear() + 1,
+        customFromDate.getMonth(),
+        customFromDate.getDate(),
+      )
+    : new Date();
 
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex flex-wrap items-end gap-4">
         <div>
-          <SelectButton 
-            value={rangeOption} 
-            options={rangeOptions} 
-            onChange={(e) => setRangeOption(e.value)} 
+          <SelectButton
+            value={rangeOption}
+            options={rangeOptions}
+            onChange={(e) => setRangeOption(e.value)}
           />
         </div>
-        
+
         {rangeOption === 'custom' && (
           <>
             <div className="flex flex-col">
               <label className="mb-2">{t('admin.pages.stats.startDate')}</label>
-              <Calendar 
+              <Calendar
                 value={customFromDate}
                 onChange={(e) => setCustomFromDate(e.value as Date)}
                 maxDate={new Date()}
@@ -212,7 +218,7 @@ export default function Stats() {
             </div>
             <div className="flex flex-col">
               <label className="mb-2">{t('admin.pages.stats.endDate')}</label>
-              <Calendar 
+              <Calendar
                 value={customToDate}
                 onChange={(e) => setCustomToDate(e.value as Date)}
                 minDate={customFromDate || undefined}

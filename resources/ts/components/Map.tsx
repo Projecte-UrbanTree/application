@@ -1,23 +1,22 @@
-import { RootState, AppDispatch } from '@/store/store';
-import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
+import { fetchPointsAsync } from '@/redux/slices/pointSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchElementType } from '@/services/service/elementTypeService';
+import { MapService } from '@/services/service/mapService';
+import { SavePointsProps } from '@/services/service/pointService';
+import { fetchTreeTypes } from '@/services/service/treeTypesService';
+import { ElementType } from '@/types/ElementType';
 import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
+import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
+import * as turf from '@turf/turf';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as turf from '@turf/turf';
-import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
 import { SaveElementForm } from './Admin/Inventory/SaveElementForm';
-import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import { TreeTypes } from '@/types/TreeTypes';
-import { fetchTreeTypes } from '@/api/service/treeTypesService';
-import { fetchElementType } from '@/api/service/elementTypeService';
-import { ElementType } from '@/types/ElementType';
-import { SavePointsProps } from '@/api/service/pointService';
+import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
-import { data } from 'react-router-dom';
-import { MapService } from '@/api/service/mapService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -58,7 +57,7 @@ export const MapComponent: React.FC<MapProps> = ({
     (state: RootState) => state.contract.currentContract,
   );
   const zonesRedux = useSelector((state: RootState) => state.zone.zones);
-  const { points } = useSelector((state: RootState) => state.points);
+  const { points } = useSelector((state: RootState) => state.point);
   const { elements } = useSelector((state: RootState) => state.element);
 
   // load data

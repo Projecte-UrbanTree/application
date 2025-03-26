@@ -8,9 +8,14 @@
       "enableGitCredentialHelper": true
     }
   },
+  "postStartCommand": "echo \"PRÉMEU A LA TERMINAL LA COMBINACIÓ DE TECLES: CTRL + Z \" && php artisan serve --host 0.0.0.0 --port 80",
   "customizations": {
     "vscode": {
-      "extensions": ["rvest.vs-code-prettier-eslint"]
+      "extensions": [
+        "rvest.vs-code-prettier-eslint",
+        "DEVSENSE.phptools-vscode",
+        "esbenp.prettier-vscode"
+      ]
     }
   }
 }

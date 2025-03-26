@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axiosClient from '@/api/axiosClient';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
-import { useTranslation } from 'react-i18next';
+import api from '@/services/api';
 import { Icon } from '@iconify/react';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Eva {
   element_id: number;
@@ -43,7 +43,7 @@ export default function ShowEva() {
   useEffect(() => {
     const fetchEva = async () => {
       try {
-        const response = await axiosClient.get(`/admin/evas/${id}`);
+        const response = await api.get(`/admin/evas/${id}`);
         setEva(response.data);
         setIsLoading(false);
       } catch (error) {

@@ -1,4 +1,5 @@
-import axiosClient from '@/api/axiosClient';
+import Preloader from '@/components/Preloader';
+import api from '@/services/api';
 import type { ResourceType } from '@/types/ResourceType';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
@@ -21,7 +22,7 @@ export default function CreateResource() {
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const { data } = await axiosClient.get(`/admin/resources/create`);
+        const { data } = await api.get(`/admin/resources/create`);
         setResourceTypes(data.resource_types);
       } catch (error) {
         console.error(error);
@@ -59,8 +60,8 @@ export default function CreateResource() {
   const handleSubmit = async (values: typeof initialValues) => {
     setIsSubmitting(true);
     try {
-      await axiosClient.get('/sanctum/csrf-cookie');
-      await axiosClient.post('/admin/resources', values);
+      await api.get('/sanctum/csrf-cookie');
+      await api.post('/admin/resources', values);
       navigate('/admin/resources', {
         state: {
           success: t('admin.pages.resources.list.messages.createSuccess'),
@@ -73,17 +74,7 @@ export default function CreateResource() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Preloader bg_white={false} />;
 
   return (
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">

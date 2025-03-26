@@ -1,10 +1,9 @@
-import { deleteZone } from '@/api/service/zoneService';
-import { fetchElementsAsync } from '@/store/slice/elementSlice';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
-import { fetchPointsAsync } from '@/store/slice/pointSlice';
-import { fetchZonesAsync } from '@/store/slice/zoneSlice';
-import { AppDispatch, RootState } from '@/store/store';
-import { Point, TypePoint } from '@/types/Point';
+import { fetchElementsAsync } from '@/redux/slices/elementSlice';
+import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
+import { fetchPointsAsync } from '@/redux/slices/pointSlice';
+import { fetchZonesAsync } from '@/redux/slices/zoneSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { deleteZone } from '@/services/service/zoneService';
 import { Zone } from '@/types/Zone';
 import { Icon } from '@iconify/react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
@@ -46,7 +45,7 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
     (state: RootState) => state.zone,
   );
   const { points, loading: pointsLoading } = useSelector(
-    (state: RootState) => state.points,
+    (state: RootState) => state.point,
   );
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,

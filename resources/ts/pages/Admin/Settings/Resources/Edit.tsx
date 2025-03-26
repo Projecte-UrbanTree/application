@@ -1,4 +1,4 @@
-import axiosClient from '@/api/axiosClient';
+import api from '@/services/api';
 import type { Resource } from '@/types/Resource';
 import type { ResourceType } from '@/types/ResourceType';
 import { Icon } from '@iconify/react';
@@ -28,7 +28,7 @@ export default function EditResource() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axiosClient.get(`/admin/resources/${id}/edit`);
+        const { data } = await api.get(`/admin/resources/${id}/edit`);
 
         setInitialValues({
           id: data.resource.id,
@@ -68,7 +68,7 @@ export default function EditResource() {
   const handleSubmit = async (values: typeof initialValues) => {
     try {
       const data = { ...values };
-      await axiosClient.put(`/admin/resources/${id}`, data);
+      await api.put(`/admin/resources/${id}`, data);
       navigate('/admin/resources', {
         state: {
           success: t('admin.pages.resources.list.messages.updateSuccess'),
@@ -80,17 +80,7 @@ export default function EditResource() {
       });
     }
   };
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Preloader bg_white={false} />;
   return (
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
       <Card className="w-full max-w-3xl shadow-lg">

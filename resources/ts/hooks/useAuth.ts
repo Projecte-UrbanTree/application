@@ -1,77 +1,32 @@
-import { useEffect, useState } from 'react';
+import {
+  fetchUser,
+  login,
+  logout,
+  updateContract,
+} from '@/redux/slices/authSlice';
+import type { AppDispatch, RootState } from '@/redux/store';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { setUserData, clearUserData } from '@/store/slice/userSlice';
-import axiosClient from '@/api/axiosClient';
-import { useContracts } from './useContracts';
 
-export function useAuth() {
-    const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user);
-    const [isLoading, setIsLoading] = useState(true);
-    const isAuthenticated = Boolean(user.id);
-    const { fetchContracts } = useContracts();
-    useEffect(() => {
-        const token = localStorage.getItem('authToken');
+const useAuth = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, loading, error } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
-        if (token && !user.id) {
-            fetchUser();
-        } else {
-            setIsLoading(false);
-        }
-    }, []);
+  useEffect(() => {
+    if (!user && localStorage.getItem('token')) dispatch(fetchUser());
+  }, [dispatch, user]);
 
-    const fetchUser = async (navigate?: (path: string) => void) => {
-        try {
-            const response = await axiosClient.get('/user', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-                },
-            });
+  const handleLogin = (credentials: { email: string; password: string }) =>
+    dispatch(login(credentials));
 
-            console.log('RESPONSE fetchUser: ', response.data);
+  const handleLogout = () => dispatch(logout());
 
-            dispatch(setUserData(response.data));
+  const selectContract = (contractId: number) =>
+    dispatch(updateContract(contractId));
 
-            await fetchContracts();
+  return { user, loading, error, handleLogin, handleLogout, selectContract };
+};
 
-            if (navigate) {
-                const userRole = response.data.role;
-                navigate(userRole === 'admin' ? '/admin/dashboard' : '/');
-            }
-        } catch (error) {
-            console.error('Error fetching user:', error);
-
-            if (navigate) {
-                logout(navigate);
-            } else {
-                logout();
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const login = async (token: string, navigate?: (path: string) => void) => {
-        if (!token) {
-            console.error('Error: No se recibió un token válido');
-            return;
-        }
-
-        try {
-            localStorage.setItem('authToken', token);
-            axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
-
-            await fetchUser(navigate);
-        } catch (error) {
-            console.error('Error al intentar iniciar sesión:', error);
-        }
-    };
-
-    const logout = (navigate?: (path: string) => void) => {
-        localStorage.removeItem('authToken');
-        dispatch(clearUserData());
-    };
-
-    return { isLoading, isAuthenticated, user, login, logout, fetchUser };
-}
+export default useAuth;

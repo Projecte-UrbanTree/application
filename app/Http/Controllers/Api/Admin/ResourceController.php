@@ -17,15 +17,11 @@ class ResourceController extends Controller
     public function index(Request $request)
     {
         try {
-            $contractId = $request->session()->get('selected_contract_id', 0);
+            // $resources = Resource::filterByContract()
+            //     ->with('resourceType')
+            //     ->get();
 
-            $resources = Resource::when($contractId > 0, function ($query) use ($contractId) {
-                return $query->where('contract_id', $contractId);
-            })
-                ->with('resourceType')
-                ->get();
-
-            return response()->json($resources);
+            // return response()->json($resources);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error fetching resources',

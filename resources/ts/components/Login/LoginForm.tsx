@@ -1,16 +1,12 @@
-import axiosClient from '@/api/axiosClient';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 import { useI18n } from '@/hooks/useI18n';
+import { useToast } from '@/hooks/useToast';
+import { User } from '@/types/User';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
-import { Message } from 'primereact/message';
 import { Password } from 'primereact/password';
 import { useState } from 'react';
-
-import { useToast } from '@/hooks/useToast';
-import { User } from '@/types/User';
-import { useNavigate } from 'react-router-dom';
 
 export interface LoginResponse {
   success?: boolean;
@@ -20,70 +16,67 @@ export interface LoginResponse {
 
 const LoginForm = () => {
   const { showToast } = useToast();
-  const { login } = useAuth();
+  const { handleLogin } = useAuth();
   const { t } = useI18n();
-  const navigate = useNavigate();
 
   const [email, setEmail] = useState('admin@urbantree.com');
   const [password, setPassword] = useState('demopass');
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const response = await axiosClient.post<LoginResponse>('/login', {
-        email,
-        password,
-      });
-
-      const { accessToken, userData } = response.data;
-
-      if (!accessToken || !userData) {
-        throw new Error('Error en la autenticación: Datos incompletos');
-      }
-
-      showToast(
-        'success',
-        t('public.login.form.titleSuccess'),
-        t('public.login.form.msgSuccess'),
+    handleLogin({ email, password })
+      .unwrap()
+      .then((payload: User) => {
+        if (payload) {
+          const { name, surname } = payload;
+          showToast(
+            'success',
+            t('_capitalize', { val: t('messages.success_login') }),
+            t('_capitalize', {
+              val: t('messages.greeting', {
+                name,
+                surname,
+              }),
+            }),
+          );
+        }
+      })
+      .catch((error: any) =>
+        showToast(
+          'error',
+          t('_capitalize', { val: t('messages.error_login') }),
+          error.message || t('error.unspecific'),
+        ),
       );
-      await login(accessToken, navigate);
-    } catch (error: any) {
-      console.error('ERROR EN LOGIN: ', error);
-
-      if (error?.response?.status === 401) {
-        setError(error.response.data.message);
-      } else {
-        setError(t('general.genericError'));
-      }
-      setTimeout(() => setError(null), 5000);
-    }
   };
 
   return (
     <div className="p-4 w-full">
-      {error && <Message severity="error" text={error} className="w-full" />}
-
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label htmlFor="email" className="block text-sm font-medium">
-            {t('public.login.form.labelEmail')}
+            {t('_capitalize', {
+              val: t('tooltips.enter', { item: t('glossary:email') }),
+            })}
           </label>
           <InputText
             id="email"
+            type="email"
             className="w-full"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder={t('public.login.form.placeholderEmail')}
+            placeholder={t('placeholders.email')}
             required
           />
         </div>
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium">
-            {t('public.login.form.labelPassword')}
+            {t('_capitalize', {
+              val: t('tooltips.enter', { item: t('glossary:password') }),
+            })}
           </label>
           <Password
             id="password"
@@ -92,6 +85,7 @@ const LoginForm = () => {
             className="w-full mt-1 p-password"
             inputStyle={{ width: '100%' }}
             feedback={false}
+            placeholder={t('placeholders.password')}
             required
           />
         </div>
@@ -103,12 +97,12 @@ const LoginForm = () => {
             onChange={(e) => setRememberMe(e.checked ?? false)}
           />
           <label htmlFor="remember_me" className="ml-2 text-sm">
-            {t('public.login.form.rememberMe')}
+            {t('_capitalize', { val: t('actions.remember_me') })}
           </label>
         </div>
 
         <Button
-          label={t('public.login.form.btnLogin')}
+          label={t('_capitalize', { val: t('actions.login') })}
           type="submit"
           className="w-full"
         />
@@ -118,6 +112,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}

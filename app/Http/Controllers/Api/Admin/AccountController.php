@@ -11,16 +11,7 @@ class AccountController extends Controller
 {
     public function show()
     {
-        $user = Auth::user();
-
-        return response()->json([
-            'name' => $user->name,
-            'surname' => $user->surname,
-            'email' => $user->email,
-            'company' => $user->company,
-            'dni' => $user->dni,
-            'role' => $user->role,
-        ]);
+        return response()->json(Auth::user());
     }
 
     public function update(Request $request)
@@ -30,7 +21,7 @@ class AccountController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'company' => ['nullable', 'string', 'max:255'],
             'dni' => ['nullable', 'string', 'max:50'],
         ]);
@@ -49,7 +40,7 @@ class AccountController extends Controller
 
         $user = Auth::user();
 
-        if (! Hash::check($request->input('currentPassword'), $user->password)) {
+        if (!Hash::check($request->input('currentPassword'), $user->password)) {
             return response()->json(['error' => 'La contraseña actual no es correcta'], 400);
         }
 

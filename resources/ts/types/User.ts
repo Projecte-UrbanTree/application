@@ -7,6 +7,7 @@ export interface User {
   email?: string;
   company?: string;
   dni?: string;
+  selected_contract_id?: number;
   email_verified_at?: null;
   role?: Roles;
   created_at?: null;

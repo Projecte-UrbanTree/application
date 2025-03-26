@@ -1,6 +1,7 @@
-import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/Admin/CrudPanel';
-import { RootState } from '@/store/store';
+import Preloader from '@/components/Preloader';
+import { RootState } from '@/redux/store';
+import api from '@/services/api';
 import type { Resource } from '@/types/Resource';
 import { Icon } from '@iconify/react';
 import { AxiosError } from 'axios';
@@ -9,7 +10,6 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -32,7 +32,7 @@ export default function Resources() {
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const response = await axiosClient.get('/admin/resources');
+        const response = await api.get('/admin/resources');
         setResources(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -57,7 +57,7 @@ export default function Resources() {
     if (!window.confirm(t('admin.pages.resources.list.messages.deleteConfirm')))
       return;
     try {
-      await axiosClient.delete(`/admin/resources/${resourceId}`);
+      await api.delete(`/admin/resources/${resourceId}`);
       setResources(resources.filter((resource) => resource.id !== resourceId));
       setMsg(t('admin.pages.resources.list.messages.deleteSuccess'));
     } catch (error) {
@@ -65,17 +65,7 @@ export default function Resources() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Preloader bg_white={false} />;
 
   return (
     <>

@@ -30,6 +30,7 @@ class User extends Authenticatable
         'dni',
         'role',
         'password',
+        'selected_contract_id',
     ];
 
     /**
@@ -52,6 +53,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'selected_contract_id' => 'integer',
         ];
     }
 

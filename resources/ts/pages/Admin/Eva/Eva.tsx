@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import CrudPanel from '@/components/Admin/CrudPanel';
+import api from '@/services/api';
+import { Icon } from '@iconify/react';
+import { differenceInMonths, differenceInYears } from 'date-fns';
 import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import axiosClient from '@/api/axiosClient';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/Admin/CrudPanel';
-import { Icon } from '@iconify/react';
-import { differenceInYears, differenceInMonths } from 'date-fns';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Evas() {
   const [isLoading, setIsLoading] = useState(true);
@@ -62,7 +62,7 @@ export default function Evas() {
   useEffect(() => {
     const fetchEvas = async () => {
       try {
-        const response = await axiosClient.get('/admin/evas');
+        const response = await api.get('/admin/evas');
         setEvas(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -84,7 +84,7 @@ export default function Evas() {
     if (!window.confirm(t('admin.pages.evas.list.messages.deleteConfirm')))
       return;
     try {
-      await axiosClient.delete(`/admin/evas/${evaId}`);
+      await api.delete(`/admin/evas/${evaId}`);
       setEvas(evas.filter((eva) => eva.id !== evaId));
       setMsg(t('admin.pages.evas.list.messages.deleteSuccess'));
     } catch (error) {

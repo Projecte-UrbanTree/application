@@ -1,0 +1,16 @@
+{
+  "alphanumeric": "{{field}} must contain only alphanumeric characters",
+  "dates": {
+    "start_before_end": "start date must be before end date"
+  },
+  "incorrect": "{{field}} is incorrect",
+  "invalid": "{{field}} is invalid",
+  "max": "{{field}} cannot exceed {{max}} characters",
+  "min": "{{field}} must be at least {{min}} characters",
+  "password": {
+    "complexity": "password must contain at least one uppercase letter, one lowercase letter, and one number",
+    "min_length": "password must be at least 8 characters",
+    "mismatch": "passwords do not match"
+  },
+  "required": "{{field}} is required"
+}

@@ -1,0 +1,18 @@
+import { Element } from '@/types/Element';
+import { AxiosResponse } from 'axios';
+import api from '../api';
+
+export const fetchElements = async (): Promise<Element[]> => {
+  const response: AxiosResponse = await api.get<Element[]>(`/admin/elements`);
+  return response.data;
+};
+
+export const saveElements = async (element: Element): Promise<Element> => {
+  try {
+    const respose = await api.post(`/admin/elements`, element);
+    return respose.data;
+  } catch (error) {
+    console.error('Error guardando el elemento', error);
+    throw error;
+  }
+};
