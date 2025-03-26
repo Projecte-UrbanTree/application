@@ -1,39 +1,5 @@
 {
   "admin": {
-    "menu": {
-      "management": "Gestió",
-      "settings": "Configuració"
-    },
-    "submenu": {
-      "manage": {
-        "dashboard": "Tauler",
-        "workOrders": "Ordres de treball",
-        "eva": "EVA",
-        "inventory": "Inventari",
-        "workers": "Treballadors",
-        "resources": "Recursos",
-        "stats": "Estadístiques"
-      },
-      "settings": {
-        "contracts": "Contractes",
-        "elementTypes": "Tipus d'element",
-        "species": "Espècies",
-        "taskTypes": "Tipus de tasca",
-        "resourceTypes": "Tipus de recurs",
-        "users": "Usuaris"
-      }
-    },
-    "profileDropdown": {
-      "accountSettings": "Configuració del compte",
-      "license": "Llicència",
-      "logout": "Tanca sessió"
-    },
-    "roles": {
-      "admin": "Administrador",
-      "worker": "Treballador",
-      "customer": "Client",
-      "unknown": "Desconegut"
-    },
     "buttons": {
       "createNew": "Crea nou"
     },
@@ -54,6 +20,8 @@
       "resource_type": "Tipus de recurs",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipus de recurs",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
       "species": "Espècie",
       "start_date": "Data d'inici",
       "status": "Estat",
@@ -239,7 +207,10 @@
             "name_min": "El nom ha de tenir almenys 3 caràcters",
             "name_required": "El nom és obligatori",
             "type_invalid": "Si us plau, selecciona un tipus de recurs vàlid",
-            "type_required": "El tipus és obligatori"
+            "type_required": "El tipus és obligatori",
+            "unit_cost_min": "El cost unitari ha de ser major que 0",
+            "unit_cost_required": "El cost unitari és obligatori",
+            "unit_name_required": "El nom de la unitat és obligatori"
           }
         },
         "list": {
@@ -252,7 +223,9 @@
             "description": "Descripció",
             "name": "Nom",
             "type": "Tipus",
-            "unit": "Unitat"
+            "unit": "Unitat",
+            "unit_name": "Nom de la unitat",
+            "unit_cost": "Cost unitari"
           },
           "messages": {
             "createSuccess": "Tipus de recurs creat correctament",
@@ -321,7 +294,8 @@
         "tasksNotDone": "Tasques Pendents",
         "hoursWorked": "Hores Treballades",
         "fuelConsumption": "Consum de Combustible",
-        "noData": "No hi ha dades per mostrar"
+        "noData": "No hi ha dades per mostrar",
+        "exportCSV": "Exportar a CSV"
       },
       "taskTypes": {
         "form": {
@@ -610,234 +584,234 @@
         }
       },
       "evas": {
-  "show": {
-    "title": "Detalls de l'Eva"
-  },
-  "dictionaries": {
-    "unbalancedCrown": {
-      "0": "Sense inclinació o creixement desigual",
-      "1": "Lleugera inclinació de la capçada",
-      "2": "Capçada visiblement inclinada",
-      "3": "Capçada extremadament inclinada"
-    },
-    "overextendedBranches": {
-      "0": "Branques ben estructurades",
-      "1": "Algunes branques sobreexteses",
-      "2": "Diverses branques sobreexteses",
-      "3": "Branques sobreexteses i pesades"
-    },
-    "cracks": {
-      "0": "Sense esquerdes",
-      "1": "Petites esquerdes al tronc",
-      "2": "Esquerdes visibles en diverses parts",
-      "3": "Esquerdes profundes al tronc"
-    },
-    "deadBranches": {
-      "0": "Sense branques mortes",
-      "1": "Algunes branques mortes",
-      "2": "Múltiples branques mortes",
-      "3": "Gran quantitat de branques mortes"
-    },
-    "inclination": {
-      "0": "Completament vertical",
-      "1": "Lleugera inclinació (<5°)",
-      "2": "Inclinació moderada (5-15°)",
-      "3": "Alta inclinació (>15°)"
-    },
-    "VForks": {
-      "0": "Bifurcacions normals",
-      "1": "Lleugera bifurcació en V",
-      "2": "Bifurcació en V pronunciada",
-      "3": "Bifurcació en V perillosa"
-    },
-    "cavities": {
-      "0": "Sense cavitats",
-      "1": "Petita cavitat",
-      "2": "Cavitat intermèdia",
-      "3": "Cavitat profunda i estructural"
-    },
-    "barkDamage": {
-      "0": "Escorça intacta",
-      "1": "Escorça amb petites ferides",
-      "2": "Dany significatiu a l'escorça",
-      "3": "Escorça molt danyada"
-    },
-    "soilLifting": {
-      "0": "Sòl sense alteracions",
-      "1": "Lleugera elevació del sòl",
-      "2": "Elevació visible del sòl",
-      "3": "Sòl severament aixecat"
-    },
-    "cutRoots": {
-      "0": "Arrels intactes",
-      "1": "Arrels amb petits talls",
-      "2": "Arrels parcialment danyades",
-      "3": "Arrels severament tallades"
-    },
-    "basalRot": {
-      "0": "Sense podridura",
-      "1": "Podridura inicial",
-      "2": "Podridura visible",
-      "3": "Podridura avançada"
-    },
-    "exposedRoots": {
-      "0": "Arrels sota terra",
-      "1": "Algunes arrels exposades",
-      "2": "Diverses arrels exposades",
-      "3": "Arrels exposades i debilitades"
-    },
-    "wind": {
-      "0": "Arbre protegit per barreres naturals o edificis, sense vent fort constant.",
-      "1": "Arbre amb vent ocasional però sense impacte significatiu en la seva estabilitat.",
-      "2": "Arbre exposat a vents forts freqüents, que poden afectar la seva estructura.",
-      "3": "Arbre en zones obertes o pendents on el vent bufa amb força extrema."
-    },
-    "drought": {
-      "0": "Arbre en zona amb humitat estable i accés constant a aigua, sense estrès hídric.",
-      "1": "Arbre amb accés moderat a aigua, però amb períodes ocasionals de sequera.",
-      "2": "Arbre en zona amb sequeres recurrents, afectant el seu desenvolupament i resistència.",
-      "3": "Arbre en zona àrida o amb sequeres prolongades, alt risc de debilitament."
-    }
-  },
-  "edit": {
-    "title": "Editar Eva",
-    "identification": "Identificació",
-    "treeCondition": "Estat de l'arbre",
-    "dimensions": "Dimensions",
-    "state": "Estat",
-    "crownBranches": "Capçada i branques",
-    "trunk": "Tronc",
-    "roots": "Arrels",
-    "environmentCondition": "Condicions ambientals",
-    "environmentalFactors": "Factors ambientals",
-    "windExposure": "Exposició al vent",
-    "droughtExposure": "Exposició a la sequera"
-  },
-  "create": {
-    "identification": "Identificació",
-    "treeCondition": "Estat de l'arbre",
-    "dimensions": "Dimensions",
-    "state": "Estat",
-    "crownBranches": "Capçada i branques",
-    "trunk": "Tronc",
-    "roots": "Arrels",
-    "environmentCondition": "Condicions ambientals",
-    "environmentalFactors": "Factors ambientals",
-    "windExposure": "Exposició al vent",
-    "droughtExposure": "Exposició a la sequera"
-  },
-  "title": "Eves",
-  "age": {
-    "years": "Anys",
-    "months": "Mesos"
-  },
-  "columns": {
-    "element_id": "ID de l'element",
-    "age": "Edat",
-    "height": "Alçada",
-    "actions": "Accions",
-    "name": "Nom",
-    "coordinates": "Coordenades",
-    "status": "Estat"
-  },
-  "form": {
-    "name": "Nom",
-    "element_id": "ID de l'element",
-    "years": "Anys",
-    "months": "Mesos",
-    "height": "Alçada",
-    "diameter": "Diàmetre",
-    "crown_width": "Amplada de la capçada",
-    "crown_projection_area": "Àrea de projecció de la capçada",
-    "root_surface_diameter": "Diàmetre de la superfície arrel",
-    "effective_root_area": "Àrea efectiva d'arrels",
-    "height_estimation": "Estimació d'alçada",
-    "unbalanced_crown": "Capçada desequilibrada",
-    "overextended_branches": "Branques sobreexteses",
-    "cracks": "Esquerdes",
-    "dead_branches": "Branques mortes",
-    "inclination": "Inclinació",
-    "V_forks": "Bifurcacions en V",
-    "cavities": "Cavitats",
-    "bark_damage": "Danys a l'escorça",
-    "soil_lifting": "Aixecament del sòl",
-    "cut_damaged_roots": "Arrels tallades/danyades",
-    "basal_rot": "Podridura basal",
-    "exposed_surface_roots": "Arrels superficials exposades",
-    "wind": "Vent",
-    "drought": "Sequera",
-    "validation": {
-      "element_required": "L'element és obligatori"
-    },
-    "title": {
-      "create": "Crear Eva",
-      "edit": "Editar Eva"
-    },
-    "saving": "Desant...",
-    "save": "Desar"
-  },
-  "list": {
-    "actions": {
-      "show": "Veure Eva",
-      "delete": "Eliminar Eva"
-    },
-    "messages": {
-      "createSuccess": "Eva creada correctament",
-      "deleteConfirm": "Esteu segur que voleu eliminar aquesta Eva?",
-      "deleteSuccess": "Eva eliminada correctament",
-      "error": "Error en desar l'Eva",
-      "updateSuccess": "Eva actualitzada correctament"
-    }
-  },
-  "status": {
-    "low": "Baix",
-    "moderate": "Moderat",
-    "high": "Alt",
-    "critical": "Crític",
-    "pending": "Pendent"
-  },
-  "stability": {
-    "stable": "Estable",
-    "moderate": "Moderat",
-    "highRisk": "Alt risc",
-    "pending": "Pendent"
-  },
-  "gravityHeight": {
-    "veryStable": "Molt estable",
-    "moderateRisk": "Risc moderat",
-    "highRisk": "Alt risc",
-    "pending": "Pendent"
-  },
-  "rootCrown": {
-    "veryStable": "Molt estable",
-    "stable": "Estable",
-    "moderateStability": "Estabilitat moderada",
-    "highRisk": "Alt risc",
-    "pending": "Pendent"
-  },
-  "windStability": {
-    "veryStable": "Molt estable",
-    "moderateStability": "Estabilitat moderada",
-    "highRisk": "Alt risc",
-    "pending": "Pendent"
-  },
-  "severity": {
-    "low": "Baix",
-    "moderate": "Moderat",
-    "high": "Alt",
-    "extreme": "Extrem",
-    "pending": "Pendent"
-  },
-  "indexCalculation": "Càlcul d'índexs",
-  "treeStatusFactor": "Factor d'estat de l'arbre",
-  "stabilityIndex": "Índex d'estabilitat (H/D)",
-  "gravityHeightRatio": "Relació alçada de gravetat (CG/H)",
-  "rootCrownRatio": "Relació arrel-capçada (SR/SC)",
-  "windStabilityIndex": "Índex d'estabilitat al vent (WSI)",
-  "environmentalFactors": "Factors ambientals",
-  "windExposure": "Exposició al vent",
-  "droughtExposure": "Exposició a la sequera"
-}
+        "show": {
+          "title": "Detalls de l'Eva"
+        },
+        "dictionaries": {
+          "unbalancedCrown": {
+            "0": "Sense inclinació o creixement desigual",
+            "1": "Lleugera inclinació de la capçada",
+            "2": "Capçada visiblement inclinada",
+            "3": "Capçada extremadament inclinada"
+          },
+          "overextendedBranches": {
+            "0": "Branques ben estructurades",
+            "1": "Algunes branques sobreexteses",
+            "2": "Diverses branques sobreexteses",
+            "3": "Branques sobreexteses i pesades"
+          },
+          "cracks": {
+            "0": "Sense esquerdes",
+            "1": "Petites esquerdes al tronc",
+            "2": "Esquerdes visibles en diverses parts",
+            "3": "Esquerdes profundes al tronc"
+          },
+          "deadBranches": {
+            "0": "Sense branques mortes",
+            "1": "Algunes branques mortes",
+            "2": "Múltiples branques mortes",
+            "3": "Gran quantitat de branques mortes"
+          },
+          "inclination": {
+            "0": "Completament vertical",
+            "1": "Lleugera inclinació (<5°)",
+            "2": "Inclinació moderada (5-15°)",
+            "3": "Alta inclinació (>15°)"
+          },
+          "VForks": {
+            "0": "Bifurcacions normals",
+            "1": "Lleugera bifurcació en V",
+            "2": "Bifurcació en V pronunciada",
+            "3": "Bifurcació en V perillosa"
+          },
+          "cavities": {
+            "0": "Sense cavitats",
+            "1": "Petita cavitat",
+            "2": "Cavitat intermèdia",
+            "3": "Cavitat profunda i estructural"
+          },
+          "barkDamage": {
+            "0": "Escorça intacta",
+            "1": "Escorça amb petites ferides",
+            "2": "Dany significatiu a l'escorça",
+            "3": "Escorça molt danyada"
+          },
+          "soilLifting": {
+            "0": "Sòl sense alteracions",
+            "1": "Lleugera elevació del sòl",
+            "2": "Elevació visible del sòl",
+            "3": "Sòl severament aixecat"
+          },
+          "cutRoots": {
+            "0": "Arrels intactes",
+            "1": "Arrels amb petits talls",
+            "2": "Arrels parcialment danyades",
+            "3": "Arrels severament tallades"
+          },
+          "basalRot": {
+            "0": "Sense podridura",
+            "1": "Podridura inicial",
+            "2": "Podridura visible",
+            "3": "Podridura avançada"
+          },
+          "exposedRoots": {
+            "0": "Arrels sota terra",
+            "1": "Algunes arrels exposades",
+            "2": "Diverses arrels exposades",
+            "3": "Arrels exposades i debilitades"
+          },
+          "wind": {
+            "0": "Arbre protegit per barreres naturals o edificis, sense vent fort constant.",
+            "1": "Arbre amb vent ocasional però sense impacte significatiu en la seva estabilitat.",
+            "2": "Arbre exposat a vents forts freqüents, que poden afectar la seva estructura.",
+            "3": "Arbre en zones obertes o pendents on el vent bufa amb força extrema."
+          },
+          "drought": {
+            "0": "Arbre en zona amb humitat estable i accés constant a aigua, sense estrès hídric.",
+            "1": "Arbre amb accés moderat a aigua, però amb períodes ocasionals de sequera.",
+            "2": "Arbre en zona amb sequeres recurrents, afectant el seu desenvolupament i resistència.",
+            "3": "Arbre en zona àrida o amb sequeres prolongades, alt risc de debilitament."
+          }
+        },
+        "edit": {
+          "title": "Editar Eva",
+          "identification": "Identificació",
+          "treeCondition": "Estat de l'arbre",
+          "dimensions": "Dimensions",
+          "state": "Estat",
+          "crownBranches": "Capçada i branques",
+          "trunk": "Tronc",
+          "roots": "Arrels",
+          "environmentCondition": "Condicions ambientals",
+          "environmentalFactors": "Factors ambientals",
+          "windExposure": "Exposició al vent",
+          "droughtExposure": "Exposició a la sequera"
+        },
+        "create": {
+          "identification": "Identificació",
+          "treeCondition": "Estat de l'arbre",
+          "dimensions": "Dimensions",
+          "state": "Estat",
+          "crownBranches": "Capçada i branques",
+          "trunk": "Tronc",
+          "roots": "Arrels",
+          "environmentCondition": "Condicions ambientals",
+          "environmentalFactors": "Factors ambientals",
+          "windExposure": "Exposició al vent",
+          "droughtExposure": "Exposició a la sequera"
+        },
+        "title": "Eves",
+        "age": {
+          "years": "Anys",
+          "months": "Mesos"
+        },
+        "columns": {
+          "element_id": "ID de l'element",
+          "age": "Edat",
+          "height": "Alçada",
+          "actions": "Accions",
+          "name": "Nom",
+          "coordinates": "Coordenades",
+          "status": "Estat"
+        },
+        "form": {
+          "name": "Nom",
+          "element_id": "ID de l'element",
+          "years": "Anys",
+          "months": "Mesos",
+          "height": "Alçada",
+          "diameter": "Diàmetre",
+          "crown_width": "Amplada de la capçada",
+          "crown_projection_area": "Àrea de projecció de la capçada",
+          "root_surface_diameter": "Diàmetre de la superfície arrel",
+          "effective_root_area": "Àrea efectiva d'arrels",
+          "height_estimation": "Estimació d'alçada",
+          "unbalanced_crown": "Capçada desequilibrada",
+          "overextended_branches": "Branques sobreexteses",
+          "cracks": "Esquerdes",
+          "dead_branches": "Branques mortes",
+          "inclination": "Inclinació",
+          "V_forks": "Bifurcacions en V",
+          "cavities": "Cavitats",
+          "bark_damage": "Danys a l'escorça",
+          "soil_lifting": "Aixecament del sòl",
+          "cut_damaged_roots": "Arrels tallades/danyades",
+          "basal_rot": "Podridura basal",
+          "exposed_surface_roots": "Arrels superficials exposades",
+          "wind": "Vent",
+          "drought": "Sequera",
+          "validation": {
+            "element_required": "L'element és obligatori"
+          },
+          "title": {
+            "create": "Crear Eva",
+            "edit": "Editar Eva"
+          },
+          "saving": "Desant...",
+          "save": "Desar"
+        },
+        "list": {
+          "actions": {
+            "show": "Veure Eva",
+            "delete": "Eliminar Eva"
+          },
+          "messages": {
+            "createSuccess": "Eva creada correctament",
+            "deleteConfirm": "Esteu segur que voleu eliminar aquesta Eva?",
+            "deleteSuccess": "Eva eliminada correctament",
+            "error": "Error en desar l'Eva",
+            "updateSuccess": "Eva actualitzada correctament"
+          }
+        },
+        "status": {
+          "low": "Baix",
+          "moderate": "Moderat",
+          "high": "Alt",
+          "critical": "Crític",
+          "pending": "Pendent"
+        },
+        "stability": {
+          "stable": "Estable",
+          "moderate": "Moderat",
+          "highRisk": "Alt risc",
+          "pending": "Pendent"
+        },
+        "gravityHeight": {
+          "veryStable": "Molt estable",
+          "moderateRisk": "Risc moderat",
+          "highRisk": "Alt risc",
+          "pending": "Pendent"
+        },
+        "rootCrown": {
+          "veryStable": "Molt estable",
+          "stable": "Estable",
+          "moderateStability": "Estabilitat moderada",
+          "highRisk": "Alt risc",
+          "pending": "Pendent"
+        },
+        "windStability": {
+          "veryStable": "Molt estable",
+          "moderateStability": "Estabilitat moderada",
+          "highRisk": "Alt risc",
+          "pending": "Pendent"
+        },
+        "severity": {
+          "low": "Baix",
+          "moderate": "Moderat",
+          "high": "Alt",
+          "extreme": "Extrem",
+          "pending": "Pendent"
+        },
+        "indexCalculation": "Càlcul d'índexs",
+        "treeStatusFactor": "Factor d'estat de l'arbre",
+        "stabilityIndex": "Índex d'estabilitat (H/D)",
+        "gravityHeightRatio": "Relació alçada de gravetat (CG/H)",
+        "rootCrownRatio": "Relació arrel-capçada (SR/SC)",
+        "windStabilityIndex": "Índex d'estabilitat al vent (WSI)",
+        "environmentalFactors": "Factors ambientals",
+        "windExposure": "Exposició al vent",
+        "droughtExposure": "Exposició a la sequera"
+      }
     },
     "profileDropdown": {
       "accountSettings": "Configuració del compte",
