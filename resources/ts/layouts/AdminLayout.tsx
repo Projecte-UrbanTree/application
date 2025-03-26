@@ -250,7 +250,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                   <Dropdown
                     id="contractBtn"
                     name="contractBtn"
-                    className="w-32"
+                    className="w-40"
                     value={dropdownValue}
                     options={contracts}
                     onChange={handleContractChange}
@@ -364,9 +364,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       )}
 
-      <main className={padding}>
-        {children}
-      </main>
+      <main className={padding}>{children}</main>
     </div>
   );
 };

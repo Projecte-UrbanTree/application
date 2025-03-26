@@ -100,20 +100,20 @@ export default function EditEva() {
   }
 
   interface Dictionaries {
-    copaDesequilibrada: DictionaryOption[];
-    ramasSobreextendidas: DictionaryOption[];
-    grietas: DictionaryOption[];
-    ramasMuertas: DictionaryOption[];
-    inclinacion: DictionaryOption[];
-    bifurcacionesV: DictionaryOption[];
-    cavidades: DictionaryOption[];
-    danosCorteza: DictionaryOption[];
-    levantamientoSuelo: DictionaryOption[];
-    raicesCortadas: DictionaryOption[];
-    podredumbreBasal: DictionaryOption[];
-    raicesExpuestas: DictionaryOption[];
-    viento: DictionaryOption[];
-    sequia: DictionaryOption[];
+    unbalancedCrown: DictionaryOption[];
+    overextendedBranches: DictionaryOption[];
+    cracks: DictionaryOption[];
+    deadBranches: DictionaryOption[];
+    inclination: DictionaryOption[];
+    VForks: DictionaryOption[];
+    cavities: DictionaryOption[];
+    barkDamage: DictionaryOption[];
+    soilLifting: DictionaryOption[];
+    cutRoots: DictionaryOption[];
+    basalRot: DictionaryOption[];
+    exposedRoots: DictionaryOption[];
+    wind: DictionaryOption[];
+    drought: DictionaryOption[];
   }
 
   const [initialValues, setInitialValues] = useState({
@@ -128,38 +128,38 @@ export default function EditEva() {
     root_surface_diameter: 0,
     effective_root_area: 0,
     height_estimation: 0,
-    unbalanced_crown: 0,
-    overextended_branches: 0,
+    unbalancedCrown: 0,
+    overextendedBranches: 0,
     cracks: 0,
-    dead_branches: 0,
+    deadBranches: 0,
     inclination: 0,
-    V_forks: 0,
+    VForks: 0,
     cavities: 0,
-    bark_damage: 0,
-    soil_lifting: 0,
-    cut_damaged_roots: 0,
-    basal_rot: 0,
-    exposed_surface_roots: 0,
+    barkDamage: 0,
+    soilLifting: 0,
+    cutRoots: 0,
+    basalRot: 0,
+    exposedRoots: 0,
     wind: 0,
     drought: 0,
     status: 0,
   });
 
   const [dictionaries, setDictionaries] = useState<Dictionaries>({
-    copaDesequilibrada: [],
-    ramasSobreextendidas: [],
-    grietas: [],
-    ramasMuertas: [],
-    inclinacion: [],
-    bifurcacionesV: [],
-    cavidades: [],
-    danosCorteza: [],
-    levantamientoSuelo: [],
-    raicesCortadas: [],
-    podredumbreBasal: [],
-    raicesExpuestas: [],
-    viento: [],
-    sequia: [],
+    unbalancedCrown: [],
+    overextendedBranches: [],
+    cracks: [],
+    deadBranches: [],
+    inclination: [],
+    VForks: [],
+    cavities: [],
+    barkDamage: [],
+    soilLifting: [],
+    cutRoots: [],
+    basalRot: [],
+    exposedRoots: [],
+    wind: [],
+    drought: [],
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -192,20 +192,20 @@ export default function EditEva() {
       try {
         const response = await axiosClient.get('/admin/evas/create');
         const translatedDictionaries: Dictionaries = {
-          copaDesequilibrada: [],
-          ramasSobreextendidas: [],
-          grietas: [],
-          ramasMuertas: [],
-          inclinacion: [],
-          bifurcacionesV: [],
-          cavidades: [],
-          danosCorteza: [],
-          levantamientoSuelo: [],
-          raicesCortadas: [],
-          podredumbreBasal: [],
-          raicesExpuestas: [],
-          viento: [],
-          sequia: [],
+          unbalancedCrown: [],
+          overextendedBranches: [],
+          cracks: [],
+          deadBranches: [],
+          inclination: [],
+          VForks: [],
+          cavities: [],
+          barkDamage: [],
+          soilLifting: [],
+          cutRoots: [],
+          basalRot: [],
+          exposedRoots: [],
+          wind: [],
+          drought: [],
         };
         for (const key in response.data.dictionaries) {
           translatedDictionaries[key as keyof Dictionaries] =
@@ -258,18 +258,18 @@ export default function EditEva() {
       const formattedDate = format(birthDate, 'yyyy-MM-dd');
 
       const status =
-        Number(values.unbalanced_crown) +
-        Number(values.overextended_branches) +
+        Number(values.unbalancedCrown) +
+        Number(values.overextendedBranches) +
         Number(values.cracks) +
-        Number(values.dead_branches) +
+        Number(values.deadBranches) +
         Number(values.inclination) +
-        Number(values.V_forks) +
+        Number(values.VForks) +
         Number(values.cavities) +
-        Number(values.bark_damage) +
-        Number(values.soil_lifting) +
-        Number(values.cut_damaged_roots) +
-        Number(values.basal_rot) +
-        Number(values.exposed_surface_roots);
+        Number(values.barkDamage) +
+        Number(values.soilLifting) +
+        Number(values.cutRoots) +
+        Number(values.basalRot) +
+        Number(values.exposedRoots);
 
       const updatedValues = {
         ...values,
@@ -400,25 +400,25 @@ export default function EditEva() {
                     name="unbalanced_crown"
                     label={t('admin.pages.evas.form.unbalanced_crown')}
                     as={Dropdown}
-                    options={dictionaries.copaDesequilibrada}
+                    options={dictionaries.unbalancedCrown}
                   />
                   <FormField
                     name="overextended_branches"
                     label={t('admin.pages.evas.form.overextended_branches')}
                     as={Dropdown}
-                    options={dictionaries.ramasSobreextendidas}
+                    options={dictionaries.overextendedBranches}
                   />
                   <FormField
                     name="cracks"
                     label={t('admin.pages.evas.form.cracks')}
                     as={Dropdown}
-                    options={dictionaries.grietas}
+                    options={dictionaries.cracks}
                   />
                   <FormField
                     name="dead_branches"
                     label={t('admin.pages.evas.form.dead_branches')}
                     as={Dropdown}
-                    options={dictionaries.ramasMuertas}
+                    options={dictionaries.deadBranches}
                   />
 
                   {/* Subsubsección: Tronco */}
@@ -429,25 +429,25 @@ export default function EditEva() {
                     name="inclination"
                     label={t('admin.pages.evas.form.inclination')}
                     as={Dropdown}
-                    options={dictionaries.inclinacion}
+                    options={dictionaries.inclination}
                   />
                   <FormField
                     name="V_forks"
                     label={t('admin.pages.evas.form.V_forks')}
                     as={Dropdown}
-                    options={dictionaries.bifurcacionesV}
+                    options={dictionaries.VForks}
                   />
                   <FormField
                     name="cavities"
                     label={t('admin.pages.evas.form.cavities')}
                     as={Dropdown}
-                    options={dictionaries.cavidades}
+                    options={dictionaries.cavities}
                   />
                   <FormField
                     name="bark_damage"
                     label={t('admin.pages.evas.form.bark_damage')}
                     as={Dropdown}
-                    options={dictionaries.danosCorteza}
+                    options={dictionaries.barkDamage}
                   />
 
                   {/* Subsubsección: Raíces */}
@@ -458,25 +458,25 @@ export default function EditEva() {
                     name="soil_lifting"
                     label={t('admin.pages.evas.form.soil_lifting')}
                     as={Dropdown}
-                    options={dictionaries.levantamientoSuelo}
+                    options={dictionaries.soilLifting}
                   />
                   <FormField
                     name="cut_damaged_roots"
                     label={t('admin.pages.evas.form.cut_damaged_roots')}
                     as={Dropdown}
-                    options={dictionaries.raicesCortadas}
+                    options={dictionaries.cutRoots}
                   />
                   <FormField
                     name="basal_rot"
                     label={t('admin.pages.evas.form.basal_rot')}
                     as={Dropdown}
-                    options={dictionaries.podredumbreBasal}
+                    options={dictionaries.basalRot}
                   />
                   <FormField
                     name="exposed_surface_roots"
                     label={t('admin.pages.evas.form.exposed_surface_roots')}
                     as={Dropdown}
-                    options={dictionaries.raicesExpuestas}
+                    options={dictionaries.exposedRoots}
                   />
                 </div>
 
@@ -499,7 +499,7 @@ export default function EditEva() {
                     name="wind"
                     label={t('admin.pages.evas.form.wind')}
                     as={Dropdown}
-                    options={dictionaries.viento}
+                    options={dictionaries.wind}
                   />
 
                   {/* Subsubsección: Exposición a la sequía */}
@@ -510,7 +510,7 @@ export default function EditEva() {
                     name="drought"
                     label={t('admin.pages.evas.form.drought')}
                     as={Dropdown}
-                    options={dictionaries.sequia}
+                    options={dictionaries.drought}
                   />
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
