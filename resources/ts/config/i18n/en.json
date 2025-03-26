@@ -20,6 +20,8 @@
       "resource_type": "Resource Type",
       "role": "Role",
       "select_resource_type": "Select a resource type",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
       "species": "Species",
       "start_date": "Start Date",
       "status": "Status",
@@ -205,7 +207,10 @@
             "name_min": "Name must be at least 3 characters",
             "name_required": "Name is required",
             "type_invalid": "Please select a valid resource type",
-            "type_required": "Type is required"
+            "type_required": "Type is required",
+            "unit_cost_min": "Unit cost must be greater than 0",
+            "unit_cost_required": "Unit cost is required",
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
@@ -217,7 +222,10 @@
           "columns": {
             "description": "Description",
             "name": "Name",
-            "type": "Type"
+            "type": "Type",
+            "unit": "Unit",
+            "unit_name": "Unit Name",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
             "createSuccess": "Resource created successfully",
