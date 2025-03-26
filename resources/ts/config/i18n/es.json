@@ -208,9 +208,9 @@
             "name_required": "El nombre es obligatorio",
             "type_invalid": "Por favor, selecciona un tipo de recurso válido",
             "type_required": "El tipo es obligatorio",
-            "unit_cost_min": "Unit cost must be greater than 0",
-            "unit_cost_required": "Unit cost is required",
-            "unit_name_required": "Unit name is required"
+            "unit_cost_min": "El costo unitario debe ser mayor que 0",
+            "unit_cost_required": "El costo unitario es obligatorio",
+            "unit_name_required": "El nombre de la unidad es obligatorio"
           }
         },
         "list": {
@@ -224,8 +224,8 @@
             "name": "Nombre",
             "type": "Tipo",
             "unit": "Unidad",
-            "unit_name": "Unit Name",
-            "unit_cost": "Unit Cost"
+            "unit_name": "Nombre de la unidad",
+            "unit_cost": "Costo unitario"
           },
           "messages": {
             "createSuccess": "Recurso creado exitosamente",
@@ -295,7 +295,7 @@
         "hoursWorked": "Horas Trabajadas",
         "fuelConsumption": "Consumo de Combustible",
         "noData": "No hay datos para mostrar",
-        "exportCSV": "Export to CSV"
+        "exportCSV": "Exportar a CSV"
       },
       "taskTypes": {
         "form": {

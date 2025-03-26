@@ -208,9 +208,9 @@
             "name_required": "El nom és obligatori",
             "type_invalid": "Si us plau, selecciona un tipus de recurs vàlid",
             "type_required": "El tipus és obligatori",
-            "unit_cost_min": "Unit cost must be greater than 0",
-            "unit_cost_required": "Unit cost is required",
-            "unit_name_required": "Unit name is required"
+            "unit_cost_min": "El cost unitari ha de ser major que 0",
+            "unit_cost_required": "El cost unitari és obligatori",
+            "unit_name_required": "El nom de la unitat és obligatori"
           }
         },
         "list": {
@@ -224,8 +224,8 @@
             "name": "Nom",
             "type": "Tipus",
             "unit": "Unitat",
-            "unit_name": "Unit Name",
-            "unit_cost": "Unit Cost"
+            "unit_name": "Nom de la unitat",
+            "unit_cost": "Cost unitari"
           },
           "messages": {
             "createSuccess": "Tipus de recurs creat correctament",
@@ -295,7 +295,7 @@
         "hoursWorked": "Hores Treballades",
         "fuelConsumption": "Consum de Combustible",
         "noData": "No hi ha dades per mostrar",
-        "exportCSV": "Export to CSV"
+        "exportCSV": "Exportar a CSV"
       },
       "taskTypes": {
         "form": {
