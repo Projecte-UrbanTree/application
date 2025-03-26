@@ -14,9 +14,14 @@
       "genus": "Género",
       "name": "Nombre",
       "password": "Contraseña",
-      "resource_type": "Resource Type",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "resource_type": "Tipo de Recurso",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipo de recurso",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
@@ -202,7 +207,10 @@
             "name_min": "El nombre debe tener al menos 3 caracteres",
             "name_required": "El nombre es obligatorio",
             "type_invalid": "Por favor, selecciona un tipo de recurso válido",
-            "type_required": "El tipo es obligatorio"
+            "type_required": "El tipo es obligatorio",
+            "unit_cost_min": "Unit cost must be greater than 0",
+            "unit_cost_required": "Unit cost is required",
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
@@ -214,7 +222,10 @@
           "columns": {
             "description": "Descripción",
             "name": "Nombre",
-            "type": "Tipo"
+            "type": "Tipo",
+            "unit": "Unidad",
+            "unit_name": "Unit Name",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
             "createSuccess": "Recurso creado exitosamente",
@@ -283,7 +294,8 @@
         "tasksNotDone": "Tareas Pendientes",
         "hoursWorked": "Horas Trabajadas",
         "fuelConsumption": "Consumo de Combustible",
-        "noData": "No hay datos para mostrar"
+        "noData": "No hay datos para mostrar",
+        "exportCSV": "Export to CSV"
       },
       "taskTypes": {
         "form": {
@@ -546,6 +558,259 @@
           "unknown": "Desconocido"
         },
         "title": "Órdenes de trabajo"
+      },
+      "account": {
+        "title": "Configuración de la Cuenta",
+        "basicInfo": "Información Básica",
+        "security": "Seguridad",
+        "actions": {
+          "save": "Guardar cambios",
+          "saving": "Guardando..."
+        },
+        "validation": {
+          "name_invalid": "El nombre no puede contener símbolos.",
+          "name_required": "El nombre es obligatorio",
+          "surname_invalid": "El apellido no puede contener símbolos.",
+          "surname_required": "El apellido es obligatorio",
+          "currentPasswordRequired": "Debe ingresar la contraseña actual",
+          "newPasswordMinLength": "La contraseña debe tener al menos 6 caracteres",
+          "newPasswordMismatch": "Las contraseñas no coinciden",
+          "newPasswordComplexity": "La nueva contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número"
+        },
+        "messages": {
+          "profileUpdated": "Perfil actualizado correctamente",
+          "errorSaving": "Error al guardar los cambios.",
+          "passwordCurrentWrong": "La contraseña actual no coincide"
+        }
+      },
+      "evas": {
+        "show": {
+          "title": "Detalles de Eva"
+        },
+        "dictionaries": {
+          "unbalancedCrown": {
+            "0": "Sin inclinación o crecimiento desigual",
+            "1": "Ligera inclinación de la copa",
+            "2": "Copa visiblemente inclinada",
+            "3": "Copa extremadamente inclinada"
+          },
+          "overextendedBranches": {
+            "0": "Ramas bien estructuradas",
+            "1": "Algunas ramas sobreextendidas",
+            "2": "Varias ramas sobreextendidas",
+            "3": "Ramas sobreextendidas y pesadas"
+          },
+          "cracks": {
+            "0": "Sin grietas",
+            "1": "Pequeñas grietas en el tronco",
+            "2": "Grietas visibles en varias partes",
+            "3": "Grietas profundas en el tronco"
+          },
+          "deadBranches": {
+            "0": "Sin ramas muertas",
+            "1": "Algunas ramas muertas",
+            "2": "Múltiples ramas muertas",
+            "3": "Gran cantidad de ramas muertas"
+          },
+          "inclination": {
+            "0": "Completamente vertical",
+            "1": "Ligera inclinación (<5°)",
+            "2": "Inclinación moderada (5-15°)",
+            "3": "Alta inclinación (>15°)"
+          },
+          "VForks": {
+            "0": "Bifurcaciones normales",
+            "1": "Ligera bifurcación en V",
+            "2": "Bifurcación en V pronunciada",
+            "3": "Bifurcación en V peligrosa"
+          },
+          "cavities": {
+            "0": "Sin cavidades",
+            "1": "Pequeña cavidad",
+            "2": "Cavidad intermedia",
+            "3": "Cavidad profunda y estructural"
+          },
+          "barkDamage": {
+            "0": "Corteza intacta",
+            "1": "Corteza con pequeñas heridas",
+            "2": "Daño significativo en la corteza",
+            "3": "Corteza muy dañada"
+          },
+          "soilLifting": {
+            "0": "Suelo sin alteraciones",
+            "1": "Ligera elevación del suelo",
+            "2": "Elevación visible del suelo",
+            "3": "Suelo severamente levantado"
+          },
+          "cutRoots": {
+            "0": "Raíces intactas",
+            "1": "Raíces con pequeños cortes",
+            "2": "Raíces parcialmente dañadas",
+            "3": "Raíces severamente cortadas"
+          },
+          "basalRot": {
+            "0": "Sin podredumbre",
+            "1": "Podredumbre inicial",
+            "2": "Podredumbre visible",
+            "3": "Podredumbre avanzada"
+          },
+          "exposedRoots": {
+            "0": "Raíces bajo tierra",
+            "1": "Algunas raíces expuestas",
+            "2": "Varias raíces expuestas",
+            "3": "Raíces expuestas y debilitadas"
+          },
+          "wind": {
+            "0": "Árbol protegido por barreras naturales o edificios, sin viento fuerte constante.",
+            "1": "Árbol con viento ocasional pero sin impacto significativo en su estabilidad.",
+            "2": "Árbol expuesto a vientos fuertes frecuentes, que pueden afectar su estructura.",
+            "3": "Árbol en áreas abiertas o pendientes donde el viento sopla con fuerza extrema."
+          },
+          "drought": {
+            "0": "Árbol en zona con humedad estable y acceso constante al agua, sin estrés hídrico.",
+            "1": "Árbol con acceso moderado al agua, pero con periodos ocasionales de sequía.",
+            "2": "Árbol en zona con sequías recurrentes, afectando su desarrollo y resistencia.",
+            "3": "Árbol en zona árida o con sequías prolongadas, alto riesgo de debilitamiento."
+          }
+        },
+        "edit": {
+          "title": "Editar Eva",
+          "identification": "Identificación",
+          "treeCondition": "Condición del Árbol",
+          "dimensions": "Dimensiones",
+          "state": "Estado",
+          "crownBranches": "Copa y Ramas",
+          "trunk": "Tronco",
+          "roots": "Raíces",
+          "environmentCondition": "Condición Ambiental",
+          "environmentalFactors": "Factores Ambientales",
+          "windExposure": "Exposición al Viento",
+          "droughtExposure": "Exposición a Sequía"
+        },
+        "create": {
+          "identification": "Identificación",
+          "treeCondition": "Condición del Árbol",
+          "dimensions": "Dimensiones",
+          "state": "Estado",
+          "crownBranches": "Copa y Ramas",
+          "trunk": "Tronco",
+          "roots": "Raíces",
+          "environmentCondition": "Condición Ambiental",
+          "environmentalFactors": "Factores Ambientales",
+          "windExposure": "Exposición al Viento",
+          "droughtExposure": "Exposición a Sequía"
+        },
+        "title": "Evas",
+        "age": {
+          "years": "Años",
+          "months": "Meses"
+        },
+        "columns": {
+          "element_id": "ID de Elemento",
+          "age": "Edad",
+          "height": "Altura",
+          "actions": "Acciones",
+          "name": "Nombre",
+          "coordinates": "Coordenadas",
+          "status": "Estado"
+        },
+        "form": {
+          "name": "Nombre",
+          "element_id": "ID de Elemento",
+          "years": "Años",
+          "months": "Meses",
+          "height": "Altura",
+          "diameter": "Diámetro",
+          "crown_width": "Ancho de Copa",
+          "crown_projection_area": "Área de Proyección de Copa",
+          "root_surface_diameter": "Diámetro de Superficie de Raíces",
+          "effective_root_area": "Área Efectiva de Raíces",
+          "height_estimation": "Estimación de Altura",
+          "unbalanced_crown": "Copa Desequilibrada",
+          "overextended_branches": "Ramas Sobreextendidas",
+          "cracks": "Grietas",
+          "dead_branches": "Ramas Muertas",
+          "inclination": "Inclinación",
+          "V_forks": "Bifurcaciones en V",
+          "cavities": "Cavidades",
+          "bark_damage": "Daños en Corteza",
+          "soil_lifting": "Levantamiento de Suelo",
+          "cut_damaged_roots": "Raíces Cortadas/Dañadas",
+          "basal_rot": "Podredumbre Basal",
+          "exposed_surface_roots": "Raíces Superficiales Expuestas",
+          "wind": "Viento",
+          "drought": "Sequía",
+          "validation": {
+            "element_required": "El elemento es requerido"
+          },
+          "title": {
+            "create": "Crear Eva",
+            "edit": "Editar Eva"
+          },
+          "saving": "Guardando...",
+          "save": "Guardar"
+        },
+        "list": {
+          "actions": {
+            "show": "Ver Eva",
+            "delete": "Eliminar Eva"
+          },
+          "messages": {
+            "createSuccess": "Eva creada exitosamente",
+            "deleteConfirm": "¿Estás seguro de querer eliminar esta Eva?",
+            "deleteSuccess": "Eva eliminada exitosamente",
+            "error": "Error al guardar Eva",
+            "updateSuccess": "Eva actualizada exitosamente"
+          }
+        },
+        "status": {
+          "low": "Bajo",
+          "moderate": "Moderado",
+          "high": "Alto",
+          "critical": "Crítico",
+          "pending": "Pendiente"
+        },
+        "stability": {
+          "stable": "Estable",
+          "moderate": "Moderado",
+          "highRisk": "Alto Riesgo",
+          "pending": "Pendiente"
+        },
+        "gravityHeight": {
+          "veryStable": "Muy Estable",
+          "moderateRisk": "Riesgo Moderado",
+          "highRisk": "Alto Riesgo",
+          "pending": "Pendiente"
+        },
+        "rootCrown": {
+          "veryStable": "Muy Estable",
+          "stable": "Estable",
+          "moderateStability": "Estabilidad Moderada",
+          "highRisk": "Alto Riesgo",
+          "pending": "Pendiente"
+        },
+        "windStability": {
+          "veryStable": "Muy Estable",
+          "moderateStability": "Estabilidad Moderada",
+          "highRisk": "Alto Riesgo",
+          "pending": "Pendiente"
+        },
+        "severity": {
+          "low": "Bajo",
+          "moderate": "Moderado",
+          "high": "Alto",
+          "extreme": "Extremo",
+          "pending": "Pendiente"
+        },
+        "indexCalculation": "Cálculo de Índices",
+        "treeStatusFactor": "Factor de Estado del Árbol",
+        "stabilityIndex": "Índice de Estabilidad (H/D)",
+        "gravityHeightRatio": "Relación Altura de Gravedad (CG/H)",
+        "rootCrownRatio": "Relación Raíz-Copa (SR/SC)",
+        "windStabilityIndex": "Índice de Estabilidad al Viento (WSI)",
+        "environmentalFactors": "Factores Ambientales",
+        "windExposure": "Exposición al Viento",
+        "droughtExposure": "Exposición a Sequía"
       }
     },
     "profileDropdown": {
@@ -590,7 +855,9 @@
   "general": {
     "allContracts": "Todos los contratos",
     "genericError": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
   },
   "public": {
     "error": {

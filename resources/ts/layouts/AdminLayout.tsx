@@ -13,7 +13,7 @@ import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrap
 import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
 import { selectContract } from '@/store/slice/contractSlice';
-import { Contract } from '@/types/Contract';
+import type { Contract } from '@/types/Contract';
 import logo from '@images/logo.png';
 import { useDispatch } from 'react-redux';
 
@@ -22,12 +22,14 @@ interface AdminLayoutProps {
   children: React.ReactNode;
   contracts: Contract[];
   currentContract?: Contract;
+  padding?: string;
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({
   children,
   contracts,
   currentContract,
+  padding = 'max-w-7xl mx-auto pt-8 pb-16 px-8',
 }) => {
   const { t } = useI18n();
   const { user, logout } = useAuth();
@@ -42,9 +44,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     currentContract ?? defaultContract,
   );
 
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  // Asegurarnos de que el valor del Dropdown sea un número válido
   const dropdownValue = contract?.id ?? 0;
 
   useEffect(() => {
@@ -65,7 +64,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
           dispatch(selectContract(selectedContract.id!));
           setContract(selectedContract);
-          setRefreshKey((prev) => prev + 1); // Force children re-render
         } catch (error: any) {
           console.error(
             'Error saving selected contract:',
@@ -100,12 +98,26 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     '/admin/dashboard',
     '/admin/work-orders',
     '/admin/inventory',
+    '/admin/eva',
     '/admin/workers',
     '/admin/resources',
     '/admin/statistics',
   ].some((path) => location.pathname.startsWith(path));
 
   const isSettingsPage = location.pathname.includes('/admin/settings');
+  const isWorkOrderEditPage = location.pathname.includes(
+    '/admin/work-orders/edit/',
+  );
+  const isResourceEditPage = location.pathname.includes(
+    '/admin/resources/edit/',
+  );
+  const isAccountPage = location.pathname.includes('/admin/account');
+
+  const hideContractSelector =
+    isSettingsPage ||
+    isWorkOrderEditPage ||
+    isResourceEditPage ||
+    isAccountPage;
 
   const managementSubmenuItems = [
     {
@@ -119,7 +131,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       icon: 'tabler:chart-treemap',
     },
     {
-      to: '/admin/eva',
+      to: '/admin/evas',
       label: t('admin.submenu.manage.eva'),
       icon: 'tabler:chart-bar',
     },
@@ -233,7 +245,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex gap-4">
-              {!isSettingsPage && (
+              {!hideContractSelector && (
                 <>
                   <Dropdown
                     id="contractBtn"
@@ -299,7 +311,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
             </Link>
           ))}
           <div className="mt-4 flex flex-col gap-4">
-            {!isSettingsPage && (
+            {!hideContractSelector && (
               <Dropdown
                 id="contractBtn"
                 name="contractBtn"
@@ -317,40 +329,42 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       </header>
 
-      <div
-        id="submenu"
-        className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-50 shadow-md">
-        <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
-          {isManagementActive &&
-            managementSubmenuItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`px-2 py-3 rounded flex items-center gap-1 ${
-                  location.pathname === item.to
-                    ? 'bg-gray-100 text-indigo-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}>
-                <Icon width="22px" icon={item.icon} /> {item.label}
-              </Link>
-            ))}
-          {location.pathname.includes('/admin/settings') &&
-            settingsSubmenuItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`px-2 py-3 rounded flex items-center gap-1 ${
-                  location.pathname === item.to
-                    ? 'bg-gray-100 text-indigo-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}>
-                <Icon width="22px" icon={item.icon} /> {item.label}
-              </Link>
-            ))}
+      {!isAccountPage && (
+        <div
+          id="submenu"
+          className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-50 shadow-md">
+          <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
+            {isManagementActive &&
+              managementSubmenuItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${
+                    location.pathname === item.to
+                      ? 'bg-gray-100 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}>
+                  <Icon width="22px" icon={item.icon} /> {item.label}
+                </Link>
+              ))}
+            {location.pathname.includes('/admin/settings') &&
+              settingsSubmenuItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${
+                    location.pathname === item.to
+                      ? 'bg-gray-100 text-indigo-600'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}>
+                  <Icon width="22px" icon={item.icon} /> {item.label}
+                </Link>
+              ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <main className="max-w-7xl mx-auto pt-8 pb-16 px-8" key={refreshKey}>
+      <main className={padding}>
         {children}
       </main>
     </div>

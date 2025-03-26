@@ -14,9 +14,14 @@
       "genus": "Genus",
       "name": "Name",
       "password": "Password",
+      "currentPassword": "Password (Current)",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
       "resource_type": "Resource Type",
       "role": "Role",
       "select_resource_type": "Select a resource type",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
       "species": "Species",
       "start_date": "Start Date",
       "status": "Status",
@@ -202,7 +207,10 @@
             "name_min": "Name must be at least 3 characters",
             "name_required": "Name is required",
             "type_invalid": "Please select a valid resource type",
-            "type_required": "Type is required"
+            "type_required": "Type is required",
+            "unit_cost_min": "Unit cost must be greater than 0",
+            "unit_cost_required": "Unit cost is required",
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
@@ -214,7 +222,10 @@
           "columns": {
             "description": "Description",
             "name": "Name",
-            "type": "Type"
+            "type": "Type",
+            "unit": "Unit",
+            "unit_name": "Unit Name",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
             "createSuccess": "Resource created successfully",
@@ -283,7 +294,8 @@
         "tasksNotDone": "Pending Tasks",
         "hoursWorked": "Hours Worked",
         "fuelConsumption": "Fuel Consumption",
-        "noData": "No data to display"
+        "noData": "No data to display",
+        "exportCSV": "Export to CSV"
       },
       "taskTypes": {
         "form": {
@@ -546,6 +558,259 @@
           "unknown": "Unknown"
         },
         "title": "Work Orders"
+      },
+      "account": {
+        "title": "Account Settings",
+        "basicInfo": "Basic Information",
+        "security": "Security",
+        "actions": {
+          "save": "Save Changes",
+          "saving": "Saving..."
+        },
+        "validation": {
+          "name_invalid": "Name is invalid",
+          "name_required": "Name is required",
+          "surname_invalid": "Surname is invalid",
+          "surname_required": "Surname is required",
+          "currentPasswordRequired": "Current password is required",
+          "newPasswordMinLength": "New password must be at least 8 characters",
+          "newPasswordMismatch": "New passwords do not match",
+          "newPasswordComplexity": "New password must contain at least one uppercase letter, one lowercase letter, and one number"
+        },
+        "messages": {
+          "profileUpdated": "Profile updated successfully",
+          "errorSaving": "Error saving profile",
+          "passwordCurrentWrong": "Current password is incorrect"
+        }
+      },
+      "evas": {
+        "show": {
+          "title": "Eva Details"
+        },
+        "dictionaries": {
+          "unbalancedCrown": {
+            "0": "No inclination or uneven growth",
+            "1": "Slight crown inclination",
+            "2": "Visibly inclined crown",
+            "3": "Extremely inclined crown"
+          },
+          "overextendedBranches": {
+            "0": "Well-structured branches",
+            "1": "Few overextended branches",
+            "2": "Several overextended branches",
+            "3": "Overextended and heavy branches"
+          },
+          "cracks": {
+            "0": "No cracks",
+            "1": "Small cracks in the trunk",
+            "2": "Visible cracks in several parts",
+            "3": "Deep cracks in the trunk"
+          },
+          "deadBranches": {
+            "0": "No dead branches",
+            "1": "Some dead branches",
+            "2": "Multiple dead branches",
+            "3": "Large number of dead branches"
+          },
+          "inclination": {
+            "0": "Completely vertical",
+            "1": "Slight inclination (<5°)",
+            "2": "Moderate inclination (5-15°)",
+            "3": "High inclination (>15°)"
+          },
+          "VForks": {
+            "0": "Normal bifurcations",
+            "1": "Slight V bifurcation",
+            "2": "Pronounced V bifurcation",
+            "3": "Dangerous V bifurcation"
+          },
+          "cavities": {
+            "0": "No cavities",
+            "1": "Small cavity",
+            "2": "Intermediate cavity",
+            "3": "Deep and structural cavity"
+          },
+          "barkDamage": {
+            "0": "Intact bark",
+            "1": "Bark with slight wounds",
+            "2": "Significant bark damage",
+            "3": "Very damaged bark"
+          },
+          "soilLifting": {
+            "0": "Soil without alterations",
+            "1": "Slight soil elevation",
+            "2": "Visible soil elevation",
+            "3": "Severely lifted soil"
+          },
+          "cutRoots": {
+            "0": "Intact roots",
+            "1": "Roots with slight cuts",
+            "2": "Partially damaged roots",
+            "3": "Severely cut roots"
+          },
+          "basalRot": {
+            "0": "No rot",
+            "1": "Initial rot",
+            "2": "Visible rot",
+            "3": "Advanced rot"
+          },
+          "exposedRoots": {
+            "0": "Roots underground",
+            "1": "Some exposed roots",
+            "2": "Several exposed roots",
+            "3": "Exposed and weakened roots"
+          },
+          "wind": {
+            "0": "Tree protected by natural barriers or buildings, no strong constant wind.",
+            "1": "Tree with occasional wind but no significant impact on its stability.",
+            "2": "Tree exposed to frequent strong winds, which may affect its structure.",
+            "3": "Tree in open areas or slopes where the wind blows with extreme force."
+          },
+          "drought": {
+            "0": "Tree in an area with stable humidity and constant access to water, no water stress.",
+            "1": "Tree with moderate access to water, but with occasional drought periods.",
+            "2": "Tree in an area with recurrent droughts, affecting its development and resistance.",
+            "3": "Tree in an arid area or with prolonged droughts, high risk of weakening."
+          }
+        },
+        "edit": {
+          "title": "Edit Eva",
+          "identification": "Identification",
+          "treeCondition": "Tree Condition",
+          "dimensions": "Dimensions",
+          "state": "State",
+          "crownBranches": "Crown and Branches",
+          "trunk": "Trunk",
+          "roots": "Roots",
+          "environmentCondition": "Environment Condition",
+          "environmentalFactors": "Environmental Factors",
+          "windExposure": "Wind Exposure",
+          "droughtExposure": "Drought Exposure"
+        },
+        "create": {
+          "identification": "Identification",
+          "treeCondition": "Tree Condition",
+          "dimensions": "Dimensions",
+          "state": "State",
+          "crownBranches": "Crown and Branches",
+          "trunk": "Trunk",
+          "roots": "Roots",
+          "environmentCondition": "Environment Condition",
+          "environmentalFactors": "Environmental Factors",
+          "windExposure": "Wind Exposure",
+          "droughtExposure": "Drought Exposure"
+        },
+        "title": "Evas",
+        "age": {
+          "years": "Years",
+          "months": "Months"
+        },
+        "columns": {
+          "element_id": "Element ID",
+          "age": "Age",
+          "height": "Height",
+          "actions": "Actions",
+          "name": "Name",
+          "coordinates": "Coordinates",
+          "status": "Status"
+        },
+        "form": {
+          "name": "Name",
+          "element_id": "Element ID",
+          "years": "Years",
+          "months": "Months",
+          "height": "Height",
+          "diameter": "Diameter",
+          "crown_width": "Crown Width",
+          "crown_projection_area": "Crown Projection Area",
+          "root_surface_diameter": "Root Surface Diameter",
+          "effective_root_area": "Effective Root Area",
+          "height_estimation": "Height Estimation",
+          "unbalanced_crown": "Unbalanced Crown",
+          "overextended_branches": "Overextended Branches",
+          "cracks": "Cracks",
+          "dead_branches": "Dead Branches",
+          "inclination": "Inclination",
+          "V_forks": "V Forks",
+          "cavities": "Cavities",
+          "bark_damage": "Bark Damage",
+          "soil_lifting": "Soil Lifting",
+          "cut_damaged_roots": "Cut/Damaged Roots",
+          "basal_rot": "Basal Rot",
+          "exposed_surface_roots": "Exposed Surface Roots",
+          "wind": "Wind",
+          "drought": "Drought",
+          "validation": {
+            "element_required": "Element is required"
+          },
+          "title": {
+            "create": "Create Eva",
+            "edit": "Edit Eva"
+          },
+          "saving": "Saving...",
+          "save": "Save"
+        },
+        "list": {
+          "actions": {
+            "show": "Show Eva",
+            "delete": "Delete Eva"
+          },
+          "messages": {
+            "createSuccess": "Eva created successfully",
+            "deleteConfirm": "Are you sure you want to delete this Eva?",
+            "deleteSuccess": "Eva deleted successfully",
+            "error": "Error saving Eva",
+            "updateSuccess": "Eva updated successfully"
+          }
+        },
+        "status": {
+          "low": "Low",
+          "moderate": "Moderate",
+          "high": "High",
+          "critical": "Critical",
+          "pending": "Pending"
+        },
+        "stability": {
+          "stable": "Stable",
+          "moderate": "Moderate",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "gravityHeight": {
+          "veryStable": "Very Stable",
+          "moderateRisk": "Moderate Risk",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "rootCrown": {
+          "veryStable": "Very Stable",
+          "stable": "Stable",
+          "moderateStability": "Moderate Stability",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "windStability": {
+          "veryStable": "Very Stable",
+          "moderateStability": "Moderate Stability",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "severity": {
+          "low": "Low",
+          "moderate": "Moderate",
+          "high": "High",
+          "extreme": "Extreme",
+          "pending": "Pending"
+        },
+        "indexCalculation": "Index Calculation",
+        "treeStatusFactor": "Tree Status Factor",
+        "stabilityIndex": "Stability Index (H/D)",
+        "gravityHeightRatio": "Gravity Height Ratio (CG/H)",
+        "rootCrownRatio": "Root Crown Ratio (SR/SC)",
+        "windStabilityIndex": "Wind Stability Index (WSI)",
+        "environmentalFactors": "Environmental Factors",
+        "windExposure": "Wind Exposure",
+        "droughtExposure": "Drought Exposure"
       }
     },
     "profileDropdown": {
@@ -590,7 +855,9 @@
   "general": {
     "allContracts": "All contracts",
     "genericError": "An error occurred. Please try again later.",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "error": "Error",
+    "success":"Success"
   },
   "public": {
     "error": {

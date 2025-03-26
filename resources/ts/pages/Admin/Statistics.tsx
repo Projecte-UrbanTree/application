@@ -2,6 +2,9 @@ import axiosClient from '@/api/axiosClient';
 import { differenceInMonths, parseISO } from 'date-fns';
 import { Chart } from 'primereact/chart';
 import { Skeleton } from 'primereact/skeleton';
+import { Button } from 'primereact/button';
+import { SelectButton } from 'primereact/selectbutton';
+import { Calendar } from 'primereact/calendar';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -65,6 +68,14 @@ export default function Stats() {
   const [isLoading, setIsLoading] = useState(false);
   const [customFromIso, setCustomFromIso] = useState('');
   const [customToIso, setCustomToIso] = useState('');
+  const [customFromDate, setCustomFromDate] = useState<Date | null>(null);
+  const [customToDate, setCustomToDate] = useState<Date | null>(null);
+
+  const rangeOptions = [
+    { label: t('admin.pages.stats.week'), value: 'this_week' },
+    { label: t('admin.pages.stats.month'), value: 'this_month' },
+    { label: t('admin.pages.stats.custom'), value: 'custom' },
+  ];
 
   useEffect(() => {
     if (rangeOption === 'this_week') {
@@ -94,19 +105,23 @@ export default function Stats() {
   }, [fromDate, toDate]);
 
   useEffect(() => {
-    if (rangeOption === 'custom' && customFromIso && customToIso) {
-      const startDate = parseISO(customFromIso);
-      const endDate = parseISO(customToIso);
-      const totalMonths = differenceInMonths(endDate, startDate);
+    if (rangeOption === 'custom' && customFromDate && customToDate) {
+      const fromIso = customFromDate.toISOString().split('T')[0];
+      const toIso = customToDate.toISOString().split('T')[0];
+
+      setCustomFromIso(fromIso);
+      setCustomToIso(toIso);
+      setFromDate(parseIsoToSpanish(fromIso));
+      setToDate(parseIsoToSpanish(toIso));
+
+      const totalMonths = differenceInMonths(customToDate, customFromDate);
       if (totalMonths > 12) {
-        const maxEndDate = new Date(startDate);
+        const maxEndDate = new Date(customFromDate);
         maxEndDate.setFullYear(maxEndDate.getFullYear() + 1);
-        const adjustedToIso = maxEndDate.toISOString().split('T')[0];
-        setCustomToIso(adjustedToIso);
-        setToDate(parseIsoToSpanish(adjustedToIso));
+        setCustomToDate(maxEndDate);
       }
     }
-  }, [customFromIso, customToIso, rangeOption]);
+  }, [customFromDate, customToDate, rangeOption]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -135,7 +150,21 @@ export default function Stats() {
       setIsLoading(false);
     }
   };
-
+  const exportToCSV = (data: number[], labels: string[], filename: string) => {
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      [
+        'Date,Value',
+        ...data.map((value, index) => `${labels[index]},${value}`),
+      ].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `${filename}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const bentoItems = [
     {
       key: 'tasksDone',
@@ -171,93 +200,47 @@ export default function Stats() {
     },
   ];
 
-  const maxAllowedToDate = customFromIso
+  const maxDate = customFromDate
     ? new Date(
-        new Date(customFromIso).setFullYear(
-          new Date(customFromIso).getFullYear() + 1,
-        ),
+        customFromDate.getFullYear() + 1,
+        customFromDate.getMonth(),
+        customFromDate.getDate(),
       )
-        .toISOString()
-        .split('T')[0]
-    : new Date().toISOString().split('T')[0];
+    : new Date();
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <div className="flex flex-wrap items-center gap-4">
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            id="this_week"
-            name="rangeOption"
-            value="this_week"
-            checked={rangeOption === 'this_week'}
-            onChange={() => setRangeOption('this_week')}
+      <div className="flex flex-wrap items-end gap-4">
+        <div>
+          <SelectButton
+            value={rangeOption}
+            options={rangeOptions}
+            onChange={(e) => setRangeOption(e.value)}
           />
-          <label htmlFor="this_week" className="cursor-pointer">
-            {t('admin.pages.stats.week')}
-          </label>
         </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            id="this_month"
-            name="rangeOption"
-            value="this_month"
-            checked={rangeOption === 'this_month'}
-            onChange={() => setRangeOption('this_month')}
-          />
-          <label htmlFor="this_month" className="cursor-pointer">
-            {t('admin.pages.stats.month')}
-          </label>
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="radio"
-            id="custom"
-            name="rangeOption"
-            value="custom"
-            checked={rangeOption === 'custom'}
-            onChange={() => setRangeOption('custom')}
-          />
-          <label htmlFor="custom" className="cursor-pointer">
-            {t('admin.pages.stats.custom')}
-          </label>
-        </div>
+
         {rangeOption === 'custom' && (
           <>
             <div className="flex flex-col">
-              <label>{t('admin.pages.stats.startDate')}</label>
-              <input
-                type="date"
-                className="border rounded px-2 py-1"
-                value={customFromIso}
-                max={new Date().toISOString().split('T')[0]}
-                onChange={(e) => {
-                  setCustomFromIso(e.target.value);
-                  if (e.target.value) {
-                    setFromDate(parseIsoToSpanish(e.target.value));
-                  } else {
-                    setFromDate('');
-                  }
-                }}
+              <label className="mb-2">{t('admin.pages.stats.startDate')}</label>
+              <Calendar
+                value={customFromDate}
+                onChange={(e) => setCustomFromDate(e.value as Date)}
+                maxDate={new Date()}
+                showIcon
+                dateFormat="dd/mm/yy"
               />
             </div>
             <div className="flex flex-col">
-              <label>{t('admin.pages.stats.endDate')}</label>
-              <input
-                type="date"
-                className="border rounded px-2 py-1"
-                value={customToIso}
-                min={customFromIso || undefined}
-                max={maxAllowedToDate}
-                onChange={(e) => {
-                  setCustomToIso(e.target.value);
-                  if (e.target.value) {
-                    setToDate(parseIsoToSpanish(e.target.value));
-                  } else {
-                    setToDate('');
-                  }
-                }}
+              <label className="mb-2">{t('admin.pages.stats.endDate')}</label>
+              <Calendar
+                value={customToDate}
+                onChange={(e) => setCustomToDate(e.value as Date)}
+                minDate={customFromDate || undefined}
+                maxDate={maxDate}
+                showIcon
+                dateFormat="dd/mm/yy"
+                disabled={!customFromDate}
               />
             </div>
           </>
@@ -299,28 +282,38 @@ export default function Stats() {
               maxBarThickness: 60,
             };
             return (
-              <div
-                key={item.key}
-                className="bg-white rounded p-6 border border-gray-300"
-                style={{ height: '300px' }}>
-                <div className="flex justify-between items-center mb-4">
-                  <div className="text-sm font-bold uppercase">
-                    {item.label}
-                  </div>
-                  <div className="text-xl">{item.total}</div>
-                </div>
-                {item.data.length === 0 ? (
-                  <div className="text-center text-gray-500">
-                    {t('admin.pages.stats.noData')}
-                  </div>
-                ) : (
-                  <Chart
-                    type="bar"
-                    data={chartData}
-                    options={options}
-                    style={{ height: '88%' }}
+              <div key={item.key}>
+                <div className="flex justify-end mb-2">
+                  <Button
+                    label={t('admin.pages.stats.exportCSV')}
+                    icon="pi pi-file"
+                    className="p-button-sm p-button-text p-button-plain"
+                    style={{ color: 'blue' }}
+                    onClick={() => exportToCSV(item.data, days, item.label)}
                   />
-                )}
+                </div>
+                <div
+                  className="bg-white rounded p-6 border border-gray-300"
+                  style={{ height: '300px' }}>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="text-sm font-bold uppercase">
+                      {item.label}
+                    </div>
+                    <div className="text-xl">{item.total}</div>
+                  </div>
+                  {item.data.length === 0 ? (
+                    <div className="text-center text-gray-500">
+                      {t('admin.pages.stats.noData')}
+                    </div>
+                  ) : (
+                    <Chart
+                      type="bar"
+                      data={chartData}
+                      options={options}
+                      style={{ height: '88%' }}
+                    />
+                  )}
+                </div>
               </div>
             );
           })}
