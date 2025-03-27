@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('contract_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('unit_name');
+            $table->decimal('unit_cost', 10, 2);
             $table->text('description')->nullable();
             $table->foreignId('resource_type_id')->constrained('resource_types')->onDelete('cascade');
             $table->timestamps();
