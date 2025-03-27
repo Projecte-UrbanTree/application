@@ -13,20 +13,20 @@ return new class extends Migration
     {
         Schema::table('sensors', function (Blueprint $table) {
             if (!Schema::hasColumn('sensors', 'contract_id')) {
-                $table->unsignedBigInteger('contract_id');
+                $table->unsignedBigInteger('contract_id')->nullable()->after('id');
                 $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
             }
-            if (!Schema::hasColumn('sensors', 'dev_eui')) { // Cambiado de 'device_eui' a 'dev_eui'
-                $table->string('dev_eui')->nullable()->unique(); // Permitir valores nulos
+            if (!Schema::hasColumn('sensors', 'dev_eui')) {
+                $table->string('dev_eui')->nullable()->unique()->after('contract_id'); // Permitir valores nulos
             }
             if (!Schema::hasColumn('sensors', 'name')) {
-                $table->string('name');
+                $table->string('name')->after('dev_eui');
             }
             if (!Schema::hasColumn('sensors', 'latitude')) {
-                $table->float('latitude');
+                $table->float('latitude')->after('name');
             }
             if (!Schema::hasColumn('sensors', 'longitude')) {
-                $table->float('longitude');
+                $table->float('longitude')->after('latitude');
             }
         });
     }
@@ -41,9 +41,9 @@ return new class extends Migration
                 $table->dropForeign(['contract_id']);
                 $table->dropColumn('contract_id');
             }
-            if (Schema::hasColumn('sensors', 'dev_eui')) { // Cambiado de 'device_eui' a 'dev_eui'
-                $table->dropUnique(['dev_eui']); // Elimina el índice único
-                $table->dropColumn('dev_eui');  // Luego elimina la columna
+            if (Schema::hasColumn('sensors', 'dev_eui')) {
+                $table->dropUnique(['dev_eui']);
+                $table->dropColumn('dev_eui');
             }
             if (Schema::hasColumn('sensors', 'name')) {
                 $table->dropColumn('name');

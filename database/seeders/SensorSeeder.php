@@ -19,24 +19,17 @@ class SensorSeeder extends Seeder
         DB::table('sensors')->insert([
             [
                 'contract_id' => 1,
-                'device_eui' => 'ABC123',
-                'name' => 'Sensor 1',
-                'latitude' => 40.7128,
-                'longitude' => -74.0060,
+                'dev_eui' => 'a84041265185f3fc',
+                'name' => 'SensorPH',
+                'latitude' => 40.7093,
+                'longitude' => 0.582962,
             ],
             [
                 'contract_id' => 2,
-                'device_eui' => 'DEF456',
-                'name' => 'Sensor 2',
-                'latitude' => 34.0522,
-                'longitude' => -118.2437,
-            ],
-            [
-                'contract_id' => 3,
-                'device_eui' => 'GHI789',
-                'name' => 'Sensor 3',
-                'latitude' => 51.5074,
-                'longitude' => -0.1278,
+                'dev_eui' => 'a840418401877546',
+                'name' => 'SensorHumitat',
+                'latitude' => 40.7093,
+                'longitude' => 0.582962,
             ],
         ]);
 

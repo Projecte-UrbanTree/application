@@ -28,7 +28,8 @@
       "species": "Species",
       "start_date": "Start Date",
       "status": "Status",
-      "surname": "Surname"
+      "surname": "Surname",
+      "dev_eui": "Device EUI"
     },
     "menu": {
       "management": "Management",

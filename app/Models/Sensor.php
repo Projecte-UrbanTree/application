@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sensor extends Model
 {
     protected $fillable = [
-        'device_eui',
+        'dev_eui', // Cambiado de 'device_eui' a 'dev_eui'
         'name',
         'latitude',
         'longitude',
@@ -25,5 +25,23 @@ class Sensor extends Model
     public function contract()
     {
         return $this->belongsTo(Contract::class, 'contract_id'); 
+    }
+
+    public function scopeUniqueByEuiAndName($query)
+    {
+        return $query->select('id', 'dev_eui', 'name', 'latitude', 'longitude', 'contract_id')
+            ->groupBy('dev_eui', 'name'); // Cambiado de 'device_eui' a 'dev_eui'
+    }
+
+    public function scopeUniqueByDeviceEui($query)
+    {
+        return $query->select('id', 'dev_eui', 'name', 'latitude', 'longitude', 'contract_id')
+            ->groupBy('dev_eui');
+    }
+
+    public function scopeUniqueByDevEui($query)
+    {
+        return $query->select('id', 'dev_eui', 'name', 'latitude', 'longitude', 'contract_id')
+            ->groupBy('dev_eui');
     }
 }

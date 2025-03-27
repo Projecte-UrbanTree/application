@@ -1,16 +1,17 @@
-import { useState, useEffect } from "react";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import axiosClient from "@/api/axiosClient";
-import { useNavigate, useParams } from "react-router-dom";
-import { Icon } from "@iconify/react";
-import { useTranslation } from "react-i18next";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import { Card } from "primereact/card";
+import { useState, useEffect } from 'react';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import { useTranslation } from 'react-i18next';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { Card } from 'primereact/card';
+import { updateSensor, fetchSensors } from '@/api/sensorHistoryService';
+import axiosClient from '@/api/axiosClient';
 
 interface Sensor {
-  device_eui: string;
+  dev_eui: string;
   name: string;
   latitude: number;
   longitude: number;
@@ -25,35 +26,77 @@ export default function EditSensor() {
   const [initialValues, setInitialValues] = useState<Sensor | null>(null);
 
   const validationSchema = Yup.object({
-    device_eui: Yup.string().required("Device EUI is required"),
-    name: Yup.string().required(t("admin.pages.sensors.form.validation.name_required")),
-    latitude: Yup.number().required(t("admin.pages.sensors.form.validation.latitude_required")),
-    longitude: Yup.number().required(t("admin.pages.sensors.form.validation.longitude_required")),
-    contract_id: Yup.number().required("Contract ID is required"),
+    dev_eui: Yup.string().required(
+      t('admin.pages.sensors.form.validation.dev_eui_required'),
+    ),
+    name: Yup.string().required(
+      t('admin.pages.sensors.form.validation.name_required'),
+    ),
+    latitude: Yup.number()
+      .required(t('admin.pages.sensors.form.validation.latitude_required'))
+      .test(
+        'max-decimals',
+        t('admin.pages.sensors.form.validation.latitude_precision'),
+        (value) => (value ? value.toString().split('.')[1]?.length <= 6 : true),
+      ), // Permet fins a 6 decimals
+    longitude: Yup.number()
+      .required(t('admin.pages.sensors.form.validation.longitude_required'))
+      .test(
+        'max-decimals',
+        t('admin.pages.sensors.form.validation.longitude_precision'),
+        (value) => (value ? value.toString().split('.')[1]?.length <= 6 : true),
+      ), // Permet fins a 6 decimals
+    contract_id: Yup.number().required(
+      t('admin.pages.sensors.form.validation.contract_id_required'),
+    ),
   });
 
   useEffect(() => {
-    const fetchSensor = async () => {
+    const fetchSensorById = async () => {
       try {
-        const response = await axiosClient.get(`/admin/sensor/${id}`);
-        setInitialValues(response.data); 
+        const response = await axiosClient.get(`/admin/sensors/${id}`); // Endpoint correcte
+        const sensor = response.data;
+        setInitialValues({
+          dev_eui: sensor.dev_eui,
+          name: sensor.name || '',
+          latitude: sensor.latitude,
+          longitude: sensor.longitude,
+          contract_id: sensor.contract_id,
+        });
       } catch (error) {
-        console.error("Error fetching sensor:", error);
-        navigate("/admin/sensors", { state: { error: t("admin.pages.sensors.list.messages.error") } });
+        console.error('Error fetching sensor by ID:', error);
+        navigate('/admin/sensors', {
+          state: { error: t('admin.pages.sensors.list.messages.error') },
+        });
       }
     };
-    fetchSensor();
+    if (id) {
+      fetchSensorById();
+    }
   }, [id, navigate, t]);
 
   const handleSubmit = async (values: Sensor) => {
     setIsSubmitting(true);
     try {
-      const response = await axiosClient.put(`/admin/sensor/${id}`, values);
-      console.log("Sensor updated:", response.data);
-      navigate("/admin/sensors", { state: { success: t("admin.pages.sensors.list.messages.updateSuccess") } });
-    } catch (error) {
-      console.error("Error updating sensor:", error);
-      navigate("/admin/sensors", { state: { error: t("admin.pages.sensors.list.messages.error") } });
+      // Crida a l'API per actualitzar el sensor utilitzant l'ID
+      await axiosClient.put(`/admin/sensors/${id}`, values);
+
+      // Redirigeix a la vista de sensors amb un missatge d'èxit
+      navigate('/admin/sensors', {
+        state: {
+          success: t('admin.pages.sensors.list.messages.updateSuccess'),
+        },
+      });
+    } catch (error: any) {
+      console.error('Error updating sensor:', error.response?.data || error);
+
+      // Mostra un missatge d'error més clar
+      const errorMessage =
+        error.response?.data?.message ||
+        t('admin.pages.sensors.form.errorSaving');
+      navigate('/admin/sensors', {
+        state: { error: errorMessage },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -62,7 +105,7 @@ export default function EditSensor() {
   if (!initialValues) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p>{t("general.loading")}</p>
+        <p>{t('general.loading')}</p>
       </div>
     );
   }
@@ -73,13 +116,12 @@ export default function EditSensor() {
         <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
           <Button
             className="p-button-text mr-4"
-            style={{ color: "#fff" }}
-            onClick={() => navigate("/admin/sensors")}
-          >
+            style={{ color: '#fff' }}
+            onClick={() => navigate('/admin/sensors')}>
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
           <h2 className="text-white text-3xl font-bold">
-            {t("admin.pages.sensors.form.title.edit")}
+            {t('admin.pages.sensors.form.title.edit')}
           </h2>
         </header>
         <div className="p-6">
@@ -87,80 +129,89 @@ export default function EditSensor() {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
-            enableReinitialize
-          >
-            {({ errors, touched }) => (
+            enableReinitialize>
+            {({ errors, touched, values, handleChange }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col">
-                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <Icon icon="tabler:tag" className="h-5 w-5 mr-2" />
-                    Device EUI
+                  <label className="text-sm font-medium text-gray-700 mb-1">
+                    {t('admin.fields.dev_eui')}
                   </label>
-                  <Field
-                    name="device_eui"
-                    as={InputText}
-                    placeholder="Device EUI"
-                    className={errors.device_eui && touched.device_eui ? "p-invalid" : ""}
+                  <InputText
+                    name="dev_eui"
+                    value={values.dev_eui}
+                    onChange={handleChange}
+                    placeholder={t('admin.fields.dev_eui')}
+                    className={
+                      errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''
+                    }
                   />
-                  {errors.device_eui && touched.device_eui && (
-                    <small className="p-error">{errors.device_eui}</small>
+                  {errors.dev_eui && touched.dev_eui && (
+                    <small className="p-error">{errors.dev_eui}</small>
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <Icon icon="tabler:tag" className="h-5 w-5 mr-2" />
-                    {t("admin.fields.name")}
+                  <label className="text-sm font-medium text-gray-700 mb-1">
+                    {t('admin.fields.name')}
                   </label>
-                  <Field
+                  <InputText
                     name="name"
-                    as={InputText}
-                    placeholder={t("admin.fields.name")}
-                    className={errors.name && touched.name ? "p-invalid" : ""}
+                    value={values.name}
+                    onChange={handleChange}
+                    placeholder={t('admin.fields.name')}
+                    className={errors.name && touched.name ? 'p-invalid' : ''}
                   />
                   {errors.name && touched.name && (
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                    {t("admin.fields.latitude")}
+                  <label className="text-sm font-medium text-gray-700 mb-1">
+                    {t('admin.fields.latitude')}
                   </label>
-                  <Field
+                  <InputText
                     name="latitude"
-                    as={InputText}
-                    placeholder={t("admin.fields.latitude")}
-                    className={errors.latitude && touched.latitude ? "p-invalid" : ""}
+                    value={values.latitude}
+                    onChange={handleChange}
+                    placeholder={t('admin.fields.latitude')}
+                    className={
+                      errors.latitude && touched.latitude ? 'p-invalid' : ''
+                    }
                   />
                   {errors.latitude && touched.latitude && (
                     <small className="p-error">{errors.latitude}</small>
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                    {t("admin.fields.longitude")}
+                  <label className="text-sm font-medium text-gray-700 mb-1">
+                    {t('admin.fields.longitude')}
                   </label>
-                  <Field
+                  <InputText
                     name="longitude"
-                    as={InputText}
-                    placeholder={t("admin.fields.longitude")}
-                    className={errors.longitude && touched.longitude ? "p-invalid" : ""}
+                    value={values.longitude}
+                    onChange={handleChange}
+                    placeholder={t('admin.fields.longitude')}
+                    className={
+                      errors.longitude && touched.longitude ? 'p-invalid' : ''
+                    }
                   />
                   {errors.longitude && touched.longitude && (
                     <small className="p-error">{errors.longitude}</small>
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <Icon icon="tabler:tag" className="h-5 w-5 mr-2" />
-                    Contract ID
+                  <label className="text-sm font-medium text-gray-700 mb-1">
+                    {t('admin.fields.contract_id')}
                   </label>
-                  <Field
+                  <InputText
                     name="contract_id"
-                    as={InputText}
-                    placeholder="Contract ID"
-                    className={errors.contract_id && touched.contract_id ? "p-invalid" : ""}
+                    value={values.contract_id}
+                    onChange={handleChange}
+                    placeholder={t('admin.fields.contract_id')}
+                    className={
+                      errors.contract_id && touched.contract_id
+                        ? 'p-invalid'
+                        : ''
+                    }
                   />
                   {errors.contract_id && touched.contract_id && (
                     <small className="p-error">{errors.contract_id}</small>
@@ -171,11 +222,13 @@ export default function EditSensor() {
                     type="submit"
                     disabled={isSubmitting}
                     className="w-full md:w-auto"
-                    icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"}
+                    icon={
+                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
+                    }
                     label={
                       isSubmitting
-                        ? t("admin.pages.sensors.form.submittingText.edit")
-                        : t("admin.pages.sensors.form.submitButton.edit")
+                        ? t('admin.pages.sensors.form.submittingText.edit')
+                        : t('admin.pages.sensors.form.submitButton.edit')
                     }
                   />
                 </div>

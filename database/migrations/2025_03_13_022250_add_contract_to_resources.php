@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('resources', function (Blueprint $table) {
-            $table->foreignId('contract_id')->after('id')->constrained()->onDelete('cascade');
+            if (!Schema::hasColumn('resources', 'contract_id')) {
+                $table->unsignedBigInteger('contract_id')->after('id');
+                $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
+            }
         });
     }
 
@@ -22,7 +25,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('resources', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('resources', 'contract_id')) {
+                $table->dropForeign(['contract_id']);
+                $table->dropColumn('contract_id');
+            }
         });
     }
 };

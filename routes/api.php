@@ -57,11 +57,18 @@ Route::middleware('auth:sanctum')->group(function () {
             'evas' => EvaController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,
-            'sensors' => SensorController::class,
+            'sensors' => SensorController::class, // Assegura que aquest endpoint està configurat correctament
             'task-types' => TaskTypeController::class,
             'tree-types' => TreeTypeController::class,
             'users' => UserController::class,
             'work-orders' => WorkOrderController::class,
         ]);
+
+        // Rutes per a sensors
+        Route::get('sensors', [SensorController::class, 'index']); // Llistar sensors
+        Route::post('sensors', [SensorController::class, 'store']); // Crear sensor
+        Route::get('sensors/{id}', [SensorController::class, 'show']); // Mostrar sensor
+        Route::put('sensors/{id}', [SensorController::class, 'update']); // Editar sensor
+        Route::delete('sensors/{id}', [SensorController::class, 'destroy']); // Eliminar sensor
     });
 });
