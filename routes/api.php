@@ -37,6 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('select-contract', [ContractController::class, 'selectContract']);
         Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
 
+        Route::post('contracts/{id}/duplicate', [ContractController::class, 'duplicate']);
+
         Route::get('stats', function (Request $request) {
             return response()->json([
                 'users' => User::count(),

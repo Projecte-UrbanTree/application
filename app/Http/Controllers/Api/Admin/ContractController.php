@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Services\ContractDuplicationService;
 
 class ContractController extends Controller
 {
@@ -104,6 +105,16 @@ class ContractController extends Controller
         return response()->json([
             'contract_id' => $contractId,
             'contract' => $contract,
+        ]);
+    }
+    public function duplicate($id)
+    {
+        $service = app(ContractDuplicationService::class);
+        $newContract = $service->duplicate($id);
+
+        return response()->json([
+            'message' => 'Contracte duplicat amb èxit',
+            'contract' => $newContract
         ]);
     }
 }
