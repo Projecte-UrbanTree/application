@@ -29,7 +29,6 @@ interface Rescources {
   unit_name: string;
   unit_cost: string;
   quantity: number;
-
 }
 interface BlockTask {
   id: number;
@@ -156,25 +155,25 @@ const WorkReportDetail = () => {
     switch (status) {
       case 0:
         return {
-          label: t('status.pending'),
+          label: 'Pending',
           color: 'p-button-rojo',
           icon: 'pi pi-clock',
         };
       case 1:
         return {
-          label: t('status.in_progress'),
+          label: 'In Progress',
           color: 'p-button-warning',
           icon: 'pi pi-spinner pi-spin',
         };
       case 2:
         return {
-          label: t('status.completed'),
+          label: 'Completed',
           color: 'p-button-success',
           icon: 'pi pi-check',
         };
       default:
         return {
-          label: t('status.unknown'),
+          label: 'Unknown',
           color: 'p-button-gray',
           icon: 'pi pi-question',
         };
@@ -204,10 +203,7 @@ const WorkReportDetail = () => {
     );
   };
 
-  const renderWorkOrderBlock = (
-    block: WorkOrderBlock,
-    index: number,
-  ) => {
+  const renderWorkOrderBlock = (block: WorkOrderBlock, index: number) => {
     return (
       <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 pb-2 border-b border-gray-100">
@@ -228,63 +224,61 @@ const WorkReportDetail = () => {
         {block.notes && (
           <div className="p-3 rounded-lg mb-3 bg-blue-50 border border-blue-100 w-full">
             <p className="m-0 text-blue-800 text-sm sm:text-base">
-              <strong className="font-semibold">
-                {t('admin.pages.work_reports.columns.notes')}:
-              </strong>{' '}
-              {block.notes}
+              <strong className="font-semibold">Notes:</strong> {block.notes}
             </p>
           </div>
         )}
         <h3 className="m-0 text-gray-800 font-semibold text-lg">
-          {t('admin.pages.work_reports.columns.block')} {index + 1}
+          Block {index + 1}
         </h3>
         <div className="mb-3 border-2 border-gray-200 rounded-lg p-3">
-            <div className="mb-3">
+          <div className="mb-3">
             <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-              {t('admin.pages.work_reports.columns.zones')}
+              Zones
             </h4>
             <div className="flex flex-wrap gap-1 sm:gap-2">
               {block.zones.map((zone) => (
-              <Tag
-                key={zone.id}
-                value={zone.name}
-                style={{ backgroundColor: zone.color, color: 'white' }}
-                className="text-xs sm:text-sm"
-              />
+                <Tag
+                  key={zone.id}
+                  value={zone.name}
+                  style={{ backgroundColor: zone.color, color: 'white' }}
+                  className="text-xs sm:text-sm"
+                />
               ))}
             </div>
-            </div>
+          </div>
 
-            <div className="mb-3">
-            <h4 className="m-0 mb-2 text-gray-700 font-medium text-sm sm:text-base"></h4>
-              {t('admin.pages.work_reports.columns.tasks')}
+          <div className="mb-3">
+            <h4 className="m-0 mb-2 text-gray-700 font-medium text-sm sm:text-base">
+              Tasks
+            </h4>
             <div className="flex flex-wrap gap-1 sm:gap-2">
               {block.block_tasks.map((task) => {
-              const status = getTaskStatus(task.status);
-              return (
-                <div key={task.id} className="mb-2">
-                <Tag
-                  value={status.label}
-                  icon={status.icon}
-                  className={`${status.color} border-none mb-1`}
-                />
-                {renderBlockTask(task)}
-                </div>
-              );
+                const status = getTaskStatus(task.status);
+                return (
+                  <div key={task.id} className="mb-2">
+                    <Tag
+                      value={status.label}
+                      icon={status.icon}
+                      className={`${status.color} border-none mb-1`}
+                    />
+                    {renderBlockTask(task)}
+                  </div>
+                );
               })}
             </div>
-        </div>
+          </div>
         </div>
 
         <div className="mb-3">
           <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-            {t('admin.pages.work_reports.columns.resources')}
+            Resources
           </h4>
           <div className="flex flex-wrap gap-1 sm:gap-2">
             {workReport?.resources.map((resource) => (
               <Tag
                 key={resource.id}
-                value={`${resource.name} - ${resource.quantity} ${resource.unit_name} `}
+                value={`${resource.name} - ${resource.quantity} ${resource.unit_name} (${resource.unit_cost}€)`}
                 className="bg-purple-100 text-purple-800 border-purple-200 text-xs sm:text-sm"
               />
             ))}
@@ -293,25 +287,23 @@ const WorkReportDetail = () => {
 
         <div className="mt-4 pt-3 border-t border-gray-100">
           <h4 className="m-0 mb-3 text-gray-800 font-semibold text-sm sm:text-base">
-            {t('admin.pages.work_reports.details')}
+            Details
           </h4>
           <div className="space-y-3">
             <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
               <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-                {t('admin.pages.work_reports.columns.observation')}
+                Observation
               </h4>
               <p className="m-0 text-gray-600 text-sm sm:text-base">
                 {workReport?.observation || (
-                  <span className="text-gray-400 italic">
-                    {t('general.not_available')}
-                  </span>
+                  <span className="text-gray-400 italic">Not available</span>
                 )}
               </p>
             </div>
 
             <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
               <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-                {t('admin.pages.work_reports.columns.spent_fuel')}
+                Spent Fuel
               </h4>
               <p className="m-0 text-gray-600 text-sm sm:text-base">
                 {workReport?.spent_fuel || 0} L
@@ -320,13 +312,11 @@ const WorkReportDetail = () => {
 
             <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
               <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-                {t('admin.pages.work_reports.columns.incidents')}
+                Incidents
               </h4>
               <p className="m-0 text-gray-600 text-sm sm:text-base">
                 {workReport?.report_incidents || (
-                  <span className="text-gray-400 italic">
-                    {t('general.not_available')}
-                  </span>
+                  <span className="text-gray-400 italic">Not available</span>
                 )}
               </p>
             </div>
