@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class WorkReportResource extends Model
 {
     protected $fillable = [
+        'quantity',
         'work_report_id',
         'resource_id',
     ];

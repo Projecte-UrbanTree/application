@@ -10,8 +10,6 @@ import { SplitButton } from 'primereact/splitbutton';
 import { Toast } from 'primereact/toast';
 import { Tag } from 'primereact/tag';
 import { Divider } from 'primereact/divider';
-import { Badge } from 'primereact/badge';
-import WorkOrders from './WorkOrders/WorkOrders';
 
 interface Zone {
   id: number;
@@ -28,8 +26,10 @@ interface Rescources {
   id: number;
   name: string;
   description: string;
-  unit_name: number;
+  unit_name: string;
   unit_cost: string;
+  quantity: number;
+
 }
 interface BlockTask {
   id: number;
@@ -207,9 +207,7 @@ const WorkReportDetail = () => {
   const renderWorkOrderBlock = (
     block: WorkOrderBlock,
     index: number,
-    task: BlockTask,
   ) => {
-    const status = getTaskStatus(task.status);
     return (
       <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 pb-2 border-b border-gray-100">
@@ -241,39 +239,41 @@ const WorkReportDetail = () => {
           {t('admin.pages.work_reports.columns.block')} {index + 1}
         </h3>
         <div className="mb-3 border-2 border-gray-200 rounded-lg p-3">
-          <div className="mb-3">
+            <div className="mb-3">
             <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
               {t('admin.pages.work_reports.columns.zones')}
             </h4>
             <div className="flex flex-wrap gap-1 sm:gap-2">
               {block.zones.map((zone) => (
-                <Tag
-                  key={zone.id}
-                  value={zone.name}
-                  style={{ backgroundColor: zone.color, color: 'white' }}
-                  className="text-xs sm:text-sm"
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <div className="flex items-center justify-between">
-              <h4 className="m-0 mb-2 text-gray-700 font-medium text-sm sm:text-base">
-                {t('admin.pages.work_reports.columns.tasks')}
-              </h4>
               <Tag
-                value={status.label}
-                icon={status.icon}
-                className={`${status.color} border-none`}
+                key={zone.id}
+                value={zone.name}
+                style={{ backgroundColor: zone.color, color: 'white' }}
+                className="text-xs sm:text-sm"
               />
-            </div>
-            <div className="space-y-2">
-              {block.block_tasks.map((task) => (
-                <div key={task.id}>{renderBlockTask(task)}</div>
               ))}
             </div>
-          </div>
+            </div>
+
+            <div className="mb-3">
+            <h4 className="m-0 mb-2 text-gray-700 font-medium text-sm sm:text-base"></h4>
+              {t('admin.pages.work_reports.columns.tasks')}
+            <div className="flex flex-wrap gap-1 sm:gap-2">
+              {block.block_tasks.map((task) => {
+              const status = getTaskStatus(task.status);
+              return (
+                <div key={task.id} className="mb-2">
+                <Tag
+                  value={status.label}
+                  icon={status.icon}
+                  className={`${status.color} border-none mb-1`}
+                />
+                {renderBlockTask(task)}
+                </div>
+              );
+              })}
+            </div>
+        </div>
         </div>
 
         <div className="mb-3">
@@ -284,7 +284,7 @@ const WorkReportDetail = () => {
             {workReport?.resources.map((resource) => (
               <Tag
                 key={resource.id}
-                value={`${resource.name} (${resource.unit_name})`}
+                value={`${resource.name} - ${resource.quantity} ${resource.unit_name} `}
                 className="bg-purple-100 text-purple-800 border-purple-200 text-xs sm:text-sm"
               />
             ))}
@@ -420,7 +420,7 @@ const WorkReportDetail = () => {
             <div className="space-y-4">
               {workReport.work_orders.work_orders_blocks.map((block, index) => (
                 <div key={block.id}>
-                  {renderWorkOrderBlock(block, index, block.block_tasks[0])}
+                  {renderWorkOrderBlock(block, index)}
                   {index <
                     workReport.work_orders.work_orders_blocks.length - 1 && (
                     <Divider className="my-4" />
