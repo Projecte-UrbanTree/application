@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
@@ -19,6 +19,10 @@ import { Message } from 'primereact/message';
 
 const CreateWorkOrder = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
   const [users, setUsers] = useState<any[]>([]);
   const [zones, setZones] = useState<any[]>([]);
   const [taskTypes, setTaskTypes] = useState<any[]>([]);
@@ -28,26 +32,27 @@ const CreateWorkOrder = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState<number[]>([]);
-  const { t } = useTranslation();
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
-  );
+
+  const fetchInitialData = useCallback(async () => {
+    try {
+      const response = await axiosClient.get(
+        `/admin/work-orders/create${currentContract ? `?contract_id=${currentContract.id}` : ''}`,
+      );
+      setUsers(response.data.users);
+      setZones(response.data.zones);
+      setTaskTypes(response.data.task_types);
+      setElementTypes(response.data.element_types);
+      setTreeTypes(response.data.tree_types);
+    } catch (error) {
+      console.error('Error fetching initial data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentContract]);
 
   useEffect(() => {
-    axiosClient
-      .get(
-        `/admin/work-orders/create${currentContract ? `?contract_id=${currentContract.id}` : ''}`,
-      )
-      .then((response) => {
-        setUsers(response.data.users);
-        setZones(response.data.zones);
-        setTaskTypes(response.data.task_types);
-        setElementTypes(response.data.element_types);
-        setTreeTypes(response.data.tree_types);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [currentContract]);
+    fetchInitialData();
+  }, [fetchInitialData]);
 
   useEffect(() => {
     setActiveIndex([0]);
@@ -149,25 +154,36 @@ const CreateWorkOrder = () => {
     }
   };
 
-  const userTemplate = (option: any) => (
-    <div className="flex items-center">
-      <div>
-        {option.name} {option.surname}
+  const userTemplate = useCallback(
+    (option: any) => (
+      <div className="flex items-center">
+        <div>
+          {option.name} {option.surname}
+        </div>
       </div>
-    </div>
+    ),
+    [],
   );
 
-  const zoneTemplate = (option: any) => (
-    <div className="flex items-center">
-      <div>{option.name}</div>
-    </div>
+  const zoneTemplate = useCallback(
+    (option: any) => (
+      <div className="flex items-center">
+        <div>{option.name}</div>
+      </div>
+    ),
+    [],
   );
 
-  const requiresTreeType = (elementTypeId: number | null) => {
-    if (!elementTypeId) return false;
-    const elementType = elementTypes.find((et: any) => et.id === elementTypeId);
-    return elementType && elementType.requires_tree_type;
-  };
+  const requiresTreeType = useCallback(
+    (elementTypeId: number | null) => {
+      if (!elementTypeId) return false;
+      const elementType = elementTypes.find(
+        (et: any) => et.id === elementTypeId,
+      );
+      return elementType && elementType.requires_tree_type;
+    },
+    [elementTypes],
+  );
 
   if (loading) {
     return (

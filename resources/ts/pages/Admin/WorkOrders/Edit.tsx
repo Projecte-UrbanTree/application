@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
@@ -63,61 +63,59 @@ const EditWorkOrder = () => {
   );
   const [activeIndex, setActiveIndex] = useState<number[]>([]);
 
-  useEffect(() => {
-    axiosClient
-      .get(`/admin/work-orders/${id}`)
-      .then((response) => {
-        const data = response.data;
-        setWorkOrderContract(data.contract_id);
+  const fetchInitialData = useCallback(async () => {
+    try {
+      const response = await axiosClient.get(`/admin/work-orders/${id}`);
+      const data = response.data;
+      setWorkOrderContract(data.contract_id);
+      setUsers(
+        data.available_workers.map((u: any) => ({
+          id: u.id,
+          name: u.name,
+          surname: u.surname || '',
+        })),
+      );
+      setZones(
+        data.available_zones.map((z: any) => ({
+          id: z.id,
+          name: z.name,
+        })),
+      );
+      setTaskTypes(data.task_types);
+      setElementTypes(data.element_types);
+      setTreeTypes(data.tree_types);
 
-        // Usar los trabajadores disponibles del contrato
-        setUsers(
-          data.available_workers.map((u: any) => ({
-            id: u.id,
-            name: u.name,
-            surname: u.surname || '',
+      const transformed: EditWorkOrderValues = {
+        date: data.date ? new Date(data.date) : null,
+        selectedUsers: data.users.map((u: any) => ({
+          id: u.id,
+          name: u.name,
+          surname: u.surname,
+        })),
+        blocks: data.work_orders_blocks.map((block: any) => ({
+          notes: block.notes,
+          zones: block.zones.map((z: any) => ({ id: z.id, name: z.name })),
+          tasks: block.block_tasks.map((task: any) => ({
+            task_type_id: task.task_type_id,
+            element_type_id: task.element_type_id,
+            tree_type_id: task.tree_type_id || null,
           })),
-        );
-
-        // Usar las zonas disponibles del contrato
-        setZones(
-          data.available_zones.map((z: any) => ({
-            id: z.id,
-            name: z.name,
-          })),
-        );
-
-        // Configurar tipos de tareas, elementos y árboles
-        setTaskTypes(data.task_types);
-        setElementTypes(data.element_types);
-        setTreeTypes(data.tree_types);
-
-        const transformed: EditWorkOrderValues = {
-          date: data.date ? new Date(data.date) : null,
-          selectedUsers: data.users.map((u: any) => ({
-            id: u.id,
-            name: u.name,
-            surname: u.surname,
-          })),
-          blocks: data.work_orders_blocks.map((block: any) => ({
-            notes: block.notes,
-            zones: block.zones.map((z: any) => ({ id: z.id, name: z.name })),
-            tasks: block.block_tasks.map((task: any) => ({
-              task_type_id: task.task_type_id,
-              element_type_id: task.element_type_id,
-              tree_type_id: task.tree_type_id || null,
-            })),
-          })),
-        };
-        setInitialValues(transformed);
-        setLoading(false);
-        // Inicializar activeIndex con todos los índices
-        setActiveIndex(
-          Array.from({ length: data.work_orders_blocks.length }, (_, i) => i),
-        );
-      })
-      .catch(() => setLoading(false));
+        })),
+      };
+      setInitialValues(transformed);
+      setActiveIndex(
+        Array.from({ length: data.work_orders_blocks.length }, (_, i) => i),
+      );
+    } catch (error) {
+      console.error('Error fetching initial data:', error);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [fetchInitialData]);
 
   const validationSchema = Yup.object({
     date: Yup.date().required(
@@ -203,25 +201,36 @@ const EditWorkOrder = () => {
     }
   };
 
-  const userTemplate = (option: UserType) => (
-    <div className="flex items-center">
-      <div>
-        {option.name} {option.surname}
+  const userTemplate = useCallback(
+    (option: UserType) => (
+      <div className="flex items-center">
+        <div>
+          {option.name} {option.surname}
+        </div>
       </div>
-    </div>
+    ),
+    [],
   );
 
-  const zoneTemplate = (option: { id: number; name: string }) => (
-    <div className="flex items-center">
-      <div>{option.name}</div>
-    </div>
+  const zoneTemplate = useCallback(
+    (option: { id: number; name: string }) => (
+      <div className="flex items-center">
+        <div>{option.name}</div>
+      </div>
+    ),
+    [],
   );
 
-  const requiresTreeType = (elementTypeId: number | null): boolean => {
-    if (!elementTypeId) return false;
-    const elementType = elementTypes.find((et: any) => et.id === elementTypeId);
-    return elementType && elementType.requires_tree_type;
-  };
+  const requiresTreeType = useCallback(
+    (elementTypeId: number | null): boolean => {
+      if (!elementTypeId) return false;
+      const elementType = elementTypes.find(
+        (et: any) => et.id === elementTypeId,
+      );
+      return elementType && elementType.requires_tree_type;
+    },
+    [elementTypes],
+  );
 
   if (loading || !initialValues) {
     return (
