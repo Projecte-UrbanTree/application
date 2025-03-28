@@ -71,6 +71,7 @@ class ResourceController extends Controller
             return response()->json(['message' => 'Error al crear el recurso'], 500);
         }
     }
+
     /**
      * Display the specified resource.
      */
@@ -100,7 +101,7 @@ class ResourceController extends Controller
                 'description' => $validated['description'],
                 'resource_type_id' => $validated['resource_type_id'],
                 'unit_cost' => $validated['unit_cost'],
-                'unit_name' => $validated['unit_name']
+                'unit_name' => $validated['unit_name'],
             ]);
 
             $resource->load('resourceType');
@@ -109,7 +110,7 @@ class ResourceController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Error al actualizar el recurso',
-                'error' => $th->getMessage()
+                'error' => $th->getMessage(),
             ], 500);
         }
     }
