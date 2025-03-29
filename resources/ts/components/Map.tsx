@@ -52,6 +52,8 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
       }
     }
     if (currentContract) {
+      console.log('test');
+
       loadData();
     }
   }, [currentContract]);
