@@ -60,7 +60,6 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
     if (!mapContainerRef.current) return;
 
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
-
     service.addBasicControls();
     service.addGeocoder();
 
