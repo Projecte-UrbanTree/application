@@ -10,6 +10,7 @@ import { SplitButton } from 'primereact/splitbutton';
 import { Toast } from 'primereact/toast';
 import { Tag } from 'primereact/tag';
 import { Divider } from 'primereact/divider';
+import { stat } from 'fs';
 
 interface Zone {
   id: number;
@@ -84,46 +85,67 @@ const WorkReportDetail = () => {
 
   const actions = [
     {
-      label: t('general.actions.close_block'),
-      icon: 'pi pi-check',
-      command: () => {
-        toast.current?.show({
-          severity: 'success',
-          summary: t('general.messages.close_block'),
-          detail: t('admin.pages.work_reports.messages.closing_block'),
-        });
-      },
-    },
-    {
       label: t('general.actions.close_with_incidents'),
       icon: 'pi pi-exclamation-triangle',
-      command: () => {
-        toast.current?.show({
-          severity: 'warn',
-          summary: t('general.messages.close_with_incidents'),
-          detail: t('admin.pages.work_reports.messages.closing_with_incidents'),
-        });
+      command: async () => {
+        await handleStatusChange(3);
       },
     },
     {
       label: t('general.actions.reject'),
       icon: 'pi pi-times',
-      command: () => {
-        toast.current?.show({
-          severity: 'error',
-          summary: t('general.messages.reject'),
-          detail: t('admin.pages.work_reports.messages.rejecting'),
-        });
+      command: async () => {
+        await handleStatusChange(2);
       },
     },
   ];
 
-  const handleClosePart = () => {
-    toast.current?.show({
-      severity: 'success',
-      summary: t('admin.pages.work_reports.messages.closing_part'),
-      detail: t('admin.pages.work_reports.messages.part_closed'),
-    });
+  const handleStatusChange = async (status: number) => {
+    try {
+      const response = await axiosClient.put(`/admin/work-reports/${id}`, {
+        report_status: status,
+      });
+
+      setWorkReport(response.data);
+
+      let severity: 'success' | 'warn' | 'error' = 'success';
+      let summary = '';
+      let detail = '';
+
+      switch (status) {
+        case 1:
+          summary = t('general.messages.close_block');
+          detail = t('admin.pages.work_reports.messages.closing_block');
+          break;
+        case 2:
+          severity = 'error';
+          summary = t('general.messages.reject');
+          detail = t('admin.pages.work_reports.messages.rejecting');
+          break;
+        case 3:
+          severity = 'warn';
+          summary = t('general.messages.close_with_incidents');
+          detail = t(
+            'admin.pages.work_reports.messages.closing_with_incidents',
+          );
+          break;
+      }
+
+      toast.current?.show({
+        severity,
+        summary,
+        detail,
+      });
+
+      navigate('/admin/work-orders');
+    } catch (err) {
+      console.error('Error updating status:', err);
+      toast.current?.show({
+        severity: 'error',
+        summary: t('general.messages.error'),
+        detail: t('admin.pages.work_reports.messages.error_updating_status'),
+      });
+    }
   };
 
   useEffect(() => {
@@ -424,7 +446,7 @@ const WorkReportDetail = () => {
             <SplitButton
               label={t('general.actions.close_block')}
               icon="pi pi-plus"
-              onClick={handleClosePart}
+              onClick={() => handleStatusChange(1)}
               model={actions}
               className="p-button-plain ml-auto"
               severity="info"

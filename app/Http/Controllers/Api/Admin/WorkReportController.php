@@ -60,16 +60,28 @@ class WorkReportController extends Controller
         }
 
         $validated = $request->validate([
-            'observation' => ['required', 'string', 'max:255'],
-            'spent_fuel' => ['required', 'numeric'],
-            'work_order_id' => ['required', 'integer'],
-            'report_status' => ['required', 'string', 'max:255'],
-            'report_incidents' => ['required', 'string', 'max:255'],
+            'observation' => ['sometimes', 'string', 'max:255'],
+            'spent_fuel' => ['sometimes', 'numeric'],
+            'work_order_id' => ['sometimes', 'integer'],
+            'report_status' => ['sometimes', 'integer'],
+            'report_incidents' => ['sometimes', 'string', 'max:255'],
         ]);
 
         $workReport->update($validated);
 
-        return response()->json($workReport, 200);
+        $updatedReport = WorkReport::with([
+            'workOrders',
+            'workOrders.contract',
+            'workOrders.workOrdersBlocks',
+            'workOrders.workOrdersBlocks.zones',
+            'workOrders.workOrdersBlocks.blockTasks.elementType',
+            'workOrders.workOrdersBlocks.blockTasks.treeType',
+            'workOrders.workOrdersBlocks.blockTasks.tasksType',
+            'workOrders.users',
+            'resources'
+        ])->find($id);
+
+        return response()->json($updatedReport, 200);
     }
     public function edit($id)
     {
