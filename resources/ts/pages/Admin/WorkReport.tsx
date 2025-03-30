@@ -10,6 +10,8 @@ import { SplitButton } from 'primereact/splitbutton';
 import { Toast } from 'primereact/toast';
 import { Tag } from 'primereact/tag';
 import { Divider } from 'primereact/divider';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Badge } from 'primereact/badge';
 
 interface Zone {
   id: number;
@@ -81,6 +83,7 @@ const WorkReportDetail = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
+  const [activeTabs, setActiveTabs] = useState<number[]>([]);
 
   const actions = [
     {
@@ -153,6 +156,14 @@ const WorkReportDetail = () => {
         const response = await axiosClient.get(`/admin/work-reports/${id}`);
         setWorkReport(response.data);
         setLoading(false);
+        // Initialize all tabs as active
+        if (response.data?.work_orders?.work_orders_blocks) {
+          setActiveTabs(
+            response.data.work_orders.work_orders_blocks.map(
+              (_: WorkOrderBlock, i: number) => i,
+            ),
+          );
+        }
       } catch (err) {
         setError(t('admin.pages.error.fetching_data'));
         setLoading(false);
@@ -201,147 +212,118 @@ const WorkReportDetail = () => {
     }
   };
 
-  const renderBlockTask = (task: BlockTask) => {
-    return (
-      <div className="p-3 rounded-lg mb-2 bg-white border border-gray-200 hover:border-blue-300 transition-colors">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 min-w-0">
-            <h4 className="m-0 text-gray-800 truncate">
-              {task.tasks_type.name}
-            </h4>
-            <p className="text-sm m-0 text-gray-600 truncate">
-              {task.element_type.name}
-              {task.tree_type && ` • ${task.tree_type.species}`}
-            </p>
-          </div>
-          <Tag
-            value={`${task.spent_time} h`}
-            severity="info"
-            className="ml-auto flex-shrink-0"
+  const getReportStatusBadge = (status: number) => {
+    switch (status) {
+      case 0:
+        return (
+          <Badge
+            value={t('admin.pages.workOrders.reportStatus.pending')}
+            severity="warning"
           />
-        </div>
-      </div>
-    );
+        );
+      case 1:
+        return (
+          <Badge
+            value={t('admin.pages.workOrders.reportStatus.completed')}
+            severity="success"
+          />
+        );
+      case 2:
+        return (
+          <Badge
+            value={t('admin.pages.workOrders.reportStatus.rejected')}
+            severity="danger"
+          />
+        );
+      case 3:
+        return (
+          <Badge
+            value={t('admin.pages.workOrders.reportStatus.closedWithIncidents')}
+            severity="danger"
+          />
+        );
+      default:
+        return (
+          <Badge
+            value={t('admin.pages.workOrders.reportStatus.unknown')}
+            severity="secondary"
+          />
+        );
+    }
   };
 
-  const renderWorkOrderBlock = (block: WorkOrderBlock, index: number) => {
+  const renderBlockDetails = (block: WorkOrderBlock) => {
     return (
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm mb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 pb-2 border-b border-gray-100">
-          <div className="flex items-center gap-2 mb-2 sm:mb-0">
-            <div className="flex flex-wrap gap-1 sm:gap-2">
-              <h4>Users: </h4>
-              {workReport?.work_orders.users.map((user) => (
-                <Tag
-                  key={user.id}
-                  value={`${user.name} ${user.surname}`}
-                  className="bg-green-100 text-green-800 border-green-200 text-xs sm:text-sm"
-                />
-              ))}
-            </div>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <h4 className="font-medium flex items-center gap-2">
+            <Icon icon="tabler:map-pin" />
+            {t('admin.pages.workOrders.details.zones')}
+          </h4>
+          <ul className="list-disc pl-5">
+            {block.zones && block.zones.length > 0 ? (
+              block.zones.map((zone) => (
+                <li key={zone.id}>
+                  <Tag
+                    value={zone.name}
+                    style={{ backgroundColor: zone.color, color: 'white' }}
+                    className="text-xs"
+                  />
+                </li>
+              ))
+            ) : (
+              <li>{t('admin.pages.workOrders.details.noZones')}</li>
+            )}
+          </ul>
         </div>
 
-        {block.notes && (
-          <div className="p-3 rounded-lg mb-3 bg-blue-50 border border-blue-100 w-full">
-            <p className="m-0 text-blue-800 text-sm sm:text-base">
-              <strong className="font-semibold">Notes:</strong> {block.notes}
-            </p>
-          </div>
-        )}
-        <h3 className="m-0 text-gray-800 font-semibold text-lg">
-          Block {index + 1}
-        </h3>
-        <div className="mb-3 border-2 border-gray-200 rounded-lg p-3">
-          <div className="mb-3">
-            <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-              Zones
-            </h4>
-            <div className="flex flex-wrap gap-1 sm:gap-2">
-              {block.zones.map((zone) => (
-                <Tag
-                  key={zone.id}
-                  value={zone.name}
-                  style={{ backgroundColor: zone.color, color: 'white' }}
-                  className="text-xs sm:text-sm"
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <h4 className="m-0 mb-2 text-gray-700 font-medium text-sm sm:text-base">
-              Tasks
-            </h4>
-            <div className="flex flex-wrap gap-1 sm:gap-2">
-              {block.block_tasks.map((task) => {
-                const status = getTaskStatus(task.status);
+        <div>
+          <h4 className="font-medium flex items-center gap-2">
+            <Icon icon="tabler:clipboard-list" />
+            {t('admin.pages.workOrders.details.tasks')}
+          </h4>
+          <ul className="list-disc pl-5">
+            {block.block_tasks && block.block_tasks.length > 0 ? (
+              block.block_tasks.map((task) => {
+                const taskName =
+                  task.tasks_type?.name ||
+                  t('admin.pages.workOrders.details.unknown');
+                const elementName =
+                  task.element_type?.name ||
+                  t('admin.pages.workOrders.details.unknown');
+                const speciesName = task.tree_type?.species
+                  ? `: ${task.tree_type.species}`
+                  : '';
                 return (
-                  <div key={task.id} className="mb-2">
-                    <Tag
-                      value={status.label}
-                      icon={status.icon}
-                      className={`${status.color} border-none mb-1`}
-                    />
-                    {renderBlockTask(task)}
-                  </div>
+                  <li key={task.id} className="mb-2">
+                    <div className="flex items-center gap-2">
+                      <Tag
+                        value={getTaskStatus(task.status).label}
+                        icon={getTaskStatus(task.status).icon}
+                        className={`${getTaskStatus(task.status).color} border-none`}
+                      />
+                      <span>
+                        {taskName} {elementName}
+                        {speciesName} ({task.spent_time}h)
+                      </span>
+                    </div>
+                  </li>
                 );
-              })}
-            </div>
-          </div>
+              })
+            ) : (
+              <li>{t('admin.pages.workOrders.details.noTasks')}</li>
+            )}
+          </ul>
         </div>
 
-        <div className="mb-3">
-          <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-            Resources
+        <div>
+          <h4 className="font-medium flex items-center gap-2">
+            <Icon icon="tabler:note" />
+            {t('admin.pages.workOrders.details.notes')}
           </h4>
-          <div className="flex flex-wrap gap-1 sm:gap-2">
-            {workReport?.resources.map((resource) => (
-              <Tag
-                key={resource.id}
-                value={`${resource.name} - ${resource.quantity} ${resource.unit_name} (${resource.unit_cost}€)`}
-                className="bg-purple-100 text-purple-800 border-purple-200 text-xs sm:text-sm"
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-4 pt-3 border-t border-gray-100">
-          <h4 className="m-0 mb-3 text-gray-800 font-semibold text-sm sm:text-base">
-            Details
-          </h4>
-          <div className="space-y-3">
-            <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
-              <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-                Observation
-              </h4>
-              <p className="m-0 text-gray-600 text-sm sm:text-base">
-                {workReport?.observation || (
-                  <span className="text-gray-400 italic">Not available</span>
-                )}
-              </p>
-            </div>
-
-            <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
-              <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-                Spent Fuel
-              </h4>
-              <p className="m-0 text-gray-600 text-sm sm:text-base">
-                {workReport?.spent_fuel || 0} L
-              </p>
-            </div>
-
-            <div className="p-3 rounded-lg bg-gray-50 border border-gray-200">
-              <h4 className="m-0 mb-1 text-gray-700 font-medium text-sm sm:text-base">
-                Incidents
-              </h4>
-              <p className="m-0 text-gray-600 text-sm sm:text-base">
-                {workReport?.report_incidents || (
-                  <span className="text-gray-400 italic">Not available</span>
-                )}
-              </p>
-            </div>
-          </div>
+          <p className="bg-blue-50 p-2 rounded">
+            {block.notes || t('admin.pages.workOrders.details.noNotes')}
+          </p>
         </div>
       </div>
     );
@@ -420,24 +402,98 @@ const WorkReportDetail = () => {
                 <h2 className="text-white text-xl sm:text-2xl font-bold">
                   {t('admin.pages.work_reports.title')}
                 </h2>
-                <p className="text-blue-100 m-0 text-xs sm:text-sm">
-                  {formatDate(workReport.work_orders.date)}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-blue-100 m-0 text-xs sm:text-sm">
+                    {formatDate(workReport.work_orders.date)}
+                  </p>
+                  {getReportStatusBadge(workReport.report_status)}
+                </div>
               </div>
             </div>
           </header>
 
-          <div className="p-2 sm:p-4">
-            <div className="space-y-4">
-              {workReport.work_orders.work_orders_blocks.map((block, index) => (
-                <div key={block.id}>
-                  {renderWorkOrderBlock(block, index)}
-                  {index <
-                    workReport.work_orders.work_orders_blocks.length - 1 && (
-                    <Divider className="my-4" />
-                  )}
-                </div>
-              ))}
+          <div className="p-4">
+            <div className="mb-4">
+              <h3 className="font-medium flex items-center gap-2">
+                <Icon icon="tabler:users" />
+                {t('admin.pages.workOrders.list.columns.users')}
+              </h3>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {workReport.work_orders.users.map((user) => (
+                  <Tag
+                    key={user.id}
+                    value={`${user.name} ${user.surname}`}
+                    className="bg-green-100 text-green-800 border-green-200"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <h3 className="font-medium flex items-center gap-2">
+                <Icon icon="tabler:package" />
+                {t('admin.pages.workOrders.details.resources')}
+              </h3>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {workReport.resources.map((resource) => (
+                  <Tag
+                    key={resource.id}
+                    value={`${resource.name} - ${resource.quantity} ${resource.unit_name} (${resource.unit_cost}€)`}
+                    className="bg-purple-100 text-purple-800 border-purple-200"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <Accordion multiple activeIndex={activeTabs}>
+              {workReport.work_orders.work_orders_blocks?.length ? (
+                workReport.work_orders.work_orders_blocks.map(
+                  (block, index) => (
+                    <AccordionTab
+                      key={block.id}
+                      header={`${t('admin.pages.workOrders.details.block')} ${index + 1}`}>
+                      {renderBlockDetails(block)}
+                    </AccordionTab>
+                  ),
+                )
+              ) : (
+                <AccordionTab
+                  header={t('admin.pages.workOrders.details.noBlocks')}>
+                  <p>{t('admin.pages.workOrders.details.noBlocksAvailable')}</p>
+                </AccordionTab>
+              )}
+            </Accordion>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium flex items-center gap-2">
+                  <Icon icon="tabler:eye" />
+                  {t('admin.pages.workOrders.details.observation')}
+                </h4>
+                <p className="mt-2">
+                  {workReport.observation ||
+                    t('admin.pages.workOrders.details.noObservation')}
+                </p>
+              </div>
+
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium flex items-center gap-2">
+                  <Icon icon="tabler:alert-triangle" />
+                  {t('admin.pages.workOrders.details.incidents')}
+                </h4>
+                <p className="mt-2">
+                  {workReport.report_incidents ||
+                    t('admin.pages.workOrders.details.noIncidents')}
+                </p>
+              </div>
+
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium flex items-center gap-2">
+                  <Icon icon="tabler:gas-station" />
+                  {t('admin.pages.workOrders.details.spentFuel')}
+                </h4>
+                <p className="mt-2">{workReport.spent_fuel || 0} L</p>
+              </div>
             </div>
           </div>
 
