@@ -140,7 +140,7 @@ export default function Resources() {
             header={t('admin.pages.resources.list.columns.unit')}
             body={(rowData: Resource) => (
               <span>
-                {rowData.unit_cost} {rowData.unit_name.toLowerCase()}
+                {rowData.unit_cost}€/{rowData.unit_name.toLowerCase()}
               </span>
             )}
           />
