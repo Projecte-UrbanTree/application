@@ -1,13 +1,17 @@
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { Marker } from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import { Element } from '@/types/Element';
+import { Point, TypePoint } from '@/types/Point';
 
 export class MapService {
-  private map!: mapboxgl.Map;
+  public map!: mapboxgl.Map;
   private draw?: MapboxDraw;
+  private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
+  private elementMarkers: mapboxgl.Marker[] = [];
 
   constructor(container: HTMLDivElement, token: string) {
     mapboxgl.accessToken = token;

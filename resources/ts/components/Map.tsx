@@ -1,25 +1,39 @@
-import { MapService } from '@/api/service/mapService';
-import { fetchPoints } from '@/api/service/pointService';
-import { fetchZones } from '@/api/service/zoneService';
-import { RootState } from '@/store/store';
-import { Point } from '@/types/Point';
+import { RootState, AppDispatch } from '@/store/store';
+import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
+import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { Zone } from '@/types/Zone';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as turf from '@turf/turf';
 import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
+import { SaveElementForm } from './Admin/Inventory/SaveElementForm';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
+import { TreeTypes } from '@/types/TreeTypes';
+import { fetchTreeTypes } from '@/api/service/treeTypesService';
+import { fetchElementType } from '@/api/service/elementTypeService';
+import { ElementType } from '@/types/ElementType';
+import { SavePointsProps } from '@/api/service/pointService';
+import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
+import { data } from 'react-router-dom';
+import { MapService } from '@/api/service/mapService';
+import { fetchZones } from '@/api/service/zoneService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 interface MapProps {
   selectedZone: Zone | null;
+  zoneToAddElement: Zone | null;
+  onElementAdd: () => void;
 }
 
-export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
-  // Refs
+export const MapComponent: React.FC<MapProps> = ({
+  selectedZone,
+  // zoneToAddElement,
+  onElementAdd,
+}) => {
+  // refs
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapServiceRef = useRef<MapService | null>(null);
 
@@ -28,43 +42,44 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
   const [enabledButton, setEnabledButton] = useState(false);
+  const [isAddingPoint, setIsAddingPoint] = useState(false);
+  const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(
+    null,
+  );
+  const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
+  const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
+  const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
 
-  // redux
+  const [zoneToAddElement, setSelectedZoneToAdd] = useState<Zone>();
+
+  // redux store
+  const dispatch = useDispatch<AppDispatch>();
   const userValue = useSelector((state: RootState) => state.user);
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
+  const zonesRedux = useSelector((state: RootState) => state.zone.zones);
+  const { points } = useSelector((state: RootState) => state.points);
+  const { elements } = useSelector((state: RootState) => state.element);
 
-  // api data
-  const [zones, setZones] = useState<Zone[]>([]);
-  const [points, setPoints] = useState<Point[]>([]);
-
+  // load data
   useEffect(() => {
-    async function loadData() {
-      try {
-        const zonesData = await fetchZones();
-        setZones(zonesData);
+    const loadData = async () => {
+      const treeTypesFetch = await fetchTreeTypes();
+      const elementTypeFetch = await fetchElementType();
 
-        const pointsData = await fetchPoints();
-        setPoints(pointsData);
-      } catch (error) {
-        console.error('Error al cargar zonas y puntos:', error);
-      }
-    }
-    if (currentContract) {
-      console.log('test');
+      setTreeTypes(treeTypesFetch);
+      setElementTypes(elementTypeFetch);
+    };
+    loadData();
+  }, []);
 
-      loadData();
-    }
-  }, [currentContract]);
-
+  // incialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
-
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
     service.addBasicControls();
     service.addGeocoder();
-
     service.enableDraw(userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
@@ -75,58 +90,139 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
         setEnabledButton(false);
       }
     });
-
     mapServiceRef.current = service;
-  }, []);
+  }, [userValue.role]);
 
+  // load points if contract is active
+  useEffect(() => {
+    if (!currentContract) return;
+    dispatch(fetchPointsAsync());
+  }, [currentContract, dispatch]);
+
+  // fly to a selected zone
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service || !selectedZone) return;
-
-    async function flyToSelectedZone() {
-      const allPoints = await fetchPoints();
-      const firstPoint = allPoints.find((p) => p.zone_id === selectedZone!.id);
-      if (firstPoint?.longitude && firstPoint?.latitude) {
-        service!.flyTo([firstPoint.longitude, firstPoint.latitude]);
-      }
+    if (!service || !selectedZone || !points.length) return;
+    const firstPoint = points.find((p) => p.zone_id === selectedZone.id);
+    if (firstPoint?.longitude && firstPoint?.latitude) {
+      service.flyTo([firstPoint.longitude, firstPoint.latitude]);
     }
+  }, [selectedZone, points]);
 
-    flyToSelectedZone();
-  }, [selectedZone]);
-
+  // if "zoneToAddElement" change, enter on mode "add point"
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service || !zones.length || !points.length) return;
+    if (!service) return;
 
+    const subscription = eventSubject.subscribe({
+      next: (data: ZoneEvent) => {
+        const { isCreatingElement, zone } = data;
+        setSelectedZoneToAdd(zone);
+
+        if (!isCreatingElement) {
+          setIsAddingPoint(false);
+          service.disableSingleClick();
+          return;
+        }
+        setIsAddingPoint(true);
+        service.enableSingleClick((lngLat) => {
+          setNewPointCoord([lngLat.lng, lngLat.lat]);
+          setModalAddPointVisible(true);
+        });
+        const firstPoint = points.find((p: Point) => p.zone_id === zone?.id);
+        if (firstPoint?.longitude && firstPoint?.latitude) {
+          service.flyTo([firstPoint.longitude, firstPoint.latitude]);
+        }
+      },
+      error: (err: Error) => console.log('ERROR STREAM: ', err.message),
+      complete: () => console.log('STREAM COMPLETADO'),
+    });
+
+    return () => subscription.unsubscribe();
+  }, [zoneToAddElement]);
+
+  // draw zones
+  useEffect(() => {
+    const service = mapServiceRef.current;
+    if (!service) return;
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => updateZones(service));
     } else {
       updateZones(service);
     }
-  }, [zones, points, currentContract]);
+  }, [zonesRedux, points, currentContract]);
 
   function updateZones(service: MapService) {
     service.removeLayersAndSources('zone-');
-
-    const filteredZones = zones.filter(
+    const filteredZones = zonesRedux.filter(
       (z) => z.contract_id === currentContract?.id,
     );
-
-    filteredZones.forEach((zone) => {
+    filteredZones.forEach((zone: Zone) => {
       const zonePoints = points
-        .filter((p) => p.zone_id === zone.id)
-        .map((p) => [p.longitude!, p.latitude!] as [number, number]);
+        .filter(
+          (p) => p.zone_id === zone.id && p.type == TypePoint.zone_delimiter,
+        )
 
+        .map((p) => [p.longitude!, p.latitude!] as [number, number]);
       if (zonePoints.length > 2) {
         zonePoints.push(zonePoints[0]);
         service.addZoneToMap(`zone-${zone.id}`, zonePoints);
       }
     });
   }
-  async function handleZoneSaved() {
+
+  // draw elements
+  useEffect(() => {
+    const service = mapServiceRef.current;
+    if (!service) return;
+    if (!service.isStyleLoaded()) {
+      service.onceStyleLoad(() => updateElements(service));
+    } else {
+      updateElements(service);
+    }
+  }, [elements, currentContract]);
+
+  function updateElements(service: MapService) {
+    if (!currentContract) return;
+    const filteredZones = zonesRedux.filter(
+      (zone) => zone.contract_id === currentContract.id,
+    );
+    const zoneIds = new Set(filteredZones.map((zone) => zone.id));
+    const filteredPoints = points.filter(
+      (point) => point.zone_id && zoneIds.has(point.zone_id),
+    );
+    const pointIds = new Set(filteredPoints.map((point) => point.id));
+    const filteredElements = elements.filter(
+      (element) => element.point_id && pointIds.has(element.point_id),
+    );
+    if (!service.isStyleLoaded()) {
+      service.onceStyleLoad(() => {
+        service.addElementMarkers(filteredElements, filteredPoints);
+      });
+    } else {
+      service.addElementMarkers(filteredElements, filteredPoints);
+    }
+  }
+
+  // save drawed zone
+  async function handleZoneSaved(newZone: Zone, newPoints: SavePointsProps[]) {
     setModalVisible(false);
     setIsDrawingMode(false);
     setEnabledButton(false);
+
+    const service = mapServiceRef.current;
+    if (!service) return;
+
+    service.clearDraw();
+
+    const zonePoints = newPoints.map(
+      (p) => [p.longitude, p.latitude] as [number, number],
+    );
+
+    if (zonePoints.length > 2) {
+      zonePoints.push(zonePoints[0]);
+      service.addZoneToMap(`zone-${newZone.id}`, zonePoints);
+    }
   }
 
   function detectCollision(
@@ -160,7 +256,6 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
   return (
     <div style={{ position: 'relative', width: '100%', height: '90%' }}>
       <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
-
       {userValue.role === Roles.admin && isDrawingMode && (
         <Button
           label="Guardar Zona"
@@ -169,12 +264,35 @@ export const MapComponent: React.FC<MapProps> = ({ selectedZone }) => {
           disabled={!enabledButton}
         />
       )}
-
       <Dialog
         header="Guardar Zona"
         visible={modalVisible}
         onHide={() => setModalVisible(false)}>
         <SaveZoneForm coordinates={coordinates} onClose={handleZoneSaved} />
+      </Dialog>
+      <Dialog
+        header="Guardar Elemento"
+        visible={modalAddPointVisible}
+        onHide={() => setModalAddPointVisible(false)}>
+        <SaveElementForm
+          zoneId={zoneToAddElement?.id!}
+          coordinate={newPointCoord!}
+          onClose={() => {
+            setModalAddPointVisible(false);
+            setIsAddingPoint(false);
+            setNewPointCoord(null);
+            mapServiceRef.current?.disableSingleClick();
+            onElementAdd();
+          }}
+          elementTypes={elementTypes.map((item) => ({
+            label: `${item.name}`,
+            value: item.id!,
+          }))}
+          treeTypes={treeTypes.map((item) => ({
+            label: `${item.family} ${item.genus} ${item.species}`,
+            value: item.id!,
+          }))}
+        />
       </Dialog>
     </div>
   );

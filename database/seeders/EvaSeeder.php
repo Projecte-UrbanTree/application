@@ -15,7 +15,7 @@ class EvaSeeder extends Seeder
         DB::table('eva')->insert([
             [
                 'element_id' => 1,
-                'date_birth' => '2025-03-11 15:40:20',
+                'date_birth' => '2010-09-11',
                 'height' => 10.5,
                 'diameter' => 0.5,
                 'crown_width' => 3.2,

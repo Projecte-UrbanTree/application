@@ -14,9 +14,14 @@
       "genus": "crwdns2819:0crwdne2819:0",
       "name": "crwdns2821:0crwdne2821:0",
       "password": "crwdns2823:0crwdne2823:0",
+      "currentPassword": "crwdns3723:0crwdne3723:0",
+      "newPassword": "crwdns3725:0crwdne3725:0",
+      "confirmPassword": "crwdns3727:0crwdne3727:0",
       "resource_type": "crwdns3597:0crwdne3597:0",
       "role": "crwdns2825:0crwdne2825:0",
       "select_resource_type": "crwdns3599:0crwdne3599:0",
+      "unit_cost": "crwdns4857:0crwdne4857:0",
+      "unit_name": "crwdns4859:0crwdne4859:0",
       "species": "crwdns2827:0crwdne2827:0",
       "start_date": "crwdns2829:0crwdne2829:0",
       "status": "crwdns2831:0crwdne2831:0",
@@ -95,14 +100,80 @@
         }
       },
       "elementTypes": {
+        "title": "crwdns2923:0crwdne2923:0",
+        "loading": "crwdns3613:0crwdne3613:0",
+        "actions": "crwdns3615:0crwdne3615:0",
+        "editButton": "crwdns3617:0crwdne3617:0",
+        "deleteButton": "crwdns3619:0crwdne3619:0",
+        "deletedSuccess": "crwdns3621:0crwdne3621:0",
+        "deleteConfirm": "crwdns3623:0crwdne3623:0",
+        "success": "crwdns3625:0crwdne3625:0",
+        "update": "crwdns3627:0crwdne3627:0",
+        "error": "crwdns3629:0crwdne3629:0",
+        "true": "crwdns3631:0crwdne3631:0",
+        "false": "crwdns3633:0crwdne3633:0",
+        "create": {
+          "title": "crwdns3635:0crwdne3635:0",
+          "submittingText": "crwdns3637:0crwdne3637:0",
+          "submitButton": "crwdns3639:0crwdne3639:0",
+          "validations": {
+            "name": "crwdns3641:0crwdne3641:0",
+            "requires_tree_type": "crwdns3643:0crwdne3643:0",
+            "icon": "crwdns3645:0crwdne3645:0",
+            "color": "crwdns3647:0crwdne3647:0",
+            "description": "crwdns3649:0crwdne3649:0"
+          },
+          "placeholders": {
+            "name": "crwdns3651:0crwdne3651:0",
+            "requires_tree_type": "crwdns3653:0crwdne3653:0",
+            "description": "crwdns3655:0crwdne3655:0",
+            "icon": "crwdns3657:0crwdne3657:0",
+            "color": "crwdns3659:0crwdne3659:0"
+          }
+        },
+        "edit": {
+          "title": "crwdns3661:0crwdne3661:0",
+          "submittingText": "crwdns3663:0crwdne3663:0",
+          "submitButton": "crwdns3665:0crwdne3665:0",
+          "validations": {
+            "name": "crwdns3667:0crwdne3667:0",
+            "requires_tree_type": "crwdns3669:0crwdne3669:0",
+            "icon": "crwdns3671:0crwdne3671:0",
+            "color": "crwdns3673:0crwdne3673:0",
+            "description": "crwdns3675:0crwdne3675:0"
+          },
+          "placeholders": {
+            "name": "crwdns3677:0crwdne3677:0",
+            "requires_tree_type": "crwdns3679:0crwdne3679:0",
+            "description": "crwdns3681:0crwdne3681:0",
+            "icon": "crwdns3683:0crwdne3683:0",
+            "color": "crwdns3685:0crwdne3685:0"
+          }
+        },
         "columns": {
-          "color": "crwdns2913:0crwdne2913:0",
+          "name": "crwdns3687:0crwdne3687:0",
+          "requires_tree_type": "crwdns3689:0crwdne3689:0",
           "description": "crwdns2915:0crwdne2915:0",
           "icon": "crwdns2917:0crwdne2917:0",
-          "name": "crwdns2919:0crwdne2919:0",
-          "requires_tree_type": "crwdns2921:0crwdne2921:0"
+          "color": "crwdns2913:0crwdne2913:0"
         },
-        "title": "crwdns2923:0crwdne2923:0"
+        "icons": {
+          "tree": "crwdns3691:0crwdne3691:0",
+          "home": "crwdns3693:0crwdne3693:0",
+          "post-lamp": "crwdns3695:0crwdne3695:0",
+          "park": "crwdns3697:0crwdne3697:0",
+          "fountain": "crwdns3699:0crwdne3699:0",
+          "flower": "crwdns3701:0crwdne3701:0",
+          "mountain": "crwdns3703:0crwdne3703:0",
+          "beach": "crwdns3705:0crwdne3705:0",
+          "volcano": "crwdns3707:0crwdne3707:0",
+          "tap": "crwdns3709:0crwdne3709:0",
+          "water-drop": "crwdns3711:0crwdne3711:0",
+          "lightbulb": "crwdns3713:0crwdne3713:0",
+          "lightning-bolt": "crwdns3715:0crwdne3715:0",
+          "grass": "crwdns3717:0crwdne3717:0",
+          "cloud": "crwdns3719:0crwdne3719:0"
+        }
       },
       "resources": {
         "form": {
@@ -136,7 +207,10 @@
             "name_min": "crwdns3607:0crwdne3607:0",
             "name_required": "crwdns2951:0crwdne2951:0",
             "type_invalid": "crwdns3609:0crwdne3609:0",
-            "type_required": "crwdns2953:0crwdne2953:0"
+            "type_required": "crwdns2953:0crwdne2953:0",
+            "unit_cost_min": "crwdns4861:0crwdne4861:0",
+            "unit_cost_required": "crwdns4863:0crwdne4863:0",
+            "unit_name_required": "crwdns4865:0crwdne4865:0"
           }
         },
         "list": {
@@ -148,7 +222,10 @@
           "columns": {
             "description": "crwdns2961:0crwdne2961:0",
             "name": "crwdns2963:0crwdne2963:0",
-            "type": "crwdns2965:0crwdne2965:0"
+            "type": "crwdns2965:0crwdne2965:0",
+            "unit": "crwdns4867:0crwdne4867:0",
+            "unit_name": "crwdns4869:0crwdne4869:0",
+            "unit_cost": "crwdns4871:0crwdne4871:0"
           },
           "messages": {
             "createSuccess": "crwdns2967:0crwdne2967:0",
@@ -217,7 +294,8 @@
         "tasksNotDone": "crwdns3441:0crwdne3441:0",
         "hoursWorked": "crwdns3443:0crwdne3443:0",
         "fuelConsumption": "crwdns3445:0crwdne3445:0",
-        "noData": "crwdns3447:0crwdne3447:0"
+        "noData": "crwdns3447:0crwdne3447:0",
+        "exportCSV": "crwdns4091:0crwdne4091:0"
       },
       "taskTypes": {
         "form": {
@@ -232,7 +310,7 @@
           "returnButton": "crwdns3037:0crwdne3037:0",
           "submitButton": {
             "create": "crwdns3039:0crwdne3039:0",
-            "edit": "crwdns3041:0crwdne3041:0"
+            "edit": "crwdns3721:0crwdne3721:0"
           },
           "submittingText": {
             "create": "crwdns3043:0crwdne3043:0",
@@ -480,6 +558,259 @@
           "unknown": "crwdns3309:0crwdne3309:0"
         },
         "title": "crwdns3205:0crwdne3205:0"
+      },
+      "account": {
+        "title": "crwdns3729:0crwdne3729:0",
+        "basicInfo": "crwdns3731:0crwdne3731:0",
+        "security": "crwdns3733:0crwdne3733:0",
+        "actions": {
+          "save": "crwdns3735:0crwdne3735:0",
+          "saving": "crwdns3737:0crwdne3737:0"
+        },
+        "validation": {
+          "name_invalid": "crwdns3739:0crwdne3739:0",
+          "name_required": "crwdns3741:0crwdne3741:0",
+          "surname_invalid": "crwdns3743:0crwdne3743:0",
+          "surname_required": "crwdns3745:0crwdne3745:0",
+          "currentPasswordRequired": "crwdns3747:0crwdne3747:0",
+          "newPasswordMinLength": "crwdns3749:0crwdne3749:0",
+          "newPasswordMismatch": "crwdns3751:0crwdne3751:0",
+          "newPasswordComplexity": "crwdns3753:0crwdne3753:0"
+        },
+        "messages": {
+          "profileUpdated": "crwdns3755:0crwdne3755:0",
+          "errorSaving": "crwdns3757:0crwdne3757:0",
+          "passwordCurrentWrong": "crwdns3759:0crwdne3759:0"
+        }
+      },
+      "evas": {
+        "show": {
+          "title": "crwdns4531:0crwdne4531:0"
+        },
+        "dictionaries": {
+          "unbalancedCrown": {
+            "0": "crwdns4533:0crwdne4533:0",
+            "1": "crwdns4535:0crwdne4535:0",
+            "2": "crwdns4537:0crwdne4537:0",
+            "3": "crwdns4539:0crwdne4539:0"
+          },
+          "overextendedBranches": {
+            "0": "crwdns4541:0crwdne4541:0",
+            "1": "crwdns4543:0crwdne4543:0",
+            "2": "crwdns4545:0crwdne4545:0",
+            "3": "crwdns4547:0crwdne4547:0"
+          },
+          "cracks": {
+            "0": "crwdns4549:0crwdne4549:0",
+            "1": "crwdns4551:0crwdne4551:0",
+            "2": "crwdns4553:0crwdne4553:0",
+            "3": "crwdns4555:0crwdne4555:0"
+          },
+          "deadBranches": {
+            "0": "crwdns4557:0crwdne4557:0",
+            "1": "crwdns4559:0crwdne4559:0",
+            "2": "crwdns4561:0crwdne4561:0",
+            "3": "crwdns4563:0crwdne4563:0"
+          },
+          "inclination": {
+            "0": "crwdns4565:0crwdne4565:0",
+            "1": "crwdns4567:0crwdne4567:0",
+            "2": "crwdns4569:0crwdne4569:0",
+            "3": "crwdns4571:0crwdne4571:0"
+          },
+          "VForks": {
+            "0": "crwdns4573:0crwdne4573:0",
+            "1": "crwdns4575:0crwdne4575:0",
+            "2": "crwdns4577:0crwdne4577:0",
+            "3": "crwdns4579:0crwdne4579:0"
+          },
+          "cavities": {
+            "0": "crwdns4581:0crwdne4581:0",
+            "1": "crwdns4583:0crwdne4583:0",
+            "2": "crwdns4585:0crwdne4585:0",
+            "3": "crwdns4587:0crwdne4587:0"
+          },
+          "barkDamage": {
+            "0": "crwdns4589:0crwdne4589:0",
+            "1": "crwdns4591:0crwdne4591:0",
+            "2": "crwdns4593:0crwdne4593:0",
+            "3": "crwdns4595:0crwdne4595:0"
+          },
+          "soilLifting": {
+            "0": "crwdns4597:0crwdne4597:0",
+            "1": "crwdns4599:0crwdne4599:0",
+            "2": "crwdns4601:0crwdne4601:0",
+            "3": "crwdns4603:0crwdne4603:0"
+          },
+          "cutRoots": {
+            "0": "crwdns4605:0crwdne4605:0",
+            "1": "crwdns4607:0crwdne4607:0",
+            "2": "crwdns4609:0crwdne4609:0",
+            "3": "crwdns4611:0crwdne4611:0"
+          },
+          "basalRot": {
+            "0": "crwdns4613:0crwdne4613:0",
+            "1": "crwdns4615:0crwdne4615:0",
+            "2": "crwdns4617:0crwdne4617:0",
+            "3": "crwdns4619:0crwdne4619:0"
+          },
+          "exposedRoots": {
+            "0": "crwdns4621:0crwdne4621:0",
+            "1": "crwdns4623:0crwdne4623:0",
+            "2": "crwdns4625:0crwdne4625:0",
+            "3": "crwdns4627:0crwdne4627:0"
+          },
+          "wind": {
+            "0": "crwdns4629:0crwdne4629:0",
+            "1": "crwdns4631:0crwdne4631:0",
+            "2": "crwdns4633:0crwdne4633:0",
+            "3": "crwdns4635:0crwdne4635:0"
+          },
+          "drought": {
+            "0": "crwdns4637:0crwdne4637:0",
+            "1": "crwdns4639:0crwdne4639:0",
+            "2": "crwdns4641:0crwdne4641:0",
+            "3": "crwdns4643:0crwdne4643:0"
+          }
+        },
+        "edit": {
+          "title": "crwdns4645:0crwdne4645:0",
+          "identification": "crwdns4647:0crwdne4647:0",
+          "treeCondition": "crwdns4649:0crwdne4649:0",
+          "dimensions": "crwdns4651:0crwdne4651:0",
+          "state": "crwdns4653:0crwdne4653:0",
+          "crownBranches": "crwdns4655:0crwdne4655:0",
+          "trunk": "crwdns4657:0crwdne4657:0",
+          "roots": "crwdns4659:0crwdne4659:0",
+          "environmentCondition": "crwdns4661:0crwdne4661:0",
+          "environmentalFactors": "crwdns4663:0crwdne4663:0",
+          "windExposure": "crwdns4665:0crwdne4665:0",
+          "droughtExposure": "crwdns4667:0crwdne4667:0"
+        },
+        "create": {
+          "identification": "crwdns4669:0crwdne4669:0",
+          "treeCondition": "crwdns4671:0crwdne4671:0",
+          "dimensions": "crwdns4673:0crwdne4673:0",
+          "state": "crwdns4675:0crwdne4675:0",
+          "crownBranches": "crwdns4677:0crwdne4677:0",
+          "trunk": "crwdns4679:0crwdne4679:0",
+          "roots": "crwdns4681:0crwdne4681:0",
+          "environmentCondition": "crwdns4683:0crwdne4683:0",
+          "environmentalFactors": "crwdns4685:0crwdne4685:0",
+          "windExposure": "crwdns4687:0crwdne4687:0",
+          "droughtExposure": "crwdns4689:0crwdne4689:0"
+        },
+        "title": "crwdns4691:0crwdne4691:0",
+        "age": {
+          "years": "crwdns4693:0crwdne4693:0",
+          "months": "crwdns4695:0crwdne4695:0"
+        },
+        "columns": {
+          "element_id": "crwdns4697:0crwdne4697:0",
+          "age": "crwdns4699:0crwdne4699:0",
+          "height": "crwdns4701:0crwdne4701:0",
+          "actions": "crwdns4703:0crwdne4703:0",
+          "name": "crwdns4705:0crwdne4705:0",
+          "coordinates": "crwdns4707:0crwdne4707:0",
+          "status": "crwdns4709:0crwdne4709:0"
+        },
+        "form": {
+          "name": "crwdns4711:0crwdne4711:0",
+          "element_id": "crwdns4713:0crwdne4713:0",
+          "years": "crwdns4715:0crwdne4715:0",
+          "months": "crwdns4717:0crwdne4717:0",
+          "height": "crwdns4719:0crwdne4719:0",
+          "diameter": "crwdns4721:0crwdne4721:0",
+          "crown_width": "crwdns4723:0crwdne4723:0",
+          "crown_projection_area": "crwdns4725:0crwdne4725:0",
+          "root_surface_diameter": "crwdns4727:0crwdne4727:0",
+          "effective_root_area": "crwdns4729:0crwdne4729:0",
+          "height_estimation": "crwdns4731:0crwdne4731:0",
+          "unbalanced_crown": "crwdns4733:0crwdne4733:0",
+          "overextended_branches": "crwdns4735:0crwdne4735:0",
+          "cracks": "crwdns4737:0crwdne4737:0",
+          "dead_branches": "crwdns4739:0crwdne4739:0",
+          "inclination": "crwdns4741:0crwdne4741:0",
+          "V_forks": "crwdns4743:0crwdne4743:0",
+          "cavities": "crwdns4745:0crwdne4745:0",
+          "bark_damage": "crwdns4747:0crwdne4747:0",
+          "soil_lifting": "crwdns4749:0crwdne4749:0",
+          "cut_damaged_roots": "crwdns4751:0crwdne4751:0",
+          "basal_rot": "crwdns4753:0crwdne4753:0",
+          "exposed_surface_roots": "crwdns4755:0crwdne4755:0",
+          "wind": "crwdns4757:0crwdne4757:0",
+          "drought": "crwdns4759:0crwdne4759:0",
+          "validation": {
+            "element_required": "crwdns4761:0crwdne4761:0"
+          },
+          "title": {
+            "create": "crwdns4763:0crwdne4763:0",
+            "edit": "crwdns4765:0crwdne4765:0"
+          },
+          "saving": "crwdns4767:0crwdne4767:0",
+          "save": "crwdns4769:0crwdne4769:0"
+        },
+        "list": {
+          "actions": {
+            "show": "crwdns4771:0crwdne4771:0",
+            "delete": "crwdns4773:0crwdne4773:0"
+          },
+          "messages": {
+            "createSuccess": "crwdns4775:0crwdne4775:0",
+            "deleteConfirm": "crwdns4777:0crwdne4777:0",
+            "deleteSuccess": "crwdns4779:0crwdne4779:0",
+            "error": "crwdns4781:0crwdne4781:0",
+            "updateSuccess": "crwdns4783:0crwdne4783:0"
+          }
+        },
+        "status": {
+          "low": "crwdns4785:0crwdne4785:0",
+          "moderate": "crwdns4787:0crwdne4787:0",
+          "high": "crwdns4789:0crwdne4789:0",
+          "critical": "crwdns4791:0crwdne4791:0",
+          "pending": "crwdns4793:0crwdne4793:0"
+        },
+        "stability": {
+          "stable": "crwdns4795:0crwdne4795:0",
+          "moderate": "crwdns4797:0crwdne4797:0",
+          "highRisk": "crwdns4799:0crwdne4799:0",
+          "pending": "crwdns4801:0crwdne4801:0"
+        },
+        "gravityHeight": {
+          "veryStable": "crwdns4803:0crwdne4803:0",
+          "moderateRisk": "crwdns4805:0crwdne4805:0",
+          "highRisk": "crwdns4807:0crwdne4807:0",
+          "pending": "crwdns4809:0crwdne4809:0"
+        },
+        "rootCrown": {
+          "veryStable": "crwdns4811:0crwdne4811:0",
+          "stable": "crwdns4813:0crwdne4813:0",
+          "moderateStability": "crwdns4815:0crwdne4815:0",
+          "highRisk": "crwdns4817:0crwdne4817:0",
+          "pending": "crwdns4819:0crwdne4819:0"
+        },
+        "windStability": {
+          "veryStable": "crwdns4821:0crwdne4821:0",
+          "moderateStability": "crwdns4823:0crwdne4823:0",
+          "highRisk": "crwdns4825:0crwdne4825:0",
+          "pending": "crwdns4827:0crwdne4827:0"
+        },
+        "severity": {
+          "low": "crwdns4829:0crwdne4829:0",
+          "moderate": "crwdns4831:0crwdne4831:0",
+          "high": "crwdns4833:0crwdne4833:0",
+          "extreme": "crwdns4835:0crwdne4835:0",
+          "pending": "crwdns4837:0crwdne4837:0"
+        },
+        "indexCalculation": "crwdns4839:0crwdne4839:0",
+        "treeStatusFactor": "crwdns4841:0crwdne4841:0",
+        "stabilityIndex": "crwdns4843:0crwdne4843:0",
+        "gravityHeightRatio": "crwdns4845:0crwdne4845:0",
+        "rootCrownRatio": "crwdns4847:0crwdne4847:0",
+        "windStabilityIndex": "crwdns4849:0crwdne4849:0",
+        "environmentalFactors": "crwdns4851:0crwdne4851:0",
+        "windExposure": "crwdns4853:0crwdne4853:0",
+        "droughtExposure": "crwdns4855:0crwdne4855:0"
       }
     },
     "profileDropdown": {
@@ -524,7 +855,9 @@
   "general": {
     "allContracts": "crwdns3251:0crwdne3251:0",
     "genericError": "crwdns3253:0crwdne3253:0",
-    "loading": "crwdns3255:0crwdne3255:0"
+    "loading": "crwdns3255:0crwdne3255:0",
+    "error": "crwdns3761:0crwdne3761:0",
+    "success": "crwdns3763:0crwdne3763:0"
   },
   "public": {
     "error": {

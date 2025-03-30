@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
+use App\Http\Controllers\Api\Admin\EvaController;
 use App\Http\Controllers\Api\Admin\PointController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\ZoneController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ElementController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -30,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
         Route::post('select-contract', [ContractController::class, 'selectContract']);
         Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
 
@@ -43,12 +46,18 @@ Route::middleware('auth:sanctum')->group(function () {
             ]);
         });
 
+        Route::get('account', [AccountController::class, 'show']);
+        Route::put('account', [AccountController::class, 'update']);
+        Route::put('account/password', [AccountController::class, 'updatePassword']);
         // Route for stats
+        Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
         Route::get('statistics', [StatisticsController::class, 'index']);
 
         Route::resources([
             'contracts' => ContractController::class,
+            'elements' => ElementController::class,
             'element-types' => ElementTypeController::class,
+            'evas' => EvaController::class,
             'points' => PointController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,
