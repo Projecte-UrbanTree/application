@@ -117,19 +117,17 @@ const WorkReportDetail = () => {
       switch (status) {
         case 1:
           summary = t('general.messages.close_part');
-          detail = t('admin.pages.work_reports.messages.closing_part');
+          detail = t('admin.pages.workReport.messages.closing_part');
           break;
         case 2:
           severity = 'error';
           summary = t('general.messages.reject');
-          detail = t('admin.pages.work_reports.messages.rejecting');
+          detail = t('admin.pages.workReport.messages.rejecting');
           break;
         case 3:
           severity = 'warn';
           summary = t('general.messages.close_with_incidents');
-          detail = t(
-            'admin.pages.work_reports.messages.closing_with_incidents',
-          );
+          detail = t('admin.pages.workReport.messages.closing_with_incidents');
           break;
       }
 
@@ -145,7 +143,7 @@ const WorkReportDetail = () => {
       toast.current?.show({
         severity: 'error',
         summary: t('general.messages.error'),
-        detail: t('admin.pages.work_reports.messages.error_updating_status'),
+        detail: t('admin.pages.workReport.messages.error_updating_status'),
       });
     }
   };
@@ -217,35 +215,35 @@ const WorkReportDetail = () => {
       case 0:
         return (
           <Badge
-            value={t('admin.pages.workOrders.reportStatus.pending')}
+            value={t('admin.pages.workReport.reportStatus.pending')}
             severity="warning"
           />
         );
       case 1:
         return (
           <Badge
-            value={t('admin.pages.workOrders.reportStatus.completed')}
+            value={t('admin.pages.workReport.reportStatus.completed')}
             severity="success"
           />
         );
       case 2:
         return (
           <Badge
-            value={t('admin.pages.workOrders.reportStatus.rejected')}
+            value={t('admin.pages.workReport.reportStatus.rejected')}
             severity="danger"
           />
         );
       case 3:
         return (
           <Badge
-            value={t('admin.pages.workOrders.reportStatus.closedWithIncidents')}
+            value={t('admin.pages.workReport.reportStatus.closedWithIncidents')}
             severity="danger"
           />
         );
       default:
         return (
           <Badge
-            value={t('admin.pages.workOrders.reportStatus.unknown')}
+            value={t('admin.pages.workReport.reportStatus.unknown')}
             severity="secondary"
           />
         );
@@ -258,7 +256,7 @@ const WorkReportDetail = () => {
         <div>
           <h4 className="font-medium flex items-center gap-2">
             <Icon icon="tabler:map-pin" />
-            {t('admin.pages.workOrders.details.zones')}
+            {t('admin.pages.workReport.details.zones')}
           </h4>
           <ul className="list-disc pl-5">
             {block.zones && block.zones.length > 0 ? (
@@ -272,57 +270,90 @@ const WorkReportDetail = () => {
                 </li>
               ))
             ) : (
-              <li>{t('admin.pages.workOrders.details.noZones')}</li>
+              <li>{t('admin.pages.workReport.details.noZones')}</li>
             )}
           </ul>
         </div>
 
-        <div>
-          <h4 className="font-medium flex items-center gap-2">
-            <Icon icon="tabler:clipboard-list" />
-            {t('admin.pages.workOrders.details.tasks')}
-          </h4>
-          <ul className="list-disc pl-5">
-            {block.block_tasks && block.block_tasks.length > 0 ? (
-              block.block_tasks.map((task) => {
-                const taskName =
-                  task.tasks_type?.name ||
-                  t('admin.pages.workOrders.details.unknown');
-                const elementName =
-                  task.element_type?.name ||
-                  t('admin.pages.workOrders.details.unknown');
-                const speciesName = task.tree_type?.species
-                  ? `: ${task.tree_type.species}`
-                  : '';
-                return (
-                  <li key={task.id} className="mb-2">
-                    <div className="flex items-center gap-2">
-                      <Tag
-                        value={getTaskStatus(task.status).label}
-                        icon={getTaskStatus(task.status).icon}
-                        className={`${getTaskStatus(task.status).color} border-none`}
-                      />
-                      <span>
-                        {taskName} {elementName}
-                        {speciesName} ({task.spent_time}h)
-                      </span>
-                    </div>
-                  </li>
-                );
-              })
-            ) : (
-              <li>{t('admin.pages.workOrders.details.noTasks')}</li>
-            )}
-          </ul>
+        <div className="md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 className="font-medium flex items-center gap-2">
+                <Icon icon="tabler:clipboard-list" />
+                {t('admin.pages.workReport.details.tasks')}
+              </h4>
+              <div className="space-y-2 mt-2">
+                {block.block_tasks && block.block_tasks.length > 0 ? (
+                  block.block_tasks.map((task) => {
+                    const taskName =
+                      task.tasks_type?.name ||
+                      t('admin.pages.workReport.details.unknown');
+                    const elementName =
+                      task.element_type?.name ||
+                      t('admin.pages.workReport.details.unknown');
+                    const speciesName = task.tree_type?.species
+                      ? `: ${task.tree_type.species}`
+                      : '';
+                    return (
+                      <div
+                        key={task.id}
+                        className="p-2 bg-white rounded border border-gray-200">
+                        <div className="font-medium">
+                          {taskName} {elementName}
+                          {speciesName}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {task.spent_time}h
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-gray-500">
+                    {t('admin.pages.workReport.details.noTasks')}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-medium flex items-center gap-2">
+                <Icon icon="tabler:status-change" />
+                {t('admin.pages.workReport.details.taskStatus')}
+              </h4>
+              <div className="space-y-2 mt-2">
+                {block.block_tasks && block.block_tasks.length > 0 ? (
+                  block.block_tasks.map((task) => {
+                    const status = getTaskStatus(task.status);
+                    return (
+                      <div
+                        key={task.id}
+                        className="flex items-center p-2 bg-white rounded border border-gray-200">
+                        <Tag
+                          value={status.label}
+                          icon={status.icon}
+                          className={`${status.color} mx-auto border-none justify-center`}
+                        />
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-gray-500">
+                    {t('admin.pages.workReport.details.noStatus')}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div>
+        <div className="md:col-span-3">
           <h4 className="font-medium flex items-center gap-2">
             <Icon icon="tabler:note" />
-            {t('admin.pages.workOrders.details.notes')}
+            {t('admin.pages.workReport.details.notes')}
           </h4>
-          <p className="bg-blue-50 p-2 rounded">
-            {block.notes || t('admin.pages.workOrders.details.noNotes')}
+          <p className="bg-blue-50 p-3 rounded">
+            {block.notes || t('admin.pages.workReport.details.noNotes')}
           </p>
         </div>
       </div>
@@ -372,7 +403,7 @@ const WorkReportDetail = () => {
               className="h-16 w-16 text-yellow-500 mx-auto mb-4"
             />
             <h2 className="text-2xl font-bold mb-4">
-              {t('admin.pages.work_reports.not_found')}
+              {t('admin.pages.workReport.not_found')}
             </h2>
             <Button
               label={t('admin.pages.general.returnButton')}
@@ -400,7 +431,7 @@ const WorkReportDetail = () => {
               </Button>
               <div>
                 <h2 className="text-white text-xl sm:text-2xl font-bold">
-                  {t('admin.pages.work_reports.title')}
+                  {t('admin.pages.workReport.title')}
                 </h2>
                 <div className="flex items-center gap-2">
                   <p className="text-blue-100 m-0 text-xs sm:text-sm">
@@ -413,10 +444,10 @@ const WorkReportDetail = () => {
           </header>
 
           <div className="p-4">
-            <div className="mb-4">
+            <div className="mb-6">
               <h3 className="font-medium flex items-center gap-2">
                 <Icon icon="tabler:users" />
-                {t('admin.pages.workOrders.list.columns.users')}
+                {t('admin.pages.workReport.list.columns.users')}
               </h3>
               <div className="flex flex-wrap gap-2 mt-2">
                 {workReport.work_orders.users.map((user) => (
@@ -429,68 +460,67 @@ const WorkReportDetail = () => {
               </div>
             </div>
 
-            <div className="mb-4">
-              <h3 className="font-medium flex items-center gap-2">
-                <Icon icon="tabler:package" />
-                {t('admin.pages.workOrders.details.resources')}
-              </h3>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {workReport.resources.map((resource) => (
-                  <Tag
-                    key={resource.id}
-                    value={`${resource.name} - ${resource.quantity} ${resource.unit_name} (${resource.unit_cost}€)`}
-                    className="bg-purple-100 text-purple-800 border-purple-200"
-                  />
-                ))}
-              </div>
-            </div>
-
             <Accordion multiple activeIndex={activeTabs}>
               {workReport.work_orders.work_orders_blocks?.length ? (
                 workReport.work_orders.work_orders_blocks.map(
                   (block, index) => (
                     <AccordionTab
                       key={block.id}
-                      header={`${t('admin.pages.workOrders.details.block')} ${index + 1}`}>
+                      header={`${t('admin.pages.workReport.details.block')} ${index + 1}`}>
                       {renderBlockDetails(block)}
                     </AccordionTab>
                   ),
                 )
               ) : (
                 <AccordionTab
-                  header={t('admin.pages.workOrders.details.noBlocks')}>
-                  <p>{t('admin.pages.workOrders.details.noBlocksAvailable')}</p>
+                  header={t('admin.pages.workReport.details.noBlocks')}>
+                  <p>{t('admin.pages.workReport.details.noBlocksAvailable')}</p>
                 </AccordionTab>
               )}
             </Accordion>
+            <div className="mb-4 mt-6">
+              <h3 className="font-medium flex items-center gap-2">
+                <Icon icon="tabler:package" />
+                {t('admin.pages.workReport.details.resources')}
+              </h3>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {workReport.resources.map((resource) => (
+                  <Tag
+                    key={resource.id}
+                    value={`${resource.name} - ${resource.unit_name} (${resource.unit_cost}€)`}
+                    className="bg-purple-100 text-purple-800 border-purple-200"
+                  />
+                ))}
+              </div>
+            </div>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h4 className="font-medium flex items-center gap-2">
                   <Icon icon="tabler:eye" />
-                  {t('admin.pages.workOrders.details.observation')}
+                  {t('admin.pages.workReport.details.observation')}
                 </h4>
                 <p className="mt-2">
                   {workReport.observation ||
-                    t('admin.pages.workOrders.details.noObservation')}
+                    t('admin.pages.workReport.details.noObservation')}
                 </p>
               </div>
 
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h4 className="font-medium flex items-center gap-2">
                   <Icon icon="tabler:alert-triangle" />
-                  {t('admin.pages.workOrders.details.incidents')}
+                  {t('admin.pages.workReport.details.incidents')}
                 </h4>
                 <p className="mt-2">
                   {workReport.report_incidents ||
-                    t('admin.pages.workOrders.details.noIncidents')}
+                    t('admin.pages.workReport.details.noIncidents')}
                 </p>
               </div>
 
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h4 className="font-medium flex items-center gap-2">
                   <Icon icon="tabler:gas-station" />
-                  {t('admin.pages.workOrders.details.spentFuel')}
+                  {t('admin.pages.workReport.details.spentFuel')}
                 </h4>
                 <p className="mt-2">{workReport.spent_fuel || 0} L</p>
               </div>

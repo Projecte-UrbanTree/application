@@ -559,6 +559,58 @@
         },
         "title": "Ordres de treball"
       },
+      "workReport": {
+        "title": "Informe de Treball",
+        "not_found": "No s'ha trobat l'Informe de Treball",
+        "columns": {
+          "observation": "Observació",
+          "spent_fuel": "Combustible Gastat",
+          "incidents": "Incidències",
+          "zones": "Zones",
+          "tasks": "Tasques",
+          "notes": "Notes",
+          "block": "Bloc",
+          "resources": "Recursos"
+        },
+        "messages": {
+          "closing_part": "Tancant part...",
+          "part_closed": "Part tancat amb èxit",
+          "closing_block": "Tancant bloc...",
+          "close_block": "Bloc tancat amb èxit",
+          "closing_with_incidents": "Tancant bloc amb incidències...",
+          "close_with_incidents": "Bloc tancat amb incidències",
+          "rejecting": "Rebutjant bloc...",
+          "reject": "Bloc rebutjat"
+        },
+        "reportStatus": {
+          "pending": "Pendent",
+          "completed": "Completat",
+          "rejected": "Rebutjat",
+          "closedWithIncidents": "Tancat amb incidències",
+          "unknown": "Desconegut"
+        },
+        "details": {
+          "details": "Detalls",
+          "block": "Bloc",
+          "noBlocks": "No hi ha blocs",
+          "noBlocksAvailable": "No hi ha blocs disponibles per aquest informe de treball",
+          "noNotes": "No hi ha notes",
+          "noTasks": "No hi ha tasques assignades",
+          "notes": "Notes",
+          "noUsers": "No hi ha usuaris assignats",
+          "noZones": "No hi ha zones assignades",
+          "tasks": "Tasques",
+          "unknown": "Desconegut",
+          "zones": "Zones",
+          "resources": "Recursos",
+          "observation": "Observació",
+          "noObservation": "No hi ha observació disponible",
+          "incidents": "Incidències",
+          "noIncidents": "No hi ha incidències registrades",
+          "spentFuel": "Combustible Gastat",
+          "taskStatus": "Estat de la Tasca"
+        }
+      },
       "account": {
         "title": "Configuració del Compte",
         "basicInfo": "Informació Bàsica",

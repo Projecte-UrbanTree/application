@@ -559,6 +559,59 @@
         },
         "title": "Órdenes de trabajo"
       },
+      "workReport": {
+        "title": "Informe de Trabajo",
+        "not_found": "No se encontró el Informe de Trabajo",
+        "columns": {
+          "users": "Usuarios",
+          "observation": "Observación",
+          "spent_fuel": "Combustible Gastado",
+          "incidents": "Incidentes",
+          "zones": "Zonas",
+          "tasks": "Tareas",
+          "notes": "Notas",
+          "block": "Bloque",
+          "resources": "Recursos"
+        },
+        "messages": {
+          "closing_part": "Cerrando parte...",
+          "part_closed": "Parte cerrado con éxito",
+          "closing_block": "Cerrando bloque...",
+          "close_block": "Bloque cerrado con éxito",
+          "closing_with_incidents": "Cerrando bloque con incidentes...",
+          "close_with_incidents": "Bloque cerrado con incidentes",
+          "rejecting": "Rechazando bloque...",
+          "reject": "Bloque rechazado"
+        },
+        "reportStatus": {
+          "pending": "Pendiente",
+          "completed": "Completado",
+          "rejected": "Rechazado",
+          "closedWithIncidents": "Cerrado con incidencias",
+          "unknown": "Desconocido"
+        },
+        "details": {
+          "details": "Detalles",
+          "block": "Bloque",
+          "noBlocks": "No hay bloques",
+          "noBlocksAvailable": "No hay bloques disponibles para este informe de trabajo",
+          "noNotes": "No hay notas",
+          "noTasks": "No hay tareas asignadas",
+          "notes": "Notas",
+          "noUsers": "No hay usuarios asignados",
+          "noZones": "No hay zonas asignadas",
+          "tasks": "Tareas",
+          "unknown": "Desconocido",
+          "zones": "Zonas",
+          "resources": "Recursos",
+          "observation": "Observación",
+          "noObservation": "No hay observación disponible",
+          "incidents": "Incidentes",
+          "noIncidents": "No hay incidentes registrados",
+          "spentFuel": "Combustible Gastado",
+          "taskStatus": "Estado de la Tarea"
+        }
+      },
       "account": {
         "title": "Configuración de la Cuenta",
         "basicInfo": "Información Básica",
@@ -812,7 +865,7 @@
         "windExposure": "Exposición al Viento",
         "droughtExposure": "Exposición a Sequía"
       },
-      "work_reports": {
+      "workReports": {
         "title": "Informe de Trabajo",
         "not_found": "Informe de Trabajo no encontrado",
         "details": "Detalles",
