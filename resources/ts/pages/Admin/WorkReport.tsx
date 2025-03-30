@@ -114,8 +114,8 @@ const WorkReportDetail = () => {
 
       switch (status) {
         case 1:
-          summary = t('general.messages.close_block');
-          detail = t('admin.pages.work_reports.messages.closing_block');
+          summary = t('general.messages.close_part');
+          detail = t('admin.pages.work_reports.messages.closing_part');
           break;
         case 2:
           severity = 'error';
@@ -444,7 +444,7 @@ const WorkReportDetail = () => {
 
           <div className="flex items-center gap-2 p-4 rounded-b-lg">
             <SplitButton
-              label={t('general.actions.close_block')}
+              label={t('general.actions.close_part')}
               icon="pi pi-plus"
               onClick={() => handleStatusChange(1)}
               model={actions}

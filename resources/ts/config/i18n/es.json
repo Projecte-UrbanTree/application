@@ -884,12 +884,12 @@
     "error": "Error",
     "success": "Éxito",
     "actions": {
-      "close_block": "Cerrar Bloque",
+      "close_part": "Cerrar Parte",
       "close_with_incidents": "Cerrar con Incidentes",
       "reject": "Rechazar"
     },
     "messages": {
-      "close_block": "Bloque cerrado con éxito",
+      "close_block": "Parte cerrado con éxito",
       "close_with_incidents": "Bloque cerrado con incidentes",
       "reject": "Bloque rechazado"
     },
