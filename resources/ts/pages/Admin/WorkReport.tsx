@@ -447,7 +447,7 @@ const WorkReportDetail = () => {
             <div className="mb-6">
               <h3 className="font-medium flex items-center gap-2">
                 <Icon icon="tabler:users" />
-                {t('admin.pages.workReport.list.columns.users')}
+                {t('admin.pages.workReport.columns.users')}
               </h3>
               <div className="flex flex-wrap gap-2 mt-2">
                 {workReport.work_orders.users.map((user) => (
