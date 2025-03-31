@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
 import { Calendar } from 'primereact/calendar';
-import { Incidence } from '@/types/Incident';
-import { fetchIncidence } from '@/api/service/incidentService';
+import { Incidence, IncidentStatus } from '@/types/Incident';
+import { deleteIncidence, fetchIncidence } from '@/api/service/incidentService';
 import IncidentForm from './IncidentForm';
 import { Dialog } from 'primereact/dialog';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
+import { Toast } from 'primereact/toast';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -22,7 +26,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
-
+  const dispatch = useDispatch<AppDispatch>();
+  const toast = useRef<Toast>(null);
   useEffect(() => {
     const loadIncidences = async () => {
       try {
@@ -46,6 +51,26 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     setTimeout(() => {
       onOpenIncidentForm();
     }, 300);
+  };
+
+  const handleDeleteIncident = async (id: number) => {
+    try {
+      onClose();
+      dispatch(showLoader());
+      await deleteIncidence(id);
+
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Incidencia eliminada correctamente',
+      });
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+      });
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   return (
@@ -94,13 +119,26 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   <p>
                     <strong>⚠️ Estado:</strong>{' '}
                     <Tag
+                      // severidad del tag según el estado de la incidencia
                       severity={
-                        incidence.status === 'Abierta' ? 'warning' : 'success'
+                        incidence.status === IncidentStatus.open
+                          ? 'warning'
+                          : incidence.status === IncidentStatus.in_progress
+                            ? 'info'
+                            : 'success'
                       }
-                      value={incidence.status}
+                      // texto mostrado en el tag según el estado
+                      value={
+                        incidence.status === IncidentStatus.open
+                          ? 'Abierto'
+                          : incidence.status === IncidentStatus.in_progress
+                            ? 'En progreso'
+                            : 'Cerrado'
+                      }
                       className="ml-2"
                     />
                   </p>
+
                   <p>
                     <strong>📝 Descripción:</strong>{' '}
                     {incidence.description || 'No disponible'}
@@ -114,6 +152,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                     <Button
                       label="Eliminar incidencia"
                       className="p-button-danger p-button-sm"
+                      onClick={() => handleDeleteIncident(incidence.id!)}
                     />
                   </div>
                 </div>

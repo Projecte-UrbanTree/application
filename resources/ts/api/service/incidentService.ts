@@ -12,8 +12,12 @@ export const saveIncidence = async (
   incidence: Incidence,
 ): Promise<Incidence> => {
   const response: AxiosResponse = await axiosClient.post<Incidence>(
-    `/admin/incidences`,
+    `/admin/incidents`,
     incidence,
   );
   return response.data;
+};
+
+export const deleteIncidence = async (id: number): Promise<void> => {
+  await axiosClient.delete(`/admin/incidents/${id}`);
 };

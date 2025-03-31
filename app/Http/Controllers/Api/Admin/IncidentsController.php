@@ -13,4 +13,17 @@ class IncidentsController extends Controller
         $incidences = Incidence::all();
         return response()->json($incidences);
     }
+
+    public function store(Request $request)
+    {
+        $incidence = Incidence::create($request->all());
+        return response()->json($incidence);
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $incidence = Incidence::find($id);
+        $incidence->delete();
+        return response()->json(null, 204);
+    }
 }

@@ -9,7 +9,7 @@ export interface Incidence {
 }
 
 export enum IncidentStatus {
-  'open' = 'Abierta',
-  'in_progress' = 'En Progreso',
-  'closed' = 'Cerrada',
+  open = 'open',
+  in_progress = 'in_progress',
+  closed = 'closed',
 }

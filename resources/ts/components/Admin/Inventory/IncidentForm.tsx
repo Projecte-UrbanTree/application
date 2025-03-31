@@ -27,6 +27,8 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ elementId, onClose }) => {
       element_id: elementId,
     };
 
+    console.log(newIncidence);
+
     try {
       onClose();
       dispatch(showLoader());
