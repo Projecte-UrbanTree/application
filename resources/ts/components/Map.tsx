@@ -20,6 +20,8 @@ import { MapService } from '@/api/service/mapService';
 import { Toast } from 'primereact/toast';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
 import IncidentForm from './Admin/Inventory/IncidentForm';
+import { Element } from '@/types/Element';
+import ElementDetailPopup from './Admin/Inventory/ElementDetailPopup';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -56,6 +58,8 @@ export const MapComponent: React.FC<MapProps> = ({
   const [selectedElementId, setSelectedElementId] = useState<number | null>(
     null,
   );
+  const [elementModalVisible, setElementModalVisible] = useState(false);
+  const [selectedElement, setSelectedElement] = useState<Element | null>(null);
 
   // redux store
   const dispatch = useDispatch<AppDispatch>();
@@ -220,11 +224,9 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     };
 
-    const handleAddIncident = (elementId: number) => {
-      console.log('elementId', elementId);
-
-      setSelectedElementId(elementId);
-      setIncidentModalVisible(true);
+    const handleElementClick = (element: Element) => {
+      setSelectedElement(element);
+      setElementModalVisible(true);
     };
 
     service.removeElementMarkers();
@@ -248,7 +250,7 @@ export const MapComponent: React.FC<MapProps> = ({
           treeTypes,
           elementTypes,
           handleDeleteElement,
-          handleAddIncident,
+          handleElementClick,
         );
       });
     } else {
@@ -258,7 +260,7 @@ export const MapComponent: React.FC<MapProps> = ({
         treeTypes,
         elementTypes,
         handleDeleteElement,
-        handleAddIncident,
+        handleElementClick,
       );
     }
   }
@@ -373,6 +375,17 @@ export const MapComponent: React.FC<MapProps> = ({
           <IncidentForm
             elementId={selectedElementId}
             onClose={() => setIncidentModalVisible(false)}
+          />
+        )}
+      </Dialog>
+      <Dialog
+        header={`Detalles del Elemento #${selectedElement?.id}`}
+        visible={elementModalVisible}
+        onHide={() => setElementModalVisible(false)}>
+        {selectedElement && (
+          <ElementDetailPopup
+            element={selectedElement}
+            onClose={() => setElementModalVisible(false)}
           />
         )}
       </Dialog>

@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\ZoneController;
+use App\Http\Controllers\Api\Admin\IncidentsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ElementController;
 use App\Http\Middleware\RoleMiddleware;
@@ -66,6 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'users' => UserController::class,
             'work-orders' => WorkOrderController::class,
             'zones' => ZoneController::class,
+            'incidents' => IncidentsController::class,
         ]);
     });
 });

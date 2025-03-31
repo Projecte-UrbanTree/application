@@ -191,7 +191,7 @@ export class MapService {
     treeTypes: TreeTypes[],
     elementTypes: ElementType[],
     onDeleteElement?: (elementId: number) => void,
-    onAddIncident?: (elementId: number) => void,
+    onElementClick?: (element: Element) => void,
   ) {
     this.removeElementMarkers();
     const filteredPoints = points.filter((p) => p.type === TypePoint.element);
@@ -203,22 +203,15 @@ export class MapService {
         return;
       }
 
-      const popupContent = renderElementPopup(
-        element,
-        treeTypes,
-        elementTypes,
-        onDeleteElement,
-        onAddIncident,
-      );
-
-      const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(
-        popupContent,
-      );
-
       const marker = new mapboxgl.Marker({ color: '#FF0000' })
         .setLngLat([coords.lng, coords.lat])
-        .setPopup(popup)
         .addTo(this.map);
+
+      marker.getElement().addEventListener('click', () => {
+        if (onElementClick) {
+          onElementClick(element);
+        }
+      });
 
       this.elementMarkers.push(marker);
     });
