@@ -190,6 +190,7 @@ export class MapService {
     treeTypes: TreeTypes[],
     elementTypes: ElementType[],
     onDeleteElement?: (elementId: number) => void,
+    handleAddIncident?: (elementId: number) => void,
   ) {
     this.removeElementMarkers();
     const filteredPoints = points.filter((p) => p.type === TypePoint.element);

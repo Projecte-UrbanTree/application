@@ -19,6 +19,7 @@ import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
 import { MapService } from '@/api/service/mapService';
 import { Toast } from 'primereact/toast';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
+import IncidentForm from './Admin/Inventory/IncidentForm';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -51,6 +52,10 @@ export const MapComponent: React.FC<MapProps> = ({
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
 
   const [zoneToAddElement, setSelectedZoneToAdd] = useState<Zone>();
+  const [incidentModalVisible, setIncidentModalVisible] = useState(false);
+  const [selectedElementId, setSelectedElementId] = useState<number | null>(
+    null,
+  );
 
   // redux store
   const dispatch = useDispatch<AppDispatch>();
@@ -101,7 +106,7 @@ export const MapComponent: React.FC<MapProps> = ({
         service.resizeMap();
       }
     };
-    
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -215,6 +220,11 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     };
 
+    const handleAddIncident = (elementId: number) => {
+      setSelectedElementId(elementId);
+      setIncidentModalVisible(true);
+    };
+
     service.removeElementMarkers();
     const filteredZones = zonesRedux.filter(
       (zone) => zone.contract_id === currentContract.id,
@@ -236,6 +246,7 @@ export const MapComponent: React.FC<MapProps> = ({
           treeTypes,
           elementTypes,
           handleDeleteElement,
+          handleAddIncident,
         );
       });
     } else {
@@ -245,6 +256,7 @@ export const MapComponent: React.FC<MapProps> = ({
         treeTypes,
         elementTypes,
         handleDeleteElement,
+        handleAddIncident,
       );
     }
   }
@@ -283,7 +295,7 @@ export const MapComponent: React.FC<MapProps> = ({
       const existingPoly = getZonePolygon(filteredZones[i], allPoints);
       const polyIntersection = turf.intersect(
         turf.featureCollection([createdPoly]),
-        turf.featureCollection([existingPoly]).features[0]
+        turf.featureCollection([existingPoly]).features[0],
       );
       if (polyIntersection) {
         return true;
@@ -303,15 +315,15 @@ export const MapComponent: React.FC<MapProps> = ({
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <div 
-        ref={mapContainerRef} 
-        style={{ 
-          width: '100%', 
+      <div
+        ref={mapContainerRef}
+        style={{
+          width: '100%',
           height: '100%',
           position: 'absolute',
           top: 0,
-          left: 0
-        }} 
+          left: 0,
+        }}
       />
       {userValue.role === Roles.admin && isDrawingMode && (
         <Button
@@ -350,6 +362,17 @@ export const MapComponent: React.FC<MapProps> = ({
             value: item.id!,
           }))}
         />
+      </Dialog>
+      <Dialog
+        header="Añadir Incidencia"
+        visible={incidentModalVisible}
+        onHide={() => setIncidentModalVisible(false)}>
+        {selectedElementId && (
+          <IncidentForm
+            elementId={selectedElementId}
+            onClose={() => setIncidentModalVisible(false)}
+          />
+        )}
       </Dialog>
     </div>
   );
