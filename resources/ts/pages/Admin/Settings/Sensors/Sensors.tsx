@@ -15,11 +15,7 @@ import { Icon } from '@iconify/react';
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
 import CrudPanel from '@/components/Admin/CrudPanel';
-import {
-  fetchSensors,
-  fetchSensorHistory,
-  SensorHistory,
-} from '@/api/sensorHistoryService';
+import { fetchSensors, SensorHistory } from '@/api/sensorHistoryService';
 
 interface Sensor {
   id: number;
@@ -149,54 +145,6 @@ export default function Sensors() {
     }
   };
 
-  const fetchSensorHistoryData = async (
-    sensorId: number,
-    range: 'week' | 'month' | 'custom',
-    startDate?: string,
-    endDate?: string,
-  ) => {
-    try {
-      const { labels, datasets } = await fetchSensorHistory(
-        sensorId,
-        range,
-        startDate,
-        endDate,
-      );
-
-      const chartDatasets = datasets.map((dataset) => ({
-        label: dataset.label,
-        data: dataset.data.map((value, index) => ({
-          x: new Date(labels[index]),
-          y: value,
-        })),
-        borderColor:
-          dataset.label === 'PH Terra'
-            ? '#66BB6A'
-            : dataset.label === 'Humitat Terra'
-              ? '#AB47BC'
-              : '#42A5F5',
-        backgroundColor:
-          dataset.label === 'PH Terra'
-            ? 'rgba(102, 187, 106, 0.2)'
-            : dataset.label === 'Humitat Terra'
-              ? 'rgba(171, 71, 188, 0.2)'
-              : 'rgba(66, 165, 245, 0.2)',
-        showLine: true,
-      }));
-
-      setChartData({ labels, datasets: chartDatasets });
-    } catch (error) {
-      console.error('Error fetching sensor history:', error);
-      setMsg(t('admin.pages.sensors.list.messages.error'));
-
-      // Mostra gràfiques buides si hi ha un error
-      setChartData({
-        labels: ['No Data'],
-        datasets: [],
-      });
-    }
-  };
-
   const fetchSensorPH = async (sensorId: number) => {
     try {
       const response = await axiosClient.get(`/admin/sensor/${sensorId}/ph`);
@@ -209,28 +157,46 @@ export default function Sensors() {
     }
   };
 
-  const fetchSensorPHData = async (dev_eui: string) => {
-    try {
-      const response = await axiosClient.get(`/admin/sensors/${dev_eui}/ph`);
-      const phData = response.data;
+  const getCurrentWeekDates = () => {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Dilluns
+    const dates = [];
 
-      // Verifiquem que hi ha dades abans de processar-les
-      if (!Array.isArray(phData) || phData.length === 0) {
-        console.warn('No PH data available for this sensor.');
-        return { labels: [], data: [] };
-      }
-
-      const labels = phData.map((entry: any) =>
-        new Date(entry.created_at).toLocaleString(),
+    for (let i = 0; i < 7; i++) {
+      const currentDate = new Date(startOfWeek);
+      currentDate.setDate(startOfWeek.getDate() + i);
+      dates.push(
+        currentDate.toLocaleDateString('es-ES', {
+          weekday: 'short',
+          day: 'numeric',
+          month: 'short',
+        }),
       );
-      const data = phData.map((entry: any) => entry.phi_soil);
-
-      return { labels, data };
-    } catch (error) {
-      console.error('Error fetching sensor PH data:', error);
-      setMsg(t('admin.pages.sensors.list.messages.error'));
-      return { labels: [], data: [] };
     }
+
+    return dates;
+  };
+
+  const getCurrentMonthDates = () => {
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    const dates = [];
+    const currentDate = new Date(startOfMonth);
+
+    while (currentDate <= endOfMonth) {
+      dates.push(
+        currentDate.toLocaleDateString('es-ES', {
+          day: 'numeric',
+          month: 'short',
+        }),
+      );
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
   };
 
   const handleViewSensor = (id: number) => {
@@ -242,10 +208,10 @@ export default function Sensors() {
 
     setSelectedSensor(sensor);
 
-    // Configura dades fictícies per a la gràfica si no hi ha dades
-    const labels = ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5'];
-    const phValues = [6.5, 6.8, 7.0, 6.7, 6.9];
-    const humidityValues = [30, 35, 40, 38, 36];
+    // Configura dades fictícies per a la gràfica amb la data actual
+    const labels = getCurrentWeekDates(); // Utilitza les dates de la setmana actual
+    const phValues = [6.5, 6.8, 7.0, 6.7, 6.9, 7.1, 6.6]; // Dades de prova per a PH
+    const humidityValues = [30, 35, 40, 38, 36, 34, 32]; // Dades de prova per a Humitat
 
     if (sensor.name.includes('SensorPH')) {
       setChartData({
@@ -280,9 +246,32 @@ export default function Sensors() {
         },
       });
     } else {
+      // Si el sensor no és ni PH ni Humitat, mostra ambdues gràfiques
       setChartData({
-        ph: null,
-        humidity: null,
+        ph: {
+          labels,
+          datasets: [
+            {
+              label: 'PH Terra',
+              data: phValues,
+              borderColor: '#66BB6A',
+              backgroundColor: 'rgba(102, 187, 106, 0.2)',
+              showLine: true,
+            },
+          ],
+        },
+        humidity: {
+          labels,
+          datasets: [
+            {
+              label: 'Humitat Terra',
+              data: humidityValues,
+              borderColor: '#42A5F5',
+              backgroundColor: 'rgba(66, 165, 245, 0.2)',
+              showLine: true,
+            },
+          ],
+        },
       });
     }
 
@@ -294,44 +283,7 @@ export default function Sensors() {
     setSelectedSensor(null);
   };
 
-  const getCurrentWeekDates = () => {
-    const today = new Date();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Dilluns
-    const dates = [];
-
-    for (let i = 0; i < 7; i++) {
-      const currentDate = new Date(startOfWeek);
-      currentDate.setDate(startOfWeek.getDate() + i);
-      dates.push(
-        currentDate.toLocaleDateString('es-ES', {
-          weekday: 'short',
-          day: 'numeric',
-          month: 'short',
-        }),
-      );
-    }
-
-    return dates;
-  };
-
-  const getCurrentMonthDates = () => {
-    const today = new Date();
-    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-    const dates = [];
-    const currentDate = new Date(startOfMonth);
-
-    while (currentDate <= endOfMonth) {
-      dates.push(currentDate.getDate().toString());
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return dates;
-  };
-
-  const handleRangeChange = async (range: 'week' | 'month' | 'custom') => {
+  const handleRangeChange = (range: 'week' | 'month' | 'custom') => {
     setSelectedRange(range);
 
     if (range !== 'custom') {
@@ -339,99 +291,109 @@ export default function Sensors() {
     }
 
     if (selectedSensor) {
-      let startDate: string | undefined;
-      let endDate: string | undefined;
-
-      const today = new Date();
+      let labels: string[] = [];
+      let phValues: number[] = [];
+      let humidityValues: number[] = [];
 
       if (range === 'week') {
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Dilluns
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6); // Diumenge
-
-        startDate = startOfWeek.toISOString();
-        endDate = endOfWeek.toISOString();
+        labels = getCurrentWeekDates();
+        phValues = [6.5, 6.8, 7.0, 6.7, 6.9, 7.1, 6.6];
+        humidityValues = [30, 35, 40, 38, 36, 34, 32];
       } else if (range === 'month') {
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        const endOfMonth = new Date(
-          today.getFullYear(),
-          today.getMonth() + 1,
-          0,
-        );
-
-        startDate = startOfMonth.toISOString();
-        endDate = endOfMonth.toISOString();
+        labels = getCurrentMonthDates();
+        phValues = Array(labels.length).fill(7.0);
+        humidityValues = Array(labels.length).fill(35);
       } else if (range === 'custom' && customRange[0] && customRange[1]) {
-        startDate = customRange[0].toISOString();
-        endDate = customRange[1].toISOString();
-      }
+        const currentDate = new Date(customRange[0]);
+        const endDate = new Date(customRange[1]);
 
-      if (startDate && endDate) {
-        try {
-          const response = await axiosClient.get(
-            `/admin/sensors/${selectedSensor.dev_eui}/ph`,
-            { params: { startDate, endDate } },
-          );
-
-          if (
-            typeof response.data === 'string' &&
-            response.data.includes('<html')
-          ) {
-            console.error('Server returned an HTML response:', response.data);
-            setMsg(t('admin.pages.sensors.list.messages.serverError'));
-            return;
-          }
-
-          const phData = response.data;
-
-          if (!Array.isArray(phData)) {
-            console.error('Invalid data format for sensor history:', phData);
-            setMsg(t('admin.pages.sensors.list.messages.error'));
-            return;
-          }
-
-          const labels = phData.map((entry: any) =>
-            new Date(entry.created_at).toLocaleDateString('es-ES', {
-              weekday: 'short',
+        while (currentDate <= endDate) {
+          labels.push(
+            currentDate.toLocaleDateString('es-ES', {
               day: 'numeric',
               month: 'short',
             }),
           );
-          const phValues = phData.map((entry: any) => entry.phi_soil);
-          const humidityValues = phData.map((entry: any) => entry.water_soil);
-
-          setChartData({
-            ph: {
-              labels,
-              datasets: [
-                {
-                  label: t('admin.pages.sensors.list.columns.deviceEui'),
-                  data: phValues,
-                  borderColor: '#66BB6A',
-                  backgroundColor: 'rgba(102, 187, 106, 0.2)',
-                  showLine: true,
-                },
-              ],
-            },
-            humidity: {
-              labels,
-              datasets: [
-                {
-                  label: t('admin.pages.sensors.list.columns.status'),
-                  data: humidityValues,
-                  borderColor: '#42A5F5',
-                  backgroundColor: 'rgba(66, 165, 245, 0.2)',
-                  showLine: true,
-                },
-              ],
-            },
-          });
-        } catch (error) {
-          console.error('Error fetching sensor data:', error);
-          setMsg(t('admin.pages.sensors.list.messages.error'));
+          currentDate.setDate(currentDate.getDate() + 1);
         }
+
+        phValues = Array(labels.length).fill(7.0); // Exemple de dades
+        humidityValues = Array(labels.length).fill(35); // Exemple de dades
       }
+
+      if (selectedSensor.name.includes('SensorPH')) {
+        setChartData({
+          ph: {
+            labels,
+            datasets: [
+              {
+                label: 'PH Terra',
+                data: phValues,
+                borderColor: '#66BB6A',
+                backgroundColor: 'rgba(102, 187, 106, 0.2)',
+                showLine: true,
+              },
+            ],
+          },
+          humidity: null, // Assegura que no hi ha dades per a humitat
+        });
+      } else if (selectedSensor.name.includes('SensorHumitat')) {
+        setChartData({
+          ph: null, // Assegura que no hi ha dades per a PH
+          humidity: {
+            labels,
+            datasets: [
+              {
+                label: 'Humitat Terra',
+                data: humidityValues,
+                borderColor: '#42A5F5',
+                backgroundColor: 'rgba(66, 165, 245, 0.2)',
+                showLine: true,
+              },
+            ],
+          },
+        });
+      } else {
+        setChartData({
+          ph: {
+            labels,
+            datasets: [
+              {
+                label: 'PH Terra',
+                data: phValues,
+                borderColor: '#66BB6A',
+                backgroundColor: 'rgba(102, 187, 106, 0.2)',
+                showLine: true,
+              },
+            ],
+          },
+          humidity: {
+            labels,
+            datasets: [
+              {
+                label: 'Humitat Terra',
+                data: humidityValues,
+                borderColor: '#42A5F5',
+                backgroundColor: 'rgba(66, 165, 245, 0.2)',
+                showLine: true,
+              },
+            ],
+          },
+        });
+      }
+    }
+  };
+
+  const handleCustomRangeChange = (index: 0 | 1, date: Date | null) => {
+    setCustomRange((prevRange) => {
+      const newRange = [...prevRange] as [Date | null, Date | null];
+      newRange[index] = date;
+      return newRange;
+    });
+
+    // Actualitzar les dades quan es selecciona un rang personalitzat complet
+    if (customRange[0] && customRange[1]) {
+      handleRangeChange('custom');
     }
   };
 
@@ -444,17 +406,9 @@ export default function Sensors() {
     ) {
       const startDate = customRange[0].toISOString();
       const endDate = customRange[1].toISOString();
-      fetchSensorHistoryData(selectedSensor.id, 'custom', startDate, endDate);
+      // fetchSensorHistoryData(selectedSensor.id, 'custom', startDate, endDate);
     }
   }, [customRange, selectedRange]);
-
-  const handleCustomRangeChange = (index: 0 | 1, date: Date | null) => {
-    setCustomRange((prevRange) => {
-      const newRange = [...prevRange] as [Date | null, Date | null];
-      newRange[index] = date;
-      return newRange;
-    });
-  };
 
   if (isLoading) {
     return (
@@ -614,57 +568,23 @@ export default function Sensors() {
                   />
                 </div>
               )}
-              {chartData.ph || chartData.humidity ? (
-                <Chart
-                  type="scatter"
-                  data={chartData.ph || chartData.humidity}
-                  options={{
-                    scales: {
-                      x: {
-                        title: {
-                          display: true,
-                          text: t('admin.sensors.stats.startDate'),
-                        },
-                      },
-                      y: {
-                        title: {
-                          display: true,
-                          text: chartData.ph
-                            ? 'PH'
-                            : t('admin.sensors.stats.endDate'),
-                        },
-                      },
+              <Chart
+                type="line"
+                data={
+                  chartData.ph ||
+                  chartData.humidity || { labels: [], datasets: [] }
+                }
+                options={{
+                  scales: {
+                    x: {
+                      title: { display: true, text: 'Dates' },
                     },
-                    plugins: {
-                      legend: {
-                        display: true,
-                      },
-                      tooltip: {
-                        callbacks: {
-                          footer: () => {
-                            if (
-                              selectedRange === 'custom' &&
-                              customRange[0] &&
-                              customRange[1]
-                            ) {
-                              return `Rang: ${customRange[0]?.toLocaleDateString('es-ES')} - ${customRange[1]?.toLocaleDateString('es-ES')}`;
-                            } else if (selectedRange === 'week') {
-                              return `Rang: ${getCurrentWeekDates().join(', ')}`;
-                            } else if (selectedRange === 'month') {
-                              return `Rang: ${getCurrentMonthDates().join(', ')}`;
-                            }
-                            return '';
-                          },
-                        },
-                      },
+                    y: {
+                      title: { display: true, text: 'Values' },
                     },
-                  }}
-                />
-              ) : (
-                <p className="text-center text-gray-500">
-                  {t('admin.pages.sensors.list.messages.noData')}
-                </p>
-              )}
+                  },
+                }}
+              />
             </div>
           )}
         </div>
