@@ -1,10 +1,8 @@
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
-
+import ReactDOM from 'react-dom/client';
 interface ElementPopupProps {
   element: Element;
   treeTypes: TreeTypes[] | undefined;
@@ -13,7 +11,7 @@ interface ElementPopupProps {
   onAddIncident?: (elementId: number) => void;
 }
 
-export const ElementPopup: React.FC<ElementPopupProps> = ({
+const ElementPopup: React.FC<ElementPopupProps> = ({
   element,
   treeTypes,
   elementTypes,
@@ -71,14 +69,16 @@ export const renderElementPopup = (
   elementTypes: ElementType[],
   onDelete?: (elementId: number) => void,
   onAddIncident?: (elementId: number) => void,
-): string => {
-  return ReactDOMServer.renderToString(
+): HTMLElement => {
+  const container = document.createElement('div');
+  ReactDOM.createRoot(container).render(
     <ElementPopup
       element={element}
-      elementTypes={elementTypes}
       treeTypes={treeTypes}
+      elementTypes={elementTypes}
       onDeleteElement={onDelete}
       onAddIncident={onAddIncident}
     />,
   );
+  return container;
 };

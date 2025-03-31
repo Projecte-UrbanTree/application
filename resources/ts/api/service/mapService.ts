@@ -8,6 +8,7 @@ import { Element } from '@/types/Element';
 import { Point, TypePoint } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
+import ReactDOM from 'react-dom/client';
 import { renderElementPopup } from '@/components/Admin/Inventory/ElementComponent';
 
 export class MapService {
@@ -190,7 +191,7 @@ export class MapService {
     treeTypes: TreeTypes[],
     elementTypes: ElementType[],
     onDeleteElement?: (elementId: number) => void,
-    handleAddIncident?: (elementId: number) => void,
+    onAddIncident?: (elementId: number) => void,
   ) {
     this.removeElementMarkers();
     const filteredPoints = points.filter((p) => p.type === TypePoint.element);
@@ -202,26 +203,17 @@ export class MapService {
         return;
       }
 
-      const popupContent = document.createElement('div');
-      popupContent.innerHTML = renderElementPopup(
+      const popupContent = renderElementPopup(
         element,
         treeTypes,
         elementTypes,
+        onDeleteElement,
+        onAddIncident,
       );
 
       const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(
         popupContent,
       );
-
-      popup.on('open', () => {
-        const deleteButton = popupContent.querySelector('.p-button-danger');
-        if (deleteButton && onDeleteElement) {
-          deleteButton.addEventListener('click', () => {
-            onDeleteElement(element.id!);
-            popup.remove();
-          });
-        }
-      });
 
       const marker = new mapboxgl.Marker({ color: '#FF0000' })
         .setLngLat([coords.lng, coords.lat])

@@ -221,6 +221,8 @@ export const MapComponent: React.FC<MapProps> = ({
     };
 
     const handleAddIncident = (elementId: number) => {
+      console.log('elementId', elementId);
+
       setSelectedElementId(elementId);
       setIncidentModalVisible(true);
     };

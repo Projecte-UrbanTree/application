@@ -10,9 +10,8 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ elementId, onClose }) => {
   const [description, setDescription] = useState('');
 
   const handleSubmit = () => {
-    // Aquí puedes manejar la lógica para enviar la incidencia
     console.log(`Incidencia para el elemento ${elementId}: ${description}`);
-    onClose(); // Cerrar el modal después de enviar
+    onClose();
   };
 
   return (
