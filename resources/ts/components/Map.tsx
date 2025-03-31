@@ -227,6 +227,7 @@ export const MapComponent: React.FC<MapProps> = ({
     const handleElementClick = (element: Element) => {
       setSelectedElement(element);
       setElementModalVisible(true);
+      setSelectedElementId(element.id!);
     };
 
     service.removeElementMarkers();

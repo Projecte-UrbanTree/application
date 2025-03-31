@@ -123,7 +123,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             )}
             <div className="flex justify-end">
               <Button
-                label="Añadir Incidencia"
+                label="Añadir Incidencidda"
                 className="p-button-sm"
                 onClick={handleAddIncidentClick}
               />
