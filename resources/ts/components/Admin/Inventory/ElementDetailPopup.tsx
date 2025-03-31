@@ -1,20 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
 import { Calendar } from 'primereact/calendar';
+import { Incidence } from '@/types/Incident';
+import { fetchIncidence } from '@/api/service/incidentService';
+import IncidentForm from './IncidentForm';
+import { Dialog } from 'primereact/dialog';
 
 interface ElementDetailPopupProps {
   element: Element;
   onClose: () => void;
+  onOpenIncidentForm: () => void;
 }
 
 const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   element,
   onClose,
+  onOpenIncidentForm,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [incidences, setIncidences] = useState<Incidence[]>([]);
+
+  useEffect(() => {
+    const loadIncidences = async () => {
+      try {
+        const data = await fetchIncidence();
+
+        if (Array.isArray(data)) {
+          setIncidences(data.filter((i) => i.element_id === element.id));
+        } else {
+          setIncidences([]);
+        }
+      } catch (error) {
+        setIncidences([]);
+      }
+    };
+
+    loadIncidences();
+  }, [element.id]);
+
+  const handleAddIncidentClick = () => {
+    onClose();
+    setTimeout(() => {
+      onOpenIncidentForm();
+    }, 300);
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg w-[650px] max-w-full">
@@ -47,36 +79,54 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
         <TabPanel header="Incidencias">
           <div className="space-y-4">
-            <div className="border p-4 rounded-md">
-              <p className="font-bold">Incidencia 1</p>
-              <p>
-                <strong>📛 Nombre:</strong> Rama caída
-              </p>
-              <p>
-                <strong>📅 Fecha Creación:</strong> 2025-03-31 15:15:26
-              </p>
-              <p>
-                <strong>⚠️ Estado:</strong>{' '}
-                <Tag severity="warning" value="Abierta" className="ml-2" />
-              </p>
-              <p>
-                <strong>📝 Descripción:</strong> Rama caída en el suelo
-              </p>
+            {incidences.length > 0 ? (
+              incidences.map((incidence) => (
+                <div key={incidence.id} className="border p-4 rounded-md">
+                  <p className="font-bold">Incidencia #{incidence.id}</p>
+                  <p>
+                    <strong>📛 Nombre:</strong>{' '}
+                    {incidence.name || 'No disponible'}
+                  </p>
+                  <p>
+                    <strong>📅 Fecha Creación:</strong>{' '}
+                    {incidence.created_at || 'No disponible'}
+                  </p>
+                  <p>
+                    <strong>⚠️ Estado:</strong>{' '}
+                    <Tag
+                      severity={
+                        incidence.status === 'Abierta' ? 'warning' : 'success'
+                      }
+                      value={incidence.status}
+                      className="ml-2"
+                    />
+                  </p>
+                  <p>
+                    <strong>📝 Descripción:</strong>{' '}
+                    {incidence.description || 'No disponible'}
+                  </p>
 
-              <div className="mt-3 flex gap-2">
-                <Button
-                  label="Cambiar Estado"
-                  className="p-button-success p-button-sm"
-                />
-                <Button
-                  label="Eliminar incidencia"
-                  className="p-button-danger p-button-sm"
-                />
-              </div>
-            </div>
-
+                  <div className="mt-3 flex gap-2">
+                    <Button
+                      label="Cambiar Estado"
+                      className="p-button-success p-button-sm"
+                    />
+                    <Button
+                      label="Eliminar incidencia"
+                      className="p-button-danger p-button-sm"
+                    />
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No hay incidencias registradas para este elemento.</p>
+            )}
             <div className="flex justify-end">
-              <Button label="Añadir Incidencia" className="p-button-sm" />
+              <Button
+                label="Añadir Incidencia"
+                className="p-button-sm"
+                onClick={handleAddIncidentClick}
+              />
             </div>
           </div>
         </TabPanel>

@@ -386,6 +386,7 @@ export const MapComponent: React.FC<MapProps> = ({
           <ElementDetailPopup
             element={selectedElement}
             onClose={() => setElementModalVisible(false)}
+            onOpenIncidentForm={() => setIncidentModalVisible(true)}
           />
         )}
       </Dialog>
