@@ -16,9 +16,9 @@ import { fetchElementType } from '@/api/service/elementTypeService';
 import { ElementType } from '@/types/ElementType';
 import { SavePointsProps } from '@/api/service/pointService';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
-import { data } from 'react-router-dom';
 import { MapService } from '@/api/service/mapService';
 import { Toast } from 'primereact/toast';
+import { deleteElementAsync } from '@/store/slice/elementSlice';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -187,7 +187,7 @@ export const MapComponent: React.FC<MapProps> = ({
 
     const handleDeleteElement = async (elementId: number) => {
       try {
-        // await dispatch(deleteElementAsync(elementId));
+        await dispatch(deleteElementAsync(elementId));
         toast.current?.show({
           severity: 'success',
           summary: 'Success',
@@ -202,6 +202,7 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     };
 
+    service.removeElementMarkers();
     const filteredZones = zonesRedux.filter(
       (zone) => zone.contract_id === currentContract.id,
     );
@@ -213,6 +214,7 @@ export const MapComponent: React.FC<MapProps> = ({
     const filteredElements = elements.filter(
       (element) => element.point_id && pointIds.has(element.point_id),
     );
+
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => {
         service.addElementMarkers(
