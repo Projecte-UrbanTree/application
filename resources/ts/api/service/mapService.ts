@@ -232,4 +232,10 @@ export class MapService {
   public flyTo(coord: [number, number], zoom = 18) {
     this.map.flyTo({ center: coord, zoom, essential: true });
   }
+
+  public resizeMap(): void {
+    if (this.map) {
+      this.map.resize();
+    }
+  }
 }
