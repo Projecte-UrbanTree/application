@@ -164,7 +164,6 @@ const WorkReportDetail = () => {
           severity = 'warn';
           summary = t('general.messages.close_with_incidents');
           detail = t('admin.pages.workReport.messages.closing_with_incidents');
-
           break;
       }
 
@@ -191,7 +190,6 @@ const WorkReportDetail = () => {
         const response = await axiosClient.get(`/admin/work-reports/${id}`);
         setWorkReport(response.data);
         setLoading(false);
-        // Initialize all tabs as active
         if (response.data?.work_orders?.work_orders_blocks) {
           setActiveTabs(
             response.data.work_orders.work_orders_blocks.map(
@@ -395,9 +393,19 @@ const WorkReportDetail = () => {
               (res) => res.id === pivot.resource_id,
             );
             return (
-              <li key={pivot.resource_id} className="text-gray-800">
-                {resource?.name || t('admin.pages.workReport.details.unknown')}:{' '}
-                {pivot.quantity} {resource?.unit_name || ''}
+              <li key={pivot.resource_id} className="my-2">
+                <Tag
+                  style={{
+                    backgroundColor: '#007bff',
+                    color: '#fff',
+                    borderRadius: '0.375rem',
+                  }}>
+                  <span className="text-sm">
+                    {resource?.name ||
+                      t('admin.pages.workReport.details.unknown')}
+                    : {pivot.quantity} {resource?.unit_name || ''}
+                  </span>
+                </Tag>
               </li>
             );
           })}
@@ -491,14 +499,25 @@ const WorkReportDetail = () => {
 
           <div className="p-4">
             <div className="mb-6">
-              <h3 className="font-medium flex items-center gap-2">
+              <h3 className="font-medium text-gray-700 flex items-center gap-2 mb-3">
                 <Icon icon="tabler:users" />
                 {t('admin.pages.workReport.columns.users')}
               </h3>
-              <ul className="list-disc pl-5 mt-2">
+              <ul className="list-disc pl-5">
                 {workReport.work_orders.users.map((user) => (
-                  <li key={user.id} className="text-gray-800">
-                    {`${user.name} ${user.surname}`}
+                  <li key={user.id} className="my-2">
+                    <Tag
+                      style={{
+                        backgroundColor: '#007bff',
+                        color: '#fff',
+                        borderRadius: '0.375rem',
+                      }}>
+                      <span className="text-sm">
+                        <span className="text-sm">
+                          {`${user.name} ${user.surname}`}
+                        </span>
+                      </span>
+                    </Tag>
                   </li>
                 ))}
               </ul>
@@ -527,18 +546,7 @@ const WorkReportDetail = () => {
               workReport.resources,
             )}
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-medium flex items-center gap-2">
-                  <Icon icon="tabler:eye" />
-                  {t('admin.pages.workReport.details.observation')}
-                </h4>
-                <p className="mt-2">
-                  {workReport.observation ||
-                    t('admin.pages.workReport.details.noObservation')}
-                </p>
-              </div>
-
+            <div className="mt-6 grid grid-cols-1 gap-4">
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h4 className="font-medium flex items-center gap-2">
                   <Icon icon="tabler:alert-triangle" />
@@ -549,6 +557,15 @@ const WorkReportDetail = () => {
                     t('admin.pages.workReport.details.noIncidents')}
                 </p>
               </div>
+              {workReport.observation && (
+                <div className="p-4 bg-yellow-200 rounded-lg">
+                  <h4 className="font-medium flex items-center gap-2">
+                    <Icon icon="tabler:eye" />
+                    {t('admin.pages.workReport.details.observation')}
+                  </h4>
+                  <p className="mt-2">{workReport.observation}</p>
+                </div>
+              )}
             </div>
           </div>
 
