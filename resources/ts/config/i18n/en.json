@@ -563,7 +563,7 @@
         "title": "Work Report",
         "not_found": "Work Report not found",
         "columns": {
-          "users": "Users",
+          "users": "Workers",
           "observation": "Observation",
           "spent_fuel": "Spent Fuel",
           "incidents": "Incidents",

@@ -563,7 +563,7 @@
         "title": "Informe de Trabajo",
         "not_found": "No se encontró el Informe de Trabajo",
         "columns": {
-          "users": "Usuarios",
+          "users": "Operarios",
           "observation": "Observación",
           "spent_fuel": "Combustible Gastado",
           "incidents": "Incidentes",

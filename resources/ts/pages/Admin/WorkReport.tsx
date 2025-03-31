@@ -28,14 +28,18 @@ interface Users {
   name: string;
   surname: string;
 }
-interface Rescources {
+interface Resources {
   id: number;
   name: string;
   description: string;
   unit_name: string;
   unit_cost: string;
-  quantity: number;
+  work_report_resource: WorkReportResources[];
   resource_type: ResourceType;
+}
+interface WorkReportResources {
+  quantity: number;
+  resource_id: number;
 }
 interface BlockTask {
   id: number;
@@ -77,7 +81,8 @@ interface WorkReport {
   report_incidents: string;
   work_order_id: number;
   work_orders: WorkOrder;
-  resources: Rescources[];
+  resources: Resources[];
+  work_report_resources: WorkReportResources[];
 }
 
 const WorkReportDetail = () => {
@@ -263,19 +268,17 @@ const WorkReportDetail = () => {
             <Icon icon="tabler:map-pin" />
             {t('admin.pages.workReport.details.zones')}
           </h4>
-          <ul className="list-disc pl-5">
+          <ul className="list-disc pl-5 mt-2">
             {block.zones && block.zones.length > 0 ? (
               block.zones.map((zone) => (
-                <li key={zone.id}>
-                  <Tag
-                    value={zone.name}
-                    style={{ backgroundColor: zone.color, color: 'white' }}
-                    className="text-xs"
-                  />
+                <li key={zone.id} className="text-gray-800">
+                  {zone.name}
                 </li>
               ))
             ) : (
-              <li>{t('admin.pages.workReport.details.noZones')}</li>
+              <li className="text-gray-500">
+                {t('admin.pages.workReport.details.noZones')}
+              </li>
             )}
           </ul>
         </div>
@@ -299,17 +302,29 @@ const WorkReportDetail = () => {
                     const speciesName = task.tree_type?.species
                       ? `: ${task.tree_type.species}`
                       : '';
+                    const status = getTaskStatus(task.status);
                     return (
                       <div
                         key={task.id}
                         className="p-2 bg-white rounded border border-gray-200">
-                        <div className="font-medium">
-                          {taskName} {elementName}
-                          {speciesName}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          {t('admin.pages.workReport.details.hours')}:{' '}
-                          {task.spent_time}h
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium">
+                              {taskName} {elementName}
+                              {speciesName}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              {t('admin.pages.workReport.details.hours')}:{' '}
+                              {task.spent_time}h
+                            </div>
+                          </div>
+                          <div className="mt-1">
+                            <Tag
+                              value={status.label}
+                              icon={status.icon}
+                              className={`${status.color} border-none`}
+                            />
+                          </div>
                         </div>
                       </div>
                     );
@@ -317,35 +332,6 @@ const WorkReportDetail = () => {
                 ) : (
                   <div className="text-gray-500">
                     {t('admin.pages.workReport.details.noTasks')}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-medium flex items-center gap-2">
-                <Icon icon="tabler:status-change" />
-                {t('admin.pages.workReport.details.taskStatus')}
-              </h4>
-              <div className="space-y-2 mt-2">
-                {block.block_tasks && block.block_tasks.length > 0 ? (
-                  block.block_tasks.map((task) => {
-                    const status = getTaskStatus(task.status);
-                    return (
-                      <div
-                        key={task.id}
-                        className="flex items-center p-2 bg-white rounded border border-gray-200">
-                        <Tag
-                          value={status.label}
-                          icon={status.icon}
-                          className={`${status.color} mx-auto border-none justify-center`}
-                        />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="text-gray-500">
-                    {t('admin.pages.workReport.details.noStatus')}
                   </div>
                 )}
               </div>
@@ -365,34 +351,33 @@ const WorkReportDetail = () => {
       </div>
     );
   };
-  const resourcesByType = workReport?.resources?.reduce<
-    Record<
-      string,
-      {
-        typeId: number;
-        typeName: string;
-        resources: Rescources[];
-      }
-    >
-  >((acc, resource) => {
-    const typeKey = resource.resource_type?.id || 'other';
-    const typeName =
-      resource.resource_type?.name || resource.unit_name || 'Other';
 
-    if (!acc[typeKey]) {
-      acc[typeKey] = {
-        typeId: resource.resource_type?.id || 0,
-        typeName,
-        resources: [],
-      };
-    }
-    acc[typeKey].resources.push(resource);
-    return acc;
-  }, {});
-
-  const resourceTypes = Object.values(resourcesByType ?? {}).filter(
-    (typeGroup) => typeGroup.resources.length > 0,
-  );
+  const renderResources = (
+    resources: WorkReportResources[],
+    allResources: Resources[],
+  ) => {
+    return (
+      <div className="mb-6 mt-6">
+        <h3 className="font-medium text-gray-700 flex items-center gap-2 mb-3">
+          <Icon icon="tabler:package" />
+          {t('admin.pages.workReport.details.resources')}
+        </h3>
+        <ul className="list-disc pl-5">
+          {resources.map((pivot) => {
+            const resource = allResources.find(
+              (res) => res.id === pivot.resource_id,
+            );
+            return (
+              <li key={pivot.resource_id} className="text-gray-800">
+                {resource?.name || t('admin.pages.workReport.details.unknown')}:{' '}
+                {pivot.quantity} {resource?.unit_name || ''}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  };
 
   if (loading) {
     return (
@@ -483,15 +468,13 @@ const WorkReportDetail = () => {
                 <Icon icon="tabler:users" />
                 {t('admin.pages.workReport.columns.users')}
               </h3>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <ul className="list-disc pl-5 mt-2">
                 {workReport.work_orders.users.map((user) => (
-                  <Tag
-                    key={user.id}
-                    value={`${user.name} ${user.surname}`}
-                    className="bg-green-100 text-green-800 border-green-200"
-                  />
+                  <li key={user.id} className="text-gray-800">
+                    {`${user.name} ${user.surname}`}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             <Accordion multiple activeIndex={activeTabs}>
@@ -512,81 +495,10 @@ const WorkReportDetail = () => {
                 </AccordionTab>
               )}
             </Accordion>
-            <div className="mb-6 mt-6">
-              <h3 className="font-medium text-gray-700 flex items-center gap-2 mb-3">
-                <Icon icon="tabler:package" />
-                {t('admin.pages.workReport.details.resources')}
-              </h3>
-
-              {resourceTypes.length > 0 ? (
-                <Accordion multiple>
-                  {resourceTypes.map((typeGroup) => (
-                    <AccordionTab
-                      key={typeGroup.typeId}
-                      header={
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex items-center gap-2">
-                            <Icon
-                              icon="tabler:category"
-                              className="text-blue-500"
-                            />
-                            <span>{typeGroup.typeName}</span>
-                          </div>
-                        </div>
-                      }>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-3">
-                        {typeGroup.resources.map((resource) => (
-                          <div
-                            key={resource.id}
-                            className="bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
-                            <div className="font-medium text-gray-800">
-                              {resource.name}
-                            </div>
-                            <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                              <div>
-                                <span className="text-gray-500">
-                                  {t('admin.pages.workReport.details.unit')}:
-                                </span>
-                                <span className="ml-1 font-medium">
-                                  {resource.unit_name}
-                                </span>
-                              </div>
-                              <div>
-                                <span className="text-gray-500">
-                                  {t('admin.pages.workReport.details.cost')}:
-                                </span>
-                                <span className="ml-1 font-medium">
-                                  {resource.unit_cost}€
-                                </span>
-                              </div>
-                              <div>
-                                <span className="text-gray-500">
-                                  {t('admin.pages.workReport.details.quantity')}
-                                  :
-                                </span>
-                                <span className="ml-1 font-medium">
-                                  {resource.quantity}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </AccordionTab>
-                  ))}
-                </Accordion>
-              ) : (
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-center">
-                  <Icon
-                    icon="tabler:package-off"
-                    className="mx-auto text-gray-400 h-8 w-8"
-                  />
-                  <p className="text-gray-500 mt-2">
-                    {t('admin.pages.workReport.details.noResources')}
-                  </p>
-                </div>
-              )}
-            </div>
+            {renderResources(
+              workReport.work_report_resources,
+              workReport.resources,
+            )}
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 bg-blue-50 rounded-lg">
@@ -609,14 +521,6 @@ const WorkReportDetail = () => {
                   {workReport.report_incidents ||
                     t('admin.pages.workReport.details.noIncidents')}
                 </p>
-              </div>
-
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-medium flex items-center gap-2">
-                  <Icon icon="tabler:gas-station" />
-                  {t('admin.pages.workReport.details.spentFuel')}
-                </h4>
-                <p className="mt-2">{workReport.spent_fuel || 0} L</p>
               </div>
             </div>
           </div>

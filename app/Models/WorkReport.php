@@ -13,6 +13,7 @@ class WorkReport extends Model
         'report_status',
         'report_incidents',
     ];
+    protected $with = ['workOrders', 'resources', 'workReportResources'];
 
     public function workOrders()
     {
@@ -22,5 +23,9 @@ class WorkReport extends Model
     public function resources()
     {
         return $this->belongsToMany(Resource::class, 'work_report_resources', 'work_report_id', 'resource_id')->withTimestamps();
+    }
+    public function workReportResources()
+    {
+        return $this->hasMany(WorkReportResource::class, 'work_report_id');
     }
 }

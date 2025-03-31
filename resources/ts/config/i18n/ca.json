@@ -563,7 +563,7 @@
         "title": "Informe de Treball",
         "not_found": "No s'ha trobat l'Informe de Treball",
         "columns": {
-          "users": "Usuaris",
+          "users": "Treballadors",
           "observation": "Observació",
           "spent_fuel": "Combustible Gastat",
           "incidents": "Incidències",
