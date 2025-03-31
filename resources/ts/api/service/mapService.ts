@@ -6,6 +6,9 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { Element } from '@/types/Element';
 import { Point, TypePoint } from '@/types/Point';
+import { TreeTypes } from '@/types/TreeTypes';
+import { ElementType } from '@/types/ElementType';
+import { renderElementPopup } from '@/components/Admin/Inventory/ElementComponent';
 
 export class MapService {
   public map!: mapboxgl.Map;
@@ -181,15 +184,15 @@ export class MapService {
     });
   }
 
-  public addElementMarkers(elements: Element[], points: Point[]) {
+  public addElementMarkers(
+    elements: Element[],
+    points: Point[],
+    treeTypes: TreeTypes[],
+    elementTypes: ElementType[],
+    onDeleteElement?: (elementId: number) => void,
+  ) {
     this.removeElementMarkers();
-
     const filteredPoints = points.filter((p) => p.type === TypePoint.element);
-
-    console.log(
-      'Añadiendo marcadores, puntos filtrados:',
-      filteredPoints.length,
-    );
 
     elements.forEach((element) => {
       const coords = this.getCoordElement(element, filteredPoints);
@@ -197,16 +200,35 @@ export class MapService {
         console.warn('Elemento sin coordenadas:', element);
         return;
       }
-      console.log('Agregando marcador en:', coords);
+
+      const popupContent = document.createElement('div');
+      popupContent.innerHTML = renderElementPopup(
+        element,
+        treeTypes,
+        elementTypes,
+      );
+
+      const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(
+        popupContent,
+      );
+
+      popup.on('open', () => {
+        const deleteButton = popupContent.querySelector('.p-button-danger');
+        if (deleteButton && onDeleteElement) {
+          deleteButton.addEventListener('click', () => {
+            onDeleteElement(element.id!);
+            popup.remove();
+          });
+        }
+      });
 
       const marker = new mapboxgl.Marker({ color: '#FF0000' })
         .setLngLat([coords.lng, coords.lat])
+        .setPopup(popup)
         .addTo(this.map);
 
       this.elementMarkers.push(marker);
     });
-
-    console.log('Total de marcadores añadidos:', this.elementMarkers.length);
   }
 
   public removeElementMarkers() {

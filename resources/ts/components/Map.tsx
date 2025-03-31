@@ -18,6 +18,7 @@ import { SavePointsProps } from '@/api/service/pointService';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
 import { data } from 'react-router-dom';
 import { MapService } from '@/api/service/mapService';
+import { Toast } from 'primereact/toast';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -35,7 +36,7 @@ export const MapComponent: React.FC<MapProps> = ({
   // refs
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapServiceRef = useRef<MapService | null>(null);
-
+  const toast = useRef<Toast>(null);
   // states
   const [modalVisible, setModalVisible] = useState(false);
   const [coordinates, setCoordinates] = useState<number[][]>([]);
@@ -183,6 +184,24 @@ export const MapComponent: React.FC<MapProps> = ({
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
+
+    const handleDeleteElement = async (elementId: number) => {
+      try {
+        // await dispatch(deleteElementAsync(elementId));
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Elemento eliminado correctamente',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al eliminar el elemento',
+        });
+      }
+    };
+
     const filteredZones = zonesRedux.filter(
       (zone) => zone.contract_id === currentContract.id,
     );
@@ -196,10 +215,22 @@ export const MapComponent: React.FC<MapProps> = ({
     );
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => {
-        service.addElementMarkers(filteredElements, filteredPoints);
+        service.addElementMarkers(
+          filteredElements,
+          filteredPoints,
+          treeTypes,
+          elementTypes,
+          handleDeleteElement,
+        );
       });
     } else {
-      service.addElementMarkers(filteredElements, filteredPoints);
+      service.addElementMarkers(
+        filteredElements,
+        filteredPoints,
+        treeTypes,
+        elementTypes,
+        handleDeleteElement,
+      );
     }
   }
 
