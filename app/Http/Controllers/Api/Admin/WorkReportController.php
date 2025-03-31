@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\WorkReport;
 use App\Http\Controllers\Controller;
+use App\Models\WorkReport;
+use Illuminate\Http\Request;
 
 class WorkReportController extends Controller
 {
     public function index()
     {
         $workReports = WorkReport::all();
+
         return response()->json($workReports, 200);
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -27,6 +29,7 @@ class WorkReportController extends Controller
 
         return response()->json($createdWorkReport, 201);
     }
+
     public function show($id)
     {
         $workReport = WorkReport::with(
@@ -50,6 +53,7 @@ class WorkReportController extends Controller
 
         return response()->json($workReport, 200);
     }
+
     public function update(Request $request, $id)
     {
         $workReport = WorkReport::find($id);
@@ -79,19 +83,22 @@ class WorkReportController extends Controller
             'workOrders.workOrdersBlocks.blockTasks.treeType',
             'workOrders.workOrdersBlocks.blockTasks.tasksType',
             'workOrders.users',
-            'resources'
+            'resources',
         ])->find($id);
 
         return response()->json($updatedReport, 200);
     }
+
     public function edit($id)
     {
         //
     }
+
     public function create()
     {
         //
     }
+
     public function destroy($id)
     {
         $workReport = WorkReport::find($id);
