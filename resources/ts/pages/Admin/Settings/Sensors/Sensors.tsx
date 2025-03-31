@@ -576,19 +576,19 @@ export default function Sensors() {
             <div className="bg-white p-4 rounded-lg shadow-md">
               <div className="flex justify-center gap-4 mb-4">
                 <Button
-                  label={t('admin.sensors.stats.week')}
+                  label={t('admin.sensors.stats.week')} // Traducción para el botón de la semana
                   onClick={() => handleRangeChange('week')}
                   className={selectedRange === 'week' ? 'p-button-primary' : ''}
                 />
                 <Button
-                  label={t('admin.sensors.stats.month')}
+                  label={t('admin.sensors.stats.month')} // Traducción para el botón del mes
                   onClick={() => handleRangeChange('month')}
                   className={
                     selectedRange === 'month' ? 'p-button-primary' : ''
                   }
                 />
                 <Button
-                  label={t('admin.sensors.stats.custom')}
+                  label={t('admin.sensors.stats.custom')} // Traducción para el botón de rango personalizado
                   onClick={() => handleRangeChange('custom')}
                   className={
                     selectedRange === 'custom' ? 'p-button-primary' : ''
@@ -600,12 +600,12 @@ export default function Sensors() {
                   <Calendar
                     value={customRange[0]}
                     onChange={(e) => handleCustomRangeChange(0, e.value)}
-                    placeholder={t('admin.sensors.stats.startDate')}
+                    placeholder={t('admin.sensors.stats.startDate')} // Traducción para la fecha de inicio
                   />
                   <Calendar
                     value={customRange[1]}
                     onChange={(e) => handleCustomRangeChange(1, e.value)}
-                    placeholder={t('admin.sensors.stats.endDate')}
+                    placeholder={t('admin.sensors.stats.endDate')} // Traducción para la fecha de fin
                   />
                 </div>
               )}

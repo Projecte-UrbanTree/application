@@ -578,9 +578,9 @@
           }
         },
         "stats": {
-          "week": "This Week",
-          "month": "This Month",
-          "custom": "Custom",
+          "week": "View data for this week",
+          "month": "View data for this month",
+          "custom": "Select a custom date range",
           "startDate": "Start Date",
           "endDate": "End Date"
         },
