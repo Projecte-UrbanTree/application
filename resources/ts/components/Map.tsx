@@ -93,6 +93,19 @@ export const MapComponent: React.FC<MapProps> = ({
     mapServiceRef.current = service;
   }, [userValue.role]);
 
+  // Handle resize events
+  useEffect(() => {
+    const handleResize = () => {
+      const service = mapServiceRef.current;
+      if (service) {
+        service.resizeMap();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // load points if contract is active
   useEffect(() => {
     if (!currentContract) return;
@@ -268,7 +281,10 @@ export const MapComponent: React.FC<MapProps> = ({
     const createdPoly = turf.polygon([newPolygonCoords]);
     for (let i = 0; i < filteredZones.length; i++) {
       const existingPoly = getZonePolygon(filteredZones[i], allPoints);
-      const polyIntersection = turf.intersect(createdPoly, existingPoly);
+      const polyIntersection = turf.intersect(
+        turf.featureCollection([createdPoly]),
+        turf.featureCollection([existingPoly]).features[0]
+      );
       if (polyIntersection) {
         return true;
       }
@@ -286,8 +302,17 @@ export const MapComponent: React.FC<MapProps> = ({
   }
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '90%' }}>
-      <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div 
+        ref={mapContainerRef} 
+        style={{ 
+          width: '100%', 
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0
+        }} 
+      />
       {userValue.role === Roles.admin && isDrawingMode && (
         <Button
           label="Guardar Zona"
