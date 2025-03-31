@@ -233,7 +233,7 @@ export default function Sensors() {
                 month: 'short',
               }) === label,
           );
-          return phEntry ? phEntry.phi_soil : null; // Si no hi ha dades, retorna null
+          return phEntry ? phEntry.phi_soil : null; // Canviat de `ph1_soil` a `phi_soil`
         });
 
         setChartData({
@@ -371,7 +371,7 @@ export default function Sensors() {
                   month: 'short',
                 }) === label,
             );
-            return phEntry ? phEntry.phi_soil : null; // Si no hi ha dades, retorna null
+            return phEntry ? phEntry.phi_soil : null; // Canviat de `ph1_soil` a `phi_soil`
           });
 
           setChartData({
@@ -447,7 +447,6 @@ export default function Sensors() {
     ) {
       const startDate = customRange[0].toISOString();
       const endDate = customRange[1].toISOString();
-      // fetchSensorHistoryData(selectedSensor.id, 'custom', startDate, endDate);
     }
   }, [customRange, selectedRange]);
 
@@ -493,7 +492,7 @@ export default function Sensors() {
         title={t('admin.pages.sensors.title')}
         onCreate={() => navigate('/admin/sensors/create')}>
         <DataTable
-          value={sensors || []} // Assegura que `value` sempre és un array
+          value={sensors || []}
           paginator
           rows={10}
           stripedRows
@@ -501,9 +500,9 @@ export default function Sensors() {
           className="p-datatable-sm"
           emptyMessage={t('admin.pages.sensors.list.noData')}>
           <Column
-            field="dev_eui" // Canviat de device_eui a dev_eui
+            field="dev_eui"
             header={t('admin.pages.sensors.list.columns.deviceEui')}
-            body={(rowData) => rowData.dev_eui || 'No EUI'} // Canviat de device_eui a dev_eui
+            body={(rowData) => rowData.dev_eui || 'No EUI'}
           />
           <Column
             field="name"

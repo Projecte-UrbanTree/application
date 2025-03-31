@@ -21,21 +21,20 @@ export async function fetchAllSensorHistories(): Promise<
   } catch (error) {
     console.error('Error fetching all sensor histories:', error);
 
-    // Simular dades si l'endpoint no està disponible
     return [
       {
-        dev_eui: 'sensorPH1',
+        dev_eui: 'a84041265185f3fc',
         time: new Date().toISOString(),
         phi_soil: 6.8,
-        humidity_soil: null, // Sense dades d'humitat per a PH
+        humidity_soil: null,
       },
       {
-        dev_eui: 'sensorHumitat1',
+        dev_eui: 'a840418401877546',
         time: new Date(
           new Date().setDate(new Date().getDate() - 1),
         ).toISOString(),
-        phi_soil: null, // Sense dades de PH per a humitat
-        humidity_soil: 45, // Exemple de dades d'humitat
+        phi_soil: null,
+        humidity_soil: 45,
       },
     ];
   }
