@@ -193,7 +193,7 @@ export const MapComponent: React.FC<MapProps> = ({
     } else {
       updateElements(service);
     }
-  }, [elements, currentContract]);
+  }, [elements, currentContract, points]);
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
