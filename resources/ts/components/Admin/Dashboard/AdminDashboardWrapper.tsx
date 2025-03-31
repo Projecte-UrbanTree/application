@@ -31,11 +31,11 @@ export default function AdminLayoutWrapper({
     (state: RootState) => state.contract,
   );
   const location = useLocation();
+  const isInventoryPage = location.pathname.includes('/admin/inventory');
 
-  const contracts = [
-    ...allContracts.filter((c) => c.id !== 0),
-  ];
-  const selectedContract = currentContract;
+  const contracts = isInventoryPage
+    ? [...allContracts.filter((c) => c.id !== 0)]
+    : [defaultContract, ...allContracts.filter((c) => c.id !== 0)];
 
   useEffect(() => {
     if (allContracts.length === 0) {
@@ -48,7 +48,25 @@ export default function AdminLayoutWrapper({
     }
   }, [dispatch, allContracts.length]);
 
-  const padding = location.pathname.includes('/admin/inventory')
+  useEffect(() => {
+    if (isInventoryPage) {
+      const availableContracts = allContracts.filter((c) => c.id !== 0);
+      
+      if (availableContracts.length > 0 && 
+          (!currentContract || currentContract.id === 0)) {
+        dispatch(
+          setContractState({
+            allContracts,
+            currentContract: availableContracts[0],
+          })
+        );
+      }
+    }
+  }, [isInventoryPage, allContracts, currentContract, dispatch]);
+
+  const selectedContract = currentContract;
+  
+  const padding = isInventoryPage
     ? 'py-8 px-4'
     : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
@@ -56,7 +74,7 @@ export default function AdminLayoutWrapper({
     <AdminLayout
       titleI18n={titleI18n}
       contracts={contracts}
-      currentContract={selectedContract ?? defaultContract}
+      currentContract={selectedContract ?? (contracts.length > 0 ? contracts[0] : defaultContract)}
       padding={padding}>
       {children}
     </AdminLayout>
