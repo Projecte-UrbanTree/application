@@ -33,7 +33,6 @@ export default function AdminLayoutWrapper({
   const location = useLocation();
 
   const contracts = [
-    defaultContract,
     ...allContracts.filter((c) => c.id !== 0),
   ];
   const selectedContract = currentContract;
