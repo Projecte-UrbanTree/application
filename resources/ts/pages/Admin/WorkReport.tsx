@@ -476,7 +476,7 @@ const WorkReportDetail = () => {
       <div className="max-w-6xl mx-auto">
         <Card className="w-full shadow-sm">
           <header className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row items-center sm:justify-between -mt-2 sm:-mt-4 -mx-2 sm:-mx-4 rounded-t-lg">
-            <div className="flex items-center">
+            <div className="flex items-center mb-4 sm:mb-0">
               <Button
                 className="p-button-text mr-4"
                 style={{ color: '#fff' }}
