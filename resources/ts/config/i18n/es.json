@@ -609,7 +609,11 @@
           "incidents": "Incidentes",
           "noIncidents": "No hay incidentes registrados",
           "spentFuel": "Combustible Gastado",
-          "taskStatus": "Estado de la Tarea"
+          "taskStatus": "Estado de la Tarea",
+          "hours": "Horas",
+          "unit": "Unidad",
+          "cost": "Costo",
+          "quantity": "Cantidad"
         }
       },
       "account": {

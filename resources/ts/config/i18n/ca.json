@@ -609,7 +609,11 @@
           "incidents": "Incidències",
           "noIncidents": "No hi ha incidències registrades",
           "spentFuel": "Combustible Gastat",
-          "taskStatus": "Estat de la Tasca"
+          "taskStatus": "Estat de la Tasca",
+          "hours": "Hores",
+          "unit": "Unitat",
+          "cost": "Cost",
+          "quantity": "Quantitat"
         }
       },
       "account": {

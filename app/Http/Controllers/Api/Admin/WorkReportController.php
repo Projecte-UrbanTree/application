@@ -39,6 +39,7 @@ class WorkReportController extends Controller
             'workOrders.workOrdersBlocks.blockTasks.tasksType',
             'workOrders.users',
             'resources',
+            'resources.resourceType',
         )->find($id);
 
         if ($workReport === null) {

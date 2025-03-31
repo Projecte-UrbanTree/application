@@ -609,7 +609,11 @@
           "incidents": "Incidents",
           "noIncidents": "No incidents recorded",
           "spentFuel": "Spent Fuel",
-          "taskStatus": "Task Status"
+          "taskStatus": "Task Status",
+          "hours": "Hours",
+          "unit": "Unit",
+          "cost": "Cost",
+          "quantity": "Quantity"
         }
       },
       "account": {
