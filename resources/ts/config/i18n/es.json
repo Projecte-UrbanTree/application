@@ -524,13 +524,13 @@
             "delete": "Eliminar orden de trabajo",
             "edit": "Editar orden de trabajo",
             "label": "Acciones",
-            "viewReport": "Ver informe"
+            "viewReport": "Ver Parte"
           },
           "columns": {
             "contract": "Contrato",
             "date": "Fecha",
             "id": "ID",
-            "reportStatus": "Estado del informe",
+            "reportStatus": "Estado del Parte",
             "status": "Estado",
             "users": "Trabajadores"
           },
@@ -554,14 +554,14 @@
           "completed": "Completado",
           "inProgress": "En progreso",
           "notStarted": "No iniciado",
-          "reportSent": "Informe enviado",
+          "reportSent": "Parte enviado",
           "unknown": "Desconocido"
         },
         "title": "Órdenes de trabajo"
       },
       "workReport": {
-        "title": "Informe de Trabajo",
-        "not_found": "No se encontró el Informe de Trabajo",
+        "title": "Parte de Trabajo",
+        "not_found": "No se encontró el Parte de Trabajo",
         "columns": {
           "users": "Operarios",
           "observation": "Observación",
@@ -594,7 +594,7 @@
           "details": "Detalles",
           "block": "Bloque",
           "noBlocks": "No hay bloques",
-          "noBlocksAvailable": "No hay bloques disponibles para este informe de trabajo",
+          "noBlocksAvailable": "No hay bloques disponibles para este parte de trabajo",
           "noNotes": "No hay notas",
           "noTasks": "No hay tareas asignadas",
           "notes": "Notas",
@@ -614,6 +614,14 @@
           "unit": "Unidad",
           "cost": "Costo",
           "quantity": "Cantidad"
+        },
+        "dialogs": {
+          "observationHeader": "Añadir Observaciones",
+          "observationMessage": "Por favor, proporciona tus observaciones antes de cerrar el parte.",
+          "observationPlaceholder": "Introduce tus observaciones aquí...",
+          "editObservationHeader": "Editar Observación",
+          "editObservationMessage": "Modifica la observación para este parte.",
+          "editObservationPlaceholder": "Introduce tu observación actualizada aquí..."
         }
       },
       "account": {
@@ -870,8 +878,8 @@
         "droughtExposure": "Exposición a Sequía"
       },
       "workReports": {
-        "title": "Informe de Trabajo",
-        "not_found": "Informe de Trabajo no encontrado",
+        "title": "Parte de Trabajo",
+        "not_found": "Parte de Trabajo no encontrado",
         "details": "Detalles",
         "columns": {
           "observation": "Observación",
@@ -936,18 +944,22 @@
   },
   "general": {
     "allContracts": "Todos los contratos",
-    "genericError": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
+    "genericError": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde.",
     "loading": "Cargando...",
     "error": "Error",
     "success": "Éxito",
     "actions": {
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
       "close_part": "Cerrar Parte",
-      "close_with_incidents": "Cerrar con Incidentes",
-      "reject": "Rechazar"
+      "close_with_incidents": "Cerrar con Incidencias",
+      "reject": "Rechazar",
+      "close_with_observations": "Cerrar con Observaciones",
+      "edit_observation": "Editar Observación"
     },
     "messages": {
-      "close_block": "Parte cerrado con éxito",
-      "close_with_incidents": "Bloque cerrado con incidentes",
+      "close_block": "Bloque cerrado correctamente",
+      "close_with_incidents": "Bloque cerrado con incidencias",
       "reject": "Bloque rechazado"
     },
     "not_available": "No disponible"

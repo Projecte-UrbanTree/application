@@ -12,6 +12,7 @@ import { Tag } from 'primereact/tag';
 import { Divider } from 'primereact/divider';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Badge } from 'primereact/badge';
+import { Dialog } from 'primereact/dialog';
 
 interface ResourceType {
   id: number;
@@ -94,14 +95,39 @@ const WorkReportDetail = () => {
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
   const [activeTabs, setActiveTabs] = useState<number[]>([]);
+  const [showObservationDialog, setShowObservationDialog] = useState(false);
+  const [observationNotes, setObservationNotes] = useState('');
+
+  const handleCloseWithObservations = async () => {
+    try {
+      await axiosClient.put(`/admin/work-reports/${id}`, {
+        report_status: 3,
+        observation: observationNotes,
+      });
+      toast.current?.show({
+        severity: 'warn',
+        summary: t('general.messages.close_with_incidents'),
+        detail: t('admin.pages.workReport.messages.closing_with_incidents'),
+      });
+      setShowObservationDialog(false);
+      navigate('/admin/work-orders');
+    } catch (err) {
+      console.error('Error closing with observations:', err);
+      toast.current?.show({
+        severity: 'error',
+        summary: t('general.messages.error'),
+        detail: t(
+          'admin.pages.workReport.messages.error_updating_observations',
+        ),
+      });
+    }
+  };
 
   const actions = [
     {
       label: t('general.actions.close_with_incidents'),
       icon: 'pi pi-exclamation-triangle',
-      command: async () => {
-        await handleStatusChange(3);
-      },
+      command: () => setShowObservationDialog(true),
     },
     {
       label: t('general.actions.reject'),
@@ -138,6 +164,7 @@ const WorkReportDetail = () => {
           severity = 'warn';
           summary = t('general.messages.close_with_incidents');
           detail = t('admin.pages.workReport.messages.closing_with_incidents');
+
           break;
       }
 
@@ -540,6 +567,39 @@ const WorkReportDetail = () => {
           </div>
         </Card>
       </div>
+      <Dialog
+        header={t('admin.pages.workReport.dialogs.observationHeader')}
+        visible={showObservationDialog}
+        onHide={() => setShowObservationDialog(false)}
+        footer={
+          <div>
+            <Button
+              label={t('general.actions.cancel')}
+              icon="pi pi-times"
+              className="p-button-text"
+              onClick={() => setShowObservationDialog(false)}
+            />
+            <Button
+              label={t('general.actions.confirm')}
+              icon="pi pi-check"
+              className="p-button-warning"
+              onClick={handleCloseWithObservations}
+            />
+          </div>
+        }>
+        <div>
+          <p>{t('admin.pages.workReport.dialogs.observationMessage')}</p>
+          <textarea
+            value={observationNotes}
+            onChange={(e) => setObservationNotes(e.target.value)}
+            className="w-full p-2 border rounded mt-2"
+            rows={4}
+            placeholder={t(
+              'admin.pages.workReport.dialogs.observationPlaceholder',
+            )}
+          />
+        </div>
+      </Dialog>
       <Toast ref={toast} position="top-center" />
     </div>
   );

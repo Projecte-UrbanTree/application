@@ -581,7 +581,12 @@
           "closing_with_incidents": "Closing block with incidents...",
           "close_with_incidents": "Block closed with incidents",
           "rejecting": "Rejecting block...",
-          "reject": "Block rejected"
+          "reject": "Block rejected",
+          "closing_with_observations": "Closing report with observations...",
+          "close_with_observations": "Report closed with observations",
+          "error_updating_observations": "Error updating observations",
+          "observation_updated": "Observation updated successfully",
+          "error_updating_observation": "Error updating observation"
         },
         "reportStatus": {
           "pending": "Pending",
@@ -614,6 +619,14 @@
           "unit": "Unit",
           "cost": "Cost",
           "quantity": "Quantity"
+        },
+        "dialogs": {
+          "observationHeader": "Add Observations",
+          "observationMessage": "Please provide your observations before closing the report.",
+          "observationPlaceholder": "Enter your observations here...",
+          "editObservationHeader": "Edit Observation",
+          "editObservationMessage": "Modify the observation for this report.",
+          "editObservationPlaceholder": "Enter your updated observation here..."
         }
       },
       "account": {
@@ -940,9 +953,13 @@
     "error": "Error",
     "success":"Success",
     "actions": {
-      "close_block": "Close Block",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "close_part": "Close Part",
       "close_with_incidents": "Close with Incidents",
-      "reject": "Reject"
+      "reject": "Reject",
+      "close_with_observations": "Close with Observations",
+      "edit_observation": "Edit Observation"
     },
     "messages": {
       "close_block": "Block closed successfully",
