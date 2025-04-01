@@ -572,7 +572,7 @@ export default function Stats() {
                 filter
                 showClear={selectedResourceId !== null}
                 filterPlaceholder={t(
-                  'admin.pages.stats.searchResourcePlaceholder',
+                  'admin.pages.stats.selectResourcePlaceholder',
                 )}
               />
             </div>
