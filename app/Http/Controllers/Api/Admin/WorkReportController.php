@@ -18,7 +18,7 @@ class WorkReportController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'observation' => ['required', 'string', 'max:255'],
+            'observation' => ['nullable', 'string', 'max:255'],
             'spent_fuel' => ['required', 'numeric'],
             'work_order_id' => ['required', 'integer'],
             'report_status' => ['required', 'string', 'max:255'],
@@ -37,6 +37,7 @@ class WorkReportController extends Controller
             'workOrders.contract',
             'workOrders.workOrdersBlocks',
             'workOrders.workOrdersBlocks.zones',
+            'workOrders.workOrdersBlocks.blockTasks',
             'workOrders.workOrdersBlocks.blockTasks.elementType',
             'workOrders.workOrdersBlocks.blockTasks.treeType',
             'workOrders.workOrdersBlocks.blockTasks.tasksType',
