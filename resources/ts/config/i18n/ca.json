@@ -27,10 +27,6 @@
       "status": "Estat",
       "surname": "Cognom"
     },
-    "menu": {
-      "management": "Gestió",
-      "settings": "Configuració"
-    },
     "pages": {
       "contracts": {
         "form": {
