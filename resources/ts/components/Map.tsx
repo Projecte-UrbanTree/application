@@ -18,7 +18,7 @@ import { SavePointsProps } from '@/api/service/pointService';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
 import { MapService } from '@/api/service/mapService';
 import { Toast } from 'primereact/toast';
-import { deleteElementAsync } from '@/store/slice/elementSlice';
+import { deleteElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice';
 import IncidentForm from './Admin/Inventory/IncidentForm';
 import { Element } from '@/types/Element';
 import ElementDetailPopup from './Admin/Inventory/ElementDetailPopup';
@@ -382,6 +382,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const handleElementDelete = async (elementId: number) => {
     try {
       await dispatch(deleteElementAsync(elementId));
+      await dispatch(fetchElementsAsync());
       mapServiceRef.current?.removeElementMarker(elementId);
       setElementModalVisible(false);
       setSelectedElement(null);

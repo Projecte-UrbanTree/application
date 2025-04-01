@@ -142,6 +142,10 @@ export const Zones = ({
       dispatch(fetchPointsAsync())
         .unwrap()
         .catch((error) => console.error('error al recargar puntos:', error));
+
+      dispatch(fetchElementsAsync())
+        .unwrap()
+        .catch((error) => console.error('error al recargar elementos:', error));
     } catch (error) {
       console.error(error);
       toast.current?.show({

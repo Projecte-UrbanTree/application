@@ -252,7 +252,7 @@ export class MapService {
     return { lat: point.latitude, lng: point.longitude };
   }
 
-  public flyTo(coord: [number, number], zoom = 18) {
+  public flyTo(coord: [number, number], zoom = 16) {
     this.map.flyTo({ center: coord, zoom, essential: true });
   }
 
