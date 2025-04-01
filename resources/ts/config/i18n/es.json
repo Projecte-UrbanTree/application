@@ -20,8 +20,8 @@
       "resource_type": "Tipo de recurso",
       "role": "Rol",
       "select_resource_type": "Seleccionar un tipo de recurso",
-      "unit_cost": "Edit the unit cost",
-      "unit_name": "Select a resource unit",
+      "unit_cost": "Editar el costo unitario",
+      "unit_name": "Seleccionar una unidad de recurso",
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
@@ -488,7 +488,7 @@
           "placeholders": {
             "elementType": "Selecciona el tipo de elemento",
             "notes": "Agrega notas para este bloque de trabajo...",
-            "status": "Selecciona un estado",
+            "status": "Seleccionar un estado",
             "taskType": "Selecciona el tipo de tarea",
             "treeType": "Selecciona la especie de árbol",
             "users": "Selecciona trabajadores",
@@ -582,11 +582,11 @@
           "close_with_incidents": "Bloque cerrado con incidentes",
           "rejecting": "Rechazando bloque...",
           "reject": "Bloque rechazado",
-          "closing_with_observations": "Closing report with observations...",
-          "close_with_observations": "Report closed with observations",
-          "error_updating_observations": "Error updating observations",
-          "observation_updated": "Observation updated successfully",
-          "error_updating_observation": "Error updating observation"
+          "closing_with_observations": "Cerrando informe con observaciones...",
+          "close_with_observations": "Informe cerrado con observaciones",
+          "error_updating_observations": "Error al actualizar observaciones",
+          "observation_updated": "Observación actualizada correctamente",
+          "error_updating_observation": "Error al actualizar la observación"
         },
         "reportStatus": {
           "pending": "Pendiente",

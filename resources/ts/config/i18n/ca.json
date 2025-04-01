@@ -20,8 +20,8 @@
       "resource_type": "Tipus de recurs",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipus de recurs",
-      "unit_cost": "Edit the unit cost",
-      "unit_name": "Select a resource unit",
+      "unit_cost": "Edita el cost unitari",
+      "unit_name": "Selecciona una unitat de recurs",
       "species": "Espècie",
       "start_date": "Data d'inici",
       "status": "Estat",
@@ -582,11 +582,11 @@
           "close_with_incidents": "Bloc tancat amb incidències",
           "rejecting": "Rebutjant bloc...",
           "reject": "Bloc rebutjat",
-          "closing_with_observations": "Closing report with observations...",
-          "close_with_observations": "Report closed with observations",
-          "error_updating_observations": "Error updating observations",
-          "observation_updated": "Observation updated successfully",
-          "error_updating_observation": "Error updating observation"
+          "closing_with_observations": "Tancant informe amb observacions...",
+          "close_with_observations": "Informe tancat amb observacions",
+          "error_updating_observations": "Error en actualitzar observacions",
+          "observation_updated": "Observació actualitzada correctament",
+          "error_updating_observation": "Error en actualitzar l'observació"
         },
         "reportStatus": {
           "pending": "Pendent",
