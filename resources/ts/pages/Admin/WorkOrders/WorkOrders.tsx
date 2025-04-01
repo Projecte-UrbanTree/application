@@ -317,7 +317,7 @@ export default function WorkOrders() {
 
   const actionButtons = useCallback(
     (rowData: WorkOrder) => {
-      const isEditable = rowData.status !== 1 && rowData.status !== 2; // 1: In Progress, 2: Completed
+      const isEditable = rowData.status !== 1 && rowData.status !== 2;
 
       return (
         <div className="flex justify-end gap-2">
@@ -340,7 +340,7 @@ export default function WorkOrders() {
             </>
           ) : (
             <Button
-              icon={<Icon icon="tabler:eye" />}
+              icon={<Icon icon="tabler:file-text" />}
               className="p-button-rounded p-button-info"
               onClick={() => navigate(`/admin/work-reports/${rowData.id}`)}
               title={t('admin.pages.workOrders.list.actions.viewReport')}
