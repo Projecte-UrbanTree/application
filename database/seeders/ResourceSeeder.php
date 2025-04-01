@@ -30,7 +30,7 @@ class ResourceSeeder extends Seeder
                 'unit_name' => 'Hores',
                 'unit_cost' => 20.5,
 
-            ],
+            ],  
             [
                 'name' => 'Resource 3',
                 'contract_id' => 3,
