@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { Message } from 'primereact/message';
 import { subYears, subMonths, format } from 'date-fns';
 
-// Componente FormField para manejar campos del formulario
 const FormField = ({ as: Component, name, label, ...props }: any) => {
   const [field, meta, helpers] = useField(name);
 

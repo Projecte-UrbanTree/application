@@ -135,18 +135,18 @@ export default function EditEva() {
     root_surface_diameter: 0,
     effective_root_area: 0,
     height_estimation: 0,
-    unbalanced_crown: 0, // Cambiado de unbalancedCrown
-    overextended_branches: 0, // Cambiado de overextendedBranches
+    unbalanced_crown: 0,
+    overextended_branches: 0,
     cracks: 0,
-    dead_branches: 0, // Cambiado de deadBranches
+    dead_branches: 0,
     inclination: 0,
-    V_forks: 0, // Cambiado de VForks
+    V_forks: 0,
     cavities: 0,
-    bark_damage: 0, // Cambiado de barkDamage
-    soil_lifting: 0, // Cambiado de soilLifting
-    cut_damaged_roots: 0, // Cambiado de cutRoots
-    basal_rot: 0, // Cambiado de basalRot
-    exposed_surface_roots: 0, // Cambiado de exposedRoots
+    bark_damage: 0,
+    soil_lifting: 0,
+    cut_damaged_roots: 0,
+    basal_rot: 0,
+    exposed_surface_roots: 0,
     wind: 0,
     drought: 0,
     status: 0,
@@ -284,7 +284,6 @@ export default function EditEva() {
         status: status,
       };
 
-      // Ensure all required fields are included and properly formatted
       const payload = {
         ...updatedValues,
         element_id: Number(updatedValues.element_id),
