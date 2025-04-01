@@ -170,7 +170,7 @@ export const MapComponent: React.FC<MapProps> = ({
             toast.current?.show({
               severity: 'error',
               summary: 'Error',
-              detail: 'El elemento debe estar dentro de la zona seleccionada',
+              detail: 'El elemento debe estar dwntro de la zona seleccionada',
             });
           }
         });

@@ -3,14 +3,13 @@ import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
-import { Dropdown } from 'primereact/dropdown'; // <-- importa el Dropdown
+import { Dropdown } from 'primereact/dropdown';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import {
   deleteIncidence,
   fetchIncidence,
   updateIncidence,
 } from '@/api/service/incidentService';
-// ↑ hipotético import para la función updateIncidence
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
@@ -19,6 +18,9 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
+import { WorkOrder } from '@/types/WorkOrder';
+import { fetchWorkOrders } from '@/api/service/workOrder';
+import { Zone } from '@/types/Zone';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -44,19 +46,32 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
-  const [incidentModalVisible, setIncidentModalVisible] = useState(false);
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
 
-  // estado de opciones para el dropdown de estado
+  const { points } = useSelector((state: RootState) => state.points);
+  const { zones } = useSelector((state: RootState) => state.zone);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
+  const dispatch = useDispatch<AppDispatch>();
+  const toast = useRef<Toast>(null);
+
   const statusOptions = [
     { label: 'Abierto', value: IncidentStatus.open },
     { label: 'En progreso', value: IncidentStatus.in_progress },
     { label: 'Cerrado', value: IncidentStatus.closed },
   ];
 
-  const { points } = useSelector((state: RootState) => state.points);
-  const { zones } = useSelector((state: RootState) => state.zone);
-  const dispatch = useDispatch<AppDispatch>();
-  const toast = useRef<Toast>(null);
+  useEffect(() => {
+    const loadWorkOrders = async () => {
+      const data: WorkOrder[] = await fetchWorkOrders();
+      const workOrdersFiltered = data.filter(
+        (workOrder) => workOrder.contract_id === currentContract?.id,
+      );
+      setWorkOrders(workOrdersFiltered);
+    };
+    loadWorkOrders();
+  }, []);
 
   useEffect(() => {
     const loadIncidences = async () => {
@@ -178,16 +193,48 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
   }
 
+  const findWorkOrdersForElement = (
+    element: Element,
+    workOrders: WorkOrder[],
+    points: Point[],
+    zones: Zone[],
+  ) => {
+    const elementZone = getZoneElement(element.point_id!);
+    if (!elementZone) return [];
+
+    return workOrders.flatMap((workOrder) =>
+      workOrder.work_orders_blocks!.flatMap((block) => {
+        const zoneMatches = block.zones!.some(
+          (zone) => zone.id === elementZone.id,
+        );
+
+        if (zoneMatches) {
+          return block.block_tasks!.map((task) => ({
+            workOrderId: workOrder.id,
+            taskType: task.tasks_type,
+            notes: block.notes,
+          }));
+        }
+        return [];
+      }),
+    );
+  };
+
+  const tasksForElement = findWorkOrdersForElement(
+    element,
+    workOrders,
+    points,
+    zones,
+  );
+
   return (
     <div className="bg-white rounded-lg w-[650px] max-w-full">
       <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}>
-        {/* pestaña de información */}
         <TabPanel header="Información">
           <div className="grid grid-cols-2 gap-4">
-            {/* columna izquierda */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">
                 Información del Árbol
@@ -232,7 +279,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 <strong>Longitud:</strong> {coords.lng || 'No disponible'}
               </p>
 
-              {/* boton para eliminar elemento */}
               <Button
                 label="Eliminar Elemento"
                 className="p-button-danger p-button-sm"
@@ -242,7 +288,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </TabPanel>
 
-        {/* pestaña de incidencias */}
         <TabPanel header="Incidencias">
           <div className="space-y-4">
             {incidences.length > 0 ? (
@@ -314,9 +359,30 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </TabPanel>
 
-        {/* pestaña de historial */}
         <TabPanel header="Historial">
-          <p className="text-sm">Historial del elemento (en construcción...)</p>
+          <div>
+            <h1>Historial de tareas</h1>
+            {tasksForElement.length > 0 ? (
+              tasksForElement.map((taskInfo, index) => (
+                <div key={index} className="border p-4 rounded-md">
+                  <h4 className="font-semibold">Notas: {taskInfo.notes}</h4>
+                  <p>
+                    <strong>Tarea:</strong> {taskInfo.taskType?.name}
+                  </p>
+                  <p>
+                    <strong>Descripción:</strong>{' '}
+                    {taskInfo.taskType?.description}
+                  </p>
+                  <p>
+                    <strong>ID de Orden de Trabajo:</strong>{' '}
+                    {taskInfo.workOrderId}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No hay historial de tareas para este elemento.</p>
+            )}
+          </div>
         </TabPanel>
       </TabView>
     </div>

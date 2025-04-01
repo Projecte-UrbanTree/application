@@ -68,16 +68,6 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   );
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
 
-  const totalTreeElements = elements.reduce((acc, element) => {
-    console.log('ELEMENT:', elementTypes);
-    console.log('TREE TYPES:', treeTypes);
-
-    if (element.tree_type_id) {
-      return acc + 1;
-    }
-    return acc;
-  }, 0);
-
   useEffect(() => {
     if (!currentContract) return;
 
