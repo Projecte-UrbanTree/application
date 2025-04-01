@@ -1,4 +1,8 @@
-import { fetchElements, saveElements } from '@/api/service/elementService';
+import {
+  deleteElement,
+  fetchElements,
+  saveElements,
+} from '@/api/service/elementService';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Element } from '@/types/Element';
 
@@ -30,6 +34,19 @@ export const saveElementAsync = createAsyncThunk<
     return response;
   } catch (error) {
     return rejectWithValue('error al guardar el elemento');
+  }
+});
+
+export const deleteElementAsync = createAsyncThunk<
+  number,
+  number,
+  { rejectValue: string }
+>('elements/deleteElement', async (elementId, { rejectWithValue }) => {
+  try {
+    await deleteElement(elementId);
+    return elementId;
+  } catch (error) {
+    return rejectWithValue('error al eliminar el elemento');
   }
 });
 

@@ -68,6 +68,11 @@ class ElementController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $element = Element::find($id);
+        if (!$element) {
+            return response()->json(['message' => 'Element not found'], 404);
+        }
+        $element->delete();
+        return response()->json(['message' => 'Element deleted successfully'], 200);
     }
 }
