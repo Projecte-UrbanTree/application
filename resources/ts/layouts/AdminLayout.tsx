@@ -39,7 +39,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const activeContracts = contracts.filter(contract => contract.status === 0);
   const todosOption: Contract = { id: 0, name: t('general.allContracts'), status: 1 };
-  const dropdownOptions = [todosOption, ...activeContracts];
+  
+  const isInventoryPage = location.pathname.includes('/admin/inventory');
+
+  const dropdownOptions = isInventoryPage 
+    ? [...activeContracts]
+    : [todosOption, ...activeContracts];
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
@@ -48,7 +53,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     currentContract ?? defaultContract,
   );
 
-  const dropdownValue = contract?.id ?? 0;
+  const dropdownValue = currentContract ? currentContract.id : 0;
 
   useEffect(() => {
     if (currentContract) {
