@@ -295,7 +295,11 @@
         "hoursWorked": "crwdns3443:0crwdne3443:0",
         "fuelConsumption": "crwdns3445:0crwdne3445:0",
         "noData": "crwdns3447:0crwdne3447:0",
-        "exportCSV": "crwdns4091:0crwdne4091:0"
+        "exportCSV": "crwdns4091:0crwdne4091:0",
+        "total": "crwdns5047:0crwdne5047:0",
+        "noDataResourcePeriod": "crwdns5049:0crwdne5049:0",
+        "selectResource": "crwdns5051:0crwdne5051:0",
+        "selectResourcePlaceholder": "crwdns5053:0crwdne5053:0"
       },
       "taskTypes": {
         "form": {
