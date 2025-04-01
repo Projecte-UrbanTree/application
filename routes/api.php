@@ -69,5 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'work-reports' => WorkReportController::class,
             'zones' => ZoneController::class,
         ]);
+
+        Route::put('/work-orders/{id}/status', [WorkOrderController::class, 'updateStatus']);
     });
 });
