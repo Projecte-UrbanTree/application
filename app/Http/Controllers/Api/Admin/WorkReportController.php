@@ -33,15 +33,15 @@ class WorkReportController extends Controller
     public function show($id)
     {
         $workReport = WorkReport::with(
-            'workOrders',
-            'workOrders.contract',
-            'workOrders.workOrdersBlocks',
-            'workOrders.workOrdersBlocks.zones',
-            'workOrders.workOrdersBlocks.blockTasks',
-            'workOrders.workOrdersBlocks.blockTasks.elementType',
-            'workOrders.workOrdersBlocks.blockTasks.treeType',
-            'workOrders.workOrdersBlocks.blockTasks.tasksType',
-            'workOrders.users',
+            'workOrder',
+            'workOrder.contract',
+            'workOrder.workOrdersBlocks',
+            'workOrder.workOrdersBlocks.zones',
+            'workOrder.workOrdersBlocks.blockTasks',
+            'workOrder.workOrdersBlocks.blockTasks.elementType',
+            'workOrder.workOrdersBlocks.blockTasks.treeType',
+            'workOrder.workOrdersBlocks.blockTasks.tasksType',
+            'workOrder.users',
             'resources',
             'resources.resourceType',
         )->find($id);
@@ -76,14 +76,14 @@ class WorkReportController extends Controller
         $workReport->update($validated);
 
         $updatedReport = WorkReport::with([
-            'workOrders',
-            'workOrders.contract',
-            'workOrders.workOrdersBlocks',
-            'workOrders.workOrdersBlocks.zones',
-            'workOrders.workOrdersBlocks.blockTasks.elementType',
-            'workOrders.workOrdersBlocks.blockTasks.treeType',
-            'workOrders.workOrdersBlocks.blockTasks.tasksType',
-            'workOrders.users',
+            'workOrder',
+            'workOrder.contract',
+            'workOrder.workOrdersBlocks',
+            'workOrder.workOrdersBlocks.zones',
+            'workOrder.workOrdersBlocks.blockTasks.elementType',
+            'workOrder.workOrdersBlocks.blockTasks.treeType',
+            'workOrder.workOrdersBlocks.blockTasks.tasksType',
+            'workOrder.users',
             'resources',
         ])->find($id);
 
