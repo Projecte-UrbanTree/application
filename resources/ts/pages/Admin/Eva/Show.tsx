@@ -14,7 +14,6 @@ export default function ShowEva() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
-  // Usamos el hook de evaluación de árboles
   const {
     getStatusMessage,
     calculateStabilityIndex,
