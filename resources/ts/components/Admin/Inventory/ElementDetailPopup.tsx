@@ -3,14 +3,13 @@ import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
-import { Dropdown } from 'primereact/dropdown'; // <-- importa el Dropdown
+import { Dropdown } from 'primereact/dropdown';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import {
   deleteIncidence,
   fetchIncidence,
   updateIncidence,
 } from '@/api/service/incidentService';
-// ↑ hipotético import para la función updateIncidence
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
@@ -184,10 +183,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}>
-        {/* pestaña de información */}
         <TabPanel header="Información">
           <div className="grid grid-cols-2 gap-4">
-            {/* columna izquierda */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">
                 Información del Árbol
@@ -232,7 +229,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 <strong>Longitud:</strong> {coords.lng || 'No disponible'}
               </p>
 
-              {/* boton para eliminar elemento */}
               <Button
                 label="Eliminar Elemento"
                 className="p-button-danger p-button-sm"
@@ -242,7 +238,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </TabPanel>
 
-        {/* pestaña de incidencias */}
         <TabPanel header="Incidencias">
           <div className="space-y-4">
             {incidences.length > 0 ? (
