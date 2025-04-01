@@ -193,7 +193,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
   }
 
-  // found the work orders for the element
   const findWorkOrdersForElement = (
     element: Element,
     workOrders: WorkOrder[],
@@ -211,6 +210,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
         if (zoneMatches) {
           return block.block_tasks!.map((task) => ({
+            workOrderId: workOrder.id,
             taskType: task.tasks_type,
             notes: block.notes,
           }));
@@ -366,13 +366,16 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               tasksForElement.map((taskInfo, index) => (
                 <div key={index} className="border p-4 rounded-md">
                   <h4 className="font-semibold">Notas: {taskInfo.notes}</h4>
-
                   <p>
                     <strong>Tarea:</strong> {taskInfo.taskType?.name}
                   </p>
                   <p>
                     <strong>Descripción:</strong>{' '}
                     {taskInfo.taskType?.description}
+                  </p>
+                  <p>
+                    <strong>ID de Orden de Trabajo:</strong>{' '}
+                    {taskInfo.workOrderId}
                   </p>
                 </div>
               ))
