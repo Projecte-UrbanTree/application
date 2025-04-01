@@ -18,9 +18,10 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
-import { WorkOrder } from '@/types/WorkOrder';
+import { WorkOrder, WorkReport } from '@/types/WorkOrder';
 import { fetchWorkOrders } from '@/api/service/workOrder';
 import { Zone } from '@/types/Zone';
+import { fetchWorkReports } from '@/api/service/workReportService';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -47,6 +48,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [workReports, setWorkReports] = useState<WorkReport[]>([]);
 
   const { points } = useSelector((state: RootState) => state.points);
   const { zones } = useSelector((state: RootState) => state.zone);
@@ -63,14 +65,14 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   ];
 
   useEffect(() => {
-    const loadWorkOrders = async () => {
+    const loadData = async () => {
       const data: WorkOrder[] = await fetchWorkOrders();
       const workOrdersFiltered = data.filter(
         (workOrder) => workOrder.contract_id === currentContract?.id,
       );
       setWorkOrders(workOrdersFiltered);
     };
-    loadWorkOrders();
+    loadData();
   }, []);
 
   useEffect(() => {

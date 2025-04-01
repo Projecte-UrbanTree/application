@@ -39,8 +39,6 @@ export function useAuth() {
           },
         });
 
-        console.log('RESPONSE fetchUser: ', response.data);
-
         dispatch(setUserData(response.data));
 
         await fetchContracts();

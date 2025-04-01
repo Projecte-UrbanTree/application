@@ -29,8 +29,6 @@ export class MapService {
   }
 
   public addBasicControls() {
-    console.log('ENTRANDO EN BASIC CONTROLS');
-
     this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
     this.map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
@@ -135,6 +133,11 @@ export class MapService {
         if (this.map.getLayer(layer.id)) {
           this.map.removeLayer(layer.id);
         }
+      }
+    });
+
+    style.layers.forEach((layer) => {
+      if (layer.id.startsWith(prefix)) {
         if (this.map.getSource(layer.id)) {
           this.map.removeSource(layer.id);
         }

@@ -8,6 +8,10 @@ export default function Inventory() {
   const [zoneToAddElement, setZoneToAddElement] = useState<Zone | null>(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [mapKey, setMapKey] = useState(Date.now());
+  const [isCreatingElement, setIsCreatingElement] = useState(false);
+  const [isDrawingMode, setIsDrawingMode] = useState(false);
+  const [enabledButton, setEnabledButton] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   
@@ -36,6 +40,10 @@ export default function Inventory() {
     setSelectedZone(null);
   };
 
+  const handleCreatingElementChange = (isCreating: boolean) => {
+    setIsCreatingElement(isCreating);
+  };
+
   return (
     <div className="flex flex-col w-full h-full">
       <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
@@ -50,6 +58,14 @@ export default function Inventory() {
             selectedZone={selectedZone}
             zoneToAddElement={zoneToAddElement}
             onElementAdd={() => setZoneToAddElement(null)}
+            isCreatingElement={isCreatingElement}
+            onCreatingElementChange={handleCreatingElementChange}
+            isDrawingMode={isDrawingMode}
+            onDrawingModeChange={setIsDrawingMode}
+            enabledButton={enabledButton}
+            onEnabledButtonChange={setEnabledButton}
+            modalVisible={modalVisible}
+            onModalVisibleChange={setModalVisible}
           />
         </div>
 
@@ -60,6 +76,11 @@ export default function Inventory() {
           <Zones
             onSelectedZone={handleSelectedZone}
             onAddElementZone={handleAddElementZone}
+            stopCreatingElement={handleCreatingElementChange}
+            isCreatingElement={isCreatingElement}
+            isDrawingMode={isDrawingMode}
+            onSaveZone={() => setModalVisible(true)}
+            enabledButton={enabledButton}
           />
         </div>
       </div>

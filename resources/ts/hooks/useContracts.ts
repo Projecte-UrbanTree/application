@@ -10,7 +10,6 @@ export function useContracts() {
   const fetchContracts = useCallback(async () => {
     try {
       const response = await axiosClient.get<Contract[]>('/admin/contracts');
-      console.log('RESPONSE hookContr: ', response);
 
       if (response.data.length > 0) {
         try {

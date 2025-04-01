@@ -7,15 +7,12 @@ import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ElementType } from '@/types/ElementType';
-import { Point, TypePoint } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
 import { Icon } from '@iconify/react';
-import { log } from 'console';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +21,11 @@ import { Subject } from 'rxjs';
 interface ZoneProps {
   onSelectedZone: (zone: Zone) => void;
   onAddElementZone: (zone: Zone) => void;
+  stopCreatingElement: (isCreating: boolean) => void;
+  isCreatingElement: boolean;
+  isDrawingMode?: boolean;
+  onSaveZone?: () => void;
+  enabledButton?: boolean;
 }
 
 interface AddElementProps {
@@ -37,9 +39,16 @@ export interface ZoneEvent {
 }
 
 export const eventSubject = new Subject<ZoneEvent>();
-export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
+export const Zones = ({ 
+  onSelectedZone, 
+  onAddElementZone, 
+  stopCreatingElement, 
+  isCreatingElement,
+  isDrawingMode,
+  onSaveZone,
+  enabledButton 
+}: ZoneProps) => {
   const [selectedZoneToAdd, setSelectedZoneToAdd] = useState<Zone | null>(null);
-  const [createActive, setIsCreatingElement] = useState<boolean>(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
 
@@ -47,6 +56,7 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
     eventSubject.next({ isCreatingElement, zone });
     onAddElementZone(zone!);
     setSelectedZoneToAdd(zone!);
+    stopCreatingElement(isCreatingElement);
   };
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -105,13 +115,14 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   useEffect(() => {
     const subscription = eventSubject.subscribe({
       next: (data: AddElementProps) => {
-        setIsCreatingElement(data.isCreatingElement);
+        setSelectedZoneToAdd(data.zone!);
+        stopCreatingElement(data.isCreatingElement);
       },
       error: (err: Error) => console.error('error en el stream:', err.message),
       complete: () => console.log('stream completado'),
     });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [stopCreatingElement]);
 
   const handleDeleteZone = async (zoneId: number) => {
     try {
@@ -178,109 +189,127 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
 
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
-      {createActive ? (
-        <div>
-          <div>
-            <Button
-              label="Salir del modo creacion de elementos"
-              onClick={() =>
-                addElementZone({ isCreatingElement: false, zone: undefined })
-              }
-              className="p-button-text p-2 mt-8"
-            />
-          </div>
+      {(zonesLoading || pointsLoading || elementsLoading) ? (
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+          <p className="mt-4 text-gray-600">Cargando zonas...</p>
         </div>
       ) : (
-        <div></div>
-      )}
-      {uniqueZones.length > 0 ? (
-        <Accordion multiple activeIndex={null} className="w-full">
-          {uniqueZones.map((zone: Zone) => (
-            <AccordionTab
-              key={zone.id}
-              header={
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{
-                        backgroundColor: zone.color || 'gray',
-                      }}></div>
-                    <span className="text-sm font-medium">{zone.name}</span>
-                  </div>
-                  <Button
-                    icon={<Icon icon="mdi:map-marker" width="20" />}
-                    className="p-button-text p-2"
-                    onClick={() => onSelectedZone(zone)}
-                  />
-                </div>
-              }>
-              <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
-                <p>
-                  <strong>Descripción:</strong> {zone.description}
-                </p>
+        <>
+          {isCreatingElement ? (
+            <div>
+              <div>
                 <Button
-                  icon={<Icon icon="mdi:trash-can-outline" width="20" />}
-                  className="p-button-danger p-button-text p-2"
-                  onClick={() => confirmDeleteZone(zone)}
+                  label="Salir del modo creacion de elementos"
+                  onClick={() => {
+                    addElementZone({ isCreatingElement: false, zone: undefined });
+                    stopCreatingElement(false);
+                  }}
+                  className="p-button-text p-2 mt-8"
                 />
               </div>
-              <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
-                <strong>Añadir elemento</strong>
-                <Button
-                  className="p-button p-button-text p-2"
-                  icon={<Icon icon="mdi:add" />}
-                  onClick={() =>
-                    addElementZone({ isCreatingElement: true, zone: zone })
-                  }
-                />
-              </div>
-
-              {/* Lista de elementos por tipo dentro de la zona */}
-              <div className="p-2 text-sm text-gray-700">
-                <strong>Elementos en esta zona</strong>
-                {elementTypes.map((elementType: ElementType) => {
-                  const elementCountByType = countElementsByTypeInZone(
-                    zone.id!,
-                  );
-                  const count = elementCountByType[elementType.id!] || 0;
-                  if (count > 0) {
-                    return (
-                      <div
-                        key={elementType.id}
-                        className="flex justify-between items-center my-2">
-                        <span>
-                          {elementType.name} ({count} elementos)
-                        </span>
-                        <Button
-                          icon={<Icon icon="mdi:eye" width="20" />}
-                          className="p-button-text p-2"
-                          onClick={() => {}}
-                        />
+            </div>
+          ) : null}
+          {isDrawingMode && (
+            <div>
+              <Button
+                label="Guardar Zona"
+                onClick={onSaveZone}
+                className="p-button-text p-2 mt-8"
+                disabled={!enabledButton}
+              />
+            </div>
+          )}
+          {uniqueZones.length > 0 ? (
+            <Accordion multiple activeIndex={null} className="w-full">
+              {uniqueZones.map((zone: Zone) => (
+                <AccordionTab
+                  key={zone.id}
+                  header={
+                    <div className="flex justify-between items-center w-full">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-4 h-4 rounded-full"
+                          style={{
+                            backgroundColor: zone.color || 'gray',
+                          }}></div>
+                        <span className="text-sm font-medium">{zone.name}</span>
                       </div>
-                    );
-                  }
-                  return null;
-                })}
+                      <Button
+                        icon={<Icon icon="mdi:map-marker" width="20" />}
+                        className="p-button-text p-2"
+                        onClick={() => onSelectedZone(zone)}
+                      />
+                    </div>
+                  }>
+                  <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
+                    <p>
+                      <strong>Descripción:</strong> {zone.description}
+                    </p>
+                    <Button
+                      icon={<Icon icon="mdi:trash-can-outline" width="20" />}
+                      className="p-button-danger p-button-text p-2"
+                      onClick={() => confirmDeleteZone(zone)}
+                    />
+                  </div>
+                  <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
+                    <strong>Añadir elemento</strong>
+                    <Button
+                      className="p-button p-button-text p-2"
+                      icon={<Icon icon="mdi:add" />}
+                      onClick={() =>
+                        addElementZone({ isCreatingElement: true, zone: zone })
+                      }
+                    />
+                  </div>
 
-                {elementTypes.every((elementType: ElementType) => {
-                  const count =
-                    countElementsByTypeInZone(zone.id!)[elementType.id!] || 0;
-                  return count === 0;
-                }) && (
-                  <p className="text-gray-500 mt-2">
-                    No hay elementos marcados en esta zona.
-                  </p>
-                )}
-              </div>
-            </AccordionTab>
-          ))}
-        </Accordion>
-      ) : (
-        <div className="flex flex-col items-center justify-center h-full text-gray-500 text-lg">
-          <Icon icon="mdi:alert-circle-outline" width="32" className="mb-2" />
-          <p>No hay zonas en este contrato</p>
-        </div>
+                  {/* Lista de elementos por tipo dentro de la zona */}
+                  <div className="p-2 text-sm text-gray-700">
+                    <strong>Elementos en esta zona</strong>
+                    {elementTypes.map((elementType: ElementType) => {
+                      const elementCountByType = countElementsByTypeInZone(
+                        zone.id!,
+                      );
+                      const count = elementCountByType[elementType.id!] || 0;
+                      if (count > 0) {
+                        return (
+                          <div
+                            key={elementType.id}
+                            className="flex justify-between items-center my-2">
+                            <span>
+                              {elementType.name} ({count} elementos)
+                            </span>
+                            <Button
+                              icon={<Icon icon="mdi:eye" width="20" />}
+                              className="p-button-text p-2"
+                              onClick={() => {}}
+                            />
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
+
+                    {elementTypes.every((elementType: ElementType) => {
+                      const count =
+                        countElementsByTypeInZone(zone.id!)[elementType.id!] || 0;
+                      return count === 0;
+                    }) && (
+                      <p className="text-gray-500 mt-2">
+                        No hay elementos marcados en esta zona.
+                      </p>
+                    )}
+                  </div>
+                </AccordionTab>
+              ))}
+            </Accordion>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500 text-lg">
+              <Icon icon="mdi:alert-circle-outline" width="32" className="mb-2" />
+              <p>No hay zonas en este contrato</p>
+            </div>
+          )}
+        </>
       )}
 
       <Dialog
