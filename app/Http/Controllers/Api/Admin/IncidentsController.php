@@ -11,12 +11,14 @@ class IncidentsController extends Controller
     public function index()
     {
         $incidences = Incidence::all();
+
         return response()->json($incidences);
     }
 
     public function store(Request $request)
     {
         $incidence = Incidence::create($request->all());
+
         return response()->json($incidence);
     }
 
@@ -24,6 +26,7 @@ class IncidentsController extends Controller
     {
         $incidence = Incidence::find($id);
         $incidence->delete();
+
         return response()->json(null, 204);
     }
 
@@ -31,6 +34,7 @@ class IncidentsController extends Controller
     {
         $incidence = Incidence::findOrFail($id);
         $incidence->update($request->all());
+
         return response()->json($incidence, 200);
     }
 }
