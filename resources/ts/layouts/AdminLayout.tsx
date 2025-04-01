@@ -101,6 +101,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     '/admin/workers',
     '/admin/resources',
     '/admin/statistics',
+    '/admin/work-reports',
   ].some((path) => location.pathname.startsWith(path));
 
   const isSettingsPage = location.pathname.includes('/admin/settings');

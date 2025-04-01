@@ -10,6 +10,7 @@ use App\Models\TreeType;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderBlock;
 use App\Models\WorkOrderBlockTask;
+use App\Models\WorkReport;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -195,6 +196,22 @@ class WorkOrderController extends Controller
         $workOrder->delete();
 
         return response()->json(['message' => 'Work order deleted successfully']);
+    }
+
+    public function updateWorkReportStatus(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'status' => 'required|integer',
+            ]);
+
+            $workReport = WorkReport::findOrFail($id);
+            $workReport->update(['report_status' => $validated['status']]);
+
+            return response()->json(['message' => 'Work report status updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating work report status'], 500);
+        }
     }
 
     private function saveBlocks($workOrder, $blocks)
