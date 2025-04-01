@@ -3,13 +3,14 @@ import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
-import { Dropdown } from 'primereact/dropdown';
+import { Dropdown } from 'primereact/dropdown'; // <-- importa el Dropdown
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import {
   deleteIncidence,
   fetchIncidence,
   updateIncidence,
 } from '@/api/service/incidentService';
+// ↑ hipotético import para la función updateIncidence
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
@@ -18,9 +19,9 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
-import { WorkOrder } from '@/types/WorkOrder';
-import { fetchWorkOrders } from '@/api/service/workOrder';
-import { Zone } from '@/types/Zone';
+import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
+import { useTranslation } from 'react-i18next';
+import axiosClient from '@/api/axiosClient';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -46,32 +47,30 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
-  const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [incidentModalVisible, setIncidentModalVisible] = useState(false);
+  const [eva, setEva] = useState<Eva | null>(null);
+  const [isLoadingEva, setIsLoadingEva] = useState(false);
+  const { t } = useTranslation();
 
-  const { points } = useSelector((state: RootState) => state.points);
-  const { zones } = useSelector((state: RootState) => state.zone);
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
-  );
-  const dispatch = useDispatch<AppDispatch>();
-  const toast = useRef<Toast>(null);
-
+  // estado de opciones para el dropdown de estado
   const statusOptions = [
     { label: 'Abierto', value: IncidentStatus.open },
     { label: 'En progreso', value: IncidentStatus.in_progress },
     { label: 'Cerrado', value: IncidentStatus.closed },
   ];
 
-  useEffect(() => {
-    const loadWorkOrders = async () => {
-      const data: WorkOrder[] = await fetchWorkOrders();
-      const workOrdersFiltered = data.filter(
-        (workOrder) => workOrder.contract_id === currentContract?.id,
-      );
-      setWorkOrders(workOrdersFiltered);
-    };
-    loadWorkOrders();
-  }, []);
+  const { points } = useSelector((state: RootState) => state.points);
+  const { zones } = useSelector((state: RootState) => state.zone);
+  const dispatch = useDispatch<AppDispatch>();
+  const toast = useRef<Toast>(null);
+  const {
+    getStatusMessage,
+    calculateStabilityIndex,
+    calculateGravityHeightRatio,
+    calculateRootCrownRatio,
+    calculateWindStabilityIndex,
+    getSeverityMessage,
+  } = useTreeEvaluation();
 
   useEffect(() => {
     const loadIncidences = async () => {
@@ -91,6 +90,26 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     };
     loadIncidences();
   }, [element.id, dispatch]);
+
+  useEffect(() => {
+    const loadEvaData = async () => {
+      if (activeIndex === 3 && !eva) {
+        // 3 es el índice de la pestaña EVA
+        try {
+          setIsLoadingEva(true);
+          const response = await axiosClient.get(`/admin/evas/${element.id}`);
+          setEva(response.data);
+        } catch (error) {
+          console.error('Error al cargar datos EVA:', error);
+          setEva(null);
+        } finally {
+          setIsLoadingEva(false);
+        }
+      }
+    };
+
+    loadEvaData();
+  }, [activeIndex, element.id, eva]);
 
   const handleStatusChange = async (
     incidenceId: number,
@@ -193,39 +212,150 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
   }
 
-  const findWorkOrdersForElement = (
-    element: Element,
-    workOrders: WorkOrder[],
-    points: Point[],
-    zones: Zone[],
-  ) => {
-    const elementZone = getZoneElement(element.point_id!);
-    if (!elementZone) return [];
+  const renderEvaPanel = () => {
+    if (isLoadingEva) {
+      return (
+        <div className="flex justify-center items-center py-8">
+          <p>Cargando evaluación del árbol...</p>
+        </div>
+      );
+    }
 
-    return workOrders.flatMap((workOrder) =>
-      workOrder.work_orders_blocks!.flatMap((block) => {
-        const zoneMatches = block.zones!.some(
-          (zone) => zone.id === elementZone.id,
-        );
+    if (!eva) {
+      return (
+        <div className="text-center py-8">
+          <p>No hay datos de evaluación disponibles para este árbol.</p>
+        </div>
+      );
+    }
 
-        if (zoneMatches) {
-          return block.block_tasks!.map((task) => ({
-            workOrderId: workOrder.id,
-            taskType: task.tasks_type,
-            notes: block.notes,
-          }));
-        }
-        return [];
-      }),
+    // Calcular todos los indicadores
+    const { message, color } = getStatusMessage(eva.status);
+    const stabilityIndex = calculateStabilityIndex(eva.height, eva.diameter);
+    const gravityHeightRatio = calculateGravityHeightRatio(
+      eva.height_estimation,
+      eva.height,
+    );
+    const rootCrownRatio = calculateRootCrownRatio(
+      eva.effective_root_area,
+      eva.crown_projection_area,
+    );
+    const windStabilityIndex = calculateWindStabilityIndex(
+      eva.height,
+      eva.crown_width,
+      eva.effective_root_area,
+    );
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+          <h3 className="text-lg font-bold mb-3">Índices de Evaluación</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-medium">Estado del Árbol:</p>
+              <Tag
+                value={message}
+                style={{ backgroundColor: color, color: 'black' }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">Índice de Estabilidad:</p>
+              <Tag
+                value={stabilityIndex.message}
+                style={{
+                  backgroundColor: stabilityIndex.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">Relación Altura-Gravedad:</p>
+              <Tag
+                value={gravityHeightRatio.message}
+                style={{
+                  backgroundColor: gravityHeightRatio.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">Relación Raíz-Copa:</p>
+              <Tag
+                value={rootCrownRatio.message}
+                style={{
+                  backgroundColor: rootCrownRatio.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">Índice de Estabilidad al Viento:</p>
+              <Tag
+                value={windStabilityIndex.message}
+                style={{
+                  backgroundColor: windStabilityIndex.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+          <h3 className="text-lg font-bold mb-3">Factores Ambientales</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-medium">Exposición al Viento:</p>
+              <Tag
+                value={getSeverityMessage(eva.wind).message}
+                style={{
+                  backgroundColor: getSeverityMessage(eva.wind).color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">Exposición a Sequía:</p>
+              <Tag
+                value={getSeverityMessage(eva.drought).message}
+                style={{
+                  backgroundColor: getSeverityMessage(eva.drought).color,
+                  color: 'black',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+          <h3 className="text-lg font-bold mb-3">Datos Técnicos</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p>
+                <strong>Altura:</strong> {eva.height} m
+              </p>
+              <p>
+                <strong>Diámetro:</strong> {eva.diameter} cm
+              </p>
+              <p>
+                <strong>Ancho de copa:</strong> {eva.crown_width} m
+              </p>
+            </div>
+            <div>
+              <p>
+                <strong>Área de proyección de copa:</strong>{' '}
+                {eva.crown_projection_area} m²
+              </p>
+              <p>
+                <strong>Área efectiva de raíces:</strong>{' '}
+                {eva.effective_root_area} m²
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   };
-
-  const tasksForElement = findWorkOrdersForElement(
-    element,
-    workOrders,
-    points,
-    zones,
-  );
 
   return (
     <div className="bg-white rounded-lg w-[650px] max-w-full">
@@ -233,8 +363,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}>
+        {/* pestaña de información */}
         <TabPanel header="Información">
           <div className="grid grid-cols-2 gap-4">
+            {/* columna izquierda */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">
                 Información del Árbol
@@ -279,6 +411,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 <strong>Longitud:</strong> {coords.lng || 'No disponible'}
               </p>
 
+              {/* boton para eliminar elemento */}
               <Button
                 label="Eliminar Elemento"
                 className="p-button-danger p-button-sm"
@@ -288,6 +421,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </TabPanel>
 
+        {/* pestaña de incidencias */}
         <TabPanel header="Incidencias">
           <div className="space-y-4">
             {incidences.length > 0 ? (
@@ -359,31 +493,11 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </TabPanel>
 
+        {/* pestaña de historial */}
         <TabPanel header="Historial">
-          <div>
-            <h1>Historial de tareas</h1>
-            {tasksForElement.length > 0 ? (
-              tasksForElement.map((taskInfo, index) => (
-                <div key={index} className="border p-4 rounded-md">
-                  <h4 className="font-semibold">Notas: {taskInfo.notes}</h4>
-                  <p>
-                    <strong>Tarea:</strong> {taskInfo.taskType?.name}
-                  </p>
-                  <p>
-                    <strong>Descripción:</strong>{' '}
-                    {taskInfo.taskType?.description}
-                  </p>
-                  <p>
-                    <strong>ID de Orden de Trabajo:</strong>{' '}
-                    {taskInfo.workOrderId}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <p>No hay historial de tareas para este elemento.</p>
-            )}
-          </div>
+          <p className="text-sm">Historial del elemento (en construcción...)</p>
         </TabPanel>
+        <TabPanel header="EVA">{renderEvaPanel()}</TabPanel>
       </TabView>
     </div>
   );
