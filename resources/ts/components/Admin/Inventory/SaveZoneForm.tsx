@@ -114,7 +114,6 @@ export const SaveZoneForm = ({
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg w-96">
       <Toast ref={toast} />
-      <h2 className="text-xl font-semibold mb-4">Guardar Zona</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label className="block text-sm font-medium">Nombre</label>
