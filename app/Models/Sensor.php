@@ -14,7 +14,7 @@ class Sensor extends Model
         'contract_id',
     ];
 
-    public $incrementing = true; 
+    public $incrementing = true;
     protected $keyType = 'integer';
 
     public function contracts()
@@ -24,13 +24,13 @@ class Sensor extends Model
 
     public function contract()
     {
-        return $this->belongsTo(Contract::class, 'contract_id'); 
+        return $this->belongsTo(Contract::class, 'contract_id');
     }
 
     public function scopeUniqueByEuiAndName($query)
     {
         return $query->select('id', 'dev_eui', 'name', 'latitude', 'longitude', 'contract_id')
-            ->groupBy('dev_eui', 'name'); // Cambiado de 'device_eui' a 'dev_eui'
+            ->groupBy('dev_eui', 'name');
     }
 
     public function scopeUniqueByDeviceEui($query)

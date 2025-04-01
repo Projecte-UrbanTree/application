@@ -19,24 +19,23 @@ class SensorController extends Controller
     public function store(Request $request)
     {
         try {
-            \Log::info('Request data:', $request->all()); // Afegim un log per veure les dades rebudes
+            \Log::info('Request data:', $request->all());
 
             $validatedData = $request->validate([
-                'dev_eui' => 'required|string|unique:sensors,dev_eui', // Assegura que el camp és únic
+                'dev_eui' => 'required|string|unique:sensors,dev_eui',
                 'name' => 'required|string|max:255',
-                'latitude' => 'required|numeric', // Eliminem restriccions de precisió
-                'longitude' => 'required|numeric', // Eliminem restriccions de precisió
-                'contract_id' => 'required|integer|exists:contracts,id', // Verifica que el contract_id existeix
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric',
+                'contract_id' => 'required|integer|exists:contracts,id',
             ]);
 
-            // Crear el sensor
             $sensor = Sensor::create($validatedData);
 
             return response()->json($sensor, 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $e->errors(), // Retorna els errors de validació
+                'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
@@ -63,8 +62,8 @@ class SensorController extends Controller
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
-                'latitude' => 'required|numeric|between:-90,90', 
-                'longitude' => 'required|numeric|between:-180,180', 
+                'latitude' => 'required|numeric|between:-90,90',
+                'longitude' => 'required|numeric|between:-180,180',
                 'contract_id' => 'required|integer|exists:contracts,id',
             ]);
 
@@ -146,7 +145,7 @@ class SensorController extends Controller
             ->orderBy('created_at', 'desc')
             ->value('phi_soil');
 
-        return response()->json(['ph' => $lastPH ?? 0], 200); 
+        return response()->json(['ph' => $lastPH ?? 0], 200);
     }
 
     public function getSensorPHByDevEui($dev_eui)
@@ -155,8 +154,8 @@ class SensorController extends Controller
             $sensorData = SensorHistory::whereHas('sensor', function ($query) use ($dev_eui) {
                 $query->where('dev_eui', $dev_eui);
             })->select('created_at', 'phi_soil', 'water_soil')
-              ->orderBy('created_at', 'asc')
-              ->get();
+                ->orderBy('created_at', 'asc')
+                ->get();
 
             if ($sensorData->isEmpty()) {
                 return response()->json(['message' => 'No history found for the specified dev_eui'], 404);
@@ -194,37 +193,37 @@ class SensorController extends Controller
     }
 
     public function getSensorHistoryByDevEui($dev_eui)
-{
-    try {
-        $sensor = Sensor::where('dev_eui', $dev_eui)->first();
+    {
+        try {
+            $sensor = Sensor::where('dev_eui', $dev_eui)->first();
 
-        if (!$sensor) {
-            return response()->json(['message' => 'Sensor not found'], 404);
+            if (!$sensor) {
+                return response()->json(['message' => 'Sensor not found'], 404);
+            }
+
+            $sensorHistory = SensorHistory::where('sensor_id', $sensor->id)
+                ->orderBy('created_at', 'asc')
+                ->get(['created_at', 'phi_soil as ph1_soil', 'water_soil as humidity_soil']);
+
+            if ($sensorHistory->isEmpty()) {
+                return response()->json(['message' => 'No history found for the specified dev_eui'], 404);
+            }
+
+            $formattedHistory = $sensorHistory->map(function ($entry) {
+                return [
+                    'time' => $entry->created_at->toISOString(),
+                    'ph1_soil' => $entry->ph1_soil,
+                    'humidity_soil' => $entry->humidity_soil,
+                ];
+            });
+
+            return response()->json($formattedHistory, 200);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching sensor history by dev_eui:', ['error' => $e->getMessage()]);
+            return response()->json([
+                'message' => 'Error fetching sensor history',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        $sensorHistory = SensorHistory::where('sensor_id', $sensor->id)
-            ->orderBy('created_at', 'asc')
-            ->get(['created_at', 'phi_soil as ph1_soil', 'water_soil as humidity_soil']);
-
-        if ($sensorHistory->isEmpty()) {
-            return response()->json(['message' => 'No history found for the specified dev_eui'], 404);
-        }
-
-        $formattedHistory = $sensorHistory->map(function ($entry) {
-            return [
-                'time' => $entry->created_at->toISOString(),
-                'ph1_soil' => $entry->ph1_soil,
-                'humidity_soil' => $entry->humidity_soil,
-            ];
-        });
-
-        return response()->json($formattedHistory, 200);
-    } catch (\Exception $e) {
-        \Log::error('Error fetching sensor history by dev_eui:', ['error' => $e->getMessage()]);
-        return response()->json([
-            'message' => 'Error fetching sensor history',
-            'error' => $e->getMessage(),
-        ], 500);
     }
-}
 }
