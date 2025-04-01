@@ -187,9 +187,9 @@
             "name": "Introdueix el nom",
             "type": "Selecciona un tipus"
           },
-          "returnButton": "Torna a la llista de tipus de tasca",
+          "returnButton": "Torna a la llista de recursos",
           "submitButton": {
-            "create": "Crear Tipus de tasca",
+            "create": "Crear Recurs",
             "edit": "Desa Canvis"
           },
           "submittingText": {
@@ -197,8 +197,8 @@
             "edit": "Desant..."
           },
           "title": {
-            "create": "Crear Tipus de tasca",
-            "edit": "Edita Tipus de tasca"
+            "create": "Crear Recurs",
+            "edit": "Edita Recurs"
           },
           "validation": {
             "description_max": "La descripció no pot excedir els 255 caràcters",
