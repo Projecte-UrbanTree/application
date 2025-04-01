@@ -31,17 +31,47 @@ class WorkReportResourceSeeder extends Seeder
             [
                 'quantity' => 15,
                 'resource_id' => 4,
-                'work_report_id' => 3,
+                'work_report_id' => 4,
             ],
             [
                 'quantity' => 25,
                 'resource_id' => 5,
-                'work_report_id' => 3,
+                'work_report_id' => 5,
             ],
             [
                 'quantity' => 35,
                 'resource_id' => 6,
-                'work_report_id' => 3,
+                'work_report_id' => 6,
+            ],
+            [
+                'quantity' => 10,
+                'resource_id' => 1,
+                'work_report_id' => 7,
+            ],
+            [
+                'quantity' => 20,
+                'resource_id' => 2,
+                'work_report_id' => 8,
+            ],
+            [
+                'quantity' => 30,
+                'resource_id' => 3,
+                'work_report_id' => 9,
+            ],
+            [
+                'quantity' => 15,
+                'resource_id' => 4,
+                'work_report_id' => 11,
+            ],
+            [
+                'quantity' => 25,
+                'resource_id' => 5,
+                'work_report_id' => 12,
+            ],
+            [
+                'quantity' => 35,
+                'resource_id' => 6,
+                'work_report_id' => 10,
             ],
         ]);
     }

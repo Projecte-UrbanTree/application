@@ -83,6 +83,20 @@ class WorkReportSeeder extends Seeder
                 'report_status' => 2,
                 'report_incidents' => 'Incidence for Work Report 10',
             ],
+            [
+                'observation' => 'Observation for Work Report 10',
+                'spent_fuel' => 35.5,
+                'work_order_id' => 11,
+                'report_status' => 2,
+                'report_incidents' => 'Incidence for Work Report 10',
+            ],
+            [
+                'observation' => 'Observation for Work Report 10',
+                'spent_fuel' => 35.5,
+                'work_order_id' => 12,
+                'report_status' => 2,
+                'report_incidents' => 'Incidence for Work Report 10',
+            ],
         ]);
     }
 }
