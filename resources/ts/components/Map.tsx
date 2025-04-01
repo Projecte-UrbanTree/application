@@ -380,7 +380,7 @@ export const MapComponent: React.FC<MapProps> = ({
         )}
       </Dialog>
       <Dialog
-        header={`Detalles del Elemento #${selectedElement?.id}`}
+        header={`Elemento ${selectedElement?.id}`}
         visible={elementModalVisible}
         onHide={() => setElementModalVisible(false)}>
         {selectedElement && (
@@ -388,6 +388,10 @@ export const MapComponent: React.FC<MapProps> = ({
             element={selectedElement}
             onClose={() => setElementModalVisible(false)}
             onOpenIncidentForm={() => setIncidentModalVisible(true)}
+            treeTypes={treeTypes}
+            elementTypes={elementTypes}
+            getCoordElement={(selectedElement, points) => mapServiceRef.current?.getCoordElement(selectedElement, points)!}
+            // PASAR FUNCION service.getCoordElement
           />
         )}
       </Dialog>
