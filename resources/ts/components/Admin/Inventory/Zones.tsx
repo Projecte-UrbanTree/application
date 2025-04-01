@@ -272,6 +272,16 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
                   }
                   return null;
                 })}
+
+                {elementTypes.every((elementType: ElementType) => {
+                  const count =
+                    countElementsByTypeInZone(zone.id!)[elementType.id!] || 0;
+                  return count === 0;
+                }) && (
+                  <p className="text-gray-500 mt-2">
+                    No hay elementos marcados en esta zona.
+                  </p>
+                )}
               </div>
             </AccordionTab>
           ))}
