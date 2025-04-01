@@ -15,7 +15,7 @@ export class MapService {
   public map!: mapboxgl.Map;
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
-  private elementMarkers: mapboxgl.Marker[] = [];
+  private elementMarkers: { marker: mapboxgl.Marker; elementId: number }[] = [];
 
   constructor(container: HTMLDivElement, token: string) {
     mapboxgl.accessToken = token;
@@ -213,12 +213,24 @@ export class MapService {
         }
       });
 
-      this.elementMarkers.push(marker);
+      this.elementMarkers.push({ marker, elementId: element.id! });
     });
   }
 
+  public removeElementMarker(elementId: number) {
+    const markerObj = this.elementMarkers.find(
+      (m) => m.elementId === elementId,
+    );
+    if (markerObj) {
+      markerObj.marker.remove();
+      this.elementMarkers = this.elementMarkers.filter(
+        (m) => m.elementId !== elementId,
+      );
+    }
+  }
+
   public removeElementMarkers() {
-    this.elementMarkers.forEach((marker) => marker.remove());
+    this.elementMarkers.forEach((markerObj) => markerObj.marker.remove());
     this.elementMarkers = [];
   }
 

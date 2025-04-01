@@ -5,7 +5,11 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
 import { Dropdown } from 'primereact/dropdown'; // <-- importa el Dropdown
 import { Incidence, IncidentStatus } from '@/types/Incident';
-import { deleteIncidence, fetchIncidence, updateIncidence } from '@/api/service/incidentService'; 
+import {
+  deleteIncidence,
+  fetchIncidence,
+  updateIncidence,
+} from '@/api/service/incidentService';
 // ↑ hipotético import para la función updateIncidence
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
@@ -14,6 +18,7 @@ import { Toast } from 'primereact/toast';
 import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
+import { deleteElementAsync } from '@/store/slice/elementSlice';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -21,7 +26,11 @@ interface ElementDetailPopupProps {
   elementTypes: ElementType[];
   onClose: () => void;
   onOpenIncidentForm: () => void;
-  getCoordElement: (element: Element, points: Point[]) => { lat: number; lng: number };
+  getCoordElement: (
+    element: Element,
+    points: Point[],
+  ) => { lat: number; lng: number };
+  onDeleteElement: (elementId: number) => void;
 }
 
 const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
@@ -31,9 +40,11 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   onClose,
   onOpenIncidentForm,
   getCoordElement,
+  onDeleteElement,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
+  const [incidentModalVisible, setIncidentModalVisible] = useState(false);
 
   // estado de opciones para el dropdown de estado
   const statusOptions = [
@@ -66,15 +77,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     loadIncidences();
   }, [element.id, dispatch]);
 
-  const handleStatusChange = async (incidenceId: number, newStatus: IncidentStatus) => {
+  const handleStatusChange = async (
+    incidenceId: number,
+    newStatus: IncidentStatus,
+  ) => {
     try {
       dispatch(showLoader());
       await updateIncidence(incidenceId, { status: newStatus });
 
       setIncidences((prev) =>
         prev.map((inc) =>
-          inc.id === incidenceId ? { ...inc, status: newStatus } : inc
-        )
+          inc.id === incidenceId ? { ...inc, status: newStatus } : inc,
+        ),
       );
 
       toast.current?.show({
@@ -100,21 +114,36 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     }, 300);
   };
 
-  const handleDeleteIncident = async (id: number) => {
+  const handleDeleteIncident = async (incidentId: number) => {
+    try {
+      await deleteIncidence(incidentId);
+      const updatedIncidences = incidences.filter(
+        (inc) => inc.id !== incidentId,
+      );
+      setIncidences(updatedIncidences);
+      onDeleteElement(element.id!);
+      onClose();
+    } catch (error) {
+      console.error('Error al eliminar la incidencia:', error);
+    }
+  };
+
+  const handleDeleteElement = async (id: number) => {
     try {
       onClose();
       dispatch(showLoader());
-      await deleteIncidence(id);
+      await dispatch(deleteElementAsync(id));
+      onDeleteElement(id);
       toast.current?.show({
         severity: 'success',
         summary: 'Éxito',
-        detail: 'Incidencia eliminada correctamente',
+        detail: 'Elemento eliminado correctamente',
       });
-      // quita la incidencia del estado local
-      setIncidences((prev) => prev.filter((inc) => inc.id !== id));
     } catch (error) {
       toast.current?.show({
         severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo eliminar el elemento',
       });
     } finally {
       dispatch(hideLoader());
@@ -152,18 +181,24 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   return (
     <div className="bg-white rounded-lg w-[650px] max-w-full">
       <Toast ref={toast} />
-      <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
+      <TabView
+        activeIndex={activeIndex}
+        onTabChange={(e) => setActiveIndex(e.index)}>
         {/* pestaña de información */}
         <TabPanel header="Información">
           <div className="grid grid-cols-2 gap-4">
             {/* columna izquierda */}
             <div className="text-sm space-y-2">
-              <h3 className="font-bold text-base mb-3">Información del Árbol</h3>
+              <h3 className="font-bold text-base mb-3">
+                Información del Árbol
+              </h3>
               <p>
-                <strong>Descripción:</strong> {element.description || 'No disponible'}
+                <strong>Descripción:</strong>{' '}
+                {element.description || 'No disponible'}
               </p>
               <p>
-                <strong>Tipo Elemento:</strong> {getElementType(element.element_type_id!)}
+                <strong>Tipo Elemento:</strong>{' '}
+                {getElementType(element.element_type_id!)}
               </p>
               <p>
                 <strong>Familia Arbol:</strong>{' '}
@@ -196,6 +231,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               <p>
                 <strong>Longitud:</strong> {coords.lng || 'No disponible'}
               </p>
+
+              {/* boton para eliminar elemento */}
+              <Button
+                label="Eliminar Elemento"
+                className="p-button-danger p-button-sm"
+                onClick={() => handleDeleteElement(element.id!)}
+              />
             </div>
           </div>
         </TabPanel>
@@ -208,11 +250,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 <div key={incidence.id} className="border p-4 rounded-md">
                   <p className="font-bold">Incidencia #{incidence.id}</p>
                   <p>
-                    <strong>📛 Nombre:</strong> {incidence.name || 'No disponible'}
+                    <strong>📛 Nombre:</strong>{' '}
+                    {incidence.name || 'No disponible'}
                   </p>
                   <p>
                     <strong>📅 Fecha Creación:</strong>{' '}
-                    {convertirFechaIsoAFormatoEuropeo(incidence.created_at!) || 'No disponible'}
+                    {convertirFechaIsoAFormatoEuropeo(incidence.created_at!) ||
+                      'No disponible'}
                   </p>
                   <p>
                     <strong>⚠️ Estado:</strong>{' '}
@@ -221,15 +265,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                         incidence.status === IncidentStatus.open
                           ? 'warning'
                           : incidence.status === IncidentStatus.in_progress
-                          ? 'info'
-                          : 'success'
+                            ? 'info'
+                            : 'success'
                       }
                       value={
                         incidence.status === IncidentStatus.open
                           ? 'Abierto'
                           : incidence.status === IncidentStatus.in_progress
-                          ? 'En progreso'
-                          : 'Cerrado'
+                            ? 'En progreso'
+                            : 'Cerrado'
                       }
                       className="ml-2"
                     />
@@ -239,12 +283,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                     {incidence.description || 'No disponible'}
                   </p>
 
-                 
-                  <div className="mt-3 flex gap-2 flex-wrap items-center">
+                  <div className="mt-3 flex gap-2">
                     <Dropdown
                       value={incidence.status}
                       options={statusOptions}
-                      onChange={(e) => handleStatusChange(incidence.id!, e.value)}
+                      onChange={(e) =>
+                        handleStatusChange(incidence.id!, e.value)
+                      }
                       className="w-[140px] p-inputtext-sm"
                     />
                     <Button

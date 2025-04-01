@@ -202,7 +202,7 @@ export const MapComponent: React.FC<MapProps> = ({
     } else {
       updateElements(service);
     }
-  }, [elements, currentContract, points]);
+  }, [elements, currentContract, points, dispatch]);
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
@@ -318,6 +318,26 @@ export const MapComponent: React.FC<MapProps> = ({
     return turf.polygon([coords]);
   }
 
+  const handleElementDelete = async (elementId: number) => {
+    try {
+      await dispatch(deleteElementAsync(elementId));
+      mapServiceRef.current?.removeElementMarker(elementId);
+      setElementModalVisible(false);
+      setSelectedElement(null);
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Elemento eliminado correctamente',
+      });
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al eliminar el elemento',
+      });
+    }
+  };
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div
@@ -380,18 +400,20 @@ export const MapComponent: React.FC<MapProps> = ({
         )}
       </Dialog>
       <Dialog
-        header={`Elemento ${selectedElement?.id}`}
+        header={`Detalles del Elemento #${selectedElement?.id}`}
         visible={elementModalVisible}
         onHide={() => setElementModalVisible(false)}>
         {selectedElement && (
           <ElementDetailPopup
             element={selectedElement}
             onClose={() => setElementModalVisible(false)}
-            onOpenIncidentForm={() => setIncidentModalVisible(true)}
+            onDeleteElement={handleElementDelete}
             treeTypes={treeTypes}
             elementTypes={elementTypes}
-            getCoordElement={(selectedElement, points) => mapServiceRef.current?.getCoordElement(selectedElement, points)!}
-            // PASAR FUNCION service.getCoordElement
+            onOpenIncidentForm={() => setIncidentModalVisible(true)}
+            getCoordElement={() =>
+              mapServiceRef.current?.getCoordElement(selectedElement, points)!
+            }
           />
         )}
       </Dialog>
