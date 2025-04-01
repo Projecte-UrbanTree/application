@@ -317,11 +317,12 @@ export default function WorkOrders() {
 
   const actionButtons = useCallback(
     (rowData: WorkOrder) => {
-      const isEditable = rowData.status !== 1 && rowData.status !== 2;
+      const isEditable = rowData.status !== 1 && rowData.status !== 2 && rowData.status !== 3;
+      const canViewReport = rowData.status === 1 || rowData.status === 2 || rowData.status === 3;
 
       return (
         <div className="flex justify-end gap-2">
-          {isEditable ? (
+          {isEditable && (
             <>
               <Button
                 icon={<Icon icon="tabler:edit" />}
@@ -338,7 +339,8 @@ export default function WorkOrders() {
                 title={t('admin.pages.workOrders.list.actions.delete')}
               />
             </>
-          ) : (
+          )}
+          {canViewReport && (
             <Button
               icon={<Icon icon="tabler:file-text" />}
               className="p-button-rounded p-button-info"
