@@ -42,326 +42,299 @@ import EditSensor from '@/pages/Admin/Settings/Sensors/Edit';
 import { Navigate, RouteObject } from 'react-router-dom';
 
 const AdminRoutes: RouteObject[] = [
-    {
-        element: <AdminProtectedRoute />,
+  {
+    element: <AdminProtectedRoute />,
+    children: [
+      {
+        path: '/admin',
         children: [
-            {
-                path: '/admin',
-                children: [
-                    { index: true, element: <Navigate to="/admin/dashboard" replace /> },
-                    {
-                        path: 'dashboard',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.dashboard.title">
-                                <AdminDashboard />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'evas',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.evas.title">
-                                <Eva />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'evas/create',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.evas.create.title">
-                                <CreateEva />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'evas/edit/:id',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.evas.edit.title">
-                                <EditEva />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'evas/:id',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.evas.show.title">
-                                <ShowEva />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'work-orders',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.title">
-                                <AdminWorkOrders />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'work-orders/create',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.create.title">
-                                <CreateWorkOrder />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'work-orders/edit/:id',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
-                                <EditWorkOrder />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'work-reports/:id',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
-                                <WorkReport />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'inventory',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.inventory.title">
-                                <AdminInventory />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'workers',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.workers.title">
-                                <AdminWorkers />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'resources',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.resources.title">
-                                <AdminResources />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'resources/create',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.resources.create.title">
-                                <CreateResource />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'resources/edit/:id',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.resources.edit.title">
-                                <EditResource />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'statistics',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
-                                <AdminStats />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'account',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.account.title">
-                                <Account />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'sensors',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.sensors.title">
-                                <AdminSensors />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'sensors/create',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.sensors.create.title">
-                                <CreateSensor />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'sensors/edit/:id',
-                        element: (
-                            <AdminLayoutWrapper titleI18n="admin.pages.sensors.edit.title">
-                                <EditSensor />
-                            </AdminLayoutWrapper>
-                        ),
-                    },
-                    {
-                        path: 'settings',
-                        children: [
-                            {
-                                index: true,
-                                element: <Navigate to="/admin/settings/users" replace />,
-                            },
-                            {
-                                path: 'users',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.users.title">
-                                        <AdminUsers />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'users/create',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.users.create.title">
-                                        <CreateUser />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'users/edit/:id',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.users.edit.title">
-                                        <EditUser />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'contracts',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.title">
-                                        <AdminContracts />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'contracts/create',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.create.title">
-                                        <CreateContract />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'contracts/edit/:id',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.contracts.edit.title">
-                                        <EditContract />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'element-types',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.title">
-                                        <AdminElementTypes />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'element-types/create',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.create.title">
-                                        <CreateElementTypes />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'element-types/edit/:id',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.edit.title">
-                                        <EditElementTypes />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'tree-types',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.title">
-                                        <AdminTreeTypes />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'tree-types/create',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.create.title">
-                                        <CreateTreeType />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'tree-types/edit/:id',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.edit.title">
-                                        <EditTreeType />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'task-types',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.title">
-                                        <AdminTaskTypes />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'task-types/create',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.create.title">
-                                        <CreateTaskType />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'task-types/edit/:id',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.edit.title">
-                                        <EditTaskType />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'resource-types',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.title">
-                                        <AdminResourceTypes />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'resource-types/create',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.create.title">
-                                        <CreateResourceType />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                            {
-                                path: 'resource-types/edit/:id',
-                                element: (
-                                    <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.edit.title">
-                                        <EditResourceType />
-                                    </AdminLayoutWrapper>
-                                ),
-                            },
-                        ],
-                    },
-                ],
-            },
+          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
+          {
+            path: 'dashboard',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.dashboard.title">
+                <AdminDashboard />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.title">
+                <Eva />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas/create',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.create.title">
+                <CreateEva />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas/edit/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.edit.title">
+                <EditEva />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'evas/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.evas.show.title">
+                <ShowEva />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'work-orders',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.workOrders.title">
+                <AdminWorkOrders />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'work-orders/create',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.workOrders.create.title">
+                <CreateWorkOrder />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'work-orders/edit/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                <EditWorkOrder />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'work-reports/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+                <WorkReport />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'inventory',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.inventory.title">
+                <AdminInventory />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'workers',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.workers.title">
+                <AdminWorkers />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'resources',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.resources.title">
+                <AdminResources />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'resources/create',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.resources.create.title">
+                <CreateResource />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'resources/edit/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.resources.edit.title">
+                <EditResource />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'statistics',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.stats.title">
+                <AdminStats />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'account',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.account.title">
+                <Account />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'settings',
+            children: [
+              { index: true, element: <Navigate to="/admin/settings/users" replace /> },
+              {
+                path: 'users',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.users.title">
+                    <AdminUsers />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'users/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.users.create.title">
+                    <CreateUser />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'users/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.users.edit.title">
+                    <EditUser />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'contracts',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.contracts.title">
+                    <AdminContracts />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'contracts/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.contracts.create.title">
+                    <CreateContract />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'contracts/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.contracts.edit.title">
+                    <EditContract />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'element-types',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.title">
+                    <AdminElementTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'element-types/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.create.title">
+                    <CreateElementTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'element-types/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.elementTypes.edit.title">
+                    <EditElementTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'tree-types',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.title">
+                    <AdminTreeTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'tree-types/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.create.title">
+                    <CreateTreeType />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'tree-types/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.treeTypes.edit.title">
+                    <EditTreeType />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'task-types',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.title">
+                    <AdminTaskTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'task-types/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.create.title">
+                    <CreateTaskType />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'task-types/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.taskTypes.edit.title">
+                    <EditTaskType />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'resource-types',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.title">
+                    <AdminResourceTypes />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'resource-types/create',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.create.title">
+                    <CreateResourceType />
+                  </AdminLayoutWrapper>
+                ),
+              },
+              {
+                path: 'resource-types/edit/:id',
+                element: (
+                  <AdminLayoutWrapper titleI18n="admin.pages.resourceTypes.edit.title">
+                    <EditResourceType />
+                  </AdminLayoutWrapper>
+                ),
+              },
+            ],
+          },
         ],
-    },
-    {
-        path: '*',
-        element: <Navigate to="/login" replace />,
-    },
+      },
+    ],
+  },
+  {
+    path: '*',
+    element: <Navigate to="/login" replace />,
+  },
 ];
 
 export default AdminRoutes;

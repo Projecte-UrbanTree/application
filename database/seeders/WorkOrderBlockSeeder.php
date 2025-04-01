@@ -53,6 +53,10 @@ class WorkOrderBlockSeeder extends Seeder
                 'notes' => 'Notes for Work Order Block 10',
                 'work_order_id' => 10,
             ],
+            [
+                'notes' => 'Notes for Work Order Block 11',
+                'work_order_id' => 3,
+            ],
         ]);
     }
 }

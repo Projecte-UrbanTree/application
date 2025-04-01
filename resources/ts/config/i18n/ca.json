@@ -12,8 +12,7 @@
         "inventory": "Inventari",
         "workers": "Treballadors",
         "resources": "Recursos",
-        "stats": "Estadístiques",
-        "sensors": "Sensors"
+        "stats": "Estadístiques"
       },
       "settings": {
         "contracts": "Contractes",
@@ -55,6 +54,8 @@
       "resource_type": "Tipus de recurs",
       "role": "Rol",
       "select_resource_type": "Selecciona un tipus de recurs",
+      "unit_cost": "Edita el cost unitari",
+      "unit_name": "Selecciona una unitat de recurs",
       "species": "Espècie",
       "start_date": "Data d'inici",
       "status": "Estat",
@@ -220,9 +221,9 @@
             "name": "Introdueix el nom",
             "type": "Selecciona un tipus"
           },
-          "returnButton": "Torna a la llista de tipus de tasca",
+          "returnButton": "Torna a la llista de recursos",
           "submitButton": {
-            "create": "Crear Tipus de tasca",
+            "create": "Crear Recurs",
             "edit": "Desa Canvis"
           },
           "submittingText": {
@@ -230,8 +231,8 @@
             "edit": "Desant..."
           },
           "title": {
-            "create": "Crear Tipus de tasca",
-            "edit": "Edita Tipus de tasca"
+            "create": "Crear Recurs",
+            "edit": "Edita Recurs"
           },
           "validation": {
             "description_max": "La descripció no pot excedir els 255 caràcters",
@@ -240,7 +241,10 @@
             "name_min": "El nom ha de tenir almenys 3 caràcters",
             "name_required": "El nom és obligatori",
             "type_invalid": "Si us plau, selecciona un tipus de recurs vàlid",
-            "type_required": "El tipus és obligatori"
+            "type_required": "El tipus és obligatori",
+            "unit_cost_min": "El cost unitari ha de ser major que 0",
+            "unit_cost_required": "El cost unitari és obligatori",
+            "unit_name_required": "El nom de la unitat és obligatori"
           }
         },
         "list": {
@@ -252,7 +256,10 @@
           "columns": {
             "description": "Descripció",
             "name": "Nom",
-            "type": "Tipus"
+            "type": "Tipus",
+            "unit": "Unitat",
+            "unit_name": "Nom de la unitat",
+            "unit_cost": "Cost unitari"
           },
           "messages": {
             "createSuccess": "Tipus de recurs creat correctament",
@@ -321,7 +328,8 @@
         "tasksNotDone": "Tasques Pendents",
         "hoursWorked": "Hores Treballades",
         "fuelConsumption": "Consum de Combustible",
-        "noData": "No hi ha dades per mostrar"
+        "noData": "No hi ha dades per mostrar",
+        "exportCSV": "Exportar a CSV"
       },
       "taskTypes": {
         "form": {
@@ -585,6 +593,76 @@
         },
         "title": "Ordres de treball"
       },
+      "workReport": {
+        "title": "Informe de Treball",
+        "not_found": "No s'ha trobat l'Informe de Treball",
+        "columns": {
+          "users": "Treballadors",
+          "observation": "Observació",
+          "spent_fuel": "Combustible Gastat",
+          "incidents": "Incidències",
+          "zones": "Zones",
+          "tasks": "Tasques",
+          "notes": "Notes",
+          "block": "Bloc",
+          "resources": "Recursos"
+        },
+        "messages": {
+          "closing_part": "Tancant part...",
+          "part_closed": "Part tancat amb èxit",
+          "closing_block": "Tancant bloc...",
+          "close_block": "Bloc tancat amb èxit",
+          "closing_with_incidents": "Tancant bloc amb incidències...",
+          "close_with_incidents": "Bloc tancat amb incidències",
+          "rejecting": "Rebutjant bloc...",
+          "reject": "Bloc rebutjat",
+          "closing_with_observations": "Tancant informe amb observacions...",
+          "close_with_observations": "Informe tancat amb observacions",
+          "error_updating_observations": "Error en actualitzar observacions",
+          "observation_updated": "Observació actualitzada correctament",
+          "error_updating_observation": "Error en actualitzar l'observació"
+        },
+        "reportStatus": {
+          "pending": "Pendent",
+          "completed": "Completat",
+          "rejected": "Rebutjat",
+          "closedWithIncidents": "Tancat amb incidències",
+          "unknown": "Desconegut"
+        },
+        "details": {
+          "details": "Detalls",
+          "block": "Bloc",
+          "noBlocks": "No hi ha blocs",
+          "noBlocksAvailable": "No hi ha blocs disponibles per aquest informe de treball",
+          "noNotes": "No hi ha notes",
+          "noTasks": "No hi ha tasques assignades",
+          "notes": "Notes",
+          "noUsers": "No hi ha usuaris assignats",
+          "noZones": "No hi ha zones assignades",
+          "tasks": "Tasques",
+          "unknown": "Desconegut",
+          "zones": "Zones",
+          "resources": "Recursos",
+          "observation": "Observació",
+          "noObservation": "No hi ha observació disponible",
+          "incidents": "Incidències",
+          "noIncidents": "No hi ha incidències registrades",
+          "spentFuel": "Combustible Gastat",
+          "taskStatus": "Estat de la Tasca",
+          "hours": "Hores",
+          "unit": "Unitat",
+          "cost": "Cost",
+          "quantity": "Quantitat"
+        },
+        "dialogs": {
+          "observationHeader": "Afegeix Observacions",
+          "observationMessage": "Si us plau, proporciona les teves observacions abans de tancar l'informe.",
+          "observationPlaceholder": "Introdueix les teves observacions aquí...",
+          "editObservationHeader": "Edita Observació",
+          "editObservationMessage": "Modifica l'observació per aquest informe.",
+          "editObservationPlaceholder": "Introdueix la teva observació actualitzada aquí..."
+        }
+      },
       "account": {
         "title": "Configuració del Compte",
         "basicInfo": "Informació Bàsica",
@@ -607,6 +685,259 @@
           "profileUpdated": "Perfil actualitzat correctament",
           "errorSaving": "Error en desar els canvis.",
           "passwordCurrentWrong": "La contrasenya actual no coincideix"
+        }
+      },
+      "evas": {
+        "show": {
+          "title": "Detalls de l'Eva"
+        },
+        "dictionaries": {
+          "unbalancedCrown": {
+            "0": "Sense inclinació o creixement desigual",
+            "1": "Lleugera inclinació de la capçada",
+            "2": "Capçada visiblement inclinada",
+            "3": "Capçada extremadament inclinada"
+          },
+          "overextendedBranches": {
+            "0": "Branques ben estructurades",
+            "1": "Algunes branques sobreexteses",
+            "2": "Diverses branques sobreexteses",
+            "3": "Branques sobreexteses i pesades"
+          },
+          "cracks": {
+            "0": "Sense esquerdes",
+            "1": "Petites esquerdes al tronc",
+            "2": "Esquerdes visibles en diverses parts",
+            "3": "Esquerdes profundes al tronc"
+          },
+          "deadBranches": {
+            "0": "Sense branques mortes",
+            "1": "Algunes branques mortes",
+            "2": "Múltiples branques mortes",
+            "3": "Gran quantitat de branques mortes"
+          },
+          "inclination": {
+            "0": "Completament vertical",
+            "1": "Lleugera inclinació (<5°)",
+            "2": "Inclinació moderada (5-15°)",
+            "3": "Alta inclinació (>15°)"
+          },
+          "VForks": {
+            "0": "Bifurcacions normals",
+            "1": "Lleugera bifurcació en V",
+            "2": "Bifurcació en V pronunciada",
+            "3": "Bifurcació en V perillosa"
+          },
+          "cavities": {
+            "0": "Sense cavitats",
+            "1": "Petita cavitat",
+            "2": "Cavitat intermèdia",
+            "3": "Cavitat profunda i estructural"
+          },
+          "barkDamage": {
+            "0": "Escorça intacta",
+            "1": "Escorça amb petites ferides",
+            "2": "Dany significatiu a l'escorça",
+            "3": "Escorça molt danyada"
+          },
+          "soilLifting": {
+            "0": "Sòl sense alteracions",
+            "1": "Lleugera elevació del sòl",
+            "2": "Elevació visible del sòl",
+            "3": "Sòl severament aixecat"
+          },
+          "cutRoots": {
+            "0": "Arrels intactes",
+            "1": "Arrels amb petits talls",
+            "2": "Arrels parcialment danyades",
+            "3": "Arrels severament tallades"
+          },
+          "basalRot": {
+            "0": "Sense podridura",
+            "1": "Podridura inicial",
+            "2": "Podridura visible",
+            "3": "Podridura avançada"
+          },
+          "exposedRoots": {
+            "0": "Arrels sota terra",
+            "1": "Algunes arrels exposades",
+            "2": "Diverses arrels exposades",
+            "3": "Arrels exposades i debilitades"
+          },
+          "wind": {
+            "0": "Arbre protegit per barreres naturals o edificis, sense vent fort constant.",
+            "1": "Arbre amb vent ocasional però sense impacte significatiu en la seva estabilitat.",
+            "2": "Arbre exposat a vents forts freqüents, que poden afectar la seva estructura.",
+            "3": "Arbre en zones obertes o pendents on el vent bufa amb força extrema."
+          },
+          "drought": {
+            "0": "Arbre en zona amb humitat estable i accés constant a aigua, sense estrès hídric.",
+            "1": "Arbre amb accés moderat a aigua, però amb períodes ocasionals de sequera.",
+            "2": "Arbre en zona amb sequeres recurrents, afectant el seu desenvolupament i resistència.",
+            "3": "Arbre en zona àrida o amb sequeres prolongades, alt risc de debilitament."
+          }
+        },
+        "edit": {
+          "title": "Editar Eva",
+          "identification": "Identificació",
+          "treeCondition": "Condició de l'Arbre",
+          "dimensions": "Dimensions",
+          "state": "Estat",
+          "crownBranches": "Copa i Branques",
+          "trunk": "Tronc",
+          "roots": "Arrels",
+          "environmentCondition": "Condició de l'Entorn",
+          "environmentalFactors": "Factors Ambientals",
+          "windExposure": "Exposició al Vent",
+          "droughtExposure": "Exposició a la Sequera"
+        },
+        "create": {
+          "identification": "Identificació",
+          "treeCondition": "Condició de l'Arbre",
+          "dimensions": "Dimensions",
+          "state": "Estat",
+          "crownBranches": "Copa i Branques",
+          "trunk": "Tronc",
+          "roots": "Arrels",
+          "environmentCondition": "Condició de l'Entorn",
+          "environmentalFactors": "Factors Ambientals",
+          "windExposure": "Exposició al Vent",
+          "droughtExposure": "Exposició a la Sequera"
+        },
+        "title": "Eves",
+        "age": {
+          "years": "Anys",
+          "months": "Mesos"
+        },
+        "columns": {
+          "element_id": "ID de l'Element",
+          "age": "Edat",
+          "height": "Alçada",
+          "actions": "Accions",
+          "name": "Nom",
+          "coordinates": "Coordenades",
+          "status": "Estat"
+        },
+        "form": {
+          "name": "Nom",
+          "element_id": "ID de l'Element",
+          "years": "Anys",
+          "months": "Mesos",
+          "height": "Alçada",
+          "diameter": "Diàmetre",
+          "crown_width": "Amplada de la Copa",
+          "crown_projection_area": "Àrea de Projecció de la Copa",
+          "root_surface_diameter": "Diàmetre de la Superfície de l'Arrel",
+          "effective_root_area": "Àrea Efectiva de l'Arrel",
+          "height_estimation": "Estimació de l'Alçada",
+          "unbalanced_crown": "Copa Descompensada",
+          "overextended_branches": "Branques Sobreexteses",
+          "cracks": "Esquerdes",
+          "dead_branches": "Branques Mortes",
+          "inclination": "Inclinació",
+          "V_forks": "Bifurcacions en V",
+          "cavities": "Cavitats",
+          "bark_damage": "Danys a l'Escorça",
+          "soil_lifting": "Aixecament del Sòl",
+          "cut_damaged_roots": "Arrels Tallades/Danyades",
+          "basal_rot": "Podridura Basal",
+          "exposed_surface_roots": "Arrels Superficials Exposades",
+          "wind": "Vent",
+          "drought": "Sequera",
+          "validation": {
+            "element_required": "L'element és obligatori"
+          },
+          "title": {
+            "create": "Crear Eva",
+            "edit": "Editar Eva"
+          },
+          "saving": "Guardant...",
+          "save": "Guardar"
+        },
+        "list": {
+          "actions": {
+            "show": "Mostrar Eva",
+            "delete": "Eliminar Eva"
+          },
+          "messages": {
+            "createSuccess": "Eva creada correctament",
+            "deleteConfirm": "Estàs segur que vols eliminar aquesta Eva?",
+            "deleteSuccess": "Eva eliminada correctament",
+            "error": "Error guardant l'Eva",
+            "updateSuccess": "Eva actualitzada correctament"
+          }
+        },
+        "status": {
+          "low": "Baix",
+          "moderate": "Moderada",
+          "high": "Alta",
+          "critical": "Crítica",
+          "pending": "Pendent"
+        },
+        "stability": {
+          "stable": "Estable",
+          "moderate": "Moderada",
+          "highRisk": "Alt Risc",
+          "pending": "Pendent"
+        },
+        "gravityHeight": {
+          "veryStable": "Molt Estable",
+          "moderateRisk": "Risc Moderat",
+          "highRisk": "Alt Risc",
+          "pending": "Pendent"
+        },
+        "rootCrown": {
+          "veryStable": "Molt Estable",
+          "stable": "Estable",
+          "moderateStability": "Estabilitat Moderada",
+          "highRisk": "Alt Risc",
+          "pending": "Pendent"
+        },
+        "windStability": {
+          "veryStable": "Molt Estable",
+          "moderateStability": "Estabilitat Moderada",
+          "highRisk": "Alt Risc",
+          "pending": "Pendent"
+        },
+        "severity": {
+          "low": "Baix",
+          "moderate": "Moderada",
+          "high": "Alta",
+          "extreme": "Extrema",
+          "pending": "Pendent"
+        },
+        "indexCalculation": "Càlcul de l'Índex",
+        "treeStatusFactor": "Factor d'Estat de l'Arbre",
+        "stabilityIndex": "Índex d'Estabilitat (H/D)",
+        "gravityHeightRatio": "Relació d'Alçada de la Gravetat (CG/H)",
+        "rootCrownRatio": "Relació de la Corona de l'Arrel (SR/SC)",
+        "windStabilityIndex": "Índex d'Estabilitat del Vent (WSI)",
+        "environmentalFactors": "Factors Ambientals",
+        "windExposure": "Exposició al Vent",
+        "droughtExposure": "Exposició a la Sequera"
+      },
+      "work_reports": {
+        "title": "Informe de Treball",
+        "not_found": "No s'ha trobat l'Informe de Treball",
+        "details": "Detalls",
+        "columns": {
+          "observation": "Observació",
+          "spent_fuel": "Combustible Gastat",
+          "incidents": "Incidències",
+          "zones": "Zones",
+          "tasks": "Tasques",
+          "notes": "Notes",
+          "block": "Bloc"
+        },
+        "messages": {
+          "closing_part": "Tancant part...",
+          "part_closed": "Part tancat amb èxit",
+          "closing_block": "Tancant bloc...",
+          "close_block": "Bloc tancat amb èxit",
+          "closing_with_incidents": "Tancant bloc amb incidències...",
+          "close_with_incidents": "Bloc tancat amb incidències",
+          "rejecting": "Rebutjant bloc...",
+          "reject": "Bloc rebutjat"
         }
       }
     },
@@ -643,19 +974,6 @@
         "species": "Espècies",
         "taskTypes": "Tipus de tasca",
         "users": "Usuaris"
-      },
-      "evas": {
-        "title": "Evas",
-        "age": {
-          "years": "Anys",
-          "months": "Mesos"
-        },
-        "columns": {
-          "element_id": "ID de l'element",
-          "age": "Edat",
-          "height": "Alçada",
-          "actions": "Accions"
-        }
       }
     },
     "tooltips": {
@@ -667,7 +985,22 @@
     "genericError": "S'ha produït un error inesperat. Torna-ho a provar més tard.",
     "loading": "Carregant...",
     "error": "Error",
-    "success": "Èxit"
+    "success": "Èxit",
+    "actions": {
+      "cancel": "Cancel·lar",
+      "confirm": "Confirmar",
+      "close_part": "Tancar Part",
+      "close_with_incidents": "Tancar amb Incidències",
+      "reject": "Rebutjar",
+      "close_with_observations": "Tancar amb Observacions",
+      "edit_observation": "Edita Observació"
+    },
+    "messages": {
+      "close_block": "Bloc tancat correctament",
+      "close_with_incidents": "Bloc tancat amb incidències",
+      "reject": "Bloc rebutjat"
+    },
+    "not_available": "No disponible"
   },
   "public": {
     "error": {

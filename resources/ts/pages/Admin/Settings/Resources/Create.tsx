@@ -36,6 +36,8 @@ export default function CreateResource() {
     name: '',
     description: '',
     resource_type_id: 0,
+    unit_cost: 0,
+    unit_name: '',
   };
 
   const validationSchema = Yup.object({
@@ -54,6 +56,12 @@ export default function CreateResource() {
     resource_type_id: Yup.number()
       .required(t('admin.pages.resources.form.validation.type_required'))
       .positive(t('admin.pages.resources.form.validation.type_invalid')),
+    unit_cost: Yup.number()
+      .min(0, t('admin.pages.resources.form.validation.unit_cost_min'))
+      .required(t('admin.pages.resources.form.validation.unit_cost_required')),
+    unit_name: Yup.string().required(
+      t('admin.pages.resources.form.validation.unit_name_required'),
+    ),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -152,6 +160,45 @@ export default function CreateResource() {
                   />
                   {errors.resource_type_id && touched.resource_type_id && (
                     <small className="p-error">{errors.resource_type_id}</small>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon
+                      icon="tabler:currency-euro"
+                      className="h-5 w-5 mr-2"
+                    />
+                    {t('admin.fields.unit_cost')}
+                  </label>
+                  <Field
+                    name="unit_cost"
+                    as={InputText}
+                    type="number"
+                    placeholder={t('admin.fields.unit_cost')}
+                    className={
+                      errors.unit_cost && touched.unit_cost ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.unit_cost && touched.unit_cost && (
+                    <small className="p-error">{errors.unit_cost}</small>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:ruler" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.unit_name')}
+                  </label>
+                  <Field
+                    name="unit_name"
+                    as={InputText}
+                    placeholder={t('admin.fields.unit_name')}
+                    className={
+                      errors.unit_name && touched.unit_name ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.unit_name && touched.unit_name && (
+                    <small className="p-error">{errors.unit_name}</small>
                   )}
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">

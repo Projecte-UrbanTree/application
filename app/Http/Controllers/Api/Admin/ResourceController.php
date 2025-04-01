@@ -59,6 +59,8 @@ class ResourceController extends Controller
 
         $validated = $request->validated();
         $validated['contract_id'] = $contractId;
+        $validated['unit_cost'] = $request->input('unit_cost', 0);
+        $validated['unit_name'] = $request->input('unit_name', '');
 
         try {
             $resource = Resource::create($validated);
@@ -91,14 +93,25 @@ class ResourceController extends Controller
      */
     public function update(UpdateResourceRequest $request, Resource $resource)
     {
-        $validated = $request->validated();
-
         try {
-            $resource->update($validated);
+            $validated = $request->validated();
 
-            return response()->json($resource, 201);
+            $resource->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'resource_type_id' => $validated['resource_type_id'],
+                'unit_cost' => $validated['unit_cost'],
+                'unit_name' => $validated['unit_name'],
+            ]);
+
+            $resource->load('resourceType');
+
+            return response()->json($resource, 200);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Error al actualizar el recurso'], 500);
+            return response()->json([
+                'message' => 'Error al actualizar el recurso',
+                'error' => $th->getMessage(),
+            ], 500);
         }
     }
 

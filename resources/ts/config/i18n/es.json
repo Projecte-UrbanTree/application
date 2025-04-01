@@ -7,19 +7,21 @@
       "company": "Efmpresa",
       "description": "Descripción",
       "dni": "DNI",
-      "email": "Correo",
+      "email": "Correo electrónico",
       "end_date": "Fecha de finalización",
       "family": "Familia",
       "final_price": "Precio final",
       "genus": "Género",
       "name": "Nombre",
       "password": "Contraseña",
-      "currentPassword": "Contraseña actual",
+      "currentPassword": "Contraseña (actual)",
       "newPassword": "Nueva contraseña",
       "confirmPassword": "Confirmar contraseña",
-      "resource_type": "Tipo de Recurso",
+      "resource_type": "Tipo de recurso",
       "role": "Rol",
-      "select_resource_type": "Selecciona un tipo de recurso",
+      "select_resource_type": "Seleccionar un tipo de recurso",
+      "unit_cost": "Editar el costo unitario",
+      "unit_name": "Seleccionar una unidad de recurso",
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
@@ -33,20 +35,20 @@
       "contracts": {
         "form": {
           "placeholders": {
-            "status": "Selecciona un estado"
+            "status": "Seleccionar un estado"
           },
           "returnButton": "Volver a la lista de contratos",
           "submitButton": {
-            "create": "Crear Contrato",
-            "edit": "Guardar Cambios"
+            "create": "Crear contrato",
+            "edit": "Guardar cambios"
           },
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Contrato",
-            "edit": "Editar Contrato"
+            "create": "Crear contrato",
+            "edit": "Editar contrato"
           },
           "validation": {
             "end_date_after_start_date": "La fecha de finalización debe ser posterior a la fecha de inicio",
@@ -74,9 +76,9 @@
           },
           "messages": {
             "createSuccess": "Contrato creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que quieres eliminar este contrato?",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este contrato?",
             "deleteSuccess": "Contrato eliminado correctamente",
-            "error": "Error guardando el contrato",
+            "error": "Error al guardar el contrato",
             "updateSuccess": "Contrato actualizado correctamente"
           }
         },
@@ -91,29 +93,29 @@
             "workOrders": "Órdenes de trabajo"
           }
         },
-        "title": "Panel",
+        "title": "Panel de control",
         "welcome": {
           "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
-          "message": "Te damos la bienvenida a tu panel. Aquí tienes un resumen rápido de tus datos."
+          "message": "Nos alegra verte de nuevo. Aquí tienes un resumen rápido de tus datos."
         }
       },
       "elementTypes": {
-        "title": "Tipos de elemento",
+        "title": "Tipos de elementos",
         "loading": "Cargando...",
         "actions": "Acciones",
         "editButton": "Editar tipo de elemento",
         "deleteButton": "Eliminar tipo de elemento",
         "deletedSuccess": "Tipo de elemento eliminado correctamente",
-        "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de elemento?",
+        "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de elemento?",
         "success": "Tipo de elemento creado correctamente",
         "update": "Tipo de elemento actualizado correctamente",
-        "error": "Error guardando el tipo de elemento",
+        "error": "Error al guardar el tipo de elemento",
         "true": "Sí",
         "false": "No",
         "create": {
-          "title": "Crear Tipo de Elemento",
+          "title": "Crear tipo de elemento",
           "submittingText": "Creando...",
-          "submitButton": "Crear Tipo de Elemento",
+          "submitButton": "Crear tipo de elemento",
           "validations": {
             "name": "El nombre es obligatorio",
             "requires_tree_type": "Requiere tipo de árbol",
@@ -130,9 +132,9 @@
           }
         },
         "edit": {
-          "title": "Editar Tipo de Elemento",
+          "title": "Editar tipo de elemento",
           "submittingText": "Guardando...",
-          "submitButton": "Guardar Cambios",
+          "submitButton": "Guardar cambios",
           "validations": {
             "name": "El nombre es obligatorio",
             "requires_tree_type": "Requiere tipo de árbol",
@@ -158,7 +160,7 @@
         "icons": {
           "tree": "Árbol",
           "home": "Casa",
-          "post-lamp": "Farola",
+          "post-lamp": "Poste de luz",
           "park": "Parque",
           "fountain": "Fuente",
           "flower": "Flor",
@@ -169,21 +171,8 @@
           "water-drop": "Gota de agua",
           "lightbulb": "Bombilla",
           "lightning-bolt": "Rayo",
-          "grass": "Césped",
+          "grass": "Hierba",
           "cloud": "Nube"
-        }
-      },
-      "evas": {
-        "title": "Evas",
-        "age": {
-          "years": "Años",
-          "months": "Meses"
-        },
-        "columns": {
-          "element_id": "ID del elemento",
-          "age": "Edad",
-          "height": "Altura",
-          "actions": "Acciones"
         }
       },
       "resources": {
@@ -194,22 +183,22 @@
             "type": "Tipo"
           },
           "placeholders": {
-            "description": "Introduce la descripción",
-            "name": "Introduce el nombre",
+            "description": "Ingresa la descripción",
+            "name": "Ingresa el nombre",
             "type": "Selecciona un tipo"
           },
           "returnButton": "Volver a la lista de recursos",
           "submitButton": {
-            "create": "Crear Recurso",
-            "edit": "Guardar Cambios"
+            "create": "Crear recurso",
+            "edit": "Guardar cambios"
           },
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Recurso",
-            "edit": "Editar Recurso"
+            "create": "Crear recurso",
+            "edit": "Editar recurso"
           },
           "validation": {
             "description_max": "La descripción no puede exceder los 255 caracteres",
@@ -218,26 +207,32 @@
             "name_min": "El nombre debe tener al menos 3 caracteres",
             "name_required": "El nombre es obligatorio",
             "type_invalid": "Por favor, selecciona un tipo de recurso válido",
-            "type_required": "El tipo es obligatorio"
+            "type_required": "El tipo es obligatorio",
+            "unit_cost_min": "El costo unitario debe ser mayor que 0",
+            "unit_cost_required": "El costo unitario es obligatorio",
+            "unit_name_required": "El nombre de la unidad es obligatorio"
           }
         },
         "list": {
           "actions": {
-            "delete": "Eliminar recurs",
+            "delete": "Eliminar recurso",
             "edit": "Editar recurso",
             "label": "Acciones"
           },
           "columns": {
             "description": "Descripción",
             "name": "Nombre",
-            "type": "Tipo"
+            "type": "Tipo",
+            "unit": "Unidad",
+            "unit_name": "Nombre de la unidad",
+            "unit_cost": "Costo unitario"
           },
           "messages": {
-            "createSuccess": "Recurso creado exitosamente",
-            "deleteConfirm": "¿Estás seguro de que quieres eliminar este recurso?",
-            "deleteSuccess": "Recurso eliminado exitosamente",
-            "error": "Error guardando el recurso",
-            "updateSuccess": "Recurso actualizado exitosamente"
+            "createSuccess": "Recurso creado correctamente",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este recurso?",
+            "deleteSuccess": "Recurso eliminado correctamente",
+            "error": "Error al guardar el recurso",
+            "updateSuccess": "Recurso actualizado correctamente"
           },
           "title": "Recursos"
         },
@@ -246,12 +241,12 @@
       "resourceTypes": {
         "form": {
           "placeholders": {
-            "description": "Introduce la descripción",
-            "name": "Introduce el nombre"
+            "description": "Ingresa la descripción",
+            "name": "Ingresa el nombre"
           },
           "returnButton": "Volver a la lista de tipos de recurso",
           "submitButton": {
-            "create": "Crear Tipo de Recurso",
+            "create": "Crear tipo de recurso",
             "edit": "Guardar cambios"
           },
           "submittingText": {
@@ -259,8 +254,8 @@
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Tipo de Recurso",
-            "edit": "Editar Tipo de Recurso"
+            "create": "Crear tipo de recurso",
+            "edit": "Editar tipo de recurso"
           },
           "validation": {
             "description_required": "La descripción es obligatoria",
@@ -280,9 +275,9 @@
           },
           "messages": {
             "createSuccess": "Tipo de recurso creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de recurso?",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de recurso?",
             "deleteSuccess": "Tipo de recurso eliminado correctamente",
-            "error": "Error guardando el tipo de recurso",
+            "error": "Error al guardar el tipo de recurso",
             "updateSuccess": "Tipo de recurso actualizado correctamente"
           }
         },
@@ -290,16 +285,17 @@
       },
       "stats": {
         "title": "Estadísticas",
-        "week": "Esta Semana",
-        "month": "Este Mes",
+        "week": "Esta semana",
+        "month": "Este mes",
         "custom": "Personalizado",
         "startDate": "Fecha de inicio",
-        "endDate": "Fecha de fin",
-        "tasksDone": "Tareas Completadas",
-        "tasksNotDone": "Tareas Pendientes",
-        "hoursWorked": "Horas Trabajadas",
-        "fuelConsumption": "Consumo de Combustible",
-        "noData": "No hay datos para mostrar"
+        "endDate": "Fecha de finalización",
+        "tasksDone": "Tareas completadas",
+        "tasksNotDone": "Tareas pendientes",
+        "hoursWorked": "Horas trabajadas",
+        "fuelConsumption": "Consumo de combustible",
+        "noData": "No hay datos para mostrar",
+        "exportCSV": "Exportar a CSV"
       },
       "taskTypes": {
         "form": {
@@ -308,12 +304,12 @@
             "name": "Nombre"
           },
           "placeholders": {
-            "description": "Introduce la descripción",
-            "name": "Introduce el nombre"
+            "description": "Ingresa la descripción",
+            "name": "Ingresa el nombre"
           },
           "returnButton": "Volver a la lista de tipos de tarea",
           "submitButton": {
-            "create": "Crear Tipo de Tarea",
+            "create": "Crear tipo de tarea",
             "edit": "Guardar cambios"
           },
           "submittingText": {
@@ -321,8 +317,8 @@
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Tipo de Tarea",
-            "edit": "Editar Tipo de Tarea"
+            "create": "Crear tipo de tarea",
+            "edit": "Editar tipo de tarea"
           },
           "validation": {
             "error_numbers": "El nombre no puede contener números ni caracteres especiales",
@@ -337,13 +333,13 @@
           },
           "columns": {
             "description": "Descripción",
-            "name": "Nombre"
+            "name": "Tipo de tarea"
           },
           "messages": {
             "createSuccess": "Tipo de tarea creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de tarea?",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de tarea?",
             "deleteSuccess": "Tipo de tarea eliminado correctamente",
-            "error": "Error guardando el tipo de tarea",
+            "error": "Error al guardar el tipo de tarea",
             "updateSuccess": "Tipo de tarea actualizado correctamente"
           },
           "title": "Tipos de tarea"
@@ -353,22 +349,22 @@
       "treeTypes": {
         "form": {
           "submitButton": {
-            "create": "Crear Tipo de Árbol",
-            "edit": "Guardar Cambios"
+            "create": "Crear tipo de árbol",
+            "edit": "Guardar cambios"
           },
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Tipo de Árbol",
-            "edit": "Editar Tipo de Árbol"
+            "create": "Crear tipo de árbol",
+            "edit": "Editar tipo de árbol"
           },
           "validation": {
             "alphanumeric": {
-              "family": "La familia debe contener solo caracteres alfanuméricos",
-              "genus": "El género debe contener solo caracteres alfanuméricos",
-              "species": "La especie debe contener solo caracteres alfanuméricos"
+              "family": "La familia solo puede contener caracteres alfanuméricos",
+              "genus": "El género solo puede contener caracteres alfanuméricos",
+              "species": "La especie solo puede contener caracteres alfanuméricos"
             },
             "family": "La familia es obligatoria",
             "genus": "El género es obligatorio",
@@ -377,8 +373,8 @@
         },
         "list": {
           "actions": {
-            "delete": "Eliminar Tipo de Árbol",
-            "edit": "Editar Tipo de Árbol",
+            "delete": "Eliminar tipo de árbol",
+            "edit": "Editar tipo de árbol",
             "label": "Acciones"
           },
           "columns": {
@@ -388,9 +384,9 @@
           },
           "messages": {
             "createSuccess": "Tipo de árbol creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que quieres eliminar este tipo de árbol?",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de árbol?",
             "deletedSuccess": "Tipo de árbol eliminado correctamente",
-            "error": "Error guardando el tipo de árbol",
+            "error": "Error al guardar el tipo de árbol",
             "updateSuccess": "Tipo de árbol actualizado correctamente"
           },
           "title": "Tipos de árbol"
@@ -401,25 +397,25 @@
         "form": {
           "placeholders": {
             "password": "Contraseña",
-            "passwordEdit": "Contraseña (dejar en blanco para no cambiar)",
+            "passwordEdit": "Contraseña (dejar en blanco para mantenerla sin cambios)",
             "role": "Selecciona un rol"
           },
           "returnButton": "Volver a la lista de usuarios",
           "submitButton": {
-            "create": "Crear Usuario",
-            "edit": "Guardar Cambios"
+            "create": "Crear usuario",
+            "edit": "Guardar cambios"
           },
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Usuario",
-            "edit": "Editar Usuario"
+            "create": "Crear usuario",
+            "edit": "Editar usuario"
           },
           "validation": {
-            "email_required": "El correo es obligatorio",
-            "invalid_email": "Correo inválido",
+            "email_required": "El correo electrónico es obligatorio",
+            "invalid_email": "Correo electrónico no válido",
             "name_required": "El nombre es obligatorio",
             "password_min": "Debe tener al menos 8 caracteres",
             "password_number": "Debe contener al menos un número",
@@ -446,9 +442,9 @@
           },
           "messages": {
             "createSuccess": "Usuario creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que quieres eliminar este usuario?",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este usuario?",
             "deleteSuccess": "Usuario eliminado correctamente",
-            "error": "Error guardando el usuario",
+            "error": "Error al guardar el usuario",
             "updateSuccess": "Usuario actualizado correctamente"
           }
         },
@@ -457,7 +453,7 @@
       "workOrders": {
         "details": {
           "block": "Bloque",
-          "noBlocks": "No hay bloques",
+          "noBlocks": "Sin bloques",
           "noBlocksAvailable": "No hay bloques disponibles para esta orden de trabajo",
           "noNotes": "N/A",
           "noTasks": "No hay tareas asignadas",
@@ -469,10 +465,10 @@
           "zones": "Zonas"
         },
         "form": {
-          "blocksTitle": "Bloques de Trabajo",
+          "blocksTitle": "Bloques de trabajo",
           "buttons": {
-            "addBlock": "Añadir Bloque",
-            "addTask": "Añadir Tarea"
+            "addBlock": "Agregar bloque",
+            "addTask": "Agregar tarea"
           },
           "fields": {
             "block": "Bloque",
@@ -480,21 +476,21 @@
             "elementType": "Tipo de elemento",
             "notes": "Notas",
             "task": "Tarea",
-            "taskType": "Nombre",
+            "taskType": "Tipo de tarea",
             "treeType": "Especie de árbol",
             "users": "Trabajadores",
             "zones": "Zonas"
           },
           "noContract": {
             "message": "Debes seleccionar un contrato en el panel superior para crear una orden de trabajo.",
-            "title": "No hay contrato seleccionado"
+            "title": "No se ha seleccionado un contrato"
           },
           "placeholders": {
-            "elementType": "Selecciona tipo de elemento",
-            "notes": "Añade notas para este bloque de trabajo...",
-            "status": "Selecciona un estado",
-            "taskType": "Selecciona tipo de tarea",
-            "treeType": "Selecciona especie de árbol",
+            "elementType": "Selecciona el tipo de elemento",
+            "notes": "Agrega notas para este bloque de trabajo...",
+            "status": "Seleccionar un estado",
+            "taskType": "Selecciona el tipo de tarea",
+            "treeType": "Selecciona la especie de árbol",
             "users": "Selecciona trabajadores",
             "zones": "Selecciona zonas para este bloque"
           },
@@ -502,16 +498,16 @@
           "removeTask": "Eliminar tarea",
           "returnButton": "Volver a la lista de órdenes de trabajo",
           "submitButton": {
-            "create": "Crear Orden de Trabajo",
-            "edit": "Guardar Cambios"
+            "create": "Crear orden de trabajo",
+            "edit": "Guardar cambios"
           },
           "submittingText": {
             "create": "Creando...",
             "edit": "Guardando..."
           },
           "title": {
-            "create": "Crear Orden de Trabajo",
-            "edit": "Editar Orden de Trabajo"
+            "create": "Crear orden de trabajo",
+            "edit": "Editar orden de trabajo"
           },
           "validation": {
             "blocks_required": "Se requiere al menos un bloque",
@@ -519,8 +515,8 @@
             "element_type_required": "El tipo de elemento es obligatorio",
             "task_type_required": "El tipo de tarea es obligatorio",
             "tasks_required": "Se requiere al menos una tarea",
-            "users_required": "Se debe seleccionar al menos un trabajador",
-            "zones_required": "Se debe seleccionar al menos una zona"
+            "users_required": "Debe seleccionarse al menos un trabajador",
+            "zones_required": "Debe seleccionarse al menos una zona"
           }
         },
         "list": {
@@ -528,27 +524,27 @@
             "delete": "Eliminar orden de trabajo",
             "edit": "Editar orden de trabajo",
             "label": "Acciones",
-            "viewReport": "Ver informe"
+            "viewReport": "Ver Parte"
           },
           "columns": {
             "contract": "Contrato",
             "date": "Fecha",
             "id": "ID",
-            "reportStatus": "Estado del informe",
+            "reportStatus": "Estado del Parte",
             "status": "Estado",
             "users": "Trabajadores"
           },
           "messages": {
             "createSuccess": "Orden de trabajo creada correctamente",
-            "deleteConfirm": "¿Estás seguro de que quieres eliminar esta orden de trabajo?",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar esta orden de trabajo?",
             "deleteSuccess": "Orden de trabajo eliminada correctamente",
-            "error": "Error guardando la orden de trabajo",
+            "error": "Error al guardar la orden de trabajo",
             "noData": "No hay órdenes de trabajo disponibles",
             "updateSuccess": "Orden de trabajo actualizada correctamente"
           }
         },
         "reportStatus": {
-          "closedWithIncidents": "Cerrado con incidencias",
+          "closedWithIncidents": "Cerrado con incidentes",
           "completed": "Completado",
           "pending": "Pendiente",
           "rejected": "Rechazado",
@@ -558,10 +554,80 @@
           "completed": "Completado",
           "inProgress": "En progreso",
           "notStarted": "No iniciado",
-          "reportSent": "Informe enviado",
+          "reportSent": "Parte enviado",
           "unknown": "Desconocido"
         },
         "title": "Órdenes de trabajo"
+      },
+      "workReport": {
+        "title": "Parte de Trabajo",
+        "not_found": "No se encontró el Parte de Trabajo",
+        "columns": {
+          "users": "Operarios",
+          "observation": "Observación",
+          "spent_fuel": "Combustible Gastado",
+          "incidents": "Incidentes",
+          "zones": "Zonas",
+          "tasks": "Tareas",
+          "notes": "Notas",
+          "block": "Bloque",
+          "resources": "Recursos"
+        },
+        "messages": {
+          "closing_part": "Cerrando parte...",
+          "part_closed": "Parte cerrado con éxito",
+          "closing_block": "Cerrando bloque...",
+          "close_block": "Bloque cerrado con éxito",
+          "closing_with_incidents": "Cerrando bloque con incidentes...",
+          "close_with_incidents": "Bloque cerrado con incidentes",
+          "rejecting": "Rechazando bloque...",
+          "reject": "Bloque rechazado",
+          "closing_with_observations": "Cerrando informe con observaciones...",
+          "close_with_observations": "Informe cerrado con observaciones",
+          "error_updating_observations": "Error al actualizar observaciones",
+          "observation_updated": "Observación actualizada correctamente",
+          "error_updating_observation": "Error al actualizar la observación"
+        },
+        "reportStatus": {
+          "pending": "Pendiente",
+          "completed": "Completado",
+          "rejected": "Rechazado",
+          "closedWithIncidents": "Cerrado con incidencias",
+          "unknown": "Desconocido"
+        },
+        "details": {
+          "details": "Detalles",
+          "block": "Bloque",
+          "noBlocks": "No hay bloques",
+          "noBlocksAvailable": "No hay bloques disponibles para este parte de trabajo",
+          "noNotes": "No hay notas",
+          "noTasks": "No hay tareas asignadas",
+          "notes": "Notas",
+          "noUsers": "No hay usuarios asignados",
+          "noZones": "No hay zonas asignadas",
+          "tasks": "Tareas",
+          "unknown": "Desconocido",
+          "zones": "Zonas",
+          "resources": "Recursos",
+          "observation": "Observación",
+          "noObservation": "No hay observación disponible",
+          "incidents": "Incidentes",
+          "noIncidents": "No hay incidentes registrados",
+          "spentFuel": "Combustible Gastado",
+          "taskStatus": "Estado de la Tarea",
+          "hours": "Horas",
+          "unit": "Unidad",
+          "cost": "Costo",
+          "quantity": "Cantidad"
+        },
+        "dialogs": {
+          "observationHeader": "Añadir Observaciones",
+          "observationMessage": "Por favor, proporciona tus observaciones antes de cerrar el parte.",
+          "observationPlaceholder": "Introduce tus observaciones aquí...",
+          "editObservationHeader": "Editar Observación",
+          "editObservationMessage": "Modifica la observación para este parte.",
+          "editObservationPlaceholder": "Introduce tu observación actualizada aquí..."
+        }
       },
       "account": {
         "title": "Configuración de la Cuenta",
@@ -577,14 +643,267 @@
           "surname_invalid": "El apellido no puede contener símbolos.",
           "surname_required": "El apellido es obligatorio",
           "currentPasswordRequired": "Debe ingresar la contraseña actual",
-          "newPasswordMinLength": "La contraseña debe tener al menos 6 caracteres",
+          "newPasswordMinLength": "La nueva contraseña debe tener al menos 8 caracteres",
           "newPasswordMismatch": "Las contraseñas no coinciden",
-          "newPasswordComplexity": "La nueva contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número"
+          "newPasswordComplexity": "La nueva contraseña debe contener al menos una letra mayúscula, una minúscula y un número"
         },
         "messages": {
           "profileUpdated": "Perfil actualizado correctamente",
-          "errorSaving": "Error al guardar los cambios.",
-          "passwordCurrentWrong": "La contraseña actual no coincide"
+          "errorSaving": "Error al guardar el perfil",
+          "passwordCurrentWrong": "La contraseña actual es incorrecta"
+        }
+      },
+      "evas": {
+        "show": {
+          "title": "Detalles de Eva"
+        },
+        "dictionaries": {
+          "unbalancedCrown": {
+            "0": "Sin inclinación o crecimiento desigual",
+            "1": "Ligera inclinación de la copa",
+            "2": "Copa visiblemente inclinada",
+            "3": "Copa extremadamente inclinada"
+          },
+          "overextendedBranches": {
+            "0": "Ramas bien estructuradas",
+            "1": "Algunas ramas sobreextendidas",
+            "2": "Varias ramas sobreextendidas",
+            "3": "Ramas sobreextendidas y pesadas"
+          },
+          "cracks": {
+            "0": "Sin grietas",
+            "1": "Pequeñas grietas en el tronco",
+            "2": "Grietas visibles en varias partes",
+            "3": "Grietas profundas en el tronco"
+          },
+          "deadBranches": {
+            "0": "Sin ramas muertas",
+            "1": "Algunas ramas muertas",
+            "2": "Múltiples ramas muertas",
+            "3": "Gran cantidad de ramas muertas"
+          },
+          "inclination": {
+            "0": "Completamente vertical",
+            "1": "Ligera inclinación (<5°)",
+            "2": "Inclinación moderada (5-15°)",
+            "3": "Alta inclinación (>15°)"
+          },
+          "VForks": {
+            "0": "Bifurcaciones normales",
+            "1": "Ligera bifurcación en V",
+            "2": "Bifurcación en V pronunciada",
+            "3": "Bifurcación en V peligrosa"
+          },
+          "cavities": {
+            "0": "Sin cavidades",
+            "1": "Pequeña cavidad",
+            "2": "Cavidad intermedia",
+            "3": "Cavidad profunda y estructural"
+          },
+          "barkDamage": {
+            "0": "Corteza intacta",
+            "1": "Corteza con pequeñas heridas",
+            "2": "Daño significativo en la corteza",
+            "3": "Corteza muy dañada"
+          },
+          "soilLifting": {
+            "0": "Suelo sin alteraciones",
+            "1": "Ligera elevación del suelo",
+            "2": "Elevación visible del suelo",
+            "3": "Suelo severamente levantado"
+          },
+          "cutRoots": {
+            "0": "Raíces intactas",
+            "1": "Raíces con pequeños cortes",
+            "2": "Raíces parcialmente dañadas",
+            "3": "Raíces severamente cortadas"
+          },
+          "basalRot": {
+            "0": "Sin podredumbre",
+            "1": "Podredumbre inicial",
+            "2": "Podredumbre visible",
+            "3": "Podredumbre avanzada"
+          },
+          "exposedRoots": {
+            "0": "Raíces bajo tierra",
+            "1": "Algunas raíces expuestas",
+            "2": "Varias raíces expuestas",
+            "3": "Raíces expuestas y debilitadas"
+          },
+          "wind": {
+            "0": "Árbol protegido por barreras naturales o edificios, sin viento fuerte constante.",
+            "1": "Árbol con viento ocasional pero sin impacto significativo en su estabilidad.",
+            "2": "Árbol expuesto a vientos fuertes frecuentes, que pueden afectar su estructura.",
+            "3": "Árbol en áreas abiertas o pendientes donde el viento sopla con fuerza extrema."
+          },
+          "drought": {
+            "0": "Árbol en zona con humedad estable y acceso constante al agua, sin estrés hídrico.",
+            "1": "Árbol con acceso moderado al agua, pero con periodos ocasionales de sequía.",
+            "2": "Árbol en zona con sequías recurrentes, afectando su desarrollo y resistencia.",
+            "3": "Árbol en zona árida o con sequías prolongadas, alto riesgo de debilitamiento."
+          }
+        },
+        "edit": {
+          "title": "Editar Eva",
+          "identification": "Identificación",
+          "treeCondition": "Condición del árbol",
+          "dimensions": "Dimensiones",
+          "state": "Estado",
+          "crownBranches": "Copa y ramas",
+          "trunk": "Tronco",
+          "roots": "Raíces",
+          "environmentCondition": "Condición del entorno",
+          "environmentalFactors": "Factores ambientales",
+          "windExposure": "Exposición al viento",
+          "droughtExposure": "Exposición a la sequía"
+        },
+        "create": {
+          "identification": "Identificación",
+          "treeCondition": "Condición del árbol",
+          "dimensions": "Dimensiones",
+          "state": "Estado",
+          "crownBranches": "Copa y ramas",
+          "trunk": "Tronco",
+          "roots": "Raíces",
+          "environmentCondition": "Condición del entorno",
+          "environmentalFactors": "Factores ambientales",
+          "windExposure": "Exposición al viento",
+          "droughtExposure": "Exposición a la sequía"
+        },
+        "title": "Evas",
+        "age": {
+          "years": "Años",
+          "months": "Meses"
+        },
+        "columns": {
+          "element_id": "ID del elemento",
+          "age": "Edad",
+          "height": "Altura",
+          "actions": "Acciones",
+          "name": "Nombre",
+          "coordinates": "Coordenadas",
+          "status": "Estado"
+        },
+        "form": {
+          "name": "Nombre",
+          "element_id": "ID del elemento",
+          "years": "Años",
+          "months": "Meses",
+          "height": "Altura",
+          "diameter": "Diámetro",
+          "crown_width": "Ancho de la copa",
+          "crown_projection_area": "Área de proyección de la copa",
+          "root_surface_diameter": "Diámetro de la superficie de la raíz",
+          "effective_root_area": "Área efectiva de la raíz",
+          "height_estimation": "Estimación de altura",
+          "unbalanced_crown": "Copa desequilibrada",
+          "overextended_branches": "Ramas sobreextendidas",
+          "cracks": "Grietas",
+          "dead_branches": "Ramas muertas",
+          "inclination": "Inclinación",
+          "V_forks": "Bifurcaciones en V",
+          "cavities": "Cavidades",
+          "bark_damage": "Daño en la corteza",
+          "soil_lifting": "Levantamiento del suelo",
+          "cut_damaged_roots": "Raíces cortadas/dañadas",
+          "basal_rot": "Podredumbre basal",
+          "exposed_surface_roots": "Raíces superficiales expuestas",
+          "wind": "Viento",
+          "drought": "Sequía",
+          "validation": {
+            "element_required": "El elemento es obligatorio"
+          },
+          "title": {
+            "create": "Crear Eva",
+            "edit": "Editar Eva"
+          },
+          "saving": "Guardando...",
+          "save": "Guardar"
+        },
+        "list": {
+          "actions": {
+            "show": "Mostrar Eva",
+            "delete": "Eliminar Eva"
+          },
+          "messages": {
+            "createSuccess": "Eva creada correctamente",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar esta Eva?",
+            "deleteSuccess": "Eva eliminada correctamente",
+            "error": "Error al guardar Eva",
+            "updateSuccess": "Eva actualizada correctamente"
+          }
+        },
+        "status": {
+          "low": "Bajo",
+          "moderate": "Moderado",
+          "high": "Alto",
+          "critical": "Crítico",
+          "pending": "Pendiente"
+        },
+        "stability": {
+          "stable": "Estable",
+          "moderate": "Moderado",
+          "highRisk": "Alto riesgo",
+          "pending": "Pendiente"
+        },
+        "gravityHeight": {
+          "veryStable": "Muy estable",
+          "moderateRisk": "Riesgo moderado",
+          "highRisk": "Alto riesgo",
+          "pending": "Pendiente"
+        },
+        "rootCrown": {
+          "veryStable": "Muy estable",
+          "stable": "Estable",
+          "moderateStability": "Estabilidad moderada",
+          "highRisk": "Alto riesgo",
+          "pending": "Pendiente"
+        },
+        "windStability": {
+          "veryStable": "Muy estable",
+          "moderateStability": "Estabilidad moderada",
+          "highRisk": "Alto riesgo",
+          "pending": "Pendiente"
+        },
+        "severity": {
+          "low": "Bajo",
+          "moderate": "Moderado",
+          "high": "Alto",
+          "extreme": "Extremo",
+          "pending": "Pendiente"
+        },
+        "indexCalculation": "Cálculo de índices",
+        "treeStatusFactor": "Factor de estado del árbol",
+        "stabilityIndex": "Índice de estabilidad (H/D)",
+        "gravityHeightRatio": "Relación altura de gravedad (CG/H)",
+        "rootCrownRatio": "Relación raíz-copa (SR/SC)",
+        "windStabilityIndex": "Índice de estabilidad al viento (WSI)",
+        "environmentalFactors": "Factores ambientales",
+        "windExposure": "Exposición al viento",
+        "droughtExposure": "Exposición a la sequía"
+      },
+      "work_reports": {
+        "title": "Informe de Trabajo",
+        "not_found": "Informe de Trabajo no encontrado",
+        "details": "Detalles",
+        "columns": {
+          "observation": "Observación",
+          "spent_fuel": "Combustible Gastado",
+          "incidents": "Incidentes",
+          "zones": "Zonas",
+          "tasks": "Tareas",
+          "notes": "Notas",
+          "block": "Bloque"
+        },
+        "messages": {
+          "closing_part": "Cerrando parte...",
+          "part_closed": "Parte cerrado con éxito",
+          "closing_block": "Cerrando bloque...",
+          "close_block": "Bloque cerrado con éxito",
+          "closing_with_incidents": "Cerrando bloque con incidentes...",
+          "close_with_incidents": "Bloque cerrado con incidentes",
+          "rejecting": "Rechazando bloque...",
+          "reject": "Bloque rechazado"
         }
       }
     },
@@ -606,9 +925,8 @@
     },
     "submenu": {
       "manage": {
-        "dashboard": "Panel",
+        "dashboard": "Panel de control",
         "inventory": "Inventario",
-        "eva": "EVA",
         "resources": "Recursos",
         "stats": "Estadísticas",
         "workers": "Trabajadores",
@@ -630,17 +948,32 @@
   },
   "general": {
     "allContracts": "Todos los contratos",
-    "genericError": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.",
+    "genericError": "Ocurrió un error. Por favor, inténtalo de nuevo más tarde.",
     "loading": "Cargando...",
     "error": "Error",
-    "success": "Éxito"
+    "success": "Éxito",
+    "actions": {
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "close_part": "Cerrar Parte",
+      "close_with_incidents": "Cerrar con Incidencias",
+      "reject": "Rechazar",
+      "close_with_observations": "Cerrar con Observaciones",
+      "edit_observation": "Editar Observación"
+    },
+    "messages": {
+      "close_block": "Bloque cerrado correctamente",
+      "close_with_incidents": "Bloque cerrado con incidencias",
+      "reject": "Bloque rechazado"
+    },
+    "not_available": "No disponible"
   },
   "public": {
     "error": {
-      "btnReturn": "Volver atrás",
+      "btnReturn": "Volver",
       "descriptions": {
         "404": "La página que buscas no existe.",
-        "unexpected": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo más tarde."
+        "unexpected": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
       },
       "title": "Error {{errorCode}}"
     },

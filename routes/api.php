@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\EvaController;
+use App\Http\Controllers\Api\Admin\PointController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
 use App\Http\Controllers\Api\Admin\StatisticsController;
@@ -11,8 +12,10 @@ use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
+use App\Http\Controllers\Api\Admin\WorkReportController;
+use App\Http\Controllers\Api\Admin\ZoneController;
+use App\Http\Controllers\Api\Admin\IncidentsController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -31,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
         Route::post('select-contract', [ContractController::class, 'selectContract']);
         Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
 
@@ -53,8 +56,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::resources([
             'contracts' => ContractController::class,
+            'elements' => ElementController::class,
             'element-types' => ElementTypeController::class,
             'evas' => EvaController::class,
+            'points' => PointController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,
             'sensors' => SensorController::class, // Assegura que aquest endpoint està configurat correctament
@@ -62,15 +67,9 @@ Route::middleware('auth:sanctum')->group(function () {
             'tree-types' => TreeTypeController::class,
             'users' => UserController::class,
             'work-orders' => WorkOrderController::class,
+            'work-reports' => WorkReportController::class,
+            'zones' => ZoneController::class,
+            'incidents' => IncidentsController::class,
         ]);
-
-        // Rutes per a sensors
-        Route::get('sensors', [SensorController::class, 'index']); // Llistar sensors
-        Route::post('sensors', [SensorController::class, 'store']); // Crear sensor
-        Route::get('sensors/{id}', [SensorController::class, 'show']); // Mostrar sensor
-        Route::put('sensors/{id}', [SensorController::class, 'update']); // Editar sensor
-        Route::delete('sensors/{id}', [SensorController::class, 'destroy']); // Eliminar sensor
-        Route::get('history/{dev_eui}', [SensorController::class, 'getSensorHistoryByDevEui']);    });
+    });
 });
-
-
