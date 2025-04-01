@@ -50,8 +50,9 @@ export default function Sensors() {
     null,
   ]);
 
+  // Fixed to April 2025 for simulation
   const getCurrentWeekRange = () => {
-    const now = new Date();
+    const now = new Date('2025-04-01');
     const day = now.getDay();
     const diff = now.getDate() - day + (day === 0 ? -6 : 1);
 
@@ -67,7 +68,7 @@ export default function Sensors() {
   };
 
   const getCurrentMonthRange = () => {
-    const now = new Date();
+    const now = new Date('2025-04-01');
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
     start.setHours(0, 0, 0, 0);
 
@@ -78,7 +79,7 @@ export default function Sensors() {
   };
 
   const getTodayRange = () => {
-    const now = new Date();
+    const now = new Date('2025-04-01T12:00:00Z');
     const start = new Date(now);
     start.setHours(0, 0, 0, 0);
 
@@ -86,6 +87,28 @@ export default function Sensors() {
     end.setHours(23, 59, 59, 999);
 
     return { start, end };
+  };
+
+  const generateSimulatedDailyData = (sensorType: 'ph' | 'humidity') => {
+    const today = new Date('2025-04-01T12:00:00Z');
+
+    if (sensorType === 'ph') {
+      return [
+        {
+          time: today.toISOString(),
+          ph1_soil: 6.5,
+          humidity_soil: null,
+        },
+      ];
+    } else {
+      return [
+        {
+          time: today.toISOString(),
+          ph1_soil: null,
+          humidity_soil: 42,
+        },
+      ];
+    }
   };
 
   const fetchSensorsData = async () => {
@@ -128,7 +151,7 @@ export default function Sensors() {
     setSelectedSensor(sensor);
 
     try {
-      let dateRange = { start: null, end: null };
+      let dateRange = { start: new Date(), end: new Date() };
 
       switch (selectedRange) {
         case 'week':
@@ -151,40 +174,49 @@ export default function Sensors() {
           dateRange = getTodayRange();
       }
 
-      const sensorHistories = await fetchSensorHistoryByDevEui(
-        sensor.dev_eui,
-        dateRange.start,
-        dateRange.end,
-      );
+      let sensorHistories: any[] = [];
 
-      console.log('Datos recibidos de la API:', sensorHistories);
+      if (sensor.name.includes('SensorPH')) {
+        sensorHistories = generateSimulatedDailyData('ph');
+      } else if (sensor.name.includes('SensorHumitat')) {
+        sensorHistories = generateSimulatedDailyData('humidity');
+      }
 
-      // Procesar datos asegurando que los valores son números válidos
-      const processData = (data: any[], key: 'ph1_soil' | 'humidity_soil') => {
-        return data
-          .filter((entry) => entry[key] !== null && !isNaN(Number(entry[key])))
-          .map((entry) => ({
-            time: new Date(entry.time).toLocaleString('es-ES', {
-              day: 'numeric',
-              month: 'short',
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-            value: Number(entry[key]),
-          }));
+      const processDailyData = (
+        data: any[],
+        key: 'ph1_soil' | 'humidity_soil',
+      ) => {
+        const dailyValues: { [key: string]: any } = {};
+
+        data.forEach((entry) => {
+          const date = new Date(entry.time);
+          const dateKey = date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          });
+
+          if (entry[key] !== null && !isNaN(Number(entry[key]))) {
+            if (!dailyValues[dateKey]) {
+              dailyValues[dateKey] = {
+                time: dateKey,
+                value: Number(entry[key]),
+              };
+            }
+          }
+        });
+
+        return Object.values(dailyValues);
       };
 
-      const phPoints = processData(sensorHistories, 'ph1_soil');
-      const humidityPoints = processData(sensorHistories, 'humidity_soil');
-
-      console.log('Datos de PH procesados:', phPoints);
-      console.log('Datos de humedad procesados:', humidityPoints);
+      const phPoints = processDailyData(sensorHistories, 'ph1_soil');
+      const humidityPoints = processDailyData(sensorHistories, 'humidity_soil');
 
       setPhData(phPoints);
       setHumidityData(humidityPoints);
 
       if (phPoints.length === 0 && humidityPoints.length === 0) {
-        setMsg(t('admin.pages.sensors.list.messages.noDataAvailable'));
+        setMsg('No data available for the selected range');
       } else {
         setMsg(null);
       }
@@ -192,7 +224,7 @@ export default function Sensors() {
       setIsDialogVisible(true);
     } catch (error) {
       console.error('Error fetching sensor data:', error);
-      setMsg(t('admin.pages.sensors.list.messages.error'));
+      setMsg('Error loading sensor data');
     }
   };
 
@@ -210,8 +242,8 @@ export default function Sensors() {
           borderColor: color,
           backgroundColor: `${color}33`,
           borderWidth: 2,
-          pointRadius: 4,
-          pointHoverRadius: 6,
+          pointRadius: 6,
+          pointHoverRadius: 8,
           pointBackgroundColor: color,
           fill: false,
           tension: 0.1,
@@ -230,7 +262,7 @@ export default function Sensors() {
       await handleViewSensor(selectedSensor.id);
     } catch (error) {
       console.error('Error updating sensor data:', error);
-      setMsg(t('admin.pages.sensors.list.messages.error'));
+      setMsg('Error updating data range');
     }
   };
 
@@ -244,14 +276,14 @@ export default function Sensors() {
   const handleEditClick = (id: number) => navigate(`/admin/sensors/edit/${id}`);
 
   const handleDelete = async (id: number) => {
-    if (window.confirm(t('admin.pages.sensors.list.messages.deleteConfirm'))) {
+    if (window.confirm('Are you sure you want to delete this sensor?')) {
       try {
         await axiosClient.delete(`/admin/sensors/${id}`);
-        setMsg(t('admin.pages.sensors.list.messages.deleteSuccess'));
+        setMsg('Sensor deleted successfully');
         await fetchSensorsData();
       } catch (error) {
         console.error(error);
-        setMsg(t('admin.pages.sensors.list.messages.deleteError'));
+        setMsg('Error deleting sensor');
       }
     }
   };
@@ -263,7 +295,7 @@ export default function Sensors() {
           style={{ width: '50px', height: '50px' }}
           strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
+        <span className="mt-2 text-blue-600">Loading...</span>
       </div>
     );
   }
@@ -271,10 +303,8 @@ export default function Sensors() {
   if (hasError) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-red-600">
-          {t('admin.pages.sensors.list.messages.error')}
-        </p>
-        <Button label={t('general.retry')} onClick={fetchSensorsData} />
+        <p className="text-red-600">Error loading sensors</p>
+        <Button label="Retry" onClick={fetchSensorsData} />
       </div>
     );
   }
@@ -290,7 +320,7 @@ export default function Sensors() {
       )}
 
       <CrudPanel
-        title={t('admin.pages.sensors.title')}
+        title="Sensors Management"
         onCreate={() => navigate('/admin/sensors/create')}>
         <DataTable
           value={sensors}
@@ -299,43 +329,31 @@ export default function Sensors() {
           stripedRows
           showGridlines
           className="p-datatable-sm"
-          emptyMessage={t('admin.pages.sensors.list.noData')}>
+          emptyMessage="No sensors found">
+          <Column field="dev_eui" header="Device EUI" />
+          <Column field="name" header="Name" />
+          <Column field="latitude" header="Latitude" />
+          <Column field="longitude" header="Longitude" />
           <Column
-            field="dev_eui"
-            header={t('admin.pages.sensors.list.columns.deviceEui')}
-          />
-          <Column
-            field="name"
-            header={t('admin.pages.sensors.list.columns.name')}
-          />
-          <Column
-            field="latitude"
-            header={t('admin.pages.sensors.list.columns.latitude')}
-          />
-          <Column
-            field="longitude"
-            header={t('admin.pages.sensors.list.columns.longitude')}
-          />
-          <Column
-            header={t('admin.pages.sensors.list.actions.label')}
+            header="Actions"
             body={(rowData) => (
               <div className="flex justify-center gap-2">
                 <Button
                   icon={<Icon icon="tabler:eye" className="h-5 w-5" />}
                   className="p-button-rounded p-button-success"
-                  tooltip={t('admin.pages.sensors.list.actions.view')}
+                  tooltip="View details"
                   onClick={() => handleViewSensor(rowData.id)}
                 />
                 <Button
                   icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
                   className="p-button-rounded p-button-info"
-                  tooltip={t('admin.pages.sensors.list.actions.edit')}
+                  tooltip="Edit sensor"
                   onClick={() => handleEditClick(rowData.id)}
                 />
                 <Button
                   icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
                   className="p-button-rounded p-button-danger"
-                  tooltip={t('admin.pages.sensors.list.actions.delete')}
+                  tooltip="Delete sensor"
                   onClick={() => handleDelete(rowData.id)}
                 />
               </div>
@@ -348,23 +366,23 @@ export default function Sensors() {
         visible={isDialogVisible}
         style={{ width: '90vw', maxWidth: '1200px' }}
         onHide={closeDialog}
-        header={`Dades del sensor: ${selectedSensor?.name || ''} (${selectedSensor?.dev_eui || ''})`}
+        header={`Sensor data: ${selectedSensor?.name || ''} (${selectedSensor?.dev_eui || ''})`}
         modal>
         <div className="p-4">
           <div className="flex justify-between mb-6">
             <div className="flex gap-2">
               <Button
-                label={t('admin.sensors.stats.week')}
+                label="This week"
                 onClick={() => handleRangeChange('week')}
                 className={selectedRange === 'week' ? 'p-button-primary' : ''}
               />
               <Button
-                label={t('admin.sensors.stats.month')}
+                label="This month"
                 onClick={() => handleRangeChange('month')}
                 className={selectedRange === 'month' ? 'p-button-primary' : ''}
               />
               <Button
-                label={t('admin.sensors.stats.custom')}
+                label="Custom"
                 onClick={() => handleRangeChange('custom')}
                 className={selectedRange === 'custom' ? 'p-button-primary' : ''}
               />
@@ -377,17 +395,17 @@ export default function Sensors() {
                   onChange={(e) =>
                     setCustomRange([e.value as Date, customRange[1]])
                   }
-                  placeholder="Data inicial"
+                  placeholder="Start date"
                   showIcon
                   dateFormat="dd/mm/yy"
                 />
-                <span>a</span>
+                <span>to</span>
                 <Calendar
                   value={customRange[1]}
                   onChange={(e) =>
                     setCustomRange([customRange[0], e.value as Date])
                   }
-                  placeholder="Data final"
+                  placeholder="End date"
                   showIcon
                   dateFormat="dd/mm/yy"
                 />
@@ -398,27 +416,27 @@ export default function Sensors() {
           <div className="mb-4 text-center text-gray-600">
             {selectedRange === 'week' && (
               <span>
-                Mostrant dades d'aquesta setmana:{' '}
-                {getCurrentWeekRange().start.toLocaleDateString('es-ES')} -{' '}
-                {getCurrentWeekRange().end.toLocaleDateString('es-ES')}
+                Showing data for this week:{' '}
+                {getCurrentWeekRange().start.toLocaleDateString('en-US')} -{' '}
+                {getCurrentWeekRange().end.toLocaleDateString('en-US')}
               </span>
             )}
             {selectedRange === 'month' && (
               <span>
-                Mostrant dades d'aquest mes:{' '}
-                {getCurrentMonthRange().start.toLocaleDateString('es-ES')} -{' '}
-                {getCurrentMonthRange().end.toLocaleDateString('es-ES')}
+                Showing data for this month:{' '}
+                {getCurrentMonthRange().start.toLocaleDateString('en-US')} -{' '}
+                {getCurrentMonthRange().end.toLocaleDateString('en-US')}
               </span>
             )}
             {selectedRange === 'custom' && customRange[0] && customRange[1] ? (
               <span>
-                Mostrant dades des de{' '}
-                {customRange[0].toLocaleDateString('es-ES')} fins a{' '}
-                {customRange[1].toLocaleDateString('es-ES')}
+                Showing data from {customRange[0].toLocaleDateString('en-US')}{' '}
+                to {customRange[1].toLocaleDateString('en-US')}
               </span>
             ) : (
               <span>
-                Mostrant dades d'avui: {new Date().toLocaleDateString('es-ES')}
+                Showing data for today:{' '}
+                {new Date('2025-04-01').toLocaleDateString('en-US')}
               </span>
             )}
           </div>
@@ -427,11 +445,11 @@ export default function Sensors() {
             {selectedSensor?.name.includes('SensorPH') && phData.length > 0 && (
               <div className="col-12">
                 <h3 className="text-lg font-semibold mb-3 text-center">
-                  PH del Sòl (ph1_soil)
+                  Soil PH (ph1_soil)
                 </h3>
                 <Chart
                   type="line"
-                  data={prepareChartData(phData, 'PH del Sòl', '#66BB6A')}
+                  data={prepareChartData(phData, 'Soil PH', '#66BB6A')}
                   options={{
                     responsive: true,
                     plugins: {
@@ -446,10 +464,10 @@ export default function Sensors() {
                       y: {
                         min: 0,
                         max: 14,
-                        title: { display: true, text: 'Valor de PH' },
+                        title: { display: true, text: 'PH Value' },
                       },
                       x: {
-                        title: { display: true, text: 'Data i hora' },
+                        title: { display: true, text: 'Date' },
                       },
                     },
                   }}
@@ -462,13 +480,13 @@ export default function Sensors() {
               humidityData.length > 0 && (
                 <div className="col-12">
                   <h3 className="text-lg font-semibold mb-3 text-center">
-                    Humitat del Sòl
+                    Soil Humidity
                   </h3>
                   <Chart
                     type="line"
                     data={prepareChartData(
                       humidityData,
-                      'Humitat del Sòl',
+                      'Soil Humidity',
                       '#42A5F5',
                     )}
                     options={{
@@ -477,7 +495,7 @@ export default function Sensors() {
                         legend: { display: true },
                         tooltip: {
                           callbacks: {
-                            label: (context) => `Humitat: ${context.raw}%`,
+                            label: (context) => `Humidity: ${context.raw}%`,
                           },
                         },
                       },
@@ -485,13 +503,10 @@ export default function Sensors() {
                         y: {
                           min: 0,
                           max: 100,
-                          title: {
-                            display: true,
-                            text: "Percentatge d'Humitat",
-                          },
+                          title: { display: true, text: 'Humidity Percentage' },
                         },
                         x: {
-                          title: { display: true, text: 'Data i hora' },
+                          title: { display: true, text: 'Date' },
                         },
                       },
                     }}
@@ -503,8 +518,7 @@ export default function Sensors() {
             {phData.length === 0 && humidityData.length === 0 && (
               <div className="col-12 text-center py-4">
                 <p className="text-gray-500">
-                  No hi ha dades disponibles per aquest sensor en el rang
-                  seleccionat
+                  No data available for this sensor in the selected range
                 </p>
               </div>
             )}

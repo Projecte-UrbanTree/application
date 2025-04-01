@@ -562,7 +562,7 @@
             "view": "View"
           },
           "columns": {
-            "deviceEui": "EUI",
+            "deviceEui": "Device EUI",
             "id": "ID",
             "latitude": "Latitude",
             "longitude": "Longitude",
@@ -578,11 +578,17 @@
           }
         },
         "stats": {
-          "week": "View data for this week",
-          "month": "View data for this month",
-          "custom": "Select a custom date range",
+          "week": "Week",
+          "month": "Month",
+          "custom": "Custom",
           "startDate": "Start Date",
-          "endDate": "End Date"
+          "endDate": "End Date",
+          "phChartTitle": "Soil pH (ph1_soil)",
+          "humidityChartTitle": "Soil Humidity",
+          "phYAxis": "pH Value",
+          "humidityYAxis": "Humidity Percentage",
+          "xAxis": "Date",
+          "noData": "No data available for selected range"
         },
         "title": "Sensors"
       },

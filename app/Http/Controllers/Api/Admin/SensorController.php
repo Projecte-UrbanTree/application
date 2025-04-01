@@ -63,8 +63,8 @@ class SensorController extends Controller
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
-                'latitude' => 'required|numeric|between:-90,90', // Eliminem restriccions de precisió
-                'longitude' => 'required|numeric|between:-180,180', // Eliminem restriccions de precisió
+                'latitude' => 'required|numeric|between:-90,90', 
+                'longitude' => 'required|numeric|between:-180,180', 
                 'contract_id' => 'required|integer|exists:contracts,id',
             ]);
 
@@ -116,7 +116,6 @@ class SensorController extends Controller
 
         $sensorHistory = $query->select('created_at', 'phi_soil', 'water_soil', 'humidity')->get();
 
-        // Agrupem les dades per dia
         $groupedData = $sensorHistory->groupBy(function ($item) {
             return $item->created_at->format('Y-m-d');
         });
@@ -143,18 +142,16 @@ class SensorController extends Controller
     {
         $sensor = Sensor::findOrFail($sensorId);
 
-        // Obtén el último valor de PH del historial del sensor
         $lastPH = SensorHistory::where('sensor_id', $sensorId)
             ->orderBy('created_at', 'desc')
             ->value('phi_soil');
 
-        return response()->json(['ph' => $lastPH ?? 0], 200); // Devuelve 0 si no hay datos
+        return response()->json(['ph' => $lastPH ?? 0], 200); 
     }
 
     public function getSensorPHByDevEui($dev_eui)
     {
         try {
-            // Obtenim les dades de PH i Humitat del sensor amb el dev_eui especificat
             $sensorData = SensorHistory::whereHas('sensor', function ($query) use ($dev_eui) {
                 $query->where('dev_eui', $dev_eui);
             })->select('created_at', 'phi_soil', 'water_soil')
@@ -191,7 +188,6 @@ class SensorController extends Controller
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
-        // Inclou tots els camps necessaris
         $sensorHistories = $query->select('sensor_id', 'created_at', 'phi_soil', 'temp_soil', 'bat', 'water_soil')->get();
 
         return response()->json($sensorHistories, 200);
@@ -200,14 +196,12 @@ class SensorController extends Controller
     public function getSensorHistoryByDevEui($dev_eui)
 {
     try {
-        // Verifiquem si existeix un sensor amb el dev_eui especificat
         $sensor = Sensor::where('dev_eui', $dev_eui)->first();
 
         if (!$sensor) {
             return response()->json(['message' => 'Sensor not found'], 404);
         }
 
-        // Obtenim l'historial del sensor
         $sensorHistory = SensorHistory::where('sensor_id', $sensor->id)
             ->orderBy('created_at', 'asc')
             ->get(['created_at', 'phi_soil as ph1_soil', 'water_soil as humidity_soil']);
@@ -216,7 +210,6 @@ class SensorController extends Controller
             return response()->json(['message' => 'No history found for the specified dev_eui'], 404);
         }
 
-        // Formatem les dades per retornar-les
         $formattedHistory = $sensorHistory->map(function ($entry) {
             return [
                 'time' => $entry->created_at->toISOString(),

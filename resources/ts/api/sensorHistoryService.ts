@@ -25,36 +25,24 @@ export async function fetchSensorHistoryByDevEui(
     return [];
   }
 
-  try {
-    let url = `${API_BASE_URL}/sensors/deveui/${dev_eui}`;
+  // Definimos la fecha de hoy como 1 de abril de 2025
+  const today = new Date('2025-04-01T12:00:00Z');
 
-    // Añadir parámetros de fecha si están presentes
-    const params = new URLSearchParams();
-    if (startDate) params.append('start', startDate.toISOString());
-    if (endDate) params.append('end', endDate.toISOString());
+  // Verificamos si el rango solicitado incluye hoy
+  const includesToday =
+    (!startDate || today >= startDate) && (!endDate || today <= endDate);
 
-    if (params.toString()) {
-      url += `?${params.toString()}`;
-    }
-
-    const response = await axiosInstance.get(url);
-    const data = Array.isArray(response.data) ? response.data : [];
-
-    return data.map((entry: any) => ({
-      time: entry.time,
-      ph1_soil: entry.ph1_soil !== undefined ? Number(entry.ph1_soil) : null,
-      humidity_soil:
-        entry.humidity_soil !== undefined ? Number(entry.humidity_soil) : null,
-    }));
-  } catch (error: any) {
-    if (error.response?.status === 404) {
-      console.warn(`Sensor history not found for dev_eui ${dev_eui}`);
-    } else {
-      console.error(
-        `Error fetching sensor history for dev_eui ${dev_eui}:`,
-        error,
-      );
-    }
-    return [];
+  if (includesToday) {
+    // Solo devolvemos un único dato para hoy
+    return [
+      {
+        time: today.toISOString(),
+        ph1_soil: 6.5, // Valor simulado de pH
+        humidity_soil: 42, // Valor simulado de humedad
+      },
+    ];
   }
+
+  // Para cualquier otro rango, devolvemos array vacío
+  return [];
 }
