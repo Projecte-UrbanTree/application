@@ -135,18 +135,18 @@ export default function EditEva() {
     root_surface_diameter: 0,
     effective_root_area: 0,
     height_estimation: 0,
-    unbalancedCrown: 0,
-    overextendedBranches: 0,
+    unbalanced_crown: 0, // Cambiado de unbalancedCrown
+    overextended_branches: 0, // Cambiado de overextendedBranches
     cracks: 0,
-    deadBranches: 0,
+    dead_branches: 0, // Cambiado de deadBranches
     inclination: 0,
-    VForks: 0,
+    V_forks: 0, // Cambiado de VForks
     cavities: 0,
-    barkDamage: 0,
-    soilLifting: 0,
-    cutRoots: 0,
-    basalRot: 0,
-    exposedRoots: 0,
+    bark_damage: 0, // Cambiado de barkDamage
+    soil_lifting: 0, // Cambiado de soilLifting
+    cut_damaged_roots: 0, // Cambiado de cutRoots
+    basal_rot: 0, // Cambiado de basalRot
+    exposed_surface_roots: 0, // Cambiado de exposedRoots
     wind: 0,
     drought: 0,
     status: 0,
@@ -265,18 +265,18 @@ export default function EditEva() {
       const formattedDate = format(birthDate, 'yyyy-MM-dd');
 
       const status =
-        Number(values.unbalancedCrown) +
-        Number(values.overextendedBranches) +
+        Number(values.unbalanced_crown) +
+        Number(values.overextended_branches) +
         Number(values.cracks) +
-        Number(values.deadBranches) +
+        Number(values.dead_branches) +
         Number(values.inclination) +
-        Number(values.VForks) +
+        Number(values.V_forks) +
         Number(values.cavities) +
-        Number(values.barkDamage) +
-        Number(values.soilLifting) +
-        Number(values.cutRoots) +
-        Number(values.basalRot) +
-        Number(values.exposedRoots);
+        Number(values.bark_damage) +
+        Number(values.soil_lifting) +
+        Number(values.cut_damaged_roots) +
+        Number(values.basal_rot) +
+        Number(values.exposed_surface_roots);
 
       const updatedValues = {
         ...values,

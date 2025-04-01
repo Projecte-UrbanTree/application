@@ -210,6 +210,15 @@ const CreateEva = () => {
         ...values,
         date_birth: formattedDate,
         status,
+        unbalanced_crown: values.unbalancedCrown,
+        overextended_branches: values.overextendedBranches,
+        dead_branches: values.deadBranches,
+        V_forks: values.VForks,
+        bark_damage: values.barkDamage,
+        soil_lifting: values.soilLifting,
+        cut_damaged_roots: values.cutRoots,
+        basal_rot: values.basalRot,
+        exposed_surface_roots: values.exposedRoots,
       };
 
       await axiosClient.post('/admin/evas', updatedValues);
