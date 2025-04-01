@@ -22,6 +22,7 @@ import { deleteElementAsync } from '@/store/slice/elementSlice';
 import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
 import { useTranslation } from 'react-i18next';
 import axiosClient from '@/api/axiosClient';
+import CreateEva from '@/pages/Admin/Eva/Create'; // Import the CreateEva component
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -50,6 +51,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [eva, setEva] = useState<Eva | null>(null);
   const [isLoadingEva, setIsLoadingEva] = useState(false);
+  const [isEvaModalVisible, setIsEvaModalVisible] = useState(false);
   const { t } = useTranslation();
 
   // estado de opciones para el dropdown de estado
@@ -184,6 +186,14 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     }
   };
 
+  const handleCreateEva = () => {
+    setIsEvaModalVisible(true);
+  };
+
+  const handleCloseEvaModal = () => {
+    setIsEvaModalVisible(false);
+  };
+
   const getElementType = (elementTypeId: number) => {
     const type = elementTypes.find((t) => t.id === elementTypeId);
     return type?.name || 'No definido';
@@ -225,6 +235,23 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       return (
         <div className="text-center py-8">
           <p>No hay datos de evaluación disponibles para este árbol.</p>
+          <Button
+            label="Crear EVA"
+            className="p-button-sm p-button-primary mt-4"
+            onClick={handleCreateEva}
+          />
+          {isEvaModalVisible && (
+            <div className="modal">
+              <div className="modal-content">
+                <Button
+                  label="Cerrar"
+                  className="p-button-sm p-button-secondary mb-4"
+                  onClick={handleCloseEvaModal}
+                />
+                <CreateEva preselectedElementId={element.id} />
+              </div>
+            </div>
+          )}
         </div>
       );
     }

@@ -81,7 +81,11 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
   );
 };
 
-const CreateEva = () => {
+const CreateEva = ({
+  preselectedElementId,
+}: {
+  preselectedElementId?: number;
+}) => {
   const navigate = useNavigate();
   const [elements, setElements] = useState<any[]>([]);
   const [dictionaries, setDictionaries] = useState<any>({});
@@ -95,6 +99,12 @@ const CreateEva = () => {
       .get('/admin/evas/create')
       .then((response) => {
         setElements(response.data.elements);
+        // If preselectedElementId is provided, set it as the default value
+        if (preselectedElementId) {
+          setElements((prev) =>
+            prev.filter((element) => element.id === preselectedElementId),
+          );
+        }
         const translatedDictionaries: any = {
           unbalancedCrown: [],
           overextendedBranches: [],
@@ -123,10 +133,10 @@ const CreateEva = () => {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [preselectedElementId]);
 
   const initialValues = {
-    element_id: 0,
+    element_id: preselectedElementId || 0,
     date_birth: '',
     years: 0,
     months: 0,
@@ -284,6 +294,7 @@ const CreateEva = () => {
                     }))}
                     optionLabel="label"
                     optionValue="value"
+                    disabled={!!preselectedElementId} // Disable if preselectedElementId is provided
                   />
                   <FormField
                     name="years"
