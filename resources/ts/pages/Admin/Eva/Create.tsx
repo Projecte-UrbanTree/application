@@ -280,7 +280,7 @@ const CreateEva = () => {
                     label={t('admin.pages.evas.form.name')}
                     as={Dropdown}
                     options={elements.map((element) => ({
-                      label: element.name,
+                      label: element.id,
                       value: element.id,
                     }))}
                     optionLabel="label"

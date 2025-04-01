@@ -265,18 +265,18 @@ export default function EditEva() {
       const formattedDate = format(birthDate, 'yyyy-MM-dd');
 
       const status =
-        Number(values.unbalanced_crown) +
-        Number(values.overextended_branches) +
-        Number(values.cracks) +
-        Number(values.dead_branches) +
-        Number(values.inclination) +
-        Number(values.V_forks) +
-        Number(values.cavities) +
-        Number(values.bark_damage) +
-        Number(values.soil_lifting) +
-        Number(values.cut_damaged_roots) +
-        Number(values.basal_rot) +
-        Number(values.exposed_surface_roots);
+        Number(values.unbalanced_crown || 0) +
+        Number(values.overextended_branches || 0) +
+        Number(values.cracks || 0) +
+        Number(values.dead_branches || 0) +
+        Number(values.inclination || 0) +
+        Number(values.V_forks || 0) +
+        Number(values.cavities || 0) +
+        Number(values.bark_damage || 0) +
+        Number(values.soil_lifting || 0) +
+        Number(values.cut_damaged_roots || 0) +
+        Number(values.basal_rot || 0) +
+        Number(values.exposed_surface_roots || 0);
 
       const updatedValues = {
         ...values,
@@ -284,7 +284,20 @@ export default function EditEva() {
         status: status,
       };
 
-      await axiosClient.put(`/admin/evas/${id}`, updatedValues);
+      // Ensure all required fields are included and properly formatted
+      const payload = {
+        ...updatedValues,
+        element_id: Number(updatedValues.element_id),
+        height: Number(updatedValues.height),
+        diameter: Number(updatedValues.diameter),
+        crown_width: Number(updatedValues.crown_width),
+        crown_projection_area: Number(updatedValues.crown_projection_area),
+        root_surface_diameter: Number(updatedValues.root_surface_diameter),
+        effective_root_area: Number(updatedValues.effective_root_area),
+        height_estimation: Number(updatedValues.height_estimation),
+      };
+
+      await axiosClient.put(`/admin/evas/${id}`, payload);
       navigate(`/admin/evas/${id}`, {
         state: { success: t('messages.updateSuccess') },
       });
