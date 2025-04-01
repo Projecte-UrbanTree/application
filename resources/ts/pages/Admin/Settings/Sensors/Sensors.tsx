@@ -50,7 +50,6 @@ export default function Sensors() {
     null,
   ]);
 
-  // Fixed to April 2025 for simulation
   const getCurrentWeekRange = () => {
     const now = new Date('2025-04-01');
     const day = now.getDay();
