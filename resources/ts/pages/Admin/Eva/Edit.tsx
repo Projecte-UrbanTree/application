@@ -135,18 +135,18 @@ export default function EditEva() {
     root_surface_diameter: 0,
     effective_root_area: 0,
     height_estimation: 0,
-    unbalancedCrown: 0,
-    overextendedBranches: 0,
+    unbalanced_crown: 0,
+    overextended_branches: 0,
     cracks: 0,
-    deadBranches: 0,
+    dead_branches: 0,
     inclination: 0,
-    VForks: 0,
+    V_forks: 0,
     cavities: 0,
-    barkDamage: 0,
-    soilLifting: 0,
-    cutRoots: 0,
-    basalRot: 0,
-    exposedRoots: 0,
+    bark_damage: 0,
+    soil_lifting: 0,
+    cut_damaged_roots: 0,
+    basal_rot: 0,
+    exposed_surface_roots: 0,
     wind: 0,
     drought: 0,
     status: 0,
@@ -265,18 +265,18 @@ export default function EditEva() {
       const formattedDate = format(birthDate, 'yyyy-MM-dd');
 
       const status =
-        Number(values.unbalancedCrown) +
-        Number(values.overextendedBranches) +
-        Number(values.cracks) +
-        Number(values.deadBranches) +
-        Number(values.inclination) +
-        Number(values.VForks) +
-        Number(values.cavities) +
-        Number(values.barkDamage) +
-        Number(values.soilLifting) +
-        Number(values.cutRoots) +
-        Number(values.basalRot) +
-        Number(values.exposedRoots);
+        Number(values.unbalanced_crown || 0) +
+        Number(values.overextended_branches || 0) +
+        Number(values.cracks || 0) +
+        Number(values.dead_branches || 0) +
+        Number(values.inclination || 0) +
+        Number(values.V_forks || 0) +
+        Number(values.cavities || 0) +
+        Number(values.bark_damage || 0) +
+        Number(values.soil_lifting || 0) +
+        Number(values.cut_damaged_roots || 0) +
+        Number(values.basal_rot || 0) +
+        Number(values.exposed_surface_roots || 0);
 
       const updatedValues = {
         ...values,
@@ -284,7 +284,19 @@ export default function EditEva() {
         status: status,
       };
 
-      await axiosClient.put(`/admin/evas/${id}`, updatedValues);
+      const payload = {
+        ...updatedValues,
+        element_id: Number(updatedValues.element_id),
+        height: Number(updatedValues.height),
+        diameter: Number(updatedValues.diameter),
+        crown_width: Number(updatedValues.crown_width),
+        crown_projection_area: Number(updatedValues.crown_projection_area),
+        root_surface_diameter: Number(updatedValues.root_surface_diameter),
+        effective_root_area: Number(updatedValues.effective_root_area),
+        height_estimation: Number(updatedValues.height_estimation),
+      };
+
+      await axiosClient.put(`/admin/evas/${id}`, payload);
       navigate(`/admin/evas/${id}`, {
         state: { success: t('messages.updateSuccess') },
       });
