@@ -146,11 +146,35 @@ export const MapComponent: React.FC<MapProps> = ({
           service.disableSingleClick();
           return;
         }
+
         setIsAddingPoint(true);
         service.enableSingleClick((lngLat) => {
-          setNewPointCoord([lngLat.lng, lngLat.lat]);
-          setModalAddPointVisible(true);
+          const clickedPoint = turf.point([lngLat.lng, lngLat.lat]);
+
+          const zonePoints = points
+            .filter(
+              (p) =>
+                p.zone_id === zone?.id && p.type === TypePoint.zone_delimiter,
+            )
+            .map((p) => [p.longitude!, p.latitude!]);
+          if (zonePoints.length > 0) {
+            zonePoints.push(zonePoints[0]);
+          }
+
+          const zonePolygon = turf.polygon([zonePoints]);
+
+          if (turf.booleanPointInPolygon(clickedPoint, zonePolygon)) {
+            setNewPointCoord([lngLat.lng, lngLat.lat]);
+            setModalAddPointVisible(true);
+          } else {
+            toast.current?.show({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'El elemento debe estar dentro de la zona seleccionada',
+            });
+          }
         });
+
         const firstPoint = points.find((p: Point) => p.zone_id === zone?.id);
         if (firstPoint?.longitude && firstPoint?.latitude) {
           service.flyTo([firstPoint.longitude, firstPoint.latitude]);
@@ -161,7 +185,7 @@ export const MapComponent: React.FC<MapProps> = ({
     });
 
     return () => subscription.unsubscribe();
-  }, [zoneToAddElement]);
+  }, [zoneToAddElement, points]);
 
   // draw zones
   useEffect(() => {
