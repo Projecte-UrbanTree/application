@@ -189,7 +189,7 @@
           },
           "returnButton": "Torna a la llista de recursos",
           "submitButton": {
-            "create": "Crear Recurs",
+            "create": "Crear Tipus de tasca",
             "edit": "Desa Canvis"
           },
           "submittingText": {
@@ -197,7 +197,7 @@
             "edit": "Desant..."
           },
           "title": {
-            "create": "Crear Recurs",
+            "create": "Crear Tipus de tasca",
             "edit": "Edita Recurs"
           },
           "validation": {
