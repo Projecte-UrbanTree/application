@@ -12,7 +12,7 @@ class IncidentSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('incidents')->insert([
+        DB::table('incidences')->insert([
             [
                 'name' => 'Incident 1',
                 'description' => 'Description for Incident 1',

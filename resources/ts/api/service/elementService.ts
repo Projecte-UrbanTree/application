@@ -17,3 +17,12 @@ export const saveElements = async (element: Element): Promise<Element> => {
     throw error;
   }
 };
+
+export const deleteElement = async (elementId: number): Promise<void> => {
+  try {
+    await axiosClient.delete(`/admin/elements/${elementId}`);
+  } catch (error) {
+    console.error('Error eliminando el elemento', error);
+    throw error;
+  }
+};

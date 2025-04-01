@@ -113,7 +113,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'work-reports/:id',
             element: (
-              <AdminLayoutWrapper titleI18n="admin.pages.workOrders.edit.title">
+              <AdminLayoutWrapper titleI18n="admin.pages.workReports.show.title">
                 <WorkReport />
               </AdminLayoutWrapper>
             ),
