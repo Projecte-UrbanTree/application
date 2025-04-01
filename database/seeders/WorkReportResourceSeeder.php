@@ -14,15 +14,33 @@ class WorkReportResourceSeeder extends Seeder
     {
         DB::table('work_report_resources')->insert([
             [
+                'quantity' => 10,
                 'resource_id' => 1,
                 'work_report_id' => 1,
             ],
             [
+                'quantity' => 20,
                 'resource_id' => 2,
                 'work_report_id' => 2,
             ],
             [
+                'quantity' => 30,
                 'resource_id' => 3,
+                'work_report_id' => 3,
+            ],
+            [
+                'quantity' => 15,
+                'resource_id' => 4,
+                'work_report_id' => 3,
+            ],
+            [
+                'quantity' => 25,
+                'resource_id' => 5,
+                'work_report_id' => 3,
+            ],
+            [
+                'quantity' => 35,
+                'resource_id' => 6,
                 'work_report_id' => 3,
             ],
         ]);

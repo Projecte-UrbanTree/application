@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('resources', function (Blueprint $table) {
-            $table->foreignId('contract_id')->after('id')->constrained()->onDelete('cascade');
+        Schema::create('contract_user', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('contract_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('resources', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('contract_user');
     }
 };

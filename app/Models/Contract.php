@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Contract extends Model
 {
@@ -14,18 +16,23 @@ class Contract extends Model
         'status',
     ];
 
-    public function sensors()
+    public function sensors(): HasMany
     {
         return $this->hasMany(Sensor::class, 'contract_id');
     }
 
-    public function zones()
+    public function zones(): HasMany
     {
         return $this->hasMany(Zone::class, 'contract_id');
     }
 
-    public function workOrders()
+    public function workOrders(): HasMany
     {
         return $this->hasMany(WorkOrder::class, 'contract_id');
+    }
+
+    public function workers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'contract_user');
     }
 }

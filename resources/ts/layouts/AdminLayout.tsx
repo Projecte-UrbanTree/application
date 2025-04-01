@@ -12,7 +12,7 @@ import axiosClient from '@/api/axiosClient';
 import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import LangSelector from '@/components/LangSelector';
 import { useI18n } from '@/hooks/useI18n';
-import { selectContract } from '@/store/slice/contractSlice';
+import { selectContract, setContractState } from '@/store/slice/contractSlice';
 import type { Contract } from '@/types/Contract';
 import logo from '@images/logo.png';
 import { useDispatch } from 'react-redux';
@@ -37,6 +37,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const dispatch = useDispatch();
   const profileRef = useRef<HTMLDivElement>(null);
 
+  const activeContracts = contracts.filter(contract => contract.status === 0);
+  const todosOption: Contract = { id: 0, name: t('general.allContracts'), status: 1 };
+  const dropdownOptions = [todosOption, ...activeContracts];
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
 
@@ -54,25 +58,20 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const handleContractChange = useCallback(
     async (e: DropdownChangeEvent) => {
-      const selectedContract = contracts.find((c) => c.id === e.value);
-
+      const selectedContract = dropdownOptions.find((c) => c.id === e.value);
       if (selectedContract) {
         try {
           await axiosClient.post('/admin/select-contract', {
             contract_id: selectedContract.id,
           });
-
           dispatch(selectContract(selectedContract.id!));
           setContract(selectedContract);
         } catch (error: any) {
-          console.error(
-            'Error saving selected contract:',
-            error.response?.data || error,
-          );
+          console.error('Error saving selected contract:', error.response?.data || error);
         }
       }
     },
-    [dispatch, contracts],
+    [dispatch, dropdownOptions],
   );
 
   const handleProfileClick = () => setProfileDropdownVisible((prev) => !prev);
@@ -102,6 +101,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     '/admin/workers',
     '/admin/resources',
     '/admin/statistics',
+    '/admin/work-reports',
   ].some((path) => location.pathname.startsWith(path));
 
   const isSettingsPage = location.pathname.includes('/admin/settings');
@@ -204,6 +204,19 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     },
   ];
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      axiosClient.get<Contract[]>('/admin/contracts')
+        .then(response => {
+          dispatch(setContractState({ allContracts: response.data }));
+        })
+        .catch(error => {
+          console.error("Error fetching contracts during polling:", error);
+        });
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
+
   return (
     <div>
       <header className="border-b border-gray-200 bg-white shadow-md">
@@ -250,9 +263,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                   <Dropdown
                     id="contractBtn"
                     name="contractBtn"
-                    className="w-32"
+                    className="w-40"
                     value={dropdownValue}
-                    options={contracts}
+                    options={dropdownOptions}
                     onChange={handleContractChange}
                     optionLabel="name"
                     optionValue="id"
@@ -317,7 +330,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 name="contractBtn"
                 className="w-full"
                 value={dropdownValue}
-                options={contracts}
+                options={dropdownOptions}
                 onChange={handleContractChange}
                 optionLabel="name"
                 optionValue="id"
@@ -364,9 +377,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
       )}
 
-      <main className={padding}>
-        {children}
-      </main>
+      <main className={padding}>{children}</main>
     </div>
   );
 };

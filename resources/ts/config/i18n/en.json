@@ -20,6 +20,8 @@
       "resource_type": "Resource Type",
       "role": "Role",
       "select_resource_type": "Select a resource type",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
       "species": "Species",
       "start_date": "Start Date",
       "status": "Status",
@@ -205,7 +207,10 @@
             "name_min": "Name must be at least 3 characters",
             "name_required": "Name is required",
             "type_invalid": "Please select a valid resource type",
-            "type_required": "Type is required"
+            "type_required": "Type is required",
+            "unit_cost_min": "Unit cost must be greater than 0",
+            "unit_cost_required": "Unit cost is required",
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
@@ -217,7 +222,10 @@
           "columns": {
             "description": "Description",
             "name": "Name",
-            "type": "Type"
+            "type": "Type",
+            "unit": "Unit",
+            "unit_name": "Unit Name",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
             "createSuccess": "Resource created successfully",
@@ -286,7 +294,8 @@
         "tasksNotDone": "Pending Tasks",
         "hoursWorked": "Hours Worked",
         "fuelConsumption": "Fuel Consumption",
-        "noData": "No data to display"
+        "noData": "No data to display",
+        "exportCSV": "Export to CSV"
       },
       "taskTypes": {
         "form": {
@@ -550,6 +559,76 @@
         },
         "title": "Work Orders"
       },
+      "workReport": {
+        "title": "Work Report",
+        "not_found": "Work Report not found",
+        "columns": {
+          "users": "Workers",
+          "observation": "Observation",
+          "spent_fuel": "Spent Fuel",
+          "incidents": "Incidents",
+          "zones": "Zones",
+          "tasks": "Tasks",
+          "notes": "Notes",
+          "block": "Block",
+          "resources": "Resources"
+        },
+        "messages": {
+          "closing_part": "Closing part...",
+          "part_closed": "Part successfully closed",
+          "closing_block": "Closing block...",
+          "close_block": "Block successfully closed",
+          "closing_with_incidents": "Closing block with incidents...",
+          "close_with_incidents": "Block closed with incidents",
+          "rejecting": "Rejecting block...",
+          "reject": "Block rejected",
+          "closing_with_observations": "Closing report with observations...",
+          "close_with_observations": "Report closed with observations",
+          "error_updating_observations": "Error updating observations",
+          "observation_updated": "Observation updated successfully",
+          "error_updating_observation": "Error updating observation"
+        },
+        "reportStatus": {
+          "pending": "Pending",
+          "completed": "Completed",
+          "rejected": "Rejected",
+          "closedWithIncidents": "Closed with Incidents",
+          "unknown": "Unknown"
+        },
+        "details": {
+          "details": "Details",
+          "block": "Block",
+          "noBlocks": "No blocks",
+          "noBlocksAvailable": "No blocks available for this work report",
+          "noNotes": "No notes",
+          "noTasks": "No tasks assigned",
+          "notes": "Notes",
+          "noUsers": "No users assigned",
+          "noZones": "No zones assigned",
+          "tasks": "Tasks",
+          "unknown": "Unknown",
+          "zones": "Zones",
+          "resources": "Resources",
+          "observation": "Observation",
+          "noObservation": "No observation available",
+          "incidents": "Incidents",
+          "noIncidents": "No incidents recorded",
+          "spentFuel": "Spent Fuel",
+          "taskStatus": "Task Status",
+          "hours": "Hours",
+          "unit": "Unit",
+          "cost": "Cost",
+          "quantity": "Quantity"
+        },
+        "dialogs": {
+          "observationHeader": "Add Observations",
+          "observationMessage": "Please provide your observations before closing the report.",
+          "observationPlaceholder": "Enter your observations here...",
+          "editObservationHeader": "Edit Observation",
+          "editObservationMessage": "Modify the observation for this report.",
+          "editObservationPlaceholder": "Enter your updated observation here..."
+        }
+      },
       "account": {
         "title": "Account Settings",
         "basicInfo": "Basic Information",
@@ -579,85 +658,85 @@
           "title": "Eva Details"
         },
         "dictionaries": {
-          "copaDesequilibrada": {
+          "unbalancedCrown": {
             "0": "No inclination or uneven growth",
             "1": "Slight crown inclination",
             "2": "Visibly inclined crown",
             "3": "Extremely inclined crown"
           },
-          "ramasSobreextendidas": {
+          "overextendedBranches": {
             "0": "Well-structured branches",
             "1": "Few overextended branches",
             "2": "Several overextended branches",
             "3": "Overextended and heavy branches"
           },
-          "grietas": {
+          "cracks": {
             "0": "No cracks",
             "1": "Small cracks in the trunk",
             "2": "Visible cracks in several parts",
             "3": "Deep cracks in the trunk"
           },
-          "ramasMuertas": {
+          "deadBranches": {
             "0": "No dead branches",
             "1": "Some dead branches",
             "2": "Multiple dead branches",
             "3": "Large number of dead branches"
           },
-          "inclinacion": {
+          "inclination": {
             "0": "Completely vertical",
             "1": "Slight inclination (<5°)",
             "2": "Moderate inclination (5-15°)",
             "3": "High inclination (>15°)"
           },
-          "bifurcacionesV": {
+          "VForks": {
             "0": "Normal bifurcations",
             "1": "Slight V bifurcation",
             "2": "Pronounced V bifurcation",
             "3": "Dangerous V bifurcation"
           },
-          "cavidades": {
+          "cavities": {
             "0": "No cavities",
             "1": "Small cavity",
             "2": "Intermediate cavity",
             "3": "Deep and structural cavity"
           },
-          "danosCorteza": {
+          "barkDamage": {
             "0": "Intact bark",
             "1": "Bark with slight wounds",
             "2": "Significant bark damage",
             "3": "Very damaged bark"
           },
-          "levantamientoSuelo": {
+          "soilLifting": {
             "0": "Soil without alterations",
             "1": "Slight soil elevation",
             "2": "Visible soil elevation",
             "3": "Severely lifted soil"
           },
-          "raicesCortadas": {
+          "cutRoots": {
             "0": "Intact roots",
             "1": "Roots with slight cuts",
             "2": "Partially damaged roots",
             "3": "Severely cut roots"
           },
-          "podredumbreBasal": {
+          "basalRot": {
             "0": "No rot",
             "1": "Initial rot",
             "2": "Visible rot",
             "3": "Advanced rot"
           },
-          "raicesExpuestas": {
+          "exposedRoots": {
             "0": "Roots underground",
             "1": "Some exposed roots",
             "2": "Several exposed roots",
             "3": "Exposed and weakened roots"
           },
-          "viento": {
+          "wind": {
             "0": "Tree protected by natural barriers or buildings, no strong constant wind.",
             "1": "Tree with occasional wind but no significant impact on its stability.",
             "2": "Tree exposed to frequent strong winds, which may affect its structure.",
             "3": "Tree in open areas or slopes where the wind blows with extreme force."
           },
-          "sequia": {
+          "drought": {
             "0": "Tree in an area with stable humidity and constant access to water, no water stress.",
             "1": "Tree with moderate access to water, but with occasional drought periods.",
             "2": "Tree in an area with recurrent droughts, affecting its development and resistance.",
@@ -802,6 +881,30 @@
         "environmentalFactors": "Environmental Factors",
         "windExposure": "Wind Exposure",
         "droughtExposure": "Drought Exposure"
+      },
+      "work_reports": {
+        "title": "Work Report",
+        "not_found": "Work Report not found",
+        "details": "Details",
+        "columns": {
+          "observation": "Observation",
+          "spent_fuel": "Spent Fuel",
+          "incidents": "Incidents",
+          "zones": "Zones",
+          "tasks": "Tasks",
+          "notes": "Notes",
+          "block": "Block"
+        },
+        "messages": {
+          "closing_part": "Closing part...",
+          "part_closed": "Part successfully closed",
+          "closing_block": "Closing block...",
+          "close_block": "Block successfully closed",
+          "closing_with_incidents": "Closing block with incidents...",
+          "close_with_incidents": "Block closed with incidents",
+          "rejecting": "Rejecting block...",
+          "reject": "Block rejected"
+        }
       }
     },
     "profileDropdown": {
@@ -848,7 +951,22 @@
     "genericError": "An error occurred. Please try again later.",
     "loading": "Loading...",
     "error": "Error",
-    "success":"Success"
+    "success":"Success",
+    "actions": {
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "close_part": "Close Part",
+      "close_with_incidents": "Close with Incidents",
+      "reject": "Reject",
+      "close_with_observations": "Close with Observations",
+      "edit_observation": "Edit Observation"
+    },
+    "messages": {
+      "close_block": "Block closed successfully",
+      "close_with_incidents": "Block closed with incidents",
+      "reject": "Block rejected"
+    },
+    "not_available": "Not available"
   },
   "public": {
     "error": {

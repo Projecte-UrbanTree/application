@@ -28,7 +28,7 @@ class WorkReportSeeder extends Seeder
                 'report_incidents' => 'Incidence for Work Report 2',
             ],
             [
-                'observation' => 'Observation for Work Report 3',
+                'observation' => '',
                 'spent_fuel' => 15.75,
                 'work_order_id' => 3,
                 'report_status' => 2,
