@@ -239,7 +239,7 @@ const CreateEva = () => {
 
   return (
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6 min-h-screen">
-      <Card className="w-full max-w-3xl shadow-lg rounded-lg overflow-hidden">
+      <Card className="w-full max-w-3xl shadow-lg">
         <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
           <Button
             className="p-button-text mr-4"
@@ -251,7 +251,7 @@ const CreateEva = () => {
             {t('admin.pages.evas.form.title.create')}
           </h2>
         </header>
-        <div className="p-6 bg-white">
+        <div className="p-6">
           {error && (
             <Message severity="error" text={error} className="mb-4 w-full" />
           )}
@@ -262,86 +262,86 @@ const CreateEva = () => {
             {({ isSubmitting }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Sección: Identificación */}
-                <div className="md:col-span-2">
-                  <div className="bg-gray-200 rounded-lg mt-4 border-2 border-gray-300">
+                <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                  <h1 className="text-xl font-bold mb-4">
+                    {t('admin.pages.evas.create.identification')}
+                  </h1>
+                  <FormField
+                    name="element_id"
+                    label={t('admin.pages.evas.form.name')}
+                    as={Dropdown}
+                    options={elements.map((element) => ({
+                      label: element.name,
+                      value: element.id,
+                    }))}
+                    optionLabel="label"
+                    optionValue="value"
+                  />
+                  <FormField
+                    name="years"
+                    label={t('admin.pages.evas.form.years')}
+                    as={InputNumber}
+                    min={0}
+                  />
+                  <FormField
+                    name="months"
+                    label={t('admin.pages.evas.form.months')}
+                    as={InputNumber}
+                    min={0}
+                    max={11}
+                  />
+                </div>
+                {/* Sección: Condición del árbol */}
+                <div className="md:col-span-1">
+                  <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
                     <h1 className="text-xl font-bold mb-4">
-                      {t('admin.pages.evas.create.identification')}
+                      {t('admin.pages.evas.create.treeCondition')}
                     </h1>
+
+                    {/* Subsección: Dimensiones */}
+                    <h2 className="text-lg font-semibold mb-2">
+                      {t('admin.pages.evas.create.dimensions')}
+                    </h2>
                     <FormField
-                      name="element_id"
-                      label={t('admin.pages.evas.form.name')}
-                      as={Dropdown}
-                      options={elements.map((element) => ({
-                        label: element.name,
-                        value: element.id,
-                      }))}
-                      optionLabel="label"
-                      optionValue="value"
+                      name="height"
+                      label={`${t('admin.pages.evas.form.height')} (m)`}
+                      as={InputNumber}
                     />
                     <FormField
-                      name="years"
-                      label={t('admin.pages.evas.form.years')}
+                      name="diameter"
+                      label={`${t('admin.pages.evas.form.diameter')} (cm)`}
                       as={InputNumber}
-                      min={0}
                     />
                     <FormField
-                      name="months"
-                      label={t('admin.pages.evas.form.months')}
+                      name="crown_width"
+                      label={`${t('admin.pages.evas.form.crown_width')} (m)`}
                       as={InputNumber}
-                      min={0}
-                      max={11}
+                    />
+                    <FormField
+                      name="crown_projection_area"
+                      label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="root_surface_diameter"
+                      label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="effective_root_area"
+                      label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="height_estimation"
+                      label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
+                      as={InputNumber}
                     />
                   </div>
                 </div>
-
-                {/* Sección: Condición del árbol */}
-                <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mb-4">
-                    {t('admin.pages.evas.create.treeCondition')}
-                  </h1>
-
-                  {/* Subsección: Dimensiones */}
-                  <h2 className="text-lg font-semibold mb-2">
-                    {t('admin.pages.evas.create.dimensions')}
-                  </h2>
-                  <FormField
-                    name="height"
-                    label={`${t('admin.pages.evas.form.height')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="diameter"
-                    label={`${t('admin.pages.evas.form.diameter')} (cm)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="crown_width"
-                    label={`${t('admin.pages.evas.form.crown_width')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="crown_projection_area"
-                    label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="root_surface_diameter"
-                    label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="effective_root_area"
-                    label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="height_estimation"
-                    label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
-                    as={InputNumber}
-                  />
-
+                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50 mb-6">
                   {/* Subsección: Estado */}
-                  <h2 className="text-lg font-semibold mt-4 mb-2">
+                  <h2 className="text-lg font-semibold mb-2">
                     {t('admin.pages.evas.create.state')}
                   </h2>
 
@@ -432,42 +432,35 @@ const CreateEva = () => {
                     options={dictionaries.exposedRoots}
                   />
                 </div>
+                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                  {/* Sección: Condición del entorno */}
+                  <div className="md:col-span-2">
+                    <h1 className="text-xl font-bold mb-4">
+                      {t('admin.pages.evas.create.environmentCondition')}
+                    </h1>
 
-                {/* Sección: Condición del entorno */}
-                <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mt-6 mb-4">
-                    {t('admin.pages.evas.create.environmentCondition')}
-                  </h1>
+                    {/* Subsección: Factores Ambientales */}
+                    <h2 className="text-lg font-semibold mb-2">
+                      {t('admin.pages.evas.create.environmentalFactors')}
+                    </h2>
 
-                  {/* Subsección: Factores Ambientales */}
-                  <h2 className="text-lg font-semibold mb-2">
-                    {t('admin.pages.evas.create.environmentalFactors')}
-                  </h2>
+                    {/* Subsubsección: Exposición al viento */}
+                    <FormField
+                      name="wind"
+                      label={t('admin.pages.evas.form.wind')}
+                      as={Dropdown}
+                      options={dictionaries.wind}
+                    />
 
-                  {/* Subsubsección: Exposición al viento */}
-                  <h3 className="text-md font-medium mb-2">
-                    {t('admin.pages.evas.create.windExposure')}
-                  </h3>
-                  <FormField
-                    name="wind"
-                    label={t('admin.pages.evas.form.wind')}
-                    as={Dropdown}
-                    options={dictionaries.wind}
-                  />
-
-                  {/* Subsubsección: Exposición a la sequía */}
-                  <h3 className="text-md font-medium mt-4 mb-2">
-                    {t('admin.pages.evas.create.droughtExposure')}
-                  </h3>
-                  <FormField
-                    name="drought"
-                    label={t('admin.pages.evas.form.drought')}
-                    as={Dropdown}
-                    options={dictionaries.drought}
-                  />
+                    {/* Subsubsección: Exposición a la sequía */}
+                    <FormField
+                      name="drought"
+                      label={t('admin.pages.evas.form.drought')}
+                      as={Dropdown}
+                      options={dictionaries.drought}
+                    />
+                  </div>
                 </div>
-
-                {/* Botón de envío */}
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <Button
                     type="submit"

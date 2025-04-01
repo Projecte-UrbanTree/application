@@ -505,7 +505,7 @@ export default function EditEva() {
                       name="wind"
                       label={t('admin.pages.evas.edit.windExposure')}
                       as={Dropdown}
-                      options={dictionaries.viento}
+                      options={dictionaries.wind}
                     />
 
                     {/* Subsubsección: Exposición a la sequía */}
@@ -513,7 +513,7 @@ export default function EditEva() {
                       name="drought"
                       label={t('admin.pages.evas.edit.droughtExposure')}
                       as={Dropdown}
-                      options={dictionaries.sequia}
+                      options={dictionaries.drought}
                     />
                   </div>
                 </div>
