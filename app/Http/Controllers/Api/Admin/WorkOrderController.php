@@ -239,16 +239,16 @@ class WorkOrderController extends Controller
             ]);
             $block->save();
 
-            if (!empty($blockData['zones']) && is_array($blockData['zones'])) {
+            if (! empty($blockData['zones']) && is_array($blockData['zones'])) {
                 $zoneIds = is_array($blockData['zones'][0])
                     ? collect($blockData['zones'])->pluck('id')->filter()->values()->toArray()
                     : array_filter($blockData['zones']);
-                if (!empty($zoneIds)) {
+                if (! empty($zoneIds)) {
                     $block->zones()->attach($zoneIds);
                 }
             }
 
-            if (!empty($blockData['tasks'])) {
+            if (! empty($blockData['tasks'])) {
                 foreach ($blockData['tasks'] as $taskData) {
                     WorkOrderBlockTask::create([
                         'work_order_block_id' => $block->id,
