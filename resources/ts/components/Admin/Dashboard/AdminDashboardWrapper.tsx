@@ -51,30 +51,47 @@ export default function AdminLayoutWrapper({
   useEffect(() => {
     if (isInventoryPage) {
       const availableContracts = allContracts.filter((c) => c.id !== 0);
-      
-      if (availableContracts.length > 0 && 
-          (!currentContract || currentContract.id === 0)) {
+
+      if (availableContracts.length > 0 && (!currentContract || currentContract.id === 0)) {
+        const firstContract = availableContracts[0];
         dispatch(
           setContractState({
             allContracts,
-            currentContract: availableContracts[0],
+            currentContract: firstContract,
           })
         );
       }
     }
   }, [isInventoryPage, allContracts, currentContract, dispatch]);
 
-  const selectedContract = currentContract;
-  
-  const padding = isInventoryPage
-    ? 'py-8 px-4'
-    : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
+  useEffect(() => {
+    if (isInventoryPage && allContracts.length > 0) {
+      const activeContracts = allContracts.filter((c) => c.id !== 0 && c.status === 0);
+      if (activeContracts.length > 0 && (!currentContract || currentContract.id === 0 || currentContract.status !== 0)) {
+        dispatch(
+          setContractState({
+            allContracts,
+            currentContract: activeContracts[0],
+          })
+        );
+      }
+    }
+  }, [isInventoryPage, allContracts, currentContract, dispatch]);
+
+  let selectedContract: Contract | undefined = undefined;
+  if (currentContract) {
+    selectedContract = currentContract;
+  } else if (contracts.length > 0) {
+    selectedContract = contracts[0];
+  }
+
+  const padding = isInventoryPage ? 'py-8 px-4' : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
   return (
     <AdminLayout
       titleI18n={titleI18n}
       contracts={contracts}
-      currentContract={selectedContract ?? (contracts.length > 0 ? contracts[0] : defaultContract)}
+      currentContract={selectedContract}
       padding={padding}>
       {children}
     </AdminLayout>
