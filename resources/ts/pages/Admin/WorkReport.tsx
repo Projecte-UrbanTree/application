@@ -122,6 +122,33 @@ const WorkReportDetail = () => {
       });
     }
   };
+  const calculateWorkOrderStatus = (workOrder: WorkOrder) => {
+    const allTasksPending = workOrder.work_orders_blocks.every((block) =>
+      block.block_tasks.every((task) => task.status === 0),
+    );
+
+    if (allTasksPending) {
+      return 0;
+    }
+
+    const hasInProgressTask = workOrder.work_orders_blocks.some((block) =>
+      block.block_tasks.some((task) => task.status === 1),
+    );
+
+    if (hasInProgressTask) {
+      return 1;
+    }
+
+    const allTasksInProgress = workOrder.work_orders_blocks.every((block) =>
+      block.block_tasks.every((task) => task.status === 1),
+    );
+
+    if (allTasksInProgress) {
+      return 2;
+    }
+
+    return workOrder.status;
+  };
 
   const actions = [
     {
@@ -145,6 +172,22 @@ const WorkReportDetail = () => {
       });
 
       setWorkReport(response.data);
+
+      if (workReport) {
+        try {
+          await axiosClient.put(
+            `/admin/work-orders/${workReport.work_order_id}/status`,
+            { status: calculateWorkOrderStatus(workReport.work_orders) },
+          );
+        } catch (woError) {
+          console.error('Work order update failed:', woError);
+          toast.current?.show({
+            severity: 'warn',
+            summary: t('general.messages.warning'),
+            detail: t('admin.pages.workReport.messages.workOrderUpdateFailed'),
+          });
+        }
+      }
 
       let severity: 'success' | 'warn' | 'error' = 'success';
       let summary = '';
@@ -179,7 +222,9 @@ const WorkReportDetail = () => {
       toast.current?.show({
         severity: 'error',
         summary: t('general.messages.error'),
-        detail: t('admin.pages.workReport.messages.error_updating_status'),
+        detail:
+          (err as any).response?.data?.message ||
+          t('admin.pages.workReport.messages.error_updating_status'),
       });
     }
   };

@@ -214,6 +214,22 @@ class WorkOrderController extends Controller
         }
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'status' => 'required|integer',
+            ]);
+
+            $workOrder = WorkOrder::findOrFail($id);
+            $workOrder->update(['status' => $validated['status']]);
+
+            return response()->json(['message' => 'Work order status updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating work order status', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     private function saveBlocks($workOrder, $blocks)
     {
         foreach ($blocks as $blockData) {
