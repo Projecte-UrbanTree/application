@@ -1,21 +1,15 @@
-import { fetchElementType } from '@/api/service/elementTypeService';
-import { fetchTreeTypes } from '@/api/service/treeTypesService';
 import { deleteZone } from '@/api/service/zoneService';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
-import { ElementType } from '@/types/ElementType';
 import { Point, TypePoint } from '@/types/Point';
-import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
 import { Icon } from '@iconify/react';
-import { log } from 'console';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,8 +34,6 @@ export const eventSubject = new Subject<ZoneEvent>();
 export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   const [selectedZoneToAdd, setSelectedZoneToAdd] = useState<Zone | null>(null);
   const [createActive, setIsCreatingElement] = useState<boolean>(false);
-  const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
-  const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
 
   const addElementZone = ({ isCreatingElement, zone }: AddElementProps) => {
     eventSubject.next({ isCreatingElement, zone });
@@ -59,24 +51,11 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
-  const { elements, loading: elementsLoading } = useSelector(
-    (state: RootState) => state.element,
-  );
 
   const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(
     null,
   );
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
-
-  const totalTreeElements = elements.reduce((acc, element) => {
-    console.log('ELEMENT:', elementTypes);
-    console.log('TREE TYPES:', treeTypes);
-
-    if (element.tree_type_id) {
-      return acc + 1;
-    }
-    return acc;
-  }, 0);
 
   useEffect(() => {
     if (!currentContract) return;
@@ -101,16 +80,6 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
     setSelectedZoneToDelete(zone);
     setIsConfirmDialogVisible(true);
   };
-
-  useEffect(() => {
-    const loadData = async () => {
-      const response = await fetchElementType();
-      const responseTreeTypes = await fetchTreeTypes();
-      setElementTypes(response);
-      setTreeTypes(responseTreeTypes);
-    };
-    loadData();
-  }, []);
 
   useEffect(() => {
     const subscription = eventSubject.subscribe({
@@ -153,38 +122,8 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
     }
   };
 
+  const handleAddElement = (zoneId: number) => {};
   const uniqueZones = Array.from(new Map(zones.map((z) => [z.id, z])).values());
-
-  const getElementCount = (elementTypeId: number) => {
-    return elements.filter(
-      (element) => element.element_type_id === elementTypeId,
-    ).length;
-  };
-
-  // Función para contar elementos por tipo en una zona específica
-  const countElementsByTypeInZone = (zoneId: number) => {
-    // Filtrar los puntos que pertenecen a la zona
-    const pointIdsInZone = points
-      .filter((point) => point.zone_id === zoneId)
-      .map((point) => point.id);
-
-    // Filtrar los elementos que están en los puntos de la zona
-    const elementsInZone = elements.filter((element) =>
-      pointIdsInZone.includes(element.point_id),
-    );
-
-    // Contar los elementos por tipo
-    return elementsInZone.reduce(
-      (acc, element) => {
-        if (element.element_type_id) {
-          acc[element.element_type_id] =
-            (acc[element.element_type_id] || 0) + 1;
-        }
-        return acc;
-      },
-      {} as Record<number, number>,
-    );
-  };
 
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
@@ -244,34 +183,6 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
                     addElementZone({ isCreatingElement: true, zone: zone })
                   }
                 />
-              </div>
-
-              {/* Lista de elementos por tipo dentro de la zona */}
-              <div className="p-2 text-sm text-gray-700">
-                <strong>Elementos en esta zona</strong>
-                {elementTypes.map((elementType: ElementType) => {
-                  const elementCountByType = countElementsByTypeInZone(
-                    zone.id!,
-                  );
-                  const count = elementCountByType[elementType.id!] || 0;
-                  if (count > 0) {
-                    return (
-                      <div
-                        key={elementType.id}
-                        className="flex justify-between items-center my-2">
-                        <span>
-                          {elementType.name} ({count} elementos)
-                        </span>
-                        <Button
-                          icon={<Icon icon="mdi:eye" width="20" />}
-                          className="p-button-text p-2"
-                          onClick={() => {}}
-                        />
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
               </div>
             </AccordionTab>
           ))}
