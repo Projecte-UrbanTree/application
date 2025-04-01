@@ -3,13 +3,13 @@ import store from '@/store/store';
 import { Contract } from '@/types/Contract';
 import axios from 'axios';
 
-const API_BASE_URL = `http://api_urbantree.alumnat.iesmontsia.org`;
 const axiosClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_URL, || 'http://localhost/api',
   headers: {
-    'X-API-Key': import.meta.env.VITE_API_KEY,
+    'Content-Type': 'application/json',
   },
 });
+
 
 axiosClient.interceptors.request.use(
   (config) => {
