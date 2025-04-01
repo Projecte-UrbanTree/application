@@ -70,5 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('sensors/{id}', [SensorController::class, 'show']); // Mostrar sensor
         Route::put('sensors/{id}', [SensorController::class, 'update']); // Editar sensor
         Route::delete('sensors/{id}', [SensorController::class, 'destroy']); // Eliminar sensor
-    });
+        Route::get('history/{dev_eui}', [SensorController::class, 'getSensorHistoryByDevEui']);    });
 });
+
+

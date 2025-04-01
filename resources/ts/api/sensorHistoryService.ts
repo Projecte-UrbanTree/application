@@ -1,41 +1,60 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://api_urbantree.alumnat.iesmontsia.org';
+const API_BASE_URL = `http://api_urbantree.alumnat.iesmontsia.org`;
 
-export async function fetchAllSensorHistories(): Promise<
-  {
-    dev_eui: string;
-    time: string;
-    phi_soil: number | null;
-    humidity_soil: number | null;
-  }[]
-> {
+const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'X-API-Key': import.meta.env.VITE_API_KEY,
+  },
+});
+
+export interface SensorHistoryEntry {
+  time: string;
+  ph1_soil: number | null;
+  humidity_soil: number | null;
+}
+
+export async function fetchSensorHistoryByDevEui(
+  dev_eui: string,
+  startDate?: Date | null,
+  endDate?: Date | null,
+): Promise<SensorHistoryEntry[]> {
+  if (!dev_eui?.trim()) {
+    console.error('Invalid dev_eui provided');
+    return [];
+  }
+
   try {
-    const response = await axios.get(`${API_BASE_URL}/sensors/history/all`);
-    return response.data.map((entry: any) => ({
-      dev_eui: entry.dev_eui,
-      time: entry.time,
-      phi_soil: entry.phi_soil || null,
-      humidity_soil: entry.humidity_soil || null,
-    }));
-  } catch (error) {
-    console.error('Error fetching all sensor histories:', error);
+    let url = `${API_BASE_URL}/sensors/deveui/${dev_eui}`;
 
-    return [
-      {
-        dev_eui: 'a84041265185f3fc',
-        time: new Date().toISOString(),
-        phi_soil: 6.8,
-        humidity_soil: null,
-      },
-      {
-        dev_eui: 'a840418401877546',
-        time: new Date(
-          new Date().setDate(new Date().getDate() - 1),
-        ).toISOString(),
-        phi_soil: null,
-        humidity_soil: 45,
-      },
-    ];
+    // Añadir parámetros de fecha si están presentes
+    const params = new URLSearchParams();
+    if (startDate) params.append('start', startDate.toISOString());
+    if (endDate) params.append('end', endDate.toISOString());
+
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+
+    const response = await axiosInstance.get(url);
+    const data = Array.isArray(response.data) ? response.data : [];
+
+    return data.map((entry: any) => ({
+      time: entry.time,
+      ph1_soil: entry.ph1_soil !== undefined ? Number(entry.ph1_soil) : null,
+      humidity_soil:
+        entry.humidity_soil !== undefined ? Number(entry.humidity_soil) : null,
+    }));
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+      console.warn(`Sensor history not found for dev_eui ${dev_eui}`);
+    } else {
+      console.error(
+        `Error fetching sensor history for dev_eui ${dev_eui}:`,
+        error,
+      );
+    }
+    return [];
   }
 }

@@ -47,8 +47,15 @@ class SensorController extends Controller
 
     public function show($id)
     {
-        $sensor = Sensor::findOrFail($id); 
-        return response()->json($sensor, 200);
+        try {
+            $sensor = Sensor::findOrFail($id);
+            return response()->json($sensor, 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Sensor not found'], 404);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching sensor:', ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Error fetching sensor'], 500);
+        }
     }
 
     public function update(Request $request, $id)
@@ -83,10 +90,11 @@ class SensorController extends Controller
             $sensor->delete();
 
             return response()->json(['message' => 'Sensor deleted successfully'], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Sensor not found'], 404);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 500);
+            \Log::error('Error deleting sensor:', ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Error deleting sensor'], 500);
         }
     }
 
@@ -153,10 +161,16 @@ class SensorController extends Controller
               ->orderBy('created_at', 'asc')
               ->get();
 
+            if ($sensorData->isEmpty()) {
+                return response()->json(['message' => 'No history found for the specified dev_eui'], 404);
+            }
+
             return response()->json($sensorData, 200);
         } catch (\Exception $e) {
+            \Log::error('Error fetching sensor data:', ['error' => $e->getMessage()]);
             return response()->json([
-                'message' => 'Error fetching sensor data: ' . $e->getMessage(),
+                'message' => 'Error fetching sensor data',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -182,4 +196,42 @@ class SensorController extends Controller
 
         return response()->json($sensorHistories, 200);
     }
+
+    public function getSensorHistoryByDevEui($dev_eui)
+{
+    try {
+        // Verifiquem si existeix un sensor amb el dev_eui especificat
+        $sensor = Sensor::where('dev_eui', $dev_eui)->first();
+
+        if (!$sensor) {
+            return response()->json(['message' => 'Sensor not found'], 404);
+        }
+
+        // Obtenim l'historial del sensor
+        $sensorHistory = SensorHistory::where('sensor_id', $sensor->id)
+            ->orderBy('created_at', 'asc')
+            ->get(['created_at', 'phi_soil as ph1_soil', 'water_soil as humidity_soil']);
+
+        if ($sensorHistory->isEmpty()) {
+            return response()->json(['message' => 'No history found for the specified dev_eui'], 404);
+        }
+
+        // Formatem les dades per retornar-les
+        $formattedHistory = $sensorHistory->map(function ($entry) {
+            return [
+                'time' => $entry->created_at->toISOString(),
+                'ph1_soil' => $entry->ph1_soil,
+                'humidity_soil' => $entry->humidity_soil,
+            ];
+        });
+
+        return response()->json($formattedHistory, 200);
+    } catch (\Exception $e) {
+        \Log::error('Error fetching sensor history by dev_eui:', ['error' => $e->getMessage()]);
+        return response()->json([
+            'message' => 'Error fetching sensor history',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
 }
