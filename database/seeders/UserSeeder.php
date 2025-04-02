@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Victor',
-                'surname' => 'Gonzalez',
+                'surname' => 'Zheong',
                 'email' => 'cascascas@urbantere.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678E',

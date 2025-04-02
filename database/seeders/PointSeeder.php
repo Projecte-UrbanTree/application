@@ -14,20 +14,20 @@ class PointSeeder extends Seeder
     {
         DB::table('points')->insert([
             [
-                'latitude' => 51.5074,
-                'longitude' => 0.1278,
+                'latitude' => 40.705957017151285, 
+                'longitude' => 0.5819307088421274,
                 'type' => 'zone_delimiter',
                 'zone_id' => 1,
             ],
             [
-                'latitude' => 48.8566,
-                'longitude' => 2.3522,
+                'latitude' => 40.70866070784594,
+                'longitude' =>  0.5779260143620888,
                 'type' => 'element',
                 'zone_id' => 2,
             ],
             [
-                'latitude' => 40.7128,
-                'longitude' => -74.0060,
+                'latitude' => 40.70858885178705,
+                'longitude' => 0.5706795952178493,
                 'type' => 'zone_delimiter',
                 'zone_id' => 3,
             ],

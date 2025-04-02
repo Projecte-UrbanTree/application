@@ -14,19 +14,19 @@ class ZoneSeeder extends Seeder
     {
         DB::table('zones')->insert([
             [
-                'name' => 'Zone 1',
-                'description' => 'A description for Zone 1',
+                'name' => 'Parc dels Xiribecs',
+                'description' => '',
                 'color' => '#FF5733',
                 'contract_id' => 1,
             ],
             [
-                'name' => 'Zone 2',
+                'name' => 'Parc Municipal de amposta',
                 'description' => 'A description for Zone 2',
                 'color' => '#33FF57',
                 'contract_id' => 2,
             ],
             [
-                'name' => 'Zone 3',
+                'name' => 'Cementeri de amposta',
                 'description' => 'A description for Zone 3',
                 'color' => '#3357FF',
                 'contract_id' => 3,
