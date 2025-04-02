@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Sensor, fetchSensors } from '@/api/sensors';
 import { PencilIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
 
 const Sensors: React.FC = () => {
+  const navigate = useNavigate();
   const [sensors, setSensors] = useState<Sensor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +58,7 @@ const Sensors: React.FC = () => {
   );
 
   const handleEdit = (sensorId: number) => {
-    console.log('Editar sensor:', sensorId);
+    navigate(`/admin/sensors/edit/${sensorId}`);
   };
 
   return (
@@ -65,6 +67,11 @@ const Sensors: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-800">
           Monitorización de Sensores
         </h1>
+        <button
+          onClick={() => navigate('/admin/sensors/create')}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          Crear Sensor
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -88,7 +95,7 @@ const Sensors: React.FC = () => {
                 </div>
                 <button
                   onClick={() => handleEdit(sensorData.id)}
-                  className="text-gray-400 hover:text-blue-600 transition-colors"
+                  className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
                   aria-label="Editar sensor">
                   <PencilIcon className="w-5 h-5" />
                 </button>

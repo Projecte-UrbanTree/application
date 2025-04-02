@@ -35,7 +35,9 @@ import Eva from '@/pages/Admin/Eva/Eva';
 import EditEva from '@/pages/Admin/Eva/Edit';
 import ShowEva from '@/pages/Admin/Eva/Show';
 import CreateEva from '@/pages/Admin/Eva/Create';
-import Sensors from '@/pages/Admin/Sensors';
+import Sensors from '@/pages/Admin/Sensor/Sensors';
+import CreateSensor from '@/pages/Admin/Sensor/Create';
+import EditSensor from '@/pages/Admin/Sensor/Edit';
 
 import { Navigate, RouteObject } from 'react-router-dom';
 
@@ -172,6 +174,22 @@ const AdminRoutes: RouteObject[] = [
             element: (
               <AdminLayoutWrapper titleI18n="admin.pages.sensors.title">
                 <Sensors />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'sensors/create',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.sensors.create.title">
+                <CreateSensor />
+              </AdminLayoutWrapper>
+            ),
+          },
+          {
+            path: 'sensors/edit/:id',
+            element: (
+              <AdminLayoutWrapper titleI18n="admin.pages.sensors.edit.title">
+                <EditSensor />
               </AdminLayoutWrapper>
             ),
           },
