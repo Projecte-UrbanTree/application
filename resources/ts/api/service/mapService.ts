@@ -261,4 +261,16 @@ export class MapService {
       this.map.resize();
     }
   }
+
+  public updateMarkerVisibility(elementId: number, visible: boolean) {
+    const markerObj = this.elementMarkers.find((m) => m.elementId === elementId);
+    if (markerObj) {
+      const markerElement = markerObj.marker.getElement();
+      if (visible) {
+        markerElement.style.display = '';
+      } else {
+        markerElement.style.display = 'none';
+      }
+    }
+  }
 }

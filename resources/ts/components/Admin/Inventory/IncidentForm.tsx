@@ -27,10 +27,7 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ elementId, onClose }) => {
       element_id: elementId,
     };
 
-    console.log(newIncidence);
-
     try {
-      onClose();
       dispatch(showLoader());
       await saveIncidence(newIncidence);
       toast.current?.show({
@@ -38,6 +35,11 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ elementId, onClose }) => {
         summary: 'Éxito',
         detail: 'Incidencia creada correctamente',
       });
+
+      setName('');
+      setDescription('');
+
+      onClose();
     } catch (error) {
       console.error('Error al crear la incidencia:', error);
       toast.current?.show({
@@ -50,6 +52,7 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ elementId, onClose }) => {
 
   return (
     <div className="p-4">
+      <Toast ref={toast} />
       <h3 className="text-lg font-bold mb-2">Añadir Incidencia</h3>
       <div className="mb-4">
         <label className="block mb-1">Nombre:</label>

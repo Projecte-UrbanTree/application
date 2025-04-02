@@ -37,6 +37,11 @@ interface AddElementProps {
 export interface ZoneEvent {
   zone?: Zone;
   isCreatingElement: boolean;
+  hiddenElementTypes?: {
+    zoneId: number;
+    elementTypeId: number;
+    hidden: boolean;
+  };
 }
 
 export const eventSubject = new Subject<ZoneEvent>();
@@ -53,6 +58,7 @@ export const Zones = ({
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
 
   const addElementZone = ({ isCreatingElement, zone }: AddElementProps) => {
     eventSubject.next({ isCreatingElement, zone });
@@ -87,7 +93,7 @@ export const Zones = ({
 
     dispatch(fetchZonesAsync())
       .unwrap()
-      .catch((error) => console.error('Error al cargar zonas:', error));
+      .catch((error) => console.error('Error loading zones:', error));
 
     dispatch(fetchPointsAsync())
       .unwrap()
@@ -133,27 +139,27 @@ export const Zones = ({
 
       toast.current?.show({
         severity: 'success',
-        summary: 'Éxito',
-        detail: 'Zona y puntos eliminados correctamente',
+        summary: 'Success',
+        detail: 'Zone and points deleted successfully',
       });
 
       dispatch(fetchZonesAsync())
         .unwrap()
-        .catch((error) => console.error('Error al recargar zonas:', error));
+        .catch((error) => console.error('Error reloading zones:', error));
 
       dispatch(fetchPointsAsync())
         .unwrap()
-        .catch((error) => console.error('error al recargar puntos:', error));
+        .catch((error) => console.error('error reloading points:', error));
 
       dispatch(fetchElementsAsync())
         .unwrap()
-        .catch((error) => console.error('error al recargar elementos:', error));
+        .catch((error) => console.error('error reloading elements:', error));
     } catch (error) {
       console.error(error);
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
-        detail: 'No se pudo eliminar la zona',
+        detail: 'Could not delete the zone',
       });
     } finally {
       dispatch(hideLoader());
@@ -196,17 +202,22 @@ export const Zones = ({
   });
 
   const handleViewElements = (elementTypeId: number, zoneId: number) => {
-    const pointsInZone = points
-      .filter((point) => point.zone_id === zoneId)
-      .map((point) => point.id);
-    const elementsInZone = elements.filter(
-      (element) =>
-        element.element_type_id === elementTypeId &&
-        element.point_id &&
-        pointsInZone.includes(element.point_id),
-    );
+    const key = `${zoneId}-${elementTypeId}`;
+    const isHidden = hiddenElementTypes[key] || false;
+    
+    setHiddenElementTypes(prev => ({
+      ...prev,
+      [key]: !isHidden
+    }));
 
-    console.log(elementsInZone);
+    eventSubject.next({
+      isCreatingElement: false,
+      hiddenElementTypes: {
+        zoneId,
+        elementTypeId,
+        hidden: !isHidden
+      }
+    });
   };
 
   return (
@@ -297,7 +308,6 @@ export const Zones = ({
                     />
                   </div>
 
-                  {/* Lista de elementos por tipo dentro de la zona */}
                   <div className="p-2 text-sm text-gray-700">
                     <strong>Elementos en esta zona</strong>
                     {elementTypes.map((elementType: ElementType) => {
@@ -306,6 +316,8 @@ export const Zones = ({
                       );
                       const count = elementCountByType[elementType.id!] || 0;
                       if (count > 0) {
+                        const key = `${zone.id}-${elementType.id}`;
+                        const isHidden = hiddenElementTypes[key] || false;
                         return (
                           <div
                             key={elementType.id}
@@ -314,11 +326,9 @@ export const Zones = ({
                               {elementType.name} ({count} elementos)
                             </span>
                             <Button
-                              icon={<Icon icon="mdi:eye" width="20" />}
-                              className="p-button-text p-2"
-                              onClick={() =>
-                                handleViewElements(elementType.id!, zone.id!)
-                              }
+                              icon={<Icon icon={isHidden ? "mdi:eye-off" : "mdi:eye"} width="20" />}
+                              className={`p-button-text p-2 ${isHidden ? 'text-gray-400' : ''}`}
+                              onClick={() => handleViewElements(elementType.id!, zone.id!)}
                             />
                           </div>
                         );

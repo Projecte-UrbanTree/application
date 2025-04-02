@@ -83,6 +83,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
 
   // load data
   useEffect(() => {
@@ -197,15 +198,29 @@ export const MapComponent: React.FC<MapProps> = ({
 
     const subscription = eventSubject.subscribe({
       next: (data: ZoneEvent) => {
-        const { isCreatingElement, zone } = data;
-        
-        if (isCreatingElement && zone) {
-          handleElementCreation(zone);
-        } else {
-          onCreatingElementChange(false);
-          setSelectedZoneForElement(null);
-          setNewPointCoord(null);
-          service.disableSingleClick();
+        if (data.isCreatingElement !== undefined) {
+          const { isCreatingElement, zone } = data;
+          
+          if (isCreatingElement && zone) {
+            handleElementCreation(zone);
+          } else {
+            onCreatingElementChange(false);
+            setSelectedZoneForElement(null);
+            setNewPointCoord(null);
+            service.disableSingleClick();
+          }
+        }
+
+        if (data.hiddenElementTypes) {
+          const { zoneId, elementTypeId, hidden } = data.hiddenElementTypes;
+          const key = `${zoneId}-${elementTypeId}`;
+          
+          setHiddenElementTypes(prev => ({
+            ...prev,
+            [key]: hidden
+          }));
+
+          updateElementVisibility(zoneId, elementTypeId, hidden, service);
         }
       },
       error: (err: Error) => console.log('ERROR STREAM: ', err.message),
@@ -405,6 +420,22 @@ export const MapComponent: React.FC<MapProps> = ({
         detail: 'Error al eliminar el elemento',
       });
     }
+  };
+
+  const updateElementVisibility = (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
+    const pointsInZone = points.filter(p => p.zone_id === zoneId);
+    const pointIds = pointsInZone.map(p => p.id);
+    
+    const elementsToUpdate = elements.filter(element => 
+      element.element_type_id === elementTypeId && 
+      pointIds.includes(element.point_id!)
+    );
+    
+    elementsToUpdate.forEach(element => {
+      if (element.id) {
+        service.updateMarkerVisibility(element.id, !hidden);
+      }
+    });
   };
 
   return (

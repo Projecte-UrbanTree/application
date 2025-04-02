@@ -134,14 +134,28 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
   const handleDeleteIncident = async (incidentId: number) => {
     try {
+      dispatch(showLoader());
       await deleteIncidence(incidentId);
+
       const updatedIncidences = incidences.filter(
         (inc) => inc.id !== incidentId,
       );
       setIncidences(updatedIncidences);
-      onClose();
+      
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Incidencia eliminada correctamente',
+      });
     } catch (error) {
       console.error('Error al eliminar la incidencia:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo eliminar la incidencia',
+      });
+    } finally {
+      dispatch(hideLoader());
     }
   };
 
@@ -283,7 +297,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
             </div>
 
-            {/* columna derecha */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">Ubicación</h3>
               <p>
