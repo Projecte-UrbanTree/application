@@ -905,6 +905,26 @@
           "rejecting": "Rebutjant bloc...",
           "reject": "Bloc rebutjat"
         }
+      },
+      "workers": {
+        "title": "Gestió de Treballadors",
+        "contractWorkers": "Treballadors del Contracte",
+        "assignRemoveWorkers": "Assignar/Eliminar Treballadors",
+        "selectWorkers": "Seleccionar Treballadors",
+        "selected": "Seleccionat",
+        "workersForContract": "Treballadors per al Contracte",
+        "noWorkersAssigned": "No hi ha treballadors assignats a aquest contracte",
+        "useDropdownToAssign": "Utilitza el menú desplegable de dalt per assignar treballadors",
+        "selectWorkerHelp": "Selecciona o desselecciona treballadors per assignar-los a aquest contracte",
+        "noWorkersFound": "No s'han trobat treballadors",
+        "name": "Nom",
+        "email": "Correu Electrònic",
+        "company": "Empresa",
+        "dni": "DNI",
+        "pleaseSelectContract": "Si us plau, selecciona primer un contracte",
+        "updatedSuccessfully": "Treballadors actualitzats correctament",
+        "failedToLoad": "Error en carregar els treballadors",
+        "failedToUpdate": "Error en actualitzar els treballadors"
       }
     },
     "profileDropdown": {
