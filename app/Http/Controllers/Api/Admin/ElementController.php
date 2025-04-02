@@ -35,7 +35,7 @@ class ElementController extends Controller
             'tree_type_id' => ['required', 'integer'],
             'point_id' => ['required', 'integer'],
         ]);
-        
+
         $element = Element::create($validated);
 
         return response()->json($element, 201);
@@ -70,7 +70,7 @@ class ElementController extends Controller
             'tree_type_id' => ['nullable', 'integer'],
             'point_id' => ['nullable', 'integer'],
         ]);
-        
+
         $element = Element::findOrFail($id);
         $element->update($validated);
 

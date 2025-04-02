@@ -29,7 +29,7 @@ class StatisticsController extends Controller
                 $toDate = $defaultToDate;
             }
         } catch (\Exception $e) {
-            Log::warning('Invalid date format in statistics request: ' . $e->getMessage(), ['request_data' => $request->all()]);
+            Log::warning('Invalid date format in statistics request: '.$e->getMessage(), ['request_data' => $request->all()]);
             $fromDate = $defaultFromDate;
             $toDate = $defaultToDate;
         }
@@ -47,16 +47,18 @@ class StatisticsController extends Controller
         $tasks = WorkOrderBlockTask::with([
             'workOrderBlock.workOrder' => function ($query) use ($fromDateSql, $toDateSql) {
                 $query->whereBetween('date', [$fromDateSql, $toDateSql]);
-            }
+            },
         ])->whereHas('workOrderBlock.workOrder', function (Builder $query) use ($fromDateSql, $toDateSql) {
             $query->whereBetween('date', [$fromDateSql, $toDateSql]);
         })->get();
 
         $filteredTasks = $tasks->filter(function ($t) use ($fromDateSql, $toDateSql, $dateFormatQuery) {
-            if (!$t->workOrderBlock || !$t->workOrderBlock->workOrder || !$t->workOrderBlock->workOrder->date)
+            if (! $t->workOrderBlock || ! $t->workOrderBlock->workOrder || ! $t->workOrderBlock->workOrder->date) {
                 return false;
+            }
             try {
                 $d = Carbon::parse($t->workOrderBlock->workOrder->date);
+
                 return $d->format($dateFormatQuery) >= $fromDateSql && $d->format($dateFormatQuery) <= $toDateSql;
             } catch (\Exception $e) {
                 return false;
@@ -88,10 +90,12 @@ class StatisticsController extends Controller
             $query->whereBetween('date', [$fromDateSql, $toDateSql]);
         })->get();
         $reportsByDay = $reports->filter(function ($r) use ($fromDateSql, $toDateSql, $dateFormatQuery) {
-            if (!$r->workOrder || !$r->workOrder->date)
+            if (! $r->workOrder || ! $r->workOrder->date) {
                 return false;
+            }
             try {
                 $d = Carbon::parse($r->workOrder->date);
+
                 return $d->format($dateFormatQuery) >= $fromDateSql && $d->format($dateFormatQuery) <= $toDateSql;
             } catch (\Exception $e) {
                 return false;
@@ -119,12 +123,13 @@ class StatisticsController extends Controller
         })
             ->with(['workReport', 'workReport.workOrder']) // Carga completa para depurar
             ->get();
-        Log::info("[Stats] Found " . $resourceUsageRecords->count() . " WorkReportResource records potentially in range.");
+        Log::info('[Stats] Found '.$resourceUsageRecords->count().' WorkReportResource records potentially in range.');
 
         $resourceUsageByDay = [];
         foreach ($resourceUsageRecords as $record) {
-            if (!$record->workReport || !$record->workReport->workOrder || !$record->workReport->workOrder->date) {
-                Log::debug("[Stats] Skipping WRR ID={$record->id}: Missing related data (WR exists: " . ($record->workReport ? 'Yes' : 'No') . ", WR->WO exists: " . ($record->workReport && $record->workReport->workOrder ? 'Yes' : 'No') . ", WR->WO->date exists: " . ($record->workReport && $record->workReport->workOrder && $record->workReport->workOrder->date ? 'Yes' : 'No') . ")");
+            if (! $record->workReport || ! $record->workReport->workOrder || ! $record->workReport->workOrder->date) {
+                Log::debug("[Stats] Skipping WRR ID={$record->id}: Missing related data (WR exists: ".($record->workReport ? 'Yes' : 'No').', WR->WO exists: '.($record->workReport && $record->workReport->workOrder ? 'Yes' : 'No').', WR->WO->date exists: '.($record->workReport && $record->workReport->workOrder && $record->workReport->workOrder->date ? 'Yes' : 'No').')');
+
                 continue;
             }
 
@@ -133,6 +138,7 @@ class StatisticsController extends Controller
 
             if ($quantity <= 0) { // Considerar <= 0 por si acaso
                 Log::debug("[Stats] Skipping WRR ID={$record->id}, Res ID={$resourceId}: Quantity is zero or negative ({$record->quantity}).");
+
                 continue;
             }
 
@@ -140,17 +146,19 @@ class StatisticsController extends Controller
                 $dateKey = Carbon::parse($record->workReport->workOrder->date)->format($dateFormatQuery);
                 if ($dateKey < $fromDateSql || $dateKey > $toDateSql) { // Check redundante por seguridad
                     Log::debug("[Stats] Skipping WRR ID={$record->id}, Res ID={$resourceId}: Date {$dateKey} outside range {$fromDateSql}-{$toDateSql} (Unexpected).");
+
                     continue;
                 }
             } catch (\Exception $e) {
-                Log::warning("[Stats] Invalid date parsing WRR ID={$record->id}, Res ID={$resourceId}. Date val: '" . $record->workReport->workOrder->date . "'. Error: " . $e->getMessage());
+                Log::warning("[Stats] Invalid date parsing WRR ID={$record->id}, Res ID={$resourceId}. Date val: '".$record->workReport->workOrder->date."'. Error: ".$e->getMessage());
+
                 continue;
             }
 
-            if (!isset($resourceUsageByDay[$resourceId])) {
+            if (! isset($resourceUsageByDay[$resourceId])) {
                 $resourceUsageByDay[$resourceId] = [];
             }
-            if (!isset($resourceUsageByDay[$resourceId][$dateKey])) {
+            if (! isset($resourceUsageByDay[$resourceId][$dateKey])) {
                 $resourceUsageByDay[$resourceId][$dateKey] = 0;
             }
 
@@ -159,7 +167,7 @@ class StatisticsController extends Controller
 
         } // Fin foreach
 
-        Log::info("[Stats] Final resourceUsageByDay array structure:", $resourceUsageByDay);
+        Log::info('[Stats] Final resourceUsageByDay array structure:', $resourceUsageByDay);
 
         $tasks_done_total = $doneTasks->count();
         $tasks_not_done_total = $notDoneTasks->count();
