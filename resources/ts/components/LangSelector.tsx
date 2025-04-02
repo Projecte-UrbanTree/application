@@ -1,4 +1,4 @@
-import { useI18n } from '@/hooks/useI18n';
+import useI18n from '@/hooks/useI18n';
 import { Icon } from '@iconify/react';
 import { Dropdown } from 'primereact/dropdown';
 
@@ -7,7 +7,7 @@ interface LangSelectorProps {
 }
 
 export default function LangSelector({ className }: LangSelectorProps) {
-  const { getAvailableLanguages, getLanguage, setLanguage } = useI18n();
+  const { getAvailableLanguages, getLanguage, setLanguage, format } = useI18n();
 
   const languages = getAvailableLanguages().map((lang) => ({
     label: lang.name,
@@ -25,7 +25,9 @@ export default function LangSelector({ className }: LangSelectorProps) {
           height="20"
           style={{ marginRight: '8px' }}
         />
-        <span>{option.value.toUpperCase()}</span>
+        <span>
+          {format({ text: option.value, formatOptions: ['uppercase'] })}
+        </span>
       </div>
     );
   };

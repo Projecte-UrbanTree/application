@@ -21,7 +21,7 @@ class ElementController extends Controller
      */
     public function create()
     {
-        // Not needed for API
+        abort(404);
     }
 
     /**
@@ -29,7 +29,13 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-        $element = Element::create($request->all());
+        $validate = $request->validate([
+            'description' => ['required', 'string', 'max:255'],
+            'element_type_id' => ['required', 'integer'],
+            'tree_type_id' => ['required', 'integer'],
+            'point_id' => ['required', 'integer'],
+        ]);
+        $element = Element::create($validate);
 
         return response()->json($element, 201);
     }
@@ -49,7 +55,7 @@ class ElementController extends Controller
      */
     public function edit(string $id)
     {
-        // Not needed for API
+        abort(404);
     }
 
     /**
@@ -68,8 +74,12 @@ class ElementController extends Controller
      */
     public function destroy(string $id)
     {
-        Element::destroy($id);
+        $element = Element::find($id);
+        if (! $element) {
+            return response()->json(['message' => 'Element not found'], 404);
+        }
+        $element->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Element deleted successfully'], 200);
     }
 }

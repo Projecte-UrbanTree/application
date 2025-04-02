@@ -22,6 +22,22 @@
 .fade-animation {
   animation: fadeInOut 1.5s infinite ease-in-out;
 }
+
+/* Dots animation */
+@keyframes dots {
+    0% { content: ""; }
+    25% { content: "."; }
+    50% { content: ".."; }
+    75% { content: "..."; }
+    100% { content: ""; }
+}
+
+.dots-animation::after {
+    content: "";
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+/* Button styles */
 .p-button-warning {
   background: #ffc107 !important;
   border-color: #ffc107 !important;

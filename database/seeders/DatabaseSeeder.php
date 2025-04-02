@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             WorkReportResourceSeeder::class,
             SensorSeeder::class,
             EvaSeeder::class,
+            WorkerSeeder::class,
         ]);
     }
 }

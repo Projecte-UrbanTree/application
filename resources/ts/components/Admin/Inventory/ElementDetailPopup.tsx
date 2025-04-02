@@ -1,28 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Element } from '@/types/Element';
-import { Button } from 'primereact/button';
-import { TabView, TabPanel } from 'primereact/tabview';
-import { Tag } from 'primereact/tag';
-import { Dropdown } from 'primereact/dropdown'; // <-- importa el Dropdown
-import { Incidence, IncidentStatus } from '@/types/Incident';
+import { deleteElementAsync } from '@/redux/slices/elementSlice';
+import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
+import { AppDispatch, RootState } from '@/redux/store';
 import {
   deleteIncidence,
   fetchIncidence,
   updateIncidence,
-} from '@/api/service/incidentService';
-// ↑ hipotético import para la función updateIncidence
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store/store';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
-import { Toast } from 'primereact/toast';
-import { TreeTypes } from '@/types/TreeTypes';
+} from '@/services/service/incidentService';
+import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
+import { Incidence, IncidentStatus } from '@/types/Incident';
 import { Point } from '@/types/Point';
-import { deleteElementAsync } from '@/store/slice/elementSlice';
+import { TreeType } from '@/types/TreeType';
+import { Button } from 'primereact/button';
+import { Dropdown } from 'primereact/dropdown';
+import { TabPanel, TabView } from 'primereact/tabview';
+import { Tag } from 'primereact/tag';
+import { Toast } from 'primereact/toast';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface ElementDetailPopupProps {
   element: Element;
-  treeTypes: TreeTypes[];
+  treeTypes: TreeType[];
   elementTypes: ElementType[];
   onClose: () => void;
   onOpenIncidentForm: () => void;
@@ -53,7 +52,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     { label: 'Cerrado', value: IncidentStatus.closed },
   ];
 
-  const { points } = useSelector((state: RootState) => state.points);
+  const { points } = useSelector((state: RootState) => state.point);
   const { zones } = useSelector((state: RootState) => state.zone);
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);

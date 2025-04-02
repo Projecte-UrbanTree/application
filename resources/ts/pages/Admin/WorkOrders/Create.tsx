@@ -1,28 +1,25 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { Calendar } from 'primereact/calendar';
-import { MultiSelect } from 'primereact/multiselect';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Accordion, AccordionTab } from 'primereact/accordion';
+import Preloader from '@/components/Preloader';
+import useAuth from '@/hooks/useAuth';
+import useI18n from '@/hooks/useI18n';
+import api from '@/services/api';
 import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { RootState } from '@/store/store';
-import { useTranslation } from 'react-i18next';
+import { ErrorMessage, FieldArray, Form, Formik } from 'formik';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Message } from 'primereact/message';
+import { MultiSelect } from 'primereact/multiselect';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
 const CreateWorkOrder = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
-  );
+  const { t } = useI18n();
+  const { selectedContractId } = useAuth();
   const [users, setUsers] = useState<any[]>([]);
   const [zones, setZones] = useState<any[]>([]);
   const [taskTypes, setTaskTypes] = useState<any[]>([]);
@@ -35,8 +32,8 @@ const CreateWorkOrder = () => {
 
   const fetchInitialData = useCallback(async () => {
     try {
-      const response = await axiosClient.get(
-        `/admin/work-orders/create${currentContract ? `?contract_id=${currentContract.id}` : ''}`,
+      const response = await api.get(
+        `/admin/work-orders/create${selectedContractId ? `?contract_id=${selectedContractId}` : ''}`,
       );
       setUsers(response.data.users);
       setZones(response.data.zones);
@@ -48,7 +45,7 @@ const CreateWorkOrder = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentContract]);
+  }, [selectedContractId]);
 
   useEffect(() => {
     fetchInitialData();
@@ -74,11 +71,11 @@ const CreateWorkOrder = () => {
 
   const validationSchema = Yup.object({
     date: Yup.date().required(
-      t('admin.pages.workOrders.form.validation.date_required'),
+      t('admin:pages.workOrders.form.validation.date_required'),
     ),
     selectedUsers: Yup.array().min(
       1,
-      t('admin.pages.workOrders.form.validation.users_required'),
+      t('admin:pages.workOrders.form.validation.users_required'),
     ),
     blocks: Yup.array()
       .of(
@@ -86,7 +83,7 @@ const CreateWorkOrder = () => {
           notes: Yup.string().nullable(),
           zones: Yup.array().min(
             1,
-            t('admin.pages.workOrders.form.validation.zones_required'),
+            t('admin:pages.workOrders.form.validation.zones_required'),
           ),
           tasks: Yup.array()
             .of(
@@ -95,26 +92,28 @@ const CreateWorkOrder = () => {
                   .nullable()
                   .required(
                     t(
-                      'admin.pages.workOrders.form.validation.task_type_required',
+                      'admin:pages.workOrders.form.validation.task_type_required',
                     ),
                   ),
                 element_type_id: Yup.number()
                   .nullable()
                   .required(
                     t(
-                      'admin.pages.workOrders.form.validation.element_type_required',
+                      'admin:pages.workOrders.form.validation.element_type_required',
                     ),
                   ),
                 tree_type_id: Yup.number().nullable(),
               }),
             )
-            .min(1, t('admin.pages.workOrders.form.validation.tasks_required')),
+            .min(1, t('admin:pages.workOrders.form.validation.tasks_required')),
         }),
       )
-      .min(1, t('admin.pages.workOrders.form.validation.blocks_required')),
+      .min(1, t('admin:pages.workOrders.form.validation.blocks_required')),
   });
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
+    setIsSubmitting(true);
+    setError(null);
     setIsSubmitting(true);
     setError(null);
     try {
@@ -133,21 +132,21 @@ const CreateWorkOrder = () => {
           tree_type_id: task.tree_type_id,
         })),
       }));
-      await axiosClient.post('/admin/work-orders', {
+      await api.post('/admin/work-orders', {
         date: formattedDate,
         users: userIds,
-        contract_id: currentContract?.id,
+        contract_id: selectedContractId,
         blocks: formattedBlocks,
       });
       navigate('/admin/work-orders', {
         state: {
-          success: t('admin.pages.workOrders.list.messages.createSuccess'),
+          success: t('admin:pages.workOrders.list.messages.createSuccess'),
         },
       });
     } catch (error: any) {
       setError(
         error.response?.data?.message ||
-          t('admin.pages.workOrders.list.messages.error'),
+          t('admin:pages.workOrders.list.messages.error'),
       );
       setSubmitting(false);
       setIsSubmitting(false);
@@ -185,19 +184,9 @@ const CreateWorkOrder = () => {
     [elementTypes],
   );
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (loading) return <Preloader />;
 
-  if (!currentContract) {
+  if (!selectedContractId) {
     return (
       <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
         <Card className="w-full max-w-3xl shadow-lg">
@@ -207,13 +196,13 @@ const CreateWorkOrder = () => {
               className="h-16 w-16 text-yellow-500 mx-auto mb-4"
             />
             <h2 className="text-2xl font-bold mb-4">
-              {t('admin.pages.workOrders.form.noContract.title')}
+              {t('admin:pages.workOrders.form.noContract.title')}
             </h2>
             <p className="text-gray-600 mb-6">
-              {t('admin.pages.workOrders.form.noContract.message')}
+              {t('admin:pages.workOrders.form.noContract.message')}
             </p>
             <Button
-              label={t('admin.pages.workOrders.form.returnButton')}
+              label={t('admin:pages.workOrders.form.returnButton')}
               icon="pi pi-arrow-left"
               onClick={() => navigate('/admin/work-orders')}
             />
@@ -234,7 +223,7 @@ const CreateWorkOrder = () => {
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
           <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.workOrders.form.title.create')}
+            {t('admin:pages.workOrders.form.title.create')}
           </h2>
         </header>
         <div className="p-6">
@@ -250,7 +239,7 @@ const CreateWorkOrder = () => {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:calendar" className="h-5 w-5 mr-2" />
-                    {t('admin.pages.workOrders.form.fields.date')}
+                    {t('admin:pages.workOrders.form.fields.date')}
                   </label>
                   <Calendar
                     id="date"
@@ -273,7 +262,7 @@ const CreateWorkOrder = () => {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
-                    {t('admin.pages.workOrders.form.fields.users')}
+                    {t('admin:pages.workOrders.form.fields.users')}
                   </label>
                   <MultiSelect
                     value={values.selectedUsers}
@@ -281,7 +270,7 @@ const CreateWorkOrder = () => {
                     onChange={(e) => setFieldValue('selectedUsers', e.value)}
                     optionLabel="name"
                     placeholder={t(
-                      'admin.pages.workOrders.form.placeholders.users',
+                      'admin:pages.workOrders.form.placeholders.users',
                     )}
                     filter
                     itemTemplate={userTemplate}
@@ -300,7 +289,7 @@ const CreateWorkOrder = () => {
                 </div>
                 <div className="my-6">
                   <h3 className="text-2xl font-bold text-center mb-4">
-                    {t('admin.pages.workOrders.form.blocksTitle')}
+                    {t('admin:pages.workOrders.form.blocksTitle')}
                   </h3>
                 </div>
                 <FieldArray name="blocks">
@@ -321,7 +310,7 @@ const CreateWorkOrder = () => {
                               <div className="flex items-center justify-between w-full">
                                 <span>
                                   {t(
-                                    'admin.pages.workOrders.form.fields.block',
+                                    'admin:pages.workOrders.form.fields.block',
                                   )}{' '}
                                   {index + 1}
                                 </span>
@@ -340,7 +329,7 @@ const CreateWorkOrder = () => {
                                     }}
                                     type="button"
                                     aria-label={t(
-                                      'admin.pages.workOrders.form.removeBlock',
+                                      'admin:pages.workOrders.form.removeBlock',
                                     )}
                                   />
                                 )}
@@ -352,7 +341,7 @@ const CreateWorkOrder = () => {
                                   icon="tabler:map-pin"
                                   className="h-5 w-5 mr-2"
                                 />
-                                {t('admin.pages.workOrders.form.fields.zones')}
+                                {t('admin:pages.workOrders.form.fields.zones')}
                               </label>
                               <MultiSelect
                                 value={values.blocks[index].zones}
@@ -365,7 +354,7 @@ const CreateWorkOrder = () => {
                                 }
                                 optionLabel="name"
                                 placeholder={t(
-                                  'admin.pages.workOrders.form.placeholders.zones',
+                                  'admin:pages.workOrders.form.placeholders.zones',
                                 )}
                                 filter
                                 itemTemplate={zoneTemplate}
@@ -389,7 +378,7 @@ const CreateWorkOrder = () => {
                                         <div className="flex justify-between items-center mb-2">
                                           <h5 className="text-sm font-semibold">
                                             {t(
-                                              'admin.pages.workOrders.form.fields.task',
+                                              'admin:pages.workOrders.form.fields.task',
                                             )}{' '}
                                             {taskIndex + 1}
                                           </h5>
@@ -408,7 +397,7 @@ const CreateWorkOrder = () => {
                                               }
                                               type="button"
                                               aria-label={t(
-                                                'admin.pages.workOrders.form.removeTask',
+                                                'admin:pages.workOrders.form.removeTask',
                                               )}
                                             />
                                           )}
@@ -417,7 +406,7 @@ const CreateWorkOrder = () => {
                                           <div className="flex flex-col">
                                             <label className="text-xs font-medium text-gray-700 mb-1">
                                               {t(
-                                                'admin.pages.workOrders.form.fields.taskType',
+                                                'admin:pages.workOrders.form.fields.taskType',
                                               )}
                                             </label>
                                             <Dropdown
@@ -432,7 +421,7 @@ const CreateWorkOrder = () => {
                                               optionLabel="name"
                                               optionValue="id"
                                               placeholder={t(
-                                                'admin.pages.workOrders.form.placeholders.taskType',
+                                                'admin:pages.workOrders.form.placeholders.taskType',
                                               )}
                                               className="w-full"
                                             />
@@ -445,7 +434,7 @@ const CreateWorkOrder = () => {
                                           <div className="flex flex-col">
                                             <label className="text-xs font-medium text-gray-700 mb-1">
                                               {t(
-                                                'admin.pages.workOrders.form.fields.elementType',
+                                                'admin:pages.workOrders.form.fields.elementType',
                                               )}
                                             </label>
                                             <Dropdown
@@ -468,7 +457,7 @@ const CreateWorkOrder = () => {
                                               optionLabel="name"
                                               optionValue="id"
                                               placeholder={t(
-                                                'admin.pages.workOrders.form.placeholders.elementType',
+                                                'admin:pages.workOrders.form.placeholders.elementType',
                                               )}
                                               className="w-full"
                                             />
@@ -481,7 +470,7 @@ const CreateWorkOrder = () => {
                                           <div className="flex flex-col">
                                             <label className="text-xs font-medium text-gray-700 mb-1">
                                               {t(
-                                                'admin.pages.workOrders.form.fields.treeType',
+                                                'admin:pages.workOrders.form.fields.treeType',
                                               )}
                                             </label>
                                             <Dropdown
@@ -496,7 +485,7 @@ const CreateWorkOrder = () => {
                                               optionLabel="species"
                                               optionValue="id"
                                               placeholder={t(
-                                                'admin.pages.workOrders.form.placeholders.treeType',
+                                                'admin:pages.workOrders.form.placeholders.treeType',
                                               )}
                                               className="w-full"
                                               disabled={
@@ -515,7 +504,7 @@ const CreateWorkOrder = () => {
                                       type="button"
                                       icon="pi pi-plus"
                                       label={t(
-                                        'admin.pages.workOrders.form.buttons.addTask',
+                                        'admin:pages.workOrders.form.buttons.addTask',
                                       )}
                                       className="p-button-outlined p-button-sm"
                                       onClick={() =>
@@ -536,7 +525,7 @@ const CreateWorkOrder = () => {
                                   icon="tabler:notes"
                                   className="h-5 w-5 mr-2"
                                 />
-                                {t('admin.pages.workOrders.form.fields.notes')}
+                                {t('admin:pages.workOrders.form.fields.notes')}
                               </label>
                               <InputTextarea
                                 rows={3}
@@ -549,7 +538,7 @@ const CreateWorkOrder = () => {
                                 }
                                 className="w-full"
                                 placeholder={t(
-                                  'admin.pages.workOrders.form.placeholders.notes',
+                                  'admin:pages.workOrders.form.placeholders.notes',
                                 )}
                               />
                             </div>
@@ -561,7 +550,7 @@ const CreateWorkOrder = () => {
                           type="button"
                           icon="pi pi-plus"
                           label={t(
-                            'admin.pages.workOrders.form.buttons.addBlock',
+                            'admin:pages.workOrders.form.buttons.addBlock',
                           )}
                           className="p-button-outlined"
                           onClick={() => {
@@ -588,7 +577,7 @@ const CreateWorkOrder = () => {
                   <Button
                     type="submit"
                     icon="pi pi-check"
-                    label={t('admin.pages.workOrders.form.submitButton.create')}
+                    label={t('admin:pages.workOrders.form.submitButton.create')}
                     className="w-full md:w-auto"
                     loading={isSubmitting}
                   />

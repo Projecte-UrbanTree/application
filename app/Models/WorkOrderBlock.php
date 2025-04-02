@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class WorkOrderBlock extends Model
 {
@@ -17,7 +16,7 @@ class WorkOrderBlock extends Model
         return $this->belongsTo(WorkOrder::class, 'work_order_id');
     }
 
-    public function taskTypes(): BelongsToMany
+    public function taskTypes()
     {
         return $this->belongsToMany(TaskType::class, 'work_order_block_tasks', 'work_order_block_id', 'task_type_id')->withTimestamps();
     }
@@ -27,7 +26,7 @@ class WorkOrderBlock extends Model
         return $this->belongsToMany(Zone::class, 'work_order_block_zones', 'work_order_block_id', 'zone_id')->withTimestamps();
     }
 
-    public function blockTasks()
+    public function workOrderBlockTasks()
     {
         return $this->hasMany(WorkOrderBlockTask::class, 'work_order_block_id');
     }

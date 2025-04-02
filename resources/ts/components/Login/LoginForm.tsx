@@ -1,116 +1,97 @@
-import axiosClient from '@/api/axiosClient';
-import { useAuth } from '@/hooks/useAuth';
-import { useI18n } from '@/hooks/useI18n';
+import useAuth from '@/hooks/useAuth';
+import useI18n from '@/hooks/useI18n';
+import useToast from '@/hooks/useToast';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
-import { Message } from 'primereact/message';
 import { Password } from 'primereact/password';
 import { useState } from 'react';
 
-import { useToast } from '@/hooks/useToast';
-import { User } from '@/types/User';
-import { useNavigate } from 'react-router-dom';
-
-export interface LoginResponse {
-  success?: boolean;
-  accessToken?: string;
-  userData?: User;
-}
-
 const LoginForm = () => {
   const { showToast } = useToast();
-  const { login } = useAuth();
-  const { t } = useI18n();
-  const navigate = useNavigate();
+  const { handleLogin } = useAuth();
+  const { t, format } = useI18n();
 
-  const [email, setEmail] = useState('admin@urbantree.com');
+  const [email, setEmail] = useState('customer@urbantree.com');
   const [password, setPassword] = useState('demopass');
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const response = await axiosClient.post<LoginResponse>('/login', {
-        email,
-        password,
-      });
-
-      const { accessToken, userData } = response.data;
-
-      if (!accessToken || !userData) {
-        throw new Error('Error en la autenticación: Datos incompletos');
-      }
-
-      showToast(
-        'success',
-        t('public.login.form.titleSuccess'),
-        t('public.login.form.msgSuccess'),
+    handleLogin({ email, password })
+      .unwrap()
+      .then((payload) => {
+        if (payload) {
+          showToast(
+            'success',
+            format('messages.success_login'),
+            format({ key: 'messages.greeting', options: payload }),
+          );
+        }
+      })
+      .catch((error) =>
+        showToast(
+          'error',
+          format('messages.error_login'),
+          error.message
+            ? format({ text: error.message })
+            : format('error.unspecific'),
+        ),
       );
-      await login(accessToken, navigate);
-    } catch (error: any) {
-      console.error('ERROR EN LOGIN: ', error);
-
-      if (error?.response?.status === 401) {
-        setError(error.response.data.message);
-      } else {
-        setError(t('general.genericError'));
-      }
-      setTimeout(() => setError(null), 5000);
-    }
   };
 
   return (
     <div className="p-4 w-full">
-      {error && <Message severity="error" text={error} className="w-full" />}
-
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label htmlFor="email" className="block text-sm font-medium">
-            {t('public.login.form.labelEmail')}
+            {format('tooltips.enter', 'glossary:email')}
           </label>
           <InputText
-            id="email"
+            autoComplete="email"
             className="w-full"
-            value={email}
+            id="email"
             onChange={(e) => setEmail(e.target.value)}
-            placeholder={t('public.login.form.placeholderEmail')}
+            placeholder={t('placeholders.email')}
             required
+            type="email"
+            value={email}
           />
         </div>
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium">
-            {t('public.login.form.labelPassword')}
+            {format('tooltips.enter', 'glossary:password')}
           </label>
           <Password
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
             className="w-full mt-1 p-password"
-            inputStyle={{ width: '100%' }}
             feedback={false}
+            id="password"
+            inputStyle={{ width: '100%' }}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder={t('placeholders.password')}
             required
+            value={password}
           />
         </div>
 
         <div className="flex items-center">
           <Checkbox
-            inputId="remember_me"
             checked={rememberMe}
+            inputId="remember_me"
             onChange={(e) => setRememberMe(e.checked ?? false)}
           />
           <label htmlFor="remember_me" className="ml-2 text-sm">
-            {t('public.login.form.rememberMe')}
+            {format('actions.remember_me')}
           </label>
         </div>
 
         <Button
-          label={t('public.login.form.btnLogin')}
-          type="submit"
           className="w-full"
+          label={format('actions.login')}
+          type="submit"
         />
       </form>
     </div>
@@ -118,6 +99,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}

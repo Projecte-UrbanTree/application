@@ -25,7 +25,7 @@ class WorkOrderBlockTask extends Model
         return $this->belongsTo(TreeType::class, 'tree_type_id');
     }
 
-    public function tasksType()
+    public function taskType()
     {
         return $this->belongsTo(TaskType::class, 'task_type_id');
     }

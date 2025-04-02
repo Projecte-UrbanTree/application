@@ -41,6 +41,6 @@
         "isolatedModules": true, // Required for transpiling TypeScript with tools like Babel
         "useDefineForClassFields": true // Aligns class field behavior with modern JS
     },
-    "include": ["resources/ts/**/*", "resources/ts/store"], // Include source files
+    "include": ["resources/ts/**/*", "resources/ts/redux"], // Include source files
     "exclude": ["node_modules", "dist"] // Exclude unnecessary folders
 }

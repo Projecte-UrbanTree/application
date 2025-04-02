@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contract;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -11,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return response()->json(User::all());
+        return response()->json(User::with('contracts')->get());
     }
 
     public function store(Request $request)
@@ -71,5 +72,14 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json(['message' => 'Usuario eliminado'], 200);
+    }
+
+    public function workers(Request $request)
+    {
+        $contractId = $request->user()->selected_contract_id;
+        $userByContract = $contractId > 0 ? Contract::find($contractId)?->workers : [];
+        $users = User::where('role', 'worker')->get();
+
+        return response()->json(['users' => $users, 'usersByContract' => $userByContract]);
     }
 }

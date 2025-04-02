@@ -1,3 +1,4 @@
+import type { Contract } from './Contract';
 import type { Roles } from './Role';
 
 export interface User {
@@ -7,6 +8,8 @@ export interface User {
   email?: string;
   company?: string;
   dni?: string;
+  contracts?: Contract[];
+  selected_contract_id?: number;
   email_verified_at?: null;
   role?: Roles;
   created_at?: null;

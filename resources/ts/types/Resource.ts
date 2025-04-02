@@ -1,14 +1,14 @@
 import type { ResourceType } from './ResourceType';
 
 export interface Resource {
-  contract_id: number | undefined;
+  contract_id?: number;
+  created_at?: string;
+  description?: string;
   id: number;
   name: string;
-  description?: string;
   resource_type_id: number;
   resource_type?: ResourceType;
-  unit_name: string;
   unit_cost: number;
-  created_at?: string;
+  unit_name: string;
   updated_at?: string;
 }

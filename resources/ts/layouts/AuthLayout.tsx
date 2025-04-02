@@ -1,17 +1,12 @@
-import React from 'react';
 import LangSelector from '@/components/LangSelector';
 import logo from '@images/logo.png';
+import React from 'react';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
-  title?: string;
 }
 
-const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
-  document.title = title
-    ? `${title} - ${import.meta.env.VITE_APP_NAME}`
-    : import.meta.env.VITE_APP_NAME;
-
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
     <div className="font-sans leading-normal tracking-normal flex items-center justify-center h-screen p-2 md:p-0">
       <div className="w-full max-w-xl bg-white rounded p-8 border border-gray-200">

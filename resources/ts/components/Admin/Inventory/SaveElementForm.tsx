@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import {
+  fetchElementsAsync,
+  saveElementAsync,
+} from '@/redux/slices/elementSlice';
+import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
+import { fetchPointsAsync, savePointsAsync } from '@/redux/slices/pointSlice';
+import { AppDispatch } from '@/redux/store';
+import { SavePointsProps } from '@/services/service/pointService';
+import { Element } from '@/types/Element';
+import { TypePoint } from '@/types/Point';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store/store';
-import { savePointsAsync, fetchPointsAsync } from '@/store/slice/pointSlice';
-import {
-  saveElementAsync,
-  fetchElementsAsync,
-} from '@/store/slice/elementSlice';
-import { Element } from '@/types/Element';
-import { TypePoint } from '@/types/Point';
-import { SavePointsProps } from '@/api/service/pointService';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 
 interface SaveElementFormProps {
   zoneId: number;

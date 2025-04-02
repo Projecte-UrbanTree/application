@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
-import { Button } from 'primereact/button';
+import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
+import { AppDispatch } from '@/redux/store';
+import { saveIncidence } from '@/services/service/incidentService';
 import { Incidence, IncidentStatus } from '@/types/Incident';
-import { saveIncidence } from '@/api/service/incidentService';
-import { AppDispatch } from '@/store/store';
-import { useDispatch } from 'react-redux';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
+import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
+import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 interface IncidentFormProps {
   elementId: number;

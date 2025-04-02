@@ -1,0 +1,91 @@
+{
+  "_capitalize": "{{val, capitalize}}",
+  "_exclamation": "{{val}}!",
+  "_lowercase": "{{val, lowercase}}",
+  "_question": "{{val}}?",
+  "_uppercase": "{{val, uppercase}}",
+  "actions": {
+    "create": "create",
+    "create_new": "create new",
+    "delete": "delete",
+    "edit": "edit",
+    "go_back": "go back",
+    "login": "log in",
+    "logout": "log out",
+    "remember": "remember",
+    "remember_me": "remember me",
+    "return": "return",
+    "save": "save",
+    "view": "view"
+  },
+  "contracts": {
+    "all": "all contracts",
+    "contract": "contract",
+    "contracts": "contracts",
+    "no_contracts": "no contracts available",
+    "select_contract": "first, select a contract"
+  },
+  "error": {
+    "404": "the page you are looking for does not exist.",
+    "title": "error {{val}}",
+    "unspecific": "an unexpected error occurred. please try again later."
+  },
+  "messages": {
+    "greeting": "welcome back, {{name}} {{surname}}.",
+    "confirm_delete": "are you sure you want to delete {{item}}?",
+    "error_deleting": "error deleting {{item}}",
+    "error_loading": "error loading {{item}}",
+    "error_login": "error logging in",
+    "error_logout": "error logging out",
+    "error_saving": "error saving {{item}}",
+    "success_create": "{{item}} created successfully",
+    "success_delete": "{{item}} deleted successfully",
+    "success_login": "logged in successfully",
+    "success_logout": "logged out successfully",
+    "success_update": "{{item}} updated successfully"
+  },
+  "placeholders": {
+    "email": "youremail@example.com",
+    "password": "do not write 'password'"
+  },
+  "roles": {
+    "admin": "admin",
+    "customer": "customer",
+    "worker": "worker"
+  },
+  "states": {
+    "active": "active",
+    "closed": "closed",
+    "closed_with_incidents": "closed with incidents",
+    "completed": "completed",
+    "created": "created",
+    "creating": "creating",
+    "deleted": "deleted",
+    "deleting": "deleting",
+    "editing": "editing",
+    "error": "error",
+    "in_progress": "in progress",
+    "inactive": "inactive",
+    "item_selected": "{{item}} selected",
+    "loading": "loading",
+    "loading_item": "loading {{item}}",
+    "not_started": "not started",
+    "pending": "pending",
+    "rejected": "rejected",
+    "report_sent": "report sent",
+    "saved": "saved",
+    "saving": "saving",
+    "success": "success",
+    "unknown": "unknown"
+  },
+  "tooltips": {
+    "add": "add {{item}}",
+    "create": "create {{item}}",
+    "delete": "delete {{item}}",
+    "edit": "edit {{item}}",
+    "enter": "enter {{item}}",
+    "review": "review {{item}}",
+    "save": "save {{item}}",
+    "select": "select {{item}}"
+  }
+}

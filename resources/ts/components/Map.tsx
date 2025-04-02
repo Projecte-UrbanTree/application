@@ -1,27 +1,28 @@
-import { RootState, AppDispatch } from '@/store/store';
-import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
+import useAuth from '@/hooks/useAuth';
+import { deleteElementAsync } from '@/redux/slices/elementSlice';
+import { fetchPointsAsync } from '@/redux/slices/pointSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchElementType } from '@/services/service/elementTypeService';
+import { MapService } from '@/services/service/mapService';
+import { SavePointsProps } from '@/services/service/pointService';
+import { fetchTreeTypes } from '@/services/service/treeTypesService';
+import { Element } from '@/types/Element';
+import { ElementType } from '@/types/ElementType';
 import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
+import { TreeType } from '@/types/TreeType';
 import { Zone } from '@/types/Zone';
+import * as turf from '@turf/turf';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as turf from '@turf/turf';
-import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
-import { SaveElementForm } from './Admin/Inventory/SaveElementForm';
-import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import { TreeTypes } from '@/types/TreeTypes';
-import { fetchTreeTypes } from '@/api/service/treeTypesService';
-import { fetchElementType } from '@/api/service/elementTypeService';
-import { ElementType } from '@/types/ElementType';
-import { SavePointsProps } from '@/api/service/pointService';
-import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
-import { MapService } from '@/api/service/mapService';
-import { Toast } from 'primereact/toast';
-import { deleteElementAsync } from '@/store/slice/elementSlice';
-import IncidentForm from './Admin/Inventory/IncidentForm';
-import { Element } from '@/types/Element';
 import ElementDetailPopup from './Admin/Inventory/ElementDetailPopup';
+import IncidentForm from './Admin/Inventory/IncidentForm';
+import { SaveElementForm } from './Admin/Inventory/SaveElementForm';
+import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
+import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -50,7 +51,7 @@ export const MapComponent: React.FC<MapProps> = ({
     null,
   );
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
-  const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
+  const [treeTypes, setTreeTypes] = useState<TreeType[]>([]);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
 
   const [zoneToAddElement, setSelectedZoneToAdd] = useState<Zone>();
@@ -63,12 +64,9 @@ export const MapComponent: React.FC<MapProps> = ({
 
   // redux store
   const dispatch = useDispatch<AppDispatch>();
-  const userValue = useSelector((state: RootState) => state.user);
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
-  );
-  const zonesRedux = useSelector((state: RootState) => state.zone.zones);
-  const { points } = useSelector((state: RootState) => state.points);
+  const { user, selectedContractId } = useAuth();
+  const { zones } = useSelector((state: RootState) => state.zone);
+  const { points } = useSelector((state: RootState) => state.point);
   const { elements } = useSelector((state: RootState) => state.element);
 
   // load data
@@ -89,7 +87,7 @@ export const MapComponent: React.FC<MapProps> = ({
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
     service.addBasicControls();
     service.addGeocoder();
-    service.enableDraw(userValue.role === Roles.admin, (coords) => {
+    service.enableDraw(user?.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
         setIsDrawingMode(true);
@@ -100,7 +98,7 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     });
     mapServiceRef.current = service;
-  }, [userValue.role]);
+  }, [user?.role]);
 
   // Handle resize events
   useEffect(() => {
@@ -117,9 +115,9 @@ export const MapComponent: React.FC<MapProps> = ({
 
   // load points if contract is active
   useEffect(() => {
-    if (!currentContract) return;
+    if (!selectedContractId) return;
     dispatch(fetchPointsAsync());
-  }, [currentContract, dispatch]);
+  }, [selectedContractId, dispatch]);
 
   // fly to a selected zone
   useEffect(() => {
@@ -196,12 +194,12 @@ export const MapComponent: React.FC<MapProps> = ({
     } else {
       updateZones(service);
     }
-  }, [zonesRedux, points, currentContract]);
+  }, [zones, points, selectedContractId]);
 
   function updateZones(service: MapService) {
     service.removeLayersAndSources('zone-');
-    const filteredZones = zonesRedux.filter(
-      (z) => z.contract_id === currentContract?.id,
+    const filteredZones = zones.filter(
+      (z) => z.contract_id === selectedContractId,
     );
     filteredZones.forEach((zone: Zone) => {
       const zonePoints = points
@@ -226,10 +224,10 @@ export const MapComponent: React.FC<MapProps> = ({
     } else {
       updateElements(service);
     }
-  }, [elements, currentContract, points, dispatch]);
+  }, [elements, selectedContractId, points, dispatch]);
 
   function updateElements(service: MapService) {
-    if (!currentContract) return;
+    if (!selectedContractId) return;
 
     const handleDeleteElement = async (elementId: number) => {
       try {
@@ -255,8 +253,8 @@ export const MapComponent: React.FC<MapProps> = ({
     };
 
     service.removeElementMarkers();
-    const filteredZones = zonesRedux.filter(
-      (zone) => zone.contract_id === currentContract.id,
+    const filteredZones = zones.filter(
+      (zone) => zone.contract_id === selectedContractId,
     );
     const zoneIds = new Set(filteredZones.map((zone) => zone.id));
     const filteredPoints = points.filter(
@@ -374,7 +372,7 @@ export const MapComponent: React.FC<MapProps> = ({
           left: 0,
         }}
       />
-      {userValue.role === Roles.admin && isDrawingMode && (
+      {user?.role === Roles.admin && isDrawingMode && (
         <Button
           label="Guardar Zona"
           onClick={() => setModalVisible(true)}

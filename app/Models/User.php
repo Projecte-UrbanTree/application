@@ -6,8 +6,6 @@ namespace App\Models;
 use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -30,6 +28,7 @@ class User extends Authenticatable
         'dni',
         'role',
         'password',
+        'selected_contract_id',
     ];
 
     /**
@@ -52,16 +51,25 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'selected_contract_id' => 'integer',
         ];
     }
 
-    public function workOrderUsers(): HasMany
+    public function workOrders()
     {
-        return $this->hasMany(WorkOrderUser::class, 'user_id');
+        return $this->belongsToMany(WorkOrder::class, 'work_order_users');
     }
 
-    public function contracts(): BelongsToMany
+    public function contracts()
     {
-        return $this->belongsToMany(Contract::class, 'contract_user');
+        if ($this->role === 'admin') {
+            return Contract::where('status', 0);
+        }
+
+        if ($this->role === 'customer') {
+            return $this->belongsTo(Contract::class, 'selected_contract_id');
+        }
+
+        return $this->belongsToMany(Contract::class, 'contract_user')->where('status', 0);
     }
 }

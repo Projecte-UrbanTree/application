@@ -1,0 +1,174 @@
+{
+  "dashboard": {
+    "welcome_message": "We are glad to see you again. Here is a quick overview of your data."
+  },
+  "pages": {
+    "account": {
+      "basicInfo": "Basic Information",
+      "security": "Security",
+      "title": "Account Settings"
+    },
+    "contracts": {
+      "form": {
+        "placeholders": {
+          "status": "Select a status"
+        },
+        "returnButton": "Return to contract list",
+        "title": {
+          "create": "Create Contract",
+          "edit": "Edit Contract"
+        },
+        "validation": {
+          "end_date_after_start_date": "End date must be after start date"
+        }
+      },
+      "title": "Contracts"
+    },
+    "elementTypes": {
+      "columns": {
+        "color": "Color",
+        "description": "Description",
+        "icon": "Icon",
+        "name": "Name",
+        "requires_tree_type": "Requires tree type"
+      },
+      "create": {
+        "placeholders": {
+          "color": "Select a color",
+          "description": "Element type description",
+          "icon": "Select an icon",
+          "name": "Element type name",
+          "requires_tree_type": "Select if it requires tree type"
+        },
+        "validations": {
+          "requires_tree_type": "Requires tree type"
+        }
+      },
+      "edit": {
+        "placeholders": {
+          "description": "Element type description",
+          "name": "Element type name",
+          "requires_tree_type": "Select if it requires tree type"
+        },
+        "validations": {
+          "requires_tree_type": "Requires tree type"
+        }
+      }
+    },
+    "resources": {
+      "form": {
+        "returnButton": "Return to resource list",
+        "validation": {
+          "type_invalid": "Please select a valid resource type"
+        }
+      }
+    },
+    "resourceTypes": {
+      "form": {
+        "returnButton": "Return to resource type list"
+      }
+    },
+    "stats": {
+      "custom": "Custom",
+      "endDate": "End Date",
+      "fuelConsumption": "Fuel Consumption",
+      "hoursWorked": "Hours Worked",
+      "month": "This Month",
+      "noData": "No data to display",
+      "startDate": "Start Date",
+      "tasksDone": "Tasks Done",
+      "tasksNotDone": "Pending Tasks",
+      "title": "Statistics",
+      "week": "This Week"
+    },
+    "taskTypes": {
+      "form": {
+        "returnButton": "Return to task type list",
+        "validation": {
+          "error_numbers": "Name cannot contain numbers or special characters"
+        }
+      }
+    },
+    "users": {
+      "form": {
+        "placeholders": {
+          "passwordEdit": "Password (leave blank to keep unchanged)"
+        },
+        "returnButton": "Return to user list"
+      }
+    },
+    "workOrders": {
+      "details": {
+        "block": "Block",
+        "noBlocks": "No blocks",
+        "noBlocksAvailable": "No blocks available for this work order",
+        "noNotes": "N/A",
+        "noTasks": "No tasks assigned",
+        "notes": "Notes",
+        "noUsers": "No users assigned",
+        "noZones": "No zones assigned",
+        "tasks": "Tasks",
+        "unknown": "Unknown",
+        "zones": "Zones"
+      },
+      "form": {
+        "blocksTitle": "Work Blocks",
+        "buttons": {
+          "addBlock": "Add Block",
+          "addTask": "Add Task"
+        },
+        "fields": {
+          "block": "Block",
+          "date": "Date",
+          "elementType": "Element Type",
+          "notes": "Notes",
+          "task": "Task",
+          "taskType": "Task Type",
+          "treeType": "Tree Species",
+          "users": "Workers",
+          "zones": "Zones"
+        },
+        "noContract": {
+          "message": "You must select a contract in the top panel to create a work order.",
+          "title": "No contract selected"
+        },
+        "removeBlock": "Remove block",
+        "removeTask": "Remove task",
+        "returnButton": "Return to work order list",
+        "submitButton": {
+          "create": "Create Work Order",
+          "edit": "Save Changes"
+        },
+        "title": {
+          "create": "Create Work Order",
+          "edit": "Edit Work Order"
+        },
+        "validation": {
+          "blocks_required": "At least one block is required",
+          "tasks_required": "At least one task is required",
+          "users_required": "At least one worker must be selected",
+          "zones_required": "At least one zone must be selected"
+        }
+      },
+      "list": {
+        "actions": {
+          "delete": "Delete work order",
+          "edit": "Edit work order",
+          "label": "Actions",
+          "viewReport": "View report"
+        },
+        "columns": {
+          "contract": "Contract",
+          "date": "Date",
+          "id": "ID",
+          "reportStatus": "Report Status",
+          "status": "Status",
+          "users": "Workers"
+        }
+      }
+    }
+  },
+  "profileDropdown": {
+    "accountSettings": "Account settings"
+  }
+}

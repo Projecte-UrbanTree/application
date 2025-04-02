@@ -38,6 +38,7 @@
         "date-fns": "^4.1.0",
         "decamelize-keys": "^2.0.1",
         "i18next": "^24.2.3",
+        "i18next-intervalplural-postprocessor": "^3.0.0",
         "mapbox-gl": "^3.10.0",
         "primereact": "^10.9.4",
         "react": "^19.1.0",

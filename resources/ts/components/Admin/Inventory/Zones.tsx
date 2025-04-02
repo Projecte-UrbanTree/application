@@ -1,21 +1,19 @@
-import { fetchElementType } from '@/api/service/elementTypeService';
-import { fetchTreeTypes } from '@/api/service/treeTypesService';
-import { deleteZone } from '@/api/service/zoneService';
-import { fetchElementsAsync } from '@/store/slice/elementSlice';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
-import { fetchPointsAsync } from '@/store/slice/pointSlice';
-import { fetchZonesAsync } from '@/store/slice/zoneSlice';
-import { AppDispatch, RootState } from '@/store/store';
+import useAuth from '@/hooks/useAuth';
+import { fetchElementsAsync } from '@/redux/slices/elementSlice';
+import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
+import { fetchPointsAsync } from '@/redux/slices/pointSlice';
+import { fetchZonesAsync } from '@/redux/slices/zoneSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchElementType } from '@/services/service/elementTypeService';
+import { fetchTreeTypes } from '@/services/service/treeTypesService';
+import { deleteZone } from '@/services/service/zoneService';
 import { ElementType } from '@/types/ElementType';
-import { Point, TypePoint } from '@/types/Point';
-import { TreeTypes } from '@/types/TreeTypes';
+import { TreeType } from '@/types/TreeType';
 import { Zone } from '@/types/Zone';
 import { Icon } from '@iconify/react';
-import { log } from 'console';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,10 +36,11 @@ export interface ZoneEvent {
 
 export const eventSubject = new Subject<ZoneEvent>();
 export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
+  const { selectedContractId } = useAuth();
   const [selectedZoneToAdd, setSelectedZoneToAdd] = useState<Zone | null>(null);
   const [createActive, setIsCreatingElement] = useState<boolean>(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
-  const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
+  const [treeTypes, setTreeTypes] = useState<TreeType[]>([]);
 
   const addElementZone = ({ isCreatingElement, zone }: AddElementProps) => {
     eventSubject.next({ isCreatingElement, zone });
@@ -54,10 +53,7 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
     (state: RootState) => state.zone,
   );
   const { points, loading: pointsLoading } = useSelector(
-    (state: RootState) => state.points,
-  );
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
+    (state: RootState) => state.point,
   );
   const { elements, loading: elementsLoading } = useSelector(
     (state: RootState) => state.element,
@@ -79,7 +75,7 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
   }, 0);
 
   useEffect(() => {
-    if (!currentContract) return;
+    if (!selectedContractId) return;
 
     dispatch(showLoader());
 
@@ -87,15 +83,13 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
       .unwrap()
       .catch((error) => console.error('Error al cargar zonas:', error));
 
-    dispatch(fetchPointsAsync())
-      .unwrap()
-      .catch((error) => console.error(error));
+    dispatch(fetchPointsAsync()).unwrap().catch(console.error);
 
     dispatch(fetchElementsAsync())
       .unwrap()
-      .catch((error) => console.error(error))
+      .catch(console.error)
       .finally(() => dispatch(hideLoader()));
-  }, [dispatch, currentContract]);
+  }, [dispatch, selectedContractId]);
 
   const confirmDeleteZone = (zone: Zone) => {
     setSelectedZoneToDelete(zone);
@@ -117,7 +111,7 @@ export const Zones = ({ onSelectedZone, onAddElementZone }: ZoneProps) => {
       next: (data: AddElementProps) => {
         setIsCreatingElement(data.isCreatingElement);
       },
-      error: (err: Error) => console.error('error en el stream:', err.message),
+      error: console.error,
       complete: () => console.log('stream completado'),
     });
     return () => subscription.unsubscribe();

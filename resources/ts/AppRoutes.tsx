@@ -1,35 +1,32 @@
-import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
-import Error from '@/pages/Error';
-
-import { useAuth } from '@/hooks/useAuth';
-
 import Preloader from '@/components/Preloader';
+import useAuth from '@/hooks/useAuth';
+import Error from '@/pages/Error';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import routesConfig from './routes/routesConfig';
 
-function RoutesComponent() {
-  return useRoutes([
-    ...routesConfig,
-    {
-      path: '*',
-      element: <Error icon="tabler:face-id-error" errorCode="404" />,
-    },
-  ]);
-}
+export default function AppRoutes() {
+  const { loading, fetchUser } = useAuth();
 
-function AuthWrapper() {
-  const { isLoading } = useAuth();
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
-  if (isLoading) {
-    return <Preloader />;
+  if (loading) return <Preloader bg_white={true} />;
+
+  function RoutesComponent() {
+    return useRoutes([
+      ...routesConfig,
+      {
+        path: '*',
+        element: <Error icon="tabler:face-id-error" errorCode="404" />,
+      },
+    ]);
   }
 
-  return <RoutesComponent />;
-}
-
-export default function AppRoutes() {
   return (
     <Router>
-      <AuthWrapper />
+      <RoutesComponent />
     </Router>
   );
 }

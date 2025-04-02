@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class WorkOrderBlockZone extends Model
 {
     protected $fillable = [
-        'zone_id',
         'work_order_block_id',
+        'zone_id',
     ];
 
     public function workOrderBlock()
@@ -16,7 +16,7 @@ class WorkOrderBlockZone extends Model
         return $this->belongsTo(WorkOrderBlock::class, 'work_order_block_id');
     }
 
-    public function zones()
+    public function zone()
     {
         return $this->belongsTo(Zone::class, 'zone_id');
     }

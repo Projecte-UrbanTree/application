@@ -17,11 +17,7 @@ class ResourceController extends Controller
     public function index(Request $request)
     {
         try {
-            $contractId = $request->session()->get('selected_contract_id', 0);
-
-            $resources = Resource::when($contractId > 0, function ($query) use ($contractId) {
-                return $query->where('contract_id', $contractId);
-            })
+            $resources = Resource::filterByContract($request->user()->selected_contract_id)
                 ->with('resourceType')
                 ->get();
 

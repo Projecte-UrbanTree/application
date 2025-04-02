@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contract;
+use App\Models\Element;
+use App\Models\User;
+use App\Models\WorkOrder;
 use App\Models\WorkOrderBlockTask;
 use App\Models\WorkReport;
 use Carbon\Carbon;
@@ -96,6 +100,40 @@ class StatisticsController extends Controller
                 'hours_worked_total' => $hours_worked_total,
                 'fuel_consumption_total' => $fuel_consumption_total,
             ],
+        ]);
+    }
+
+    public function metrics(Request $request)
+    {
+        $contractId = $request->user()->selected_contract_id;
+
+        // Count of contracts, elements, work orders and users, this last should count admin, customers and workers related to the contract
+        $users = User::whereIn('role', ['admin', 'customer']) // Count all admins and customers
+            ->when($contractId, function ($query) use ($contractId) {
+                // Count only workers assigned to the contract
+                return $query->orWhereHas('contracts', function ($q) use ($contractId) {
+                    $q->where('contracts.id', $contractId);
+                });
+            }, function ($query) {
+                // If no contract is provided, count all workers
+                return $query->orWhere('role', 'worker');
+            })
+            ->count();
+
+        return response()->json([
+            'user' => $users,
+            'user_all' => User::count(),
+            'contract' => Contract::count(),
+            'element' => Element::when($contractId > 0, function ($query) use ($contractId) {
+                return $query->whereHas('point.zones', function ($q) use ($contractId) {
+                    $q->where('contract_id', $contractId);
+                });
+            })->count(),
+            'element_all' => Element::count(),
+            'work_order' => WorkOrder::when($contractId > 0, function ($query) use ($contractId) {
+                return $query->where('contract_id', $contractId);
+            })->count(),
+            'work_order_all' => WorkOrder::count(),
         ]);
     }
 }

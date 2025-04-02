@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\FiltersByContract;
 use Illuminate\Database\Eloquent\Model;
 
 class Zone extends Model
 {
+    use FiltersByContract;
+
     protected $fillable = [
         'name',
         'description',

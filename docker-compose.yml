@@ -4,64 +4,70 @@ services:
     ####################################################################################################
     php:
         build: .docker/php
-        ports:
-            - 5173:5173
+        networks:
+            - default
+        # ports:
+        #     - 5173:5173
         volumes:
             - .:/var/www:cached
 
     ####################################################################################################
     # Nginx
     ####################################################################################################
-    nginx:
-        image: nginx
-        ports:
-            - 80:80
-        volumes:
-            - .:/var/www
-            - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - .docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-        depends_on:
-            - php
+    # nginx:
+    #     image: nginx
+    #     networks:
+    #         - default
+    #     ports:
+    #         - 80:80
+    #     volumes:
+    #         - .:/var/www
+    #         - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    #         - .docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    #     depends_on:
+    #         - php
 
     ####################################################################################################
     # DATABASE (MariaDB)
     ####################################################################################################
-    db:
-        image: mariadb:10.11
-        ports:
-            - 3306:3306
-        volumes:
-            - .docker/db/data:/var/lib/mysql
-            - .docker/logs:/var/log/mysql
-            - .docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
-            - .docker/db/sql:/docker-entrypoint-initdb.d
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: urbantree
-            MYSQL_USER: urbantree
-            MYSQL_PASSWORD: urbantree
+    # db:
+    #     image: mariadb:10.11
+    #     ports:
+    #         - 3306:3306
+    #     volumes:
+    #         - .docker/db/data:/var/lib/mysql
+    #         - .docker/logs:/var/log/mysql
+    #         - .docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    #         - .docker/db/sql:/docker-entrypoint-initdb.d
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: root
+    #         MYSQL_DATABASE: urbantree
+    #         MYSQL_USER: urbantree
+    #         MYSQL_PASSWORD: urbantree
 
     ####################################################################################################
     # phpMyAdmin
     ####################################################################################################
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        ports:
-            - 8080:80
-        links:
-            - db
-        environment:
-            PMA_HOST: db
-            PMA_PORT: 3306
-            PMA_ARBITRARY: 1
-        volumes:
-            - .docker/phpmyadmin/sessions:/sessions
+    # phpmyadmin:
+    #     image: phpmyadmin/phpmyadmin
+    #     ports:
+    #         - 8080:80
+    #     links:
+    #         - db
+    #     environment:
+    #         PMA_HOST: db
+    #         PMA_PORT: 3306
+    #         PMA_ARBITRARY: 1
+    #     volumes:
+    #         - .docker/phpmyadmin/sessions:/sessions
 
     ####################################################################################################
     # Mailpit
     ####################################################################################################
     mail:
         image: axllent/mailpit:latest
+        networks:
+            - default
         ports:
             - 8025:8025
             - 1025:1025
@@ -74,5 +80,12 @@ services:
         command: redis-server --appendonly yes
         volumes:
             - .docker/redis/data:/data
+        networks:
+            - default
         ports:
             - 6379:6379
+
+networks:
+    default:
+        name: urbantree
+        external: true

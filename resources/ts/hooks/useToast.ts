@@ -1,6 +1,6 @@
 import { useToastContext } from '@/contexts/ToastContext';
 
-export function useToast() {
+export default function useToast() {
   const { showToast } = useToastContext();
 
   return { showToast };

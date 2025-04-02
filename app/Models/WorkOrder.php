@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\FiltersByContract;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class WorkOrder extends Model
 {
+    use FiltersByContract;
+
     protected $fillable = [
         'date',
         'status',
@@ -18,18 +20,18 @@ class WorkOrder extends Model
         return $this->belongsTo(Contract::class, 'contract_id');
     }
 
-    public function workReports()
+    public function users()
     {
-        return $this->hasMany(WorkReport::class, 'work_order_id');
+        return $this->belongsToMany(User::class, 'work_order_users');
     }
 
-    public function workOrdersBlocks()
+    public function workReport()
+    {
+        return $this->hasOne(WorkReport::class, 'work_order_id');
+    }
+
+    public function workOrderBlocks()
     {
         return $this->hasMany(WorkOrderBlock::class, 'work_order_id');
-    }
-
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'work_order_users', 'work_order_id', 'user_id')->withTimestamps();
     }
 }

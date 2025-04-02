@@ -1,20 +1,35 @@
-import React from 'react';
-import UnauthenticatedRoute from '@/middlewares/UnauthenticatedRoute';
-
+import ProtectedRoute from '@/components/Routes/Protected';
+import UnauthenticatedRoute from '@/components/Routes/Unauthenticated';
+import AppLayout from '@/layouts/AppLayout';
 import AuthLayout from '@/layouts/AuthLayout';
+import Account from '@/pages/Account';
 import Login from '@/pages/Login';
 import Logout from '@/pages/Logout';
-
 import { RouteObject } from 'react-router-dom';
 
-const AuthRoutes: RouteObject[] = [
+export default [
   {
+    path: '/account',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        index: true,
+        element: (
+          <AppLayout>
+            <Account />
+          </AppLayout>
+        ),
+      },
+    ],
+  },
+  {
+    path: '/login',
     element: <UnauthenticatedRoute />,
     children: [
       {
-        path: '/login',
+        index: true,
         element: (
-          <AuthLayout title="Login">
+          <AuthLayout>
             <Login />
           </AuthLayout>
         ),
@@ -23,8 +38,6 @@ const AuthRoutes: RouteObject[] = [
   },
   {
     path: '/logout',
-    element: React.createElement(Logout),
-  }
-];
-
-export default AuthRoutes;
+    element: <Logout />,
+  },
+] as RouteObject[];

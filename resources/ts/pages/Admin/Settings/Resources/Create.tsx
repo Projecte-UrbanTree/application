@@ -1,4 +1,6 @@
-import axiosClient from '@/api/axiosClient';
+import Preloader from '@/components/Preloader';
+import useI18n from '@/hooks/useI18n';
+import api from '@/services/api';
 import type { ResourceType } from '@/types/ResourceType';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
@@ -7,13 +9,12 @@ import { Card } from 'primereact/card';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 export default function CreateResource() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useI18n();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
@@ -21,7 +22,7 @@ export default function CreateResource() {
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const { data } = await axiosClient.get(`/admin/resources/create`);
+        const { data } = await api.get(`/admin/resources/create`);
         setResourceTypes(data.resource_types);
       } catch (error) {
         console.error(error);
@@ -42,36 +43,36 @@ export default function CreateResource() {
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .required(t('admin.pages.resources.form.validation.name_required'))
-      .min(3, t('admin.pages.resources.form.validation.name_min'))
-      .max(50, t('admin.pages.resources.form.validation.name_max'))
+      .required(t('admin:pages.resources.form.validation.name_required'))
+      .min(3, t('admin:pages.resources.form.validation.name_min'))
+      .max(50, t('admin:pages.resources.form.validation.name_max'))
       .matches(
         /^[a-zA-Z0-9\s]+$/,
-        t('admin.pages.resources.form.validation.name_format'),
+        t('admin:pages.resources.form.validation.name_format'),
       ),
     description: Yup.string().max(
       255,
-      t('admin.pages.resources.form.validation.description_max'),
+      t('admin:pages.resources.form.validation.description_max'),
     ),
     resource_type_id: Yup.number()
-      .required(t('admin.pages.resources.form.validation.type_required'))
-      .positive(t('admin.pages.resources.form.validation.type_invalid')),
+      .required(t('admin:pages.resources.form.validation.type_required'))
+      .positive(t('admin:pages.resources.form.validation.type_invalid')),
     unit_cost: Yup.number()
-      .min(0, t('admin.pages.resources.form.validation.unit_cost_min'))
-      .required(t('admin.pages.resources.form.validation.unit_cost_required')),
+      .min(0, t('admin:pages.resources.form.validation.unit_cost_min'))
+      .required(t('admin:pages.resources.form.validation.unit_cost_required')),
     unit_name: Yup.string().required(
-      t('admin.pages.resources.form.validation.unit_name_required'),
+      t('admin:pages.resources.form.validation.unit_name_required'),
     ),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
     setIsSubmitting(true);
     try {
-      await axiosClient.get('/sanctum/csrf-cookie');
-      await axiosClient.post('/admin/resources', values);
+      await api.get('/sanctum/csrf-cookie');
+      await api.post('/admin/resources', values);
       navigate('/admin/resources', {
         state: {
-          success: t('admin.pages.resources.list.messages.createSuccess'),
+          success: t('admin:pages.resources.list.messages.createSuccess'),
         },
       });
     } catch (error) {
@@ -81,17 +82,7 @@ export default function CreateResource() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Preloader />;
 
   return (
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
@@ -104,7 +95,7 @@ export default function CreateResource() {
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
           <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.resources.form.title.create')}
+            {t('admin:pages.resources.form.title.create')}
           </h2>
         </header>
         <div className="p-6">
@@ -117,12 +108,12 @@ export default function CreateResource() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:resource" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.name')}
+                    {t('admin:fields.name')}
                   </label>
                   <Field
                     name="name"
                     as={InputText}
-                    placeholder={t('admin.fields.name')}
+                    placeholder={t('admin:fields.name')}
                     className={errors.name && touched.name ? 'p-invalid' : ''}
                   />
                   {errors.name && touched.name && (
@@ -132,18 +123,18 @@ export default function CreateResource() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:note" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.description')}
+                    {t('admin:fields.description')}
                   </label>
                   <Field
                     name="description"
                     as={InputText}
-                    placeholder={t('admin.fields.description')}
+                    placeholder={t('admin:fields.description')}
                   />
                 </div>
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:category" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.resource_type')}
+                    {t('admin:fields.resource_type')}
                   </label>
                   <Field
                     name="resource_type_id"
@@ -151,7 +142,7 @@ export default function CreateResource() {
                     options={resourceTypes}
                     optionLabel="name"
                     optionValue="id"
-                    placeholder={t('admin.fields.select_resource_type')}
+                    placeholder={t('admin:fields.select_resource_type')}
                     className={
                       errors.resource_type_id && touched.resource_type_id
                         ? 'p-invalid'
@@ -168,13 +159,13 @@ export default function CreateResource() {
                       icon="tabler:currency-euro"
                       className="h-5 w-5 mr-2"
                     />
-                    {t('admin.fields.unit_cost')}
+                    {t('admin:fields.unit_cost')}
                   </label>
                   <Field
                     name="unit_cost"
                     as={InputText}
                     type="number"
-                    placeholder={t('admin.fields.unit_cost')}
+                    placeholder={t('admin:fields.unit_cost')}
                     className={
                       errors.unit_cost && touched.unit_cost ? 'p-invalid' : ''
                     }
@@ -187,12 +178,12 @@ export default function CreateResource() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:ruler" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.unit_name')}
+                    {t('admin:fields.unit_name')}
                   </label>
                   <Field
                     name="unit_name"
                     as={InputText}
-                    placeholder={t('admin.fields.unit_name')}
+                    placeholder={t('admin:fields.unit_name')}
                     className={
                       errors.unit_name && touched.unit_name ? 'p-invalid' : ''
                     }
@@ -211,8 +202,8 @@ export default function CreateResource() {
                     }
                     label={
                       isSubmitting
-                        ? t('admin.pages.resources.form.submittingText.create')
-                        : t('admin.pages.resources.form.submitButton.create')
+                        ? t('admin:pages.resources.form.submittingText.create')
+                        : t('admin:pages.resources.form.submitButton.create')
                     }
                   />
                 </div>

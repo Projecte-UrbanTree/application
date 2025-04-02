@@ -1,12 +1,12 @@
-import axiosClient from '@/api/axiosClient';
-import { differenceInMonths, parseISO } from 'date-fns';
-import { Chart } from 'primereact/chart';
-import { Skeleton } from 'primereact/skeleton';
+import useI18n from '@/hooks/useI18n';
+import api from '@/services/api';
+import { differenceInMonths } from 'date-fns';
 import { Button } from 'primereact/button';
-import { SelectButton } from 'primereact/selectbutton';
 import { Calendar } from 'primereact/calendar';
+import { Chart } from 'primereact/chart';
+import { SelectButton } from 'primereact/selectbutton';
+import { Skeleton } from 'primereact/skeleton';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 function formatDateSpanish(date: Date): string {
   const year = date.getFullYear();
@@ -48,7 +48,7 @@ function ShimmerCard() {
 }
 
 export default function Stats() {
-  const { t } = useTranslation();
+  const { t } = useI18n();
   const [rangeOption, setRangeOption] = useState<
     'this_week' | 'this_month' | 'custom'
   >('this_week');
@@ -72,9 +72,9 @@ export default function Stats() {
   const [customToDate, setCustomToDate] = useState<Date | null>(null);
 
   const rangeOptions = [
-    { label: t('admin.pages.stats.week'), value: 'this_week' },
-    { label: t('admin.pages.stats.month'), value: 'this_month' },
-    { label: t('admin.pages.stats.custom'), value: 'custom' },
+    { label: t('admin:pages.stats.week'), value: 'this_week' },
+    { label: t('admin:pages.stats.month'), value: 'this_month' },
+    { label: t('admin:pages.stats.custom'), value: 'custom' },
   ];
 
   useEffect(() => {
@@ -126,7 +126,7 @@ export default function Stats() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const res = await axiosClient.get('/admin/statistics', {
+      const res = await api.get('/admin/statistics', {
         params: { from_date: fromDate, to_date: toDate },
       });
       const daysRaw = res.data.days || [];
@@ -168,7 +168,7 @@ export default function Stats() {
   const bentoItems = [
     {
       key: 'tasksDone',
-      label: t('admin.pages.stats.tasksDone'),
+      label: t('admin:pages.stats.tasksDone'),
       total: summary.tasks_done_total,
       data: tasksDoneCount,
       backgroundColor: 'rgba(52,211,153,0.6)',
@@ -176,7 +176,7 @@ export default function Stats() {
     },
     {
       key: 'tasksNotDone',
-      label: t('admin.pages.stats.tasksNotDone'),
+      label: t('admin:pages.stats.tasksNotDone'),
       total: summary.tasks_not_done_total,
       data: tasksNotDoneCount,
       backgroundColor: 'rgba(248,113,113,0.6)',
@@ -184,7 +184,7 @@ export default function Stats() {
     },
     {
       key: 'hoursWorked',
-      label: t('admin.pages.stats.hoursWorked'),
+      label: t('admin:pages.stats.hoursWorked'),
       total: summary.hours_worked_total,
       data: hoursWorked,
       backgroundColor: 'rgba(96,165,250,0.6)',
@@ -192,7 +192,7 @@ export default function Stats() {
     },
     {
       key: 'fuelConsumption',
-      label: t('admin.pages.stats.fuelConsumption'),
+      label: t('admin:pages.stats.fuelConsumption'),
       total: summary.fuel_consumption_total,
       data: fuelConsumption,
       backgroundColor: 'rgba(251,191,36,0.6)',
@@ -222,7 +222,7 @@ export default function Stats() {
         {rangeOption === 'custom' && (
           <>
             <div className="flex flex-col">
-              <label className="mb-2">{t('admin.pages.stats.startDate')}</label>
+              <label className="mb-2">{t('admin:pages.stats.startDate')}</label>
               <Calendar
                 value={customFromDate}
                 onChange={(e) => setCustomFromDate(e.value as Date)}
@@ -232,7 +232,7 @@ export default function Stats() {
               />
             </div>
             <div className="flex flex-col">
-              <label className="mb-2">{t('admin.pages.stats.endDate')}</label>
+              <label className="mb-2">{t('admin:pages.stats.endDate')}</label>
               <Calendar
                 value={customToDate}
                 onChange={(e) => setCustomToDate(e.value as Date)}
@@ -285,7 +285,7 @@ export default function Stats() {
               <div key={item.key}>
                 <div className="flex justify-end mb-2">
                   <Button
-                    label={t('admin.pages.stats.exportCSV')}
+                    label={t('admin:pages.stats.exportCSV')}
                     icon="pi pi-file"
                     className="p-button-sm p-button-text p-button-plain"
                     style={{ color: 'blue' }}
@@ -303,7 +303,7 @@ export default function Stats() {
                   </div>
                   {item.data.length === 0 ? (
                     <div className="text-center text-gray-500">
-                      {t('admin.pages.stats.noData')}
+                      {t('admin:pages.stats.noData')}
                     </div>
                   ) : (
                     <Chart

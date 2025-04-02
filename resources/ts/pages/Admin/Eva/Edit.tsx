@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
+import Preloader from '@/components/Preloader';
+import useI18n from '@/hooks/useI18n';
+import api from '@/services/api';
 import { Icon } from '@iconify/react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, useField } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import {
+  differenceInMonths,
+  differenceInYears,
+  format,
+  subMonths,
+  subYears,
+} from 'date-fns';
+import { Form, Formik, useField } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import {
-  differenceInYears,
-  differenceInMonths,
-  subYears,
-  subMonths,
-  format,
-} from 'date-fns';
+import { InputNumber } from 'primereact/inputnumber';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 
 interface FormFieldProps {
   as: React.ElementType;
@@ -99,7 +100,7 @@ const FormField = ({
 export default function EditEva() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useI18n();
 
   interface DictionaryOption {
     label: string;
@@ -174,7 +175,7 @@ export default function EditEva() {
   useEffect(() => {
     const fetchEva = async () => {
       try {
-        const response = await axiosClient.get(`/admin/evas/${id}`);
+        const response = await api.get(`/admin/evas/${id}`);
         const data = response.data;
         const today = new Date();
         const birthDate = new Date(data.date_birth);
@@ -197,7 +198,7 @@ export default function EditEva() {
   useEffect(() => {
     const fetchDictionaries = async () => {
       try {
-        const response = await axiosClient.get('/admin/evas/create');
+        const response = await api.get('/admin/evas/create');
         const translatedDictionaries: Dictionaries = {
           unbalancedCrown: [],
           overextendedBranches: [],
@@ -284,7 +285,7 @@ export default function EditEva() {
         status: status,
       };
 
-      await axiosClient.put(`/admin/evas/${id}`, updatedValues);
+      await api.put(`/admin/evas/${id}`, updatedValues);
       navigate(`/admin/evas/${id}`, {
         state: { success: t('messages.updateSuccess') },
       });
@@ -294,17 +295,7 @@ export default function EditEva() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Preloader />;
 
   return (
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
@@ -317,7 +308,7 @@ export default function EditEva() {
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
           <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.evas.edit.title')}
+            {t('admin:pages.evas.edit.title')}
           </h2>
         </header>
         <div className="p-6">
@@ -331,17 +322,17 @@ export default function EditEva() {
                 {/* Sección: Identificación */}
                 <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
                   <h1 className="text-xl font-bold mb-4">
-                    {t('admin.pages.evas.edit.identification')}
+                    {t('admin:pages.evas.edit.identification')}
                   </h1>
                   <FormField
                     name="years"
-                    label={t('admin.pages.evas.form.years')}
+                    label={t('admin:pages.evas.form.years')}
                     as={InputNumber}
                     min={0}
                   />
                   <FormField
                     name="months"
-                    label={t('admin.pages.evas.form.months')}
+                    label={t('admin:pages.evas.form.months')}
                     as={InputNumber}
                     min={0}
                     max={11}
@@ -351,46 +342,46 @@ export default function EditEva() {
                 <div className="md:col-span-1">
                   <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
                     <h1 className="text-xl font-bold mb-4">
-                      {t('admin.pages.evas.edit.treeCondition')}
+                      {t('admin:pages.evas.edit.treeCondition')}
                     </h1>
 
                     {/* Subsección: Dimensiones */}
                     <h2 className="text-lg font-semibold mb-2">
-                      {t('admin.pages.evas.edit.dimensions')}
+                      {t('admin:pages.evas.edit.dimensions')}
                     </h2>
                     <FormField
                       name="height"
-                      label={`${t('admin.pages.evas.form.height')} (m)`}
+                      label={`${t('admin:pages.evas.form.height')} (m)`}
                       as={InputNumber}
                     />
                     <FormField
                       name="diameter"
-                      label={`${t('admin.pages.evas.form.diameter')} (cm)`}
+                      label={`${t('admin:pages.evas.form.diameter')} (cm)`}
                       as={InputNumber}
                     />
                     <FormField
                       name="crown_width"
-                      label={`${t('admin.pages.evas.form.crown_width')} (m)`}
+                      label={`${t('admin:pages.evas.form.crown_width')} (m)`}
                       as={InputNumber}
                     />
                     <FormField
                       name="crown_projection_area"
-                      label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
+                      label={`${t('admin:pages.evas.form.crown_projection_area')} (m²)`}
                       as={InputNumber}
                     />
                     <FormField
                       name="root_surface_diameter"
-                      label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
+                      label={`${t('admin:pages.evas.form.root_surface_diameter')} (m)`}
                       as={InputNumber}
                     />
                     <FormField
                       name="effective_root_area"
-                      label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
+                      label={`${t('admin:pages.evas.form.effective_root_area')} (m²)`}
                       as={InputNumber}
                     />
                     <FormField
                       name="height_estimation"
-                      label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
+                      label={`${t('admin:pages.evas.form.height_estimation')} (m)`}
                       as={InputNumber}
                     />
                   </div>
@@ -398,92 +389,92 @@ export default function EditEva() {
                 <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50 mb-6">
                   {/* Subsección: Estado */}
                   <h2 className="text-lg font-semibold mb-2">
-                    {t('admin.pages.evas.edit.state')}
+                    {t('admin:pages.evas.edit.state')}
                   </h2>
 
                   {/* Subsubsección: Copa y Ramas */}
                   <h3 className="text-md font-medium mb-2">
-                    {t('admin.pages.evas.edit.crownBranches')}
+                    {t('admin:pages.evas.edit.crownBranches')}
                   </h3>
                   <FormField
                     name="unbalanced_crown"
-                    label={t('admin.pages.evas.form.unbalanced_crown')}
+                    label={t('admin:pages.evas.form.unbalanced_crown')}
                     as={Dropdown}
                     options={dictionaries.unbalancedCrown}
                   />
                   <FormField
                     name="overextended_branches"
-                    label={t('admin.pages.evas.form.overextended_branches')}
+                    label={t('admin:pages.evas.form.overextended_branches')}
                     as={Dropdown}
                     options={dictionaries.overextendedBranches}
                   />
                   <FormField
                     name="cracks"
-                    label={t('admin.pages.evas.form.cracks')}
+                    label={t('admin:pages.evas.form.cracks')}
                     as={Dropdown}
                     options={dictionaries.cracks}
                   />
                   <FormField
                     name="dead_branches"
-                    label={t('admin.pages.evas.form.dead_branches')}
+                    label={t('admin:pages.evas.form.dead_branches')}
                     as={Dropdown}
                     options={dictionaries.deadBranches}
                   />
 
                   {/* Subsubsección: Tronco */}
                   <h3 className="text-md font-medium mt-4 mb-2">
-                    {t('admin.pages.evas.edit.trunk')}
+                    {t('admin:pages.evas.edit.trunk')}
                   </h3>
                   <FormField
                     name="inclination"
-                    label={t('admin.pages.evas.form.inclination')}
+                    label={t('admin:pages.evas.form.inclination')}
                     as={Dropdown}
                     options={dictionaries.inclination}
                   />
                   <FormField
                     name="V_forks"
-                    label={t('admin.pages.evas.form.V_forks')}
+                    label={t('admin:pages.evas.form.V_forks')}
                     as={Dropdown}
                     options={dictionaries.VForks}
                   />
                   <FormField
                     name="cavities"
-                    label={t('admin.pages.evas.form.cavities')}
+                    label={t('admin:pages.evas.form.cavities')}
                     as={Dropdown}
                     options={dictionaries.cavities}
                   />
                   <FormField
                     name="bark_damage"
-                    label={t('admin.pages.evas.form.bark_damage')}
+                    label={t('admin:pages.evas.form.bark_damage')}
                     as={Dropdown}
                     options={dictionaries.barkDamage}
                   />
 
                   {/* Subsubsección: Raíces */}
                   <h3 className="text-md font-medium mt-4 mb-2">
-                    {t('admin.pages.evas.edit.roots')}
+                    {t('admin:pages.evas.edit.roots')}
                   </h3>
                   <FormField
                     name="soil_lifting"
-                    label={t('admin.pages.evas.form.soil_lifting')}
+                    label={t('admin:pages.evas.form.soil_lifting')}
                     as={Dropdown}
                     options={dictionaries.soilLifting}
                   />
                   <FormField
                     name="cut_damaged_roots"
-                    label={t('admin.pages.evas.form.cut_damaged_roots')}
+                    label={t('admin:pages.evas.form.cut_damaged_roots')}
                     as={Dropdown}
                     options={dictionaries.cutRoots}
                   />
                   <FormField
                     name="basal_rot"
-                    label={t('admin.pages.evas.form.basal_rot')}
+                    label={t('admin:pages.evas.form.basal_rot')}
                     as={Dropdown}
                     options={dictionaries.basalRot}
                   />
                   <FormField
                     name="exposed_surface_roots"
-                    label={t('admin.pages.evas.form.exposed_surface_roots')}
+                    label={t('admin:pages.evas.form.exposed_surface_roots')}
                     as={Dropdown}
                     options={dictionaries.exposedRoots}
                   />
@@ -492,18 +483,18 @@ export default function EditEva() {
                   {/* Sección: Condición del entorno */}
                   <div className="md:col-span-2">
                     <h1 className="text-xl font-bold mb-4">
-                      {t('admin.pages.evas.edit.environmentCondition')}
+                      {t('admin:pages.evas.edit.environmentCondition')}
                     </h1>
 
                     {/* Subsección: Factores Ambientales */}
                     <h2 className="text-lg font-semibold mb-2">
-                      {t('admin.pages.evas.edit.environmentalFactors')}
+                      {t('admin:pages.evas.edit.environmentalFactors')}
                     </h2>
 
                     {/* Subsubsección: Exposición al viento */}
                     <FormField
                       name="wind"
-                      label={t('admin.pages.evas.edit.windExposure')}
+                      label={t('admin:pages.evas.edit.windExposure')}
                       as={Dropdown}
                       options={dictionaries.wind}
                     />
@@ -511,7 +502,7 @@ export default function EditEva() {
                     {/* Subsubsección: Exposición a la sequía */}
                     <FormField
                       name="drought"
-                      label={t('admin.pages.evas.edit.droughtExposure')}
+                      label={t('admin:pages.evas.edit.droughtExposure')}
                       as={Dropdown}
                       options={dictionaries.drought}
                     />
@@ -527,8 +518,8 @@ export default function EditEva() {
                     }
                     label={
                       isSubmitting
-                        ? t('admin.pages.evas.form.saving')
-                        : t('admin.pages.evas.form.save')
+                        ? t('admin:pages.evas.form.saving')
+                        : t('admin:pages.evas.form.save')
                     }
                   />
                 </div>

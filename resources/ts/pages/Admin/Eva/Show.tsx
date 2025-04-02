@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axiosClient from '@/api/axiosClient';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
-import { useTranslation } from 'react-i18next';
+import Preloader from '@/components/Preloader';
+import useI18n from '@/hooks/useI18n';
+import api from '@/services/api';
 import { Icon } from '@iconify/react';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Eva {
   element_id: number;
@@ -36,68 +37,61 @@ interface Eva {
 export default function ShowEva() {
   const { id } = useParams<{ id: string }>();
   const [eva, setEva] = useState<Eva | null>(null);
-  const { t } = useTranslation();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEva = async () => {
-      try {
-        const response = await axiosClient.get(`/admin/evas/${id}`);
-        setEva(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchEva();
+    (async () =>
+      await api
+        .get(`/admin/evas/${id}`)
+        .then(({ data }) => setEva(data))
+        .finally(() => setIsLoading(false)))();
   }, [id]);
 
   const getStatusMessage = (status: number) => {
     const percentage = (status / 36) * 100;
     if (percentage == 0 && percentage <= 24) {
-      return { message: t('admin.pages.evas.status.low'), color: '#6AA84F' };
+      return { message: t('admin:pages.evas.status.low'), color: '#6AA84F' };
     }
     if (percentage >= 25 && percentage <= 49) {
       return {
-        message: t('admin.pages.evas.status.moderate'),
+        message: t('admin:pages.evas.status.moderate'),
         color: '#00FF00',
       };
     }
     if (percentage >= 50 && percentage <= 74) {
-      return { message: t('admin.pages.evas.status.high'), color: '#FFFF00' };
+      return { message: t('admin:pages.evas.status.high'), color: '#FFFF00' };
     }
     if (percentage >= 75 && percentage <= 100) {
       return {
-        message: t('admin.pages.evas.status.critical'),
+        message: t('admin:pages.evas.status.critical'),
         color: '#FF0000',
       };
     }
-    return { message: t('admin.pages.evas.status.pending'), color: 'gray' };
+    return { message: t('admin:pages.evas.status.pending'), color: 'gray' };
   };
 
   const calculateStabilityIndex = (height: number, diameter: number) => {
     const index = (height / diameter) * 100;
     if (index < 50) {
       return {
-        message: t('admin.pages.evas.stability.stable'),
+        message: t('admin:pages.evas.stability.stable'),
         color: '#6AA84F',
       };
     } else if (index >= 50 && index <= 80) {
       return {
-        message: t('admin.pages.evas.stability.moderate'),
+        message: t('admin:pages.evas.stability.moderate'),
         color: '#00FF00',
       };
     } else if (index > 80) {
       return {
-        message: t('admin.pages.evas.stability.highRisk'),
+        message: t('admin:pages.evas.stability.highRisk'),
         color: '#FF0000',
       };
     } else {
       return {
-        message: t('admin.pages.evas.stability.pending'),
+        message: t('admin:pages.evas.stability.pending'),
         color: 'gray',
       };
     }
@@ -110,22 +104,22 @@ export default function ShowEva() {
     const ratio = heightEstimation / height;
     if (ratio < 0.3) {
       return {
-        message: t('admin.pages.evas.gravityHeight.veryStable'),
+        message: t('admin:pages.evas.gravityHeight.veryStable'),
         color: '#6AA84F',
       };
     } else if (ratio >= 0.3 && ratio <= 0.5) {
       return {
-        message: t('admin.pages.evas.gravityHeight.moderateRisk'),
+        message: t('admin:pages.evas.gravityHeight.moderateRisk'),
         color: '#00FF00',
       };
     } else if (ratio > 0.5) {
       return {
-        message: t('admin.pages.evas.gravityHeight.highRisk'),
+        message: t('admin:pages.evas.gravityHeight.highRisk'),
         color: '#FF0000',
       };
     } else {
       return {
-        message: t('admin.pages.evas.gravityHeight.pending'),
+        message: t('admin:pages.evas.gravityHeight.pending'),
         color: 'gray',
       };
     }
@@ -138,27 +132,27 @@ export default function ShowEva() {
     const ratio = effective_root_area / crown_projection_area;
     if (ratio > 2) {
       return {
-        message: t('admin.pages.evas.rootCrown.veryStable'),
+        message: t('admin:pages.evas.rootCrown.veryStable'),
         color: '#6AA84F',
       };
     } else if (ratio > 1.5 && ratio <= 2) {
       return {
-        message: t('admin.pages.evas.rootCrown.stable'),
+        message: t('admin:pages.evas.rootCrown.stable'),
         color: '#00FF00',
       };
     } else if (ratio > 1 && ratio <= 1.5) {
       return {
-        message: t('admin.pages.evas.rootCrown.moderateStability'),
+        message: t('admin:pages.evas.rootCrown.moderateStability'),
         color: '#FFFF00',
       };
     } else if (ratio <= 1) {
       return {
-        message: t('admin.pages.evas.rootCrown.highRisk'),
+        message: t('admin:pages.evas.rootCrown.highRisk'),
         color: '#FF0000',
       };
     } else {
       return {
-        message: t('admin.pages.evas.rootCrown.pending'),
+        message: t('admin:pages.evas.rootCrown.pending'),
         color: 'gray',
       };
     }
@@ -172,22 +166,22 @@ export default function ShowEva() {
     const index = (height * wind) / rootSurfaceDiameter;
     if (index < 0.5) {
       return {
-        message: t('admin.pages.evas.windStability.veryStable'),
+        message: t('admin:pages.evas.windStability.veryStable'),
         color: '#6AA84F',
       };
     } else if (index >= 0.5 && index <= 1) {
       return {
-        message: t('admin.pages.evas.windStability.moderateStability'),
+        message: t('admin:pages.evas.windStability.moderateStability'),
         color: '#FFFF00',
       };
     } else if (index > 1) {
       return {
-        message: t('admin.pages.evas.windStability.highRisk'),
+        message: t('admin:pages.evas.windStability.highRisk'),
         color: '#FF0000',
       };
     } else {
       return {
-        message: t('admin.pages.evas.windStability.pending'),
+        message: t('admin:pages.evas.windStability.pending'),
         color: 'gray',
       };
     }
@@ -197,43 +191,33 @@ export default function ShowEva() {
     switch (value) {
       case 0:
         return {
-          message: t('admin.pages.evas.severity.low'),
+          message: t('admin:pages.evas.severity.low'),
           color: '#6AA84F',
         };
       case 1:
         return {
-          message: t('admin.pages.evas.severity.moderate'),
+          message: t('admin:pages.evas.severity.moderate'),
           color: '#00FF00',
         };
       case 2:
         return {
-          message: t('admin.pages.evas.severity.high'),
+          message: t('admin:pages.evas.severity.high'),
           color: '#FFFF00',
         };
       case 3:
         return {
-          message: t('admin.pages.evas.severity.extreme'),
+          message: t('admin:pages.evas.severity.extreme'),
           color: '#FF0000',
         };
       default:
         return {
-          message: t('admin.pages.evas.severity.pending'),
+          message: t('admin:pages.evas.severity.pending'),
           color: 'gray',
         };
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  if (isLoading) return <Preloader />;
 
   if (!eva) {
     return <p>{t('not_found')}</p>;
@@ -266,7 +250,7 @@ export default function ShowEva() {
               <Icon icon="tabler:arrow-left" className="h-6 w-6" />
             </Button>
             <h2 className="text-white text-3xl font-bold">
-              {t('admin.pages.evas.show.title')}
+              {t('admin:pages.evas.show.title')}
             </h2>
           </div>
           <Button
@@ -280,10 +264,10 @@ export default function ShowEva() {
           <div className="bg-gray-200 rounded-lg border-2 border-gray-300">
             <div className="p-4">
               <h1 className="text-xl font-bold mb-4 underline">
-                {t('admin.pages.evas.indexCalculation')}
+                {t('admin:pages.evas.indexCalculation')}
               </h1>
               <p className="mb-4">
-                <strong>{t('admin.pages.evas.treeStatusFactor')}:</strong>{' '}
+                <strong>{t('admin:pages.evas.treeStatusFactor')}:</strong>{' '}
                 <span
                   style={{
                     backgroundColor: color,
@@ -295,7 +279,7 @@ export default function ShowEva() {
                 </span>{' '}
               </p>
               <p className="mb-4">
-                <strong>{t('admin.pages.evas.stabilityIndex')}:</strong>{' '}
+                <strong>{t('admin:pages.evas.stabilityIndex')}:</strong>{' '}
                 <span
                   style={{
                     backgroundColor: stabilityIndex.color,
@@ -307,7 +291,7 @@ export default function ShowEva() {
                 </span>{' '}
               </p>
               <p className="mb-4">
-                <strong>{t('admin.pages.evas.gravityHeightRatio')}:</strong>{' '}
+                <strong>{t('admin:pages.evas.gravityHeightRatio')}:</strong>{' '}
                 <span
                   style={{
                     backgroundColor: gravityHeightRatio.color,
@@ -319,7 +303,7 @@ export default function ShowEva() {
                 </span>{' '}
               </p>
               <p className="mb-4">
-                <strong>{t('admin.pages.evas.rootCrownRatio')}:</strong>{' '}
+                <strong>{t('admin:pages.evas.rootCrownRatio')}:</strong>{' '}
                 <span
                   style={{
                     backgroundColor: rootCrownRatio.color,
@@ -331,7 +315,7 @@ export default function ShowEva() {
                 </span>{' '}
               </p>
               <p className="mb-4">
-                <strong>{t('admin.pages.evas.windStabilityIndex')}:</strong>{' '}
+                <strong>{t('admin:pages.evas.windStabilityIndex')}:</strong>{' '}
                 <span
                   style={{
                     backgroundColor: windStabilityIndex.color,
@@ -347,10 +331,10 @@ export default function ShowEva() {
           <div className="bg-gray-200 rounded-lg mt-4 border-2 border-gray-300">
             <div className="p-4">
               <h1 className="text-xl font-bold mb-4 underline">
-                {t('admin.pages.evas.environmentalFactors')}
+                {t('admin:pages.evas.environmentalFactors')}
               </h1>
               <p className="mb-4">
-                <strong>{t('admin.pages.evas.windExposure')}:</strong>{' '}
+                <strong>{t('admin:pages.evas.windExposure')}:</strong>{' '}
                 <span
                   style={{
                     backgroundColor: getSeverityMessage(eva.wind).color,
@@ -362,7 +346,7 @@ export default function ShowEva() {
                 </span>{' '}
               </p>
               <p className="mb-4">
-                <strong>{t('admin.pages.evas.droughtExposure')}:</strong>{' '}
+                <strong>{t('admin:pages.evas.droughtExposure')}:</strong>{' '}
                 <span
                   style={{
                     backgroundColor: getSeverityMessage(eva.drought).color,

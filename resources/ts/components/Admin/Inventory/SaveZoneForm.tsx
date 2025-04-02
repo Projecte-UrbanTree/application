@@ -1,7 +1,7 @@
-import { savePoints, SavePointsProps } from '@/api/service/pointService';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
-import { saveZoneAsync } from '@/store/slice/zoneSlice';
-import { AppDispatch, RootState } from '@/store/store';
+import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
+import { saveZoneAsync } from '@/redux/slices/zoneSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { savePoints, SavePointsProps } from '@/services/service/pointService';
 import { Contract } from '@/types/Contract';
 import { TypePoint } from '@/types/Point';
 import { Zone } from '@/types/Zone';

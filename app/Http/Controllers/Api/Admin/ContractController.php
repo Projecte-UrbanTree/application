@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ContractController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->user()->cannot('viewAny', Contract::class)) {
+            abort(403);
+        }
+
         return response()->json(Contract::all());
     }
 
@@ -71,39 +76,25 @@ class ContractController extends Controller
         return response()->json(['message' => 'Contract deleted'], 200);
     }
 
-    public function selectContract(Request $request)
+    public function assignUser(Request $request, Contract $contract, User $user)
     {
-        $validated = $request->validate([
-            'contract_id' => [
-                'nullable',
-                'integer',
-                function ($attribute, $value, $fail) {
-                    if ($value !== 0 && ! Contract::find($value)) {
-                        $fail('The selected contract does not exist.');
-                    }
-                },
-            ],
-        ]);
+        if ($user->role !== 'worker') {
+            return response()->json(['error' => 'Only workers can be assigned'], 403);
+        }
 
-        $contractId = $validated['contract_id'] ?? 0;
-        $request->session()->put('selected_contract_id', $contractId);
+        $contract->workers()->syncWithoutDetaching([$user->id]);
 
-        $contract = $contractId > 0 ? Contract::find($contractId) : null;
-
-        return response()->json([
-            'message' => 'Contract selected successfully',
-            'contract' => $contract,
-        ]);
+        return response()->json(['message' => 'Worker assigned successfully']);
     }
 
-    public function getSelectedContract(Request $request)
+    public function unassignUser(Contract $contract, User $user)
     {
-        $contractId = $request->session()->get('selected_contract_id', null);
-        $contract = $contractId > 0 ? Contract::find($contractId) : null;
+        if (! $contract->workers()->where('user_id', $user->id)->exists()) {
+            return response()->json(['error' => 'Worker not assigned to this contract'], 404);
+        }
 
-        return response()->json([
-            'contract_id' => $contractId,
-            'contract' => $contract,
-        ]);
+        $contract->workers()->detach($user->id);
+
+        return response()->json(['message' => 'Worker removed successfully']);
     }
 }

@@ -20,8 +20,8 @@ RUN apt-get install -y libicu-dev \
 
 # gd
 RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
-docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
-docker-php-ext-install gd
+  docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+  docker-php-ext-install gd
 
 # redis
 RUN pecl install redis && docker-php-ext-enable redis
@@ -30,9 +30,9 @@ RUN pecl install redis && docker-php-ext-enable redis
 RUN pecl install pcov && docker-php-ext-enable pcov
 
 # Xdebug
-# RUN pecl install xdebug \
-# && docker-php-ext-enable xdebug \
-# && echo ";zend_extension=xdebug" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+  && echo ";zend_extension=xdebug" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Node.js, NPM, Yarn
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -

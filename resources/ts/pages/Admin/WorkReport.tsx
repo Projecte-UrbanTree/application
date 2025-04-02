@@ -1,94 +1,26 @@
-import { useState, useEffect, useRef } from 'react';
-import axiosClient from '@/api/axiosClient';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
+import api from '@/services/api';
+import type { Resource } from '@/types/Resource';
+import type { WorkOrder } from '@/types/WorkOrder';
+import type { WorkOrderBlock } from '@/types/WorkOrderBlock';
+import type { WorkReport } from '@/types/WorkReport';
+import type { WorkReportResource } from '@/types/WorkReportResource';
 import { Icon } from '@iconify/react';
-import { SplitButton } from 'primereact/splitbutton';
-import { Toast } from 'primereact/toast';
-import { Tag } from 'primereact/tag';
-import { Divider } from 'primereact/divider';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
-
-interface ResourceType {
-  id: number;
-  name: string;
-}
-interface Zone {
-  id: number;
-  name: string;
-  description: string;
-  color: string;
-}
-interface Users {
-  id: number;
-  name: string;
-  surname: string;
-}
-interface Resources {
-  id: number;
-  name: string;
-  description: string;
-  unit_name: string;
-  unit_cost: string;
-  work_report_resource: WorkReportResources[];
-  resource_type: ResourceType;
-}
-interface WorkReportResources {
-  quantity: number;
-  resource_id: number;
-}
-interface BlockTask {
-  id: number;
-  status: number;
-  spent_time: number;
-  element_type: {
-    id: number;
-    name: string;
-  };
-  tree_type: {
-    id: number;
-    family: string;
-    genus: string;
-    species: string;
-  } | null;
-  tasks_type: { id: number; name: string; description: string };
-}
-
-interface WorkOrderBlock {
-  id: number;
-  notes: string;
-  zones: Zone[];
-  block_tasks: BlockTask[];
-}
-
-interface WorkOrder {
-  id: number;
-  date: string;
-  status: number;
-  work_orders_blocks: WorkOrderBlock[];
-  users: Users[];
-}
-
-interface WorkReport {
-  id: number;
-  observation: string;
-  spent_fuel: number;
-  report_status: number;
-  report_incidents: string;
-  work_order_id: number;
-  work_orders: WorkOrder;
-  resources: Resources[];
-  work_report_resources: WorkReportResources[];
-}
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { SplitButton } from 'primereact/splitbutton';
+import { Tag } from 'primereact/tag';
+import { Toast } from 'primereact/toast';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const WorkReportDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [workReport, setWorkReport] = useState<WorkReport | null>(null);
+  const [workReport, setWorkReport] = useState<WorkReport>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
@@ -100,14 +32,14 @@ const WorkReportDetail = () => {
 
   const handleCloseWithObservations = async () => {
     try {
-      await axiosClient.put(`/admin/work-reports/${id}`, {
+      await api.put(`/admin/work-reports/${id}`, {
         report_status: 3,
         observation: observationNotes,
       });
       toast.current?.show({
         severity: 'warn',
         summary: t('general.messages.close_with_incidents'),
-        detail: t('admin.pages.workReport.messages.closing_with_incidents'),
+        detail: t('admin:pages.workReport.messages.closing_with_incidents'),
       });
       setShowObservationDialog(false);
       navigate('/admin/work-orders');
@@ -117,30 +49,30 @@ const WorkReportDetail = () => {
         severity: 'error',
         summary: t('general.messages.error'),
         detail: t(
-          'admin.pages.workReport.messages.error_updating_observations',
+          'admin:pages.workReport.messages.error_updating_observations',
         ),
       });
     }
   };
   const calculateWorkOrderStatus = (workOrder: WorkOrder) => {
-    const allTasksPending = workOrder.work_orders_blocks.every((block) =>
-      block.block_tasks.every((task) => task.status === 0),
+    const allTasksPending = workOrder.work_order_blocks.every((block) =>
+      block.work_order_block_tasks.every((task) => task.status === 0),
     );
 
     if (allTasksPending) {
       return 0;
     }
 
-    const hasInProgressTask = workOrder.work_orders_blocks.some((block) =>
-      block.block_tasks.some((task) => task.status === 1),
+    const hasInProgressTask = workOrder.work_order_blocks.some((block) =>
+      block.work_order_block_tasks.some((task) => task.status === 1),
     );
 
     if (hasInProgressTask) {
       return 1;
     }
 
-    const allTasksInProgress = workOrder.work_orders_blocks.every((block) =>
-      block.block_tasks.every((task) => task.status === 1),
+    const allTasksInProgress = workOrder.work_order_blocks.every((block) =>
+      block.work_order_block_tasks.every((task) => task.status === 1),
     );
 
     if (allTasksInProgress) {
@@ -167,7 +99,7 @@ const WorkReportDetail = () => {
 
   const handleStatusChange = async (status: number) => {
     try {
-      const response = await axiosClient.put(`/admin/work-reports/${id}`, {
+      const response = await api.put(`/admin/work-reports/${id}`, {
         report_status: status,
       });
 
@@ -175,16 +107,15 @@ const WorkReportDetail = () => {
 
       if (workReport) {
         try {
-          await axiosClient.put(
-            `/admin/work-orders/${workReport.work_order_id}/status`,
-            { status: calculateWorkOrderStatus(workReport.work_orders) },
-          );
+          await api.put(`/admin/work-orders/${workReport.id}/status`, {
+            status: calculateWorkOrderStatus(workReport.work_order),
+          });
         } catch (woError) {
           console.error('Work order update failed:', woError);
           toast.current?.show({
             severity: 'warn',
             summary: t('general.messages.warning'),
-            detail: t('admin.pages.workReport.messages.workOrderUpdateFailed'),
+            detail: t('admin:pages.workReport.messages.workOrderUpdateFailed'),
           });
         }
       }
@@ -196,17 +127,17 @@ const WorkReportDetail = () => {
       switch (status) {
         case 1:
           summary = t('general.messages.close_part');
-          detail = t('admin.pages.workReport.messages.closing_part');
+          detail = t('admin:pages.workReport.messages.closing_part');
           break;
         case 2:
           severity = 'error';
           summary = t('general.messages.reject');
-          detail = t('admin.pages.workReport.messages.rejecting');
+          detail = t('admin:pages.workReport.messages.rejecting');
           break;
         case 3:
           severity = 'warn';
           summary = t('general.messages.close_with_incidents');
-          detail = t('admin.pages.workReport.messages.closing_with_incidents');
+          detail = t('admin:pages.workReport.messages.closing_with_incidents');
           break;
       }
 
@@ -224,7 +155,7 @@ const WorkReportDetail = () => {
         summary: t('general.messages.error'),
         detail:
           (err as any).response?.data?.message ||
-          t('admin.pages.workReport.messages.error_updating_status'),
+          t('admin:pages.workReport.messages.error_updating_status'),
       });
     }
   };
@@ -232,7 +163,7 @@ const WorkReportDetail = () => {
   useEffect(() => {
     const fetchWorkReport = async () => {
       try {
-        const response = await axiosClient.get(`/admin/work-reports/${id}`);
+        const response = await api.get(`/admin/work-reports/${id}`);
         setWorkReport(response.data);
         setLoading(false);
         if (response.data?.work_orders?.work_orders_blocks) {
@@ -243,7 +174,7 @@ const WorkReportDetail = () => {
           );
         }
       } catch (err) {
-        setError(t('admin.pages.error.fetching_data'));
+        setError(t('admin:pages.error.fetching_data'));
         setLoading(false);
         console.error('Error fetching work report:', err);
       }
@@ -295,35 +226,35 @@ const WorkReportDetail = () => {
       case 0:
         return (
           <Badge
-            value={t('admin.pages.workReport.reportStatus.pending')}
+            value={t('admin:pages.workReport.reportStatus.pending')}
             severity="warning"
           />
         );
       case 1:
         return (
           <Badge
-            value={t('admin.pages.workReport.reportStatus.completed')}
+            value={t('admin:pages.workReport.reportStatus.completed')}
             severity="success"
           />
         );
       case 2:
         return (
           <Badge
-            value={t('admin.pages.workReport.reportStatus.rejected')}
+            value={t('admin:pages.workReport.reportStatus.rejected')}
             severity="danger"
           />
         );
       case 3:
         return (
           <Badge
-            value={t('admin.pages.workReport.reportStatus.closedWithIncidents')}
+            value={t('admin:pages.workReport.reportStatus.closedWithIncidents')}
             severity="danger"
           />
         );
       default:
         return (
           <Badge
-            value={t('admin.pages.workReport.reportStatus.unknown')}
+            value={t('admin:pages.workReport.reportStatus.unknown')}
             severity="secondary"
           />
         );
@@ -336,7 +267,7 @@ const WorkReportDetail = () => {
         <div>
           <h4 className="font-medium flex items-center gap-2">
             <Icon icon="tabler:map-pin" />
-            {t('admin.pages.workReport.details.zones')}
+            {t('admin:pages.workReport.details.zones')}
           </h4>
           <ul className="list-disc pl-5 mt-2">
             {block.zones && block.zones.length > 0 ? (
@@ -347,7 +278,7 @@ const WorkReportDetail = () => {
               ))
             ) : (
               <li className="text-gray-500">
-                {t('admin.pages.workReport.details.noZones')}
+                {t('admin:pages.workReport.details.noZones')}
               </li>
             )}
           </ul>
@@ -358,17 +289,18 @@ const WorkReportDetail = () => {
             <div>
               <h4 className="font-medium flex items-center gap-2">
                 <Icon icon="tabler:clipboard-list" />
-                {t('admin.pages.workReport.details.tasks')}
+                {t('admin:pages.workReport.details.tasks')}
               </h4>
               <div className="space-y-2 mt-2">
-                {block.block_tasks && block.block_tasks.length > 0 ? (
-                  block.block_tasks.map((task) => {
+                {block.work_order_block_tasks &&
+                block.work_order_block_tasks.length > 0 ? (
+                  block.work_order_block_tasks.map((task) => {
                     const taskName =
-                      task.tasks_type?.name ||
-                      t('admin.pages.workReport.details.unknown');
+                      task.task_type?.name ||
+                      t('admin:pages.workReport.details.unknown');
                     const elementName =
                       task.element_type?.name ||
-                      t('admin.pages.workReport.details.unknown');
+                      t('admin:pages.workReport.details.unknown');
                     const speciesName = task.tree_type?.species
                       ? `: ${task.tree_type.species}`
                       : '';
@@ -384,7 +316,7 @@ const WorkReportDetail = () => {
                               {speciesName}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {t('admin.pages.workReport.details.hours')}:{' '}
+                              {t('admin:pages.workReport.details.hours')}:{' '}
                               {task.spent_time}h
                             </div>
                           </div>
@@ -401,7 +333,7 @@ const WorkReportDetail = () => {
                   })
                 ) : (
                   <div className="text-gray-500">
-                    {t('admin.pages.workReport.details.noTasks')}
+                    {t('admin:pages.workReport.details.noTasks')}
                   </div>
                 )}
               </div>
@@ -412,10 +344,10 @@ const WorkReportDetail = () => {
         <div className="md:col-span-3">
           <h4 className="font-medium flex items-center gap-2">
             <Icon icon="tabler:note" />
-            {t('admin.pages.workReport.details.notes')}
+            {t('admin:pages.workReport.details.notes')}
           </h4>
           <p className="bg-blue-50 p-3 rounded">
-            {block.notes || t('admin.pages.workReport.details.noNotes')}
+            {block.notes || t('admin:pages.workReport.details.noNotes')}
           </p>
         </div>
       </div>
@@ -423,14 +355,14 @@ const WorkReportDetail = () => {
   };
 
   const renderResources = (
-    resources: WorkReportResources[],
-    allResources: Resources[],
+    resources: WorkReportResource[],
+    allResources: Resource[],
   ) => {
     return (
       <div className="mb-6 mt-6">
         <h3 className="font-medium text-gray-700 flex items-center gap-2 mb-3">
           <Icon icon="tabler:package" />
-          {t('admin.pages.workReport.details.resources')}
+          {t('admin:pages.workReport.details.resources')}
         </h3>
         <ul className="list-disc pl-5">
           {resources.map((pivot) => {
@@ -447,7 +379,7 @@ const WorkReportDetail = () => {
                   }}>
                   <span className="text-sm">
                     {resource?.name ||
-                      t('admin.pages.workReport.details.unknown')}
+                      t('admin:pages.workReport.details.unknown')}
                     : {pivot.quantity} {resource?.unit_name || ''}
                   </span>
                 </Tag>
@@ -477,11 +409,11 @@ const WorkReportDetail = () => {
               className="h-16 w-16 text-red-500 mx-auto mb-4"
             />
             <h2 className="text-2xl font-bold mb-4">
-              {t('admin.pages.error.error')}
+              {t('admin:pages.error.error')}
             </h2>
             <p className="mb-6">{error}</p>
             <Button
-              label={t('admin.pages.general.returnButton')}
+              label={t('admin:pages.general.returnButton')}
               icon="pi pi-arrow-left"
               onClick={() => navigate('/admin/work-reports')}
               className="p-button-outlined"
@@ -502,10 +434,10 @@ const WorkReportDetail = () => {
               className="h-16 w-16 text-yellow-500 mx-auto mb-4"
             />
             <h2 className="text-2xl font-bold mb-4">
-              {t('admin.pages.workReport.not_found')}
+              {t('admin:pages.workReport.not_found')}
             </h2>
             <Button
-              label={t('admin.pages.general.returnButton')}
+              label={t('admin:pages.general.returnButton')}
               icon="pi pi-arrow-left"
               onClick={() => navigate('/admin/work-reports')}
               className="p-button-outlined"
@@ -530,11 +462,11 @@ const WorkReportDetail = () => {
               </Button>
               <div>
                 <h2 className="text-white text-xl sm:text-2xl font-bold">
-                  {t('admin.pages.workReport.title')}
+                  {t('admin:pages.workReport.title')}
                 </h2>
                 <div className="flex items-center gap-2">
                   <p className="text-blue-100 m-0 text-xs sm:text-sm">
-                    {formatDate(workReport.work_orders.date)}
+                    {formatDate(workReport.work_order.date)}
                   </p>
                   {getReportStatusBadge(workReport.report_status)}
                 </div>
@@ -546,10 +478,10 @@ const WorkReportDetail = () => {
             <div className="mb-6">
               <h3 className="font-medium text-gray-700 flex items-center gap-2 mb-3">
                 <Icon icon="tabler:users" />
-                {t('admin.pages.workReport.columns.users')}
+                {t('admin:pages.workReport.columns.users')}
               </h3>
               <ul className="list-disc pl-5">
-                {workReport.work_orders.users.map((user) => (
+                {workReport.work_order.users.map((user) => (
                   <li key={user.id} className="my-2">
                     <Tag
                       style={{
@@ -569,20 +501,18 @@ const WorkReportDetail = () => {
             </div>
 
             <Accordion multiple activeIndex={activeTabs}>
-              {workReport.work_orders.work_orders_blocks?.length ? (
-                workReport.work_orders.work_orders_blocks.map(
-                  (block, index) => (
-                    <AccordionTab
-                      key={block.id}
-                      header={`${t('admin.pages.workReport.details.block')} ${index + 1}`}>
-                      {renderBlockDetails(block)}
-                    </AccordionTab>
-                  ),
-                )
+              {workReport.work_order.work_order_blocks?.length ? (
+                workReport.work_order.work_order_blocks.map((block, index) => (
+                  <AccordionTab
+                    key={block.id}
+                    header={`${t('admin:pages.workReport.details.block')} ${index + 1}`}>
+                    {renderBlockDetails(block)}
+                  </AccordionTab>
+                ))
               ) : (
                 <AccordionTab
-                  header={t('admin.pages.workReport.details.noBlocks')}>
-                  <p>{t('admin.pages.workReport.details.noBlocksAvailable')}</p>
+                  header={t('admin:pages.workReport.details.noBlocks')}>
+                  <p>{t('admin:pages.workReport.details.noBlocksAvailable')}</p>
                 </AccordionTab>
               )}
             </Accordion>
@@ -595,18 +525,18 @@ const WorkReportDetail = () => {
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h4 className="font-medium flex items-center gap-2">
                   <Icon icon="tabler:alert-triangle" />
-                  {t('admin.pages.workReport.details.incidents')}
+                  {t('admin:pages.workReport.details.incidents')}
                 </h4>
                 <p className="mt-2">
                   {workReport.report_incidents ||
-                    t('admin.pages.workReport.details.noIncidents')}
+                    t('admin:pages.workReport.details.noIncidents')}
                 </p>
               </div>
               {workReport.observation && (
                 <div className="p-4 bg-yellow-200 rounded-lg">
                   <h4 className="font-medium flex items-center gap-2">
                     <Icon icon="tabler:eye" />
-                    {t('admin.pages.workReport.details.observation')}
+                    {t('admin:pages.workReport.details.observation')}
                   </h4>
                   <p className="mt-2">{workReport.observation}</p>
                 </div>
@@ -630,7 +560,7 @@ const WorkReportDetail = () => {
         </Card>
       </div>
       <Dialog
-        header={t('admin.pages.workReport.dialogs.observationHeader')}
+        header={t('admin:pages.workReport.dialogs.observationHeader')}
         visible={showObservationDialog}
         onHide={() => setShowObservationDialog(false)}
         footer={
@@ -650,14 +580,14 @@ const WorkReportDetail = () => {
           </div>
         }>
         <div>
-          <p>{t('admin.pages.workReport.dialogs.observationMessage')}</p>
+          <p>{t('admin:pages.workReport.dialogs.observationMessage')}</p>
           <textarea
             value={observationNotes}
             onChange={(e) => setObservationNotes(e.target.value)}
             className="w-full p-2 border rounded mt-2"
             rows={4}
             placeholder={t(
-              'admin.pages.workReport.dialogs.observationPlaceholder',
+              'admin:pages.workReport.dialogs.observationPlaceholder',
             )}
           />
         </div>
