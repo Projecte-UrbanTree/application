@@ -24,7 +24,7 @@ export default function LoaderProvider() {
                   isLoading ? 'opacity-100' : 'opacity-0'
                 }`}
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-      <Preloader bg_white={true} />
+      <Preloader bg_white={false} />
     </div>
   );
 }

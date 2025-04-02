@@ -66,7 +66,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   useEffect(() => {
     const loadIncidences = async () => {
       try {
-        dispatch(showLoader());
         const data = await fetchIncidence();
         if (Array.isArray(data)) {
           setIncidences(data.filter((i) => i.element_id === element.id));
@@ -75,8 +74,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         }
       } catch (error) {
         setIncidences([]);
-      } finally {
-        dispatch(hideLoader());
       }
     };
 

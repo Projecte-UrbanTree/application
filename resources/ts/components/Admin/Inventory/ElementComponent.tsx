@@ -1,11 +1,11 @@
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { ElementType } from '@/types/ElementType';
-import { TreeTypes } from '@/types/TreeTypes';
+import { TreeType } from '@/types/TreeType';
 import ReactDOM from 'react-dom/client';
 interface ElementPopupProps {
   element: Element;
-  treeTypes: TreeTypes[] | undefined;
+  treeTypes: TreeType[] | undefined;
   elementTypes: ElementType[] | undefined;
   onDeleteElement?: (elementId: number) => void;
   onAddIncident?: (elementId: number) => void;
@@ -65,7 +65,7 @@ const ElementPopup: React.FC<ElementPopupProps> = ({
 
 export const renderElementPopup = (
   element: Element,
-  treeTypes: TreeTypes[],
+  treeTypes: TreeType[],
   elementTypes: ElementType[],
   onDelete?: (elementId: number) => void,
   onAddIncident?: (elementId: number) => void,

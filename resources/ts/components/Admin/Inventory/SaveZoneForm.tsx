@@ -1,3 +1,4 @@
+import useAuth from '@/hooks/useAuth';
 import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
 import { saveZoneAsync } from '@/redux/slices/zoneSlice';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -40,9 +41,7 @@ export const SaveZoneForm = ({
   coordinates,
   onClose: onCloseProp,
 }: SaveZoneProps) => {
-  const currentContract: Contract | null = useSelector(
-    (state: RootState) => state.contract.currentContract,
-  );
+  const { selectedContractId: currentContract } = useAuth();
   const isLoading = useSelector((state: RootState) => state.loader.isLoading);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -57,7 +56,7 @@ export const SaveZoneForm = ({
       name: '',
       description: '',
       color: '#FF5733',
-      contractId: currentContract?.id || 0,
+      contractId: currentContract || 0,
       coordinates: coordinates,
     },
   });
@@ -65,8 +64,8 @@ export const SaveZoneForm = ({
   const toast = useRef<Toast>(null);
   useEffect(() => {
     setValue('coordinates', coordinates);
-    if (currentContract?.id) {
-      setValue('contractId', currentContract.id);
+    if (currentContract) {
+      setValue('contractId', currentContract);
     }
   }, [coordinates, currentContract, setValue]);
 
@@ -75,7 +74,7 @@ export const SaveZoneForm = ({
 
     try {
       const createdZone = await dispatch(
-        saveZoneAsync({ data, contractId: currentContract?.id || 0 }),
+        saveZoneAsync({ data, contractId: currentContract || 0 }),
       ).unwrap();
 
       if (!createdZone?.id) {
