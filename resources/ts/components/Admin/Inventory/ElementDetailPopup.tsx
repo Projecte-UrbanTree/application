@@ -138,7 +138,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         (inc) => inc.id !== incidentId,
       );
       setIncidences(updatedIncidences);
-      onDeleteElement(element.id!);
       onClose();
     } catch (error) {
       console.error('Error al eliminar la incidencia:', error);

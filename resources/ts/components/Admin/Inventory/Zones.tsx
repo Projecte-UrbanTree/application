@@ -39,18 +39,19 @@ export interface ZoneEvent {
 }
 
 export const eventSubject = new Subject<ZoneEvent>();
-export const Zones = ({ 
-  onSelectedZone, 
-  onAddElementZone, 
-  stopCreatingElement, 
+export const Zones = ({
+  onSelectedZone,
+  onAddElementZone,
+  stopCreatingElement,
   isCreatingElement,
   isDrawingMode,
   onSaveZone,
-  enabledButton 
+  enabledButton,
 }: ZoneProps) => {
   const [selectedZoneToAdd, setSelectedZoneToAdd] = useState<Zone | null>(null);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const addElementZone = ({ isCreatingElement, zone }: AddElementProps) => {
     eventSubject.next({ isCreatingElement, zone });
@@ -191,9 +192,27 @@ export const Zones = ({
     );
   };
 
+  const filteredZones = uniqueZones.filter((zone) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return (
+      zone.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
+      zone.description?.toLowerCase().includes(lowerCaseSearchTerm)
+    );
+  });
+
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
-      {(zonesLoading || pointsLoading || elementsLoading) ? (
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Buscar zonas por nombre o descripción"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="p-inputtext p-component w-full"
+        />
+      </div>
+
+      {zonesLoading || pointsLoading || elementsLoading ? (
         <div className="flex flex-col items-center justify-center h-full">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
           <p className="mt-4 text-gray-600">Cargando zonas...</p>
@@ -201,32 +220,34 @@ export const Zones = ({
       ) : (
         <>
           {isCreatingElement ? (
-            <div>
-              <div>
-                <Button
-                  label="Salir del modo creacion de elementos"
-                  onClick={() => {
-                    addElementZone({ isCreatingElement: false, zone: undefined });
-                    stopCreatingElement(false);
-                  }}
-                  className="p-button-text p-2 mt-8"
-                />
-              </div>
+            <div className="mb-4">
+              <Button
+                label="Salir del modo creacion de elementos"
+                onClick={() => {
+                  addElementZone({
+                    isCreatingElement: false,
+                    zone: undefined,
+                  });
+                  stopCreatingElement(false);
+                }}
+                className="p-button-text p-2"
+              />
             </div>
           ) : null}
           {isDrawingMode && (
-            <div>
+            <div className="mb-4">
               <Button
                 label="Guardar Zona"
                 onClick={onSaveZone}
-                className="p-button-text p-2 mt-8"
+                className="p-button-text p-2"
                 disabled={!enabledButton}
               />
             </div>
           )}
-          {uniqueZones.length > 0 ? (
+
+          {filteredZones.length > 0 ? (
             <Accordion multiple activeIndex={null} className="w-full">
-              {uniqueZones.map((zone: Zone) => (
+              {filteredZones.map((zone: Zone) => (
                 <AccordionTab
                   key={zone.id}
                   header={
@@ -296,7 +317,8 @@ export const Zones = ({
 
                     {elementTypes.every((elementType: ElementType) => {
                       const count =
-                        countElementsByTypeInZone(zone.id!)[elementType.id!] || 0;
+                        countElementsByTypeInZone(zone.id!)[elementType.id!] ||
+                        0;
                       return count === 0;
                     }) && (
                       <p className="text-gray-500 mt-2">
@@ -309,8 +331,12 @@ export const Zones = ({
             </Accordion>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-gray-500 text-lg">
-              <Icon icon="mdi:alert-circle-outline" width="32" className="mb-2" />
-              <p>No hay zonas en este contrato</p>
+              <Icon
+                icon="mdi:alert-circle-outline"
+                width="32"
+                className="mb-2"
+              />
+              <p>No hay zonas que coincidan con la búsqueda</p>
             </div>
           )}
         </>

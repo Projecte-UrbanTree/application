@@ -70,11 +70,11 @@ const IncidentForm: React.FC<IncidentFormProps> = ({ elementId, onClose }) => {
           placeholder="Descripción de la incidencia"
         />
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-4">
         <Button
           label="Guardar"
           onClick={handleSubmit}
-          className="p-button-success mr-2"
+          className="p-button-success"
         />
         <Button
           label="Cancelar"
