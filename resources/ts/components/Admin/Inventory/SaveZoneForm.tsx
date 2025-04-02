@@ -17,14 +17,13 @@ import * as yup from 'yup';
 
 const schema = yup.object().shape({
   name: yup.string().required('El nombre es obligatorio'),
-  description: yup.string().required('La descripción es obligatoria'),
+  description: yup.string(),
   color: yup
     .string()
     .matches(
       /^#([0-9A-F]{6})$/i,
       'Debe ser un código de color válido en formato #RRGGBB',
-    )
-    .required('El color es obligatorio'),
+    ),
   contractId: yup.number().required('El ID del contrato es obligatorio'),
   coordinates: yup
     .array()

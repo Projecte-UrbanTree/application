@@ -29,8 +29,6 @@ export class MapService {
   }
 
   public addBasicControls() {
-    console.log('ENTRANDO EN BASIC CONTROLS');
-
     this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
     this.map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
@@ -135,6 +133,11 @@ export class MapService {
         if (this.map.getLayer(layer.id)) {
           this.map.removeLayer(layer.id);
         }
+      }
+    });
+
+    style.layers.forEach((layer) => {
+      if (layer.id.startsWith(prefix)) {
         if (this.map.getSource(layer.id)) {
           this.map.removeSource(layer.id);
         }
@@ -142,7 +145,7 @@ export class MapService {
     });
   }
 
-  public addZoneToMap(zoneId: string, coords: number[][]) {
+  public addZoneToMap(zoneId: string, coords: number[][], zoneColor: string = '#088') {
     if (this.map.getSource(zoneId)) {
       if (this.map.getLayer(zoneId)) {
         this.map.removeLayer(zoneId);
@@ -169,7 +172,7 @@ export class MapService {
       type: 'fill',
       source: zoneId,
       paint: {
-        'fill-color': '#088',
+        'fill-color': zoneColor,
         'fill-opacity': 0.5,
       },
     });
@@ -249,13 +252,25 @@ export class MapService {
     return { lat: point.latitude, lng: point.longitude };
   }
 
-  public flyTo(coord: [number, number], zoom = 18) {
+  public flyTo(coord: [number, number], zoom = 16) {
     this.map.flyTo({ center: coord, zoom, essential: true });
   }
 
   public resizeMap(): void {
     if (this.map) {
       this.map.resize();
+    }
+  }
+
+  public updateMarkerVisibility(elementId: number, visible: boolean) {
+    const markerObj = this.elementMarkers.find((m) => m.elementId === elementId);
+    if (markerObj) {
+      const markerElement = markerObj.marker.getElement();
+      if (visible) {
+        markerElement.style.display = '';
+      } else {
+        markerElement.style.display = 'none';
+      }
     }
   }
 }

@@ -91,7 +91,7 @@ class AccountTest extends TestCase
     {
         // Create an admin user and authenticate
         $user = User::factory()->admin()->create([
-            'password' => bcrypt('current-password')
+            'password' => bcrypt('current-password'),
         ]);
         Sanctum::actingAs($user);
 
@@ -119,7 +119,7 @@ class AccountTest extends TestCase
     {
         // Create an admin user and authenticate
         $user = User::factory()->admin()->create([
-            'password' => bcrypt('current-password')
+            'password' => bcrypt('current-password'),
         ]);
         Sanctum::actingAs($user);
 
@@ -147,7 +147,7 @@ class AccountTest extends TestCase
     {
         // Create an admin user and authenticate
         $user = User::factory()->admin()->create([
-            'password' => bcrypt('current-password')
+            'password' => bcrypt('current-password'),
         ]);
         Sanctum::actingAs($user);
 

@@ -18,9 +18,11 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
-import { WorkOrder } from '@/types/WorkOrder';
+import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
 import { fetchWorkOrders } from '@/api/service/workOrder';
 import { Zone } from '@/types/Zone';
+import { fetchWorkReports } from '@/api/service/workReportService';
+import WorkOrders from '@/pages/Admin/WorkOrders/WorkOrders';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -33,6 +35,7 @@ interface ElementDetailPopupProps {
     points: Point[],
   ) => { lat: number; lng: number };
   onDeleteElement: (elementId: number) => void;
+  initialTabIndex?: number;
 }
 
 const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
@@ -43,10 +46,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   onOpenIncidentForm,
   getCoordElement,
   onDeleteElement,
+  initialTabIndex = 0,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(initialTabIndex);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [workReports, setWorkReports] = useState<WorkReport[]>([]);
 
   const { points } = useSelector((state: RootState) => state.points);
   const { zones } = useSelector((state: RootState) => state.zone);
@@ -63,14 +68,14 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   ];
 
   useEffect(() => {
-    const loadWorkOrders = async () => {
+    const loadData = async () => {
       const data: WorkOrder[] = await fetchWorkOrders();
       const workOrdersFiltered = data.filter(
         (workOrder) => workOrder.contract_id === currentContract?.id,
       );
       setWorkOrders(workOrdersFiltered);
     };
-    loadWorkOrders();
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -89,7 +94,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         dispatch(hideLoader());
       }
     };
-    loadIncidences();
+    
+    if (element.id) {
+      loadIncidences();
+    }
   }, [element.id, dispatch]);
 
   const handleStatusChange = async (
@@ -131,15 +139,28 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
   const handleDeleteIncident = async (incidentId: number) => {
     try {
+      dispatch(showLoader());
       await deleteIncidence(incidentId);
+
       const updatedIncidences = incidences.filter(
         (inc) => inc.id !== incidentId,
       );
       setIncidences(updatedIncidences);
-      onDeleteElement(element.id!);
-      onClose();
+      
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Incidencia eliminada correctamente',
+      });
     } catch (error) {
       console.error('Error al eliminar la incidencia:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo eliminar la incidencia',
+      });
+    } finally {
+      dispatch(hideLoader());
     }
   };
 
@@ -211,6 +232,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         if (zoneMatches) {
           return block.block_tasks!.map((task) => ({
             workOrderId: workOrder.id,
+            workOrderStatus: workOrder.status,
             taskType: task.tasks_type,
             notes: block.notes,
           }));
@@ -226,6 +248,21 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     points,
     zones,
   );
+
+  function getBadgeClass(status: WorkOrderStatus): string {
+    switch (status) {
+      case WorkOrderStatus['Pendiente']:
+        return 'bg-yellow-500 text-white px-2 py-1 rounded';
+      case WorkOrderStatus['En progreso']:
+        return 'bg-blue-500 text-white px-2 py-1 rounded';
+      case WorkOrderStatus['Completado']:
+        return 'bg-green-500 text-white px-2 py-1 rounded';
+      case WorkOrderStatus['Cancelado']:
+        return 'bg-red-500 text-white px-2 py-1 rounded';
+      default:
+        return 'bg-gray-500 text-white px-2 py-1 rounded';
+    }
+  }
 
   return (
     <div className="bg-white rounded-lg w-[650px] max-w-full">
@@ -265,7 +302,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
             </div>
 
-            {/* columna derecha */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">Ubicación</h3>
               <p>
@@ -365,7 +401,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             {tasksForElement.length > 0 ? (
               tasksForElement.map((taskInfo, index) => (
                 <div key={index} className="border p-4 rounded-md">
-                  <h4 className="font-semibold">Notas: {taskInfo.notes}</h4>
+                  <h4 className="font-semibold">
+                    Notas: {taskInfo.notes ?? 'No hay notas'}
+                  </h4>
                   <p>
                     <strong>Tarea:</strong> {taskInfo.taskType?.name}
                   </p>
@@ -374,8 +412,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                     {taskInfo.taskType?.description}
                   </p>
                   <p>
-                    <strong>ID de Orden de Trabajo:</strong>{' '}
-                    {taskInfo.workOrderId}
+                    <strong>Orden de Trabajo:</strong> {taskInfo.workOrderId}
+                  </p>
+                  <p>
+                    <strong>Estado:</strong>{' '}
+                    <span className={getBadgeClass(taskInfo.workOrderStatus!)}>
+                      {WorkOrderStatus[taskInfo.workOrderStatus!]}
+                    </span>
                   </p>
                 </div>
               ))

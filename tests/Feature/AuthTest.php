@@ -38,7 +38,7 @@ class AuthTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'accessToken',
-                'userData'
+                'userData',
             ])
             ->assertJson([
                 'success' => true,
