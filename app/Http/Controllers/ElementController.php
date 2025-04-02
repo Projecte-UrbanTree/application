@@ -29,7 +29,7 @@ class ElementController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
             'element_type_id' => ['required', 'integer'],
             'tree_type_id' => ['required', 'integer'],
             'point_id' => ['required', 'integer'],

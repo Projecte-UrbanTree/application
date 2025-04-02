@@ -29,7 +29,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   elementTypes,
   treeTypes,
 }) => {
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState<string | null>(null);
   const [selectedElementType, setSelectedElementType] = useState<number | null>(
     null,
   );
@@ -108,14 +108,14 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       </div>
       <div className="mb-3">
         <label htmlFor="description" className="block text-sm font-medium mb-1">
-          Descripción:
+          Descripción: (opcional)
         </label>
         <InputTextarea
           id="description"
           rows={3}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Descripción del Elemento"
+          value={description || ""}
+          onChange={(e) => setDescription(e.target.value || null)}
+          placeholder="Descripción del Elemento (opcional)"
           className="w-full"
         />
       </div>
