@@ -909,6 +909,74 @@
           "rejecting": "Rejecting block...",
           "reject": "Block rejected"
         }
+      },
+      "inventory": {
+        "elementDetailPopup": {
+          "tabs": {
+            "information": "Information",
+            "incidences": "Incidences",
+            "history": "History",
+            "eva": "EVA"
+          },
+          "information": {
+            "title": "Tree Information",
+            "description": "Description",
+            "elementType": "Element Type",
+            "treeFamily": "Tree Family",
+            "treeGenus": "Genus",
+            "treeSpecies": "Species",
+            "creationDate": "Creation Date",
+            "location": {
+              "title": "Location",
+              "zone": "Zone",
+              "latitude": "Latitude",
+              "longitude": "Longitude"
+            },
+            "deleteElement": "Delete Element",
+            "elementDeleted": "Element deleted successfully",
+            "elementDeleteFailed": "Failed to delete the element"
+          },
+          "incidences": {
+            "title": "Incidence",
+            "name": "📛 Name",
+            "creationDate": "📅 Creation Date",
+            "status": "⚠️ Status",
+            "description": "📝 Description",
+            "addIncident": "Add Incident",
+            "deleteIncident": "Delete Incident",
+            "noIncidences": "No incidences registered for this element.",
+            "statusUpdated": "Status updated",
+            "statusUpdatedDetail": "The incidence status was updated successfully",
+            "statusUpdateFailed": "Failed to update the incidence status",
+            "statusOptions": {
+              "open": "Open",
+              "in_progress": "In Progress",
+              "closed": "Closed"
+            }
+          },
+          "eva": {
+            "loading": "Loading tree evaluation...",
+            "noData": "No evaluation data available for this tree.",
+            "evaluationIndices": "Evaluation Indices",
+            "treeStatus": "Tree Status",
+            "stabilityIndex": "Stability Index",
+            "gravityHeightRatio": "Gravity-Height Ratio",
+            "rootCrownRatio": "Root-Crown Ratio",
+            "windStabilityIndex": "Wind Stability Index",
+            "environmentalFactors": "Environmental Factors",
+            "windExposure": "Wind Exposure",
+            "droughtExposure": "Drought Exposure",
+            "technicalData": "Technical Data",
+            "height": "Height",
+            "diameter": "Diameter",
+            "crownWidth": "Crown Width",
+            "crownProjectionArea": "Crown Projection Area",
+            "effectiveRootArea": "Effective Root Area"
+          },
+          "history": {
+            "title": "Element History (under construction...)"
+          }
+        }
       }
     },
     "profileDropdown": {
