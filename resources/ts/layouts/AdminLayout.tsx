@@ -37,12 +37,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const dispatch = useDispatch();
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const activeContracts = contracts.filter(contract => contract.status === 0);
-  const todosOption: Contract = { id: 0, name: t('general.allContracts'), status: 1 };
-  
+  const activeContracts = contracts.filter((contract) => contract.status === 0);
+  const todosOption: Contract = {
+    id: 0,
+    name: t('general.allContracts'),
+    status: 1,
+  };
+
   const isInventoryPage = location.pathname.includes('/admin/inventory');
 
-  const dropdownOptions = isInventoryPage 
+  const dropdownOptions = isInventoryPage
     ? [...activeContracts]
     : [todosOption, ...activeContracts];
 
@@ -72,7 +76,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           dispatch(selectContract(selectedContract.id!));
           setContract(selectedContract);
         } catch (error: any) {
-          console.error('Error saving selected contract:', error.response?.data || error);
+          console.error(
+            'Error saving selected contract:',
+            error.response?.data || error,
+          );
         }
       }
     },
@@ -106,6 +113,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     '/admin/workers',
     '/admin/resources',
     '/admin/statistics',
+    '/admin/sensors',
     '/admin/work-reports',
   ].some((path) => location.pathname.startsWith(path));
 
@@ -160,6 +168,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       label: t('admin.submenu.manage.stats'),
       icon: 'tabler:chart-pie-4',
     },
+    {
+      to: '/admin/sensors',
+      label: t('admin.submenu.manage.sensors'),
+      icon: 'tabler:device-analytics',
+    },
   ];
   const settingsSubmenuItems = [
     {
@@ -211,12 +224,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      axiosClient.get<Contract[]>('/admin/contracts')
-        .then(response => {
+      axiosClient
+        .get<Contract[]>('/admin/contracts')
+        .then((response) => {
           dispatch(setContractState({ allContracts: response.data }));
         })
-        .catch(error => {
-          console.error("Error fetching contracts during polling:", error);
+        .catch((error) => {
+          console.error('Error fetching contracts during polling:', error);
         });
     }, 5000);
     return () => clearInterval(intervalId);
