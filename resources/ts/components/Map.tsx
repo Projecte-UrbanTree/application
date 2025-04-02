@@ -174,9 +174,17 @@ export const MapComponent: React.FC<MapProps> = ({
           setSelectedZoneForElement(null);
           service.disableSingleClick();
           toast.current?.show({
-            severity: 'info',
-            summary: 'Modo desactivado',
-            detail: 'Has salido del modo de creación de elementos',
+            severity: 'error',
+            summary: 'Aviso',
+            detail: 'No es pot crear un element fora de la zona o zona seleccionada',
+            life: 3000,
+            sticky: false,
+            style: { 
+              fontWeight: 'bold',
+              fontSize: '1.1em',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              border: '1px solid #f00'
+            }
           });
         }
       }
@@ -401,6 +409,7 @@ export const MapComponent: React.FC<MapProps> = ({
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Toast ref={toast} position="top-center" className="z-50" />
       <div
         ref={mapContainerRef}
         style={{
