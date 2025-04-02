@@ -3,7 +3,7 @@ import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
-import { Dropdown } from 'primereact/dropdown'; // <-- importa el Dropdown
+import { Dropdown } from 'primereact/dropdown';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import {
   deleteIncidence,
@@ -22,7 +22,8 @@ import { deleteElementAsync } from '@/store/slice/elementSlice';
 import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
 import { useTranslation } from 'react-i18next';
 import axiosClient from '@/api/axiosClient';
-import CreateEva from '@/pages/Admin/Eva/Create'; // Import the CreateEva component
+import CreateEva from '@/pages/Admin/Eva/Create';
+import EditEva from '@/pages/Admin/Eva/Edit';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -52,9 +53,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const [eva, setEva] = useState<Eva | null>(null);
   const [isLoadingEva, setIsLoadingEva] = useState(false);
   const [isEvaModalVisible, setIsEvaModalVisible] = useState(false);
+  const [isEditEvaModalVisible, setIsEditEvaModalVisible] = useState(false);
   const { t } = useTranslation();
 
-  // estado de opciones para el dropdown de estado
   const statusOptions = [
     { label: 'Abierto', value: IncidentStatus.open },
     { label: 'En progreso', value: IncidentStatus.in_progress },
@@ -96,7 +97,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   useEffect(() => {
     const loadEvaData = async () => {
       if (activeIndex === 3 && !eva) {
-        // 3 es el índice de la pestaña EVA
         try {
           setIsLoadingEva(true);
           const response = await axiosClient.get(`/admin/evas/${element.id}`);
@@ -186,13 +186,21 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     }
   };
 
-  const handleCreateEva = () => {
-    setIsEvaModalVisible(true);
-  };
+  // const handleCreateEva = () => {
+  //   setIsEvaModalVisible(true);
+  // };
 
-  const handleCloseEvaModal = () => {
-    setIsEvaModalVisible(false);
-  };
+  // const handleCloseEvaModal = () => {
+  //   setIsEvaModalVisible(false);
+  // };
+
+  // const handleEditEva = () => {
+  //   setIsEditEvaModalVisible(true);
+  // };
+
+  // const handleCloseEditEvaModal = () => {
+  //   setIsEditEvaModalVisible(false);
+  // };
 
   const getElementType = (elementTypeId: number) => {
     const type = elementTypes.find((t) => t.id === elementTypeId);
@@ -235,7 +243,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       return (
         <div className="text-center py-8">
           <p>No hay datos de evaluación disponibles para este árbol.</p>
-          <Button
+          {/* <Button
             label="Crear EVA"
             className="p-button-sm p-button-primary mt-4"
             onClick={handleCreateEva}
@@ -251,12 +259,11 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 <CreateEva preselectedElementId={element.id} />
               </div>
             </div>
-          )}
+          )} */}
         </div>
       );
     }
 
-    // Calcular todos los indicadores
     const { message, color } = getStatusMessage(eva.status);
     const stabilityIndex = calculateStabilityIndex(eva.height, eva.diameter);
     const gravityHeightRatio = calculateGravityHeightRatio(
@@ -380,6 +387,27 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Add Edit EVA Button
+        <div className="flex justify-end">
+          <Button
+            label="Editar EVA"
+            className="p-button-sm p-button-primary mt-4"
+            onClick={handleEditEva}
+          />
+          {isEditEvaModalVisible && (
+            <div className="modal">
+              <div className="modal-content">
+                <Button
+                  label="Cerrar"
+                  className="p-button-sm p-button-secondary mb-4"
+                  onClick={handleCloseEditEvaModal}
+                />
+                <EditEva />
+              </div>
+            </div>
+          )}
+        </div> */}
       </div>
     );
   };
@@ -424,7 +452,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
             </div>
 
-            {/* columna derecha */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">Ubicación</h3>
               <p>
@@ -438,12 +465,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 <strong>Longitud:</strong> {coords.lng || 'No disponible'}
               </p>
 
-              {/* boton para eliminar elemento */}
-              <Button
-                label="Eliminar Elemento"
-                className="p-button-danger p-button-sm"
-                onClick={() => handleDeleteElement(element.id!)}
-              />
+              <div className="flex gap-2">
+                <Button
+                  label="Eliminar Elemento"
+                  className="p-button-danger p-button-sm"
+                  onClick={() => handleDeleteElement(element.id!)}
+                />
+              </div>
             </div>
           </div>
         </TabPanel>
@@ -524,6 +552,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         <TabPanel header="Historial">
           <p className="text-sm">Historial del elemento (en construcción...)</p>
         </TabPanel>
+        {/* pestaña de EVA */}
         <TabPanel header="EVA">{renderEvaPanel()}</TabPanel>
       </TabView>
     </div>
