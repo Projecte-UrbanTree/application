@@ -1,3 +1,4 @@
+import { WorkOrderStatusInfoChip } from '@/components/Shared/WorkOrderStatusInfo';
 import { deleteElementAsync } from '@/redux/slices/elementSlice';
 import { hideLoader, showLoader } from '@/redux/slices/loaderSlice';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -10,7 +11,10 @@ import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import { Point } from '@/types/Point';
-import { TreeType } from '@/types/TreeType';
+import type { TreeType } from '@/types/TreeType';
+import { WorkOrder } from '@/types/WorkOrder';
+import type { WorkReport } from '@/types/WorkReport';
+import { Zone } from '@/types/Zone';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { TabPanel, TabView } from 'primereact/tabview';
@@ -30,6 +34,7 @@ interface ElementDetailPopupProps {
     points: Point[],
   ) => { lat: number; lng: number };
   onDeleteElement: (elementId: number) => void;
+  initialTabIndex?: number;
 }
 
 const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
@@ -40,22 +45,23 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   onOpenIncidentForm,
   getCoordElement,
   onDeleteElement,
+  initialTabIndex = 0,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(initialTabIndex);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
-  const [incidentModalVisible, setIncidentModalVisible] = useState(false);
-
-  // estado de opciones para el dropdown de estado
-  const statusOptions = [
-    { label: 'Abierto', value: IncidentStatus.open },
-    { label: 'En progreso', value: IncidentStatus.in_progress },
-    { label: 'Cerrado', value: IncidentStatus.closed },
-  ];
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [workReports, setWorkReports] = useState<WorkReport[]>([]);
 
   const { points } = useSelector((state: RootState) => state.point);
   const { zones } = useSelector((state: RootState) => state.zone);
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
+
+  const statusOptions = [
+    { label: 'Abierto', value: IncidentStatus.open },
+    { label: 'En progreso', value: IncidentStatus.in_progress },
+    { label: 'Cerrado', value: IncidentStatus.closed },
+  ];
 
   useEffect(() => {
     const loadIncidences = async () => {
@@ -73,7 +79,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         dispatch(hideLoader());
       }
     };
-    loadIncidences();
+
+    if (element.id) {
+      loadIncidences();
+    }
   }, [element.id, dispatch]);
 
   const handleStatusChange = async (
@@ -115,15 +124,28 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
   const handleDeleteIncident = async (incidentId: number) => {
     try {
+      dispatch(showLoader());
       await deleteIncidence(incidentId);
+
       const updatedIncidences = incidences.filter(
         (inc) => inc.id !== incidentId,
       );
       setIncidences(updatedIncidences);
-      onDeleteElement(element.id!);
-      onClose();
+
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Incidencia eliminada correctamente',
+      });
     } catch (error) {
       console.error('Error al eliminar la incidencia:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo eliminar la incidencia',
+      });
+    } finally {
+      dispatch(hideLoader());
     }
   };
 
@@ -177,16 +199,49 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
   }
 
+  const findWorkOrdersForElement = (
+    element: Element,
+    workOrders: WorkOrder[],
+    points: Point[],
+    zones: Zone[],
+  ) => {
+    const elementZone = getZoneElement(element.point_id!);
+    if (!elementZone) return [];
+
+    return workOrders.flatMap((workOrder) =>
+      workOrder.work_order_blocks!.flatMap((block) => {
+        const zoneMatches = block.zones!.some(
+          (zone) => zone.id === elementZone.id,
+        );
+
+        if (zoneMatches) {
+          return block.work_order_block_tasks!.map((task) => ({
+            workOrderId: workOrder.id,
+            workOrderStatus: workOrder.status,
+            taskType: task.task_type,
+            notes: block.notes,
+          }));
+        }
+        return [];
+      }),
+    );
+  };
+
+  const tasksForElement = findWorkOrdersForElement(
+    element,
+    workOrders,
+    points,
+    zones,
+  );
+
   return (
     <div className="bg-white rounded-lg w-[650px] max-w-full">
       <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}>
-        {/* pestaña de información */}
         <TabPanel header="Información">
           <div className="grid grid-cols-2 gap-4">
-            {/* columna izquierda */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">
                 Información del Árbol
@@ -217,7 +272,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
             </div>
 
-            {/* columna derecha */}
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">Ubicación</h3>
               <p>
@@ -231,7 +285,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 <strong>Longitud:</strong> {coords.lng || 'No disponible'}
               </p>
 
-              {/* boton para eliminar elemento */}
               <Button
                 label="Eliminar Elemento"
                 className="p-button-danger p-button-sm"
@@ -241,7 +294,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </TabPanel>
 
-        {/* pestaña de incidencias */}
         <TabPanel header="Incidencias">
           <div className="space-y-4">
             {incidences.length > 0 ? (
@@ -313,9 +365,37 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </TabPanel>
 
-        {/* pestaña de historial */}
         <TabPanel header="Historial">
-          <p className="text-sm">Historial del elemento (en construcción...)</p>
+          <div>
+            <h1>Historial de tareas</h1>
+            {tasksForElement.length > 0 ? (
+              tasksForElement.map((taskInfo, index) => (
+                <div key={index} className="border p-4 rounded-md">
+                  <h4 className="font-semibold">
+                    Notas: {taskInfo.notes ?? 'No hay notas'}
+                  </h4>
+                  <p>
+                    <strong>Tarea:</strong> {taskInfo.taskType?.name}
+                  </p>
+                  <p>
+                    <strong>Descripción:</strong>{' '}
+                    {taskInfo.taskType?.description}
+                  </p>
+                  <p>
+                    <strong>Orden de Trabajo:</strong> {taskInfo.workOrderId}
+                  </p>
+                  <p>
+                    <strong>Estado:</strong>{' '}
+                    <WorkOrderStatusInfoChip
+                      status={taskInfo.workOrderStatus}
+                    />
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No hay historial de tareas para este elemento.</p>
+            )}
+          </div>
         </TabPanel>
       </TabView>
     </div>

@@ -45,6 +45,7 @@ interface TaskTimeTrackerProps {
   onTimeChange: (taskId: number, timeData: TaskTimeData) => void;
   disabled: boolean;
   t: (key: string) => string;
+  format: any;
 }
 
 interface WorkBlockProps {
@@ -54,6 +55,7 @@ interface WorkBlockProps {
   handleTimeChange: (taskId: number, timeData: TaskTimeData) => void;
   disabled: boolean;
   t: (key: string) => string;
+  format: any;
 }
 
 const TaskTimeTracker = ({
@@ -62,6 +64,7 @@ const TaskTimeTracker = ({
   onTimeChange,
   disabled,
   t,
+  format,
 }: TaskTimeTrackerProps) => {
   const calculateDuration = (start?: string, end?: string): string => {
     if (!start || !end) return '00:00';
@@ -135,11 +138,11 @@ const TaskTimeTracker = ({
           <label
             htmlFor={`start-time-${task.id}`}
             className="block text-sm text-gray-600 mb-1">
-            {t('glossary:start_time')}
+            {format('glossary:time_start')}
           </label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
-              <i className="pi pi-clock"></i>
+              <Icon icon="tabler:clock" />
             </span>
             <input
               id={`start-time-${task.id}`}
@@ -150,7 +153,7 @@ const TaskTimeTracker = ({
               }
               className="p-inputtext p-component w-full text-center"
               disabled={disabled}
-              aria-label={`${t('glossary:start_time')} ${task.task_type?.name || ''}`}
+              aria-label={`${format('glossary:time_start')} ${task.task_type?.name || ''}`}
             />
           </div>
         </div>
@@ -159,11 +162,11 @@ const TaskTimeTracker = ({
           <label
             htmlFor={`end-time-${task.id}`}
             className="block text-sm text-gray-600 mb-1">
-            {t('glossary:end_time')}
+            {t('glossary:time_end')}
           </label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
-              <i className="pi pi-clock"></i>
+              <Icon icon="tabler:clock" />
             </span>
             <input
               id={`end-time-${task.id}`}
@@ -172,7 +175,7 @@ const TaskTimeTracker = ({
               onChange={(e) => handleTimeInputChange('endTime', e.target.value)}
               className="p-inputtext p-component w-full text-center"
               disabled={disabled}
-              aria-label={`${t('glossary:end_time')} ${task.task_type?.name || ''}`}
+              aria-label={`${t('glossary:time_end')} ${task.task_type?.name || ''}`}
             />
           </div>
         </div>
@@ -185,7 +188,7 @@ const TaskTimeTracker = ({
           </label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
-              <i className="pi pi-stopwatch"></i>
+              <Icon icon="tabler:stopwatch" />
             </span>
             <input
               id={`duration-${task.id}`}
@@ -208,6 +211,7 @@ const WorkBlock = ({
   formData,
   handleTimeChange,
   disabled,
+  format,
   t,
 }: WorkBlockProps) => {
   return (
@@ -224,7 +228,7 @@ const WorkBlock = ({
           </span>
         </div>
       }
-      subTitle={block.location ? block.location : null}
+      subTitle={block.zones?.map((zone) => zone.name).join(', ')}
       className="mb-4 shadow-sm">
       <div className="p-4">
         {block.notes && (
@@ -235,7 +239,12 @@ const WorkBlock = ({
                 className="mr-2"
                 aria-hidden="true"
               />
-              {t('glossary:notes')}:
+              {format({
+                key: 'note',
+                options: { count: 1 },
+                formatOptions: ['capitalize', 'interval'],
+              })}
+              :
             </div>
             <p className="text-gray-700">
               {block.notes || t('glossary:no_notes_available')}
@@ -261,6 +270,7 @@ const WorkBlock = ({
               onTimeChange={handleTimeChange}
               disabled={disabled}
               t={t}
+              format={format}
             />
           ))}
         </div>
@@ -578,9 +588,6 @@ export default function WorkOrders() {
                 <div className="mt-3 text-sm bg-blue-500 bg-opacity-30 p-2 rounded">
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="flex-1">
-                      <span className="font-medium mr-1">
-                        {t('glossary:assigned_users')}:
-                      </span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {workOrder.users.map((user) => (
                           <span
@@ -622,6 +629,7 @@ export default function WorkOrders() {
                       handleTimeChange={handleTaskTimeChange}
                       disabled={hasReport}
                       t={t}
+                      format={format}
                     />
                   ))}
 
@@ -715,7 +723,12 @@ export default function WorkOrders() {
                       <label
                         htmlFor="observation"
                         className="block text-gray-700 font-medium mb-1">
-                        {t('glossary:observations')}:
+                        {format({
+                          key: 'observation',
+                          options: { count: 1 },
+                          formatOptions: ['capitalize', 'interval'],
+                        })}
+                        :
                       </label>
                       <InputTextarea
                         id="observation"
@@ -734,7 +747,11 @@ export default function WorkOrders() {
                         rows={4}
                         placeholder={t('glossary:write_observations_here')}
                         disabled={hasReport}
-                        aria-label={t('glossary:observations')}
+                        aria-label={format({
+                          key: 'observation',
+                          options: { count: 1 },
+                          formatOptions: ['capitalize', 'interval'],
+                        })}
                       />
                     </div>
 

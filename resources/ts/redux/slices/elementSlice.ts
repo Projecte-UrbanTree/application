@@ -37,18 +37,13 @@ export const saveElementAsync = createAsyncThunk<
   }
 });
 
-export const deleteElementAsync = createAsyncThunk<
-  number,
-  number,
-  { rejectValue: string }
->('elements/deleteElement', async (elementId, { rejectWithValue }) => {
-  try {
+export const deleteElementAsync = createAsyncThunk(
+  'elements/deleteElement',
+  async (elementId: number) => {
     await deleteElement(elementId);
     return elementId;
-  } catch (error) {
-    return rejectWithValue('error al eliminar el elemento');
-  }
-});
+  },
+);
 
 const elementSlice = createSlice({
   name: 'element',
@@ -79,6 +74,11 @@ const elementSlice = createSlice({
       })
       .addCase(saveElementAsync.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(deleteElementAsync.fulfilled, (state, action) => {
+        state.elements = state.elements.filter(
+          (element) => element.id !== action.payload,
+        );
       });
   },
 });

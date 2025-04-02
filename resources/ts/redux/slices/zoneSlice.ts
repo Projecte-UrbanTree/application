@@ -16,7 +16,6 @@ export const fetchZonesAsync = createAsyncThunk(
   'zones/fetchZones',
   async () => {
     const response = await fetchZones();
-    console.log('Thunk', { response });
 
     return response;
   },

@@ -1,7 +1,7 @@
 import CrudPanel from '@/components/Admin/CrudPanel';
 import Preloader from '@/components/Preloader';
-import { WorkOrderStatusInfoBadge } from '@/components/Shared/WorkOrderStatusInfo';
-import { WorkReportStatusInfoBadge } from '@/components/Shared/WorkReportStatusInfo';
+import { WorkOrderStatusInfoChip } from '@/components/Shared/WorkOrderStatusInfo';
+import { WorkReportStatusInfoChip } from '@/components/Shared/WorkReportStatusInfo';
 import useAuth from '@/hooks/useAuth';
 import useCrudData from '@/hooks/useCrudData';
 import useI18n from '@/hooks/useI18n';
@@ -120,13 +120,13 @@ export default function WorkOrders() {
     {
       field: 'status',
       header: format('glossary:status'),
-      body: (wo: WorkOrder) => WorkOrderStatusInfoBadge(wo.status),
+      body: (wo: WorkOrder) => WorkOrderStatusInfoChip({ status: wo.status }),
     },
     {
       field: 'report_status',
       header: format('glossary:report_status'),
       body: (wo: WorkOrder) =>
-        WorkReportStatusInfoBadge(wo.work_report?.report_status),
+        WorkReportStatusInfoChip({ status: wo.work_report?.report_status }),
     },
   ];
 

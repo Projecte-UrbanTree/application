@@ -29,13 +29,14 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'description' => ['required', 'string', 'max:255'],
+        $validated = $request->validate([
+            'description' => ['nullable', 'string', 'max:255'],
             'element_type_id' => ['required', 'integer'],
             'tree_type_id' => ['required', 'integer'],
             'point_id' => ['required', 'integer'],
         ]);
-        $element = Element::create($validate);
+
+        $element = Element::create($validated);
 
         return response()->json($element, 201);
     }
@@ -63,8 +64,15 @@ class ElementController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validated = $request->validate([
+            'description' => ['nullable', 'string', 'max:255'],
+            'element_type_id' => ['nullable', 'integer'],
+            'tree_type_id' => ['nullable', 'integer'],
+            'point_id' => ['nullable', 'integer'],
+        ]);
+
         $element = Element::findOrFail($id);
-        $element->update($request->all());
+        $element->update($validated);
 
         return response()->json($element);
     }
@@ -75,7 +83,7 @@ class ElementController extends Controller
     public function destroy(string $id)
     {
         $element = Element::find($id);
-        if (! $element) {
+        if (!$element) {
             return response()->json(['message' => 'Element not found'], 404);
         }
         $element->delete();

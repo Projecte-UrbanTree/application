@@ -17,14 +17,13 @@ import * as yup from 'yup';
 
 const schema = yup.object().shape({
   name: yup.string().required('El nombre es obligatorio'),
-  description: yup.string().required('La descripción es obligatoria'),
+  description: yup.string(),
   color: yup
     .string()
     .matches(
       /^#([0-9A-F]{6})$/i,
       'Debe ser un código de color válido en formato #RRGGBB',
-    )
-    .required('El color es obligatorio'),
+    ),
   contractId: yup.number().required('El ID del contrato es obligatorio'),
   coordinates: yup
     .array()
@@ -114,7 +113,6 @@ export const SaveZoneForm = ({
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg w-96">
       <Toast ref={toast} />
-      <h2 className="text-xl font-semibold mb-4">Guardar Zona</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label className="block text-sm font-medium">Nombre</label>

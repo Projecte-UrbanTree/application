@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-// Componente FormField para manejar campos del formulario
 const FormField = ({ as: Component, name, label, ...props }: any) => {
   const [field, meta, helpers] = useField(name);
 
@@ -209,6 +208,15 @@ const CreateEva = () => {
         ...values,
         date_birth: formattedDate,
         status,
+        unbalanced_crown: values.unbalancedCrown,
+        overextended_branches: values.overextendedBranches,
+        dead_branches: values.deadBranches,
+        V_forks: values.VForks,
+        bark_damage: values.barkDamage,
+        soil_lifting: values.soilLifting,
+        cut_damaged_roots: values.cutRoots,
+        basal_rot: values.basalRot,
+        exposed_surface_roots: values.exposedRoots,
       };
 
       await api.post('/admin/evas', updatedValues);
@@ -260,7 +268,7 @@ const CreateEva = () => {
                     label={t('admin:pages.evas.form.name')}
                     as={Dropdown}
                     options={elements.map((element) => ({
-                      label: element.name,
+                      label: element.id,
                       value: element.id,
                     }))}
                     optionLabel="label"
