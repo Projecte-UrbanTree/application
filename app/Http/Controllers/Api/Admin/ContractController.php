@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class ContractController extends Controller
 {
@@ -24,8 +25,9 @@ class ContractController extends Controller
             'status' => ['required', Rule::in([0, 1, 2])],
         ]);
 
-        $validated['start_date'] = date('Y-m-d', strtotime($validated['start_date']));
-        $validated['end_date'] = date('Y-m-d', strtotime($validated['end_date']));
+        // Se usa Carbon::parse para formatear las fechas sin desfase
+        $validated['start_date'] = Carbon::parse($validated['start_date'])->format('Y-m-d');
+        $validated['end_date'] = Carbon::parse($validated['end_date'])->format('Y-m-d');
 
         $contract = Contract::create($validated);
 
@@ -52,10 +54,10 @@ class ContractController extends Controller
         ]);
 
         if (isset($validated['start_date'])) {
-            $validated['start_date'] = date('Y-m-d', strtotime($validated['start_date']));
+            $validated['start_date'] = Carbon::parse($validated['start_date'])->format('Y-m-d');
         }
         if (isset($validated['end_date'])) {
-            $validated['end_date'] = date('Y-m-d', strtotime($validated['end_date']));
+            $validated['end_date'] = Carbon::parse($validated['end_date'])->format('Y-m-d');
         }
 
         $contract->update($validated);

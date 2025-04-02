@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import * as Yup from "yup";
 import axiosClient from "@/api/axiosClient";
 import { useTranslation } from "react-i18next";
@@ -32,14 +32,19 @@ export default function EditContract() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        const parseDateLocal = (dateString: string) => {
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        };
+
         const fetchContract = async () => {
             try {
                 const response = await axiosClient.get(`/admin/contracts/${id}`);
                 const contract = response.data;
                 setInitialValues({
                     name: contract.name,
-                    start_date: new Date(contract.start_date),
-                    end_date: new Date(contract.end_date),
+                    start_date: parseDateLocal(contract.start_date),
+                    end_date: parseDateLocal(contract.end_date),
                     final_price: contract.final_price,
                     status: contract.status
                 });
@@ -67,8 +72,13 @@ export default function EditContract() {
     });
 
     const handleSubmit = async (values: typeof initialValues) => {
+        const payload = {
+            ...values,
+            start_date: values.start_date ? values.start_date.toLocaleDateString('en-CA') : null,
+            end_date: values.end_date ? values.end_date.toLocaleDateString('en-CA') : null,
+        };
         try {
-            await axiosClient.put(`/admin/contracts/${id}`, values);
+            await axiosClient.put(`/admin/contracts/${id}`, payload);
             navigate("/admin/settings/contracts", { state: { success: t("admin.pages.contracts.list.messages.updateSuccess") } });
         } catch (error) {
             navigate("/admin/settings/contracts", { state: { error: t("admin.pages.contracts.list.messages.error") } });
@@ -164,12 +174,17 @@ export default function EditContract() {
                                         <Icon icon="tabler:currency-dollar" className="h-5 w-5 mr-2" />
                                         {t("admin.fields.final_price")}
                                     </label>
-                                    <Field
-                                        name="final_price"
-                                        as={InputNumber}
-                                        placeholder={t("admin.fields.final_price")}
-                                        className={errors.final_price && touched.final_price ? "p-invalid" : ""}
-                                    />
+                                    <Field name="final_price">
+                                      {({ field, form, meta }: FieldProps) => (
+                                        <InputNumber
+                                          id="final_price"
+                                          value={field.value}
+                                          onValueChange={(e) => form.setFieldValue(field.name, e.value)}
+                                          placeholder={t("admin.fields.final_price")}
+                                          className={errors.final_price && touched.final_price ? "p-invalid" : ""}
+                                        />
+                                      )}
+                                    </Field>
                                     {errors.final_price && touched.final_price && (
                                         <small className="p-error">{errors.final_price}</small>
                                     )}
