@@ -243,11 +243,10 @@ export const MapComponent: React.FC<MapProps> = ({
         .filter(
           (p) => p.zone_id === zone.id && p.type == TypePoint.zone_delimiter,
         )
-
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
       if (zonePoints.length > 2) {
         zonePoints.push(zonePoints[0]);
-        service.addZoneToMap(`zone-${zone.id}`, zonePoints);
+        service.addZoneToMap(`zone-${zone.id}`, zonePoints, zone.color || '#088');
       }
     });
   }
@@ -342,7 +341,7 @@ export const MapComponent: React.FC<MapProps> = ({
 
     if (zonePoints.length > 2) {
       zonePoints.push(zonePoints[0]);
-      service.addZoneToMap(`zone-${newZone.id}`, zonePoints);
+      service.addZoneToMap(`zone-${newZone.id}`, zonePoints, newZone.color || '#088');
     }
 
     await dispatch(fetchPointsAsync());

@@ -145,7 +145,7 @@ export class MapService {
     });
   }
 
-  public addZoneToMap(zoneId: string, coords: number[][]) {
+  public addZoneToMap(zoneId: string, coords: number[][], zoneColor: string = '#088') {
     if (this.map.getSource(zoneId)) {
       if (this.map.getLayer(zoneId)) {
         this.map.removeLayer(zoneId);
@@ -172,7 +172,7 @@ export class MapService {
       type: 'fill',
       source: zoneId,
       paint: {
-        'fill-color': '#088',
+        'fill-color': zoneColor,
         'fill-opacity': 0.5,
       },
     });
