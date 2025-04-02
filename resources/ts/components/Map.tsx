@@ -84,6 +84,14 @@ export const MapComponent: React.FC<MapProps> = ({
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
   const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const handleBackToIncidentTab = () => {
+
+    setIncidentModalVisible(false);
+    setElementModalVisible(true);
+    setActiveTabIndex(1);
+  };
 
   // load data
   useEffect(() => {
@@ -482,7 +490,11 @@ export const MapComponent: React.FC<MapProps> = ({
         {selectedElementId && (
           <IncidentForm
             elementId={selectedElementId}
-            onClose={() => setIncidentModalVisible(false)}
+            onClose={() => {
+              setIncidentModalVisible(false);
+              dispatch(fetchElementsAsync());
+            }}
+            onBackToIncidents={handleBackToIncidentTab}
           />
         )}
       </Dialog>
@@ -501,6 +513,7 @@ export const MapComponent: React.FC<MapProps> = ({
             getCoordElement={() =>
               mapServiceRef.current?.getCoordElement(selectedElement, points)!
             }
+            initialTabIndex={activeTabIndex}
           />
         )}
       </Dialog>

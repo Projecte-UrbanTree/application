@@ -35,6 +35,7 @@ interface ElementDetailPopupProps {
     points: Point[],
   ) => { lat: number; lng: number };
   onDeleteElement: (elementId: number) => void;
+  initialTabIndex?: number;
 }
 
 const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
@@ -45,8 +46,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   onOpenIncidentForm,
   getCoordElement,
   onDeleteElement,
+  initialTabIndex = 0,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(initialTabIndex);
   const [incidences, setIncidences] = useState<Incidence[]>([]);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [workReports, setWorkReports] = useState<WorkReport[]>([]);
@@ -92,7 +94,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         dispatch(hideLoader());
       }
     };
-    loadIncidences();
+    
+    if (element.id) {
+      loadIncidences();
+    }
   }, [element.id, dispatch]);
 
   const handleStatusChange = async (
