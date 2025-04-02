@@ -15,6 +15,19 @@ export interface SensorHistoryEntry {
   humidity_soil: number | null;
 }
 
+function generateSimulatedData(): SensorHistoryEntry[] {
+  const simulatedDate = new Date(2025, 4, 1);
+  simulatedDate.setHours(12, 0, 0, 0);
+
+  return [
+    {
+      time: simulatedDate.toISOString(),
+      ph1_soil: 7,
+      humidity_soil: 7,
+    },
+  ];
+}
+
 export async function fetchSensorHistoryByDevEui(
   dev_eui: string,
   startDate?: Date | null,
@@ -25,24 +38,41 @@ export async function fetchSensorHistoryByDevEui(
     return [];
   }
 
-  // Definimos la fecha de hoy como 1 de abril de 2025
-  const today = new Date('2025-04-01T12:00:00Z');
+  try {
+    let url = `${API_BASE_URL}/sensors/deveui/${dev_eui}`;
 
-  // Verificamos si el rango solicitado incluye hoy
-  const includesToday =
-    (!startDate || today >= startDate) && (!endDate || today <= endDate);
+    const params = new URLSearchParams();
+    if (startDate) params.append('start', startDate.toISOString());
+    if (endDate) params.append('end', endDate.toISOString());
 
-  if (includesToday) {
-    // Solo devolvemos un único dato para hoy
-    return [
-      {
-        time: today.toISOString(),
-        ph1_soil: 6.5, // Valor simulado de pH
-        humidity_soil: 42, // Valor simulado de humedad
-      },
-    ];
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+
+    const response = await axiosInstance.get(url);
+    let data = Array.isArray(response.data) ? response.data : [];
+
+    if (data.length === 0) {
+      console.warn('No data from API, using simulated data for 1/05/2025');
+      data = generateSimulatedData();
+    }
+
+    return data.map((entry: any) => ({
+      time: entry.time,
+      ph1_soil: entry.ph1_soil !== undefined ? Number(entry.ph1_soil) : null,
+      humidity_soil:
+        entry.humidity_soil !== undefined ? Number(entry.humidity_soil) : null,
+    }));
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+      console.warn(`Sensor history not found for dev_eui ${dev_eui}`);
+      return generateSimulatedData();
+    } else {
+      console.error(
+        `Error fetching sensor history for dev_eui ${dev_eui}:`,
+        error,
+      );
+      return generateSimulatedData();
+    }
   }
-
-  // Para cualquier otro rango, devolvemos array vacío
-  return [];
 }
