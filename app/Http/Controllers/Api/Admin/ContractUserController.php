@@ -10,24 +10,15 @@ use Illuminate\Http\Request;
 class ContractUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the users assigned to a contract.
      */
     public function index(Contract $contract)
     {
         return response()->json($contract->workers);
-
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Assign a user to a contract.
      */
     public function store(Request $request, Contract $contract, User $user)
     {
@@ -41,35 +32,11 @@ class ContractUserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Remove a user from a contract.
      */
     public function destroy(Contract $contract, User $user)
     {
-        if (! $contract->workers()->where('user_id', $user->id)->exists()) {
+        if (!$contract->workers()->where('user_id', $user->id)->exists()) {
             return response()->json(['error' => 'Worker not assigned to this contract'], 404);
         }
 

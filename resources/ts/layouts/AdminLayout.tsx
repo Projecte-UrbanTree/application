@@ -41,8 +41,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const todosOption: Contract = { id: 0, name: t('general.allContracts'), status: 1 };
   
   const isInventoryPage = location.pathname.includes('/admin/inventory');
+  const isWorkersPage = location.pathname.includes('/admin/workers');
 
-  const dropdownOptions = isInventoryPage 
+  const dropdownOptions = isInventoryPage || isWorkersPage
     ? [...activeContracts]
     : [todosOption, ...activeContracts];
 
