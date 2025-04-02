@@ -6,6 +6,7 @@ import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
+import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
@@ -167,19 +168,13 @@ export const Zones = ({
     ).length;
   };
 
-  // Función para contar elementos por tipo en una zona específica
   const countElementsByTypeInZone = (zoneId: number) => {
-    // Filtrar los puntos que pertenecen a la zona
     const pointIdsInZone = points
       .filter((point) => point.zone_id === zoneId)
       .map((point) => point.id);
-
-    // Filtrar los elementos que están en los puntos de la zona
     const elementsInZone = elements.filter((element) =>
       pointIdsInZone.includes(element.point_id),
     );
-
-    // Contar los elementos por tipo
     return elementsInZone.reduce(
       (acc, element) => {
         if (element.element_type_id) {
@@ -199,6 +194,20 @@ export const Zones = ({
       zone.description?.toLowerCase().includes(lowerCaseSearchTerm)
     );
   });
+
+  const handleViewElements = (elementTypeId: number, zoneId: number) => {
+    const pointsInZone = points
+      .filter((point) => point.zone_id === zoneId)
+      .map((point) => point.id);
+    const elementsInZone = elements.filter(
+      (element) =>
+        element.element_type_id === elementTypeId &&
+        element.point_id &&
+        pointsInZone.includes(element.point_id),
+    );
+
+    console.log(elementsInZone);
+  };
 
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
@@ -307,7 +316,9 @@ export const Zones = ({
                             <Button
                               icon={<Icon icon="mdi:eye" width="20" />}
                               className="p-button-text p-2"
-                              onClick={() => {}}
+                              onClick={() =>
+                                handleViewElements(elementType.id!, zone.id!)
+                              }
                             />
                           </div>
                         );
