@@ -76,7 +76,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    document.title = t(titleI18n);
+    document.title = `${t(titleI18n)} - ${import.meta.env.VITE_APP_NAME}`;
   }, [titleI18n, t]);
 
   useEffect(() => {
@@ -223,7 +223,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${item.active ? 'bg-indigo-600 text-white' : 'hover:bg-indigo-100'}`}>
+                className={`text-gray-800 px-2 py-2 rounded flex items-center gap-2 ${
+                  item.active ? 'p-button p-button-indigo text-white' : 'hover:bg-gray-100'
+                }`}>
                 <Icon inline={true} width="24px" icon={item.icon} />{' '}
                 {item.label}
               </Link>
@@ -306,7 +308,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className={`px-2 py-3 rounded flex items-center gap-1 ${location.pathname === item.to ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-indigo-100'}`}>
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${
+                    location.pathname === item.to
+                      ? 'bg-white border border-gray-300 text-indigo-600'
+                      : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
+                  }`}>
                   <Icon width="22px" icon={item.icon} /> {item.label}
                 </Link>
               ))}
@@ -315,7 +321,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className={`px-2 py-3 rounded flex items-center gap-1 ${location.pathname === item.to ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-indigo-100'}`}>
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${
+                    location.pathname === item.to
+                      ? 'bg-white border border-gray-300 text-indigo-600'
+                      : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
+                  }`}>
                   <Icon width="22px" icon={item.icon} /> {item.label}
                 </Link>
               ))}

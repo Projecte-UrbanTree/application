@@ -114,10 +114,7 @@
         },
         "viewAll": "Ver todas las actividades",
         "noActivity": "Sin actividad reciente",
-        "actions": {
-          "left": "Izquierda",
-          "actions": "Acciones"
-        }
+        "actions": "Acciones"
       },
       "elementTypes": {
         "title": "Tipos de elementos",

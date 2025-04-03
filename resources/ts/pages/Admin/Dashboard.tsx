@@ -21,34 +21,30 @@ export default function Dashboard() {
           <InProgressWorkOrders />
         </div>
         <div>
-          <Card
-            title={
-              <div className="flex items-center gap-2">
+          <Card className="mb-6 lg:mb-8 border border-gray-200 bg-gray-50 rounded shadow-sm">
+              <div className="text-lg mb-4 text-gray-800">
                 {t('admin.pages.dashboard.quickActions')}
               </div>
-            }
-            className="border border-gray-300 bg-white rounded"
-          >
-            <div className="flex flex-col gap-2">
-              <Button
-                label={t('admin.pages.dashboard.createWorkOrder')}
-                icon={<Icon icon="tabler:plus" />}
-                className="p-button-outlined p-button-indigo w-full"
-                onClick={() => navigate('/admin/work-orders/create')}
-              />
-              <Button
-                label={t('admin.pages.dashboard.manageUsers')}
-                icon={<Icon icon="tabler:user" />}
-                className="p-button-outlined p-button-indigo w-full"
-                onClick={() => navigate('/admin/users')}
-              />
-              <Button
-                label={t('admin.pages.dashboard.reviewReports')}
-                icon={<Icon icon="tabler:file-text" />}
-                className="p-button-outlined p-button-indigo w-full"
-                onClick={() => navigate('/admin/reports')}
-              />
-            </div>
+              <div className="flex flex-col gap-4">
+                <Button
+                  label={t('admin.pages.dashboard.createWorkOrder')}
+                  icon={<Icon icon="tabler:plus" />}
+                  className="p-button-outlined p-button-indigo w-full text-gray-800"
+                  onClick={() => navigate('/admin/work-orders/create')}
+                />
+                <Button
+                  label={t('admin.pages.dashboard.manageUsers')}
+                  icon={<Icon icon="tabler:user" />}
+                  className="p-button-outlined p-button-indigo w-full text-gray-800"
+                  onClick={() => navigate('/admin/users')}
+                />
+                <Button
+                  label={t('admin.pages.dashboard.reviewReports')}
+                  icon={<Icon icon="tabler:file-text" />}
+                  className="p-button-outlined p-button-indigo w-full text-gray-800"
+                  onClick={() => navigate('/admin/reports')}
+                />
+              </div>
           </Card>
         </div>
       </div>

@@ -97,49 +97,49 @@ export const InProgressWorkOrders = () => {
   };
 
   return (
-    <Card className="mb-6 lg:mb-8 border border-gray-300 bg-white rounded p-6" header={header}>
-      {loading ? (
-        <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
-        </div>
-      ) : workOrders.length === 0 ? (
-        <div className="p-4 text-center">
-          <p>{t('admin.pages.dashboard.noInProgressWorkOrders')}</p>
-        </div>
-      ) : (
-        <DataTable
-          value={workOrders}
-          paginator
-          rows={5}
-          stripedRows
-          emptyMessage={t('admin.pages.dashboard.noInProgressWorkOrders')}
-          size="small"
-        >
-          <Column 
-            field="id" 
-            header={t('admin.pages.workOrders.list.columns.id')}
-            body={(rowData) => `OT-${rowData.id}`}
-          />
-          <Column 
-            field="date" 
-            header={t('admin.pages.workOrders.list.columns.date')} 
-            body={(rowData) => new Date(rowData.date).toLocaleDateString()}
-          />
-          <Column 
-            field="contract.name" 
-            header={t('admin.pages.workOrders.list.columns.contract')} 
-          />
-          <Column 
-            header={t('admin.pages.workOrders.list.columns.users')} 
-            body={userTemplate}
-          />
-          <Column 
-            header={t('admin.pages.dashboard.actions')} 
-            body={actionTemplate} 
-            style={{ width: '8rem' }}
-          />
-        </DataTable>
-      )}
+    <Card className="mb-6 lg:mb-8 border border-gray-200 bg-gray-50 rounded">
+        {loading ? (
+          <div className="flex justify-center p-4">
+            <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          </div>
+        ) : workOrders.length === 0 ? (
+          <div className="p-4 text-center">
+            <p className="text-gray-600">{t('admin.pages.dashboard.noInProgressWorkOrders')}</p>
+          </div>
+        ) : (
+          <DataTable
+            value={workOrders}
+            paginator
+            rows={5}
+            stripedRows
+            emptyMessage={t('admin.pages.dashboard.noInProgressWorkOrders')}
+            size="small"
+          >
+            <Column 
+              field="id" 
+              header={t('admin.pages.workOrders.list.columns.id')}
+              body={(rowData) => `OT-${rowData.id}`}
+            />
+            <Column 
+              field="date" 
+              header={t('admin.pages.workOrders.list.columns.date')} 
+              body={(rowData) => new Date(rowData.date).toLocaleDateString()}
+            />
+            <Column 
+              field="contract.name" 
+              header={t('admin.pages.workOrders.list.columns.contract')} 
+            />
+            <Column 
+              header={t('admin.pages.workOrders.list.columns.users')} 
+              body={userTemplate}
+            />
+            <Column 
+              header={t('admin.pages.dashboard.actions')} 
+              body={actionTemplate} 
+              style={{ width: '8rem' }}
+            />
+          </DataTable>
+        )}
     </Card>
   );
 };

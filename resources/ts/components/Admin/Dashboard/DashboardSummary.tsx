@@ -75,58 +75,58 @@ export const DashboardSummary = () => {
 
   return (
     <div className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <Card className="bg-white rounded p-6 border border-gray-300">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:clipboard-list" width={40} />
           </div>
           <div>
-            <h4 className="text-gray-500 text-xs uppercase mb-1">
+            <h4 className="text-gray-600 text-xs uppercase mb-1">
               {t('admin.pages.dashboard.totalWorkOrders')}
             </h4>
-            <div className="text-xl font-bold text-gray-800">{summaryData.totalWorkOrders}</div>
+            <div className="text-2xl font-bold text-gray-800">{summaryData.totalWorkOrders}</div>
           </div>
         </div>
       </Card>
 
-      <Card className="bg-white rounded p-6 border border-gray-300">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:hourglass" width={40} />
           </div>
           <div>
-            <h4 className="text-gray-500 text-xs uppercase mb-1">
+            <h4 className="text-gray-600 text-xs uppercase mb-1">
               {t('admin.pages.dashboard.inProgressWorkOrders')}
             </h4>
-            <div className="text-xl font-bold text-gray-800">{summaryData.inProgressWorkOrders}</div>
+            <div className="text-2xl font-bold text-gray-800">{summaryData.inProgressWorkOrders}</div>
           </div>
         </div>
       </Card>
 
-      <Card className="bg-white rounded p-6 border border-gray-300">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:check" width={40} />
           </div>
           <div>
-            <h4 className="text-gray-500 text-xs uppercase mb-1">
+            <h4 className="text-gray-600 text-xs uppercase mb-1">
               {t('admin.pages.dashboard.completedWorkOrders')}
             </h4>
-            <div className="text-xl font-bold text-gray-800">{summaryData.completedWorkOrders}</div>
+            <div className="text-2xl font-bold text-gray-800">{summaryData.completedWorkOrders}</div>
           </div>
         </div>
       </Card>
 
-      <Card className="bg-white rounded p-6 border border-gray-300">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:file-alert" width={40} />
           </div>
           <div>
-            <h4 className="text-gray-500 text-xs uppercase mb-1">
+            <h4 className="text-gray-600 text-xs uppercase mb-1">
               {t('admin.pages.dashboard.pendingReports')}
             </h4>
-            <div className="text-xl font-bold text-gray-800">{summaryData.pendingReports}</div>
+            <div className="text-2xl font-bold text-gray-800">{summaryData.pendingReports}</div>
           </div>
         </div>
       </Card>
