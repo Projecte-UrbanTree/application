@@ -78,6 +78,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
     document.title = t(titleI18n);
   }, [titleI18n, t]);
 
+  useEffect(() => {
+    if (isInventoryPage && !currentContract && allContracts.length > 0) {
+      dispatch(selectContract(allContracts[0]?.id ?? 0));
+    }
+  }, [isInventoryPage, currentContract, allContracts, dispatch]);
+
   const handleContractChange = useCallback(
     (e: DropdownChangeEvent) => {
       const newContractId = e.value;
