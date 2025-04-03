@@ -1,7 +1,11 @@
 import { User } from '@/types/User';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const userDataInitialState: User = {
+interface UserState extends User {
+  isAuthenticated: boolean;
+}
+
+const userDataInitialState: UserState = {
   id: undefined,
   name: undefined,
   surname: undefined,
@@ -12,6 +16,7 @@ const userDataInitialState: User = {
   role: undefined,
   created_at: undefined,
   updated_at: undefined,
+  isAuthenticated: Boolean(localStorage.getItem('authToken')),
 };
 
 export const userSlice = createSlice({
@@ -21,9 +26,11 @@ export const userSlice = createSlice({
     setUserData(state, action: PayloadAction<User>) {
       return { ...state, ...action.payload };
     },
-
+    setAuthenticated(state, action: PayloadAction<boolean>) {
+      state.isAuthenticated = action.payload;
+    },
     clearUserData: () => userDataInitialState,
   },
 });
 
-export const { setUserData, clearUserData } = userSlice.actions;
+export const { setUserData, setAuthenticated, clearUserData } = userSlice.actions;

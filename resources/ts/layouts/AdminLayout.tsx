@@ -26,7 +26,7 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   const { t } = useI18n();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const profileRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -267,11 +267,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.license')}
                   </a>
-                  <a
-                    onClick={() => logout()}
+                  <Link
+                    to="/logout"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.logout')}
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>
