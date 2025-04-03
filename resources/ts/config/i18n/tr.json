@@ -85,6 +85,21 @@
         "title": "crwdns2897:0crwdne2897:0"
       },
       "dashboard": {
+        "quickActions": "crwdns5047:0crwdne5047:0",
+        "createWorkOrder": "crwdns5049:0crwdne5049:0",
+        "reviewReports": "crwdns5051:0crwdne5051:0",
+        "manageUsers": "crwdns5053:0crwdne5053:0",
+        "recentActivity": "crwdns5055:0crwdne5055:0",
+        "workOrderCompleted": "crwdns5057:0crwdne5057:0",
+        "ago": "crwdns5059:0crwdne5059:0",
+        "reportSubmitted": "crwdns5061:0crwdne5061:0",
+        "workOrderAssigned": "crwdns5063:0crwdne5063:0",
+        "totalWorkOrders": "crwdns5065:0crwdne5065:0",
+        "inProgressWorkOrders": "crwdns5067:0crwdne5067:0",
+        "completedWorkOrders": "crwdns5069:0crwdne5069:0",
+        "pendingReports": "crwdns5071:0crwdne5071:0",
+        "viewAll": "crwdns5073:0crwdne5073:0",
+        "noActivity": "crwdns5075:0crwdne5075:0",
         "stats": {
           "widgets": {
             "contracts": "crwdns2899:0crwdne2899:0",

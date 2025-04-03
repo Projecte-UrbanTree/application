@@ -36,7 +36,7 @@ class ContractUserController extends Controller
      */
     public function destroy(Contract $contract, User $user)
     {
-        if (!$contract->workers()->where('user_id', $user->id)->exists()) {
+        if (! $contract->workers()->where('user_id', $user->id)->exists()) {
             return response()->json(['error' => 'Worker not assigned to this contract'], 404);
         }
 

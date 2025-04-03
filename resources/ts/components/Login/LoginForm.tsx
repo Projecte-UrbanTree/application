@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/useToast';
 import { User } from '@/types/User';
 import { useNavigate } from 'react-router-dom';
+import { getRouteByRole } from '@/utils/roleRoutes';
 
 export interface LoginResponse {
   success?: boolean;
@@ -49,10 +50,14 @@ const LoginForm = () => {
         t('public.login.form.titleSuccess'),
         t('public.login.form.msgSuccess'),
       );
-      await login(accessToken, navigate);
-    } catch (error: any) {
-      console.error('ERROR EN LOGIN: ', error);
 
+      await login(accessToken);
+      if (userData.role) {
+        navigate(getRouteByRole(userData.role));
+      } else {
+        setError(t('general.genericError'));
+      }
+    } catch (error: any) {
       if (error?.response?.status === 401) {
         setError(error.response.data.message);
       } else {
@@ -118,6 +123,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}
