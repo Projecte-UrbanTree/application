@@ -38,11 +38,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   );
 
   const isInventoryPage = location.pathname.includes('/admin/inventory');
-  const isWorkersPage = location.pathname.includes('/admin/workers');
+  const activeContracts = allContracts.filter(contract => contract.status === 0);
   const contracts =
-    isInventoryPage || isWorkersPage
-      ? allContracts
-      : [defaultContract, ...allContracts];
+    isInventoryPage
+      ? activeContracts
+      : [defaultContract, ...activeContracts];
 
   const isManagementActive = [
     '/admin/dashboard',
