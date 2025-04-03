@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/useToast';
 import { User } from '@/types/User';
 import { useNavigate } from 'react-router-dom';
 import { getRouteByRole } from '@/utils/roleRoutes';
+import { AxiosError } from 'axios';
 
 export interface LoginResponse {
   success?: boolean;
@@ -52,7 +53,11 @@ const LoginForm = () => {
       );
 
       await login(accessToken);
-      navigate(getRouteByRole(userData.role));
+      if (userData.role) {
+        navigate(getRouteByRole(userData.role));
+      } else {
+        setError(t('general.genericError'));
+      }
     } catch (error: any) {
       if (error?.response?.status === 401) {
         setError(error.response.data.message);
