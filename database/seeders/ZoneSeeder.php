@@ -31,6 +31,26 @@ class ZoneSeeder extends Seeder
                 'color' => '#3357FF',
                 'contract_id' => 1,
             ],
+            [
+                'name' => 'Parc municipal teodor Gonazalez',
+                'description' => 'A description for Zone 3',
+                'color' => '#3357FF',
+                'contract_id' => 2,
+            ],
+
+            [
+                'name' => 'Plaça de Alfons XVI',
+                'description' => 'A description for Zone 3',
+                'color' => '#FF5733',
+                'contract_id' => 2,
+            ],
+
+            [
+                'name' => 'Cementerio Municipal de Deltebre.',
+                'description' => 'A description for Zone 3',
+                'color' => '#FF5733',
+                'contract_id' => 3,
+            ],
         ]);
     }
 }

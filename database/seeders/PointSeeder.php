@@ -53,7 +53,7 @@ class PointSeeder extends Seeder
                 'zone_id' => 3,
             ],
             [
-                'latitude' => 40.70922985094096, 0.5779953158264584,
+                'latitude' => 40.70922985094096, 
                 'longitude' =>  0.5779953158264584,
                 'type' => 'zone_delimiter',
                 'zone_id' => 3,
@@ -68,7 +68,7 @@ class PointSeeder extends Seeder
                 'latitude' => 40.7087033188535,
                 'longitude' =>   0.5771575098682329,
                 'type' => 'zone_delimiter',
-                'zone_id' => 2,
+                'zone_id' => 3,
             ],
             
             
@@ -99,6 +99,88 @@ class PointSeeder extends Seeder
                 'longitude' =>  0.5681487890008956,
                 'type' => 'zone_delimiter',
                 'zone_id' => 2,
+            ],
+
+            [
+                'latitude' => 40.80661822141597, 
+                'longitude' => 0.5181194433535121,
+                'type' => 'zone_delimiter',
+                'zone_id' => 4,
+            ],
+            [
+                'latitude' => 40.80668582312178,
+                'longitude' =>  0.5202246465868029,
+                'type' => 'zone_delimiter',
+                'zone_id' => 4,
+            ],
+            [
+                'latitude' => 40.80920635188077,
+                'longitude' =>  0.519912055792426,
+                'type' => 'zone_delimiter',
+                'zone_id' => 4,
+            ],
+
+            [
+                'latitude' => 40.80928360795432,  
+                'longitude' =>  0.5186361750449769,
+                'type' => 'zone_delimiter',
+                'zone_id' => 4,
+            ],
+
+
+
+
+            [
+                'latitude' => 40.80973985076028, 
+                'longitude' => 0.5208158018481406,
+                'type' => 'zone_delimiter',
+                'zone_id' => 5,
+            ],
+            [
+                'latitude' => 40.80949160329713, 
+                'longitude' =>  0.521538107061716,
+                'type' => 'zone_delimiter',
+                'zone_id' => 5,
+            ],
+            [
+                'latitude' => 40.80980400444804, 
+                'longitude' =>  0.5214625598327451,
+                'type' => 'zone_delimiter',
+                'zone_id' => 5,
+            ],
+
+            [
+                'latitude' => 40.80973985076028, 
+                'longitude' =>  0.5208231723095036,
+                'type' => 'zone_delimiter',
+                'zone_id' => 5,
+            ],
+
+
+
+            [
+                'latitude' => 40.72753078268203, 
+                'longitude' =>   0.7210593535256875,
+                'type' => 'zone_delimiter',
+                'zone_id' => 6,
+            ],
+            [
+                'latitude' => 40.72747442083748,  
+                'longitude' => 0.7235198779068127,
+                'type' => 'zone_delimiter',
+                'zone_id' => 6,
+            ],
+            [
+                'latitude' => 40.72834802406379,  
+                'longitude' =>  0.7229558786154213,
+                'type' => 'zone_delimiter',
+                'zone_id' => 6,
+            ],
+            [
+                'latitude' => 40.72752608586348, 
+                'longitude' =>   0.7211151336753855,
+                'type' => 'zone_delimiter',
+                'zone_id' => 6,
             ],
 
             
