@@ -10,10 +10,11 @@ import { Button } from 'primereact/button';
 import { ColorPicker } from 'primereact/colorpicker';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
+import * as turf from '@turf/turf';
 
 const schema = yup.object().shape({
   name: yup.string().required('El nombre es obligatorio'),
@@ -40,31 +41,35 @@ export const SaveZoneForm = ({
   coordinates,
   onClose: onCloseProp,
 }: SaveZoneProps) => {
-  const currentContract: Contract | null = useSelector(
-    (state: RootState) => state.contract.currentContract,
+  const currentContract = useSelector<RootState, Contract | null>(
+    (state) => state.contract.currentContract
   );
+  const zones = useSelector((state: RootState) => state.zone.zones);
+  const points = useSelector((state: RootState) => state.points.points);
   const isLoading = useSelector((state: RootState) => state.loader.isLoading);
   const dispatch = useDispatch<AppDispatch>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const toast = useRef<Toast>(null);
+
+  const defaultValues = useMemo(() => ({
+    name: '',
+    description: '',
+    color: '#FF5733',
+    contractId: currentContract?.id || 0,
+    coordinates: coordinates,
+  }), [coordinates, currentContract?.id]);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
+    formState: { isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      name: '',
-      description: '',
-      color: '#FF5733',
-      contractId: currentContract?.id || 0,
-      coordinates: coordinates,
-    },
+    defaultValues,
   });
 
-  const toast = useRef<Toast>(null);
-  
   useEffect(() => {
     setValue('coordinates', coordinates);
     if (currentContract?.id) {
@@ -72,10 +77,71 @@ export const SaveZoneForm = ({
     }
   }, [coordinates, currentContract, setValue]);
 
+  const checkZonesOverlap = useCallback((newPolygonCoords: number[][]): boolean => {
+    if (!currentContract?.id) return false;
+    
+    try {
+      const closedCoords = [...newPolygonCoords];
+      if (
+        closedCoords.length > 0 &&
+        (closedCoords[0][0] !== closedCoords[closedCoords.length - 1][0] ||
+         closedCoords[0][1] !== closedCoords[closedCoords.length - 1][1])
+      ) {
+        closedCoords.push([...closedCoords[0]]);
+      }
+
+      const newPolygon = turf.polygon([closedCoords]);
+      
+      const filteredZones = zones.filter(z => z.contract_id === currentContract.id);
+      
+      return filteredZones.some(zone => {
+        const zonePoints = points
+          .filter(p => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
+          .map(p => [p.longitude!, p.latitude!]);
+          
+        if (zonePoints.length < 3) return false;
+
+        const closedZonePoints = [...zonePoints];
+        if (
+          closedZonePoints[0][0] !== closedZonePoints[closedZonePoints.length - 1][0] ||
+          closedZonePoints[0][1] !== closedZonePoints[closedZonePoints.length - 1][1]
+        ) {
+          closedZonePoints.push([...closedZonePoints[0]]);
+        }
+        
+        try {
+          const existingPolygon = turf.polygon([closedZonePoints]);
+          
+          return (
+            turf.booleanOverlap(newPolygon, existingPolygon) || 
+            turf.booleanContains(existingPolygon, newPolygon) ||
+            turf.booleanContains(newPolygon, existingPolygon)
+          );
+        } catch (err) {
+          console.error('Error al analizar intersección de polígonos:', err);
+          return false;
+        }
+      });
+    } catch (err) {
+      console.error('Error en checkZonesOverlap:', err);
+      return false;
+    }
+  }, [currentContract, zones, points]);
+
   const onSubmit = useCallback(async (data: Zone) => {
     if (isSubmitting) return;
+
+    if (checkZonesOverlap(coordinates)) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se puede crear una zona encima de otra zona existente',
+        sticky: true,
+        life: 5000
+      });
+      return;
+    }
     
-    setIsSubmitting(true);
     dispatch(showLoader());
 
     try {
@@ -110,10 +176,9 @@ export const SaveZoneForm = ({
         detail: 'No se pudo guardar la zona',
       });
     } finally {
-      setIsSubmitting(false);
       dispatch(hideLoader());
     }
-  }, [coordinates, currentContract, dispatch, isSubmitting, onCloseProp]);
+  }, [coordinates, currentContract, dispatch, isSubmitting, onCloseProp, checkZonesOverlap]);
 
   const handleCancel = useCallback(() => {
     onCloseProp({} as Zone, []);
