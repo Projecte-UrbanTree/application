@@ -38,9 +38,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   );
 
   const isInventoryPage = location.pathname.includes('/admin/inventory');
+  const isWorkersPage = location.pathname.includes('/admin/workers');
   const activeContracts = allContracts.filter(contract => contract.status === 0);
   const contracts =
-    isInventoryPage
+    isInventoryPage || isWorkersPage
       ? activeContracts
       : [defaultContract, ...activeContracts];
 
@@ -79,10 +80,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   }, [titleI18n, t]);
 
   useEffect(() => {
-    if (isInventoryPage && !currentContract && allContracts.length > 0) {
-      dispatch(selectContract(allContracts[0]?.id ?? 0));
+    if ((isInventoryPage || isWorkersPage) && (!currentContract || currentContract.id === defaultContract.id) && activeContracts.length > 0) {
+      dispatch(selectContract(activeContracts[0]?.id ?? 0));
     }
-  }, [isInventoryPage, currentContract, allContracts, dispatch]);
+  }, [isInventoryPage, isWorkersPage, currentContract, activeContracts, dispatch]);
 
   const handleContractChange = useCallback(
     (e: DropdownChangeEvent) => {
