@@ -80,7 +80,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   }, [titleI18n, t]);
 
   useEffect(() => {
-    if (!dropdownValue !== null) {
+    if (dropdownValue === null) {
       setDropdownValue(currentContract ? currentContract.id : 0);
     }
   }, [currentContract, dropdownValue]);
