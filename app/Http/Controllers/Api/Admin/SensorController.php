@@ -13,8 +13,17 @@ class SensorController extends Controller
      */
     public function index()
     {
-        $sensors = Sensor::all();
-        return response()->json(['data' => $sensors], 200);
+        $sensors = Sensor::all()->map(function ($sensor) {
+            return [
+                'id' => $sensor->id,
+                'dev_eui' => $sensor->eui,
+                'device_name' => $sensor->name,
+                'latitude' => $sensor->latitude,
+                'longitude' => $sensor->longitude,
+            ];
+        });
+
+        return response()->json($sensors, 200);
     }
 
     /**

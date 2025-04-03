@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\WorkReportController;
 use App\Http\Controllers\Api\Admin\ZoneController;
+use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ElementController;
 use App\Http\Middleware\RoleMiddleware;
@@ -35,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
         Route::post('select-contract', [ContractController::class, 'selectContract']);
         Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
 
@@ -70,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'work-reports' => WorkReportController::class,
             'zones' => ZoneController::class,
             'incidents' => IncidentsController::class,
+            'sensors' => SensorController::class,
         ]);
 
         Route::put('/work-orders/{id}/status', [WorkOrderController::class, 'updateStatus']);

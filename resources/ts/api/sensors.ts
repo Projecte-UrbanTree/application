@@ -54,7 +54,7 @@ export const fetchSensorByEUI = async (eui: string) => {
   try {
     const apiKey = import.meta.env.VITE_X_API_KEY;
     const response = await axios.get(
-      `http://api_urbantree.alumnat.iesmontsia.org/sensors/${eui}`,
+      `http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/${eui}`,
       {
         headers: {
           'X-API-Key': apiKey,

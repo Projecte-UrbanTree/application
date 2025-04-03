@@ -1,22 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { fetchSensors, fetchSensorByEUI } from '@/api/sensors';
+import { Sensor, fetchSensors } from '@/api/sensors';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
-interface Sensor {
-  id: number;
-  device_name?: string;
-  dev_eui: string;
-  time?: string;
-  temp_soil?: number;
-  ph1_soil?: number;
-  water_soil?: number;
-  conductor_soil?: number;
-  bat?: number;
-  rssi?: number;
-  snr?: number;
-  latitude?: number;
-  longitude?: number;
-}
 
 const Sensors: React.FC = () => {
   const navigate = useNavigate();
@@ -27,20 +12,8 @@ const Sensors: React.FC = () => {
   useEffect(() => {
     const loadSensors = async () => {
       try {
-        const allSensors = await fetchSensors();
-
-        const verifiedSensors = await Promise.all(
-          allSensors.map(async (sensor: any) => {
-            try {
-              const exists = await fetchSensorByEUI(sensor.dev_eui);
-              return exists ? sensor : null;
-            } catch {
-              return null;
-            }
-          }),
-        );
-
-        setSensors(verifiedSensors.filter(Boolean) as Sensor[]);
+        const data = await fetchSensors();
+        setSensors(data);
       } catch (err) {
         setError('Error al cargar los sensores');
         console.error(err);
@@ -48,7 +21,6 @@ const Sensors: React.FC = () => {
         setLoading(false);
       }
     };
-
     loadSensors();
   }, []);
 
@@ -118,62 +90,49 @@ const Sensors: React.FC = () => {
                     <h2 className="font-semibold text-gray-800">
                       {deviceName}
                     </h2>
-                    {sensorData.lastReading.time
-                      ? `${new Date(sensorData.lastReading.time).toLocaleDateString()} ${new Date(sensorData.lastReading.time).toLocaleTimeString()}`
-                      : 'N/A'}
-                  </div>
-                  <button
-                    onClick={() => handleEdit(sensorData.id)}
-                    className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
-                    aria-label="Editar sensor">
-                    <PencilIcon className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Last reading info */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between text-sm mb-1">
-                    <span className="text-gray-500">Última lectura:</span>
-                    <span className="text-gray-700">
-                      {new Date(
-                        sensorData.lastReading.time,
-                      ).toLocaleDateString()}{' '}
-                      {new Date(
-                        sensorData.lastReading.time,
-                      ).toLocaleTimeString()}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">DevEUI:</span>
-                    <span className="text-gray-700 font-mono text-xs truncate max-w-[120px]">
-                      {sensorData.dev_eui}
-                    </span>
+                    <p className="text-xs text-gray-500">ID: {sensorData.id}</p>
                   </div>
                 </div>
+                <button
+                  onClick={() => handleEdit(sensorData.id)}
+                  className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
+                  aria-label="Editar sensor">
+                  <PencilIcon className="w-5 h-5" />
+                </button>
+              </div>
 
-                {/* Status indicators */}
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-xs text-gray-500 mb-1">Batería</p>
-                    <div className="flex items-center">
-                      <span
-                        className={`inline-block w-2 h-2 rounded-full mr-2 ${sensorData.lastReading.bat < 3 ? 'bg-red-500' : 'bg-green-500'}`}></span>
-                      <span
-                        className={
-                          sensorData.lastReading.bat < 3
-                            ? 'text-red-600'
-                            : 'text-green-600'
-                        }>
-                        {sensorData.lastReading.bat || 'N/A'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-xs text-gray-500 mb-1">Ubicación</p>
-                    <p className="text-gray-700 text-sm">
-                      {sensorData.location.latitude?.toFixed(6) || 'N/A'},{' '}
-                      {sensorData.location.longitude?.toFixed(6) || 'N/A'}
-                    </p>
+              {/* Last reading info */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between text-sm mb-1">
+                  <span className="text-gray-500">Última lectura:</span>
+                  <span className="text-gray-700">
+                    {new Date(sensorData.lastReading.time).toLocaleDateString()}{' '}
+                    {new Date(sensorData.lastReading.time).toLocaleTimeString()}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">DevEUI:</span>
+                  <span className="text-gray-700 font-mono text-xs truncate max-w-[120px]">
+                    {sensorData.dev_eui}
+                  </span>
+                </div>
+              </div>
+
+              {/* Status indicators */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <p className="text-xs text-gray-500 mb-1">Batería</p>
+                  <div className="flex items-center">
+                    <span
+                      className={`inline-block w-2 h-2 rounded-full mr-2 ${sensorData.lastReading.bat < 3 ? 'bg-red-500' : 'bg-green-500'}`}></span>
+                    <span
+                      className={
+                        sensorData.lastReading.bat < 3
+                          ? 'text-red-600'
+                          : 'text-green-600'
+                      }>
+                      {sensorData.lastReading.bat}V
+                    </span>
                   </div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
