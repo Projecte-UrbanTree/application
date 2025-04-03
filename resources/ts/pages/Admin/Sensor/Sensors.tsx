@@ -106,6 +106,7 @@ const Sensors: React.FC = () => {
                 <div className="flex items-center justify-between text-sm mb-1">
                   <span className="text-gray-500">Última lectura:</span>
                   <span className="text-gray-700">
+                    {new Date(sensorData.lastReading.time).toLocaleDateString()}{' '}
                     {new Date(sensorData.lastReading.time).toLocaleTimeString()}
                   </span>
                 </div>
