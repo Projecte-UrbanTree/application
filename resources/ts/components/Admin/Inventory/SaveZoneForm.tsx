@@ -171,7 +171,6 @@ export const SaveZoneForm = ({
         summary: 'Error',
         detail: 'No se pudo guardar la zona',
       });
-    } finally {
     }
   }, [coordinates, currentContract, dispatch, isSubmitting, onCloseProp, checkZonesOverlap]);
 
@@ -235,13 +234,13 @@ export const SaveZoneForm = ({
             type="button"
             onClick={handleCancel}
             className="p-button-secondary"
-            disabled={isLoading || isSubmitting}>
+            disabled={isSubmitting}>
             Cancelar
           </Button>
           <Button
             type="submit"
             className="p-button-primary"
-            disabled={isLoading || isSubmitting}>
+            disabled={isSubmitting}>
             Guardar
           </Button>
         </div>

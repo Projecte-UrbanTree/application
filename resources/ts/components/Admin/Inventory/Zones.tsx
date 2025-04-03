@@ -258,6 +258,18 @@ export const Zones = ({
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
       <Toast ref={toast} />
       
+      {isDrawingMode && (
+        <div className="mb-4 sticky top-0 bg-white p-3 rounded-lg shadow-md z-10">
+          <Button
+            label="Guardar Zona"
+            icon="pi pi-save"
+            onClick={onSaveZone}
+            className="p-button-primary p-button-raised w-full"
+            disabled={!enabledButton}
+          />
+        </div>
+      )}
+      
       <div className="mb-6">
         <input
           type="text"
@@ -286,17 +298,6 @@ export const Zones = ({
                   });
                 }}
                 className="p-button-text p-2"
-              />
-            </div>
-          )}
-          
-          {isDrawingMode && (
-            <div className="mb-4">
-              <Button
-                label="Guardar Zona"
-                onClick={onSaveZone}
-                className="p-button-text p-2"
-                disabled={!enabledButton}
               />
             </div>
           )}
