@@ -11,18 +11,44 @@ export function useAuth() {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user);
   const [isLoading, setIsLoading] = useState(true);
-  const isAuthenticated = Boolean(user.id);
   const { fetchContracts } = useContracts();
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('authToken');
+  const isAuthenticated = Boolean(user.id);
 
+  const fetchUser = useCallback(
+    async (customNavigate?: (path: string) => void) => {
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const { data } = await axiosClient.get('/user', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        dispatch(setUserData(data));
+        await fetchContracts();
+
+        customNavigate?.(data.role === 'admin' ? '/admin/dashboard' : '/');
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        logout(customNavigate);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [dispatch, fetchContracts, token]
+  );
+
+  useEffect(() => {
     if (token && !user.id) {
       fetchUser();
     } else {
       setIsLoading(false);
     }
-  }, []);
+  }, [fetchUser, token, user.id]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -30,66 +56,19 @@ export function useAuth() {
     }
   }, [isLoading, isAuthenticated, navigate]);
 
-  const fetchUser = useCallback(
-    async (customNavigate?: (path: string) => void) => {
-      try {
-        const response = await axiosClient.get('/user', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        });
+  const login = async (authToken: string, customNavigate?: (path: string) => void) => {
+    if (!authToken) return console.error('Error: No se recibió un token válido');
 
-        dispatch(setUserData(response.data));
-
-        await fetchContracts();
-
-        if (customNavigate) {
-          const userRole = response.data.role;
-          customNavigate(userRole === 'admin' ? '/admin/dashboard' : '/');
-        }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-
-        if (customNavigate) {
-          logout(customNavigate);
-        } else {
-          logout();
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [dispatch, fetchContracts],
-  );
-
-  const login = async (
-    token: string,
-    customNavigate?: (path: string) => void,
-  ) => {
-    if (!token) {
-      console.error('Error: No se recibió un token válido');
-      return;
-    }
-
-    try {
-      localStorage.setItem('authToken', token);
-      axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
-
-      await fetchUser(customNavigate);
-    } catch (error) {
-      console.error('Error al intentar iniciar sesión:', error);
-    }
+    localStorage.setItem('authToken', authToken);
+    axiosClient.defaults.headers.Authorization = `Bearer ${authToken}`;
+    await fetchUser(customNavigate);
+    console.log('Login successful');
   };
 
   const logout = (customNavigate?: (path: string) => void) => {
     localStorage.removeItem('authToken');
     dispatch(clearUserData());
-
-    if (customNavigate) {
-      customNavigate('/login');
-    } else if (navigate) {
-      navigate('/login', { replace: true });
-    }
+    (customNavigate || ((path: string) => navigate(path, { replace: true })))('/login');
   };
 
   return { isLoading, isAuthenticated, user, login, logout, fetchUser };

@@ -1,45 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface GeolocationState {
-    latitude: number | null;
-    longitude: number | null;
-    error: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  error: string | null;
 }
 
-const useGeolocation = () => {
-    const [location, setLocation] = useState<GeolocationState>({
-        latitude: null,
-        longitude: null,
-        error: null,
+const useGeolocation = (watch: boolean = true) => {
+  const [location, setLocation] = useState<GeolocationState>({
+    latitude: null,
+    longitude: null,
+    error: null,
+  });
+
+  const updatePosition = useCallback((position: GeolocationPosition) => {
+    setLocation({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      error: null,
     });
+  }, []);
 
-    useEffect(() => {
-        if (!navigator.geolocation) {
-            setLocation((prev) => ({
-                ...prev,
-                error: 'Geolocation is not supported',
-            }));
-            return;
-        }
+  const handleError = useCallback((err: GeolocationPositionError) => {
+    setLocation((prev) => ({ ...prev, error: err.message }));
+  }, []);
 
-        const success = (position: GeolocationPosition) => {
-            setLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                error: null,
-            });
-        };
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setLocation((prev) => ({
+        ...prev,
+        error: 'Geolocation is not supported',
+      }));
+      return;
+    }
 
-        const error = (err: GeolocationPositionError) => {
-            setLocation((prev) => ({ ...prev, error: err.message }));
-        };
+    let watcherId: number | null = null;
 
-        const watcher = navigator.geolocation.watchPosition(success, error);
+    if (watch) {
+      watcherId = navigator.geolocation.watchPosition(updatePosition, handleError);
+    } else {
+      navigator.geolocation.getCurrentPosition(updatePosition, handleError);
+    }
 
-        return () => navigator.geolocation.clearWatch(watcher);
-    }, []);
+    return () => {
+      if (watcherId !== null) {
+        navigator.geolocation.clearWatch(watcherId);
+      }
+    };
+  }, [watch, updatePosition, handleError]);
 
-    return location;
+  // Expose a function to manually refresh location
+  const refreshLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(updatePosition, handleError);
+    }
+  };
+
+  return { ...location, refreshLocation };
 };
 
 export default useGeolocation;
