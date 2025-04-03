@@ -33,4 +33,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUserData, setAuthenticated, clearUserData } = userSlice.actions;
+export const { setUserData, setAuthenticated, clearUserData } =
+  userSlice.actions;

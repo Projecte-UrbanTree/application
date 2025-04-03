@@ -36,7 +36,7 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
     }
 
     setIsSubmitting(true);
-    
+
     const newIncidence: Incidence = {
       name,
       description,
@@ -71,7 +71,15 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [name, description, status, elementId, dispatch, onBackToIncidents, onClose]);
+  }, [
+    name,
+    description,
+    status,
+    elementId,
+    dispatch,
+    onBackToIncidents,
+    onClose,
+  ]);
 
   return (
     <div className="p-4">

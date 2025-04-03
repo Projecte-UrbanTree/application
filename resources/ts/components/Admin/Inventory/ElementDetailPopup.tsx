@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
@@ -58,47 +64,50 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
 
-  const statusOptions = useMemo(() => [
-    { label: 'Abierto', value: IncidentStatus.open },
-    { label: 'En progreso', value: IncidentStatus.in_progress },
-    { label: 'Cerrado', value: IncidentStatus.closed },
-  ], []);
+  const statusOptions = useMemo(
+    () => [
+      { label: 'Abierto', value: IncidentStatus.open },
+      { label: 'En progreso', value: IncidentStatus.in_progress },
+      { label: 'Cerrado', value: IncidentStatus.closed },
+    ],
+    [],
+  );
 
   useEffect(() => {
     const loadWorkOrders = async () => {
       if (!currentContract?.id) return;
-      
+
       try {
         setIsLoading(true);
         const data = await fetchWorkOrders();
         const filteredOrders = data.filter(
-          order => order.contract_id === currentContract.id
+          (order) => order.contract_id === currentContract.id,
         );
         setWorkOrders(filteredOrders);
       } catch (error) {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error cargando órdenes de trabajo'
+          detail: 'Error cargando órdenes de trabajo',
         });
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     loadWorkOrders();
   }, [currentContract]);
 
   useEffect(() => {
     const loadIncidences = async () => {
       if (!element.id) return;
-      
+
       try {
         setIsLoading(true);
         const data = await fetchIncidence();
-        
+
         if (Array.isArray(data)) {
-          setIncidences(data.filter(i => i.element_id === element.id));
+          setIncidences(data.filter((i) => i.element_id === element.id));
         } else {
           setIncidences([]);
         }
@@ -107,42 +116,42 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error cargando incidencias'
+          detail: 'Error cargando incidencias',
         });
       } finally {
-        setIsLoading(false);;
+        setIsLoading(false);
       }
     };
 
     loadIncidences();
   }, [element.id, dispatch]);
 
-  const handleStatusChange = useCallback(async (
-    incidenceId: number,
-    newStatus: IncidentStatus,
-  ) => {
-    try {
-      await updateIncidence(incidenceId, { status: newStatus });
+  const handleStatusChange = useCallback(
+    async (incidenceId: number, newStatus: IncidentStatus) => {
+      try {
+        await updateIncidence(incidenceId, { status: newStatus });
 
-      setIncidences(prev =>
-        prev.map(inc =>
-          inc.id === incidenceId ? { ...inc, status: newStatus } : inc
-        )
-      );
+        setIncidences((prev) =>
+          prev.map((inc) =>
+            inc.id === incidenceId ? { ...inc, status: newStatus } : inc,
+          ),
+        );
 
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Estado actualizado',
-        detail: 'Se actualizó correctamente el estado de la incidencia',
-      });
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo actualizar el estado de la incidencia',
-      });
-    }
-  }, [dispatch]);
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Estado actualizado',
+          detail: 'Se actualizó correctamente el estado de la incidencia',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar el estado de la incidencia',
+        });
+      }
+    },
+    [dispatch],
+  );
 
   const handleAddIncidentClick = useCallback(() => {
     onClose();
@@ -151,96 +160,118 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     }, 300);
   }, [onClose, onOpenIncidentForm]);
 
-  const handleDeleteIncident = useCallback(async (incidentId: number) => {
-    try {
-      await deleteIncidence(incidentId);
-      setIncidences(prev => prev.filter(inc => inc.id !== incidentId));
+  const handleDeleteIncident = useCallback(
+    async (incidentId: number) => {
+      try {
+        await deleteIncidence(incidentId);
+        setIncidences((prev) => prev.filter((inc) => inc.id !== incidentId));
 
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Incidencia eliminada correctamente',
-      });
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo eliminar la incidencia',
-      });
-    }
-  }, [dispatch]);
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Incidencia eliminada correctamente',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar la incidencia',
+        });
+      }
+    },
+    [dispatch],
+  );
 
-  const handleDeleteElement = useCallback(async (id: number) => {
-    try {
-      onClose();
-      await dispatch(deleteElementAsync(id));
-      onDeleteElement(id);
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Elemento eliminado correctamente',
-      });
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo eliminar el elemento',
-      });
-    }
-  }, [dispatch, onClose, onDeleteElement]);
+  const handleDeleteElement = useCallback(
+    async (id: number) => {
+      try {
+        onClose();
+        await dispatch(deleteElementAsync(id));
+        onDeleteElement(id);
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Elemento eliminado correctamente',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar el elemento',
+        });
+      }
+    },
+    [dispatch, onClose, onDeleteElement],
+  );
 
-  const getElementType = useCallback((elementTypeId: number) => {
-    const type = elementTypes.find(t => t.id === elementTypeId);
-    return type?.name || 'No definido';
-  }, [elementTypes]);
+  const getElementType = useCallback(
+    (elementTypeId: number) => {
+      const type = elementTypes.find((t) => t.id === elementTypeId);
+      return type?.name || 'No definido';
+    },
+    [elementTypes],
+  );
 
-  const getTreeType = useCallback((treeTypeId: number) => {
-    return treeTypes.find(t => t.id === treeTypeId);
-  }, [treeTypes]);
+  const getTreeType = useCallback(
+    (treeTypeId: number) => {
+      return treeTypes.find((t) => t.id === treeTypeId);
+    },
+    [treeTypes],
+  );
 
-  const coords = useMemo(() => 
-    getCoordElement(element, points), 
-  [element, points, getCoordElement]);
+  const coords = useMemo(
+    () => getCoordElement(element, points),
+    [element, points, getCoordElement],
+  );
 
-  const getZoneElement = useCallback((pointId: number) => {
-    const point = points.find(p => p.id === pointId);
-    if (!point) return null;
-    return zones.find(z => z.id === point.zone_id);
-  }, [points, zones]);
+  const getZoneElement = useCallback(
+    (pointId: number) => {
+      const point = points.find((p) => p.id === pointId);
+      if (!point) return null;
+      return zones.find((z) => z.id === point.zone_id);
+    },
+    [points, zones],
+  );
 
-  const convertirFechaIsoAFormatoEuropeo = useCallback((fechaIso: string): string => {
-    const fecha = new Date(fechaIso);
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const anio = fecha.getFullYear();
-    const horas = fecha.getHours().toString().padStart(2, '0');
-    const minutos = fecha.getMinutes().toString().padStart(2, '0');
-    const segundos = fecha.getSeconds().toString().padStart(2, '0');
-    return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
-  }, []);
+  const convertirFechaIsoAFormatoEuropeo = useCallback(
+    (fechaIso: string): string => {
+      const fecha = new Date(fechaIso);
+      const dia = fecha.getDate().toString().padStart(2, '0');
+      const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+      const anio = fecha.getFullYear();
+      const horas = fecha.getHours().toString().padStart(2, '0');
+      const minutos = fecha.getMinutes().toString().padStart(2, '0');
+      const segundos = fecha.getSeconds().toString().padStart(2, '0');
+      return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+    },
+    [],
+  );
 
   const tasksForElement = useMemo(() => {
     if (!element.point_id) return [];
-    
+
     const elementZone = getZoneElement(element.point_id);
     if (!elementZone) return [];
 
-    return workOrders.flatMap(workOrder =>
-      workOrder.work_orders_blocks?.flatMap(block => {
-        const zoneMatches = block.zones?.some(
-          zone => zone.id === elementZone.id
-        );
+    return workOrders.flatMap(
+      (workOrder) =>
+        workOrder.work_orders_blocks?.flatMap((block) => {
+          const zoneMatches = block.zones?.some(
+            (zone) => zone.id === elementZone.id,
+          );
 
-        if (zoneMatches) {
-          return block.block_tasks?.map(task => ({
-            workOrderId: workOrder.id,
-            workOrderStatus: workOrder.status,
-            taskType: task.tasks_type,
-            notes: block.notes,
-          })) || [];
-        }
-        return [];
-      }) || []
+          if (zoneMatches) {
+            return (
+              block.block_tasks?.map((task) => ({
+                workOrderId: workOrder.id,
+                workOrderStatus: workOrder.status,
+                taskType: task.tasks_type,
+                notes: block.notes,
+              })) || []
+            );
+          }
+          return [];
+        }) || [],
     );
   }, [element.point_id, getZoneElement, workOrders]);
 
@@ -293,7 +324,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <p>
                 <strong>Fecha Creación:</strong>{' '}
-                {element.created_at ? convertirFechaIsoAFormatoEuropeo(element.created_at) : 'No disponible'}
+                {element.created_at
+                  ? convertirFechaIsoAFormatoEuropeo(element.created_at)
+                  : 'No disponible'}
               </p>
             </div>
 
@@ -301,7 +334,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               <h3 className="font-bold text-base mb-3">Ubicación</h3>
               <p>
                 <strong>Zona:</strong>{' '}
-                {element.point_id && getZoneElement(element.point_id)?.name || 'No disponible'}
+                {(element.point_id && getZoneElement(element.point_id)?.name) ||
+                  'No disponible'}
               </p>
               <p>
                 <strong>Latitud:</strong> {coords?.lat || 'No disponible'}
@@ -337,7 +371,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   <p>
                     <strong>📅 Fecha Creación:</strong>{' '}
                     {incidence.created_at
-                      ? convertirFechaIsoAFormatoEuropeo(incidence.created_at) 
+                      ? convertirFechaIsoAFormatoEuropeo(incidence.created_at)
                       : 'No disponible'}
                   </p>
                   <p>

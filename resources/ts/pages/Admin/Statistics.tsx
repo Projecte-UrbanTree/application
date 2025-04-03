@@ -410,8 +410,7 @@ export default function Stats() {
 
   return (
     <div className="flex flex-col gap-6 p-4">
-      <div
-        className="flex flex-wrap items-end gap-4 p-4 bg-white rounded border border-gray-200 shadow-sm min-h-32">
+      <div className="flex flex-wrap items-end gap-4 p-4 bg-white rounded border border-gray-200 shadow-sm min-h-32">
         <div>
           <SelectButton
             value={rangeOption}

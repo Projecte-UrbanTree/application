@@ -5,7 +5,10 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { savePointsAsync, fetchPointsAsync } from '@/store/slice/pointSlice';
-import { saveElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice';
+import {
+  saveElementAsync,
+  fetchElementsAsync,
+} from '@/store/slice/elementSlice';
 import { Element } from '@/types/Element';
 import { TypePoint } from '@/types/Point';
 import { SavePointsProps } from '@/api/service/pointService';
@@ -26,14 +29,19 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   treeTypes,
 }) => {
   const [description, setDescription] = useState<string | null>(null);
-  const [selectedElementType, setSelectedElementType] = useState<number | null>(null);
+  const [selectedElementType, setSelectedElementType] = useState<number | null>(
+    null,
+  );
   const [selectedTreeType, setSelectedTreeType] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value || null);
-  }, []);
+  const handleDescriptionChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setDescription(e.target.value || null);
+    },
+    [],
+  );
 
   const handleElementTypeChange = useCallback((e: { value: number }) => {
     setSelectedElementType(e.value);
@@ -45,9 +53,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
 
   const handleSave = async () => {
     if (!selectedElementType || !selectedTreeType) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
       const [longitude, latitude] = coordinate;
 
@@ -58,8 +66,10 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
         zone_id: zoneId,
       };
 
-      const savedPoint = await dispatch(savePointsAsync([pointToSave])).unwrap();
-      
+      const savedPoint = await dispatch(
+        savePointsAsync([pointToSave]),
+      ).unwrap();
+
       if (!savedPoint.id) {
         throw new Error('Failed to save point - no ID returned');
       }
@@ -74,9 +84,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       await dispatch(saveElementAsync(elementData)).unwrap();
       await Promise.all([
         dispatch(fetchPointsAsync()),
-        dispatch(fetchElementsAsync())
+        dispatch(fetchElementsAsync()),
       ]);
-      
+
       onClose();
     } catch (error) {
       // Error is handled by the slice's rejected action
@@ -90,7 +100,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   return (
     <div className="p-3">
       <div className="mb-3">
-        <label htmlFor="element-type" className="block text-sm font-medium mb-1">
+        <label
+          htmlFor="element-type"
+          className="block text-sm font-medium mb-1">
           Tipo de Elemento:
         </label>
         <Dropdown
@@ -102,7 +114,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
           className="w-full"
         />
       </div>
-      
+
       <div className="mb-3">
         <label htmlFor="tree-type" className="block text-sm font-medium mb-1">
           Tipo de Árbol:
@@ -116,7 +128,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
           className="w-full"
         />
       </div>
-      
+
       <div className="mb-3">
         <label htmlFor="description" className="block text-sm font-medium mb-1">
           Descripción: (opcional)
@@ -130,7 +142,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
           className="w-full"
         />
       </div>
-      
+
       <div className="flex justify-end gap-2 mt-4">
         <Button
           label="Cancelar"
