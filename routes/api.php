@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ContractUserController;
+use App\Http\Controllers\Api\Admin\ElementController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\EvaController;
 use App\Http\Controllers\Api\Admin\IncidentsController;
@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\WorkReportController;
 use App\Http\Controllers\Api\Admin\ZoneController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Admin\ElementController;
+use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -38,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('contracts', [UserContractController::class, 'index']);
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
+    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
 
         Route::get('stats', function (Request $request) {
             return response()->json([

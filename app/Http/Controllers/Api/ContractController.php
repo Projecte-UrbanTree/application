@@ -10,6 +10,7 @@ class ContractController extends Controller
     public function index()
     {
         $contracts = Contract::all();
+
         return response()->json($contracts);
     }
 }
