@@ -20,7 +20,7 @@ export default function Inventory() {
   useEffect(() => {
     const handleResize = () => {
       const newIsMobile = window.innerWidth < 768;
-      
+
       if (isMobile !== newIsMobile) {
         setIsMobile(newIsMobile);
         setMapKey(Date.now());
@@ -64,11 +64,14 @@ export default function Inventory() {
     });
   }, []);
 
-  const handleMapClick = useCallback((event: React.MouseEvent) => {
-    if (isCreatingElement && !zoneToAddElement) {
-      showErrorMessage('No es pot crear un element fora de la zona');
-    }
-  }, [isCreatingElement, zoneToAddElement, showErrorMessage]);
+  const handleMapClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (isCreatingElement && !zoneToAddElement) {
+        showErrorMessage('No es pot crear un element fora de la zona');
+      }
+    },
+    [isCreatingElement, zoneToAddElement, showErrorMessage],
+  );
 
   const handleDrawingModeChange = useCallback((isDrawing: boolean) => {
     setIsDrawingMode(isDrawing);
@@ -86,7 +89,8 @@ export default function Inventory() {
     <div className="flex flex-col w-full h-full relative">
       <Toast ref={toast} position="top-center" />
 
-      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
+      <div
+        className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
         <div
           ref={mapContainerRef}
           className={`${isMobile ? 'h-[60%] w-full' : 'w-[70%] h-full'} relative bg-gray-100`}
@@ -108,7 +112,8 @@ export default function Inventory() {
           />
         </div>
 
-        <div className={`${isMobile ? 'h-[40%] w-full' : 'w-[30%] h-full'} bg-white shadow-md overflow-auto`}>
+        <div
+          className={`${isMobile ? 'h-[40%] w-full' : 'w-[30%] h-full'} bg-white shadow-md overflow-auto`}>
           <Zones
             onSelectedZone={handleSelectedZone}
             onAddElementZone={handleAddElementZone}

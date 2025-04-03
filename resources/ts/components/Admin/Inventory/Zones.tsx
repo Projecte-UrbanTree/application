@@ -58,39 +58,57 @@ export const Zones = ({
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
-  const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(null);
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<
+    Record<string, boolean>
+  >({});
+  const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(
+    null,
+  );
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
-  
-  const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
-  const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
-  const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
 
-  const uniqueZones = useMemo(() => 
-    Array.from(new Map(zones.map((z) => [z.id, z])).values()),
-  [zones]);
+  const { zones, loading: zonesLoading } = useSelector(
+    (state: RootState) => state.zone,
+  );
+  const { points, loading: pointsLoading } = useSelector(
+    (state: RootState) => state.points,
+  );
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
+  const { elements, loading: elementsLoading } = useSelector(
+    (state: RootState) => state.element,
+  );
 
-  const filteredZones = useMemo(() => 
-    uniqueZones.filter((zone) => {
-      if (!searchTerm) return true;
-      const lowerCaseSearchTerm = searchTerm.toLowerCase();
-      return (
-        zone.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
-        zone.description?.toLowerCase().includes(lowerCaseSearchTerm)
-      );
-    }), 
-  [uniqueZones, searchTerm]);
+  const uniqueZones = useMemo(
+    () => Array.from(new Map(zones.map((z) => [z.id, z])).values()),
+    [zones],
+  );
 
-  const addElementZone = useCallback(({ isCreatingElement, zone }: AddElementProps) => {
-    eventSubject.next({ isCreatingElement, zone });
-    if (zone) onAddElementZone(zone);
-    setSelectedZoneToAdd(zone || null);
-    stopCreatingElement(isCreatingElement);
-  }, [onAddElementZone, stopCreatingElement]);
+  const filteredZones = useMemo(
+    () =>
+      uniqueZones.filter((zone) => {
+        if (!searchTerm) return true;
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+        return (
+          zone.name?.toLowerCase().includes(lowerCaseSearchTerm) ||
+          zone.description?.toLowerCase().includes(lowerCaseSearchTerm)
+        );
+      }),
+    [uniqueZones, searchTerm],
+  );
+
+  const addElementZone = useCallback(
+    ({ isCreatingElement, zone }: AddElementProps) => {
+      eventSubject.next({ isCreatingElement, zone });
+      if (zone) onAddElementZone(zone);
+      setSelectedZoneToAdd(zone || null);
+      stopCreatingElement(isCreatingElement);
+    },
+    [onAddElementZone, stopCreatingElement],
+  );
 
   useEffect(() => {
     if (!currentContract) return;
@@ -100,13 +118,13 @@ export const Zones = ({
         await Promise.all([
           dispatch(fetchZonesAsync()).unwrap(),
           dispatch(fetchPointsAsync()).unwrap(),
-          dispatch(fetchElementsAsync()).unwrap()
+          dispatch(fetchElementsAsync()).unwrap(),
         ]);
       } catch (error) {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error cargando recursos'
+          detail: 'Error cargando recursos',
         });
       }
     };
@@ -124,20 +142,20 @@ export const Zones = ({
       try {
         const [elementTypesData, treeTypesData] = await Promise.all([
           fetchElementType(),
-          fetchTreeTypes()
+          fetchTreeTypes(),
         ]);
-        
+
         setElementTypes(elementTypesData);
         setTreeTypes(treeTypesData);
       } catch (error) {
         toast.current?.show({
-          severity: 'error', 
+          severity: 'error',
           summary: 'Error',
-          detail: 'Error cargando tipos de elementos'
+          detail: 'Error cargando tipos de elementos',
         });
       }
     };
-    
+
     loadData();
   }, []);
 
@@ -151,11 +169,11 @@ export const Zones = ({
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error en el stream de eventos'
+          detail: 'Error en el stream de eventos',
         });
-      }
+      },
     });
-    
+
     return () => subscription.unsubscribe();
   }, [stopCreatingElement]);
 
@@ -172,7 +190,7 @@ export const Zones = ({
       await Promise.all([
         dispatch(fetchZonesAsync()).unwrap(),
         dispatch(fetchPointsAsync()).unwrap(),
-        dispatch(fetchElementsAsync()).unwrap()
+        dispatch(fetchElementsAsync()).unwrap(),
       ]);
     } catch (error) {
       toast.current?.show({
@@ -183,72 +201,85 @@ export const Zones = ({
     }
   };
 
-  const countElementsByTypeInZone = useCallback((zoneId: number) => {
-    const pointIdsInZone = points
-      .filter((point) => point.zone_id === zoneId)
-      .map((point) => point.id);
-      
-    const elementsInZone = elements.filter((element) =>
-      pointIdsInZone.includes(element.point_id)
-    );
-    
-    return elementsInZone.reduce(
-      (acc, element) => {
-        if (element.element_type_id) {
-          acc[element.element_type_id] = (acc[element.element_type_id] || 0) + 1;
-        }
-        return acc;
-      },
-      {} as Record<number, number>
-    );
-  }, [points, elements]);
+  const countElementsByTypeInZone = useCallback(
+    (zoneId: number) => {
+      const pointIdsInZone = points
+        .filter((point) => point.zone_id === zoneId)
+        .map((point) => point.id);
 
-  const handleViewElements = useCallback((elementTypeId: number, zoneId: number) => {
-    const key = `${zoneId}-${elementTypeId}`;
-    const isHidden = hiddenElementTypes[key] || false;
+      const elementsInZone = elements.filter((element) =>
+        pointIdsInZone.includes(element.point_id),
+      );
 
-    setHiddenElementTypes((prev) => ({
-      ...prev,
-      [key]: !isHidden,
-    }));
-
-    eventSubject.next({
-      isCreatingElement: false,
-      hiddenElementTypes: {
-        zoneId,
-        elementTypeId,
-        hidden: !isHidden,
-      },
-    });
-  }, [hiddenElementTypes]);
-
-  const renderElementTypeItem = useCallback((elementType: ElementType, zone: Zone, count: number) => {
-    const key = `${zone.id}-${elementType.id}`;
-    const isHidden = hiddenElementTypes[key] || false;
-    
-    return (
-      <div key={elementType.id} className="flex justify-between items-center my-2">
-        <div className="flex items-center gap-2">
-          {elementType.icon && (
-            <Icon icon={`mdi:${elementType.icon}`} width="20" className="text-gray-500" />
-          )}
-          <span>
-            {elementType.name} ({count} elementos)
-          </span>
-        </div>
-        <Button
-          icon={
-            <Icon
-              icon={isHidden ? 'mdi:eye-off' : 'mdi:eye'}
-              width="20"
-            />
+      return elementsInZone.reduce(
+        (acc, element) => {
+          if (element.element_type_id) {
+            acc[element.element_type_id] =
+              (acc[element.element_type_id] || 0) + 1;
           }
-          className={`p-button-text p-2 ${isHidden ? 'text-gray-400' : ''}`}
-          onClick={() => handleViewElements(elementType.id!, zone.id!)}
-        />
-      </div>
-    );
-  }, [hiddenElementTypes, handleViewElements]);
+          return acc;
+        },
+        {} as Record<number, number>,
+      );
+    },
+    [points, elements],
+  );
+
+  const handleViewElements = useCallback(
+    (elementTypeId: number, zoneId: number) => {
+      const key = `${zoneId}-${elementTypeId}`;
+      const isHidden = hiddenElementTypes[key] || false;
+
+      setHiddenElementTypes((prev) => ({
+        ...prev,
+        [key]: !isHidden,
+      }));
+
+      eventSubject.next({
+        isCreatingElement: false,
+        hiddenElementTypes: {
+          zoneId,
+          elementTypeId,
+          hidden: !isHidden,
+        },
+      });
+    },
+    [hiddenElementTypes],
+  );
+
+  const renderElementTypeItem = useCallback(
+    (elementType: ElementType, zone: Zone, count: number) => {
+      const key = `${zone.id}-${elementType.id}`;
+      const isHidden = hiddenElementTypes[key] || false;
+
+      return (
+        <div
+          key={elementType.id}
+          className="flex justify-between items-center my-2">
+          <div className="flex items-center gap-2">
+            {elementType.icon && (
+              <Icon
+                icon={`mdi:${elementType.icon}`}
+                width="20"
+                className="text-gray-500"
+              />
+            )}
+            <span>
+              {elementType.name} ({count} elementos)
+            </span>
+          </div>
+          <Button
+            icon={
+              <Icon icon={isHidden ? 'mdi:eye-off' : 'mdi:eye'} width="20" />
+            }
+            className={`p-button-text p-2 ${isHidden ? 'text-gray-400' : ''}`}
+            onClick={() => handleViewElements(elementType.id!, zone.id!)}
+          />
+        </div>
+      );
+    },
+    [hiddenElementTypes, handleViewElements],
+  );
 
   if (zonesLoading || pointsLoading || elementsLoading) {
     return <Preloader />;
@@ -257,7 +288,7 @@ export const Zones = ({
   return (
     <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
       <Toast ref={toast} />
-      
+
       <div className="mb-6">
         <input
           type="text"
@@ -289,7 +320,7 @@ export const Zones = ({
               />
             </div>
           )}
-          
+
           {isDrawingMode && (
             <div className="mb-4">
               <Button
@@ -325,8 +356,7 @@ export const Zones = ({
                       }}
                     />
                   </div>
-                }
-              >
+                }>
                 <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
                   <p>
                     <strong>Descripción:</strong> {zone.description}
@@ -337,7 +367,7 @@ export const Zones = ({
                     onClick={() => confirmDeleteZone(zone)}
                   />
                 </div>
-                
+
                 <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
                   <strong>Añadir elemento</strong>
                   <Button
@@ -352,14 +382,20 @@ export const Zones = ({
                 <div className="p-2 text-sm text-gray-700">
                   <strong>Elementos en esta zona</strong>
                   {elementTypes.map((elementType: ElementType) => {
-                    const elementCountByType = countElementsByTypeInZone(zone.id!);
+                    const elementCountByType = countElementsByTypeInZone(
+                      zone.id!,
+                    );
                     const count = elementCountByType[elementType.id!] || 0;
-                    
-                    return count > 0 ? renderElementTypeItem(elementType, zone, count) : null;
+
+                    return count > 0
+                      ? renderElementTypeItem(elementType, zone, count)
+                      : null;
                   })}
 
                   {elementTypes.every((elementType: ElementType) => {
-                    const elementCountByType = countElementsByTypeInZone(zone.id!);
+                    const elementCountByType = countElementsByTypeInZone(
+                      zone.id!,
+                    );
                     return (elementCountByType[elementType.id!] || 0) === 0;
                   }) && (
                     <p className="text-gray-500 mt-2">
@@ -395,8 +431,7 @@ export const Zones = ({
               }}
             />
           </div>
-        }
-      >
+        }>
         <p>
           ¿Estás seguro de que quieres eliminar la zona?{' '}
           <strong>{selectedZoneToDelete?.name}</strong>?

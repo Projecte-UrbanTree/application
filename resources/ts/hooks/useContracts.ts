@@ -6,7 +6,9 @@ import { RootState } from '@/store/store';
 
 export function useContracts() {
   const dispatch = useDispatch();
-  const contracts = useSelector((state: RootState) => state.contract.allContracts);
+  const contracts = useSelector(
+    (state: RootState) => state.contract.allContracts,
+  );
 
   const fetchContracts = async (forceRefresh = false) => {
     if (!forceRefresh && contracts && contracts.length > 0) {
@@ -16,7 +18,9 @@ export function useContracts() {
     try {
       const { data } = await axiosClient.get<Contract[]>('/contracts');
       if (data.length) {
-        dispatch(setContractState({ allContracts: data, currentContract: null }));
+        dispatch(
+          setContractState({ allContracts: data, currentContract: null }),
+        );
       }
     } catch (error) {
       console.error('Error fetching contracts:', error);

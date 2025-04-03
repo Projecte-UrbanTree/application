@@ -147,10 +147,10 @@ export const MapComponent: React.FC<MapProps> = ({
   // Detect contract changes and reload data
   useEffect(() => {
     if (!currentContract) return;
-    
+
     if (currentContract.id !== lastContractId) {
       setLastContractId(currentContract.id!);
-      
+
       const loadContractData = async () => {
         try {
           await dispatch(fetchPointsAsync()).unwrap();
@@ -163,7 +163,7 @@ export const MapComponent: React.FC<MapProps> = ({
           });
         }
       };
-      
+
       loadContractData();
     }
   }, [dispatch, currentContract, lastContractId]);
@@ -178,55 +178,58 @@ export const MapComponent: React.FC<MapProps> = ({
     }
   }, [selectedZone, points]);
 
-  const handleElementCreation = useCallback((zone: Zone) => {
-    setSelectedZoneForElement(zone);
-    onCreatingElementChange(true);
+  const handleElementCreation = useCallback(
+    (zone: Zone) => {
+      setSelectedZoneForElement(zone);
+      onCreatingElementChange(true);
 
-    const service = mapServiceRef.current;
-    if (!service) return;
+      const service = mapServiceRef.current;
+      if (!service) return;
 
-    service.disableSingleClick();
-    setNewPointCoord(null);
+      service.disableSingleClick();
+      setNewPointCoord(null);
 
-    service.enableSingleClick((lngLat) => {
-      const clickedPoint = turf.point([lngLat.lng, lngLat.lat]);
-      const zonePoints = points
-        .filter(
-          (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
-        )
-        .map((p) => [p.longitude!, p.latitude!]);
+      service.enableSingleClick((lngLat) => {
+        const clickedPoint = turf.point([lngLat.lng, lngLat.lat]);
+        const zonePoints = points
+          .filter(
+            (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
+          )
+          .map((p) => [p.longitude!, p.latitude!]);
 
-      if (zonePoints.length > 0) {
-        zonePoints.push(zonePoints[0]);
-        const zonePolygon = turf.polygon([zonePoints]);
+        if (zonePoints.length > 0) {
+          zonePoints.push(zonePoints[0]);
+          const zonePolygon = turf.polygon([zonePoints]);
 
-        if (turf.booleanPointInPolygon(clickedPoint, zonePolygon)) {
-          setNewPointCoord([lngLat.lng, lngLat.lat]);
-          setModalAddPointVisible(true);
-          onCreatingElementChange(false);
-          service.disableSingleClick();
-        } else {
-          onCreatingElementChange(false);
-          setSelectedZoneForElement(null);
-          service.disableSingleClick();
-          toast.current?.show({
-            severity: 'error',
-            summary: 'Aviso',
-            detail:
-              'No es pot crear un element fora de la zona o zona seleccionada',
-            life: 3000,
-            sticky: false,
-            style: {
-              fontWeight: 'bold',
-              fontSize: '1.1em',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              border: '1px solid #f00',
-            },
-          });
+          if (turf.booleanPointInPolygon(clickedPoint, zonePolygon)) {
+            setNewPointCoord([lngLat.lng, lngLat.lat]);
+            setModalAddPointVisible(true);
+            onCreatingElementChange(false);
+            service.disableSingleClick();
+          } else {
+            onCreatingElementChange(false);
+            setSelectedZoneForElement(null);
+            service.disableSingleClick();
+            toast.current?.show({
+              severity: 'error',
+              summary: 'Aviso',
+              detail:
+                'No es pot crear un element fora de la zona o zona seleccionada',
+              life: 3000,
+              sticky: false,
+              style: {
+                fontWeight: 'bold',
+                fontSize: '1.1em',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                border: '1px solid #f00',
+              },
+            });
+          }
         }
-      }
-    });
-  }, [points, onCreatingElementChange]);
+      });
+    },
+    [points, onCreatingElementChange],
+  );
 
   useEffect(() => {
     const service = mapServiceRef.current;
@@ -263,7 +266,7 @@ export const MapComponent: React.FC<MapProps> = ({
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error en el stream de eventos'
+          detail: 'Error en el stream de eventos',
         });
       },
       complete: () => {},
@@ -394,31 +397,39 @@ export const MapComponent: React.FC<MapProps> = ({
   }
 
   // save drawed zone
-  const handleZoneSaved = useCallback(async (newZone: Zone, newPoints: SavePointsProps[]) => {
-    onModalVisibleChange(false);
-    onDrawingModeChange(false);
-    onEnabledButtonChange(false);
+  const handleZoneSaved = useCallback(
+    async (newZone: Zone, newPoints: SavePointsProps[]) => {
+      onModalVisibleChange(false);
+      onDrawingModeChange(false);
+      onEnabledButtonChange(false);
 
-    const service = mapServiceRef.current;
-    if (!service) return;
+      const service = mapServiceRef.current;
+      if (!service) return;
 
-    service.clearDraw();
+      service.clearDraw();
 
-    const zonePoints = newPoints.map(
-      (p) => [p.longitude, p.latitude] as [number, number],
-    );
-
-    if (zonePoints.length > 2) {
-      zonePoints.push(zonePoints[0]);
-      service.addZoneToMap(
-        `zone-${newZone.id}`,
-        zonePoints,
-        newZone.color || '#088',
+      const zonePoints = newPoints.map(
+        (p) => [p.longitude, p.latitude] as [number, number],
       );
-    }
 
-    await dispatch(fetchPointsAsync());
-  }, [dispatch, onDrawingModeChange, onEnabledButtonChange, onModalVisibleChange]);
+      if (zonePoints.length > 2) {
+        zonePoints.push(zonePoints[0]);
+        service.addZoneToMap(
+          `zone-${newZone.id}`,
+          zonePoints,
+          newZone.color || '#088',
+        );
+      }
+
+      await dispatch(fetchPointsAsync());
+    },
+    [
+      dispatch,
+      onDrawingModeChange,
+      onEnabledButtonChange,
+      onModalVisibleChange,
+    ],
+  );
 
   function detectCollision(
     allPoints: Point[],
@@ -472,27 +483,30 @@ export const MapComponent: React.FC<MapProps> = ({
     }
   };
 
-  const updateElementVisibility = useCallback((
-    zoneId: number,
-    elementTypeId: number,
-    hidden: boolean,
-    service: MapService,
-  ) => {
-    const pointsInZone = points.filter((p) => p.zone_id === zoneId);
-    const pointIds = pointsInZone.map((p) => p.id);
+  const updateElementVisibility = useCallback(
+    (
+      zoneId: number,
+      elementTypeId: number,
+      hidden: boolean,
+      service: MapService,
+    ) => {
+      const pointsInZone = points.filter((p) => p.zone_id === zoneId);
+      const pointIds = pointsInZone.map((p) => p.id);
 
-    const elementsToUpdate = elements.filter(
-      (element) =>
-        element.element_type_id === elementTypeId &&
-        pointIds.includes(element.point_id!),
-    );
+      const elementsToUpdate = elements.filter(
+        (element) =>
+          element.element_type_id === elementTypeId &&
+          pointIds.includes(element.point_id!),
+      );
 
-    elementsToUpdate.forEach((element) => {
-      if (element.id) {
-        service.updateMarkerVisibility(element.id, !hidden);
-      }
-    });
-  }, [elements, points]);
+      elementsToUpdate.forEach((element) => {
+        if (element.id) {
+          service.updateMarkerVisibility(element.id, !hidden);
+        }
+      });
+    },
+    [elements, points],
+  );
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>

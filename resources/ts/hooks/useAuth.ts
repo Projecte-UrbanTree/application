@@ -1,12 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setUserData, setAuthenticated, clearUserData } from '@/store/slice/userSlice';
+import {
+  setUserData,
+  setAuthenticated,
+  clearUserData,
+} from '@/store/slice/userSlice';
 import axiosClient from '@/api/axiosClient';
 
 export function useAuth() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated,
+  );
 
   async function fetchUser() {
     const token = localStorage.getItem('authToken');
