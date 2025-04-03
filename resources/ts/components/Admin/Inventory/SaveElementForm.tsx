@@ -5,13 +5,11 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { savePointsAsync, fetchPointsAsync } from '@/store/slice/pointSlice';
-import {
-  saveElementAsync,
-  fetchElementsAsync,
-} from '@/store/slice/elementSlice';
+import { saveElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice';
 import { Element } from '@/types/Element';
 import { TypePoint } from '@/types/Point';
 import { SavePointsProps } from '@/api/service/pointService';
+import { fetchElementType } from '@/api/service/elementTypeService';
 
 interface SaveElementFormProps {
   zoneId: number;
@@ -29,11 +27,10 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   treeTypes,
 }) => {
   const [description, setDescription] = useState<string | null>(null);
-  const [selectedElementType, setSelectedElementType] = useState<number | null>(
-    null,
-  );
+  const [selectedElementType, setSelectedElementType] = useState<number | null>(null);
   const [selectedTreeType, setSelectedTreeType] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [requiresTreeType, setRequiresTreeType] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleDescriptionChange = useCallback(
@@ -43,8 +40,25 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
     [],
   );
 
-  const handleElementTypeChange = useCallback((e: { value: number }) => {
-    setSelectedElementType(e.value);
+  const handleElementTypeChange = useCallback(async (e: { value: number }) => {
+    const elementTypeId = e.value;
+    setSelectedElementType(elementTypeId);
+    
+    try {
+      const allElementTypes = await fetchElementType();
+      const selectedElementType = allElementTypes.find(et => et.id === elementTypeId);
+      
+      if (selectedElementType) {
+        const needsTreeType = selectedElementType.requires_tree_type === 1;
+        setRequiresTreeType(needsTreeType);
+        
+        if (!needsTreeType) {
+          setSelectedTreeType(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error al verificar si requiere tipo de árbol:', error);
+    }
   }, []);
 
   const handleTreeTypeChange = useCallback((e: { value: number }) => {
@@ -52,7 +66,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   }, []);
 
   const handleSave = async () => {
-    if (!selectedElementType || !selectedTreeType) return;
+    if (!selectedElementType || (requiresTreeType && !selectedTreeType)) return;
 
     setIsSubmitting(true);
 
@@ -77,7 +91,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       const elementData: Element = {
         description,
         element_type_id: selectedElementType,
-        tree_type_id: selectedTreeType,
+        tree_type_id: requiresTreeType ? selectedTreeType ?? undefined : undefined,
         point_id: savedPoint.id,
       };
 
@@ -89,13 +103,13 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
 
       onClose();
     } catch (error) {
-      // Error is handled by the slice's rejected action
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const formIsValid = selectedElementType !== null && selectedTreeType !== null;
+  const formIsValid = selectedElementType !== null && 
+    (!requiresTreeType || selectedTreeType !== null);
 
   return (
     <div className="p-3">
@@ -115,19 +129,21 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="tree-type" className="block text-sm font-medium mb-1">
-          Tipo de Árbol:
-        </label>
-        <Dropdown
-          id="tree-type"
-          value={selectedTreeType}
-          options={treeTypes}
-          onChange={handleTreeTypeChange}
-          placeholder="Selecciona Tipo de Árbol"
-          className="w-full"
-        />
-      </div>
+      {requiresTreeType && (
+        <div className="mb-3">
+          <label htmlFor="tree-type" className="block text-sm font-medium mb-1">
+            Tipo de Árbol:
+          </label>
+          <Dropdown
+            id="tree-type"
+            value={selectedTreeType}
+            options={treeTypes}
+            onChange={handleTreeTypeChange}
+            placeholder="Selecciona Tipo de Árbol"
+            className="w-full"
+          />
+        </div>
+      )}
 
       <div className="mb-3">
         <label htmlFor="description" className="block text-sm font-medium mb-1">
