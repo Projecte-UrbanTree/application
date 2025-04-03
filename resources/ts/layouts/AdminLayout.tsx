@@ -218,12 +218,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
               <img className="w-48" src={logo} alt="Logo" />
             </a>
           </div>
-          <div className="hidden lg:flex flex-1 justify-center items-center space-x-6">
+          <div className="hidden lg:flex flex-1 items-center space-x-6 mx-4">
             {mobileNavItems.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'}`}>
+                className={`text-gray-700 px-2 py-2 rounded flex items-center gap-2 ${item.active ? 'bg-indigo-600 text-white' : 'hover:bg-indigo-100'}`}>
                 <Icon inline={true} width="24px" icon={item.icon} />{' '}
                 {item.label}
               </Link>
@@ -251,7 +251,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 size="large"
                 shape="circle"
                 className="cursor-pointer"
-                style={{ color: '#fff', backgroundColor: '#8ccc63' }}
+                style={{ color: '#fff', backgroundColor: '#4f46e5' }}
               />
               {profileDropdownVisible && (
                 <div
@@ -299,14 +299,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
       {!isAccountPage && (
         <div
           id="submenu"
-          className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-4 px-8 py-4 bg-gray-50 shadow-md">
-          <div className="submenu text-center flex items-center gap-4 mx-auto max-w-7xl">
+          className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-2 lg:gap-4 px-8 py-4 bg-white border border-gray-300 rounded shadow-md">
+          <div className="submenu text-center flex items-center gap-2 lg:gap-4 mx-auto max-w-7xl">
             {isManagementActive &&
               managementSubmenuItems.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
-                  className={`px-2 py-3 rounded flex items-center gap-1 ${location.pathname === item.to ? 'bg-gray-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${location.pathname === item.to ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-indigo-100'}`}>
                   <Icon width="22px" icon={item.icon} /> {item.label}
                 </Link>
               ))}
@@ -315,7 +315,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className={`px-2 py-3 rounded flex items-center gap-1 ${location.pathname === item.to ? 'bg-gray-100 text-indigo-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                  className={`px-2 py-3 rounded flex items-center gap-1 ${location.pathname === item.to ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700 hover:bg-indigo-100'}`}>
                   <Icon width="22px" icon={item.icon} /> {item.label}
                 </Link>
               ))}

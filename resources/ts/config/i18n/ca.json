@@ -85,6 +85,20 @@
         "title": "Contractes"
       },
       "dashboard": {
+        "quickActions": "Accions ràpides",
+        "createWorkOrder": "Crear ordre de treball",
+        "reviewReports": "Revisar informes",
+        "manageUsers": "Gestionar usuaris",
+        "recentActivity": "Activitat recent",
+        "workOrderCompleted": "Ordre de treball completada",
+        "ago": "enrere",
+        "reportSubmitted": "Informe enviat",
+        "workOrderAssigned": "Ordre de treball assignada",
+        "totalWorkOrders": "Total d'ordres",
+        "inProgressWorkOrders": "En progrés",
+        "completedWorkOrders": "Completades",
+        "pendingReports": "Informes pendents",
+        "noInProgressWorkOrders": "Sense ordres de treball en progrés",
         "stats": {
           "widgets": {
             "contracts": "Contractes",
@@ -97,7 +111,10 @@
         "welcome": {
           "greeting": "Benvingut de nou, {{name}} {{surname}}.",
           "message": "Tens a la teva disposició un resum ràpid de les teves dades."
-        }
+        },
+        "viewAll": "Veure totes les activitats",
+        "noActivity": "Sense activitat recent",
+        "actions": "Accions"
       },
       "elementTypes": {
         "title": "Tipus d'element",

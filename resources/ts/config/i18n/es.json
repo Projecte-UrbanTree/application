@@ -85,6 +85,20 @@
         "title": "Contratos"
       },
       "dashboard": {
+        "quickActions": "Acciones rápidas",
+        "createWorkOrder": "Crear orden de trabajo",
+        "reviewReports": "Revisar informes",
+        "manageUsers": "Gestionar usuarios",
+        "recentActivity": "Actividad reciente",
+        "workOrderCompleted": "Orden de trabajo completada",
+        "ago": "atrás",
+        "reportSubmitted": "Informe enviado",
+        "workOrderAssigned": "Orden de trabajo asignada",
+        "totalWorkOrders": "Total de órdenes",
+        "inProgressWorkOrders": "En progreso",
+        "noInProgressWorkOrders": "No hay órdenes de trabajo en progreso",
+        "completedWorkOrders": "Completadas",
+        "pendingReports": "Informes pendientes",
         "stats": {
           "widgets": {
             "contracts": "Contratos",
@@ -93,10 +107,16 @@
             "workOrders": "Órdenes de trabajo"
           }
         },
-        "title": "Panel de control",
+        "title": "Panel",
         "welcome": {
           "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
-          "message": "Nos alegra verte de nuevo. Aquí tienes un resumen rápido de tus datos."
+          "message": "Tienes a tu disposición un resumen rápido de tus datos."
+        },
+        "viewAll": "Ver todas las actividades",
+        "noActivity": "Sin actividad reciente",
+        "actions": {
+          "left": "Izquierda",
+          "actions": "Acciones"
         }
       },
       "elementTypes": {
