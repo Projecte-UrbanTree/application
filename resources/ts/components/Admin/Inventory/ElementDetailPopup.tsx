@@ -48,6 +48,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   onDeleteElement,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [popupWidth, setPopupWidth] = useState('650px'); // Default width
   const [incidences, setIncidences] = useState<Incidence[]>([]);
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [eva, setEva] = useState<Eva | null>(null);
@@ -127,6 +128,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
     loadEvaData();
   }, [activeIndex, element.id, eva]);
+
+  useEffect(() => {
+    // Adjust popup width based on the active tab
+    if (activeIndex === 3) {
+      setPopupWidth('900px'); // Expanded width for Eva tab
+    } else {
+      setPopupWidth('650px'); // Default width for other tabs
+    }
+  }, [activeIndex]);
 
   const handleStatusChange = async (
     incidenceId: number,
@@ -250,8 +260,16 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
     if (!eva) {
       return (
-        <div className="text-center py-8">
+        <div className="text-center py-8 space-y-4">
           <p>{t('admin.pages.inventory.elementDetailPopup.eva.noData')}</p>
+          <Button
+            label={t('admin.pages.inventory.elementDetailPopup.eva.createEva')}
+            className="p-button-sm"
+            onClick={() => setIsEvaModalVisible(true)}
+          />
+          {isEvaModalVisible && (
+            <CreateEva preselectedElementId={element.id!} />
+          )}
         </div>
       );
     }
@@ -438,13 +456,25 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
             </div>
           </div>
+          <div className="text-center py-4">
+            <Button
+              label={t('admin.pages.inventory.elementDetailPopup.eva.editEva')}
+              className="p-button-sm"
+              onClick={() => setIsEditEvaModalVisible(true)}
+            />
+            {isEditEvaModalVisible && (
+              <EditEva preselectedElementId={element.id!} />
+            )}
+          </div>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="bg-white rounded-lg w-[650px] max-w-full">
+    <div
+      className="bg-white rounded-lg max-w-full"
+      style={{ width: popupWidth }}>
       <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}

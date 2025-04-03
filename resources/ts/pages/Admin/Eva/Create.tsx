@@ -81,11 +81,11 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
   );
 };
 
-const CreateEva = ({
-  preselectedElementId,
-}: {
-  preselectedElementId?: number;
-}) => {
+interface CreateEvaProps {
+  preselectedElementId: number;
+}
+
+const CreateEva = ({ preselectedElementId }: CreateEvaProps) => {
   const navigate = useNavigate();
   const [elements, setElements] = useState<any[]>([]);
   const [dictionaries, setDictionaries] = useState<any>({});
@@ -99,7 +99,6 @@ const CreateEva = ({
       .get('/admin/evas/create')
       .then((response) => {
         setElements(response.data.elements);
-        // If preselectedElementId is provided, set it as the default value
         if (preselectedElementId) {
           setElements((prev) =>
             prev.filter((element) => element.id === preselectedElementId),
