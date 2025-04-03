@@ -7,12 +7,9 @@
   "files.autoSave": "onFocusChange",
   "vs-code-prettier-eslint.prettierLast": false,
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[php]": {
-    "editor.defaultFormatter": "DEVSENSE.phptools-vscode"
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   }
 }
