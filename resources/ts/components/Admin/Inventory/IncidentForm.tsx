@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import { saveIncidence } from '@/api/service/incidentService';
@@ -21,11 +21,23 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
 }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [status, setStatus] = useState(IncidentStatus.open);
+  const [status] = useState(IncidentStatus.open);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
+    if (!name.trim()) {
+      toast.current?.show({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'El nombre de la incidencia es obligatorio',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
     const newIncidence: Incidence = {
       name,
       description,
@@ -53,21 +65,20 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
         onClose();
       }
     } catch (error) {
-      console.error('Error al crear la incidencia:', error);
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
         detail: 'No se pudo crear la incidencia',
       });
     } finally {
+      setIsSubmitting(false);
       dispatch(hideLoader());
     }
-  };
+  }, [name, description, status, elementId, dispatch, onBackToIncidents, onClose]);
 
   return (
     <div className="p-4">
       <Toast ref={toast} />
-      <h3 className="text-lg font-bold mb-2">Añadir Incidencia</h3>
       <div className="mb-4">
         <label className="block mb-1">Nombre:</label>
         <input
@@ -76,6 +87,7 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
           onChange={(e) => setName(e.target.value)}
           className="p-inputtext p-component w-full"
           placeholder="Nombre de la incidencia"
+          disabled={isSubmitting}
         />
       </div>
       <div className="mb-4">
@@ -85,6 +97,8 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
           onChange={(e) => setDescription(e.target.value)}
           className="p-inputtext p-component w-full"
           placeholder="Descripción de la incidencia"
+          disabled={isSubmitting}
+          rows={4}
         />
       </div>
       <div className="flex justify-end gap-4">
@@ -92,11 +106,14 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
           label="Guardar"
           onClick={handleSubmit}
           className="p-button-success"
+          disabled={isSubmitting}
+          icon="pi pi-save"
         />
         <Button
           label="Cancelar"
           onClick={onBackToIncidents || onClose}
           className="p-button-secondary"
+          disabled={isSubmitting}
         />
       </div>
     </div>

@@ -3,7 +3,7 @@ import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
 import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { Zone } from '@/types/Zone';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as turf from '@turf/turf';
 import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
@@ -60,6 +60,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const mapServiceRef = useRef<MapService | null>(null);
   const toast = useRef<Toast>(null);
   const dispatch = useDispatch<AppDispatch>();
+
   const { points } = useSelector((state: RootState) => state.points);
   const { zones: zonesRedux } = useSelector((state: RootState) => state.zone);
   const { elements } = useSelector((state: RootState) => state.element);
@@ -92,12 +93,13 @@ export const MapComponent: React.FC<MapProps> = ({
     Record<string, boolean>
   >({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [lastContractId, setLastContractId] = useState<number | null>(null);
 
-  const handleBackToIncidentTab = () => {
+  const handleBackToIncidentTab = useCallback(() => {
     setIncidentModalVisible(false);
     setElementModalVisible(true);
     setActiveTabIndex(1);
-  };
+  }, []);
 
   // load data
   useEffect(() => {
@@ -111,7 +113,7 @@ export const MapComponent: React.FC<MapProps> = ({
     loadData();
   }, []);
 
-  // incialize the map
+  // initialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
@@ -142,11 +144,29 @@ export const MapComponent: React.FC<MapProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // load points if contract is active
+  // Detect contract changes and reload data
   useEffect(() => {
     if (!currentContract) return;
-    dispatch(fetchPointsAsync());
-  }, [currentContract, dispatch]);
+    
+    if (currentContract.id !== lastContractId) {
+      setLastContractId(currentContract.id!);
+      
+      const loadContractData = async () => {
+        try {
+          await dispatch(fetchPointsAsync()).unwrap();
+          await dispatch(fetchElementsAsync()).unwrap();
+        } catch (error) {
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error al cargar los datos del contrato',
+          });
+        }
+      };
+      
+      loadContractData();
+    }
+  }, [dispatch, currentContract, lastContractId]);
 
   // fly to a selected zone
   useEffect(() => {
@@ -158,7 +178,7 @@ export const MapComponent: React.FC<MapProps> = ({
     }
   }, [selectedZone, points]);
 
-  const handleElementCreation = (zone: Zone) => {
+  const handleElementCreation = useCallback((zone: Zone) => {
     setSelectedZoneForElement(zone);
     onCreatingElementChange(true);
 
@@ -206,7 +226,7 @@ export const MapComponent: React.FC<MapProps> = ({
         }
       }
     });
-  };
+  }, [points, onCreatingElementChange]);
 
   useEffect(() => {
     const service = mapServiceRef.current;
@@ -239,8 +259,14 @@ export const MapComponent: React.FC<MapProps> = ({
           updateElementVisibility(zoneId, elementTypeId, hidden, service);
         }
       },
-      error: (err: Error) => console.log('ERROR STREAM: ', err.message),
-      complete: () => console.log('STREAM COMPLETADO'),
+      error: (err: Error) => {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error en el stream de eventos'
+        });
+      },
+      complete: () => {},
     });
 
     return () => {
@@ -250,15 +276,15 @@ export const MapComponent: React.FC<MapProps> = ({
       setNewPointCoord(null);
       service.disableSingleClick();
     };
-  }, [points]);
+  }, [points, handleElementCreation]);
 
-  const handleElementFormClose = () => {
+  const handleElementFormClose = useCallback(() => {
     setModalAddPointVisible(false);
     onCreatingElementChange(false);
     setNewPointCoord(null);
     mapServiceRef.current?.disableSingleClick();
     onElementAdd();
-  };
+  }, [onCreatingElementChange, onElementAdd]);
 
   // draw zones
   useEffect(() => {
@@ -279,7 +305,7 @@ export const MapComponent: React.FC<MapProps> = ({
     filteredZones.forEach((zone: Zone) => {
       const zonePoints = points
         .filter(
-          (p) => p.zone_id === zone.id && p.type == TypePoint.zone_delimiter,
+          (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
         )
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
       if (zonePoints.length > 2) {
@@ -296,18 +322,19 @@ export const MapComponent: React.FC<MapProps> = ({
   // draw elements
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service) return;
+    if (!service || !currentContract) return;
+
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => updateElements(service));
     } else {
       updateElements(service);
     }
-  }, [elements, currentContract, points, dispatch]);
+  }, [elements, currentContract, points]);
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
 
-    const handleDeleteElement = async (elementId: number) => {
+    const handleElementDelete = async (elementId: number) => {
       try {
         await dispatch(deleteElementAsync(elementId));
         toast.current?.show({
@@ -350,7 +377,7 @@ export const MapComponent: React.FC<MapProps> = ({
           filteredPoints,
           treeTypes,
           elementTypes,
-          handleDeleteElement,
+          handleElementDelete,
           handleElementClick,
         );
       });
@@ -360,14 +387,14 @@ export const MapComponent: React.FC<MapProps> = ({
         filteredPoints,
         treeTypes,
         elementTypes,
-        handleDeleteElement,
+        handleElementDelete,
         handleElementClick,
       );
     }
   }
 
   // save drawed zone
-  async function handleZoneSaved(newZone: Zone, newPoints: SavePointsProps[]) {
+  const handleZoneSaved = useCallback(async (newZone: Zone, newPoints: SavePointsProps[]) => {
     onModalVisibleChange(false);
     onDrawingModeChange(false);
     onEnabledButtonChange(false);
@@ -391,7 +418,7 @@ export const MapComponent: React.FC<MapProps> = ({
     }
 
     await dispatch(fetchPointsAsync());
-  }
+  }, [dispatch, onDrawingModeChange, onEnabledButtonChange, onModalVisibleChange]);
 
   function detectCollision(
     allPoints: Point[],
@@ -445,7 +472,7 @@ export const MapComponent: React.FC<MapProps> = ({
     }
   };
 
-  const updateElementVisibility = (
+  const updateElementVisibility = useCallback((
     zoneId: number,
     elementTypeId: number,
     hidden: boolean,
@@ -465,7 +492,7 @@ export const MapComponent: React.FC<MapProps> = ({
         service.updateMarkerVisibility(element.id, !hidden);
       }
     });
-  };
+  }, [elements, points]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -531,8 +558,8 @@ export const MapComponent: React.FC<MapProps> = ({
             treeTypes={treeTypes}
             elementTypes={elementTypes}
             onOpenIncidentForm={() => setIncidentModalVisible(true)}
-            getCoordElement={() =>
-              mapServiceRef.current?.getCoordElement(selectedElement, points)!
+            getCoordElement={(element, pts) =>
+              mapServiceRef.current?.getCoordElement(element, pts)!
             }
             initialTabIndex={activeTabIndex}
           />

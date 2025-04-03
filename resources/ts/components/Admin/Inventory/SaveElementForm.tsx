@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store/store';
 import { savePointsAsync, fetchPointsAsync } from '@/store/slice/pointSlice';
-import {
-  saveElementAsync,
-  fetchElementsAsync,
-} from '@/store/slice/elementSlice';
+import { saveElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice';
 import { Element } from '@/types/Element';
 import { TypePoint } from '@/types/Point';
 import { SavePointsProps } from '@/api/service/pointService';
@@ -30,69 +27,85 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   treeTypes,
 }) => {
   const [description, setDescription] = useState<string | null>(null);
-  const [selectedElementType, setSelectedElementType] = useState<number | null>(
-    null,
-  );
+  const [selectedElementType, setSelectedElementType] = useState<number | null>(null);
   const [selectedTreeType, setSelectedTreeType] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+
+  const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value || null);
+  }, []);
+
+  const handleElementTypeChange = useCallback((e: { value: number }) => {
+    setSelectedElementType(e.value);
+  }, []);
+
+  const handleTreeTypeChange = useCallback((e: { value: number }) => {
+    setSelectedTreeType(e.value);
+  }, []);
 
   const handleSave = async () => {
     if (!selectedElementType || !selectedTreeType) return;
-    onClose();
+    
+    setIsSubmitting(true);
+    
     try {
       dispatch(showLoader());
       const [longitude, latitude] = coordinate;
 
       const pointToSave: SavePointsProps = {
-        latitude: latitude,
-        longitude: longitude,
+        latitude,
+        longitude,
         type: TypePoint.element,
         zone_id: zoneId,
       };
 
-      console.log(pointToSave);
-
-      const savedPoint = await dispatch(
-        savePointsAsync([pointToSave]),
-      ).unwrap();
-      const pointId = savedPoint.id;
-      console.log(pointId);
+      const savedPoint = await dispatch(savePointsAsync([pointToSave])).unwrap();
+      
+      if (!savedPoint.id) {
+        throw new Error('Failed to save point - no ID returned');
+      }
 
       const elementData: Element = {
         description,
         element_type_id: selectedElementType,
         tree_type_id: selectedTreeType,
-        point_id: pointId,
+        point_id: savedPoint.id,
       };
-      console.log({ elementData });
 
       await dispatch(saveElementAsync(elementData)).unwrap();
-      await dispatch(fetchPointsAsync());
-      await dispatch(fetchElementsAsync());
+      await Promise.all([
+        dispatch(fetchPointsAsync()),
+        dispatch(fetchElementsAsync())
+      ]);
+      
+      onClose();
     } catch (error) {
-      throw error;
+      // Error is handled by the slice's rejected action
     } finally {
+      setIsSubmitting(false);
       dispatch(hideLoader());
     }
   };
 
+  const formIsValid = selectedElementType !== null && selectedTreeType !== null;
+
   return (
-    <div>
+    <div className="p-3">
       <div className="mb-3">
-        <label
-          htmlFor="element-type"
-          className="block text-sm font-medium mb-1">
+        <label htmlFor="element-type" className="block text-sm font-medium mb-1">
           Tipo de Elemento:
         </label>
         <Dropdown
           id="element-type"
           value={selectedElementType}
           options={elementTypes}
-          onChange={(e) => setSelectedElementType(e.value)}
+          onChange={handleElementTypeChange}
           placeholder="Selecciona Tipo de Elemento"
           className="w-full"
         />
       </div>
+      
       <div className="mb-3">
         <label htmlFor="tree-type" className="block text-sm font-medium mb-1">
           Tipo de Árbol:
@@ -101,11 +114,12 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
           id="tree-type"
           value={selectedTreeType}
           options={treeTypes}
-          onChange={(e) => setSelectedTreeType(e.value)}
+          onChange={handleTreeTypeChange}
           placeholder="Selecciona Tipo de Árbol"
           className="w-full"
         />
       </div>
+      
       <div className="mb-3">
         <label htmlFor="description" className="block text-sm font-medium mb-1">
           Descripción: (opcional)
@@ -114,21 +128,24 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
           id="description"
           rows={3}
           value={description || ''}
-          onChange={(e) => setDescription(e.target.value || null)}
+          onChange={handleDescriptionChange}
           placeholder="Descripción del Elemento (opcional)"
           className="w-full"
         />
       </div>
+      
       <div className="flex justify-end gap-2 mt-4">
         <Button
           label="Cancelar"
           className="p-button-secondary"
           onClick={onClose}
+          disabled={isSubmitting}
         />
         <Button
           label="Guardar Elemento"
           className="p-button-primary"
           onClick={handleSave}
+          disabled={!formIsValid || isSubmitting}
         />
       </div>
     </div>

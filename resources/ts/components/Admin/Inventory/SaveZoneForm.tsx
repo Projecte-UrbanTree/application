@@ -10,7 +10,7 @@ import { Button } from 'primereact/button';
 import { ColorPicker } from 'primereact/colorpicker';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
@@ -45,6 +45,7 @@ export const SaveZoneForm = ({
   );
   const isLoading = useSelector((state: RootState) => state.loader.isLoading);
   const dispatch = useDispatch<AppDispatch>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     control,
@@ -63,6 +64,7 @@ export const SaveZoneForm = ({
   });
 
   const toast = useRef<Toast>(null);
+  
   useEffect(() => {
     setValue('coordinates', coordinates);
     if (currentContract?.id) {
@@ -70,7 +72,10 @@ export const SaveZoneForm = ({
     }
   }, [coordinates, currentContract, setValue]);
 
-  async function onSubmit(data: Zone) {
+  const onSubmit = useCallback(async (data: Zone) => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     dispatch(showLoader());
 
     try {
@@ -99,16 +104,20 @@ export const SaveZoneForm = ({
 
       onCloseProp(createdZone, pointsData);
     } catch (error) {
-      console.error('Error en la creación de la zona o los puntos', error);
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
         detail: 'No se pudo guardar la zona',
       });
     } finally {
+      setIsSubmitting(false);
       dispatch(hideLoader());
     }
-  }
+  }, [coordinates, currentContract, dispatch, isSubmitting, onCloseProp]);
+
+  const handleCancel = useCallback(() => {
+    onCloseProp({} as Zone, []);
+  }, [onCloseProp]);
 
   return (
     <div className="p-6 bg-white rounded-2xl shadow-lg w-96">
@@ -164,15 +173,15 @@ export const SaveZoneForm = ({
         <div className="flex justify-end gap-2">
           <Button
             type="button"
-            onClick={() => onCloseProp}
+            onClick={handleCancel}
             className="p-button-secondary"
-            disabled={isLoading}>
+            disabled={isLoading || isSubmitting}>
             Cancelar
           </Button>
           <Button
             type="submit"
             className="p-button-primary"
-            disabled={isLoading}>
+            disabled={isLoading || isSubmitting}>
             Guardar
           </Button>
         </div>
