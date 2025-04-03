@@ -14,9 +14,9 @@ class WorkReport extends Model
         'report_incidents',
     ];
 
-    protected $with = ['workOrders', 'resources', 'workReportResources'];
+    protected $with = ['workOrder', 'resources', 'workReportResources'];
 
-    public function workOrders()
+    public function workOrder()
     {
         return $this->belongsTo(WorkOrder::class, 'work_order_id');
     }

@@ -29,7 +29,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   elementTypes,
   treeTypes,
 }) => {
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState<string | null>(null);
   const [selectedElementType, setSelectedElementType] = useState<number | null>(
     null,
   );
@@ -79,54 +79,54 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   return (
     <div>
       <div className="mb-3">
-        <label htmlFor="description" className="block text-sm font-medium mb-1">
-          descripción:
-        </label>
-        <InputTextarea
-          id="description"
-          rows={3}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="descripción del elemento"
-          className="w-full"
-        />
-      </div>
-      <div className="mb-3">
         <label
           htmlFor="element-type"
           className="block text-sm font-medium mb-1">
-          tipo de elemento:
+          Tipo de Elemento:
         </label>
         <Dropdown
           id="element-type"
           value={selectedElementType}
           options={elementTypes}
           onChange={(e) => setSelectedElementType(e.value)}
-          placeholder="selecciona tipo de elemento"
+          placeholder="Selecciona Tipo de Elemento"
           className="w-full"
         />
       </div>
       <div className="mb-3">
         <label htmlFor="tree-type" className="block text-sm font-medium mb-1">
-          tipo de árbol:
+          Tipo de Árbol:
         </label>
         <Dropdown
           id="tree-type"
           value={selectedTreeType}
           options={treeTypes}
           onChange={(e) => setSelectedTreeType(e.value)}
-          placeholder="selecciona tipo de árbol"
+          placeholder="Selecciona Tipo de Árbol"
+          className="w-full"
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="description" className="block text-sm font-medium mb-1">
+          Descripción: (opcional)
+        </label>
+        <InputTextarea
+          id="description"
+          rows={3}
+          value={description || ""}
+          onChange={(e) => setDescription(e.target.value || null)}
+          placeholder="Descripción del Elemento (opcional)"
           className="w-full"
         />
       </div>
       <div className="flex justify-end gap-2 mt-4">
         <Button
-          label="cancelar"
+          label="Cancelar"
           className="p-button-secondary"
           onClick={onClose}
         />
         <Button
-          label="guardar elemento"
+          label="Guardar Elemento"
           className="p-button-primary"
           onClick={handleSave}
         />

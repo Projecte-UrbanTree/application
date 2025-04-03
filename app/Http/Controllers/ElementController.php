@@ -29,7 +29,7 @@ class ElementController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
             'element_type_id' => ['required', 'integer'],
             'tree_type_id' => ['required', 'integer'],
             'point_id' => ['required', 'integer'],
@@ -68,6 +68,12 @@ class ElementController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $element = Element::find($id);
+        if (! $element) {
+            return response()->json(['message' => 'Element not found'], 404);
+        }
+        $element->delete();
+
+        return response()->json(['message' => 'Element deleted successfully'], 200);
     }
 }

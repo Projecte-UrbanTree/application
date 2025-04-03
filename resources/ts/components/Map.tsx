@@ -16,8 +16,12 @@ import { fetchElementType } from '@/api/service/elementTypeService';
 import { ElementType } from '@/types/ElementType';
 import { SavePointsProps } from '@/api/service/pointService';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
-import { data } from 'react-router-dom';
 import { MapService } from '@/api/service/mapService';
+import { Toast } from 'primereact/toast';
+import { deleteElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice';
+import IncidentForm from './Admin/Inventory/IncidentForm';
+import { Element } from '@/types/Element';
+import ElementDetailPopup from './Admin/Inventory/ElementDetailPopup';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -25,41 +29,69 @@ interface MapProps {
   selectedZone: Zone | null;
   zoneToAddElement: Zone | null;
   onElementAdd: () => void;
+  isCreatingElement: boolean;
+  onCreatingElementChange: (isCreating: boolean) => void;
+  isDrawingMode: boolean;
+  onDrawingModeChange: (isDrawing: boolean) => void;
+  enabledButton: boolean;
+  onEnabledButtonChange: (enabled: boolean) => void;
+  modalVisible: boolean;
+  onModalVisibleChange: (visible: boolean) => void;
 }
 
 export const MapComponent: React.FC<MapProps> = ({
   selectedZone,
-  // zoneToAddElement,
+  zoneToAddElement,
   onElementAdd,
+  isCreatingElement,
+  onCreatingElementChange,
+  isDrawingMode,
+  onDrawingModeChange,
+  enabledButton,
+  onEnabledButtonChange,
+  modalVisible,
+  onModalVisibleChange,
 }) => {
   // refs
-  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapServiceRef = useRef<MapService | null>(null);
+  const toast = useRef<Toast>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { points } = useSelector((state: RootState) => state.points);
+  const { zones: zonesRedux } = useSelector((state: RootState) => state.zone);
+  const { elements } = useSelector((state: RootState) => state.element);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
+  const userValue = useSelector((state: RootState) => state.user);
 
   // states
-  const [modalVisible, setModalVisible] = useState(false);
   const [coordinates, setCoordinates] = useState<number[][]>([]);
-  const [isDrawingMode, setIsDrawingMode] = useState(false);
-  const [enabledButton, setEnabledButton] = useState(false);
   const [isAddingPoint, setIsAddingPoint] = useState(false);
   const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(
     null,
   );
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
-  const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
-  const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
-
-  const [zoneToAddElement, setSelectedZoneToAdd] = useState<Zone>();
-
-  // redux store
-  const dispatch = useDispatch<AppDispatch>();
-  const userValue = useSelector((state: RootState) => state.user);
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
+  const [selectedZoneForElement, setSelectedZoneForElement] = useState<Zone | null>(
+    null,
   );
-  const zonesRedux = useSelector((state: RootState) => state.zone.zones);
-  const { points } = useSelector((state: RootState) => state.points);
-  const { elements } = useSelector((state: RootState) => state.element);
+  const [selectedElementId, setSelectedElementId] = useState<number | null>(null);
+  const [selectedElement, setSelectedElement] = useState<Element | null>(null);
+  const [elementModalVisible, setElementModalVisible] = useState(false);
+  const [incidentModalVisible, setIncidentModalVisible] = useState(false);
+  const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
+  const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
+  const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
+  const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const handleBackToIncidentTab = () => {
+
+    setIncidentModalVisible(false);
+    setElementModalVisible(true);
+    setActiveTabIndex(1);
+  };
 
   // load data
   useEffect(() => {
@@ -82,15 +114,28 @@ export const MapComponent: React.FC<MapProps> = ({
     service.enableDraw(userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
-        setIsDrawingMode(true);
-        setEnabledButton(true);
+        onDrawingModeChange(true);
+        onEnabledButtonChange(true);
       } else {
-        setIsDrawingMode(false);
-        setEnabledButton(false);
+        onDrawingModeChange(false);
+        onEnabledButtonChange(false);
       }
     });
     mapServiceRef.current = service;
   }, [userValue.role]);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      const service = mapServiceRef.current;
+      if (service) {
+        service.resizeMap();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // load points if contract is active
   useEffect(() => {
@@ -108,40 +153,108 @@ export const MapComponent: React.FC<MapProps> = ({
     }
   }, [selectedZone, points]);
 
-  // if "zoneToAddElement" change, enter on mode "add point"
+  const handleElementCreation = (zone: Zone) => {
+    setSelectedZoneForElement(zone);
+    onCreatingElementChange(true);
+    
+    const service = mapServiceRef.current;
+    if (!service) return;
+
+    service.disableSingleClick();
+    setNewPointCoord(null);
+    
+    service.enableSingleClick((lngLat) => {
+      const clickedPoint = turf.point([lngLat.lng, lngLat.lat]);
+      const zonePoints = points
+        .filter(p => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
+        .map(p => [p.longitude!, p.latitude!]);
+      
+      if (zonePoints.length > 0) {
+        zonePoints.push(zonePoints[0]);
+        const zonePolygon = turf.polygon([zonePoints]);
+
+        if (turf.booleanPointInPolygon(clickedPoint, zonePolygon)) {
+          setNewPointCoord([lngLat.lng, lngLat.lat]);
+          setModalAddPointVisible(true);
+          onCreatingElementChange(false);
+          service.disableSingleClick();
+        } else {
+          onCreatingElementChange(false);
+          setSelectedZoneForElement(null);
+          service.disableSingleClick();
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Aviso',
+            detail: 'No es pot crear un element fora de la zona o zona seleccionada',
+            life: 3000,
+            sticky: false,
+            style: { 
+              fontWeight: 'bold',
+              fontSize: '1.1em',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              border: '1px solid #f00'
+            }
+          });
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service) return;
 
     const subscription = eventSubject.subscribe({
       next: (data: ZoneEvent) => {
-        const { isCreatingElement, zone } = data;
-        setSelectedZoneToAdd(zone);
-
-        if (!isCreatingElement) {
-          setIsAddingPoint(false);
-          service.disableSingleClick();
-          return;
+        if (data.isCreatingElement !== undefined) {
+          const { isCreatingElement, zone } = data;
+          
+          if (isCreatingElement && zone) {
+            handleElementCreation(zone);
+          } else {
+            onCreatingElementChange(false);
+            setSelectedZoneForElement(null);
+            setNewPointCoord(null);
+            service.disableSingleClick();
+          }
         }
-        setIsAddingPoint(true);
-        service.enableSingleClick((lngLat) => {
-          setNewPointCoord([lngLat.lng, lngLat.lat]);
-          setModalAddPointVisible(true);
-        });
-        const firstPoint = points.find((p: Point) => p.zone_id === zone?.id);
-        if (firstPoint?.longitude && firstPoint?.latitude) {
-          service.flyTo([firstPoint.longitude, firstPoint.latitude]);
+
+        if (data.hiddenElementTypes) {
+          const { zoneId, elementTypeId, hidden } = data.hiddenElementTypes;
+          const key = `${zoneId}-${elementTypeId}`;
+          
+          setHiddenElementTypes(prev => ({
+            ...prev,
+            [key]: hidden
+          }));
+
+          updateElementVisibility(zoneId, elementTypeId, hidden, service);
         }
       },
       error: (err: Error) => console.log('ERROR STREAM: ', err.message),
       complete: () => console.log('STREAM COMPLETADO'),
     });
 
-    return () => subscription.unsubscribe();
-  }, [zoneToAddElement]);
+    return () => {
+      subscription.unsubscribe();
+      onCreatingElementChange(false);
+      setSelectedZoneForElement(null);
+      setNewPointCoord(null);
+      service.disableSingleClick();
+    };
+  }, [points]);
+
+  const handleElementFormClose = () => {
+    setModalAddPointVisible(false);
+    onCreatingElementChange(false);
+    setNewPointCoord(null);
+    mapServiceRef.current?.disableSingleClick();
+    onElementAdd();
+  };
 
   // draw zones
   useEffect(() => {
+    
     const service = mapServiceRef.current;
     if (!service) return;
     if (!service.isStyleLoaded()) {
@@ -161,11 +274,10 @@ export const MapComponent: React.FC<MapProps> = ({
         .filter(
           (p) => p.zone_id === zone.id && p.type == TypePoint.zone_delimiter,
         )
-
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
       if (zonePoints.length > 2) {
         zonePoints.push(zonePoints[0]);
-        service.addZoneToMap(`zone-${zone.id}`, zonePoints);
+        service.addZoneToMap(`zone-${zone.id}`, zonePoints, zone.color || '#088');
       }
     });
   }
@@ -179,10 +291,35 @@ export const MapComponent: React.FC<MapProps> = ({
     } else {
       updateElements(service);
     }
-  }, [elements, currentContract]);
+  }, [elements, currentContract, points, dispatch]);
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
+
+    const handleDeleteElement = async (elementId: number) => {
+      try {
+        await dispatch(deleteElementAsync(elementId));
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Elemento eliminado correctamente',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al eliminar el elemento',
+        });
+      }
+    };
+
+    const handleElementClick = (element: Element) => {
+      setSelectedElement(element);
+      setElementModalVisible(true);
+      setSelectedElementId(element.id!);
+    };
+
+    service.removeElementMarkers();
     const filteredZones = zonesRedux.filter(
       (zone) => zone.contract_id === currentContract.id,
     );
@@ -194,20 +331,35 @@ export const MapComponent: React.FC<MapProps> = ({
     const filteredElements = elements.filter(
       (element) => element.point_id && pointIds.has(element.point_id),
     );
+
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => {
-        service.addElementMarkers(filteredElements, filteredPoints);
+        service.addElementMarkers(
+          filteredElements,
+          filteredPoints,
+          treeTypes,
+          elementTypes,
+          handleDeleteElement,
+          handleElementClick,
+        );
       });
     } else {
-      service.addElementMarkers(filteredElements, filteredPoints);
+      service.addElementMarkers(
+        filteredElements,
+        filteredPoints,
+        treeTypes,
+        elementTypes,
+        handleDeleteElement,
+        handleElementClick,
+      );
     }
   }
 
   // save drawed zone
   async function handleZoneSaved(newZone: Zone, newPoints: SavePointsProps[]) {
-    setModalVisible(false);
-    setIsDrawingMode(false);
-    setEnabledButton(false);
+    onModalVisibleChange(false);
+    onDrawingModeChange(false);
+    onEnabledButtonChange(false);
 
     const service = mapServiceRef.current;
     if (!service) return;
@@ -220,8 +372,10 @@ export const MapComponent: React.FC<MapProps> = ({
 
     if (zonePoints.length > 2) {
       zonePoints.push(zonePoints[0]);
-      service.addZoneToMap(`zone-${newZone.id}`, zonePoints);
+      service.addZoneToMap(`zone-${newZone.id}`, zonePoints, newZone.color || '#088');
     }
+
+    await dispatch(fetchPointsAsync());
   }
 
   function detectCollision(
@@ -235,7 +389,10 @@ export const MapComponent: React.FC<MapProps> = ({
     const createdPoly = turf.polygon([newPolygonCoords]);
     for (let i = 0; i < filteredZones.length; i++) {
       const existingPoly = getZonePolygon(filteredZones[i], allPoints);
-      const polyIntersection = turf.intersect(createdPoly, existingPoly);
+      const polyIntersection = turf.intersect(
+        turf.featureCollection([createdPoly]),
+        turf.featureCollection([existingPoly]).features[0],
+      );
       if (polyIntersection) {
         return true;
       }
@@ -252,37 +409,70 @@ export const MapComponent: React.FC<MapProps> = ({
     return turf.polygon([coords]);
   }
 
+  const handleElementDelete = async (elementId: number) => {
+    try {
+      await dispatch(deleteElementAsync(elementId));
+      await dispatch(fetchElementsAsync());
+      mapServiceRef.current?.removeElementMarker(elementId);
+      setElementModalVisible(false);
+      setSelectedElement(null);
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Elemento eliminado correctamente',
+      });
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al eliminar el elemento',
+      });
+    }
+  };
+
+  const updateElementVisibility = (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
+    const pointsInZone = points.filter(p => p.zone_id === zoneId);
+    const pointIds = pointsInZone.map(p => p.id);
+    
+    const elementsToUpdate = elements.filter(element => 
+      element.element_type_id === elementTypeId && 
+      pointIds.includes(element.point_id!)
+    );
+    
+    elementsToUpdate.forEach(element => {
+      if (element.id) {
+        service.updateMarkerVisibility(element.id, !hidden);
+      }
+    });
+  };
+
   return (
-    <div style={{ position: 'relative', width: '100%', height: '90%' }}>
-      <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
-      {userValue.role === Roles.admin && isDrawingMode && (
-        <Button
-          label="Guardar Zona"
-          onClick={() => setModalVisible(true)}
-          className="absolute bottom-16 left-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-10"
-          disabled={!enabledButton}
-        />
-      )}
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Toast ref={toast} position="top-center" className="z-50" />
+      <div
+        ref={mapContainerRef}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
+      />
       <Dialog
         header="Guardar Zona"
         visible={modalVisible}
-        onHide={() => setModalVisible(false)}>
+        onHide={() => onModalVisibleChange(false)}>
         <SaveZoneForm coordinates={coordinates} onClose={handleZoneSaved} />
       </Dialog>
       <Dialog
         header="Guardar Elemento"
         visible={modalAddPointVisible}
-        onHide={() => setModalAddPointVisible(false)}>
+        onHide={handleElementFormClose}>
         <SaveElementForm
-          zoneId={zoneToAddElement?.id!}
+          zoneId={selectedZoneForElement?.id!}
           coordinate={newPointCoord!}
-          onClose={() => {
-            setModalAddPointVisible(false);
-            setIsAddingPoint(false);
-            setNewPointCoord(null);
-            mapServiceRef.current?.disableSingleClick();
-            onElementAdd();
-          }}
+          onClose={handleElementFormClose}
           elementTypes={elementTypes.map((item) => ({
             label: `${item.name}`,
             value: item.id!,
@@ -292,6 +482,40 @@ export const MapComponent: React.FC<MapProps> = ({
             value: item.id!,
           }))}
         />
+      </Dialog>
+      <Dialog
+        header="Añadir Incidencia"
+        visible={incidentModalVisible}
+        onHide={() => setIncidentModalVisible(false)}>
+        {selectedElementId && (
+          <IncidentForm
+            elementId={selectedElementId}
+            onClose={() => {
+              setIncidentModalVisible(false);
+              dispatch(fetchElementsAsync());
+            }}
+            onBackToIncidents={handleBackToIncidentTab}
+          />
+        )}
+      </Dialog>
+      <Dialog
+        header={`Detalles del Elemento #${selectedElement?.id}`}
+        visible={elementModalVisible}
+        onHide={() => setElementModalVisible(false)}>
+        {selectedElement && (
+          <ElementDetailPopup
+            element={selectedElement}
+            onClose={() => setElementModalVisible(false)}
+            onDeleteElement={handleElementDelete}
+            treeTypes={treeTypes}
+            elementTypes={elementTypes}
+            onOpenIncidentForm={() => setIncidentModalVisible(true)}
+            getCoordElement={() =>
+              mapServiceRef.current?.getCoordElement(selectedElement, points)!
+            }
+            initialTabIndex={activeTabIndex}
+          />
+        )}
       </Dialog>
     </div>
   );

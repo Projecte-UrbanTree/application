@@ -305,7 +305,11 @@
         "hoursWorked": "Hours Worked",
         "fuelConsumption": "Fuel Consumption",
         "noData": "No data to display",
-        "exportCSV": "Export to CSV"
+        "exportCSV": "Export to CSV",
+        "total": "Total",
+        "noDataResourcePeriod": "No data available for the selected resource type and period",
+        "selectResource": "Select a resource type",
+        "selectResourcePlaceholder": "Search your resource type here..."
       },
       "taskTypes": {
         "form": {
@@ -915,6 +919,26 @@
           "rejecting": "Rejecting block...",
           "reject": "Block rejected"
         }
+      },
+      "workers": {
+        "title": "Workers Management",
+        "contractWorkers": "Contract Workers",
+        "assignRemoveWorkers": "Assign/Remove Workers",
+        "selectWorkers": "Select Workers",
+        "selected": "Selected",
+        "workersForContract": "Workers for Contract",
+        "noWorkersAssigned": "No workers assigned to this contract",
+        "useDropdownToAssign": "Use the dropdown above to assign workers",
+        "selectWorkerHelp": "Select or unselect workers to assign them to this contract",
+        "noWorkersFound": "No workers found",
+        "name": "Name",
+        "email": "Email",
+        "company": "Company",
+        "dni": "ID Card",
+        "pleaseSelectContract": "Please select a contract first",
+        "updatedSuccessfully": "Workers updated successfully",
+        "failedToLoad": "Failed to load workers",
+        "failedToUpdate": "Failed to update workers"
       }
     },
     "profileDropdown": {
