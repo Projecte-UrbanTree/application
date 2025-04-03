@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import Preloader from '@/components/Preloader';
 import routesConfig from './routes/routesConfig';
 
-function RoutesComponent() {
+const RoutesComponent = () => {
   return useRoutes([
     ...routesConfig,
     {
@@ -16,7 +16,7 @@ function RoutesComponent() {
   ]);
 }
 
-function AuthWrapper() {
+const LoaderWrapper = () => {
   const { isLoading } = useAuth();
 
   if (isLoading) {
@@ -29,7 +29,7 @@ function AuthWrapper() {
 export default function AppRoutes() {
   return (
     <Router>
-      <AuthWrapper />
+      <LoaderWrapper />
     </Router>
   );
 }
