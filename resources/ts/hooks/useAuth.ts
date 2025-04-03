@@ -12,7 +12,7 @@ export function useAuth() {
   const { fetchContracts } = useContracts();
 
   const token = localStorage.getItem('authToken');
-  const isAuthenticated = Boolean(token);  // More concise boolean check
+  const isAuthenticated = Boolean(token);
 
   const fetchUser = useCallback(async () => {
     try {
@@ -38,7 +38,7 @@ export function useAuth() {
   const logout = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('contractId');
-    dispatch(clearUserData());  // Clear user data from store on logout
+    dispatch(clearUserData());
   };
 
   useEffect(() => {
