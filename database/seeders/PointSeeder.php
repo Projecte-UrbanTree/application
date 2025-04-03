@@ -46,34 +46,11 @@ class PointSeeder extends Seeder
 
             //Zona Parc Municipal de amposta
             
-            [
-                'latitude' => 40.70866492137048, 
-                'longitude' =>  0.5779510431027762,
-                'type' => 'zone_delimiter',
-                'zone_id' => 3,
-            ],
-            [
-                'latitude' => 40.70922985094096, 0.5779953158264584,
-                'longitude' =>  0.5779953158264584,
-                'type' => 'zone_delimiter',
-                'zone_id' => 3,
-            ],
-            [
-                'latitude' => 40.70927086874241,
-                'longitude' =>   0.5772279217730589,
-                'type' => 'zone_delimiter',
-                'zone_id' => 3,
-            ],
-            [
-                'latitude' => 40.7087033188535,
-                'longitude' =>   0.5771575098682329,
-                'type' => 'zone_delimiter',
-                'zone_id' => 3,
-            ],
+     
             
             
             
-            //Cementerix
+            //Cementeri
             
             [
                 'latitude' => 40.70859198725073, 
