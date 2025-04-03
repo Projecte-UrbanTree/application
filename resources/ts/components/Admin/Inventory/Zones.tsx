@@ -2,11 +2,9 @@ import { fetchElementType } from '@/api/service/elementTypeService';
 import { fetchTreeTypes } from '@/api/service/treeTypesService';
 import { deleteZone } from '@/api/service/zoneService';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
-import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
@@ -82,7 +80,6 @@ export const Zones = ({
     if (!currentContract) return;
 
     const loadResources = async () => {
-      dispatch(showLoader());
       try {
         await Promise.all([
           dispatch(fetchZonesAsync()).unwrap(),
@@ -96,7 +93,6 @@ export const Zones = ({
           detail: 'Error cargando recursos'
         });
       } finally {
-        dispatch(hideLoader());
       }
     };
 
@@ -150,7 +146,6 @@ export const Zones = ({
 
   const handleDeleteZone = async (zoneId: number) => {
     try {
-      dispatch(showLoader());
       await deleteZone(zoneId);
 
       toast.current?.show({
@@ -171,7 +166,6 @@ export const Zones = ({
         detail: 'Could not delete the zone',
       });
     } finally {
-      dispatch(hideLoader());
     }
   };
 

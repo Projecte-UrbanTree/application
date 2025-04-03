@@ -1,9 +1,5 @@
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import Error from '@/pages/Error';
-
-import { useAuth } from '@/hooks/useAuth';
-
-import Preloader from '@/components/Preloader';
 import routesConfig from './routes/routesConfig';
 
 const RoutesComponent = () => {
@@ -16,18 +12,10 @@ const RoutesComponent = () => {
   ]);
 };
 
-const LoaderWrapper = () => {
-  const { isLoading } = useAuth();
-  if (isLoading) {
-    return <Preloader />;
-  }
-  return <RoutesComponent />;
-};
-
 const AppRoutes = () => {
   return (
     <Router>
-      <LoaderWrapper />
+      <RoutesComponent />
     </Router>
   );
 };

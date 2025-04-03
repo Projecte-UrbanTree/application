@@ -4,7 +4,6 @@ import { Incidence, IncidentStatus } from '@/types/Incident';
 import { saveIncidence } from '@/api/service/incidentService';
 import { AppDispatch } from '@/store/store';
 import { useDispatch } from 'react-redux';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { Toast } from 'primereact/toast';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 
@@ -46,7 +45,6 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
     };
 
     try {
-      dispatch(showLoader());
       await saveIncidence(newIncidence);
       toast.current?.show({
         severity: 'success',
@@ -72,7 +70,6 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
       });
     } finally {
       setIsSubmitting(false);
-      dispatch(hideLoader());
     }
   }, [name, description, status, elementId, dispatch, onBackToIncidents, onClose]);
 

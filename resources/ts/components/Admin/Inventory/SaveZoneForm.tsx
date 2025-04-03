@@ -1,5 +1,4 @@
 import { savePoints, SavePointsProps } from '@/api/service/pointService';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { saveZoneAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Contract } from '@/types/Contract';
@@ -46,7 +45,6 @@ export const SaveZoneForm = ({
   );
   const zones = useSelector((state: RootState) => state.zone.zones);
   const points = useSelector((state: RootState) => state.points.points);
-  const isLoading = useSelector((state: RootState) => state.loader.isLoading);
   const dispatch = useDispatch<AppDispatch>();
 
   const toast = useRef<Toast>(null);
@@ -141,8 +139,6 @@ export const SaveZoneForm = ({
       });
       return;
     }
-    
-    dispatch(showLoader());
 
     try {
       const createdZone = await dispatch(
@@ -176,7 +172,6 @@ export const SaveZoneForm = ({
         detail: 'No se pudo guardar la zona',
       });
     } finally {
-      dispatch(hideLoader());
     }
   }, [coordinates, currentContract, dispatch, isSubmitting, onCloseProp, checkZonesOverlap]);
 

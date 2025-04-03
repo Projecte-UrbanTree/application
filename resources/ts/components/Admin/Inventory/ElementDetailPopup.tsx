@@ -12,7 +12,6 @@ import {
 } from '@/api/service/incidentService';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { Toast } from 'primereact/toast';
 import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
@@ -96,7 +95,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       
       try {
         setIsLoading(true);
-        dispatch(showLoader());
         const data = await fetchIncidence();
         
         if (Array.isArray(data)) {
@@ -112,8 +110,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           detail: 'Error cargando incidencias'
         });
       } finally {
-        setIsLoading(false);
-        dispatch(hideLoader());
+        setIsLoading(false);;
       }
     };
 
@@ -125,7 +122,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     newStatus: IncidentStatus,
   ) => {
     try {
-      dispatch(showLoader());
       await updateIncidence(incidenceId, { status: newStatus });
 
       setIncidences(prev =>
@@ -145,8 +141,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         summary: 'Error',
         detail: 'No se pudo actualizar el estado de la incidencia',
       });
-    } finally {
-      dispatch(hideLoader());
     }
   }, [dispatch]);
 
@@ -159,9 +153,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
   const handleDeleteIncident = useCallback(async (incidentId: number) => {
     try {
-      dispatch(showLoader());
       await deleteIncidence(incidentId);
-
       setIncidences(prev => prev.filter(inc => inc.id !== incidentId));
 
       toast.current?.show({
@@ -175,15 +167,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         summary: 'Error',
         detail: 'No se pudo eliminar la incidencia',
       });
-    } finally {
-      dispatch(hideLoader());
     }
   }, [dispatch]);
 
   const handleDeleteElement = useCallback(async (id: number) => {
     try {
       onClose();
-      dispatch(showLoader());
       await dispatch(deleteElementAsync(id));
       onDeleteElement(id);
       toast.current?.show({
@@ -197,8 +186,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         summary: 'Error',
         detail: 'No se pudo eliminar el elemento',
       });
-    } finally {
-      dispatch(hideLoader());
     }
   }, [dispatch, onClose, onDeleteElement]);
 

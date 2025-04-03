@@ -9,7 +9,6 @@ import { saveElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice
 import { Element } from '@/types/Element';
 import { TypePoint } from '@/types/Point';
 import { SavePointsProps } from '@/api/service/pointService';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 
 interface SaveElementFormProps {
   zoneId: number;
@@ -50,7 +49,6 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
     setIsSubmitting(true);
     
     try {
-      dispatch(showLoader());
       const [longitude, latitude] = coordinate;
 
       const pointToSave: SavePointsProps = {
@@ -84,7 +82,6 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       // Error is handled by the slice's rejected action
     } finally {
       setIsSubmitting(false);
-      dispatch(hideLoader());
     }
   };
 

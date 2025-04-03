@@ -1,4 +1,3 @@
-import Preloader from '@/components/Preloader';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { Roles } from '@/types/Role';
@@ -11,12 +10,8 @@ export default function AuthenticatedRoute({
   allowedRoles?: Roles[];
   redirectPath?: string;
 }) {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const location = useLocation();
-
-  if (isLoading) {
-    return <Preloader />;
-  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
