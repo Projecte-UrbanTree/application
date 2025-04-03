@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchSensors, fetchSensorByEUI } from '@/api/sensors';
-
+import { PencilIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
 interface Sensor {
   id: number;
   device_name?: string;
@@ -16,8 +17,6 @@ interface Sensor {
   latitude?: number;
   longitude?: number;
 }
-import { PencilIcon } from '@heroicons/react/24/solid';
-import { useNavigate } from 'react-router-dom';
 
 const Sensors: React.FC = () => {
   const navigate = useNavigate();
