@@ -12,7 +12,6 @@ import { useToast } from '@/hooks/useToast';
 import { User } from '@/types/User';
 import { useNavigate } from 'react-router-dom';
 import { getRouteByRole } from '@/utils/roleRoutes';
-import { AxiosError } from 'axios';
 
 export interface LoginResponse {
   success?: boolean;

@@ -20,13 +20,8 @@ export function useAuth() {
   }
 
   async function login(authToken: string) {
-    if (!authToken) {
-      console.error('Login failed: No token provided');
-      return;
-    }
-    await fetchUser();
-    
     localStorage.setItem('authToken', authToken);
+    await fetchUser();
     dispatch(setAuthenticated(true));
   }
 
