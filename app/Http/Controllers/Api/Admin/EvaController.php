@@ -80,4 +80,17 @@ class EvaController extends Controller
 
         return response()->json(['message' => 'Eva deleted successfully']);
     }
+
+    public function getByElementId($elementId)
+    {
+        $eva = Eva::with(['element.point', 'element.elementType'])
+            ->where('element_id', $elementId)
+            ->first();
+
+        if (!$eva) {
+            return response()->json(['message' => 'No EVA found for this element'], 404);
+        }
+
+        return response()->json($eva);
+    }
 }
