@@ -9,11 +9,11 @@ const axiosClient = axios.create({
   },
 });
 
-
 axiosClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
-    const currentContract: Contract = store.getState().contract.currentContract ?? { id: 0 };
+    const currentContract: Contract = store.getState().contract
+      .currentContract ?? { id: 0 };
 
     if (token) {
       config.headers = config.headers || {};
@@ -23,7 +23,7 @@ axiosClient.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 export default axiosClient;

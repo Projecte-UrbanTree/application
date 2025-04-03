@@ -58,7 +58,9 @@ export const Zones = ({
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<
+    Record<string, boolean>
+  >({});
 
   const addElementZone = ({ isCreatingElement, zone }: AddElementProps) => {
     eventSubject.next({ isCreatingElement, zone });
@@ -204,10 +206,10 @@ export const Zones = ({
   const handleViewElements = (elementTypeId: number, zoneId: number) => {
     const key = `${zoneId}-${elementTypeId}`;
     const isHidden = hiddenElementTypes[key] || false;
-    
-    setHiddenElementTypes(prev => ({
+
+    setHiddenElementTypes((prev) => ({
       ...prev,
-      [key]: !isHidden
+      [key]: !isHidden,
     }));
 
     eventSubject.next({
@@ -215,8 +217,8 @@ export const Zones = ({
       hiddenElementTypes: {
         zoneId,
         elementTypeId,
-        hidden: !isHidden
-      }
+        hidden: !isHidden,
+      },
     });
   };
 
@@ -326,9 +328,16 @@ export const Zones = ({
                               {elementType.name} ({count} elementos)
                             </span>
                             <Button
-                              icon={<Icon icon={isHidden ? "mdi:eye-off" : "mdi:eye"} width="20" />}
+                              icon={
+                                <Icon
+                                  icon={isHidden ? 'mdi:eye-off' : 'mdi:eye'}
+                                  width="20"
+                                />
+                              }
                               className={`p-button-text p-2 ${isHidden ? 'text-gray-400' : ''}`}
-                              onClick={() => handleViewElements(elementType.id!, zone.id!)}
+                              onClick={() =>
+                                handleViewElements(elementType.id!, zone.id!)
+                              }
                             />
                           </div>
                         );

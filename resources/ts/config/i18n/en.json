@@ -100,81 +100,81 @@
         }
       },
       "elementTypes": {
-                "title": "Element Types",
-                "loading": "Loading...",
-                "actions": "Actions",
-                "editButton": "Edit element type",
-                "deleteButton": "Delete element type",
-                "deletedSuccess": "Element type deleted successfully",
-                "deleteConfirm": "Are you sure you want to delete this element type?",
-                "success": "Element type created successfully",
-                "update": "Element type updated successfully",
-                "error": "Error saving element type",
-                "true": "Yes",
-                "false": "No",
-                "create": {
-                    "title": "Create Element Type",
-                    "submittingText": "Creating...",
-                    "submitButton": "Create Element Type",
-                    "validations": {
-                        "name": "Name is required",
-                        "requires_tree_type": "Requires tree type",
-                        "icon": "Icon is required",
-                        "color": "Color is required",
-                        "description": "Description is required"
-                    },
-                    "placeholders": {
-                        "name": "Element type name",
-                        "requires_tree_type": "Select if it requires tree type",
-                        "description": "Element type description",
-                        "icon": "Select an icon",
-                        "color": "Select a color"
-                    }
-                },
-                "edit": {
-                    "title": "Edit Element Type",
-                    "submittingText": "Saving...",
-                    "submitButton": "Save Changes",
-                    "validations": {
-                        "name": "Name is required",
-                        "requires_tree_type": "Requires tree type",
-                        "icon": "Icon is required",
-                        "color": "Color is required",
-                        "description": "Description is required"
-                    },
-                    "placeholders": {
-                        "name": "Element type name",
-                        "requires_tree_type": "Select if it requires tree type",
-                        "description": "Element type description",
-                        "icon": "Select an icon",
-                        "color": "Select a color"
-                    }
-                },
-                "columns": {
-                    "name": "Name",
-                    "requires_tree_type": "Requires tree type",
-                    "description": "Description",
-                    "icon": "Icon",
-                    "color": "Color"
-                },
-                "icons": {
-                  "tree": "Tree",
-                  "home": "Home",
-                  "post-lamp": "Post Lamp",
-                  "park": "Park",
-                  "fountain": "Fountain",
-                  "flower": "Flower",
-                  "mountain": "Mountain",
-                  "beach": "Beach",
-                  "volcano": "Volcano",
-                  "tap": "Tap",
-                  "water-drop": "Water Drop",
-                  "lightbulb": "Lightbulb",
-                  "lightning-bolt": "Lightning Bolt",
-                  "grass": "Grass",
-                  "cloud": "Cloud"
-                }
-            },
+        "title": "Element Types",
+        "loading": "Loading...",
+        "actions": "Actions",
+        "editButton": "Edit element type",
+        "deleteButton": "Delete element type",
+        "deletedSuccess": "Element type deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this element type?",
+        "success": "Element type created successfully",
+        "update": "Element type updated successfully",
+        "error": "Error saving element type",
+        "true": "Yes",
+        "false": "No",
+        "create": {
+          "title": "Create Element Type",
+          "submittingText": "Creating...",
+          "submitButton": "Create Element Type",
+          "validations": {
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
+          },
+          "placeholders": {
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
+          }
+        },
+        "edit": {
+          "title": "Edit Element Type",
+          "submittingText": "Saving...",
+          "submitButton": "Save Changes",
+          "validations": {
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
+          },
+          "placeholders": {
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
+          }
+        },
+        "columns": {
+          "name": "Name",
+          "requires_tree_type": "Requires tree type",
+          "description": "Description",
+          "icon": "Icon",
+          "color": "Color"
+        },
+        "icons": {
+          "tree": "Tree",
+          "home": "Home",
+          "post-lamp": "Post Lamp",
+          "park": "Park",
+          "fountain": "Fountain",
+          "flower": "Flower",
+          "mountain": "Mountain",
+          "beach": "Beach",
+          "volcano": "Volcano",
+          "tap": "Tap",
+          "water-drop": "Water Drop",
+          "lightbulb": "Lightbulb",
+          "lightning-bolt": "Lightning Bolt",
+          "grass": "Grass",
+          "cloud": "Cloud"
+        }
+      },
       "resources": {
         "form": {
           "fields": {
@@ -975,7 +975,7 @@
     "genericError": "An error occurred. Please try again later.",
     "loading": "Loading...",
     "error": "Error",
-    "success":"Success",
+    "success": "Success",
     "actions": {
       "cancel": "Cancel",
       "confirm": "Confirm",

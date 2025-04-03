@@ -14,10 +14,10 @@ interface IncidentFormProps {
   onBackToIncidents?: () => void;
 }
 
-const IncidentForm: React.FC<IncidentFormProps> = ({ 
-  elementId, 
-  onClose, 
-  onBackToIncidents 
+const IncidentForm: React.FC<IncidentFormProps> = ({
+  elementId,
+  onClose,
+  onBackToIncidents,
 }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -46,7 +46,7 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
       setDescription('');
 
       await dispatch(fetchElementsAsync());
- 
+
       if (onBackToIncidents) {
         onBackToIncidents();
       } else {
@@ -57,7 +57,7 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
-        detail: 'No se pudo crear la incidencia'
+        detail: 'No se pudo crear la incidencia',
       });
     } finally {
       dispatch(hideLoader());

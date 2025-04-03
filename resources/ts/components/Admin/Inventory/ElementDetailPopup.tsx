@@ -94,7 +94,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         dispatch(hideLoader());
       }
     };
-    
+
     if (element.id) {
       loadIncidences();
     }
@@ -146,7 +146,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         (inc) => inc.id !== incidentId,
       );
       setIncidences(updatedIncidences);
-      
+
       toast.current?.show({
         severity: 'success',
         summary: 'Éxito',

@@ -9,7 +9,8 @@ export function useContracts() {
 
   const fetchContracts = useCallback(async () => {
     try {
-      const { data: allContracts } = await axiosClient.get<Contract[]>('/contracts');
+      const { data: allContracts } =
+        await axiosClient.get<Contract[]>('/contracts');
 
       if (allContracts.length === 0) return;
 

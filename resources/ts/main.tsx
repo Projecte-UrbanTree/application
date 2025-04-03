@@ -12,17 +12,17 @@ import LoaderProvider from './components/LoaderProvider';
 
 const rootElement = document.getElementById('app');
 if (rootElement) {
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(
-        <React.StrictMode>
-            <PrimeReactProvider>
-                <Provider store={store}>
-                    <ToastProvider>
-                        <LoaderProvider />
-                        <App />
-                    </ToastProvider>
-                </Provider>
-            </PrimeReactProvider>
-        </React.StrictMode>,
-    );
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <PrimeReactProvider>
+        <Provider store={store}>
+          <ToastProvider>
+            <LoaderProvider />
+            <App />
+          </ToastProvider>
+        </Provider>
+      </PrimeReactProvider>
+    </React.StrictMode>,
+  );
 }

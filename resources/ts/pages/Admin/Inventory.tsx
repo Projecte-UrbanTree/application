@@ -16,19 +16,19 @@ export default function Inventory() {
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
-  
+
   useEffect(() => {
     const handleResize = () => {
       const wasMobile = isMobile;
       const nowMobile = window.innerWidth < 768;
-      
+
       setIsMobile(nowMobile);
 
       if (wasMobile !== nowMobile) {
         setMapKey(Date.now());
       }
     };
-    
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobile]);
@@ -49,7 +49,7 @@ export default function Inventory() {
   const handleMapClick = (event: React.MouseEvent) => {
     if (isCreatingElement) {
       if (!zoneToAddElement) {
-        showErrorMessage("No es pot crear un element fora de la zona");
+        showErrorMessage('No es pot crear un element fora de la zona');
       }
     }
   };
@@ -61,27 +61,27 @@ export default function Inventory() {
       detail: message,
       life: 3000,
       sticky: false,
-      style: { 
+      style: {
         fontWeight: 'bold',
         fontSize: '1.1em',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-        border: '1px solid #f00'
-      }
+        border: '1px solid #f00',
+      },
     });
   };
 
   return (
     <div className="flex flex-col w-full h-full relative">
       <Toast ref={toast} position="top-center" />
-      
-      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
-        <div 
+
+      <div
+        className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
+        <div
           ref={mapContainerRef}
           className={`${isMobile ? 'h-[60%] w-full' : 'w-[70%] h-full'} 
                      relative bg-gray-100`}
           style={{ minHeight: isMobile ? '300px' : '400px' }}
-          onClick={handleMapClick}
-        >
+          onClick={handleMapClick}>
           <MapComponent
             key={mapKey}
             selectedZone={selectedZone}
@@ -98,10 +98,9 @@ export default function Inventory() {
           />
         </div>
 
-        <div 
+        <div
           className={`${isMobile ? 'h-[40%] w-full' : 'w-[30%] h-full'} 
-                     bg-white shadow-md overflow-auto`}
-        >
+                     bg-white shadow-md overflow-auto`}>
           <Zones
             onSelectedZone={handleSelectedZone}
             onAddElementZone={handleAddElementZone}

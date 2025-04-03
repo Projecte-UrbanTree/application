@@ -14,7 +14,7 @@ const RoutesComponent = () => {
       element: <Error icon="tabler:face-id-error" errorCode="404" />,
     },
   ]);
-}
+};
 
 const LoaderWrapper = () => {
   const { isLoading } = useAuth();
@@ -22,7 +22,7 @@ const LoaderWrapper = () => {
     return <Preloader />;
   }
   return <RoutesComponent />;
-}
+};
 
 const AppRoutes = () => {
   return (
@@ -30,6 +30,6 @@ const AppRoutes = () => {
       <LoaderWrapper />
     </Router>
   );
-}
+};
 
 export default AppRoutes;

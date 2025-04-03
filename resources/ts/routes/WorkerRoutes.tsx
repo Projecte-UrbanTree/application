@@ -8,12 +8,10 @@ const WorkerRoutes: RouteObject[] = [
     children: [
       {
         path: 'worker',
-        element: (
-          <>Hello Worker</>
-        ),
+        element: <>Hello Worker</>,
       },
     ],
-  }
+  },
 ];
 
 export default WorkerRoutes;

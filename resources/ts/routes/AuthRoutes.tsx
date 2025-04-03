@@ -24,7 +24,7 @@ const AuthRoutes: RouteObject[] = [
   {
     path: '/logout',
     element: React.createElement(Logout),
-  }
+  },
 ];
 
 export default AuthRoutes;

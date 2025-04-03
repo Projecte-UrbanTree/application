@@ -17,7 +17,7 @@ export const fetchAllContracts = createAsyncThunk(
   async () => {
     const { data } = await axiosClient.get('/contracts');
     return data;
-  }
+  },
 );
 
 export const contractSlice = createSlice({
@@ -45,7 +45,7 @@ export const contractSlice = createSlice({
       console.log(persistedContractId);
       if (persistedContractId > 0) {
         const foundContract = state.allContracts.find(
-          (c) => c.id === persistedContractId
+          (c) => c.id === persistedContractId,
         );
         if (foundContract) {
           state.currentContract = foundContract;

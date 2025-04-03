@@ -145,7 +145,11 @@ export class MapService {
     });
   }
 
-  public addZoneToMap(zoneId: string, coords: number[][], zoneColor: string = '#088') {
+  public addZoneToMap(
+    zoneId: string,
+    coords: number[][],
+    zoneColor: string = '#088',
+  ) {
     if (this.map.getSource(zoneId)) {
       if (this.map.getLayer(zoneId)) {
         this.map.removeLayer(zoneId);
@@ -263,7 +267,9 @@ export class MapService {
   }
 
   public updateMarkerVisibility(elementId: number, visible: boolean) {
-    const markerObj = this.elementMarkers.find((m) => m.elementId === elementId);
+    const markerObj = this.elementMarkers.find(
+      (m) => m.elementId === elementId,
+    );
     if (markerObj) {
       const markerElement = markerObj.marker.getElement();
       if (visible) {

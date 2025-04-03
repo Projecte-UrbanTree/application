@@ -37,7 +37,10 @@ const useGeolocation = (watch: boolean = true) => {
     let watcherId: number | null = null;
 
     if (watch) {
-      watcherId = navigator.geolocation.watchPosition(updatePosition, handleError);
+      watcherId = navigator.geolocation.watchPosition(
+        updatePosition,
+        handleError,
+      );
     } else {
       navigator.geolocation.getCurrentPosition(updatePosition, handleError);
     }

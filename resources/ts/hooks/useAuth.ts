@@ -29,7 +29,8 @@ export function useAuth() {
   }, [token, dispatch]);
 
   const login = async (authToken: string) => {
-    if (!authToken) return console.error('Error: No se recibió un token válido');
+    if (!authToken)
+      return console.error('Error: No se recibió un token válido');
     localStorage.setItem('authToken', authToken);
     await fetchUser();
     await fetchContracts();

@@ -113,7 +113,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
         <InputTextarea
           id="description"
           rows={3}
-          value={description || ""}
+          value={description || ''}
           onChange={(e) => setDescription(e.target.value || null)}
           placeholder="Descripción del Elemento (opcional)"
           className="w-full"

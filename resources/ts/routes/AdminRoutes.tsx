@@ -41,7 +41,9 @@ import { Roles } from '@/types/Role';
 
 const AdminRoutes: RouteObject[] = [
   {
-    element: <AuthenticatedRoute allowedRoles={[Roles.admin]} redirectPath="/worker" />,
+    element: (
+      <AuthenticatedRoute allowedRoles={[Roles.admin]} redirectPath="/worker" />
+    ),
     children: [
       {
         path: '/admin',
