@@ -9,20 +9,11 @@ export function useContracts() {
 
   const fetchContracts = useCallback(async () => {
     try {
-      const { data: allContracts } = await axiosClient.get<Contract[]>('/admin/contracts');
+      const { data: allContracts } = await axiosClient.get<Contract[]>('/contracts');
 
       if (allContracts.length === 0) return;
 
-      let selectedContract: Contract | null = null;
-
-      try {
-        const { data } = await axiosClient.get<{ contract: Contract | null }>('/admin/get-selected-contract');
-        selectedContract = data.contract;
-      } catch {
-        console.warn('Failed to fetch selected contract, defaulting to null.');
-      }
-
-      dispatch(setContractState({ allContracts, currentContract: selectedContract }));
+      dispatch(setContractState({ allContracts, currentContract: null }));
     } catch (error) {
       console.error('Error fetching contracts:', error);
     }

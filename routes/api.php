@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
 use App\Http\Controllers\Api\Admin\ContractUserController;
@@ -34,11 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('contracts', [UserContractController::class, 'index']);
 
     /* Admin protected routes */
     Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
-        Route::post('select-contract', [ContractController::class, 'selectContract']);
-        Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
 
         Route::get('stats', function (Request $request) {
             return response()->json([

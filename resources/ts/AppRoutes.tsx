@@ -18,18 +18,18 @@ const RoutesComponent = () => {
 
 const LoaderWrapper = () => {
   const { isLoading } = useAuth();
-
   if (isLoading) {
     return <Preloader />;
   }
-
   return <RoutesComponent />;
 }
 
-export default function AppRoutes() {
+const AppRoutes = () => {
   return (
     <Router>
       <LoaderWrapper />
     </Router>
   );
 }
+
+export default AppRoutes;
