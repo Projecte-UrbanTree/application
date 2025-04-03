@@ -1010,10 +1010,18 @@
             "diameter": "Diameter",
             "crownWidth": "Crown Width",
             "crownProjectionArea": "Crown Projection Area",
-            "effectiveRootArea": "Effective Root Area"
+            "effectiveRootArea": "Effective Root Area",
+            "createEva": "Create EVA",
+            "editEva": "Edit EVA"
           },
           "history": {
-            "title": "Element History (under construction...)"
+            "title": "Element History (under construction...)",
+            "notes": "Notes",
+            "task": "Task",
+            "description": "Description",
+            "workOrder": "Work Order",
+            "status": "Status",
+            "noTasks": "No tasks registered for this element."
           }
         }
       }

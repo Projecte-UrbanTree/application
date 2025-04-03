@@ -253,10 +253,18 @@
             "diameter": "Diàmetre",
             "crownWidth": "Amplada de la Copa",
             "crownProjectionArea": "Àrea de Projecció de la Copa",
-            "effectiveRootArea": "Àrea Efectiva de l'Arrel"
+            "effectiveRootArea": "Àrea Efectiva de l'Arrel",
+            "createEva": "Crear EVA",
+            "editEva": "Editar EVA"
           },
           "history": {
-            "title": "Historial de l'element (en construcció...)"
+            "title": "Historial de l'element (en construcció...)",
+            "notes": "Notes",
+            "task": "Tasca",
+            "description": "Descripció",
+            "workOrder": "Ordre de Treball",
+            "status": "Estat",
+            "noTasks": "No hi ha tasques registrades per aquest element."
           }
         }
       },

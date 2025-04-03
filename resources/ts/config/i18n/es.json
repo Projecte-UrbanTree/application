@@ -253,10 +253,18 @@
             "diameter": "Diámetro",
             "crownWidth": "Ancho de copa",
             "crownProjectionArea": "Área de proyección de copa",
-            "effectiveRootArea": "Área efectiva de raíces"
+            "effectiveRootArea": "Área efectiva de raíces",
+            "createEva": "Crear EVA",
+            "editEva": "Editar EVA"
           },
           "history": {
-            "title": "Historial del elemento (en construcción...)"
+            "title": "Historial del elemento (en construcción...)",
+            "notes": "Notas",
+            "task": "Tarea",
+            "description": "Descripción",
+            "workOrder": "Orden de Trabajo",
+            "status": "Estado",
+            "noTasks": "No hay tareas registradas para este elemento."
           }
         }
       },
