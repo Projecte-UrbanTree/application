@@ -40,7 +40,30 @@ class ResourceSeeder extends Seeder
                 'unit_cost' => 10.5,
 
             ],
-
+            [
+                'name' => 'Resource 4',
+                'contract_id' => 3,
+                'description' => 'Description for Resource 4',
+                'resource_type_id' => 1,
+                'unit_name' => 'Litres',
+                'unit_cost' => 15.0,
+            ],
+            [
+                'name' => 'Resource 5',
+                'contract_id' => 3,
+                'description' => 'Description for Resource 5',
+                'resource_type_id' => 2,
+                'unit_name' => 'Metres',
+                'unit_cost' => 12.0,
+            ],
+            [
+                'name' => 'Resource 6',
+                'contract_id' => 3,
+                'description' => 'Description for Resource 6',
+                'resource_type_id' => 3,
+                'unit_name' => 'Kilograms',
+                'unit_cost' => 18.5,
+            ],
         ]);
     }
 }

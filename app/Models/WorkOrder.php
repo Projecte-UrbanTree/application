@@ -20,7 +20,7 @@ class WorkOrder extends Model
 
     public function workReports()
     {
-        return $this->hasMany(WorkReport::class, 'work_order_id');
+        return $this->belongsTo(WorkReport::class, 'work_order_id');
     }
 
     public function workOrdersBlocks()

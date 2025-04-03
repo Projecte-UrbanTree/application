@@ -317,32 +317,39 @@ export default function WorkOrders() {
 
   const actionButtons = useCallback(
     (rowData: WorkOrder) => {
-      if (rowData.status === 3) {
-        return (
-          <div className="flex justify-end gap-2">
+      const isEditable =
+        rowData.status !== 1 && rowData.status !== 2 && rowData.status !== 3;
+      const canViewReport =
+        rowData.status === 1 || rowData.status === 2 || rowData.status === 3;
+
+      return (
+        <div className="flex justify-end gap-2">
+          {isEditable && (
+            <>
+              <Button
+                icon={<Icon icon="tabler:edit" />}
+                className="p-button-rounded p-button-primary"
+                onClick={() =>
+                  navigate(`/admin/work-orders/edit/${rowData.id}`)
+                }
+                title={t('admin.pages.workOrders.list.actions.edit')}
+              />
+              <Button
+                icon={<Icon icon="tabler:trash" />}
+                className="p-button-rounded p-button-danger"
+                onClick={() => handleDelete(rowData.id)}
+                title={t('admin.pages.workOrders.list.actions.delete')}
+              />
+            </>
+          )}
+          {canViewReport && (
             <Button
-              icon={<Icon icon="tabler:eye" />}
+              icon={<Icon icon="tabler:file-text" />}
               className="p-button-rounded p-button-info"
               onClick={() => navigate(`/admin/work-reports/${rowData.id}`)}
               title={t('admin.pages.workOrders.list.actions.viewReport')}
             />
-          </div>
-        );
-      }
-      return (
-        <div className="flex justify-end gap-2">
-          <Button
-            icon={<Icon icon="tabler:edit" />}
-            className="p-button-rounded p-button-primary"
-            onClick={() => navigate(`/admin/work-orders/edit/${rowData.id}`)}
-            title={t('admin.pages.workOrders.list.actions.edit')}
-          />
-          <Button
-            icon={<Icon icon="tabler:trash" />}
-            className="p-button-rounded p-button-danger"
-            onClick={() => handleDelete(rowData.id)}
-            title={t('admin.pages.workOrders.list.actions.delete')}
-          />
+          )}
         </div>
       );
     },

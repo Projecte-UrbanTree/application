@@ -205,7 +205,9 @@ export default function CreateElementType() {
                               icon={'mdi:' + option}
                               className="mr-2 text-2xl"
                             />
-                            <span>{t('admin.icons.' + option)}</span>
+                            <span>
+                              {t('admin.pages.elementTypes.icons.' + option)}
+                            </span>
                           </div>
                         ) : null
                       }

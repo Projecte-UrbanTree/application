@@ -34,10 +34,11 @@ const FormField = ({
 
   if (Component === InputNumber) {
     return (
-      <div className="mb-4">
+      <div className="flex flex-col mb-4">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700">
+          className="flex items-center text-sm font-medium text-gray-700 mb-1">
+          <Icon icon="tabler:input-number" className="h-5 w-5 mr-2" />
           {label}
         </label>
         <InputNumber
@@ -45,9 +46,10 @@ const FormField = ({
           value={field.value}
           onValueChange={(e) => helpers.setValue(e.value)}
           {...props}
+          className="w-full"
         />
         {meta.touched && meta.error ? (
-          <div className="text-red-500 text-sm">{meta.error}</div>
+          <small className="p-error">{meta.error}</small>
         ) : null}
       </div>
     );
@@ -55,10 +57,11 @@ const FormField = ({
 
   if (Component === Dropdown) {
     return (
-      <div className="mb-4">
+      <div className="flex flex-col mb-4">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700">
+          className="flex items-center text-sm font-medium text-gray-700 mb-1">
+          <Icon icon="tabler:dropdown" className="h-5 w-5 mr-2" />
           {label}
         </label>
         <Dropdown
@@ -68,22 +71,26 @@ const FormField = ({
           optionLabel="label"
           optionValue="value"
           {...props}
+          className="w-full"
         />
         {meta.touched && meta.error ? (
-          <div className="text-red-500 text-sm">{meta.error}</div>
+          <small className="p-error">{meta.error}</small>
         ) : null}
       </div>
     );
   }
 
   return (
-    <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+    <div className="flex flex-col mb-4">
+      <label
+        htmlFor={name}
+        className="flex items-center text-sm font-medium text-gray-700 mb-1">
+        <Icon icon="tabler:input" className="h-5 w-5 mr-2" />
         {label}
       </label>
-      <Component id={name} {...field} {...props} />
+      <Component id={name} {...field} {...props} className="w-full" />
       {meta.touched && meta.error ? (
-        <div className="text-red-500 text-sm">{meta.error}</div>
+        <small className="p-error">{meta.error}</small>
       ) : null}
     </div>
   );
@@ -128,18 +135,18 @@ export default function EditEva() {
     root_surface_diameter: 0,
     effective_root_area: 0,
     height_estimation: 0,
-    unbalancedCrown: 0,
-    overextendedBranches: 0,
+    unbalanced_crown: 0,
+    overextended_branches: 0,
     cracks: 0,
-    deadBranches: 0,
+    dead_branches: 0,
     inclination: 0,
-    VForks: 0,
+    V_forks: 0,
     cavities: 0,
-    barkDamage: 0,
-    soilLifting: 0,
-    cutRoots: 0,
-    basalRot: 0,
-    exposedRoots: 0,
+    bark_damage: 0,
+    soil_lifting: 0,
+    cut_damaged_roots: 0,
+    basal_rot: 0,
+    exposed_surface_roots: 0,
     wind: 0,
     drought: 0,
     status: 0,
@@ -258,18 +265,18 @@ export default function EditEva() {
       const formattedDate = format(birthDate, 'yyyy-MM-dd');
 
       const status =
-        Number(values.unbalancedCrown) +
-        Number(values.overextendedBranches) +
-        Number(values.cracks) +
-        Number(values.deadBranches) +
-        Number(values.inclination) +
-        Number(values.VForks) +
-        Number(values.cavities) +
-        Number(values.barkDamage) +
-        Number(values.soilLifting) +
-        Number(values.cutRoots) +
-        Number(values.basalRot) +
-        Number(values.exposedRoots);
+        Number(values.unbalanced_crown || 0) +
+        Number(values.overextended_branches || 0) +
+        Number(values.cracks || 0) +
+        Number(values.dead_branches || 0) +
+        Number(values.inclination || 0) +
+        Number(values.V_forks || 0) +
+        Number(values.cavities || 0) +
+        Number(values.bark_damage || 0) +
+        Number(values.soil_lifting || 0) +
+        Number(values.cut_damaged_roots || 0) +
+        Number(values.basal_rot || 0) +
+        Number(values.exposed_surface_roots || 0);
 
       const updatedValues = {
         ...values,
@@ -277,7 +284,19 @@ export default function EditEva() {
         status: status,
       };
 
-      await axiosClient.put(`/admin/evas/${id}`, updatedValues);
+      const payload = {
+        ...updatedValues,
+        element_id: Number(updatedValues.element_id),
+        height: Number(updatedValues.height),
+        diameter: Number(updatedValues.diameter),
+        crown_width: Number(updatedValues.crown_width),
+        crown_projection_area: Number(updatedValues.crown_projection_area),
+        root_surface_diameter: Number(updatedValues.root_surface_diameter),
+        effective_root_area: Number(updatedValues.effective_root_area),
+        height_estimation: Number(updatedValues.height_estimation),
+      };
+
+      await axiosClient.put(`/admin/evas/${id}`, payload);
       navigate(`/admin/evas/${id}`, {
         state: { success: t('messages.updateSuccess') },
       });
@@ -322,7 +341,7 @@ export default function EditEva() {
             {({ isSubmitting }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Sección: Identificación */}
-                <div className="md:col-span-2">
+                <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
                   <h1 className="text-xl font-bold mb-4">
                     {t('admin.pages.evas.edit.identification')}
                   </h1>
@@ -340,55 +359,57 @@ export default function EditEva() {
                     max={11}
                   />
                 </div>
-
                 {/* Sección: Condición del árbol */}
-                <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mb-4">
-                    {t('admin.pages.evas.edit.treeCondition')}
-                  </h1>
+                <div className="md:col-span-1">
+                  <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                    <h1 className="text-xl font-bold mb-4">
+                      {t('admin.pages.evas.edit.treeCondition')}
+                    </h1>
 
-                  {/* Subsección: Dimensiones */}
-                  <h2 className="text-lg font-semibold mb-2">
-                    {t('admin.pages.evas.edit.dimensions')}
-                  </h2>
-                  <FormField
-                    name="height"
-                    label={`${t('admin.pages.evas.form.height')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="diameter"
-                    label={`${t('admin.pages.evas.form.diameter')} (cm)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="crown_width"
-                    label={`${t('admin.pages.evas.form.crown_width')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="crown_projection_area"
-                    label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="root_surface_diameter"
-                    label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="effective_root_area"
-                    label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
-                    as={InputNumber}
-                  />
-                  <FormField
-                    name="height_estimation"
-                    label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
-                    as={InputNumber}
-                  />
-
+                    {/* Subsección: Dimensiones */}
+                    <h2 className="text-lg font-semibold mb-2">
+                      {t('admin.pages.evas.edit.dimensions')}
+                    </h2>
+                    <FormField
+                      name="height"
+                      label={`${t('admin.pages.evas.form.height')} (m)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="diameter"
+                      label={`${t('admin.pages.evas.form.diameter')} (cm)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="crown_width"
+                      label={`${t('admin.pages.evas.form.crown_width')} (m)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="crown_projection_area"
+                      label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="root_surface_diameter"
+                      label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="effective_root_area"
+                      label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
+                      as={InputNumber}
+                    />
+                    <FormField
+                      name="height_estimation"
+                      label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
+                      as={InputNumber}
+                    />
+                  </div>
+                </div>
+                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50 mb-6">
                   {/* Subsección: Estado */}
-                  <h2 className="text-lg font-semibold mt-4 mb-2">
+                  <h2 className="text-lg font-semibold mb-2">
                     {t('admin.pages.evas.edit.state')}
                   </h2>
 
@@ -479,39 +500,34 @@ export default function EditEva() {
                     options={dictionaries.exposedRoots}
                   />
                 </div>
+                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                  {/* Sección: Condición del entorno */}
+                  <div className="md:col-span-2">
+                    <h1 className="text-xl font-bold mb-4">
+                      {t('admin.pages.evas.edit.environmentCondition')}
+                    </h1>
 
-                {/* Sección: Condición del entorno */}
-                <div className="md:col-span-2">
-                  <h1 className="text-xl font-bold mt-6 mb-4">
-                    {t('admin.pages.evas.edit.environmentCondition')}
-                  </h1>
+                    {/* Subsección: Factores Ambientales */}
+                    <h2 className="text-lg font-semibold mb-2">
+                      {t('admin.pages.evas.edit.environmentalFactors')}
+                    </h2>
 
-                  {/* Subsección: Factores Ambientales */}
-                  <h2 className="text-lg font-semibold mb-2">
-                    {t('admin.pages.evas.edit.environmentalFactors')}
-                  </h2>
+                    {/* Subsubsección: Exposición al viento */}
+                    <FormField
+                      name="wind"
+                      label={t('admin.pages.evas.edit.windExposure')}
+                      as={Dropdown}
+                      options={dictionaries.wind}
+                    />
 
-                  {/* Subsubsección: Exposición al viento */}
-                  <h3 className="text-md font-medium mb-2">
-                    {t('admin.pages.evas.edit.windExposure')}
-                  </h3>
-                  <FormField
-                    name="wind"
-                    label={t('admin.pages.evas.form.wind')}
-                    as={Dropdown}
-                    options={dictionaries.wind}
-                  />
-
-                  {/* Subsubsección: Exposición a la sequía */}
-                  <h3 className="text-md font-medium mt-4 mb-2">
-                    {t('admin.pages.evas.edit.droughtExposure')}
-                  </h3>
-                  <FormField
-                    name="drought"
-                    label={t('admin.pages.evas.form.drought')}
-                    as={Dropdown}
-                    options={dictionaries.drought}
-                  />
+                    {/* Subsubsección: Exposición a la sequía */}
+                    <FormField
+                      name="drought"
+                      label={t('admin.pages.evas.edit.droughtExposure')}
+                      as={Dropdown}
+                      options={dictionaries.drought}
+                    />
+                  </div>
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <Button

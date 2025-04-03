@@ -6,12 +6,17 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { Element } from '@/types/Element';
 import { Point, TypePoint } from '@/types/Point';
+import { TreeTypes } from '@/types/TreeTypes';
+import { ElementType } from '@/types/ElementType';
+import ReactDOM from 'react-dom/client';
+import React from 'react';
+import { Icon } from '@iconify/react';
 
 export class MapService {
   public map!: mapboxgl.Map;
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
-  private elementMarkers: mapboxgl.Marker[] = [];
+  private elementMarkers: { marker: mapboxgl.Marker; elementId: number }[] = [];
 
   constructor(container: HTMLDivElement, token: string) {
     mapboxgl.accessToken = token;
@@ -25,8 +30,6 @@ export class MapService {
   }
 
   public addBasicControls() {
-    console.log('ENTRANDO EN BASIC CONTROLS');
-
     this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
     this.map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
@@ -131,6 +134,11 @@ export class MapService {
         if (this.map.getLayer(layer.id)) {
           this.map.removeLayer(layer.id);
         }
+      }
+    });
+
+    style.layers.forEach((layer) => {
+      if (layer.id.startsWith(prefix)) {
         if (this.map.getSource(layer.id)) {
           this.map.removeSource(layer.id);
         }
@@ -138,7 +146,11 @@ export class MapService {
     });
   }
 
-  public addZoneToMap(zoneId: string, coords: number[][]) {
+  public addZoneToMap(
+    zoneId: string,
+    coords: number[][],
+    zoneColor: string = '#088',
+  ) {
     if (this.map.getSource(zoneId)) {
       if (this.map.getLayer(zoneId)) {
         this.map.removeLayer(zoneId);
@@ -165,7 +177,7 @@ export class MapService {
       type: 'fill',
       source: zoneId,
       paint: {
-        'fill-color': '#088',
+        'fill-color': zoneColor,
         'fill-opacity': 0.5,
       },
     });
@@ -181,15 +193,73 @@ export class MapService {
     });
   }
 
-  public addElementMarkers(elements: Element[], points: Point[]) {
-    this.removeElementMarkers();
+  private createCustomMarkerElement(elementType: ElementType): HTMLElement {
+    const container = document.createElement('div');
+    const root = ReactDOM.createRoot(container);
 
-    const filteredPoints = points.filter((p) => p.type === TypePoint.element);
+    const iconName = elementType.icon?.trim()
+      ? elementType.icon.includes(':')
+        ? elementType.icon
+        : `mdi:${elementType.icon}`
+      : 'mdi:map-marker';
 
-    console.log(
-      'Añadiendo marcadores, puntos filtrados:',
-      filteredPoints.length,
+    const bgColor = elementType.color
+      ? elementType.color.startsWith('#')
+        ? elementType.color
+        : `#${elementType.color}`
+      : '#2D4356';
+
+    root.render(
+      React.createElement(
+        'div',
+        {
+          className: 'element-marker',
+          style: {
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: bgColor,
+            boxShadow: '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)',
+            cursor: 'pointer',
+            border: '2px solid #fff',
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          },
+          onMouseEnter: (e: any) => {
+            e.currentTarget.style.transform = 'scale(1.1)';
+            e.currentTarget.style.boxShadow =
+              '0 5px 10px rgba(0,0,0,0.25), 0 3px 6px rgba(0,0,0,0.22)';
+          },
+          onMouseLeave: (e: any) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow =
+              '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)';
+          },
+        },
+        React.createElement(Icon, {
+          icon: iconName,
+          width: 22,
+          height: 22,
+          color: '#FFFFFF',
+        }),
+      ),
     );
+
+    return container;
+  }
+
+  public addElementMarkers(
+    elements: Element[],
+    points: Point[],
+    treeTypes: TreeTypes[],
+    elementTypes: ElementType[],
+    onDeleteElement?: (elementId: number) => void,
+    onElementClick?: (element: Element) => void,
+  ) {
+    this.removeElementMarkers();
+    const filteredPoints = points.filter((p) => p.type === TypePoint.element);
 
     elements.forEach((element) => {
       const coords = this.getCoordElement(element, filteredPoints);
@@ -197,20 +267,63 @@ export class MapService {
         console.warn('Elemento sin coordenadas:', element);
         return;
       }
-      console.log('Agregando marcador en:', coords);
 
-      const marker = new mapboxgl.Marker({ color: '#FF0000' })
+      const elementType = elementTypes.find(
+        (type) => type.id === element.element_type_id,
+      );
+      if (!elementType) {
+        console.warn('Tipo de elemento no encontrado para:', element);
+        return;
+      }
+
+      const markerEl = this.createCustomMarkerElement(elementType);
+      const marker = new mapboxgl.Marker({
+        element: markerEl,
+        anchor: 'center',
+        draggable: false,
+      })
         .setLngLat([coords.lng, coords.lat])
         .addTo(this.map);
 
-      this.elementMarkers.push(marker);
-    });
+      const tooltip = document.createElement('div');
+      tooltip.className = 'marker-tooltip';
+      tooltip.style.cssText =
+        'display:none; position:absolute; background:#fff; padding:5px 10px; border-radius:4px; box-shadow:0 1px 4px rgba(0,0,0,0.2); font-size:12px; z-index:10; pointer-events:none; white-space:nowrap';
+      tooltip.textContent = elementType.name || 'Elemento';
+      markerEl.appendChild(tooltip);
 
-    console.log('Total de marcadores añadidos:', this.elementMarkers.length);
+      markerEl.addEventListener('mouseenter', () => {
+        tooltip.style.display = 'block';
+      });
+
+      markerEl.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none';
+      });
+
+      marker.getElement().addEventListener('click', () => {
+        if (onElementClick) {
+          onElementClick(element);
+        }
+      });
+
+      this.elementMarkers.push({ marker, elementId: element.id! });
+    });
+  }
+
+  public removeElementMarker(elementId: number) {
+    const markerObj = this.elementMarkers.find(
+      (m) => m.elementId === elementId,
+    );
+    if (markerObj) {
+      markerObj.marker.remove();
+      this.elementMarkers = this.elementMarkers.filter(
+        (m) => m.elementId !== elementId,
+      );
+    }
   }
 
   public removeElementMarkers() {
-    this.elementMarkers.forEach((marker) => marker.remove());
+    this.elementMarkers.forEach((markerObj) => markerObj.marker.remove());
     this.elementMarkers = [];
   }
 
@@ -229,7 +342,27 @@ export class MapService {
     return { lat: point.latitude, lng: point.longitude };
   }
 
-  public flyTo(coord: [number, number], zoom = 18) {
+  public flyTo(coord: [number, number], zoom = 16) {
     this.map.flyTo({ center: coord, zoom, essential: true });
+  }
+
+  public resizeMap(): void {
+    if (this.map) {
+      this.map.resize();
+    }
+  }
+
+  public updateMarkerVisibility(elementId: number, visible: boolean) {
+    const markerObj = this.elementMarkers.find(
+      (m) => m.elementId === elementId,
+    );
+    if (markerObj) {
+      const markerElement = markerObj.marker.getElement();
+      if (visible) {
+        markerElement.style.display = '';
+      } else {
+        markerElement.style.display = 'none';
+      }
+    }
   }
 }

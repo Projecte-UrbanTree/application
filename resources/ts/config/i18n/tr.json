@@ -85,6 +85,21 @@
         "title": "crwdns2897:0crwdne2897:0"
       },
       "dashboard": {
+        "quickActions": "crwdns5047:0crwdne5047:0",
+        "createWorkOrder": "crwdns5049:0crwdne5049:0",
+        "reviewReports": "crwdns5051:0crwdne5051:0",
+        "manageUsers": "crwdns5053:0crwdne5053:0",
+        "recentActivity": "crwdns5055:0crwdne5055:0",
+        "workOrderCompleted": "crwdns5057:0crwdne5057:0",
+        "ago": "crwdns5059:0crwdne5059:0",
+        "reportSubmitted": "crwdns5061:0crwdne5061:0",
+        "workOrderAssigned": "crwdns5063:0crwdne5063:0",
+        "totalWorkOrders": "crwdns5065:0crwdne5065:0",
+        "inProgressWorkOrders": "crwdns5067:0crwdne5067:0",
+        "completedWorkOrders": "crwdns5069:0crwdne5069:0",
+        "pendingReports": "crwdns5071:0crwdne5071:0",
+        "viewAll": "crwdns5073:0crwdne5073:0",
+        "noActivity": "crwdns5075:0crwdne5075:0",
         "stats": {
           "widgets": {
             "contracts": "crwdns2899:0crwdne2899:0",
@@ -559,6 +574,76 @@
         },
         "title": "crwdns3205:0crwdne3205:0"
       },
+      "workReport": {
+        "title": "crwdns4873:0crwdne4873:0",
+        "not_found": "crwdns4875:0crwdne4875:0",
+        "columns": {
+          "users": "crwdns4877:0crwdne4877:0",
+          "observation": "crwdns4879:0crwdne4879:0",
+          "spent_fuel": "crwdns4881:0crwdne4881:0",
+          "incidents": "crwdns4883:0crwdne4883:0",
+          "zones": "crwdns4885:0crwdne4885:0",
+          "tasks": "crwdns4887:0crwdne4887:0",
+          "notes": "crwdns4889:0crwdne4889:0",
+          "block": "crwdns4891:0crwdne4891:0",
+          "resources": "crwdns4893:0crwdne4893:0"
+        },
+        "messages": {
+          "closing_part": "crwdns4895:0crwdne4895:0",
+          "part_closed": "crwdns4897:0crwdne4897:0",
+          "closing_block": "crwdns4899:0crwdne4899:0",
+          "close_block": "crwdns4901:0crwdne4901:0",
+          "closing_with_incidents": "crwdns4903:0crwdne4903:0",
+          "close_with_incidents": "crwdns4905:0crwdne4905:0",
+          "rejecting": "crwdns4907:0crwdne4907:0",
+          "reject": "crwdns4909:0crwdne4909:0",
+          "closing_with_observations": "crwdns4911:0crwdne4911:0",
+          "close_with_observations": "crwdns4913:0crwdne4913:0",
+          "error_updating_observations": "crwdns4915:0crwdne4915:0",
+          "observation_updated": "crwdns4917:0crwdne4917:0",
+          "error_updating_observation": "crwdns4919:0crwdne4919:0"
+        },
+        "reportStatus": {
+          "pending": "crwdns4921:0crwdne4921:0",
+          "completed": "crwdns4923:0crwdne4923:0",
+          "rejected": "crwdns4925:0crwdne4925:0",
+          "closedWithIncidents": "crwdns4927:0crwdne4927:0",
+          "unknown": "crwdns4929:0crwdne4929:0"
+        },
+        "details": {
+          "details": "crwdns4931:0crwdne4931:0",
+          "block": "crwdns4933:0crwdne4933:0",
+          "noBlocks": "crwdns4935:0crwdne4935:0",
+          "noBlocksAvailable": "crwdns4937:0crwdne4937:0",
+          "noNotes": "crwdns4939:0crwdne4939:0",
+          "noTasks": "crwdns4941:0crwdne4941:0",
+          "notes": "crwdns4943:0crwdne4943:0",
+          "noUsers": "crwdns4945:0crwdne4945:0",
+          "noZones": "crwdns4947:0crwdne4947:0",
+          "tasks": "crwdns4949:0crwdne4949:0",
+          "unknown": "crwdns4951:0crwdne4951:0",
+          "zones": "crwdns4953:0crwdne4953:0",
+          "resources": "crwdns4955:0crwdne4955:0",
+          "observation": "crwdns4957:0crwdne4957:0",
+          "noObservation": "crwdns4959:0crwdne4959:0",
+          "incidents": "crwdns4961:0crwdne4961:0",
+          "noIncidents": "crwdns4963:0crwdne4963:0",
+          "spentFuel": "crwdns4965:0crwdne4965:0",
+          "taskStatus": "crwdns4967:0crwdne4967:0",
+          "hours": "crwdns4969:0crwdne4969:0",
+          "unit": "crwdns4971:0crwdne4971:0",
+          "cost": "crwdns4973:0crwdne4973:0",
+          "quantity": "crwdns4975:0crwdne4975:0"
+        },
+        "dialogs": {
+          "observationHeader": "crwdns4977:0crwdne4977:0",
+          "observationMessage": "crwdns4979:0crwdne4979:0",
+          "observationPlaceholder": "crwdns4981:0crwdne4981:0",
+          "editObservationHeader": "crwdns4983:0crwdne4983:0",
+          "editObservationMessage": "crwdns4985:0crwdne4985:0",
+          "editObservationPlaceholder": "crwdns4987:0crwdne4987:0"
+        }
+      },
       "account": {
         "title": "crwdns3729:0crwdne3729:0",
         "basicInfo": "crwdns3731:0crwdne3731:0",
@@ -811,6 +896,30 @@
         "environmentalFactors": "crwdns4851:0crwdne4851:0",
         "windExposure": "crwdns4853:0crwdne4853:0",
         "droughtExposure": "crwdns4855:0crwdne4855:0"
+      },
+      "work_reports": {
+        "title": "crwdns4989:0crwdne4989:0",
+        "not_found": "crwdns4991:0crwdne4991:0",
+        "details": "crwdns4993:0crwdne4993:0",
+        "columns": {
+          "observation": "crwdns4995:0crwdne4995:0",
+          "spent_fuel": "crwdns4997:0crwdne4997:0",
+          "incidents": "crwdns4999:0crwdne4999:0",
+          "zones": "crwdns5001:0crwdne5001:0",
+          "tasks": "crwdns5003:0crwdne5003:0",
+          "notes": "crwdns5005:0crwdne5005:0",
+          "block": "crwdns5007:0crwdne5007:0"
+        },
+        "messages": {
+          "closing_part": "crwdns5009:0crwdne5009:0",
+          "part_closed": "crwdns5011:0crwdne5011:0",
+          "closing_block": "crwdns5013:0crwdne5013:0",
+          "close_block": "crwdns5015:0crwdne5015:0",
+          "closing_with_incidents": "crwdns5017:0crwdne5017:0",
+          "close_with_incidents": "crwdns5019:0crwdne5019:0",
+          "rejecting": "crwdns5021:0crwdne5021:0",
+          "reject": "crwdns5023:0crwdne5023:0"
+        }
       }
     },
     "profileDropdown": {
@@ -857,7 +966,22 @@
     "genericError": "crwdns3253:0crwdne3253:0",
     "loading": "crwdns3255:0crwdne3255:0",
     "error": "crwdns3761:0crwdne3761:0",
-    "success": "crwdns3763:0crwdne3763:0"
+    "success": "crwdns3763:0crwdne3763:0",
+    "actions": {
+      "cancel": "crwdns5025:0crwdne5025:0",
+      "confirm": "crwdns5027:0crwdne5027:0",
+      "close_part": "crwdns5029:0crwdne5029:0",
+      "close_with_incidents": "crwdns5031:0crwdne5031:0",
+      "reject": "crwdns5033:0crwdne5033:0",
+      "close_with_observations": "crwdns5035:0crwdne5035:0",
+      "edit_observation": "crwdns5037:0crwdne5037:0"
+    },
+    "messages": {
+      "close_block": "crwdns5039:0crwdne5039:0",
+      "close_with_incidents": "crwdns5041:0crwdne5041:0",
+      "reject": "crwdns5043:0crwdne5043:0"
+    },
+    "not_available": "crwdns5045:0crwdne5045:0"
   },
   "public": {
     "error": {

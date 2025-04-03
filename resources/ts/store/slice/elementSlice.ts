@@ -1,4 +1,8 @@
-import { fetchElements, saveElements } from '@/api/service/elementService';
+import {
+  deleteElement,
+  fetchElements,
+  saveElements,
+} from '@/api/service/elementService';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Element } from '@/types/Element';
 
@@ -33,6 +37,14 @@ export const saveElementAsync = createAsyncThunk<
   }
 });
 
+export const deleteElementAsync = createAsyncThunk(
+  'elements/deleteElement',
+  async (elementId: number) => {
+    await deleteElement(elementId);
+    return elementId;
+  },
+);
+
 const elementSlice = createSlice({
   name: 'element',
   initialState,
@@ -62,6 +74,11 @@ const elementSlice = createSlice({
       })
       .addCase(saveElementAsync.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(deleteElementAsync.fulfilled, (state, action) => {
+        state.elements = state.elements.filter(
+          (element) => element.id !== action.payload,
+        );
       });
   },
 });

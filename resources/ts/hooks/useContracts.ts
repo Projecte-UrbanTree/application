@@ -1,46 +1,31 @@
 import axiosClient from '@/api/axiosClient';
 import { setContractState } from '@/store/slice/contractSlice';
 import { Contract } from '@/types/Contract';
-import { useDispatch } from 'react-redux';
-import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export function useContracts() {
   const dispatch = useDispatch();
+  const contracts = useSelector(
+    (state: RootState) => state.contract.allContracts,
+  );
 
-  const fetchContracts = useCallback(async () => {
+  const fetchContracts = async (forceRefresh = false) => {
+    if (!forceRefresh && contracts && contracts.length > 0) {
+      return;
+    }
+
     try {
-      const response = await axiosClient.get<Contract[]>('/admin/contracts');
-      console.log('RESPONSE hookContr: ', response);
-
-      if (response.data.length > 0) {
-        try {
-          const sessionResponse = await axiosClient.get<{
-            contract_id: number | null;
-            contract: Contract | null;
-          }>('/admin/get-selected-contract');
-
-          let selectedContract: Contract | null =
-            sessionResponse.data.contract || null;
-
-          dispatch(
-            setContractState({
-              allContracts: response.data,
-              currentContract: selectedContract,
-            }),
-          );
-        } catch (sessionError) {
-          dispatch(
-            setContractState({
-              allContracts: response.data,
-              currentContract: null,
-            }),
-          );
-        }
+      const { data } = await axiosClient.get<Contract[]>('/contracts');
+      if (data.length) {
+        dispatch(
+          setContractState({ allContracts: data, currentContract: null }),
+        );
       }
     } catch (error) {
       console.error('Error fetching contracts:', error);
     }
-  }, [dispatch]);
+  };
 
   return { fetchContracts };
 }

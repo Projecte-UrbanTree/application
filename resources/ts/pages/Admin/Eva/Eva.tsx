@@ -254,9 +254,7 @@ export default function Evas() {
           className="p-datatable-sm">
           <Column
             header={t('admin.pages.evas.columns.name')}
-            body={(rowData: Eva) => (
-              <span>{rowData.element?.element_type?.name || 'N/A'}</span>
-            )}
+            body={(rowData: Eva) => <span>{rowData.element_id || 'N/A'}</span>}
           />
           <Column
             header={t('admin.pages.evas.columns.coordinates')}

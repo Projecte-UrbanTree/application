@@ -93,6 +93,14 @@ class WorkOrderBlockTaskSeeder extends Seeder
                 'task_type_id' => 3,
                 'work_order_block_id' => 10,
             ],
+            [
+                'status' => 1,
+                'spent_time' => 100,
+                'element_type_id' => 2,
+                'tree_type_id' => 1,
+                'task_type_id' => 1,
+                'work_order_block_id' => 3,
+            ],
         ]);
     }
 }

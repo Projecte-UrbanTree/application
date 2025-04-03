@@ -85,6 +85,22 @@
         "title": "Contracts"
       },
       "dashboard": {
+        "quickActions": "Quick Actions",
+        "createWorkOrder": "Create Work Order",
+        "reviewReports": "Review Reports",
+        "manageUsers": "Manage Users",
+        "recentActivity": "Recent Activity",
+        "workOrderCompleted": "Work Order Completed",
+        "reportSubmitted": "Report Submitted",
+        "workOrderAssigned": "Work Order Assigned",
+        "viewAll": "View All Activities",
+        "noActivity": "No recent activity",
+        "ago": "ago",
+        "totalWorkOrders": "Total Orders",
+        "inProgressWorkOrders": "In Progress Work Orders",
+        "noInProgressWorkOrders": "No in-progress work orders",
+        "completedWorkOrders": "Completed",
+        "pendingReports": "Pending Reports",
         "stats": {
           "widgets": {
             "contracts": "Contracts",
@@ -97,84 +113,85 @@
         "welcome": {
           "greeting": "Welcome back, {{name}} {{surname}}.",
           "message": "We are glad to see you again. Here is a quick overview of your data."
-        }
+        },
+        "actions": "Actions"
       },
       "elementTypes": {
-                "title": "Element Types",
-                "loading": "Loading...",
-                "actions": "Actions",
-                "editButton": "Edit element type",
-                "deleteButton": "Delete element type",
-                "deletedSuccess": "Element type deleted successfully",
-                "deleteConfirm": "Are you sure you want to delete this element type?",
-                "success": "Element type created successfully",
-                "update": "Element type updated successfully",
-                "error": "Error saving element type",
-                "true": "Yes",
-                "false": "No",
-                "create": {
-                    "title": "Create Element Type",
-                    "submittingText": "Creating...",
-                    "submitButton": "Create Element Type",
-                    "validations": {
-                        "name": "Name is required",
-                        "requires_tree_type": "Requires tree type",
-                        "icon": "Icon is required",
-                        "color": "Color is required",
-                        "description": "Description is required"
-                    },
-                    "placeholders": {
-                        "name": "Element type name",
-                        "requires_tree_type": "Select if it requires tree type",
-                        "description": "Element type description",
-                        "icon": "Select an icon",
-                        "color": "Select a color"
-                    }
-                },
-                "edit": {
-                    "title": "Edit Element Type",
-                    "submittingText": "Saving...",
-                    "submitButton": "Save Changes",
-                    "validations": {
-                        "name": "Name is required",
-                        "requires_tree_type": "Requires tree type",
-                        "icon": "Icon is required",
-                        "color": "Color is required",
-                        "description": "Description is required"
-                    },
-                    "placeholders": {
-                        "name": "Element type name",
-                        "requires_tree_type": "Select if it requires tree type",
-                        "description": "Element type description",
-                        "icon": "Select an icon",
-                        "color": "Select a color"
-                    }
-                },
-                "columns": {
-                    "name": "Name",
-                    "requires_tree_type": "Requires tree type",
-                    "description": "Description",
-                    "icon": "Icon",
-                    "color": "Color"
-                },
-                "icons": {
-                  "tree": "Tree",
-                  "home": "Home",
-                  "post-lamp": "Post Lamp",
-                  "park": "Park",
-                  "fountain": "Fountain",
-                  "flower": "Flower",
-                  "mountain": "Mountain",
-                  "beach": "Beach",
-                  "volcano": "Volcano",
-                  "tap": "Tap",
-                  "water-drop": "Water Drop",
-                  "lightbulb": "Lightbulb",
-                  "lightning-bolt": "Lightning Bolt",
-                  "grass": "Grass",
-                  "cloud": "Cloud"
-                }
-            },
+        "title": "Element Types",
+        "loading": "Loading...",
+        "actions": "Actions",
+        "editButton": "Edit element type",
+        "deleteButton": "Delete element type",
+        "deletedSuccess": "Element type deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this element type?",
+        "success": "Element type created successfully",
+        "update": "Element type updated successfully",
+        "error": "Error saving element type",
+        "true": "Yes",
+        "false": "No",
+        "create": {
+          "title": "Create Element Type",
+          "submittingText": "Creating...",
+          "submitButton": "Create Element Type",
+          "validations": {
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
+          },
+          "placeholders": {
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
+          }
+        },
+        "edit": {
+          "title": "Edit Element Type",
+          "submittingText": "Saving...",
+          "submitButton": "Save Changes",
+          "validations": {
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
+          },
+          "placeholders": {
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
+          }
+        },
+        "columns": {
+          "name": "Name",
+          "requires_tree_type": "Requires tree type",
+          "description": "Description",
+          "icon": "Icon",
+          "color": "Color"
+        },
+        "icons": {
+          "tree": "Tree",
+          "home": "Home",
+          "post-lamp": "Post Lamp",
+          "park": "Park",
+          "fountain": "Fountain",
+          "flower": "Flower",
+          "mountain": "Mountain",
+          "beach": "Beach",
+          "volcano": "Volcano",
+          "tap": "Tap",
+          "water-drop": "Water Drop",
+          "lightbulb": "Lightbulb",
+          "lightning-bolt": "Lightning Bolt",
+          "grass": "Grass",
+          "cloud": "Cloud"
+        }
+      },
       "resources": {
         "form": {
           "fields": {
@@ -295,7 +312,13 @@
         "hoursWorked": "Hours Worked",
         "fuelConsumption": "Fuel Consumption",
         "noData": "No data to display",
-        "exportCSV": "Export to CSV"
+        "exportCSV": "Export to CSV",
+        "total": "Total",
+        "noDataResourcePeriod": "No data available for the selected resource type and period",
+        "selectResource": "Select a resource type",
+        "selectResourcePlaceholder": "Search your resource type here...",
+        "noResourcesAvailable": "No resources available",
+        "selectResourcePrompt": "Please select a resource to view its usage"
       },
       "taskTypes": {
         "form": {
@@ -559,6 +582,76 @@
         },
         "title": "Work Orders"
       },
+      "workReport": {
+        "title": "Work Report",
+        "not_found": "Work Report not found",
+        "columns": {
+          "users": "Workers",
+          "observation": "Observation",
+          "spent_fuel": "Spent Fuel",
+          "incidents": "Incidents",
+          "zones": "Zones",
+          "tasks": "Tasks",
+          "notes": "Notes",
+          "block": "Block",
+          "resources": "Resources"
+        },
+        "messages": {
+          "closing_part": "Closing part...",
+          "part_closed": "Part successfully closed",
+          "closing_block": "Closing block...",
+          "close_block": "Block successfully closed",
+          "closing_with_incidents": "Closing block with incidents...",
+          "close_with_incidents": "Block closed with incidents",
+          "rejecting": "Rejecting block...",
+          "reject": "Block rejected",
+          "closing_with_observations": "Closing report with observations...",
+          "close_with_observations": "Report closed with observations",
+          "error_updating_observations": "Error updating observations",
+          "observation_updated": "Observation updated successfully",
+          "error_updating_observation": "Error updating observation"
+        },
+        "reportStatus": {
+          "pending": "Pending",
+          "completed": "Completed",
+          "rejected": "Rejected",
+          "closedWithIncidents": "Closed with Incidents",
+          "unknown": "Unknown"
+        },
+        "details": {
+          "details": "Details",
+          "block": "Block",
+          "noBlocks": "No blocks",
+          "noBlocksAvailable": "No blocks available for this work report",
+          "noNotes": "No notes",
+          "noTasks": "No tasks assigned",
+          "notes": "Notes",
+          "noUsers": "No users assigned",
+          "noZones": "No zones assigned",
+          "tasks": "Tasks",
+          "unknown": "Unknown",
+          "zones": "Zones",
+          "resources": "Resources",
+          "observation": "Observation",
+          "noObservation": "No observation available",
+          "incidents": "Incidents",
+          "noIncidents": "No incidents recorded",
+          "spentFuel": "Spent Fuel",
+          "taskStatus": "Task Status",
+          "hours": "Hours",
+          "unit": "Unit",
+          "cost": "Cost",
+          "quantity": "Quantity"
+        },
+        "dialogs": {
+          "observationHeader": "Add Observations",
+          "observationMessage": "Please provide your observations before closing the report.",
+          "observationPlaceholder": "Enter your observations here...",
+          "editObservationHeader": "Edit Observation",
+          "editObservationMessage": "Modify the observation for this report.",
+          "editObservationPlaceholder": "Enter your updated observation here..."
+        }
+      },
       "account": {
         "title": "Account Settings",
         "basicInfo": "Basic Information",
@@ -811,6 +904,50 @@
         "environmentalFactors": "Environmental Factors",
         "windExposure": "Wind Exposure",
         "droughtExposure": "Drought Exposure"
+      },
+      "work_reports": {
+        "title": "Work Report",
+        "not_found": "Work Report not found",
+        "details": "Details",
+        "columns": {
+          "observation": "Observation",
+          "spent_fuel": "Spent Fuel",
+          "incidents": "Incidents",
+          "zones": "Zones",
+          "tasks": "Tasks",
+          "notes": "Notes",
+          "block": "Block"
+        },
+        "messages": {
+          "closing_part": "Closing part...",
+          "part_closed": "Part successfully closed",
+          "closing_block": "Closing block...",
+          "close_block": "Block successfully closed",
+          "closing_with_incidents": "Closing block with incidents...",
+          "close_with_incidents": "Block closed with incidents",
+          "rejecting": "Rejecting block...",
+          "reject": "Block rejected"
+        }
+      },
+      "workers": {
+        "title": "Workers Management",
+        "contractWorkers": "Contract Workers",
+        "assignRemoveWorkers": "Assign/Remove Workers",
+        "selectWorkers": "Select Workers",
+        "selected": "Selected",
+        "workersForContract": "Workers for Contract",
+        "noWorkersAssigned": "No workers assigned to this contract",
+        "useDropdownToAssign": "Use the dropdown above to assign workers",
+        "selectWorkerHelp": "Select or unselect workers to assign them to this contract",
+        "noWorkersFound": "No workers found",
+        "name": "Name",
+        "email": "Email",
+        "company": "Company",
+        "dni": "ID Card",
+        "pleaseSelectContract": "Please select a contract first",
+        "updatedSuccessfully": "Workers updated successfully",
+        "failedToLoad": "Failed to load workers",
+        "failedToUpdate": "Failed to update workers"
       }
     },
     "profileDropdown": {
@@ -857,7 +994,22 @@
     "genericError": "An error occurred. Please try again later.",
     "loading": "Loading...",
     "error": "Error",
-    "success":"Success"
+    "success": "Success",
+    "actions": {
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "close_part": "Close Part",
+      "close_with_incidents": "Close with Incidents",
+      "reject": "Reject",
+      "close_with_observations": "Close with Observations",
+      "edit_observation": "Edit Observation"
+    },
+    "messages": {
+      "close_block": "Block closed successfully",
+      "close_with_incidents": "Block closed with incidents",
+      "reject": "Block rejected"
+    },
+    "not_available": "Not available"
   },
   "public": {
     "error": {
