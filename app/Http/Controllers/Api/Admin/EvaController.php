@@ -34,11 +34,10 @@ class EvaController extends Controller
         ]);
     }
 
-    public function show($elementId)
+    public function show($id)
     {
         $eva = Eva::with(['element.point', 'element.elementType'])
-            ->where('element_id', $elementId)
-            ->firstOrFail();
+            ->findOrFail($id);
 
         return response()->json($eva);
     }

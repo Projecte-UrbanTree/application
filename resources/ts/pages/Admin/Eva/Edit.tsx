@@ -98,9 +98,11 @@ const FormField = ({
 
 interface EditEvaProps {
   preselectedElementId: number;
+  onClose: () => void;
+  redirectPath?: string; // Add redirectPath prop
 }
 
-export default function EditEva({ preselectedElementId }: EditEvaProps) {
+export default function EditEva({ preselectedElementId, onClose, redirectPath }: EditEvaProps) {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -303,9 +305,14 @@ export default function EditEva({ preselectedElementId }: EditEvaProps) {
       };
 
       await axiosClient.put(`/admin/evas/${elementId}`, payload);
-      navigate(`/admin/evas/${elementId}`, {
-        state: { success: t('messages.updateSuccess') },
-      });
+
+      if (redirectPath) {
+        onClose(); // Close the popup if redirectPath is provided
+      } else {
+        navigate(`/admin/evas/${elementId}`, {
+          state: { success: t('messages.updateSuccess') },
+        });
+      }
     } catch (error) {
       console.error('Error en handleSubmit:', error);
       navigate(`/admin/evas/${elementId}`, {

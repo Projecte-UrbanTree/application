@@ -83,9 +83,11 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
 
 interface CreateEvaProps {
   preselectedElementId: number;
+  onClose: () => void;
+  redirectPath?: string; // Add redirectPath prop
 }
 
-const CreateEva = ({ preselectedElementId }: CreateEvaProps) => {
+const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaProps) => {
   const navigate = useNavigate();
   const [elements, setElements] = useState<any[]>([]);
   const [dictionaries, setDictionaries] = useState<any>({});
@@ -230,9 +232,14 @@ const CreateEva = ({ preselectedElementId }: CreateEvaProps) => {
       };
 
       await axiosClient.post('/admin/evas', updatedValues);
-      navigate('/admin/evas', {
-        state: { success: t('admin.pages.evas.list.messages.createSuccess') },
-      });
+
+      if (redirectPath) {
+        onClose(); // Close the popup if redirectPath is provided
+      } else {
+        navigate('/admin/evas', {
+          state: { success: t('admin.pages.evas.list.messages.createSuccess') },
+        });
+      }
     } catch (error: any) {
       setError(
         error.response?.data?.message ||
