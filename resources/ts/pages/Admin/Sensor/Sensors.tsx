@@ -143,45 +143,6 @@ const Sensors: React.FC = () => {
                 </div>
               </div>
 
-              {/* Soil data */}
-              <div className="mb-4">
-                <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
-                  Datos del suelo
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-xs text-gray-500 mb-1">Temperatura</p>
-                    <p className="text-gray-700">
-                      {sensorData.lastReading.temp_soil}°C
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-3 rounded-lg">
-                    <p className="text-xs text-gray-500 mb-1">pH</p>
-                    <p className="text-gray-700">
-                      {sensorData.lastReading.ph1_soil}
-                    </p>
-                  </div>
-                  {sensorData.lastReading.water_soil && (
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-xs text-gray-500 mb-1">Humedad</p>
-                      <p className="text-gray-700">
-                        {sensorData.lastReading.water_soil}%
-                      </p>
-                    </div>
-                  )}
-                  {sensorData.lastReading.conductor_soil && (
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-xs text-gray-500 mb-1">
-                        Conductividad
-                      </p>
-                      <p className="text-gray-700">
-                        {sensorData.lastReading.conductor_soil} µS/cm
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
               {/* Location */}
               <div className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-xs text-gray-500 mb-1">Ubicación</p>
