@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Sensor, fetchSensors } from '@/api/sensors';
+import { Sensor, fetchSensors, fetchSensorByEUI } from '@/api/sensors';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,8 +12,20 @@ const Sensors: React.FC = () => {
   useEffect(() => {
     const loadSensors = async () => {
       try {
-        const data = await fetchSensors();
-        setSensors(data);
+        const allSensors = await fetchSensors();
+
+        const verifiedSensors = await Promise.all(
+          allSensors.map(async (sensor: any) => {
+            try {
+              const exists = await fetchSensorByEUI(sensor.dev_eui);
+              return exists ? sensor : null;
+            } catch {
+              return null;
+            }
+          }),
+        );
+
+        setSensors(verifiedSensors.filter(Boolean) as Sensor[]);
       } catch (err) {
         setError('Error al cargar los sensores');
         console.error(err);
@@ -21,6 +33,7 @@ const Sensors: React.FC = () => {
         setLoading(false);
       }
     };
+
     loadSensors();
   }, []);
 
