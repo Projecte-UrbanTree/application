@@ -7,33 +7,28 @@ interface ContractState {
   currentContract: Contract | null;
 }
 
-const initialContractState: ContractState = {
+const initialState: ContractState = {
   allContracts: [],
   currentContract: null,
 };
 
 export const contractSlice = createSlice({
   name: 'contract',
-  initialState: initialContractState,
+  initialState,
   reducers: {
     setContractState(state, action: PayloadAction<Partial<ContractState>>) {
-      return { ...state, ...action.payload };
+      Object.assign(state, action.payload);
     },
 
     selectContract(state, action: PayloadAction<number>) {
-      if (action.payload === 0) {
-        state.currentContract = defaultContract;
-      } else {
-        const selected = state.allContracts.find(
-          (c) => c.id === action.payload,
-        );
-        if (selected) {
-          state.currentContract = selected;
-        }
-      }
+      state.currentContract =
+        state.allContracts.find((c) => c.id === action.payload) ||
+        defaultContract;
     },
 
-    clearContractState: () => initialContractState,
+    clearContractState(state) {
+      Object.assign(state, initialState);
+    },
   },
 });
 
