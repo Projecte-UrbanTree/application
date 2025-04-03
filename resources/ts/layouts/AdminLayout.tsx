@@ -32,7 +32,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   const location = useLocation();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownValue, setDropdownValue] = useState<number | null>(null);
 
   const { allContracts, currentContract } = useSelector(
     (state: RootState) => state.contract,
@@ -78,12 +77,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   useEffect(() => {
     document.title = t(titleI18n);
   }, [titleI18n, t]);
-
-  useEffect(() => {
-    if (dropdownValue === null) {
-      setDropdownValue(currentContract?.id ?? 0);
-    }
-  }, [currentContract, dropdownValue]);
 
   const handleContractChange = useCallback(
     (e: DropdownChangeEvent) => {
@@ -235,7 +228,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 <Dropdown
                   id="contractBtn"
                   className="w-40"
-                  value={dropdownValue}
+                  value={currentContract?.id ?? 0}
                   options={contracts}
                   onChange={handleContractChange}
                   optionLabel="name"
@@ -281,16 +274,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
           className={`${menuOpen ? '' : 'hidden'} lg:hidden px-8 py-6 bg-gray-100`}>
           <div className="mt-4 flex flex-col gap-4">
             {!hideContractSelector && (
-              <Dropdown
-                id="contractBtn"
-                className="w-full"
-                value={dropdownValue}
-                options={contracts}
-                onChange={handleContractChange}
-                optionLabel="name"
-                optionValue="id"
-                placeholder={t('general.selectContract')}
-              />
+                <Dropdown
+                  id="contractBtn"
+                  className="w-40"
+                  value={currentContract?.id ?? 0}
+                  options={contracts}
+                  onChange={handleContractChange}
+                  optionLabel="name"
+                  optionValue="id"
+                />
             )}
             <LangSelector className="w-full" />
           </div>

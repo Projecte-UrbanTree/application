@@ -42,13 +42,15 @@ export const contractSlice = createSlice({
     builder.addCase(fetchAllContracts.fulfilled, (state, action) => {
       state.allContracts = action.payload;
       const persistedContractId = Number(localStorage.getItem('contractId'));
-      console.log(persistedContractId);
       if (persistedContractId > 0) {
         const foundContract = state.allContracts.find(
           (c) => c.id === persistedContractId,
         );
         if (foundContract) {
           state.currentContract = foundContract;
+        } else {
+          state.currentContract = null;
+          localStorage.removeItem('contractId');
         }
       }
     });
