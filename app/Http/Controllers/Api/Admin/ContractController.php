@@ -25,7 +25,6 @@ class ContractController extends Controller
             'status' => ['required', Rule::in([0, 1, 2])],
         ]);
 
-        // Se usa Carbon::parse para formatear las fechas sin desfase
         $validated['start_date'] = Carbon::parse($validated['start_date'])->format('Y-m-d');
         $validated['end_date'] = Carbon::parse($validated['end_date'])->format('Y-m-d');
 
