@@ -16,7 +16,6 @@ import {
   fetchIncidence,
   updateIncidence,
 } from '@/api/service/incidentService';
-// ↑ hipotético import para la función updateIncidence
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
 import { Toast } from 'primereact/toast';
@@ -25,11 +24,8 @@ import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
 import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
-import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
-import { useTranslation } from 'react-i18next';
-import axiosClient from '@/api/axiosClient';
-import CreateEva from '@/pages/Admin/Eva/Create';
-import EditEva from '@/pages/Admin/Eva/Edit';
+import { fetchWorkOrders } from '@/api/service/workOrder';
+import { Zone } from '@/types/Zone';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -56,43 +52,19 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   initialTabIndex = 0,
 }) => {
   const [activeIndex, setActiveIndex] = useState(initialTabIndex);
-  const [popupWidth, setPopupWidth] = useState('650px'); // Default width
   const [incidences, setIncidences] = useState<Incidence[]>([]);
-  const [incidentModalVisible, setIncidentModalVisible] = useState(false);
-  const [eva, setEva] = useState<Eva | null>(null);
-  const [isLoadingEva, setIsLoadingEva] = useState(false);
-  const [isEvaModalVisible, setIsEvaModalVisible] = useState(false);
-  const [isEditEvaModalVisible, setIsEditEvaModalVisible] = useState(false);
-  const { t } = useTranslation();
-
-  const statusOptions = [
-    {
-      label: t(
-        'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.open',
-      ),
-      value: IncidentStatus.open,
-    },
-    {
-      label: t(
-        'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.in_progress',
-      ),
-      value: IncidentStatus.in_progress,
-    },
-    {
-      label: t(
-        'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.closed',
-      ),
-      value: IncidentStatus.closed,
-    },
-  ];
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const { points } = useSelector((state: RootState) => state.points);
   const { zones } = useSelector((state: RootState) => state.zone);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
-  
-    const statusOptions = useMemo(
+
+  const statusOptions = useMemo(
     () => [
       { label: 'Abierto', value: IncidentStatus.open },
       { label: 'En progreso', value: IncidentStatus.in_progress },
@@ -100,20 +72,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     ],
     [],
   );
-    const {
-    getStatusMessage,
-    calculateStabilityIndex,
-    calculateGravityHeightRatio,
-    calculateRootCrownRatio,
-    calculateWindStabilityIndex,
-    getSeverityMessage,
-  } = useTreeEvaluation();
-
-  const statusOptions = [
-    { label: 'Abierto', value: IncidentStatus.open },
-    { label: 'En progreso', value: IncidentStatus.in_progress },
-    { label: 'Cerrado', value: IncidentStatus.closed },
-  ];
 
   useEffect(() => {
     const loadWorkOrders = async () => {
@@ -331,295 +289,38 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         return 'bg-gray-500 text-white px-2 py-1 rounded';
     }
   }, []);
-  const renderEvaPanel = () => {
-    if (isLoadingEva) {
-      return (
-        <div className="flex justify-center items-center py-8">
-          <p>{t('admin.pages.inventory.elementDetailPopup.eva.loading')}</p>
-        </div>
-      );
-    }
-
-    if (!eva) {
-      return (
-        <div className="text-center py-8 space-y-4">
-          <p>{t('admin.pages.inventory.elementDetailPopup.eva.noData')}</p>
-          <Button
-            label={t('admin.pages.inventory.elementDetailPopup.eva.createEva')}
-            className="p-button-sm"
-            onClick={() => setIsEvaModalVisible(true)}
-          />
-          {isEvaModalVisible && (
-            <CreateEva preselectedElementId={element.id!} />
-          )}
-        </div>
-      );
-    }
-
-    const { message, color } = getStatusMessage(eva.status);
-    const stabilityIndex = calculateStabilityIndex(eva.height, eva.diameter);
-    const gravityHeightRatio = calculateGravityHeightRatio(
-      eva.height_estimation,
-      eva.height,
-    );
-    const rootCrownRatio = calculateRootCrownRatio(
-      eva.effective_root_area,
-      eva.crown_projection_area,
-    );
-    const windStabilityIndex = calculateWindStabilityIndex(
-      eva.height,
-      eva.crown_width,
-      eva.effective_root_area,
-    );
-
-    return (
-      <div className="space-y-6">
-        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
-          <h3 className="text-lg font-bold mb-3">
-            {t(
-              'admin.pages.inventory.elementDetailPopup.eva.evaluationIndices',
-            )}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="font-medium">
-                {t('admin.pages.inventory.elementDetailPopup.eva.treeStatus')}:
-              </p>
-              <Tag
-                value={message}
-                style={{ backgroundColor: color, color: 'black' }}
-              />
-            </div>
-            <div>
-              <p className="font-medium">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.eva.stabilityIndex',
-                )}
-                :
-              </p>
-              <Tag
-                value={stabilityIndex.message}
-                style={{
-                  backgroundColor: stabilityIndex.color,
-                  color: 'black',
-                }}
-              />
-            </div>
-            <div>
-              <p className="font-medium">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.eva.gravityHeightRatio',
-                )}
-                :
-              </p>
-              <Tag
-                value={gravityHeightRatio.message}
-                style={{
-                  backgroundColor: gravityHeightRatio.color,
-                  color: 'black',
-                }}
-              />
-            </div>
-            <div>
-              <p className="font-medium">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.eva.rootCrownRatio',
-                )}
-                :
-              </p>
-              <Tag
-                value={rootCrownRatio.message}
-                style={{
-                  backgroundColor: rootCrownRatio.color,
-                  color: 'black',
-                }}
-              />
-            </div>
-            <div>
-              <p className="font-medium">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.eva.windStabilityIndex',
-                )}
-                :
-              </p>
-              <Tag
-                value={windStabilityIndex.message}
-                style={{
-                  backgroundColor: windStabilityIndex.color,
-                  color: 'black',
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
-          <h3 className="text-lg font-bold mb-3">
-            {t(
-              'admin.pages.inventory.elementDetailPopup.eva.environmentalFactors',
-            )}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="font-medium">
-                {t('admin.pages.inventory.elementDetailPopup.eva.windExposure')}
-                :
-              </p>
-              <Tag
-                value={getSeverityMessage(eva.wind).message}
-                style={{
-                  backgroundColor: getSeverityMessage(eva.wind).color,
-                  color: 'black',
-                }}
-              />
-            </div>
-            <div>
-              <p className="font-medium">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.eva.droughtExposure',
-                )}
-                :
-              </p>
-              <Tag
-                value={getSeverityMessage(eva.drought).message}
-                style={{
-                  backgroundColor: getSeverityMessage(eva.drought).color,
-                  color: 'black',
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
-          <h3 className="text-lg font-bold mb-3">
-            {t('admin.pages.inventory.elementDetailPopup.eva.technicalData')}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p>
-                <strong>
-                  {t('admin.pages.inventory.elementDetailPopup.eva.height')}:
-                </strong>{' '}
-                {eva.height} m
-              </p>
-              <p>
-                <strong>
-                  {t('admin.pages.inventory.elementDetailPopup.eva.diameter')}:
-                </strong>{' '}
-                {eva.diameter} cm
-              </p>
-              <p>
-                <strong>
-                  {t('admin.pages.inventory.elementDetailPopup.eva.crownWidth')}
-                  :
-                </strong>{' '}
-                {eva.crown_width} m
-              </p>
-            </div>
-            <div>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.eva.crownProjectionArea',
-                  )}
-                  :
-                </strong>{' '}
-                {eva.crown_projection_area} m²
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.eva.effectiveRootArea',
-                  )}
-                  :
-                </strong>{' '}
-                {eva.effective_root_area} m²
-              </p>
-            </div>
-          </div>
-          <div className="text-center py-4">
-            <Button
-              label={t('admin.pages.inventory.elementDetailPopup.eva.editEva')}
-              className="p-button-sm"
-              onClick={() => setIsEditEvaModalVisible(true)}
-            />
-            {isEditEvaModalVisible && (
-              <EditEva preselectedElementId={element.id!} />
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
 
   return (
-    <div
-      className="bg-white rounded-lg max-w-full"
-      style={{ width: popupWidth }}>
+    <div className="bg-white rounded-lg w-[650px] max-w-full">
       <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}>
-        <TabPanel
-          header={t(
-            'admin.pages.inventory.elementDetailPopup.tabs.information',
-          )}>
+        <TabPanel header="Información">
           <div className="grid grid-cols-2 gap-4">
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.information.title',
-                )}
+                Información del Árbol
               </h3>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.description',
-                  )}
-                  :
-                </strong>{' '}
-                {element.description || t('general.not_available')}
+                <strong>Descripción:</strong>{' '}
+                {element.description || 'No disponible'}
               </p>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.elementType',
-                  )}
-                  :
-                </strong>{' '}
+                <strong>Tipo Elemento:</strong>{' '}
                 {getElementType(element.element_type_id!)}
               </p>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.treeFamily',
-                  )}
-                  :
-                </strong>{' '}
-                {getTreeType(element.tree_type_id!)?.family ||
-                  t('general.not_available')}
+                <strong>Familia Arbol:</strong>{' '}
+                {getTreeType(element.tree_type_id!)?.family || 'No disponible'}
               </p>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.treeGenus',
-                  )}
-                  :
-                </strong>{' '}
-                {getTreeType(element.tree_type_id!)?.genus ||
-                  t('general.not_available')}
+                <strong>Género:</strong>{' '}
+                {getTreeType(element.tree_type_id!)?.genus || 'No disponible'}
               </p>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.treeSpecies',
-                  )}
-                  :
-                </strong>{' '}
-                {getTreeType(element.tree_type_id!)?.species ||
-                  t('general.not_available')}
+                <strong>Especie:</strong>{' '}
+                {getTreeType(element.tree_type_id!)?.species || 'No disponible'}
               </p>
               <p>
                 <strong>Fecha Creación:</strong>{' '}
@@ -630,11 +331,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             </div>
 
             <div className="text-sm space-y-2">
-              <h3 className="font-bold text-base mb-3">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.information.location.title',
-                )}
-              </h3>
+              <h3 className="font-bold text-base mb-3">Ubicación</h3>
               <p>
                 <strong>Zona:</strong>{' '}
                 {(element.point_id && getZoneElement(element.point_id)?.name) ||
@@ -656,10 +353,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             </div>
           </div>
         </TabPanel>
-        <TabPanel
-          header={t(
-            'admin.pages.inventory.elementDetailPopup.tabs.incidences',
-          )}>
+
+        <TabPanel header="Incidencias">
           <div className="space-y-4">
             {isLoading ? (
               <div className="flex justify-center">
@@ -668,20 +363,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             ) : incidences.length > 0 ? (
               incidences.map((incidence) => (
                 <div key={incidence.id} className="border p-4 rounded-md">
-                  <p className="font-bold">
-                    {t(
-                      'admin.pages.inventory.elementDetailPopup.incidences.title',
-                    )}{' '}
-                    #{incidence.id}
-                  </p>
+                  <p className="font-bold">Incidencia #{incidence.id}</p>
                   <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.name',
-                      )}
-                      :
-                    </strong>{' '}
-                    {incidence.name || t('general.not_available')}
+                    <strong>📛 Nombre:</strong>{' '}
+                    {incidence.name || 'No disponible'}
                   </p>
                   <p>
                     <strong>📅 Fecha Creación:</strong>{' '}
@@ -690,12 +375,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       : 'No disponible'}
                   </p>
                   <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.status',
-                      )}
-                      :
-                    </strong>{' '}
+                    <strong>⚠️ Estado:</strong>{' '}
                     <Tag
                       severity={
                         incidence.status === IncidentStatus.open
@@ -706,38 +386,23 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       }
                       value={
                         incidence.status === IncidentStatus.open
-                          ? t(
-                              'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.open',
-                            )
+                          ? 'Abierto'
                           : incidence.status === IncidentStatus.in_progress
-                            ? t(
-                                'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.in_progress',
-                              )
-                            : t(
-                                'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.closed',
-                              )
+                            ? 'En progreso'
+                            : 'Cerrado'
                       }
                       className="ml-2"
                     />
                   </p>
                   <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.description',
-                      )}
-                      :
-                    </strong>{' '}
-                    {incidence.description || t('general.not_available')}
+                    <strong>📝 Descripción:</strong>{' '}
+                    {incidence.description || 'No disponible'}
                   </p>
+
                   <div className="mt-3 flex gap-2">
                     <Dropdown
                       value={incidence.status}
-                      options={statusOptions.map((option) => ({
-                        ...option,
-                        label: t(
-                          `admin.pages.inventory.elementDetailPopup.incidences.statusOptions.${option.value}`,
-                        ),
-                      }))}
+                      options={statusOptions}
                       onChange={(e) =>
                         handleStatusChange(incidence.id!, e.value)
                       }
@@ -745,9 +410,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       disabled={isLoading}
                     />
                     <Button
-                      label={t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.deleteIncident',
-                      )}
+                      label="Eliminar incidencia"
                       className="p-button-danger p-button-sm"
                       onClick={() => handleDeleteIncident(incidence.id!)}
                       disabled={isLoading}
@@ -756,17 +419,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 </div>
               ))
             ) : (
-              <p>
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.incidences.noIncidences',
-                )}
-              </p>
+              <p>No hay incidencias registradas para este elemento.</p>
             )}
+
             <div className="flex justify-end">
               <Button
-                label={t(
-                  'admin.pages.inventory.elementDetailPopup.incidences.addIncident',
-                )}
+                label="Añadir Incidencia"
                 className="p-button-sm"
                 onClick={handleAddIncidentClick}
                 disabled={isLoading}
@@ -810,16 +468,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               <p>No hay historial de tareas para este elemento.</p>
             )}
           </div>
-        </TabPanel>
-         <TabPanel
-          header={t('admin.pages.inventory.elementDetailPopup.tabs.history')}>
-          <p className="text-sm">
-            {t('admin.pages.inventory.elementDetailPopup.history.title')}
-          </p>
-        </TabPanel>
-        <TabPanel
-          header={t('admin.pages.inventory.elementDetailPopup.tabs.eva')}>
-          {renderEvaPanel()}
         </TabPanel>
       </TabView>
     </div>
