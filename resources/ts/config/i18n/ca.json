@@ -312,7 +312,13 @@
         "hoursWorked": "Hores Treballades",
         "fuelConsumption": "Consum de Combustible",
         "noData": "No hi ha dades per mostrar",
-        "exportCSV": "Exportar a CSV"
+        "exportCSV": "Exportar a CSV",
+        "total": "Total",
+        "noDataResourcePeriod": "No hi ha dades disponibles per al tipus de recurs seleccionat i període",
+        "selectResource": "Selecciona un tipus de recurs",
+        "selectResourcePlaceholder": "Cerca el teu tipus de recurs aquí...",
+        "noResourcesAvailable": "No hi ha recursos disponibles",
+        "selectResourcePrompt": "Si us plau, selecciona un recurs per veure el seu ús"
       },
       "taskTypes": {
         "form": {

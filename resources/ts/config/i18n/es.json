@@ -312,7 +312,13 @@
         "hoursWorked": "Horas trabajadas",
         "fuelConsumption": "Consumo de combustible",
         "noData": "No hay datos para mostrar",
-        "exportCSV": "Exportar a CSV"
+        "exportCSV": "Exportar a CSV",
+        "total": "Total",
+        "noDataResourcePeriod": "No hay datos disponibles para el tipo de recurso seleccionado y período",
+        "selectResource": "Selecciona un tipo de recurso",
+        "selectResourcePlaceholder": "Busca tu tipo de recurso aquí...",
+        "noResourcesAvailable": "No hay recursos disponibles",
+        "selectResourcePrompt": "Por favor, selecciona un recurso para ver su uso"
       },
       "taskTypes": {
         "form": {

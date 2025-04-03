@@ -316,7 +316,9 @@
         "total": "Total",
         "noDataResourcePeriod": "No data available for the selected resource type and period",
         "selectResource": "Select a resource type",
-        "selectResourcePlaceholder": "Search your resource type here..."
+        "selectResourcePlaceholder": "Search your resource type here...",
+        "noResourcesAvailable": "No resources available",
+        "selectResourcePrompt": "Please select a resource to view its usage"
       },
       "taskTypes": {
         "form": {
