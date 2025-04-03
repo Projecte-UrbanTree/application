@@ -14,14 +14,14 @@ class SensorSeeder extends Seeder
     {
         DB::table('sensors')->insert([
             [
-                'eui' => 'ABC123456789',
+                'eui' => 'a84041265185f3fc',
                 'contract_id' => 1,
                 'name' => 'Sensor 1',
                 'longitude' => '12.345678',
                 'latitude' => '-98.765432',
             ],
             [
-                'eui' => 'DEF987654321',
+                'eui' => 'a840418401877546',
                 'contract_id' => 2,
                 'name' => 'Sensor 2',
                 'longitude' => '23.456789',
