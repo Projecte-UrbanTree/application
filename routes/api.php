@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\WorkReportController;
 use App\Http\Controllers\Api\Admin\ZoneController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\ElementController;
+use App\Http\Controllers\Api\Admin\ElementController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
