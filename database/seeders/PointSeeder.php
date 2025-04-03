@@ -41,19 +41,67 @@ class PointSeeder extends Seeder
                 'zone_id' => 1,
             ],
             
+
+
+
+            //Zona Parc Municipal de amposta
             
             [
-                'latitude' => 40.70866070784594,
-                'longitude' =>  0.5779260143620888,
-                'type' => 'element',
-                'zone_id' => 2,
-            ],
-            [
-                'latitude' => 40.70858885178705,
-                'longitude' => 0.5706795952178493,
+                'latitude' => 40.70866492137048, 
+                'longitude' =>  0.5779510431027762,
                 'type' => 'zone_delimiter',
                 'zone_id' => 3,
             ],
+            [
+                'latitude' => 40.70922985094096, 0.5779953158264584,
+                'longitude' =>  0.5779953158264584,
+                'type' => 'zone_delimiter',
+                'zone_id' => 3,
+            ],
+            [
+                'latitude' => 40.70927086874241,
+                'longitude' =>   0.5772279217730589,
+                'type' => 'zone_delimiter',
+                'zone_id' => 3,
+            ],
+            [
+                'latitude' => 40.7087033188535,
+                'longitude' =>   0.5771575098682329,
+                'type' => 'zone_delimiter',
+                'zone_id' => 3,
+            ],
+            
+            
+            
+            //Cementerix
+            
+            [
+                'latitude' => 40.70859198725073, 
+                'longitude' => 0.5706877205909249,
+                'type' => 'zone_delimiter',
+                'zone_id' => 2,
+            ],
+            [
+                'latitude' => 40.70898032969325, 
+                'longitude' => 0.5713032875466113,
+                'type' => 'zone_delimiter',
+                'zone_id' => 2,
+            ],
+            [
+                'latitude' => 40.7115173970029, 
+                'longitude' => 0.5687974544757909,
+                'type' => 'zone_delimiter',
+                'zone_id' => 2,
+            ],
+
+            [
+                'latitude' => 40.71096247780084, 
+                'longitude' =>  0.5681487890008956,
+                'type' => 'zone_delimiter',
+                'zone_id' => 2,
+            ],
+
+            
         ]);
     }
 }

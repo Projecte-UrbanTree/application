@@ -20,16 +20,16 @@ class ZoneSeeder extends Seeder
                 'contract_id' => 1,
             ],
             [
-                'name' => 'Parc Municipal de amposta',
+                'name' => 'Parc Municipal de Amposta',
                 'description' => 'A description for Zone 2',
                 'color' => '#33FF57',
-                'contract_id' => 2,
+                'contract_id' => 1,
             ],
             [
-                'name' => 'Cementeri de amposta',
+                'name' => 'Cementeri de Amposta',
                 'description' => 'A description for Zone 3',
                 'color' => '#3357FF',
-                'contract_id' => 3,
+                'contract_id' => 1,
             ],
         ]);
     }
