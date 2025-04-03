@@ -85,6 +85,20 @@
         "title": "Contratos"
       },
       "dashboard": {
+        "quickActions": "Acciones rápidas",
+        "createWorkOrder": "Crear orden de trabajo",
+        "reviewReports": "Revisar informes",
+        "manageUsers": "Gestionar usuarios",
+        "recentActivity": "Actividad reciente",
+        "workOrderCompleted": "Orden de trabajo completada",
+        "ago": "atrás",
+        "reportSubmitted": "Informe enviado",
+        "workOrderAssigned": "Orden de trabajo asignada",
+        "totalWorkOrders": "Total de órdenes",
+        "inProgressWorkOrders": "En progreso",
+        "noInProgressWorkOrders": "No hay órdenes de trabajo en progreso",
+        "completedWorkOrders": "Completadas",
+        "pendingReports": "Informes pendientes",
         "stats": {
           "widgets": {
             "contracts": "Contratos",
@@ -93,11 +107,14 @@
             "workOrders": "Órdenes de trabajo"
           }
         },
-        "title": "Panel de control",
+        "title": "Panel",
         "welcome": {
           "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
-          "message": "Nos alegra verte de nuevo. Aquí tienes un resumen rápido de tus datos."
-        }
+          "message": "Tienes a tu disposición un resumen rápido de tus datos."
+        },
+        "viewAll": "Ver todas las actividades",
+        "noActivity": "Sin actividad reciente",
+        "actions": "Acciones"
       },
       "elementTypes": {
         "title": "Tipos de elementos",
@@ -295,7 +312,13 @@
         "hoursWorked": "Horas trabajadas",
         "fuelConsumption": "Consumo de combustible",
         "noData": "No hay datos para mostrar",
-        "exportCSV": "Exportar a CSV"
+        "exportCSV": "Exportar a CSV",
+        "total": "Total",
+        "noDataResourcePeriod": "No hay datos disponibles para el tipo de recurso seleccionado y período",
+        "selectResource": "Selecciona un tipo de recurso",
+        "selectResourcePlaceholder": "Busca tu tipo de recurso aquí...",
+        "noResourcesAvailable": "No hay recursos disponibles",
+        "selectResourcePrompt": "Por favor, selecciona un recurso para ver su uso"
       },
       "taskTypes": {
         "form": {
@@ -905,6 +928,26 @@
           "rejecting": "Rechazando bloque...",
           "reject": "Bloque rechazado"
         }
+      },
+      "workers": {
+        "title": "Gestión de Trabajadores",
+        "contractWorkers": "Trabajadores del Contrato",
+        "assignRemoveWorkers": "Asignar/Eliminar Trabajadores",
+        "selectWorkers": "Seleccionar Trabajadores",
+        "selected": "Seleccionado",
+        "workersForContract": "Trabajadores para el Contrato",
+        "noWorkersAssigned": "No hay trabajadores asignados a este contrato",
+        "useDropdownToAssign": "Usa el menú desplegable de arriba para asignar trabajadores",
+        "selectWorkerHelp": "Selecciona o deselecciona trabajadores para asignarlos a este contrato",
+        "noWorkersFound": "No se encontraron trabajadores",
+        "name": "Nombre",
+        "email": "Correo Electrónico",
+        "company": "Empresa",
+        "dni": "DNI",
+        "pleaseSelectContract": "Por favor, selecciona primero un contrato",
+        "updatedSuccessfully": "Trabajadores actualizados correctamente",
+        "failedToLoad": "Error al cargar los trabajadores",
+        "failedToUpdate": "Error al actualizar los trabajadores"
       }
     },
     "profileDropdown": {
