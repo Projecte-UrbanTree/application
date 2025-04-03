@@ -223,8 +223,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`text-gray-800 px-2 py-2 rounded flex items-center gap-2 ${
-                  item.active ? 'p-button p-button-indigo text-white' : 'hover:bg-gray-100'
+                className={`text-gray-800 px-4 py-3 rounded flex items-center gap-2 ${
+                  item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
                 }`}>
                 <Icon inline={true} width="24px" icon={item.icon} />{' '}
                 {item.label}

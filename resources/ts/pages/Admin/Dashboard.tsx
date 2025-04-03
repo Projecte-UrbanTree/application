@@ -29,19 +29,19 @@ export default function Dashboard() {
                 <Button
                   label={t('admin.pages.dashboard.createWorkOrder')}
                   icon={<Icon icon="tabler:plus" />}
-                  className="p-button-outlined p-button-indigo w-full text-gray-800"
+                  className="w-full text-gray-800"
                   onClick={() => navigate('/admin/work-orders/create')}
                 />
                 <Button
                   label={t('admin.pages.dashboard.manageUsers')}
                   icon={<Icon icon="tabler:user" />}
-                  className="p-button-outlined p-button-indigo w-full text-gray-800"
+                  className="w-full text-gray-800"
                   onClick={() => navigate('/admin/users')}
                 />
                 <Button
                   label={t('admin.pages.dashboard.reviewReports')}
                   icon={<Icon icon="tabler:file-text" />}
-                  className="p-button-outlined p-button-indigo w-full text-gray-800"
+                  className="w-full text-gray-800"
                   onClick={() => navigate('/admin/reports')}
                 />
               </div>

@@ -113,7 +113,6 @@ export const InProgressWorkOrders = () => {
             rows={5}
             stripedRows
             emptyMessage={t('admin.pages.dashboard.noInProgressWorkOrders')}
-            size="small"
           >
             <Column 
               field="id" 

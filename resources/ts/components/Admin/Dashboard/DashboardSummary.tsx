@@ -75,7 +75,7 @@ export const DashboardSummary = () => {
 
   return (
     <div className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-300 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:clipboard-list" width={40} />
@@ -89,7 +89,7 @@ export const DashboardSummary = () => {
         </div>
       </Card>
 
-      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-300 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:hourglass" width={40} />
@@ -103,7 +103,7 @@ export const DashboardSummary = () => {
         </div>
       </Card>
 
-      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-300 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:check" width={40} />
@@ -117,7 +117,7 @@ export const DashboardSummary = () => {
         </div>
       </Card>
 
-      <Card className="bg-gray-50 rounded p-6 border border-gray-200 shadow-sm">
+      <Card className="bg-gray-50 rounded p-6 border border-gray-300 shadow-sm">
         <div className="flex items-center">
           <div className="mr-4 text-gray-600">
             <Icon icon="tabler:file-alert" width={40} />
