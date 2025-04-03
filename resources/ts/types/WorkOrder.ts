@@ -3,10 +3,17 @@ import { TreeTypes } from './TreeTypes';
 import { User } from './User';
 import { Zone } from './Zone';
 
+export enum WorkOrderStatus {
+  'Pendiente' = 0,
+  'En progreso' = 1,
+  'Completado' = 2,
+  'Cancelado' = 3,
+}
+
 export interface WorkOrder {
   id?: number;
   date?: Date;
-  status?: number;
+  status?: WorkOrderStatus;
   contract_id?: number;
   created_at?: null;
   updated_at?: null;

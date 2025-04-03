@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
@@ -13,12 +19,12 @@ import {
 // ↑ hipotético import para la función updateIncidence
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store/store';
-import { hideLoader, showLoader } from '@/store/slice/loaderSlice';
 import { Toast } from 'primereact/toast';
 import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
+import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
 import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
 import { useTranslation } from 'react-i18next';
 import axiosClient from '@/api/axiosClient';
@@ -36,6 +42,7 @@ interface ElementDetailPopupProps {
     points: Point[],
   ) => { lat: number; lng: number };
   onDeleteElement: (elementId: number) => void;
+  initialTabIndex?: number;
 }
 
 const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
@@ -46,8 +53,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   onOpenIncidentForm,
   getCoordElement,
   onDeleteElement,
+  initialTabIndex = 0,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(initialTabIndex);
   const [popupWidth, setPopupWidth] = useState('650px'); // Default width
   const [incidences, setIncidences] = useState<Incidence[]>([]);
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
@@ -77,12 +85,22 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       value: IncidentStatus.closed,
     },
   ];
+  const [isLoading, setIsLoading] = useState(false);
 
   const { points } = useSelector((state: RootState) => state.points);
   const { zones } = useSelector((state: RootState) => state.zone);
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
-  const {
+  
+    const statusOptions = useMemo(
+    () => [
+      { label: 'Abierto', value: IncidentStatus.open },
+      { label: 'En progreso', value: IncidentStatus.in_progress },
+      { label: 'Cerrado', value: IncidentStatus.closed },
+    ],
+    [],
+  );
+    const {
     getStatusMessage,
     calculateStabilityIndex,
     calculateGravityHeightRatio,
@@ -91,11 +109,45 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     getSeverityMessage,
   } = useTreeEvaluation();
 
+  const statusOptions = [
+    { label: 'Abierto', value: IncidentStatus.open },
+    { label: 'En progreso', value: IncidentStatus.in_progress },
+    { label: 'Cerrado', value: IncidentStatus.closed },
+  ];
+
+  useEffect(() => {
+    const loadWorkOrders = async () => {
+      if (!currentContract?.id) return;
+
+      try {
+        setIsLoading(true);
+        const data = await fetchWorkOrders();
+        const filteredOrders = data.filter(
+          (order) => order.contract_id === currentContract.id,
+        );
+        setWorkOrders(filteredOrders);
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error cargando órdenes de trabajo',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadWorkOrders();
+  }, [currentContract]);
+
   useEffect(() => {
     const loadIncidences = async () => {
+      if (!element.id) return;
+
       try {
-        dispatch(showLoader());
+        setIsLoading(true);
         const data = await fetchIncidence();
+
         if (Array.isArray(data)) {
           setIncidences(data.filter((i) => i.element_id === element.id));
         } else {
@@ -103,152 +155,182 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         }
       } catch (error) {
         setIncidences([]);
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error cargando incidencias',
+        });
       } finally {
-        dispatch(hideLoader());
+        setIsLoading(false);
       }
     };
+
     loadIncidences();
   }, [element.id, dispatch]);
 
-  useEffect(() => {
-    const loadEvaData = async () => {
-      if (activeIndex === 3 && !eva) {
-        try {
-          setIsLoadingEva(true);
-          const response = await axiosClient.get(`/admin/evas/${element.id}`);
-          setEva(response.data);
-        } catch (error) {
-          console.error('Error al cargar datos EVA:', error);
-          setEva(null);
-        } finally {
-          setIsLoadingEva(false);
-        }
+  const handleStatusChange = useCallback(
+    async (incidenceId: number, newStatus: IncidentStatus) => {
+      try {
+        await updateIncidence(incidenceId, { status: newStatus });
+
+        setIncidences((prev) =>
+          prev.map((inc) =>
+            inc.id === incidenceId ? { ...inc, status: newStatus } : inc,
+          ),
+        );
+
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Estado actualizado',
+          detail: 'Se actualizó correctamente el estado de la incidencia',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar el estado de la incidencia',
+        });
       }
-    };
+    },
+    [dispatch],
+  );
 
-    loadEvaData();
-  }, [activeIndex, element.id, eva]);
-
-  useEffect(() => {
-    // Adjust popup width based on the active tab
-    if (activeIndex === 3) {
-      setPopupWidth('900px'); // Expanded width for Eva tab
-    } else {
-      setPopupWidth('650px'); // Default width for other tabs
-    }
-  }, [activeIndex]);
-
-  const handleStatusChange = async (
-    incidenceId: number,
-    newStatus: IncidentStatus,
-  ) => {
-    try {
-      dispatch(showLoader());
-      await updateIncidence(incidenceId, { status: newStatus });
-
-      setIncidences((prev) =>
-        prev.map((inc) =>
-          inc.id === incidenceId ? { ...inc, status: newStatus } : inc,
-        ),
-      );
-
-      toast.current?.show({
-        severity: 'success',
-        summary: t(
-          'admin.pages.inventory.elementDetailPopup.incidences.statusUpdated',
-        ),
-        detail: t(
-          'admin.pages.inventory.elementDetailPopup.incidences.statusUpdatedDetail',
-        ),
-      });
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
-        detail: t(
-          'admin.pages.inventory.elementDetailPopup.incidences.statusUpdateFailed',
-        ),
-      });
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
-
-  const handleAddIncidentClick = () => {
+  const handleAddIncidentClick = useCallback(() => {
     onClose();
     setTimeout(() => {
       onOpenIncidentForm();
     }, 300);
-  };
+  }, [onClose, onOpenIncidentForm]);
 
-  const handleDeleteIncident = async (incidentId: number) => {
-    try {
-      await deleteIncidence(incidentId);
-      const updatedIncidences = incidences.filter(
-        (inc) => inc.id !== incidentId,
-      );
-      setIncidences(updatedIncidences);
-      onDeleteElement(element.id!);
-      onClose();
-    } catch (error) {
-      console.error('Error al eliminar la incidencia:', error);
+  const handleDeleteIncident = useCallback(
+    async (incidentId: number) => {
+      try {
+        await deleteIncidence(incidentId);
+        setIncidences((prev) => prev.filter((inc) => inc.id !== incidentId));
+
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Incidencia eliminada correctamente',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar la incidencia',
+        });
+      }
+    },
+    [dispatch],
+  );
+
+  const handleDeleteElement = useCallback(
+    async (id: number) => {
+      try {
+        onClose();
+        await dispatch(deleteElementAsync(id));
+        onDeleteElement(id);
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Elemento eliminado correctamente',
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar el elemento',
+        });
+      }
+    },
+    [dispatch, onClose, onDeleteElement],
+  );
+
+  const getElementType = useCallback(
+    (elementTypeId: number) => {
+      const type = elementTypes.find((t) => t.id === elementTypeId);
+      return type?.name || 'No definido';
+    },
+    [elementTypes],
+  );
+
+  const getTreeType = useCallback(
+    (treeTypeId: number) => {
+      return treeTypes.find((t) => t.id === treeTypeId);
+    },
+    [treeTypes],
+  );
+
+  const coords = useMemo(
+    () => getCoordElement(element, points),
+    [element, points, getCoordElement],
+  );
+
+  const getZoneElement = useCallback(
+    (pointId: number) => {
+      const point = points.find((p) => p.id === pointId);
+      if (!point) return null;
+      return zones.find((z) => z.id === point.zone_id);
+    },
+    [points, zones],
+  );
+
+  const convertirFechaIsoAFormatoEuropeo = useCallback(
+    (fechaIso: string): string => {
+      const fecha = new Date(fechaIso);
+      const dia = fecha.getDate().toString().padStart(2, '0');
+      const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+      const anio = fecha.getFullYear();
+      const horas = fecha.getHours().toString().padStart(2, '0');
+      const minutos = fecha.getMinutes().toString().padStart(2, '0');
+      const segundos = fecha.getSeconds().toString().padStart(2, '0');
+      return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+    },
+    [],
+  );
+
+  const tasksForElement = useMemo(() => {
+    if (!element.point_id) return [];
+
+    const elementZone = getZoneElement(element.point_id);
+    if (!elementZone) return [];
+
+    return workOrders.flatMap(
+      (workOrder) =>
+        workOrder.work_orders_blocks?.flatMap((block) => {
+          const zoneMatches = block.zones?.some(
+            (zone) => zone.id === elementZone.id,
+          );
+
+          if (zoneMatches) {
+            return (
+              block.block_tasks?.map((task) => ({
+                workOrderId: workOrder.id,
+                workOrderStatus: workOrder.status,
+                taskType: task.tasks_type,
+                notes: block.notes,
+              })) || []
+            );
+          }
+          return [];
+        }) || [],
+    );
+  }, [element.point_id, getZoneElement, workOrders]);
+
+  const getBadgeClass = useCallback((status: WorkOrderStatus): string => {
+    switch (status) {
+      case WorkOrderStatus['Pendiente']:
+        return 'bg-yellow-500 text-white px-2 py-1 rounded';
+      case WorkOrderStatus['En progreso']:
+        return 'bg-blue-500 text-white px-2 py-1 rounded';
+      case WorkOrderStatus['Completado']:
+        return 'bg-green-500 text-white px-2 py-1 rounded';
+      case WorkOrderStatus['Cancelado']:
+        return 'bg-red-500 text-white px-2 py-1 rounded';
+      default:
+        return 'bg-gray-500 text-white px-2 py-1 rounded';
     }
-  };
-
-  const handleDeleteElement = async (id: number) => {
-    try {
-      onClose();
-      dispatch(showLoader());
-      await dispatch(deleteElementAsync(id));
-      onDeleteElement(id);
-      toast.current?.show({
-        severity: 'success',
-        summary: t('general.success'),
-        detail: t(
-          'admin.pages.inventory.elementDetailPopup.information.elementDeleted',
-        ),
-      });
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
-        detail: t(
-          'admin.pages.inventory.elementDetailPopup.information.elementDeleteFailed',
-        ),
-      });
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
-
-  const getElementType = (elementTypeId: number) => {
-    const type = elementTypes.find((t) => t.id === elementTypeId);
-    return type?.name || t('general.not_available');
-  };
-
-  const getTreeType = (treeTypeId: number) => {
-    const type = treeTypes.find((t) => t.id === treeTypeId);
-    return type;
-  };
-
-  const coords = getCoordElement(element, points);
-
-  const getZoneElement = (pointId: number) => {
-    const point: Point = points.find((p) => p.id === pointId)!;
-    return zones.find((z) => z.id === point.zone_id);
-  };
-
-  function convertirFechaIsoAFormatoEuropeo(fechaIso: string): string {
-    const fecha = new Date(fechaIso);
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const anio = fecha.getFullYear();
-    const horas = fecha.getHours().toString().padStart(2, '0');
-    const minutos = fecha.getMinutes().toString().padStart(2, '0');
-    const segundos = fecha.getSeconds().toString().padStart(2, '0');
-    return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
-  }
-
+  }, []);
   const renderEvaPanel = () => {
     if (isLoadingEva) {
       return (
@@ -471,6 +553,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     );
   };
 
+
   return (
     <div
       className="bg-white rounded-lg max-w-full"
@@ -539,15 +622,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   t('general.not_available')}
               </p>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.creationDate',
-                  )}
-                  :
-                </strong>{' '}
-                {convertirFechaIsoAFormatoEuropeo(element.created_at!)}
+                <strong>Fecha Creación:</strong>{' '}
+                {element.created_at
+                  ? convertirFechaIsoAFormatoEuropeo(element.created_at)
+                  : 'No disponible'}
               </p>
             </div>
+
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">
                 {t(
@@ -555,42 +636,23 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 )}
               </h3>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.location.zone',
-                  )}
-                  :
-                </strong>{' '}
-                {getZoneElement(element.point_id!)?.name ||
-                  t('general.not_available')}
+                <strong>Zona:</strong>{' '}
+                {(element.point_id && getZoneElement(element.point_id)?.name) ||
+                  'No disponible'}
               </p>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.location.latitude',
-                  )}
-                  :
-                </strong>{' '}
-                {coords.lat || t('general.not_available')}
+                <strong>Latitud:</strong> {coords?.lat || 'No disponible'}
               </p>
               <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.location.longitude',
-                  )}
-                  :
-                </strong>{' '}
-                {coords.lng || t('general.not_available')}
+                <strong>Longitud:</strong> {coords?.lng || 'No disponible'}
               </p>
-              <div className="flex gap-2">
-                <Button
-                  label={t(
-                    'admin.pages.inventory.elementDetailPopup.information.deleteElement',
-                  )}
-                  className="p-button-danger p-button-sm"
-                  onClick={() => handleDeleteElement(element.id!)}
-                />
-              </div>
+
+              <Button
+                label="Eliminar Elemento"
+                className="p-button-danger p-button-sm"
+                onClick={() => handleDeleteElement(element.id!)}
+                disabled={isLoading}
+              />
             </div>
           </div>
         </TabPanel>
@@ -599,7 +661,11 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             'admin.pages.inventory.elementDetailPopup.tabs.incidences',
           )}>
           <div className="space-y-4">
-            {incidences.length > 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              </div>
+            ) : incidences.length > 0 ? (
               incidences.map((incidence) => (
                 <div key={incidence.id} className="border p-4 rounded-md">
                   <p className="font-bold">
@@ -618,14 +684,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                     {incidence.name || t('general.not_available')}
                   </p>
                   <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.creationDate',
-                      )}
-                      :
-                    </strong>{' '}
-                    {convertirFechaIsoAFormatoEuropeo(incidence.created_at!) ||
-                      t('general.not_available')}
+                    <strong>📅 Fecha Creación:</strong>{' '}
+                    {incidence.created_at
+                      ? convertirFechaIsoAFormatoEuropeo(incidence.created_at)
+                      : 'No disponible'}
                   </p>
                   <p>
                     <strong>
@@ -680,6 +742,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                         handleStatusChange(incidence.id!, e.value)
                       }
                       className="w-[140px] p-inputtext-sm"
+                      disabled={isLoading}
                     />
                     <Button
                       label={t(
@@ -687,6 +750,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       )}
                       className="p-button-danger p-button-sm"
                       onClick={() => handleDeleteIncident(incidence.id!)}
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
@@ -705,11 +769,49 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 )}
                 className="p-button-sm"
                 onClick={handleAddIncidentClick}
+                disabled={isLoading}
               />
             </div>
           </div>
         </TabPanel>
-        <TabPanel
+
+        <TabPanel header="Historial">
+          <div>
+            <h1>Historial de tareas</h1>
+            {isLoading ? (
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              </div>
+            ) : tasksForElement.length > 0 ? (
+              tasksForElement.map((taskInfo, index) => (
+                <div key={index} className="border p-4 rounded-md mb-4">
+                  <h4 className="font-semibold">
+                    Notas: {taskInfo.notes ?? 'No hay notas'}
+                  </h4>
+                  <p>
+                    <strong>Tarea:</strong> {taskInfo.taskType?.name}
+                  </p>
+                  <p>
+                    <strong>Descripción:</strong>{' '}
+                    {taskInfo.taskType?.description}
+                  </p>
+                  <p>
+                    <strong>Orden de Trabajo:</strong> {taskInfo.workOrderId}
+                  </p>
+                  <p>
+                    <strong>Estado:</strong>{' '}
+                    <span className={getBadgeClass(taskInfo.workOrderStatus!)}>
+                      {WorkOrderStatus[taskInfo.workOrderStatus!]}
+                    </span>
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No hay historial de tareas para este elemento.</p>
+            )}
+          </div>
+        </TabPanel>
+         <TabPanel
           header={t('admin.pages.inventory.elementDetailPopup.tabs.history')}>
           <p className="text-sm">
             {t('admin.pages.inventory.elementDetailPopup.history.title')}

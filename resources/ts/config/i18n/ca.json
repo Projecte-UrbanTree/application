@@ -85,6 +85,20 @@
         "title": "Contractes"
       },
       "dashboard": {
+        "quickActions": "Accions ràpides",
+        "createWorkOrder": "Crear ordre de treball",
+        "reviewReports": "Revisar informes",
+        "manageUsers": "Gestionar usuaris",
+        "recentActivity": "Activitat recent",
+        "workOrderCompleted": "Ordre de treball completada",
+        "ago": "enrere",
+        "reportSubmitted": "Informe enviat",
+        "workOrderAssigned": "Ordre de treball assignada",
+        "totalWorkOrders": "Total d'ordres",
+        "inProgressWorkOrders": "En progrés",
+        "completedWorkOrders": "Completades",
+        "pendingReports": "Informes pendents",
+        "noInProgressWorkOrders": "Sense ordres de treball en progrés",
         "stats": {
           "widgets": {
             "contracts": "Contractes",
@@ -97,7 +111,10 @@
         "welcome": {
           "greeting": "Benvingut de nou, {{name}} {{surname}}.",
           "message": "Tens a la teva disposició un resum ràpid de les teves dades."
-        }
+        },
+        "viewAll": "Veure totes les activitats",
+        "noActivity": "Sense activitat recent",
+        "actions": "Accions"
       },
       "elementTypes": {
         "title": "Tipus d'element",
@@ -363,7 +380,13 @@
         "hoursWorked": "Hores Treballades",
         "fuelConsumption": "Consum de Combustible",
         "noData": "No hi ha dades per mostrar",
-        "exportCSV": "Exportar a CSV"
+        "exportCSV": "Exportar a CSV",
+        "total": "Total",
+        "noDataResourcePeriod": "No hi ha dades disponibles per al tipus de recurs seleccionat i període",
+        "selectResource": "Selecciona un tipus de recurs",
+        "selectResourcePlaceholder": "Cerca el teu tipus de recurs aquí...",
+        "noResourcesAvailable": "No hi ha recursos disponibles",
+        "selectResourcePrompt": "Si us plau, selecciona un recurs per veure el seu ús"
       },
       "taskTypes": {
         "form": {
@@ -973,6 +996,26 @@
           "rejecting": "Rebutjant bloc...",
           "reject": "Bloc rebutjat"
         }
+      },
+      "workers": {
+        "title": "Gestió de Treballadors",
+        "contractWorkers": "Treballadors del Contracte",
+        "assignRemoveWorkers": "Assignar/Eliminar Treballadors",
+        "selectWorkers": "Seleccionar Treballadors",
+        "selected": "Seleccionat",
+        "workersForContract": "Treballadors per al Contracte",
+        "noWorkersAssigned": "No hi ha treballadors assignats a aquest contracte",
+        "useDropdownToAssign": "Utilitza el menú desplegable de dalt per assignar treballadors",
+        "selectWorkerHelp": "Selecciona o desselecciona treballadors per assignar-los a aquest contracte",
+        "noWorkersFound": "No s'han trobat treballadors",
+        "name": "Nom",
+        "email": "Correu Electrònic",
+        "company": "Empresa",
+        "dni": "DNI",
+        "pleaseSelectContract": "Si us plau, selecciona primer un contracte",
+        "updatedSuccessfully": "Treballadors actualitzats correctament",
+        "failedToLoad": "Error en carregar els treballadors",
+        "failedToUpdate": "Error en actualitzar els treballadors"
       }
     },
     "profileDropdown": {
