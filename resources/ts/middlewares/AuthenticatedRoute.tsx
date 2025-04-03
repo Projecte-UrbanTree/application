@@ -2,19 +2,7 @@ import Preloader from '@/components/Preloader';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { Roles } from '@/types/Role';
-
-const getDefaultRouteByRole = (role: Roles) => {
-  switch (role) {
-    case Roles.admin:
-      return '/admin/dashboard';
-    case Roles.worker:
-      return '/worker';
-    case Roles.customer:
-      return '/customer';
-    default:
-      return '/';
-  }
-};
+import { getRouteByRole } from '@/utils/roleRoutes';
 
 export default function AuthenticatedRoute({
   allowedRoles,
@@ -35,7 +23,7 @@ export default function AuthenticatedRoute({
   }
 
   if (allowedRoles && user.role && !allowedRoles.includes(user.role)) {
-    return <Navigate to={redirectPath ?? getDefaultRouteByRole(user.role)} replace />;
+    return <Navigate to={redirectPath ?? getRouteByRole(user.role)} replace />;
   }
 
   return isAuthenticated ? (
