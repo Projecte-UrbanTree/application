@@ -24,7 +24,7 @@ export default function Account() {
     dni: '',
     currentPassword: '',
     newPassword: '',
-    confirmNewPassword: '',
+    confirmNewPassword: ''
   });
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function Account() {
           dni: response.data.dni ?? '',
           currentPassword: '',
           newPassword: '',
-          confirmNewPassword: '',
+          confirmNewPassword: ''
         });
 
         const successMessage = sessionStorage.getItem('accountUpdateSuccess');
@@ -47,14 +47,10 @@ export default function Account() {
           showToast('success', t('general.success'), t(successMessage));
           sessionStorage.removeItem('accountUpdateSuccess');
         }
-
+        
         setIsLoading(false);
       } catch (error) {
-        showToast(
-          'error',
-          t('general.error'),
-          t('admin.pages.account.messages.errorSaving'),
-        );
+        showToast('error', t('general.error'), t('admin.pages.account.messages.errorSaving'));
         setIsLoading(false);
       }
     };
@@ -63,28 +59,16 @@ export default function Account() {
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .matches(
-        /^[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ]*$/,
-        t('admin.pages.account.validation.name_invalid'),
-      )
+      .matches(/^[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ]*$/, t('admin.pages.account.validation.name_invalid'))
       .required(t('admin.pages.account.validation.name_required')),
     surname: Yup.string()
-      .matches(
-        /^[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ]*$/,
-        t('admin.pages.account.validation.surname_invalid'),
-      )
+      .matches(/^[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ]*$/, t('admin.pages.account.validation.surname_invalid'))
       .required(t('admin.pages.account.validation.surname_required')),
     currentPassword: Yup.string(),
     newPassword: Yup.string()
       .min(8, t('admin.pages.account.validation.newPasswordMinLength'))
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-        t('admin.pages.account.validation.newPasswordComplexity'),
-      ),
-    confirmNewPassword: Yup.string().oneOf(
-      [Yup.ref('newPassword'), undefined],
-      t('admin.pages.account.validation.newPasswordMismatch'),
-    ),
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, t('admin.pages.account.validation.newPasswordComplexity')),
+    confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), undefined], t('admin.pages.account.validation.newPasswordMismatch'))
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -93,36 +77,24 @@ export default function Account() {
         name: values.name,
         surname: values.surname,
         email: values.email,
-        company: values.company,
+        company: values.company
       });
       if (values.currentPassword && values.newPassword) {
         await axiosClient.put('/admin/account/password', {
           currentPassword: values.currentPassword,
           newPassword: values.newPassword,
-          newPassword_confirmation: values.confirmNewPassword,
+          newPassword_confirmation: values.confirmNewPassword
         });
       }
 
-      sessionStorage.setItem(
-        'accountUpdateSuccess',
-        'admin.pages.account.messages.profileUpdated',
-      );
+      sessionStorage.setItem('accountUpdateSuccess', 'admin.pages.account.messages.profileUpdated');
       navigate(0);
+      
     } catch (error: any) {
-      if (
-        error.response?.data?.error === 'La contraseña actual no es correcta'
-      ) {
-        showToast(
-          'error',
-          t('general.error'),
-          t('admin.pages.account.messages.passwordCurrentWrong'),
-        );
+      if (error.response?.data?.error === 'La contraseña actual no es correcta') {
+        showToast('error', t('general.error'), t('admin.pages.account.messages.passwordCurrentWrong'));
       } else {
-        showToast(
-          'error',
-          t('general.error'),
-          t('admin.pages.account.messages.errorSaving'),
-        );
+        showToast('error', t('general.error'), t('admin.pages.account.messages.errorSaving'));
       }
     }
   };
@@ -130,10 +102,7 @@ export default function Account() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
-        />
+        <Icon icon="eos-icons:loading" className="h-8 w-8 animate-spin text-blue-600" />
         <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
@@ -143,50 +112,30 @@ export default function Account() {
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
       <Card className="w-full max-w-3xl shadow-lg">
         <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin')}>
+          <Button className="p-button-text mr-4" style={{ color: '#fff' }} onClick={() => navigate('/admin')}>
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.account.title')}
-          </h2>
+          <h2 className="text-white text-3xl font-bold">{t('admin.pages.account.title')}</h2>
         </header>
         <div className="p-6">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
-            enableReinitialize>
+            enableReinitialize
+          >
             {({ errors, touched, isSubmitting }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <h3 className="col-span-2 text-lg font-bold">
-                  {t('admin.pages.account.basicInfo')}
-                </h3>
+                <h3 className="col-span-2 text-lg font-bold">{t('admin.pages.account.basicInfo')}</h3>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.name')}</label>
-                  <Field
-                    name="name"
-                    as={InputText}
-                    className={errors.name && touched.name ? 'p-invalid' : ''}
-                  />
-                  {errors.name && touched.name && (
-                    <small className="p-error">{errors.name}</small>
-                  )}
+                  <Field name="name" as={InputText} className={errors.name && touched.name ? "p-invalid" : ""} />
+                  {errors.name && touched.name && <small className="p-error">{errors.name}</small>}
                 </div>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.surname')}</label>
-                  <Field
-                    name="surname"
-                    as={InputText}
-                    className={
-                      errors.surname && touched.surname ? 'p-invalid' : ''
-                    }
-                  />
-                  {errors.surname && touched.surname && (
-                    <small className="p-error">{errors.surname}</small>
-                  )}
+                  <Field name="surname" as={InputText} className={errors.surname && touched.surname ? "p-invalid" : ""} />
+                  {errors.surname && touched.surname && <small className="p-error">{errors.surname}</small>}
                 </div>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.email')}</label>
@@ -196,24 +145,16 @@ export default function Account() {
                   <label>{t('admin.fields.dni')}</label>
                   <Field name="dni" as={InputText} disabled />
                 </div>
-                <h3 className="col-span-2 text-lg font-bold mt-4">
-                  {t('admin.pages.account.security')}
-                </h3>
+                <h3 className="col-span-2 text-lg font-bold mt-4">{t('admin.pages.account.security')}</h3>
                 <div className="flex flex-col col-span-2">
                   <label>{t('admin.fields.currentPassword')}</label>
                   <Field
                     name="currentPassword"
                     as={Password}
                     feedback={false}
-                    className={
-                      errors.currentPassword && touched.currentPassword
-                        ? 'p-invalid'
-                        : ''
-                    }
+                    className={errors.currentPassword && touched.currentPassword ? "p-invalid" : ""}
                   />
-                  {errors.currentPassword && touched.currentPassword && (
-                    <small className="p-error">{errors.currentPassword}</small>
-                  )}
+                  {errors.currentPassword && touched.currentPassword && <small className="p-error">{errors.currentPassword}</small>}
                 </div>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.newPassword')}</label>
@@ -222,15 +163,9 @@ export default function Account() {
                     as={Password}
                     toggleMask={true}
                     feedback={false}
-                    className={
-                      errors.newPassword && touched.newPassword
-                        ? 'p-invalid'
-                        : ''
-                    }
+                    className={errors.newPassword && touched.newPassword ? "p-invalid" : ""}
                   />
-                  {errors.newPassword && touched.newPassword && (
-                    <small className="p-error">{errors.newPassword}</small>
-                  )}
+                  {errors.newPassword && touched.newPassword && <small className="p-error">{errors.newPassword}</small>}
                 </div>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.confirmPassword')}</label>
@@ -239,32 +174,12 @@ export default function Account() {
                     as={Password}
                     toggleMask={true}
                     feedback={false}
-                    className={
-                      errors.confirmNewPassword && touched.confirmNewPassword
-                        ? 'p-invalid'
-                        : ''
-                    }
+                    className={errors.confirmNewPassword && touched.confirmNewPassword ? "p-invalid" : ""}
                   />
-                  {errors.confirmNewPassword && touched.confirmNewPassword && (
-                    <small className="p-error">
-                      {errors.confirmNewPassword}
-                    </small>
-                  )}
+                  {errors.confirmNewPassword && touched.confirmNewPassword && <small className="p-error">{errors.confirmNewPassword}</small>}
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full md:w-auto"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                    }
-                    label={
-                      isSubmitting
-                        ? t('admin.pages.account.actions.saving')
-                        : t('admin.pages.account.actions.save')
-                    }
-                  />
+                  <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto" icon={isSubmitting ? "pi pi-spin pi-spinner" : "pi pi-check"} label={isSubmitting ? t('admin.pages.account.actions.saving') : t('admin.pages.account.actions.save')} />
                 </div>
               </Form>
             )}

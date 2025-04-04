@@ -1,7 +1,7 @@
 import { Zones } from '@/components/Admin/Inventory/Zones';
 import { MapComponent } from '@/components/Map';
 import { Zone } from '@/types/Zone';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Toast } from 'primereact/toast';
 
 export default function Inventory() {
@@ -16,104 +16,92 @@ export default function Inventory() {
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
-
+  
   useEffect(() => {
     const handleResize = () => {
-      const newIsMobile = window.innerWidth < 768;
+      const wasMobile = isMobile;
+      const nowMobile = window.innerWidth < 768;
+      
+      setIsMobile(nowMobile);
 
-      if (isMobile !== newIsMobile) {
-        setIsMobile(newIsMobile);
+      if (wasMobile !== nowMobile) {
         setMapKey(Date.now());
       }
     };
-
+    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobile]);
 
-  const handleSelectedZone = useCallback((zone: Zone) => {
+  const handleSelectedZone = (zone: Zone) => {
     setSelectedZone(zone);
-  }, []);
+  };
 
-  const handleAddElementZone = useCallback((zone: Zone) => {
+  const handleAddElementZone = (zone: Zone) => {
     setZoneToAddElement(zone);
     setSelectedZone(null);
-  }, []);
+  };
 
-  const handleCreatingElementChange = useCallback((isCreating: boolean) => {
+  const handleCreatingElementChange = (isCreating: boolean) => {
     setIsCreatingElement(isCreating);
-  }, []);
+  };
 
-  const handleElementAdded = useCallback(() => {
-    setZoneToAddElement(null);
-  }, []);
+  const handleMapClick = (event: React.MouseEvent) => {
+    if (isCreatingElement) {
+      if (!zoneToAddElement) {
+        showErrorMessage("No es pot crear un element fora de la zona");
+      }
+    }
+  };
 
-  const showErrorMessage = useCallback((message: string) => {
+  const showErrorMessage = (message: string) => {
     toast.current?.show({
       severity: 'error',
       summary: 'Aviso',
       detail: message,
       life: 3000,
       sticky: false,
-      style: {
+      style: { 
         fontWeight: 'bold',
         fontSize: '1.1em',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-        border: '1px solid #f00',
-      },
-    });
-  }, []);
-
-  const handleMapClick = useCallback(
-    (event: React.MouseEvent) => {
-      if (isCreatingElement && !zoneToAddElement) {
-        showErrorMessage('No es pot crear un element fora de la zona');
+        border: '1px solid #f00'
       }
-    },
-    [isCreatingElement, zoneToAddElement, showErrorMessage],
-  );
-
-  const handleDrawingModeChange = useCallback((isDrawing: boolean) => {
-    setIsDrawingMode(isDrawing);
-  }, []);
-
-  const handleEnabledButtonChange = useCallback((enabled: boolean) => {
-    setEnabledButton(enabled);
-  }, []);
-
-  const handleModalVisibleChange = useCallback((visible: boolean) => {
-    setModalVisible(visible);
-  }, []);
+    });
+  };
 
   return (
     <div className="flex flex-col w-full h-full relative">
       <Toast ref={toast} position="top-center" />
-
-      <div
-        className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
-        <div
+      
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
+        <div 
           ref={mapContainerRef}
-          className={`${isMobile ? 'h-[60%] w-full' : 'w-[70%] h-full'} relative bg-gray-100`}
+          className={`${isMobile ? 'h-[60%] w-full' : 'w-[70%] h-full'} 
+                     relative bg-gray-100`}
           style={{ minHeight: isMobile ? '300px' : '400px' }}
-          onClick={handleMapClick}>
+          onClick={handleMapClick}
+        >
           <MapComponent
             key={mapKey}
             selectedZone={selectedZone}
             zoneToAddElement={zoneToAddElement}
-            onElementAdd={handleElementAdded}
+            onElementAdd={() => setZoneToAddElement(null)}
             isCreatingElement={isCreatingElement}
             onCreatingElementChange={handleCreatingElementChange}
             isDrawingMode={isDrawingMode}
-            onDrawingModeChange={handleDrawingModeChange}
+            onDrawingModeChange={setIsDrawingMode}
             enabledButton={enabledButton}
-            onEnabledButtonChange={handleEnabledButtonChange}
+            onEnabledButtonChange={setEnabledButton}
             modalVisible={modalVisible}
-            onModalVisibleChange={handleModalVisibleChange}
+            onModalVisibleChange={setModalVisible}
           />
         </div>
 
-        <div
-          className={`${isMobile ? 'h-[40%] w-full' : 'w-[30%] h-full'} bg-white shadow-md overflow-auto`}>
+        <div 
+          className={`${isMobile ? 'h-[40%] w-full' : 'w-[30%] h-full'} 
+                     bg-white shadow-md overflow-auto`}
+        >
           <Zones
             onSelectedZone={handleSelectedZone}
             onAddElementZone={handleAddElementZone}

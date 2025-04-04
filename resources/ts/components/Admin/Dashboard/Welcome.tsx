@@ -1,14 +1,13 @@
 import { useI18n } from '@/hooks/useI18n';
 import { useAuth } from '@/hooks/useAuth';
+
 import { Icon } from '@iconify/react';
-import { Card } from 'primereact/card';
 
 export function Welcome() {
   const { user } = useAuth();
   const { t } = useI18n();
-
   return (
-    <Card className="mb-6 lg:mb-8 border border-gray-300 bg-white rounded p-6">
+    <div className="bg-white rounded p-6 mb-8 border border-gray-300">
       <div className="flex items-center space-x-4">
         <span className="text-4xl">
           <Icon icon="tabler:trees" color="#8BCC63" />
@@ -25,6 +24,6 @@ export function Welcome() {
           </p>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

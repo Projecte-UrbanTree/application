@@ -14,16 +14,16 @@ class ResourceTypeSeeder extends Seeder
     {
         DB::table('resource_types')->insert([
             [
-                'name' => 'Podadora',
-                'description' => 'Maquina per podar herba i arbusts',
+                'name' => 'Type 1',
+                'description' => 'Description for Type 1',
             ],
             [
-                'name' => 'Desbroçadora',
-                'description' => 'Maquina per desbrossar',
+                'name' => 'Type 2',
+                'description' => 'Description for Type 2',
             ],
             [
-                'name' => 'Bufador',
-                'description' => 'Maquina per bufar fulles',
+                'name' => 'Type 3',
+                'description' => 'Description for Type 3',
             ],
         ]);
     }

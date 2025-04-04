@@ -14,41 +14,21 @@ class ZoneSeeder extends Seeder
     {
         DB::table('zones')->insert([
             [
-                'name' => 'Parc dels Xiribecs',
-                'description' => '',
+                'name' => 'Zone 1',
+                'description' => 'A description for Zone 1',
                 'color' => '#FF5733',
                 'contract_id' => 1,
             ],
             [
-                'name' => 'Parc Municipal de Amposta',
+                'name' => 'Zone 2',
                 'description' => 'A description for Zone 2',
                 'color' => '#33FF57',
-                'contract_id' => 1,
-            ],
-            [
-                'name' => 'Cementeri de Amposta',
-                'description' => 'A description for Zone 3',
-                'color' => '#3357FF',
-                'contract_id' => 1,
-            ],
-            [
-                'name' => 'Parc municipal teodor Gonazalez',
-                'description' => 'A description for Zone 3',
-                'color' => '#3357FF',
                 'contract_id' => 2,
             ],
-
             [
-                'name' => 'Plaça de Alfons XVI',
+                'name' => 'Zone 3',
                 'description' => 'A description for Zone 3',
-                'color' => '#FF5733',
-                'contract_id' => 2,
-            ],
-
-            [
-                'name' => 'Cementerio Municipal de Deltebre.',
-                'description' => 'A description for Zone 3',
-                'color' => '#FF5733',
+                'color' => '#3357FF',
                 'contract_id' => 3,
             ],
         ]);

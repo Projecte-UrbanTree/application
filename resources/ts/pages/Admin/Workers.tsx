@@ -31,7 +31,7 @@ export default function Workers() {
   const [selectLoading, setSelectLoading] = useState(false);
 
   const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
+    (state: RootState) => state.contract.currentContract
   );
 
   useEffect(() => {
@@ -52,38 +52,34 @@ export default function Workers() {
     try {
       setSelectLoading(true);
       const response = await axiosClient.get('/admin/users', {
-        params: { role: 'worker' },
+        params: { role: 'worker' }
       });
-      const workerUsers = response.data.filter(
-        (user: User) => user.role === 'worker',
-      );
+      const workerUsers = response.data.filter((user: User) => user.role === 'worker');
       setAllWorkers(workerUsers);
       return workerUsers;
     } catch (error) {
       console.error('Error fetching available workers:', error);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
+      toast.current?.show({ 
+        severity: 'error', 
+        summary: t('general.error'), 
         detail: t('admin.pages.workers.failedToLoad'),
-        life: 3000,
+        life: 3000
       });
       return [];
     } finally {
       setSelectLoading(false);
     }
   };
-
+  
   const fetchWorkersForContract = async (contractId: number) => {
     setLoading(true);
     try {
-      const response = await axiosClient.get(
-        `/admin/contracts/${contractId}/users`,
-      );
+      const response = await axiosClient.get(`/admin/contracts/${contractId}/users`);
       const contractWorkers = response.data;
       setWorkers(contractWorkers);
       const selectedIds = new Set(contractWorkers.map((w: User) => w.id));
-      const matchedWorkers = allWorkers.filter((w) => selectedIds.has(w.id));
-
+      const matchedWorkers = allWorkers.filter(w => selectedIds.has(w.id));
+      
       if (contractWorkers.length === 0) {
         setSelectedWorkers([]);
       } else if (matchedWorkers.length !== contractWorkers.length) {
@@ -91,13 +87,14 @@ export default function Workers() {
       } else {
         setSelectedWorkers(matchedWorkers);
       }
+      
     } catch (error) {
       console.error('Error fetching contract workers:', error);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
+      toast.current?.show({ 
+        severity: 'error', 
+        summary: t('general.error'), 
         detail: t('admin.pages.workers.failedToLoad'),
-        life: 3000,
+        life: 3000
       });
       setWorkers([]);
       setSelectedWorkers([]);
@@ -105,59 +102,52 @@ export default function Workers() {
       setLoading(false);
     }
   };
-
+  
   const handleWorkersChange = async (e: { value: User[] }) => {
     if (!currentContract?.id) return;
 
     const contractId = currentContract.id;
     const newSelectedWorkers = e.value;
 
-    const currentWorkerIds = new Set(workers.map((w) => w.id));
-    const newWorkerIds = new Set(newSelectedWorkers.map((w) => w.id));
+    const currentWorkerIds = new Set(workers.map(w => w.id));
+    const newWorkerIds = new Set(newSelectedWorkers.map(w => w.id));
 
-    const workersToAdd = newSelectedWorkers.filter(
-      (w) => !currentWorkerIds.has(w.id),
-    );
-    const workersToRemove = workers.filter((w) => !newWorkerIds.has(w.id));
+    const workersToAdd = newSelectedWorkers.filter(w => !currentWorkerIds.has(w.id));
+    const workersToRemove = workers.filter(w => !newWorkerIds.has(w.id));
 
     setSelectedWorkers(newSelectedWorkers);
 
     try {
-      for (const worker of workersToAdd) {
-        await axiosClient.post(
-          `/admin/contracts/${contractId}/users/${worker.id}`,
-        );
-      }
+        for (const worker of workersToAdd) {
+            await axiosClient.post(`/admin/contracts/${contractId}/users/${worker.id}`);
+        }
 
-      for (const worker of workersToRemove) {
-        await axiosClient.delete(
-          `/admin/contracts/${contractId}/users/${worker.id}`,
-        );
-      }
+        for (const worker of workersToRemove) {
+            await axiosClient.delete(`/admin/contracts/${contractId}/users/${worker.id}`);
+        }
 
-      if (workersToAdd.length > 0 || workersToRemove.length > 0) {
-        await fetchWorkersForContract(contractId);
-        toast.current?.show({
-          severity: 'success',
-          summary: t('general.success'),
-          detail: t('admin.pages.workers.updatedSuccessfully'),
-          life: 3000,
-        });
-      }
+        if (workersToAdd.length > 0 || workersToRemove.length > 0) {
+            await fetchWorkersForContract(contractId);
+            toast.current?.show({ 
+                severity: 'success', 
+                summary: t('general.success'), 
+                detail: t('admin.pages.workers.updatedSuccessfully'),
+                life: 3000
+            });
+        }
     } catch (error) {
-      console.error('Error updating workers:', error);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
-        detail: t('admin.pages.workers.failedToUpdate'),
-        life: 3000,
-      });
-      await fetchWorkersForContract(contractId);
+        console.error('Error updating workers:', error);
+        toast.current?.show({ 
+            severity: 'error', 
+            summary: t('general.error'), 
+            detail: t('admin.pages.workers.failedToUpdate'),
+            life: 3000
+        });
+        await fetchWorkersForContract(contractId);
     }
   };
 
-  const fullNameTemplate = (rowData: User) =>
-    `${rowData.name} ${rowData.surname || ''}`;
+  const fullNameTemplate = (rowData: User) => `${rowData.name} ${rowData.surname || ''}`;
 
   if (loading && !currentContract?.id) {
     return (
@@ -185,10 +175,9 @@ export default function Workers() {
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              {t('admin.pages.workers.contractWorkers')}:{' '}
-              {currentContract?.name}
+              {t('admin.pages.workers.contractWorkers')}: {currentContract?.name}
             </h3>
-
+            
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 {t('admin.pages.workers.assignRemoveWorkers')}
@@ -201,9 +190,7 @@ export default function Workers() {
                 itemTemplate={(option: User) => (
                   <div className="flex items-center gap-2">
                     <Icon icon="mdi:account" className="text-gray-600" />
-                    <span>
-                      {option.name} {option.surname}
-                    </span>
+                    <span>{option.name} {option.surname}</span>
                   </div>
                 )}
                 placeholder={t('admin.pages.workers.selectWorkers')}
@@ -224,33 +211,25 @@ export default function Workers() {
 
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              {t('admin.pages.workers.workersForContract')}:{' '}
-              {currentContract.name}
+              {t('admin.pages.workers.workersForContract')}: {currentContract.name}
             </h3>
-
+            
             {loading ? (
               <div className="flex justify-center p-4">
-                <ProgressSpinner
-                  style={{ width: '50px', height: '50px' }}
+                <ProgressSpinner 
+                  style={{ width: '50px', height: '50px' }} 
                   strokeWidth="4"
                   className="text-indigo-600"
                 />
               </div>
             ) : workers.length === 0 ? (
               <div className="p-6 bg-gray-50 rounded-lg border border-dashed border-gray-200 text-center">
-                <Icon
-                  icon="mdi:account-question"
-                  className="text-3xl text-gray-400 mb-3"
-                />
-                <p className="font-medium text-gray-600">
-                  {t('admin.pages.workers.noWorkersAssigned')}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {t('admin.pages.workers.useDropdownToAssign')}
-                </p>
+                <Icon icon="mdi:account-question" className="text-3xl text-gray-400 mb-3" />
+                <p className="font-medium text-gray-600">{t('admin.pages.workers.noWorkersAssigned')}</p>
+                <p className="text-sm text-gray-500 mt-1">{t('admin.pages.workers.useDropdownToAssign')}</p>
               </div>
             ) : (
-              <DataTable
+              <DataTable 
                 value={workers}
                 paginator
                 rows={10}
@@ -258,18 +237,25 @@ export default function Workers() {
                 showGridlines
                 className="p-datatable-sm"
                 emptyMessage={t('admin.pages.workers.noWorkersFound')}
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink">
-                <Column
-                  field="name"
-                  header={t('admin.pages.workers.name')}
-                  body={fullNameTemplate}
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+              >
+                <Column 
+                  field="name" 
+                  header={t('admin.pages.workers.name')} 
+                  body={fullNameTemplate} 
                 />
-                <Column field="email" header={t('admin.pages.workers.email')} />
-                <Column
-                  field="company"
-                  header={t('admin.pages.workers.company')}
+                <Column 
+                  field="email" 
+                  header={t('admin.pages.workers.email')} 
                 />
-                <Column field="dni" header={t('admin.pages.workers.dni')} />
+                <Column 
+                  field="company" 
+                  header={t('admin.pages.workers.company')} 
+                />
+                <Column 
+                  field="dni" 
+                  header={t('admin.pages.workers.dni')} 
+                />
               </DataTable>
             )}
           </div>

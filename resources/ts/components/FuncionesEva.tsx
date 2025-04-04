@@ -7,7 +7,6 @@ interface EvaluationResult {
 }
 
 interface Eva {
-  id: number;
   element_id: number;
   date_birth: string;
   height: number;

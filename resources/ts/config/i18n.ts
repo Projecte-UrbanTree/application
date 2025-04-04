@@ -8,32 +8,32 @@ import tr from './i18n/tr.json';
 import { getCookie, setCookie } from 'typescript-cookie';
 
 const resources = {
-  ca: {
-    translation: ca,
-  },
-  es: {
-    translation: es,
-  },
-  en: {
-    translation: en,
-  },
-  tr: {
-    translation: tr,
-  },
+    ca: {
+        translation: ca,
+    },
+    es: {
+        translation: es,
+    },
+    en: {
+        translation: en,
+    },
+    tr: {
+        translation: tr,
+    },
 };
 
 if (!getCookie('lang')) {
-  setCookie('lang', 'ca');
+    setCookie('lang', 'ca');
 }
 
 const lng = getCookie('lang');
 
 i18n.use(initReactI18next).init({
-  resources,
-  lng,
-  interpolation: {
-    escapeValue: true,
-  },
+    resources,
+    lng,
+    interpolation: {
+        escapeValue: true,
+    },
 });
 
 export default i18n;

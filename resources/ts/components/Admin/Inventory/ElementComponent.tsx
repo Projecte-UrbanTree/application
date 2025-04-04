@@ -3,8 +3,6 @@ import { Button } from 'primereact/button';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
 import ReactDOM from 'react-dom/client';
-import React from 'react';
-
 interface ElementPopupProps {
   element: Element;
   treeTypes: TreeTypes[] | undefined;
@@ -13,66 +11,57 @@ interface ElementPopupProps {
   onAddIncident?: (elementId: number) => void;
 }
 
-const ElementPopup: React.FC<ElementPopupProps> = React.memo(
-  ({ element, treeTypes, elementTypes, onDeleteElement, onAddIncident }) => {
-    const elementType = elementTypes?.find(
-      (type) => type.id === element.element_type_id,
-    );
-    const treeType = treeTypes?.find(
-      (type) => type.id === element.tree_type_id,
-    );
+const ElementPopup: React.FC<ElementPopupProps> = ({
+  element,
+  treeTypes,
+  elementTypes,
+  onDeleteElement,
+  onAddIncident,
+}) => {
+  const elementType = elementTypes?.find(
+    (type) => type.id === element.element_type_id,
+  );
+  const treeType = treeTypes?.find((type) => type.id === element.tree_type_id);
 
-    return (
-      <div
-        className="p-4 bg-white shadow-lg rounded-lg border border-gray-200"
-        style={{
-          width: '300px',
-          backgroundColor: '#ffffff',
-          borderRadius: '8px',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-        }}>
-        <h3 className="text-lg font-bold mb-2 border-b pb-2">
-          Elemento #{element.id}
-        </h3>
-        <div className="my-2">
-          <p className="text-sm mb-1 flex justify-between">
-            <strong>Tipo:</strong>{' '}
-            <span>{elementType?.name || 'No definido'}</span>
-          </p>
-          <p className="text-sm mb-1 flex justify-between">
-            <strong>Árbol:</strong>{' '}
-            <span>
-              {treeType
-                ? `${treeType.family} ${treeType.genus} ${treeType.species}`
-                : 'No definido'}
-            </span>
-          </p>
-          <p className="text-sm mb-1 flex justify-between">
-            <strong>Creado:</strong>{' '}
-            <span>
-              {element.created_at
-                ? new Date(element.created_at).toLocaleDateString()
-                : 'No disponible'}
-            </span>
-          </p>
-        </div>
+  return (
+    <div
+      className="p-4"
+      style={{
+        width: '300px',
+        backgroundColor: '#f9f9f9',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+      }}>
+      <h3 className="text-lg font-bold mb-2">Elemento #{element.id}</h3>
+      <p className="text-sm mb-1">
+        <strong>Tipo:</strong> {elementType?.name || 'No definido'}
+      </p>
+      <p className="text-sm mb-1">
+        <strong>Árbol:</strong>{' '}
+        {treeType
+          ? `${treeType.family} ${treeType.genus} ${treeType.species}`
+          : 'No definido'}
+      </p>
+      <p className="text-sm mb-1">
+        <strong>Estado:</strong> {element.created_at || 'No disponible'}
+      </p>
 
-        <div className="flex gap-2 mt-4 justify-end">
-          <Button
-            label="Eliminar"
-            className="p-button-danger p-button-sm"
-            onClick={() => onDeleteElement && onDeleteElement(element.id!)}
-          />
-          <Button
-            label="Incidencia"
-            className="p-button-warning p-button-sm"
-            onClick={() => onAddIncident && onAddIncident(element.id!)}
-          />
-        </div>
+      <div className="flex gap-2 mt-3">
+        <Button label="Editar" className="p-button-sm" />
+        <Button
+          label="Eliminar"
+          className="p-button-danger p-button-sm"
+          onClick={() => onDeleteElement && onDeleteElement(element.id!)}
+        />
+        <Button
+          label="Añadir Incidencia"
+          className="p-button-warning p-button-sm"
+          onClick={() => onAddIncident && onAddIncident(element.id!)}
+        />
       </div>
-    );
-  },
-);
+    </div>
+  );
+};
 
 export const renderElementPopup = (
   element: Element,

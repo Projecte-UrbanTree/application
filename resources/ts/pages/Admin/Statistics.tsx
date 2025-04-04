@@ -410,7 +410,7 @@ export default function Stats() {
 
   return (
     <div className="flex flex-col gap-6 p-4">
-      <div className="flex flex-wrap items-end gap-4 p-4 bg-white rounded border border-gray-200 shadow-sm min-h-32">
+      <div className="flex flex-wrap items-end gap-4 p-4 bg-gray-50 rounded border border-gray-200">
         <div>
           <SelectButton
             value={rangeOption}
@@ -420,7 +420,6 @@ export default function Stats() {
                 setRangeOption(e.value);
             }}
             itemTemplate={(option) => t(option.label)}
-            className="p-button-outlined"
           />
         </div>
 
@@ -441,7 +440,6 @@ export default function Stats() {
                 maxDate={new Date()}
                 showIcon
                 dateFormat="dd/mm/yy"
-                className="p-inputtext-sm"
               />
             </div>
             <div className="flex flex-col">
@@ -460,7 +458,6 @@ export default function Stats() {
                 maxDate={new Date()}
                 showIcon
                 dateFormat="dd/mm/yy"
-                className="p-inputtext-sm"
                 disabled={!customFromDate}
               />
             </div>
@@ -518,9 +515,11 @@ export default function Stats() {
                       {item.label}
                     </div>
                     <Button
-                      label={t('admin.pages.stats.exportCSV')}
+                      aria-label={`${t('admin.pages.stats.exportCSV')} - ${item.label}`}
                       icon="pi pi-download"
-                      className="p-button-sm p-button-outlined text-blue-600 hover:bg-blue-50"
+                      tooltip={t('admin.pages.stats.exportCSV')}
+                      tooltipOptions={{ position: 'top' }}
+                      className="p-button-sm p-button-text p-button-plain text-blue-600 hover:bg-blue-50"
                       onClick={() =>
                         exportToCSV(item.data, formattedDays, item.label)
                       }
@@ -603,9 +602,11 @@ export default function Stats() {
                       {selectedResourceInfo.unit_name}
                     </div>
                     <Button
-                      label={t('admin.pages.stats.exportCSV')}
+                      aria-label={`${t('admin.pages.stats.exportCSV')} - ${selectedResourceInfo.name}`}
                       icon="pi pi-download"
-                      className="p-button-sm p-button-outlined text-blue-600 hover:bg-blue-50"
+                      tooltip={t('admin.pages.stats.exportCSV')}
+                      tooltipOptions={{ position: 'top' }}
+                      className="p-button-sm p-button-text p-button-plain text-blue-600 hover:bg-blue-50"
                       onClick={() =>
                         exportToCSV(
                           selectedResourceChartData,

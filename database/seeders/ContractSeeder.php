@@ -14,21 +14,21 @@ class ContractSeeder extends Seeder
     {
         DB::table('contracts')->insert([
             [
-                'name' => 'Ajuntament Amposta',
+                'name' => 'Contract 1',
                 'start_date' => '2025-01-29',
                 'end_date' => '2025-01-29',
                 'final_price' => 100.00,
                 'status' => true,
             ],
             [
-                'name' => 'Ajuntament Tortosa',
+                'name' => 'Contract 2',
                 'start_date' => '2025-01-29',
                 'end_date' => '2025-01-29',
                 'final_price' => 200.00,
                 'status' => false,
             ],
             [
-                'name' => 'Ajuntament Deltebre',
+                'name' => 'Contract 3',
                 'start_date' => '2025-01-29',
                 'end_date' => '2025-01-29',
                 'final_price' => 300.00,

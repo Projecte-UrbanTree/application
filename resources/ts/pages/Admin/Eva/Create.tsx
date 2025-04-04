@@ -81,13 +81,7 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
   );
 };
 
-interface CreateEvaProps {
-  preselectedElementId: number;
-  onClose: () => void;
-  redirectPath?: string; // Add redirectPath prop
-}
-
-const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaProps) => {
+const CreateEva = () => {
   const navigate = useNavigate();
   const [elements, setElements] = useState<any[]>([]);
   const [dictionaries, setDictionaries] = useState<any>({});
@@ -101,11 +95,6 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
       .get('/admin/evas/create')
       .then((response) => {
         setElements(response.data.elements);
-        if (preselectedElementId) {
-          setElements((prev) =>
-            prev.filter((element) => element.id === preselectedElementId),
-          );
-        }
         const translatedDictionaries: any = {
           unbalancedCrown: [],
           overextendedBranches: [],
@@ -134,10 +123,10 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [preselectedElementId]);
+  }, []);
 
   const initialValues = {
-    element_id: preselectedElementId || 0,
+    element_id: 0,
     date_birth: '',
     years: 0,
     months: 0,
@@ -232,14 +221,9 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
       };
 
       await axiosClient.post('/admin/evas', updatedValues);
-
-      if (redirectPath) {
-        onClose(); // Close the popup if redirectPath is provided
-      } else {
-        navigate('/admin/evas', {
-          state: { success: t('admin.pages.evas.list.messages.createSuccess') },
-        });
-      }
+      navigate('/admin/evas', {
+        state: { success: t('admin.pages.evas.list.messages.createSuccess') },
+      });
     } catch (error: any) {
       setError(
         error.response?.data?.message ||
@@ -300,7 +284,6 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
                     }))}
                     optionLabel="label"
                     optionValue="value"
-                    disabled={!!preselectedElementId} // Disable if preselectedElementId is provided
                   />
                   <FormField
                     name="years"

@@ -24,11 +24,11 @@ export const deleteIncidence = async (id: number): Promise<void> => {
 
 export const updateIncidence = async (
   id: number,
-  updates: Partial<Incidence>,
+  updates: Partial<Incidence>
 ): Promise<Incidence> => {
   const response: AxiosResponse<Incidence> = await axiosClient.patch<Incidence>(
     `/admin/incidents/${id}`,
-    updates,
+    updates
   );
   return response.data;
 };

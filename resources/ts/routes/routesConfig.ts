@@ -1,7 +1,9 @@
-import AuthRoutes from './AuthRoutes';
-import AdminRoutes from './AdminRoutes';
-import WorkerRoutes from './WorkerRoutes';
+import AuthRoutes from "./AuthRoutes";
+import AdminRoutes from "./AdminRoutes";
 
-const routesConfig = [...AuthRoutes, ...AdminRoutes, ...WorkerRoutes];
+const routesConfig = [
+  ...AuthRoutes,
+  ...AdminRoutes,
+];
 
 export default routesConfig;

@@ -14,20 +14,20 @@ class IncidentSeeder extends Seeder
     {
         DB::table('incidences')->insert([
             [
-                'name' => 'Abre trencat',
-                'description' => 'Grup de rames trencades obstaculitzant el pas',
+                'name' => 'Incident 1',
+                'description' => 'Description for Incident 1',
                 'status' => 'open',
                 'element_id' => 1,
             ],
             [
-                'name' => 'Fuga daigua',
-                'description' => 'Fuga d\'aigua a la zona de reg en aspersor',
+                'name' => 'Incident 2',
+                'description' => 'Description for Incident 2',
                 'status' => 'in_progress',
                 'element_id' => 2,
             ],
             [
-                'name' => 'Arbust mort',
-                'description' => 'Arbust mort als xiribecs',
+                'name' => 'Incident 3',
+                'description' => 'Description for Incident 3',
                 'status' => 'resolved',
                 'element_id' => 3,
             ],

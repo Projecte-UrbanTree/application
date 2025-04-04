@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button } from "primereact/button";
+import { Message } from "primereact/message";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { Icon } from "@iconify/react";
+import axiosClient from "@/api/axiosClient";
+import { useTranslation } from "react-i18next";
+import CrudPanel from "@/components/Admin/CrudPanel";
 
 interface TaskType {
   id: number;
@@ -30,7 +30,7 @@ export default function TaskTypes() {
   useEffect(() => {
     const fetchTaskTypes = async () => {
       try {
-        const response = await axiosClient.get('/admin/task-types');
+        const response = await axiosClient.get("/admin/task-types");
         setTaskTypes(response.data);
       } catch (error) {
         console.error(error);
@@ -49,26 +49,22 @@ export default function TaskTypes() {
   }, [msg]);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm(t('admin.pages.taskTypes.list.messages.deleteConfirm')))
-      return;
+    if (!window.confirm(t("admin.pages.taskTypes.list.messages.deleteConfirm"))) return;
     try {
       await axiosClient.delete(`/admin/task-types/${id}`);
       setTaskTypes(taskTypes.filter((tt) => tt.id !== id));
-      setMsg(t('admin.pages.taskTypes.list.messages.deleteSuccess'));
+      setMsg(t("admin.pages.taskTypes.list.messages.deleteSuccess"));
     } catch (error) {
       console.error(error);
-      setMsg(t('admin.pages.taskTypes.list.messages.error'));
+      setMsg(t("admin.pages.taskTypes.list.messages.error"));
     }
   };
 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
+        <ProgressSpinner style={{ width: "50px", height: "50px" }} strokeWidth="4" />
+        <span className="mt-2 text-blue-600">{t("general.loading")}</span>
       </div>
     );
   }
@@ -78,18 +74,18 @@ export default function TaskTypes() {
       {msg && (
         <Message
           severity={
-            msg === t('admin.pages.taskTypes.list.messages.deleteSuccess') ||
-            msg === successMsg
-              ? 'success'
-              : 'error'
+            msg === t("admin.pages.taskTypes.list.messages.deleteSuccess") || msg === successMsg
+              ? "success"
+              : "error"
           }
           text={msg}
           className="mb-4 w-full"
         />
       )}
       <CrudPanel
-        title={t('admin.pages.taskTypes.title')}
-        onCreate={() => navigate('/admin/settings/task-types/create')}>
+        title={t("admin.pages.taskTypes.title")}
+        onCreate={() => navigate("/admin/settings/task-types/create")}
+      >
         <DataTable
           value={taskTypes}
           paginator
@@ -97,34 +93,33 @@ export default function TaskTypes() {
           stripedRows
           showGridlines
           loading={isLoading}
-          className="p-datatable-sm">
+          className="p-datatable-sm"
+        >
           <Column
             field="name"
-            header={t('admin.pages.taskTypes.list.columns.name')}
+            header={t("admin.pages.taskTypes.list.columns.name")}
           />
           <Column
             field="description"
-            header={t('admin.pages.taskTypes.list.columns.description')}
+            header={t("admin.pages.taskTypes.list.columns.description")}
           />
           <Column
-            header={t('admin.pages.taskTypes.list.actions.label')}
+            header={t("admin.pages.taskTypes.list.actions.label")}
             body={(rowData: TaskType) => (
               <div className="flex justify-center gap-2">
                 <Button
                   icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
                   className="p-button-rounded p-button-info"
-                  onClick={() =>
-                    navigate(`/admin/settings/task-types/edit/${rowData.id}`)
-                  }
-                  tooltip={t('admin.pages.taskTypes.list.actions.edit')}
-                  tooltipOptions={{ position: 'top' }}
+                  onClick={() => navigate(`/admin/settings/task-types/edit/${rowData.id}`)}
+                  tooltip={t("admin.pages.taskTypes.list.actions.edit")}
+                  tooltipOptions={{ position: "top" }}
                 />
                 <Button
                   icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
                   className="p-button-rounded p-button-danger"
                   onClick={() => handleDelete(rowData.id)}
-                  tooltip={t('admin.pages.taskTypes.list.actions.delete')}
-                  tooltipOptions={{ position: 'top' }}
+                  tooltip={t("admin.pages.taskTypes.list.actions.delete")}
+                  tooltipOptions={{ position: "top" }}
                 />
               </div>
             )}

@@ -25,8 +25,8 @@ export default function CrudPanel({
   return (
     <Panel
       headerTemplate={
-        <div className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center shadow-md">
-          <div className="text-lg font-semibold text-gray-800">{t(title)}</div>
+        <div className="bg-gray-50 border border-gray-200 px-6 py-4 flex justify-between items-center rounded">
+          <div className="text-xl font-bold text-gray-700">{t(title)}</div>
           {onCreate && (
             <>
               <Tooltip target=".create-button-wrapper" />
@@ -34,10 +34,7 @@ export default function CrudPanel({
                 className="inline-block create-button-wrapper"
                 data-pr-tooltip={createTooltip ? t(createTooltip) : undefined}
                 data-pr-position="left">
-                <Button
-                  onClick={onCreate}
-                  disabled={createDisabled}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-md flex items-center gap-2">
+                <Button onClick={onCreate} disabled={createDisabled}>
                   <Icon icon="tabler:plus" inline />
                   {t('admin.buttons.createNew')}
                 </Button>
@@ -45,9 +42,8 @@ export default function CrudPanel({
             </>
           )}
         </div>
-      }
-      className="shadow-md rounded-md border border-gray-200">
-      <div className="p-8">{children}</div>
+      }>
+      {children}
     </Panel>
   );
 }

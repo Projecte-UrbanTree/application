@@ -317,10 +317,8 @@ export default function WorkOrders() {
 
   const actionButtons = useCallback(
     (rowData: WorkOrder) => {
-      const isEditable =
-        rowData.status !== 1 && rowData.status !== 2 && rowData.status !== 3;
-      const canViewReport =
-        rowData.status === 1 || rowData.status === 2 || rowData.status === 3;
+      const isEditable = rowData.status !== 1 && rowData.status !== 2 && rowData.status !== 3;
+      const canViewReport = rowData.status === 1 || rowData.status === 2 || rowData.status === 3;
 
       return (
         <div className="flex justify-end gap-2">
