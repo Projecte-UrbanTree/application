@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use App\Services\ContractDuplicationService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Carbon\Carbon;
 
 class ContractController extends Controller
 {
@@ -70,5 +70,52 @@ class ContractController extends Controller
         $contract->delete();
 
         return response()->json(['message' => 'Contract deleted'], 200);
+    }
+
+    public function selectContract(Request $request)
+    {
+        $validated = $request->validate([
+            'contract_id' => [
+                'nullable',
+                'integer',
+                function ($attribute, $value, $fail) {
+                    if ($value !== 0 && ! Contract::find($value)) {
+                        $fail('The selected contract does not exist.');
+                    }
+                },
+            ],
+        ]);
+
+        $contractId = $validated['contract_id'] ?? 0;
+        $request->session()->put('selected_contract_id', $contractId);
+
+        $contract = $contractId > 0 ? Contract::find($contractId) : null;
+
+        return response()->json([
+            'message' => 'Contract selected successfully',
+            'contract' => $contract,
+        ]);
+    }
+
+    public function getSelectedContract(Request $request)
+    {
+        $contractId = $request->session()->get('selected_contract_id', null);
+        $contract = $contractId > 0 ? Contract::find($contractId) : null;
+
+        return response()->json([
+            'contract_id' => $contractId,
+            'contract' => $contract,
+        ]);
+    }
+
+    public function duplicate($id)
+    {
+        $service = app(ContractDuplicationService::class);
+        $newContract = $service->duplicate($id);
+
+        return response()->json([
+            'message' => 'Contracte duplicat amb èxit',
+            'contract' => $newContract,
+        ]);
     }
 }

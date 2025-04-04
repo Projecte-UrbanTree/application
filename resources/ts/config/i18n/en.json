@@ -59,13 +59,17 @@
             "start_date_required": "Start date is required",
             "status_invalid": "Invalid status",
             "status_required": "Status is required"
-          }
+          },
+          "name": "Contract name",
+          "startDate": "Start Date",
+          "endDate": "End Date"
         },
         "list": {
           "actions": {
             "delete": "Delete contract",
             "edit": "Edit contract",
-            "label": "Actions"
+            "label": "Actions",
+            "duplicate": "Duplicate contract"
           },
           "columns": {
             "end_date": "End Date",
@@ -82,7 +86,13 @@
             "updateSuccess": "Contract updated successfully"
           }
         },
-        "title": "Contracts"
+        "title": "Contracts",
+        "duplicate": {
+          "title": "Duplicate Contract",
+          "submit": "Duplicate Contract",
+          "success": "Contract duplicated successfully",
+          "submitting": "Duplicating..."
+        }
       },
       "dashboard": {
         "quickActions": "Quick Actions",

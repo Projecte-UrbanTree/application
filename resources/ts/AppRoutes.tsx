@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import Error from '@/pages/Error';
 import routesConfig from './routes/routesConfig';

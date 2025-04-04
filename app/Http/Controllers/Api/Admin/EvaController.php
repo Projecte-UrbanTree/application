@@ -87,7 +87,7 @@ class EvaController extends Controller
             ->where('element_id', $elementId)
             ->first();
 
-        if (!$eva) {
+        if (! $eva) {
             return response()->json(['message' => 'No EVA found for this element'], 404);
         }
 

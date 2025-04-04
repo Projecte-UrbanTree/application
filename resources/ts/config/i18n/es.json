@@ -59,13 +59,17 @@
             "start_date_required": "La fecha de inicio es obligatoria",
             "status_invalid": "Estado no válido",
             "status_required": "El estado es obligatorio"
-          }
+          },
+          "name": "Nombre del contrato",
+          "startDate": "Fecha de inicio del contrato",
+          "endDate": "Fecha de finalización del contrato"
         },
         "list": {
           "actions": {
             "delete": "Eliminar contrato",
             "edit": "Editar contrato",
-            "label": "Acciones"
+            "label": "Acciones",
+            "duplicate": "Duplicar contrato"
           },
           "columns": {
             "end_date": "Fecha de finalización",
@@ -82,7 +86,13 @@
             "updateSuccess": "Contrato actualizado correctamente"
           }
         },
-        "title": "Contratos"
+        "title": "Contratos",
+        "duplicate": {
+          "title": "Duplicar contrato",
+          "submit": "Duplicar contrato",
+          "success": "Contrato duplicado correctamente",
+          "submitting": "Duplicando..."
+        }
       },
       "dashboard": {
         "quickActions": "Acciones rápidas",

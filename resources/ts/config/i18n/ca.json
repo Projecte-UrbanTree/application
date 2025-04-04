@@ -59,13 +59,17 @@
             "start_date_required": "La data d'inici és obligatòria",
             "status_invalid": "Estat no vàlid",
             "status_required": "L'estat és obligatori"
-          }
+          },
+          "name": "Nom del contracte",
+          "startDate": "Data d'inici del contracte",
+          "endDate": "Data de fi del contracte"
         },
         "list": {
           "actions": {
             "delete": "Elimina contracte",
             "edit": "Edita contracte",
-            "label": "Accions"
+            "label": "Accions",
+            "duplicate": "Duplicar contracte"
           },
           "columns": {
             "end_date": "Data de fi",
@@ -82,7 +86,13 @@
             "updateSuccess": "Contracte actualitzat amb èxit"
           }
         },
-        "title": "Contractes"
+        "title": "Contractes",
+        "duplicate": {
+          "title": "Duplicar contracte",
+          "submit": "Duplicar contracte",
+          "success": "Contracte duplicat correctament",
+          "submitting": "Duplegant..."
+        }
       },
       "dashboard": {
         "quickActions": "Accions ràpides",
