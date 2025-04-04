@@ -26,6 +26,7 @@ import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
 import { fetchWorkOrders } from '@/api/service/workOrder';
 import { Zone } from '@/types/Zone';
 import { useNavigate } from 'react-router-dom';
+import { deleteIncidentAsync } from '@/store/slice/incidentSlice';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -233,18 +234,22 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const handleDeleteIncident = useCallback(
     async (incidentId: number) => {
       try {
-        await deleteIncidence(incidentId);
-        const updatedIncidences = incidences.filter(
-          (inc) => inc.id !== incidentId,
-        );
-        setIncidences(updatedIncidences);
-        onDeleteElement(element.id!);
-        onClose();
+        await dispatch(deleteIncidentAsync(incidentId)).unwrap();
+        setIncidences((prev) => prev.filter((inc) => inc.id !== incidentId));
+        toast.current?.show({
+          severity: 'success',
+          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccess'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccessDetail'),
+        });
       } catch (error) {
-        console.error('Error al eliminar la incidencia:', error);
+        toast.current?.show({
+          severity: 'error',
+          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteError'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteErrorDetail'),
+        });
       }
     },
-    [incidences, onClose, onDeleteElement, element.id],
+    [dispatch, t]
   );
 
   const handleDeleteElement = useCallback(
