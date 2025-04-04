@@ -21,7 +21,7 @@ class ContractController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date'],
-            'final_price' => ['required', 'numeric'],
+            'final_price' => ['required', 'integer', 'min:0'],
             'status' => ['required', Rule::in([0, 1, 2])],
         ]);
 
@@ -48,7 +48,7 @@ class ContractController extends Controller
             'name' => ['sometimes', 'string', 'max:255'],
             'start_date' => ['sometimes', 'date'],
             'end_date' => ['sometimes', 'date'],
-            'final_price' => ['sometimes', 'numeric'],
+            'final_price' => ['sometimes', 'integer', 'min:0'],
             'status' => ['sometimes', Rule::in([0, 1, 2])],
         ]);
 

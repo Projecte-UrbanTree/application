@@ -73,9 +73,11 @@ export default function EditContract() {
         Yup.ref('start_date'),
         t('admin.pages.contracts.form.validation.end_date_after_start_date'),
       ),
-    final_price: Yup.number().required(
-      t('admin.pages.contracts.form.validation.final_price_required'),
-    ),
+    final_price: Yup.number()
+      .integer(t('admin.pages.contracts.form.validation.must_be_integer'))
+      .required(
+        t('admin.pages.contracts.form.validation.final_price_required'),
+      ),
     status: Yup.number()
       .oneOf(
         [0, 1, 2],
@@ -136,7 +138,7 @@ export default function EditContract() {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
             enableReinitialize>
-            {({ errors, touched, isSubmitting }) => (
+            {({ errors, touched, isSubmitting, setFieldValue, values }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
@@ -195,10 +197,15 @@ export default function EditContract() {
                     />
                     {t('admin.fields.final_price')}
                   </label>
-                  <Field
-                    name="final_price"
-                    as={InputNumber}
+                  <InputNumber
+                    value={values.final_price}
+                    onValueChange={(e) => setFieldValue('final_price', e.value || 0)}
                     placeholder={t('admin.fields.final_price')}
+                    minFractionDigits={0}
+                    maxFractionDigits={0}
+                    mode="decimal"
+                    showButtons
+                    min={0}
                     className={
                       errors.final_price && touched.final_price
                         ? 'p-invalid'
