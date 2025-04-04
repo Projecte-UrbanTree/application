@@ -9,27 +9,35 @@ use App\Models\WorkReport;
 use App\Models\WorkReportResource;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log; // Asegúrate de importar Log
+use Illuminate\Support\Facades\Log;
 
 class StatisticsController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Display statistics for tasks, reports, and resources within a date range.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the statistics data.
+     */
+    public function index(Request $request): JsonResponse
     {
-        $defaultFromDate = Carbon::now()->startOfWeek();
-        $defaultToDate = Carbon::now()->endOfWeek();
         $dateFormatInput = 'd-m-Y';
         $dateFormatQuery = 'Y-m-d';
+        $defaultFromDate = Carbon::now()->startOfWeek();
+        $defaultToDate = Carbon::now()->endOfWeek();
 
         try {
             $fromDate = Carbon::createFromFormat($dateFormatInput, $request->input('from_date', $defaultFromDate->format($dateFormatInput)))->startOfDay();
             $toDate = Carbon::createFromFormat($dateFormatInput, $request->input('to_date', $defaultToDate->format($dateFormatInput)))->endOfDay();
+
             if ($fromDate->gt($toDate)) {
                 $fromDate = $defaultFromDate;
                 $toDate = $defaultToDate;
             }
         } catch (\Exception $e) {
-            Log::warning('Invalid date format in statistics request: '.$e->getMessage(), ['request_data' => $request->all()]);
+            Log::warning('Invalid date format in statistics request: ' . $e->getMessage());
             $fromDate = $defaultFromDate;
             $toDate = $defaultToDate;
         }
@@ -37,146 +45,26 @@ class StatisticsController extends Controller
         $fromDateSql = $fromDate->format($dateFormatQuery);
         $toDateSql = $toDate->format($dateFormatQuery);
 
-        $days = [];
-        $period = $fromDate->copy()->daysUntil($toDate->copy()->addDay());
-        foreach ($period as $date) {
-            $days[] = $date->format($dateFormatQuery);
-        }
-        Log::debug("[Stats] Date range: {$fromDateSql} to {$toDateSql}. Days:", $days);
+        $days = collect($fromDate->daysUntil($toDate->copy()->addDay()))->map(fn ($date) => $date->format($dateFormatQuery))->toArray();
 
-        $tasks = WorkOrderBlockTask::with([
-            'workOrderBlock.workOrder' => function ($query) use ($fromDateSql, $toDateSql) {
-                $query->whereBetween('date', [$fromDateSql, $toDateSql]);
-            },
-        ])->whereHas('workOrderBlock.workOrder', function (Builder $query) use ($fromDateSql, $toDateSql) {
-            $query->whereBetween('date', [$fromDateSql, $toDateSql]);
-        })->get();
+        $tasks = WorkOrderBlockTask::with(['workOrderBlock.workOrder'])
+            ->whereHas('workOrderBlock.workOrder', fn (Builder $query) => $query->whereBetween('date', [$fromDateSql, $toDateSql]))
+            ->get();
 
-        $filteredTasks = $tasks->filter(function ($t) use ($fromDateSql, $toDateSql, $dateFormatQuery) {
-            if (! $t->workOrderBlock || ! $t->workOrderBlock->workOrder || ! $t->workOrderBlock->workOrder->date) {
-                return false;
-            }
-            try {
-                $d = Carbon::parse($t->workOrderBlock->workOrder->date);
+        $filteredTasks = $tasks->filter(fn ($t) => $t->workOrderBlock?->workOrder?->date && Carbon::parse($t->workOrderBlock->workOrder->date)->between($fromDate, $toDate));
 
-                return $d->format($dateFormatQuery) >= $fromDateSql && $d->format($dateFormatQuery) <= $toDateSql;
-            } catch (\Exception $e) {
-                return false;
-            }
-        });
+        $tasksDoneCount = $this->countTasksByDay($filteredTasks, $days, 1);
+        $tasksNotDoneCount = $this->countTasksByDay($filteredTasks, $days, 0);
+        $hoursWorked = $this->sumHoursByDay($filteredTasks, $days);
 
-        $doneTasks = $filteredTasks->where('status', 1);
-        $notDoneTasks = $filteredTasks->where('status', 0);
-        $tasksDoneCount = [];
-        $tasksNotDoneCount = [];
-        $hoursWorked = [];
-        $tasksByDay = $filteredTasks->groupBy(function ($t) use ($dateFormatQuery) {
-            try {
-                return Carbon::parse($t->workOrderBlock->workOrder->date)->format($dateFormatQuery);
-            } catch (\Exception $e) {
-                return 'invalid_date';
-            }
-        });
-        foreach ($days as $day) {
-            $tasksForDay = $tasksByDay->get($day, collect());
-            $tasksDoneCount[] = $tasksForDay->where('status', 1)->count();
-            $tasksNotDoneCount[] = $tasksForDay->where('status', 0)->count();
-            $hoursWorked[] = $tasksForDay->sum(function ($t) {
-                return is_numeric($t->spent_time) ? (float) $t->spent_time : 0;
-            });
-        }
+        $reports = WorkReport::with('workOrder')
+            ->whereHas('workOrder', fn (Builder $query) => $query->whereBetween('date', [$fromDateSql, $toDateSql]))
+            ->get();
 
-        $reports = WorkReport::with('workOrder')->whereHas('workOrder', function (Builder $query) use ($fromDateSql, $toDateSql) {
-            $query->whereBetween('date', [$fromDateSql, $toDateSql]);
-        })->get();
-        $reportsByDay = $reports->filter(function ($r) use ($fromDateSql, $toDateSql, $dateFormatQuery) {
-            if (! $r->workOrder || ! $r->workOrder->date) {
-                return false;
-            }
-            try {
-                $d = Carbon::parse($r->workOrder->date);
-
-                return $d->format($dateFormatQuery) >= $fromDateSql && $d->format($dateFormatQuery) <= $toDateSql;
-            } catch (\Exception $e) {
-                return false;
-            }
-        })->groupBy(function ($r) use ($dateFormatQuery) {
-            try {
-                return Carbon::parse($r->workOrder->date)->format($dateFormatQuery);
-            } catch (\Exception $e) {
-                return 'invalid_date';
-            }
-        });
-        $fuelConsumption = [];
-        foreach ($days as $day) {
-            $reportsForDay = $reportsByDay->get($day, collect());
-            $fuelConsumption[] = $reportsForDay->sum(function ($r) {
-                return is_numeric($r->spent_fuel) ? (float) $r->spent_fuel : 0;
-            });
-        }
+        $fuelConsumption = $this->sumFuelByDay($reports, $days);
 
         $allResources = Resource::select('id', 'name', 'unit_name')->orderBy('name')->get();
-
-        Log::debug("[Stats] Fetching WorkReportResource for range {$fromDateSql} to {$toDateSql}");
-        $resourceUsageRecords = WorkReportResource::whereHas('workReport.workOrder', function ($q) use ($fromDateSql, $toDateSql) {
-            $q->whereBetween('date', [$fromDateSql, $toDateSql]);
-        })
-            ->with(['workReport', 'workReport.workOrder']) // Carga completa para depurar
-            ->get();
-        Log::info('[Stats] Found '.$resourceUsageRecords->count().' WorkReportResource records potentially in range.');
-
-        $resourceUsageByDay = [];
-        foreach ($resourceUsageRecords as $record) {
-            if (! $record->workReport || ! $record->workReport->workOrder || ! $record->workReport->workOrder->date) {
-                Log::debug("[Stats] Skipping WRR ID={$record->id}: Missing related data (WR exists: ".($record->workReport ? 'Yes' : 'No').', WR->WO exists: '.($record->workReport && $record->workReport->workOrder ? 'Yes' : 'No').', WR->WO->date exists: '.($record->workReport && $record->workReport->workOrder && $record->workReport->workOrder->date ? 'Yes' : 'No').')');
-
-                continue;
-            }
-
-            $resourceId = $record->resource_id;
-            $quantity = is_numeric($record->quantity) ? (float) $record->quantity : 0;
-
-            if ($quantity <= 0) { // Considerar <= 0 por si acaso
-                Log::debug("[Stats] Skipping WRR ID={$record->id}, Res ID={$resourceId}: Quantity is zero or negative ({$record->quantity}).");
-
-                continue;
-            }
-
-            try {
-                $dateKey = Carbon::parse($record->workReport->workOrder->date)->format($dateFormatQuery);
-                if ($dateKey < $fromDateSql || $dateKey > $toDateSql) { // Check redundante por seguridad
-                    Log::debug("[Stats] Skipping WRR ID={$record->id}, Res ID={$resourceId}: Date {$dateKey} outside range {$fromDateSql}-{$toDateSql} (Unexpected).");
-
-                    continue;
-                }
-            } catch (\Exception $e) {
-                Log::warning("[Stats] Invalid date parsing WRR ID={$record->id}, Res ID={$resourceId}. Date val: '".$record->workReport->workOrder->date."'. Error: ".$e->getMessage());
-
-                continue;
-            }
-
-            if (! isset($resourceUsageByDay[$resourceId])) {
-                $resourceUsageByDay[$resourceId] = [];
-            }
-            if (! isset($resourceUsageByDay[$resourceId][$dateKey])) {
-                $resourceUsageByDay[$resourceId][$dateKey] = 0;
-            }
-
-            $resourceUsageByDay[$resourceId][$dateKey] += $quantity;
-            Log::debug("[Stats] Processed WRR ID={$record->id}: Res={$resourceId}, Date={$dateKey}, Added Qty={$quantity}, New Total={$resourceUsageByDay[$resourceId][$dateKey]}");
-
-        } // Fin foreach
-
-        Log::info('[Stats] Final resourceUsageByDay array structure:', $resourceUsageByDay);
-
-        $tasks_done_total = $doneTasks->count();
-        $tasks_not_done_total = $notDoneTasks->count();
-        $hours_worked_total = $filteredTasks->sum(function ($t) {
-            return is_numeric($t->spent_time) ? (float) $t->spent_time : 0;
-        });
-        $fuel_consumption_total = $reports->sum(function ($r) {
-            return is_numeric($r->spent_fuel) ? (float) $r->spent_fuel : 0;
-        });
+        $resourceUsageByDay = $this->calculateResourceUsage($fromDateSql, $toDateSql);
 
         return response()->json([
             'days' => $days,
@@ -185,13 +73,77 @@ class StatisticsController extends Controller
             'hoursWorked' => $hoursWorked,
             'fuelConsumption' => $fuelConsumption,
             'summary' => [
-                'tasks_done_total' => $tasks_done_total,
-                'tasks_not_done_total' => $tasks_not_done_total,
-                'hours_worked_total' => $hours_worked_total,
-                'fuel_consumption_total' => $fuel_consumption_total,
+                'tasks_done_total' => $filteredTasks->where('status', 1)->count(),
+                'tasks_not_done_total' => $filteredTasks->where('status', 0)->count(),
+                'hours_worked_total' => $filteredTasks->sum(fn ($t) => (float) $t->spent_time),
+                'fuel_consumption_total' => $reports->sum(fn ($r) => (float) $r->spent_fuel),
             ],
             'resourcesList' => $allResources,
             'resourceUsageData' => $resourceUsageByDay,
         ]);
+    }
+
+    /**
+     * Count tasks by day and status.
+     *
+     * @param mixed $tasks The collection of tasks.
+     * @param array $days The array of days.
+     * @param int $status The status of the tasks to count.
+     * @return array An array of task counts by day.
+     */
+    private function countTasksByDay($tasks, $days, $status): array
+    {
+        return collect($days)->map(fn ($day) => $tasks->where('status', $status)->filter(fn ($t) => Carbon::parse($t->workOrderBlock->workOrder->date)->format('Y-m-d') === $day)->count())->toArray();
+    }
+
+    /**
+     * Sum hours worked by day.
+     *
+     * @param mixed $tasks The collection of tasks.
+     * @param array $days The array of days.
+     * @return array An array of hours worked by day.
+     */
+    private function sumHoursByDay($tasks, $days): array
+    {
+        return collect($days)->map(fn ($day) => $tasks->filter(fn ($t) => Carbon::parse($t->workOrderBlock->workOrder->date)->format('Y-m-d') === $day)->sum(fn ($t) => (float) $t->spent_time))->toArray();
+    }
+
+    /**
+     * Sum fuel consumption by day.
+     *
+     * @param mixed $reports The collection of work reports.
+     * @param array $days The array of days.
+     * @return array An array of fuel consumption by day.
+     */
+    private function sumFuelByDay($reports, $days): array
+    {
+        return collect($days)->map(fn ($day) => $reports->filter(fn ($r) => Carbon::parse($r->workOrder->date)->format('Y-m-d') === $day)->sum(fn ($r) => (float) $r->spent_fuel))->toArray();
+    }
+
+    /**
+     * Calculate resource usage by day within a date range.
+     *
+     * @param string $fromDateSql The start date in SQL format.
+     * @param string $toDateSql The end date in SQL format.
+     * @return array An array of resource usage data by day.
+     */
+    private function calculateResourceUsage(string $fromDateSql, string $toDateSql): array
+    {
+        $resourceUsageRecords = WorkReportResource::whereHas('workReport.workOrder', fn ($q) => $q->whereBetween('date', [$fromDateSql, $toDateSql]))
+            ->with(['workReport', 'workReport.workOrder'])
+            ->get();
+
+        $resourceUsageByDay = [];
+        foreach ($resourceUsageRecords as $record) {
+            $dateKey = Carbon::parse($record->workReport->workOrder->date)->format('Y-m-d');
+            $resourceId = $record->resource_id;
+            $quantity = (float) $record->quantity;
+
+            if ($quantity > 0) {
+                $resourceUsageByDay[$resourceId][$dateKey] = ($resourceUsageByDay[$resourceId][$dateKey] ?? 0) + $quantity;
+            }
+        }
+
+        return $resourceUsageByDay;
     }
 }

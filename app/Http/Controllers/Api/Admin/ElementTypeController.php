@@ -4,42 +4,43 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ElementType;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ElementTypeController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
-        $elementType = ElementType::all();
+        $elementTypes = ElementType::all();
 
-        return response()->json($elementType);
+        return response()->json($elementTypes);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'requires_tree_type' => ['required', 'boolean'],
             'description' => ['nullable', 'string'],
-            'icon' => ['required', 'string'],
-            'color' => ['required', 'string'],
+            'icon' => ['required', 'string', 'max:255'],
+            'color' => ['required', 'string', 'max:255'],
         ]);
 
-        $element_type = ElementType::create($validated);
+        $elementType = ElementType::create($validated);
 
-        return response()->json($element_type, 201);
+        return response()->json($elementType, 201);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        $element_type = ElementType::findOrFail($id);
+        $elementType = ElementType::findOrFail($id);
 
-        return response()->json($element_type);
+        return response()->json($elementType);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
-        $element_type = ElementType::findOrFail($id);
+        $elementType = ElementType::findOrFail($id);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -49,37 +50,25 @@ class ElementTypeController extends Controller
             'color' => ['required', 'string', 'max:255'],
         ]);
 
-        $element_type->update($validated);
+        $elementType->update($validated);
 
-        return response()->json($element_type);
+        return response()->json($elementType);
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        $element_type = ElementType::findOrFail($id);
-        $element_type->delete();
+        $elementType = ElementType::findOrFail($id);
+        $elementType->delete();
 
-        return response()->json(['message' => 'Elemento eliminado eliminado'], 200);
+        return response()->json(['message' => 'Elemento eliminado'], 200);
     }
 
-    public function icons()
+    public function icons(): JsonResponse
     {
         $icons = [
-            'tree',
-            'home',
-            'post-lamp',
-            'park',
-            'fountain',
-            'flower',
-            'mountain',
-            'beach',
-            'volcano',
-            'tap',
-            'water-drop',
-            'lightbulb',
-            'lightning-bolt',
-            'grass',
-            'cloud',
+            'tree', 'home', 'post-lamp', 'park', 'fountain', 'flower', 'mountain',
+            'beach', 'volcano', 'tap', 'water-drop', 'lightbulb', 'lightning-bolt',
+            'grass', 'cloud',
         ];
 
         return response()->json($icons);

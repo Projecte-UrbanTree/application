@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @source "../views";
+
 @import 'primereact/resources/themes/tailwind-light/theme.css';
 
 
@@ -22,6 +23,11 @@
 .fade-animation {
   animation: fadeInOut 1.5s infinite ease-in-out;
 }
+
+.p-progress-spinner svg circle {
+  stroke: theme('colors.indigo.500') !important;
+}
+
 .p-button-warning {
   background: #ffc107 !important;
   border-color: #ffc107 !important;

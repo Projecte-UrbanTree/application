@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
-use App\Http\Controllers\Api\Admin\ContractUserController;
+use App\Http\Controllers\Api\Admin\WorkerController;
 use App\Http\Controllers\Api\Admin\ElementController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\EvaController;
@@ -39,7 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* Admin protected routes */
     Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
-
         Route::post('contracts/{id}/duplicate', [ContractController::class, 'duplicate']);
 
         Route::get('stats', function (Request $request) {
@@ -59,9 +58,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('statistics', [StatisticsController::class, 'index']);
 
         // Contract users routes
-        Route::get('contracts/{contract}/users', [ContractUserController::class, 'index']);
-        Route::post('contracts/{contract}/users/{user}', [ContractUserController::class, 'store']);
-        Route::delete('contracts/{contract}/users/{user}', [ContractUserController::class, 'destroy']);
+        Route::get('contracts/{contract}/users', [WorkerController::class, 'index']);
+        Route::post('contracts/{contract}/users/{user}', [WorkerController::class, 'store']);
+        Route::delete('contracts/{contract}/users/{user}', [WorkerController::class, 'destroy']);
 
         Route::resources([
             'contracts' => ContractController::class,

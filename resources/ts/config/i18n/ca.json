@@ -1017,11 +1017,10 @@
       },
       "workers": {
         "title": "Gestió de Treballadors",
-        "contractWorkers": "Treballadors del Contracte",
         "assignRemoveWorkers": "Assignar/Eliminar Treballadors",
         "selectWorkers": "Seleccionar Treballadors",
         "selected": "Seleccionat",
-        "workersForContract": "Treballadors per al Contracte",
+        "workersForContract": "Treballadors per al contracte seleccionat",
         "noWorkersAssigned": "No hi ha treballadors assignats a aquest contracte",
         "useDropdownToAssign": "Utilitza el menú desplegable de dalt per assignar treballadors",
         "selectWorkerHelp": "Selecciona o desselecciona treballadors per assignar-los a aquest contracte",

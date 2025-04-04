@@ -3,43 +3,40 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreResourceRequest;
-use App\Http\Requests\UpdateResourceRequest;
 use App\Models\Resource;
 use App\Models\ResourceType;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ResourceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of resources.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the list of resources.
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        try {
-            $contractId = $request->session()->get('selected_contract_id', 0);
+        $contractId = $request->session()->get('selected_contract_id', 0);
 
-            $resources = Resource::when($contractId > 0, function ($query) use ($contractId) {
-                return $query->where('contract_id', $contractId);
-            })
-                ->with('resourceType')
-                ->get();
+        $resources = Resource::when($contractId > 0, fn ($query) => $query->where('contract_id', $contractId))
+            ->with('resourceType')
+            ->get();
 
-            return response()->json($resources);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error fetching resources',
-                'debug_message' => $e->getMessage(),
-            ], 500);
-        }
+        return response()->json($resources);
     }
 
     /**
      * Show the form for creating a new resource.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing resource types for creation.
      */
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $contractId = $request->session()->get('selected_contract_id', null);
+
         if ($contractId <= 0) {
             return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
         }
@@ -49,83 +46,89 @@ class ResourceController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the created resource.
      */
-    public function store(StoreResourceRequest $request)
+    public function store(Request $request): JsonResponse
     {
         $contractId = $request->session()->get('selected_contract_id', null);
+
         if ($contractId <= 0) {
             return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
         }
 
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'resource_type_id' => ['required', 'integer'],
+            'unit_name' => ['required', 'string', 'max:255'],
+            'unit_cost' => ['required', 'numeric'],
+        ]);
+
         $validated['contract_id'] = $contractId;
-        $validated['unit_cost'] = $request->input('unit_cost', 0);
-        $validated['unit_name'] = $request->input('unit_name', '');
 
-        try {
-            $resource = Resource::create($validated);
-            $resource->load('resourceType');
+        $resource = Resource::create($validated);
+        $resource->load('resourceType');
 
-            return response()->json($resource, 201);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'Error al crear el recurso'], 500);
-        }
+        return response()->json($resource, 201);
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param Resource $resource The resource model instance.
+     * @return JsonResponse A JSON response containing the resource details.
      */
-    public function show(Resource $resource)
+    public function show(Resource $resource): JsonResponse
     {
         return response()->json($resource);
     }
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param Resource $resource The resource model instance.
+     * @return JsonResponse A JSON response containing the resource and resource types.
      */
-    public function edit(Resource $resource)
+    public function edit(Resource $resource): JsonResponse
     {
         return response()->json(['resource' => $resource, 'resource_types' => ResourceType::all()]);
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @param Resource $resource The resource model instance.
+     * @return JsonResponse A JSON response containing the updated resource.
      */
-    public function update(UpdateResourceRequest $request, Resource $resource)
+    public function update(Request $request, Resource $resource): JsonResponse
     {
-        try {
-            $validated = $request->validated();
+        $validated = $request->validate([
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'resource_type_id' => ['sometimes', 'required', 'integer'],
+            'unit_name' => ['nullable', 'string', 'max:255'],
+            'unit_cost' => ['nullable', 'numeric'],
+        ]);
 
-            $resource->update([
-                'name' => $validated['name'],
-                'description' => $validated['description'],
-                'resource_type_id' => $validated['resource_type_id'],
-                'unit_cost' => $validated['unit_cost'],
-                'unit_name' => $validated['unit_name'],
-            ]);
+        $resource->update($validated);
+        $resource->load('resourceType');
 
-            $resource->load('resourceType');
-
-            return response()->json($resource, 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Error al actualizar el recurso',
-                'error' => $th->getMessage(),
-            ], 500);
-        }
+        return response()->json($resource, 200);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Resource $resource The resource model instance.
+     * @return JsonResponse A JSON response confirming the deletion.
      */
-    public function destroy(Resource $resource)
+    public function destroy(Resource $resource): JsonResponse
     {
-        try {
-            $resource->delete();
+        $resource->delete();
 
-            return response()->json(['message' => 'Recurso eliminado'], 200);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'Error al eliminar el recurso'], 500);
-        }
+        return response()->json(['message' => 'Recurso eliminado'], 200);
     }
 }

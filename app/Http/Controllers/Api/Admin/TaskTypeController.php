@@ -4,16 +4,30 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TaskType;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TaskTypeController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of task types.
+     *
+     * @return JsonResponse A JSON response containing the list of task types.
+     */
+    public function index(): JsonResponse
     {
-        return response()->json(TaskType::all());
+        $taskTypes = TaskType::all();
+
+        return response()->json($taskTypes);
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created task type in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the created task type.
+     */
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -25,14 +39,27 @@ class TaskTypeController extends Controller
         return response()->json($taskType, 201);
     }
 
-    public function show($id)
+    /**
+     * Display the specified task type.
+     *
+     * @param int $id The ID of the task type to retrieve.
+     * @return JsonResponse A JSON response containing the task type details.
+     */
+    public function show($id): JsonResponse
     {
         $taskType = TaskType::findOrFail($id);
 
         return response()->json($taskType);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified task type in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @param int $id The ID of the task type to update.
+     * @return JsonResponse A JSON response containing the updated task type.
+     */
+    public function update(Request $request, $id): JsonResponse
     {
         $taskType = TaskType::findOrFail($id);
 
@@ -46,7 +73,13 @@ class TaskTypeController extends Controller
         return response()->json($taskType);
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified task type from storage.
+     *
+     * @param int $id The ID of the task type to delete.
+     * @return JsonResponse A JSON response confirming the deletion.
+     */
+    public function destroy($id): JsonResponse
     {
         $taskType = TaskType::findOrFail($id);
         $taskType->delete();

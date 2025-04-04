@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class ResourceType
+ *
+ * Represents a type of resource in the application.
+ *
+ * @package App\Models
+ */
 class ResourceType extends Model
 {
     use HasFactory;
@@ -14,6 +21,11 @@ class ResourceType extends Model
         'description',
     ];
 
+    /**
+     * Get the resources associated with the resource type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function resources()
     {
         return $this->hasMany(Resource::class, 'resource_type_id');

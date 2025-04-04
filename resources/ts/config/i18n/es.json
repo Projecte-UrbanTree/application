@@ -1017,11 +1017,10 @@
       },
       "workers": {
         "title": "Gestión de Trabajadores",
-        "contractWorkers": "Trabajadores del Contrato",
         "assignRemoveWorkers": "Asignar/Eliminar Trabajadores",
         "selectWorkers": "Seleccionar Trabajadores",
         "selected": "Seleccionado",
-        "workersForContract": "Trabajadores para el Contrato",
+        "workersForContract": "Trabajadores para el contrato",
         "noWorkersAssigned": "No hay trabajadores asignados a este contrato",
         "useDropdownToAssign": "Usa el menú desplegable de arriba para asignar trabajadores",
         "selectWorkerHelp": "Selecciona o deselecciona trabajadores para asignarlos a este contrato",
