@@ -1,39 +1,59 @@
-import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import { Contract } from '@/types/Contract';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import axiosClient from '@/api/axiosClient';
 
 interface ContractState {
   allContracts: Contract[];
   currentContract: Contract | null;
 }
 
-const initialContractState: ContractState = {
+const initialState: ContractState = {
   allContracts: [],
   currentContract: null,
 };
 
+export const fetchAllContracts = createAsyncThunk(
+  'contract/fetchAllContracts',
+  async () => {
+    const { data } = await axiosClient.get('/contracts');
+    return data;
+  },
+);
+
 export const contractSlice = createSlice({
   name: 'contract',
-  initialState: initialContractState,
+  initialState,
   reducers: {
     setContractState(state, action: PayloadAction<Partial<ContractState>>) {
-      return { ...state, ...action.payload };
+      Object.assign(state, action.payload);
     },
 
     selectContract(state, action: PayloadAction<number>) {
-      if (action.payload === 0) {
-        state.currentContract = defaultContract;
-      } else {
-        const selected = state.allContracts.find(
-          (c) => c.id === action.payload,
-        );
-        if (selected) {
-          state.currentContract = selected;
-        }
-      }
+      localStorage.setItem('contractId', String(action.payload));
+      state.currentContract =
+        state.allContracts.find((c) => c.id === action.payload) || null;
     },
 
-    clearContractState: () => initialContractState,
+    clearContractState(state) {
+      Object.assign(state, initialState);
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchAllContracts.fulfilled, (state, action) => {
+      state.allContracts = action.payload;
+      const persistedContractId = Number(localStorage.getItem('contractId'));
+      if (persistedContractId > 0) {
+        const foundContract = state.allContracts.find(
+          (c) => c.id === persistedContractId,
+        );
+        if (foundContract) {
+          state.currentContract = foundContract;
+        } else {
+          state.currentContract = null;
+          localStorage.removeItem('contractId');
+        }
+      }
+    });
   },
 });
 

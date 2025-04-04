@@ -95,6 +95,22 @@
         }
       },
       "dashboard": {
+        "quickActions": "Quick Actions",
+        "createWorkOrder": "Create Work Order",
+        "reviewReports": "Review Reports",
+        "manageUsers": "Manage Users",
+        "recentActivity": "Recent Activity",
+        "workOrderCompleted": "Work Order Completed",
+        "reportSubmitted": "Report Submitted",
+        "workOrderAssigned": "Work Order Assigned",
+        "viewAll": "View All Activities",
+        "noActivity": "No recent activity",
+        "ago": "ago",
+        "totalWorkOrders": "Total Orders",
+        "inProgressWorkOrders": "In Progress Work Orders",
+        "noInProgressWorkOrders": "No in-progress work orders",
+        "completedWorkOrders": "Completed",
+        "pendingReports": "Pending Reports",
         "stats": {
           "widgets": {
             "contracts": "Contracts",
@@ -107,84 +123,85 @@
         "welcome": {
           "greeting": "Welcome back, {{name}} {{surname}}.",
           "message": "We are glad to see you again. Here is a quick overview of your data."
-        }
+        },
+        "actions": "Actions"
       },
       "elementTypes": {
-                "title": "Element Types",
-                "loading": "Loading...",
-                "actions": "Actions",
-                "editButton": "Edit element type",
-                "deleteButton": "Delete element type",
-                "deletedSuccess": "Element type deleted successfully",
-                "deleteConfirm": "Are you sure you want to delete this element type?",
-                "success": "Element type created successfully",
-                "update": "Element type updated successfully",
-                "error": "Error saving element type",
-                "true": "Yes",
-                "false": "No",
-                "create": {
-                    "title": "Create Element Type",
-                    "submittingText": "Creating...",
-                    "submitButton": "Create Element Type",
-                    "validations": {
-                        "name": "Name is required",
-                        "requires_tree_type": "Requires tree type",
-                        "icon": "Icon is required",
-                        "color": "Color is required",
-                        "description": "Description is required"
-                    },
-                    "placeholders": {
-                        "name": "Element type name",
-                        "requires_tree_type": "Select if it requires tree type",
-                        "description": "Element type description",
-                        "icon": "Select an icon",
-                        "color": "Select a color"
-                    }
-                },
-                "edit": {
-                    "title": "Edit Element Type",
-                    "submittingText": "Saving...",
-                    "submitButton": "Save Changes",
-                    "validations": {
-                        "name": "Name is required",
-                        "requires_tree_type": "Requires tree type",
-                        "icon": "Icon is required",
-                        "color": "Color is required",
-                        "description": "Description is required"
-                    },
-                    "placeholders": {
-                        "name": "Element type name",
-                        "requires_tree_type": "Select if it requires tree type",
-                        "description": "Element type description",
-                        "icon": "Select an icon",
-                        "color": "Select a color"
-                    }
-                },
-                "columns": {
-                    "name": "Name",
-                    "requires_tree_type": "Requires tree type",
-                    "description": "Description",
-                    "icon": "Icon",
-                    "color": "Color"
-                },
-                "icons": {
-                  "tree": "Tree",
-                  "home": "Home",
-                  "post-lamp": "Post Lamp",
-                  "park": "Park",
-                  "fountain": "Fountain",
-                  "flower": "Flower",
-                  "mountain": "Mountain",
-                  "beach": "Beach",
-                  "volcano": "Volcano",
-                  "tap": "Tap",
-                  "water-drop": "Water Drop",
-                  "lightbulb": "Lightbulb",
-                  "lightning-bolt": "Lightning Bolt",
-                  "grass": "Grass",
-                  "cloud": "Cloud"
-                }
-            },
+        "title": "Element Types",
+        "loading": "Loading...",
+        "actions": "Actions",
+        "editButton": "Edit element type",
+        "deleteButton": "Delete element type",
+        "deletedSuccess": "Element type deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this element type?",
+        "success": "Element type created successfully",
+        "update": "Element type updated successfully",
+        "error": "Error saving element type",
+        "true": "Yes",
+        "false": "No",
+        "create": {
+          "title": "Create Element Type",
+          "submittingText": "Creating...",
+          "submitButton": "Create Element Type",
+          "validations": {
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
+          },
+          "placeholders": {
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
+          }
+        },
+        "edit": {
+          "title": "Edit Element Type",
+          "submittingText": "Saving...",
+          "submitButton": "Save Changes",
+          "validations": {
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
+          },
+          "placeholders": {
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
+          }
+        },
+        "columns": {
+          "name": "Name",
+          "requires_tree_type": "Requires tree type",
+          "description": "Description",
+          "icon": "Icon",
+          "color": "Color"
+        },
+        "icons": {
+          "tree": "Tree",
+          "home": "Home",
+          "post-lamp": "Post Lamp",
+          "park": "Park",
+          "fountain": "Fountain",
+          "flower": "Flower",
+          "mountain": "Mountain",
+          "beach": "Beach",
+          "volcano": "Volcano",
+          "tap": "Tap",
+          "water-drop": "Water Drop",
+          "lightbulb": "Lightbulb",
+          "lightning-bolt": "Lightning Bolt",
+          "grass": "Grass",
+          "cloud": "Cloud"
+        }
+      },
       "resources": {
         "form": {
           "fields": {
@@ -309,7 +326,9 @@
         "total": "Total",
         "noDataResourcePeriod": "No data available for the selected resource type and period",
         "selectResource": "Select a resource type",
-        "selectResourcePlaceholder": "Search your resource type here..."
+        "selectResourcePlaceholder": "Search your resource type here...",
+        "noResourcesAvailable": "No resources available",
+        "selectResourcePrompt": "Please select a resource to view its usage"
       },
       "taskTypes": {
         "form": {
@@ -939,6 +958,82 @@
         "updatedSuccessfully": "Workers updated successfully",
         "failedToLoad": "Failed to load workers",
         "failedToUpdate": "Failed to update workers"
+      },
+      "inventory": {
+        "elementDetailPopup": {
+          "tabs": {
+            "information": "Information",
+            "incidences": "Incidences",
+            "history": "History",
+            "eva": "EVA"
+          },
+          "information": {
+            "title": "Tree Information",
+            "description": "Description",
+            "elementType": "Element Type",
+            "treeFamily": "Tree Family",
+            "treeGenus": "Genus",
+            "treeSpecies": "Species",
+            "creationDate": "Creation Date",
+            "location": {
+              "title": "Location",
+              "zone": "Zone",
+              "latitude": "Latitude",
+              "longitude": "Longitude"
+            },
+            "deleteElement": "Delete Element",
+            "elementDeleted": "Element deleted successfully",
+            "elementDeleteFailed": "Failed to delete the element"
+          },
+          "incidences": {
+            "title": "Incidence",
+            "name": "📛 Name",
+            "creationDate": "📅 Creation Date",
+            "status": "⚠️ Status",
+            "description": "📝 Description",
+            "addIncident": "Add Incident",
+            "deleteIncident": "Delete Incident",
+            "noIncidences": "No incidences registered for this element.",
+            "statusUpdated": "Status updated",
+            "statusUpdatedDetail": "The incidence status was updated successfully",
+            "statusUpdateFailed": "Failed to update the incidence status",
+            "statusOptions": {
+              "open": "Open",
+              "in_progress": "In Progress",
+              "closed": "Closed"
+            }
+          },
+          "eva": {
+            "loading": "Loading tree evaluation...",
+            "noData": "No evaluation data available for this tree.",
+            "evaluationIndices": "Evaluation Indices",
+            "treeStatus": "Tree Status",
+            "stabilityIndex": "Stability Index",
+            "gravityHeightRatio": "Gravity-Height Ratio",
+            "rootCrownRatio": "Root-Crown Ratio",
+            "windStabilityIndex": "Wind Stability Index",
+            "environmentalFactors": "Environmental Factors",
+            "windExposure": "Wind Exposure",
+            "droughtExposure": "Drought Exposure",
+            "technicalData": "Technical Data",
+            "height": "Height",
+            "diameter": "Diameter",
+            "crownWidth": "Crown Width",
+            "crownProjectionArea": "Crown Projection Area",
+            "effectiveRootArea": "Effective Root Area",
+            "createEva": "Create EVA",
+            "editEva": "Edit EVA"
+          },
+          "history": {
+            "title": "Element History (under construction...)",
+            "notes": "Notes",
+            "task": "Task",
+            "description": "Description",
+            "workOrder": "Work Order",
+            "status": "Status",
+            "noTasks": "No tasks registered for this element."
+          }
+        }
       }
     },
     "profileDropdown": {
@@ -985,7 +1080,7 @@
     "genericError": "An error occurred. Please try again later.",
     "loading": "Loading...",
     "error": "Error",
-    "success":"Success",
+    "success": "Success",
     "actions": {
       "cancel": "Cancel",
       "confirm": "Confirm",

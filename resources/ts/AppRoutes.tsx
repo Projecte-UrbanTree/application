@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import Preloader from '@/components/Preloader';
 import routesConfig from './routes/routesConfig';
 
-function RoutesComponent() {
+const RoutesComponent = () => {
   return useRoutes([
     ...routesConfig,
     {
@@ -16,22 +16,14 @@ function RoutesComponent() {
       element: <Error icon="tabler:face-id-error" errorCode="404" />,
     },
   ]);
-}
+};
 
-function AuthWrapper() {
-  const { isLoading } = useAuth();
-
-  if (isLoading) {
-    return <Preloader />;
-  }
-
-  return <RoutesComponent />;
-}
-
-export default function AppRoutes() {
+const AppRoutes = () => {
   return (
     <Router>
-      <AuthWrapper />
+      <RoutesComponent />
     </Router>
   );
-}
+};
+
+export default AppRoutes;

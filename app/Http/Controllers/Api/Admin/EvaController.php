@@ -36,7 +36,8 @@ class EvaController extends Controller
 
     public function show($id)
     {
-        $eva = Eva::with(['element.point', 'element.elementType'])->findOrFail($id);
+        $eva = Eva::with(['element.point', 'element.elementType'])
+            ->findOrFail($id);
 
         return response()->json($eva);
     }
@@ -45,9 +46,12 @@ class EvaController extends Controller
     {
         $validatedData = $request->validated();
 
-        Eva::create($validatedData);
+        $eva = Eva::create($validatedData);
 
-        return response()->json(['message' => 'Eva created successfully']);
+        return response()->json([
+            'message' => 'Eva created successfully',
+            'eva' => $eva,
+        ]);
     }
 
     public function edit($id)
@@ -75,5 +79,18 @@ class EvaController extends Controller
         Eva::findOrFail($id)->delete();
 
         return response()->json(['message' => 'Eva deleted successfully']);
+    }
+
+    public function getByElementId($elementId)
+    {
+        $eva = Eva::with(['element.point', 'element.elementType'])
+            ->where('element_id', $elementId)
+            ->first();
+
+        if (!$eva) {
+            return response()->json(['message' => 'No EVA found for this element'], 404);
+        }
+
+        return response()->json($eva);
     }
 }
