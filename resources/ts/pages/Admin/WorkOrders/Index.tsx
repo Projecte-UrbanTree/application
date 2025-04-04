@@ -9,7 +9,7 @@ import { Icon } from '@iconify/react';
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import CrudPanel from '@/components/CrudPanel';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';

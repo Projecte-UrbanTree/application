@@ -1,6 +1,6 @@
-import { Welcome } from '@/components/Admin/Dashboard/Welcome';
-import { InProgressWorkOrders } from '@/components/Admin/Dashboard/InProgressWorkOrders';
-import { DashboardSummary } from '@/components/Admin/Dashboard/DashboardSummary';
+import { Welcome } from '@/pages/Admin/Dashboard/Components/Welcome';
+import { InProgressWorkOrders } from '@/pages/Admin/Dashboard/Components/InProgressWorkOrders';
+import { DashboardSummary } from '@/pages/Admin/Dashboard/Components/DashboardSummary';
 import { Card } from 'primereact/card';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

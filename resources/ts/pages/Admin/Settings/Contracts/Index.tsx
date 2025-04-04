@@ -1,5 +1,5 @@
 import axiosClient from '@/api/axiosClient';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import CrudPanel from '@/components/CrudPanel';
 import { Icon } from '@iconify/react';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';

@@ -7,7 +7,7 @@ import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import CrudPanel from '@/components/CrudPanel';
 import { Icon } from '@iconify/react';
 import { differenceInYears, differenceInMonths } from 'date-fns';
 

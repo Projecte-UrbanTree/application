@@ -1,5 +1,5 @@
 import axiosClient from '@/api/axiosClient';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import CrudPanel from '@/components/CrudPanel';
 import { RootState } from '@/store/store';
 import type { Resource } from '@/types/Resource';
 import { Icon } from '@iconify/react';

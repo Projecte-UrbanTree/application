@@ -8,7 +8,7 @@ import { RootState } from '@/store/store';
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import CrudPanel from '@/components/Admin/CrudPanel';
+import CrudPanel from '@/components/CrudPanel';
 import { useToast } from '@/hooks/useToast';
 
 interface User {

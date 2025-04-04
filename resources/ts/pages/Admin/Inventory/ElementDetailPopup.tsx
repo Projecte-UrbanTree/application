@@ -17,7 +17,7 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
-import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
+import { useTreeEvaluation, Eva } from '@/pages/Admin/Eva/Components/FuncionesEva';
 import { useTranslation } from 'react-i18next';
 import axiosClient from '@/api/axiosClient';
 import CreateEva from '@/pages/Admin/Eva/Create';

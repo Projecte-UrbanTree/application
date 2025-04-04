@@ -5,7 +5,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@iconify/react';
-import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
+import { useTreeEvaluation, Eva } from '@/pages/Admin/Eva/Components/FuncionesEva';
 
 export default function ShowEva() {
   const { id } = useParams<{ id: string }>();

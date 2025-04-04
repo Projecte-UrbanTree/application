@@ -1,4 +1,4 @@
-import { Zones } from '@/components/Admin/Inventory/Zones';
+import { Zones } from '@/pages/Admin/Inventory/Zones';
 import { MapComponent } from '@/components/Map';
 import { Zone } from '@/types/Zone';
 import { useState, useEffect, useRef, useCallback } from 'react';
