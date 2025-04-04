@@ -116,6 +116,11 @@ export const MapComponent: React.FC<MapProps> = ({
   // initialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
+
+    while (mapContainerRef.current.firstChild) {
+      mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
+    }
+
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
     service.addBasicControls();
     service.addGeocoder();
@@ -130,6 +135,21 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     });
     mapServiceRef.current = service;
+
+    const loadData = async () => {
+      try {
+        const [treeTypesData, elementTypesData] = await Promise.all([
+          fetchTreeTypes(),
+          fetchElementType(),
+        ]);
+        setTreeTypes(treeTypesData);
+        setElementTypes(elementTypesData);
+      } catch (error) {
+        console.error('Error al cargar los tipos:', error);
+      }
+    };
+
+    loadData();
   }, [userValue.role]);
 
   useEffect(() => {
@@ -316,7 +336,7 @@ export const MapComponent: React.FC<MapProps> = ({
         service.addZoneToMap(
           `zone-${zone.id}`,
           zonePoints,
-          zone.color || '#088',
+          zone.color || '#088'
         );
       }
     });
@@ -417,7 +437,7 @@ export const MapComponent: React.FC<MapProps> = ({
         service.addZoneToMap(
           `zone-${newZone.id}`,
           zonePoints,
-          newZone.color || '#088',
+          newZone.color || '#088'
         );
       }
 
