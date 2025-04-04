@@ -21,7 +21,7 @@ export default function Dashboard() {
           <InProgressWorkOrders />
         </div>
         <div>
-          <Card className="mb-6 lg:mb-8 border border-gray-200 bg-gray-50 rounded shadow-sm">
+          <Card className="mb-6 lg:mb-8 border border-gray-300 bg-gray-50 rounded shadow-sm">
             <div className="text-lg mb-4 text-gray-800">
               {t('admin.pages.dashboard.quickActions')}
             </div>

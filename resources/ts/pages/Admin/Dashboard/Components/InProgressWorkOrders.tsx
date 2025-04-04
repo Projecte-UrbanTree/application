@@ -100,7 +100,7 @@ const InProgressWorkOrders = () => {
   };
 
   return (
-    <Card className="mb-6 lg:mb-8 border border-gray-200 bg-gray-50 rounded">
+    <Card className="mb-6 lg:mb-8 border border-gray-300 bg-gray-50 rounded">
       {loading ? (
         <div className="flex justify-center p-4">
           <ProgressSpinner

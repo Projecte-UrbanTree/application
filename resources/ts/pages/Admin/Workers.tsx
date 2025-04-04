@@ -164,14 +164,14 @@ export default function Workers() {
     `${rowData.name} ${rowData.surname || ''}`;
 
   const renderNoContractSelected = () => (
-    <div className="p-6 bg-gray-50 border border-gray-200 rounded-lg text-center text-gray-700">
+    <div className="p-6 bg-gray-50 border border-gray-300 rounded-lg text-center text-gray-700">
       <Icon icon="mdi:file-document-alert" className="text-3xl mb-3 text-gray-500" />
       <p className="font-medium">{t('admin.pages.workers.pleaseSelectContract')}</p>
     </div>
   );
 
   const renderWorkersTable = () => (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-300">
       <h3 className="text-xl font-semibold text-gray-800 mb-4">
         {t('admin.pages.workers.workersForContract')}:{' '}
         <span className="text-indigo-600">{currentContract?.name}</span>
@@ -227,7 +227,7 @@ export default function Workers() {
         ? renderNoContractSelected()
         : (
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-300">
               <div className="space-y-3">
                 <label className="block text-sm font-medium text-gray-700">
                   {t('admin.pages.workers.assignRemoveWorkers')}

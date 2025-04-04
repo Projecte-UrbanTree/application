@@ -24,7 +24,7 @@ const ElementPopup: React.FC<ElementPopupProps> = React.memo(
 
     return (
       <div
-        className="p-4 bg-white shadow-lg rounded-lg border border-gray-200"
+        className="p-4 bg-white shadow-lg rounded-lg border border-gray-300"
         style={{
           width: '300px',
           backgroundColor: '#ffffff',

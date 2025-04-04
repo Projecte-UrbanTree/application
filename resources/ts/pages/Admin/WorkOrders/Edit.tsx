@@ -17,30 +17,6 @@ import { RootState } from '@/store/store';
 import { useTranslation } from 'react-i18next';
 import { Message } from 'primereact/message';
 
-interface UserType {
-  id: number;
-  name: string;
-  surname: string;
-}
-
-interface WorkTask {
-  task_type_id: number | null;
-  element_type_id: number | null;
-  tree_type_id: number | null;
-}
-
-interface WorkBlock {
-  notes: string;
-  zones: { id: number; name: string }[];
-  tasks: WorkTask[];
-}
-
-interface EditWorkOrderValues {
-  date: Date | null;
-  selectedUsers: UserType[];
-  blocks: WorkBlock[];
-}
-
 const EditWorkOrder = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -48,53 +24,34 @@ const EditWorkOrder = () => {
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
-  const [initialValues, setInitialValues] =
-    useState<EditWorkOrderValues | null>(null);
-  const [users, setUsers] = useState<UserType[]>([]);
-  const [zones, setZones] = useState<{ id: number; name: string }[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [zones, setZones] = useState<any[]>([]);
   const [taskTypes, setTaskTypes] = useState<any[]>([]);
   const [elementTypes, setElementTypes] = useState<any[]>([]);
   const [treeTypes, setTreeTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [workOrderContract, setWorkOrderContract] = useState<number | null>(
-    null,
-  );
+  const [initialValues, setInitialValues] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState<number[]>([]);
 
   const fetchInitialData = useCallback(async () => {
     try {
       const response = await axiosClient.get(`/admin/work-orders/${id}`);
       const data = response.data;
-      setWorkOrderContract(data.contract_id);
-      setUsers(
-        data.available_workers.map((u: any) => ({
-          id: u.id,
-          name: u.name,
-          surname: u.surname || '',
-        })),
-      );
-      setZones(
-        data.available_zones.map((z: any) => ({
-          id: z.id,
-          name: z.name,
-        })),
-      );
+
+      setUsers(data.available_workers);
+      setZones(data.available_zones);
       setTaskTypes(data.task_types);
       setElementTypes(data.element_types);
       setTreeTypes(data.tree_types);
 
-      const transformed: EditWorkOrderValues = {
+      const transformedValues = {
         date: data.date ? new Date(data.date) : null,
-        selectedUsers: data.users.map((u: any) => ({
-          id: u.id,
-          name: u.name,
-          surname: u.surname,
-        })),
+        selectedUsers: data.users,
         blocks: data.work_orders_blocks.map((block: any) => ({
           notes: block.notes,
-          zones: block.zones.map((z: any) => ({ id: z.id, name: z.name })),
+          zones: block.zones,
           tasks: block.block_tasks.map((task: any) => ({
             task_type_id: task.task_type_id,
             element_type_id: task.element_type_id,
@@ -102,7 +59,8 @@ const EditWorkOrder = () => {
           })),
         })),
       };
-      setInitialValues(transformed);
+
+      setInitialValues(transformedValues);
       setActiveIndex(
         Array.from({ length: data.work_orders_blocks.length }, (_, i) => i),
       );
@@ -159,33 +117,31 @@ const EditWorkOrder = () => {
       .min(1, t('admin.pages.workOrders.form.validation.blocks_required')),
   });
 
-  const handleSubmit = async (
-    values: EditWorkOrderValues,
-    { setSubmitting }: any,
-  ) => {
+  const handleSubmit = async (values: any, { setSubmitting }: any) => {
     setIsSubmitting(true);
     setError(null);
     try {
       const formattedDate = values.date
         ? `${values.date.getFullYear()}-${String(values.date.getMonth() + 1).padStart(2, '0')}-${String(values.date.getDate()).padStart(2, '0')}`
         : null;
-      const userIds = values.selectedUsers.map((user) => user.id);
-      const formattedBlocks = values.blocks.map((block) => ({
+      const userIds = values.selectedUsers.map((user: any) => user.id);
+      const formattedBlocks = values.blocks.map((block: any) => ({
         notes: block.notes,
-        zones: block.zones
-          .filter(Boolean)
-          .map((zone) => (typeof zone === 'object' ? zone.id : zone)),
-        tasks: block.tasks.map((task) => ({
+        zones: block.zones.map((zone: any) => zone.id),
+        tasks: block.tasks.map((task: any) => ({
           task_type_id: task.task_type_id,
           element_type_id: task.element_type_id,
           tree_type_id: task.tree_type_id,
         })),
       }));
+
       await axiosClient.put(`/admin/work-orders/${id}`, {
         date: formattedDate,
         users: userIds,
+        contract_id: currentContract?.id,
         blocks: formattedBlocks,
       });
+
       navigate('/admin/work-orders', {
         state: {
           success: t('admin.pages.workOrders.list.messages.updateSuccess'),
@@ -201,28 +157,8 @@ const EditWorkOrder = () => {
     }
   };
 
-  const userTemplate = useCallback(
-    (option: UserType) => (
-      <div className="flex items-center">
-        <div>
-          {option.name} {option.surname}
-        </div>
-      </div>
-    ),
-    [],
-  );
-
-  const zoneTemplate = useCallback(
-    (option: { id: number; name: string }) => (
-      <div className="flex items-center">
-        <div>{option.name}</div>
-      </div>
-    ),
-    [],
-  );
-
   const requiresTreeType = useCallback(
-    (elementTypeId: number | null): boolean => {
+    (elementTypeId: number | null) => {
       if (!elementTypeId) return false;
       const elementType = elementTypes.find(
         (et: any) => et.id === elementTypeId,
@@ -234,21 +170,30 @@ const EditWorkOrder = () => {
 
   if (loading || !initialValues) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex justify-center p-4">
         <ProgressSpinner
           style={{ width: '50px', height: '50px' }}
           strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
 
-  if (!currentContract && !workOrderContract) {
+  if (!currentContract) {
     return (
-      <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-        <Card className="w-full max-w-3xl shadow-lg">
-          <div className="p-6 text-center">
+      <>
+        <div className="flex items-center mb-4">
+          <Button
+            icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+            className="p-button-text mr-3"
+            onClick={() => navigate('/admin/work-orders')}
+          />
+          <h2 className="text-xl font-semibold text-gray-800">
+            {t('admin.pages.workOrders.form.title.edit')}
+          </h2>
+        </div>
+        <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+          <div className="p-4 text-center">
             <Icon
               icon="tabler:alert-circle"
               className="h-16 w-16 text-yellow-500 mx-auto mb-4"
@@ -266,7 +211,7 @@ const EditWorkOrder = () => {
             />
           </div>
         </Card>
-      </div>
+      </>
     );
   }
 
@@ -282,7 +227,6 @@ const EditWorkOrder = () => {
           {t('admin.pages.workOrders.form.title.edit')}
         </h2>
       </div>
-      
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           {error && (
@@ -331,7 +275,6 @@ const EditWorkOrder = () => {
                       'admin.pages.workOrders.form.placeholders.users',
                     )}
                     filter
-                    itemTemplate={userTemplate}
                     className={
                       errors.selectedUsers && touched.selectedUsers
                         ? 'p-invalid w-full'
@@ -362,7 +305,7 @@ const EditWorkOrder = () => {
                         }
                         multiple>
                         {values.blocks.map(
-                          (block: WorkBlock, index: number) => (
+                          (block: any, index: number) => (
                             <AccordionTab
                               key={index}
                               header={
@@ -381,15 +324,16 @@ const EditWorkOrder = () => {
                                           className="h-5 w-5"
                                         />
                                       }
-                                      className="p-button-rounded p-button-danger"
+                                      className="p-button-outlined p-button-danger p-button-sm"
+                                      tooltip={t(
+                                        'admin.pages.workOrders.form.removeBlock',
+                                      )}
+                                      tooltipOptions={{ position: 'top' }}
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         remove(index);
                                       }}
                                       type="button"
-                                      aria-label={t(
-                                        'admin.pages.workOrders.form.removeBlock',
-                                      )}
                                     />
                                   )}
                                 </div>
@@ -418,7 +362,6 @@ const EditWorkOrder = () => {
                                     'admin.pages.workOrders.form.placeholders.zones',
                                   )}
                                   filter
-                                  itemTemplate={zoneTemplate}
                                   className="w-full"
                                   display="chip"
                                 />
@@ -432,10 +375,10 @@ const EditWorkOrder = () => {
                                 {({ remove: removeTask, push: pushTask }) => (
                                   <div className="space-y-3 mt-6">
                                     {values.blocks[index].tasks.map(
-                                      (task: WorkTask, taskIndex: number) => (
+                                      (task: any, taskIndex: number) => (
                                         <div
                                           key={taskIndex}
-                                          className="p-2 border border-gray-200 rounded-lg">
+                                          className="p-2 border border-gray-300 rounded-lg">
                                           <div className="flex justify-between items-center mb-2">
                                             <h5 className="text-sm font-semibold">
                                               {t(
@@ -452,14 +395,17 @@ const EditWorkOrder = () => {
                                                     className="h-4 w-4"
                                                   />
                                                 }
-                                                className="p-button-rounded p-button-danger p-button-sm"
+                                                className="p-button-outlined p-button-danger p-button-sm"
+                                                tooltip={t(
+                                                  'admin.pages.workOrders.form.removeTask',
+                                                )}
+                                                tooltipOptions={{
+                                                  position: 'top',
+                                                }}
                                                 onClick={() =>
                                                   removeTask(taskIndex)
                                                 }
                                                 type="button"
-                                                aria-label={t(
-                                                  'admin.pages.workOrders.form.removeTask',
-                                                )}
                                               />
                                             )}
                                           </div>
@@ -563,11 +509,16 @@ const EditWorkOrder = () => {
                                     <div className="flex justify-center mt-2">
                                       <Button
                                         type="button"
-                                        icon="pi pi-plus"
+                                        icon={
+                                          <Icon
+                                            icon="tabler:plus"
+                                            className="h-5 w-5 mr-2"
+                                          />
+                                        }
                                         label={t(
                                           'admin.pages.workOrders.form.buttons.addTask',
                                         )}
-                                        className="p-button-outlined p-button-sm"
+                                        className="p-button-outlined p-button-sm w-full"
                                         onClick={() =>
                                           pushTask({
                                             task_type_id: null,
@@ -612,11 +563,16 @@ const EditWorkOrder = () => {
                       <div className="flex justify-center">
                         <Button
                           type="button"
-                          icon="pi pi-plus"
+                          icon={
+                            <Icon
+                              icon="tabler:plus"
+                              className="h-5 w-5 mr-2"
+                            />
+                          }
                           label={t(
                             'admin.pages.workOrders.form.buttons.addBlock',
                           )}
-                          className="p-button-outlined"
+                          className="p-button-outlined p-button-sm w-full"
                           onClick={() => {
                             const newIndex = values.blocks.length;
                             push({

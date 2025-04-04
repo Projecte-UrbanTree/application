@@ -343,15 +343,14 @@ const CreateWorkOrder = () => {
                                         className="h-5 w-5"
                                       />
                                     }
-                                    className="p-button-rounded p-button-danger"
+                                    className="p-button-outlined p-button-danger p-button-sm"
+                                    tooltip={t('admin.pages.workOrders.form.removeBlock')}
+                                    tooltipOptions={{ position: 'top' }}
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       remove(index);
                                     }}
                                     type="button"
-                                    aria-label={t(
-                                      'admin.pages.workOrders.form.removeBlock',
-                                    )}
                                   />
                                 )}
                               </div>
@@ -395,7 +394,7 @@ const CreateWorkOrder = () => {
                                     (task, taskIndex: number) => (
                                       <div
                                         key={taskIndex}
-                                        className="p-2 border border-gray-200 rounded-lg">
+                                        className="p-2 border border-gray-300 rounded-lg">
                                         <div className="flex justify-between items-center mb-2">
                                           <h5 className="text-sm font-semibold">
                                             {t(
@@ -412,14 +411,13 @@ const CreateWorkOrder = () => {
                                                   className="h-4 w-4"
                                                 />
                                               }
-                                              className="p-button-rounded p-button-danger p-button-sm"
+                                              className="p-button-outlined p-button-danger p-button-sm"
+                                              tooltip={t('admin.pages.workOrders.form.removeTask')}
+                                              tooltipOptions={{ position: 'top' }}
                                               onClick={() =>
                                                 removeTask(taskIndex)
                                               }
                                               type="button"
-                                              aria-label={t(
-                                                'admin.pages.workOrders.form.removeTask',
-                                              )}
                                             />
                                           )}
                                         </div>
@@ -523,11 +521,11 @@ const CreateWorkOrder = () => {
                                   <div className="flex justify-center mt-2">
                                     <Button
                                       type="button"
-                                      icon="pi pi-plus"
+                                      icon={<Icon icon="tabler:plus" className="h-5 w-5 mr-2" />}
                                       label={t(
                                         'admin.pages.workOrders.form.buttons.addTask',
                                       )}
-                                      className="p-button-outlined p-button-sm"
+                                      className="p-button-outlined p-button-sm w-full"
                                       onClick={() =>
                                         pushTask({
                                           task_type_id: null,
@@ -569,11 +567,11 @@ const CreateWorkOrder = () => {
                       <div className="flex justify-center">
                         <Button
                           type="button"
-                          icon="pi pi-plus"
+                          icon={<Icon icon="tabler:plus" className="h-5 w-5 mr-2" />}
                           label={t(
                             'admin.pages.workOrders.form.buttons.addBlock',
                           )}
-                          className="p-button-outlined"
+                          className="p-button-outlined p-button-sm w-full"
                           onClick={() => {
                             const newIndex = values.blocks.length;
                             push({

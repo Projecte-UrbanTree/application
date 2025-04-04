@@ -216,7 +216,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
 
   return (
     <div>
-      <header className="border-b border-gray-200 bg-white shadow-md">
+      <header className="border-b border-gray-300 bg-white shadow-md">
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
             <div className="block lg:hidden">
@@ -320,7 +320,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                   key={item.to}
                   to={item.to}
                   className={`px-2 py-3 rounded flex items-center gap-1 ${
-                    location.pathname === item.to
+                    location.pathname.includes(item.to)
                       ? 'bg-white border border-gray-300 text-indigo-600'
                       : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
                   }`}>
@@ -333,7 +333,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                   key={item.to}
                   to={item.to}
                   className={`px-2 py-3 rounded flex items-center gap-1 ${
-                    location.pathname === item.to
+                    location.pathname.includes(item.to)
                       ? 'bg-white border border-gray-300 text-indigo-600'
                       : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
                   }`}>

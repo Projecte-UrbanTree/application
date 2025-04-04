@@ -376,7 +376,7 @@ const WorkReportDetail = () => {
                     return (
                       <div
                         key={task.id}
-                        className="p-2 bg-white rounded border border-gray-200">
+                        className="p-2 bg-white rounded border border-gray-300">
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="font-medium">

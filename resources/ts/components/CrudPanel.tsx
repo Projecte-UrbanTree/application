@@ -25,7 +25,7 @@ export default function CrudPanel({
   return (
     <Panel
       headerTemplate={
-        <div className="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center shadow-md">
+        <div className="bg-gray-50 border-b border-gray-300 px-6 py-4 flex justify-between items-center rounded-t-md shadow-sm">
           <div className="text-lg font-semibold text-gray-800">{t(title)}</div>
           {onCreate && (
             <>
@@ -46,8 +46,8 @@ export default function CrudPanel({
           )}
         </div>
       }
-      className="shadow-md rounded-md border border-gray-200">
-      <div className="p-8">{children}</div>
+      className="bg-white shadow-sm rounded-md border border-gray-300 mb-6">
+      <div className="p-6">{children}</div>
     </Panel>
   );
 }
