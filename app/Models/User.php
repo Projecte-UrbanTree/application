@@ -12,10 +12,19 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * Class User
+ *
+ * Represents a user in the application.
+ *
+ * @package App\Models
+ */
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,11 +64,21 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the work order users associated with the user.
+     *
+     * @return HasMany
+     */
     public function workOrderUsers(): HasMany
     {
         return $this->hasMany(WorkOrderUser::class, 'user_id');
     }
 
+    /**
+     * Get the contracts associated with the user.
+     *
+     * @return BelongsToMany
+     */
     public function contracts(): BelongsToMany
     {
         return $this->belongsToMany(Contract::class, 'contract_user');
