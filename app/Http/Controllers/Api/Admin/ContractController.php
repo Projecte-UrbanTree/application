@@ -5,17 +5,32 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Services\ContractDuplicationService;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ContractController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of contracts.
+     *
+     * @return JsonResponse A JSON response containing the list of contracts.
+     */
+    public function index(): JsonResponse
     {
-        return response()->json(Contract::all());
+        $contracts = Contract::all();
+
+        return response()->json($contracts);
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created contract in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the created contract.
+     */
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -33,14 +48,27 @@ class ContractController extends Controller
         return response()->json($contract, 201);
     }
 
-    public function show($id)
+    /**
+     * Display the specified contract.
+     *
+     * @param int $id The ID of the contract to retrieve.
+     * @return JsonResponse A JSON response containing the contract details.
+     */
+    public function show($id): JsonResponse
     {
         $contract = Contract::findOrFail($id);
 
         return response()->json($contract);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified contract in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @param int $id The ID of the contract to update.
+     * @return JsonResponse A JSON response containing the updated contract.
+     */
+    public function update(Request $request, $id): JsonResponse
     {
         $contract = Contract::findOrFail($id);
 
@@ -64,7 +92,13 @@ class ContractController extends Controller
         return response()->json($contract);
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified contract from storage.
+     *
+     * @param int $id The ID of the contract to delete.
+     * @return JsonResponse A JSON response confirming the deletion.
+     */
+    public function destroy($id): JsonResponse
     {
         $contract = Contract::findOrFail($id);
         $contract->delete();
@@ -72,14 +106,20 @@ class ContractController extends Controller
         return response()->json(['message' => 'Contract deleted'], 200);
     }
 
-    public function selectContract(Request $request)
+    /**
+     * Select a contract for the session.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response confirming the contract selection.
+     */
+    public function selectContract(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'contract_id' => [
                 'nullable',
                 'integer',
                 function ($attribute, $value, $fail) {
-                    if ($value !== 0 && ! Contract::find($value)) {
+                    if ($value !== 0 && !Contract::find($value)) {
                         $fail('The selected contract does not exist.');
                     }
                 },
@@ -97,7 +137,13 @@ class ContractController extends Controller
         ]);
     }
 
-    public function getSelectedContract(Request $request)
+    /**
+     * Retrieve the selected contract from the session.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response with the currently selected contract.
+     */
+    public function getSelectedContract(Request $request): JsonResponse
     {
         $contractId = $request->session()->get('selected_contract_id', null);
         $contract = $contractId > 0 ? Contract::find($contractId) : null;
@@ -108,13 +154,19 @@ class ContractController extends Controller
         ]);
     }
 
-    public function duplicate($id)
+    /**
+     * Duplicate an existing contract.
+     *
+     * @param int $id The ID of the contract to duplicate.
+     * @return JsonResponse A JSON response containing the duplicated contract.
+     */
+    public function duplicate($id): JsonResponse
     {
         $service = app(ContractDuplicationService::class);
         $newContract = $service->duplicate($id);
 
         return response()->json([
-            'message' => 'Contracte duplicat amb èxit',
+            'message' => 'Contract duplicated successfully',
             'contract' => $newContract,
         ]);
     }

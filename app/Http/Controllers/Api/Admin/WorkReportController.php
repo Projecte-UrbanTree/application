@@ -4,18 +4,30 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkReport;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class WorkReportController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of work reports.
+     *
+     * @return JsonResponse A JSON response containing the list of work reports.
+     */
+    public function index(): JsonResponse
     {
         $workReports = WorkReport::all();
 
         return response()->json($workReports, 200);
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created work report in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the created work report.
+     */
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'observation' => ['nullable', 'string', 'max:255'],
@@ -25,51 +37,55 @@ class WorkReportController extends Controller
             'report_incidents' => ['required', 'string', 'max:255'],
         ]);
 
-        $createdWorkReport = WorkReport::create($validated);
+        $workReport = WorkReport::create($validated);
 
-        return response()->json($createdWorkReport, 201);
+        return response()->json($workReport, 201);
     }
 
-    public function show($id)
+    /**
+     * Display the specified work report.
+     *
+     * @param int $id The ID of the work report to retrieve.
+     * @return JsonResponse A JSON response containing the work report details.
+     */
+    public function show($id): JsonResponse
     {
-        $workReport = WorkReport::with(
+        $workReport = WorkReport::with([
             'workOrder',
             'workOrder.contract',
             'workOrder.workOrdersBlocks',
             'workOrder.workOrdersBlocks.zones',
-            'workOrder.workOrdersBlocks.blockTasks',
             'workOrder.workOrdersBlocks.blockTasks.elementType',
             'workOrder.workOrdersBlocks.blockTasks.treeType',
             'workOrder.workOrdersBlocks.blockTasks.tasksType',
             'workOrder.users',
             'resources',
             'resources.resourceType',
-        )->find($id);
+        ])->find($id);
 
-        if ($workReport === null) {
-            return response()->json([
-                'message' => 'No se encontró el reporte de trabajo solicitado.',
-            ], 404);
+        if (!$workReport) {
+            return response()->json(['message' => 'No se encontró el reporte de trabajo solicitado.'], 404);
         }
 
         return response()->json($workReport, 200);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified work report in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @param int $id The ID of the work report to update.
+     * @return JsonResponse A JSON response containing the updated work report.
+     */
+    public function update(Request $request, $id): JsonResponse
     {
-        $workReport = WorkReport::find($id);
-
-        if ($workReport === null) {
-            return response()->json([
-                'message' => 'No se encontró el reporte de trabajo solicitado.',
-            ], 404);
-        }
+        $workReport = WorkReport::findOrFail($id);
 
         $validated = $request->validate([
             'observation' => ['sometimes', 'string', 'max:255'],
             'spent_fuel' => ['sometimes', 'numeric'],
             'work_order_id' => ['sometimes', 'integer'],
-            'report_status' => ['sometimes', 'integer'],
+            'report_status' => ['sometimes', 'string', 'max:255'],
             'report_incidents' => ['sometimes', 'string', 'max:255'],
         ]);
 
@@ -90,30 +106,17 @@ class WorkReportController extends Controller
         return response()->json($updatedReport, 200);
     }
 
-    public function edit($id)
+    /**
+     * Remove the specified work report from storage.
+     *
+     * @param int $id The ID of the work report to delete.
+     * @return JsonResponse A JSON response confirming the deletion.
+     */
+    public function destroy($id): JsonResponse
     {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        $workReport = WorkReport::find($id);
-
-        if ($workReport === null) {
-            return response()->json([
-                'message' => 'No se encontró el reporte de trabajo solicitado.',
-            ], 404);
-        }
-
+        $workReport = WorkReport::findOrFail($id);
         $workReport->delete();
 
-        return response()->json([
-            'message' => 'El reporte de trabajo ha sido eliminado correctamente.',
-        ], 200);
+        return response()->json(['message' => 'El reporte de trabajo ha sido eliminado correctamente.'], 200);
     }
 }

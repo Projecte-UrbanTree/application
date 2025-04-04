@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class ContractDuplicationService
 {
+    /**
+     * Duplicate a contract along with its related resources, zones, points, elements, and workers.
+     *
+     * @param int $id The ID of the contract to duplicate.
+     * @return Contract The newly duplicated contract instance.
+     */
     public function duplicate(int $id): Contract
     {
         return DB::transaction(function () use ($id) {

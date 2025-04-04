@@ -10,14 +10,19 @@ use App\Models\TreeType;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderBlock;
 use App\Models\WorkOrderBlockTask;
-use App\Models\WorkReport;
 use App\Models\Zone;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class WorkOrderController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of work orders.
+     *
+     * @return JsonResponse A JSON response containing the list of work orders.
+     */
+    public function index(): JsonResponse
     {
         $workOrders = WorkOrder::with([
             'contract',
@@ -33,20 +38,17 @@ class WorkOrderController extends Controller
         return response()->json($workOrders);
     }
 
-    public function create(Request $request)
+    /**
+     * Display data for creating a new work order.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing data for creating a work order.
+     */
+    public function create(Request $request): JsonResponse
     {
-        $contract_id = $request->query('contract_id');
-
-        if ($contract_id) {
-            $contract = Contract::findOrFail($contract_id);
-            $users = $contract->workers()->where('role', 'worker')->get();
-            $zones = Zone::select('id', 'name')
-                ->where('contract_id', $contract_id)
-                ->get();
-        } else {
-            $users = collect([]);
-            $zones = collect([]);
-        }
+        $contractId = $request->query('contract_id');
+        $users = $contractId ? Contract::findOrFail($contractId)->workers()->where('role', 'worker')->get() : collect([]);
+        $zones = $contractId ? Zone::select('id', 'name')->where('contract_id', $contractId)->get() : collect([]);
 
         return response()->json([
             'task_types' => TaskType::all(),
@@ -58,24 +60,30 @@ class WorkOrderController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created work order in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the created work order.
+     */
+    public function store(Request $request): JsonResponse
     {
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'users' => 'required|array',
+            'contract_id' => 'required|exists:contracts,id',
+            'blocks' => 'required|array',
+            'blocks.*.notes' => 'nullable|string',
+            'blocks.*.zones' => 'required|array',
+            'blocks.*.tasks' => 'required|array',
+            'blocks.*.tasks.*.task_type_id' => 'required|exists:task_types,id',
+            'blocks.*.tasks.*.element_type_id' => 'required|exists:element_types,id',
+            'blocks.*.tasks.*.tree_type_id' => 'nullable|exists:tree_types,id',
+        ]);
+
+        DB::beginTransaction();
+
         try {
-            $validated = $request->validate([
-                'date' => 'required|date',
-                'users' => 'required|array',
-                'contract_id' => 'required|exists:contracts,id',
-                'blocks' => 'required|array',
-                'blocks.*.notes' => 'nullable|string',
-                'blocks.*.zones' => 'required|array',
-                'blocks.*.tasks' => 'required|array',
-                'blocks.*.tasks.*.task_type_id' => 'required|exists:task_types,id',
-                'blocks.*.tasks.*.element_type_id' => 'required|exists:element_types,id',
-                'blocks.*.tasks.*.tree_type_id' => 'nullable|exists:tree_types,id',
-            ]);
-
-            DB::beginTransaction();
-
             $workOrder = WorkOrder::create([
                 'date' => $validated['date'],
                 'status' => 0,
@@ -83,7 +91,6 @@ class WorkOrderController extends Controller
             ]);
 
             $workOrder->users()->attach($validated['users']);
-
             $this->saveBlocks($workOrder, $validated['blocks']);
 
             DB::commit();
@@ -107,7 +114,13 @@ class WorkOrderController extends Controller
         }
     }
 
-    public function show($id)
+    /**
+     * Display the specified work order.
+     *
+     * @param int $id The ID of the work order to retrieve.
+     * @return JsonResponse A JSON response containing the work order details.
+     */
+    public function show($id): JsonResponse
     {
         $workOrder = WorkOrder::with([
             'contract',
@@ -120,7 +133,6 @@ class WorkOrderController extends Controller
         ])->findOrFail($id);
 
         $availableWorkers = $workOrder->contract->workers()->where('role', 'worker')->get();
-
         $availableZones = Zone::where('contract_id', $workOrder->contract_id)->get();
 
         return response()->json([
@@ -131,7 +143,6 @@ class WorkOrderController extends Controller
             'users' => $workOrder->users,
             'work_orders_blocks' => $workOrder->workOrdersBlocks,
             'contract' => $workOrder->contract,
-
             'available_workers' => $availableWorkers,
             'available_zones' => $availableZones,
             'task_types' => TaskType::all(),
@@ -140,28 +151,32 @@ class WorkOrderController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified work order in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @param int $id The ID of the work order to update.
+     * @return JsonResponse A JSON response containing the updated work order.
+     */
+    public function update(Request $request, $id): JsonResponse
     {
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'users' => 'required|array',
+            'blocks' => 'required|array',
+            'blocks.*.notes' => 'nullable|string',
+            'blocks.*.zones' => 'required|array',
+            'blocks.*.tasks' => 'required|array',
+            'blocks.*.tasks.*.task_type_id' => 'required|exists:task_types,id',
+            'blocks.*.tasks.*.element_type_id' => 'required|exists:element_types,id',
+            'blocks.*.tasks.*.tree_type_id' => 'nullable|exists:tree_types,id',
+        ]);
+
+        DB::beginTransaction();
+
         try {
-            $validated = $request->validate([
-                'date' => 'required|date',
-                'users' => 'required|array',
-                'blocks' => 'required|array',
-                'blocks.*.notes' => 'nullable|string',
-                'blocks.*.zones' => 'required|array',
-                'blocks.*.tasks' => 'required|array',
-                'blocks.*.tasks.*.task_type_id' => 'required|exists:task_types,id',
-                'blocks.*.tasks.*.element_type_id' => 'required|exists:element_types,id',
-                'blocks.*.tasks.*.tree_type_id' => 'nullable|exists:tree_types,id',
-            ]);
-
-            DB::beginTransaction();
-
             $workOrder = WorkOrder::findOrFail($id);
-            $workOrder->update([
-                'date' => $validated['date'],
-            ]);
-
+            $workOrder->update(['date' => $validated['date']]);
             $workOrder->users()->sync($validated['users']);
 
             $oldBlockIds = $workOrder->workOrdersBlocks->pluck('id')->toArray();
@@ -190,75 +205,49 @@ class WorkOrderController extends Controller
         }
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified work order from storage.
+     *
+     * @param int $id The ID of the work order to delete.
+     * @return JsonResponse A JSON response confirming the deletion.
+     */
+    public function destroy($id): JsonResponse
     {
         $workOrder = WorkOrder::findOrFail($id);
         $workOrder->delete();
 
-        return response()->json(['message' => 'Work order deleted successfully']);
+        return response()->json(['message' => 'Work order deleted successfully'], 200);
     }
 
-    public function updateWorkReportStatus(Request $request, $id)
-    {
-        try {
-            $validated = $request->validate([
-                'status' => 'required|integer',
-            ]);
-
-            $workReport = WorkReport::findOrFail($id);
-            $workReport->update(['report_status' => $validated['status']]);
-
-            return response()->json(['message' => 'Work report status updated successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error updating work report status'], 500);
-        }
-    }
-
-    public function updateStatus(Request $request, $id)
-    {
-        try {
-            $validated = $request->validate([
-                'status' => 'required|integer',
-            ]);
-
-            $workOrder = WorkOrder::findOrFail($id);
-            $workOrder->update(['status' => $validated['status']]);
-
-            return response()->json(['message' => 'Work order status updated successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error updating work order status', 'error' => $e->getMessage()], 500);
-        }
-    }
-
-    private function saveBlocks($workOrder, $blocks)
+    /**
+     * Save blocks and their associated data for a work order.
+     *
+     * @param WorkOrder $workOrder The work order model instance.
+     * @param array $blocks The array of blocks to save.
+     * @return void
+     */
+    private function saveBlocks(WorkOrder $workOrder, array $blocks): void
     {
         foreach ($blocks as $blockData) {
-            $block = new WorkOrderBlock([
+            $block = WorkOrderBlock::create([
                 'notes' => $blockData['notes'] ?? '',
                 'work_order_id' => $workOrder->id,
             ]);
-            $block->save();
 
-            if (! empty($blockData['zones']) && is_array($blockData['zones'])) {
-                $zoneIds = is_array($blockData['zones'][0])
-                    ? collect($blockData['zones'])->pluck('id')->filter()->values()->toArray()
-                    : array_filter($blockData['zones']);
-                if (! empty($zoneIds)) {
-                    $block->zones()->attach($zoneIds);
-                }
+            $zoneIds = collect($blockData['zones'])->pluck('id')->filter()->values()->toArray();
+            if (!empty($zoneIds)) {
+                $block->zones()->attach($zoneIds);
             }
 
-            if (! empty($blockData['tasks'])) {
-                foreach ($blockData['tasks'] as $taskData) {
-                    WorkOrderBlockTask::create([
-                        'work_order_block_id' => $block->id,
-                        'element_type_id' => $taskData['element_type_id'],
-                        'task_type_id' => $taskData['task_type_id'],
-                        'tree_type_id' => $taskData['tree_type_id'] ?? null,
-                        'status' => 0,
-                        'spent_time' => 0,
-                    ]);
-                }
+            foreach ($blockData['tasks'] as $taskData) {
+                WorkOrderBlockTask::create([
+                    'work_order_block_id' => $block->id,
+                    'element_type_id' => $taskData['element_type_id'],
+                    'task_type_id' => $taskData['task_type_id'],
+                    'tree_type_id' => $taskData['tree_type_id'] ?? null,
+                    'status' => 0,
+                    'spent_time' => 0,
+                ]);
             }
         }
     }
