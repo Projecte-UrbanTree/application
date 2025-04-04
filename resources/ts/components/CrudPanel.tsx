@@ -47,7 +47,7 @@ export default function CrudPanel({
         </div>
       }
       className="bg-white shadow-sm rounded-md border border-gray-300 mb-6">
-      <div className="p-6">{children}</div>
+      <div>{children}</div>
     </Panel>
   );
 }
