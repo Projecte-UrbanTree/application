@@ -236,9 +236,9 @@ const AdminRoutes: RouteObject[] = [
               {
                 path: 'contracts/:id/duplicate',
                 element: (
-                  <AdminLayoutWrapper titleI18n="admin.pages.contracts.duplicate.title">
+                  <AdminLayout titleI18n="admin.pages.contracts.duplicate.title">
                     <DuplicateContractForm />
-                  </AdminLayoutWrapper>
+                  </AdminLayout>
                 ),
               },
               {
