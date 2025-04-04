@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ContractUserController extends Controller
+class WorkerController extends Controller
 {
     /**
      * Display a listing of workers assigned to a contract.
