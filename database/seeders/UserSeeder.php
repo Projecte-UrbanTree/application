@@ -24,8 +24,8 @@ class UserSeeder extends Seeder
                 'role' => 'admin',
             ],
             [
-                'name' => 'Worker',
-                'surname' => '1 Demo',
+                'name' => 'Joan',
+                'surname' => 'Garcia',
                 'email' => 'worker1@urbantree.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678B',
@@ -33,8 +33,8 @@ class UserSeeder extends Seeder
                 'role' => 'worker',
             ],
             [
-                'name' => 'Worker',
-                'surname' => '2 Demo',
+                'name' => 'Maria',
+                'surname' => 'Lopez',
                 'email' => 'worker2@urbantree.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678C',
@@ -42,8 +42,8 @@ class UserSeeder extends Seeder
                 'role' => 'worker',
             ],
             [
-                'name' => 'Customer',
-                'surname' => 'Demo',
+                'name' => 'Pere',
+                'surname' => 'Martinez',
                 'email' => 'customer@urbantree.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678D',
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Victor',
-                'surname' => 'Test',
+                'surname' => 'Zheong',
                 'email' => 'cascascas@urbantere.com',
                 'company' => 'Urban Tree 5.0',
                 'dni' => '12345678E',
