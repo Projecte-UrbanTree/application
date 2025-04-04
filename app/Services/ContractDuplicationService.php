@@ -3,10 +3,6 @@
 namespace App\Services;
 
 use App\Models\Contract;
-use App\Models\Resource;
-use App\Models\Zone;
-use App\Models\Point;
-use App\Models\Element;
 use Illuminate\Support\Facades\DB;
 
 class ContractDuplicationService
@@ -21,7 +17,6 @@ class ContractDuplicationService
             $newContract->start_date = request()->input('start_date', $original->start_date);
             $newContract->end_date = request()->input('end_date', $original->end_date);
             $newContract->save();
-
 
             foreach ($original->resources as $resource) {
                 $newContract->resources()->create($resource->replicate()->toArray());
