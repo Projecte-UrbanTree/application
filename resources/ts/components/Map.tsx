@@ -121,7 +121,13 @@ export const MapComponent: React.FC<MapProps> = ({
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
     }
 
-    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
+    const contractZones = zonesRedux.filter(z => z.contract_id === currentContract?.id);
+    const firstZone = contractZones[0];
+    const zonePoints = points.filter(p => p.zone_id === firstZone?.id && p.type === TypePoint.zone_delimiter);
+    const firstPoint = zonePoints[0];
+    const initialCoords = firstPoint ? [firstPoint.longitude!, firstPoint.latitude!] as [number, number] : undefined;
+
+    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, initialCoords);
     service.addBasicControls();
     service.addGeocoder();
     service.enableDraw(userValue.role === Roles.admin, (coords) => {
@@ -150,7 +156,7 @@ export const MapComponent: React.FC<MapProps> = ({
     };
 
     loadData();
-  }, [userValue.role]);
+  }, [userValue.role, currentContract, zonesRedux, points]);
 
   useEffect(() => {
     const handleResize = () => {
