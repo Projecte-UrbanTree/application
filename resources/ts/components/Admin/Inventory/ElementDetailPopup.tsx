@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
 import { TabView, TabPanel } from 'primereact/tabview';
@@ -23,9 +17,15 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
+import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
+import { useTranslation } from 'react-i18next';
+import axiosClient from '@/api/axiosClient';
+import CreateEva from '@/pages/Admin/Eva/Create';
+import EditEva from '@/pages/Admin/Eva/Edit';
 import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
 import { fetchWorkOrders } from '@/api/service/workOrder';
 import { Zone } from '@/types/Zone';
+import { useNavigate } from 'react-router-dom';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -52,9 +52,40 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   initialTabIndex = 0,
 }) => {
   const [activeIndex, setActiveIndex] = useState(initialTabIndex);
+  const [popupWidth, setPopupWidth] = useState('650px');
   const [incidences, setIncidences] = useState<Incidence[]>([]);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [eva, setEva] = useState<Eva | null>(null);
+  const [isLoadingEva, setIsLoadingEva] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEvaModalVisible, setIsEvaModalVisible] = useState(false);
+  const [isEditEvaModalVisible, setIsEditEvaModalVisible] = useState(false);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const statusOptions = useMemo(
+    () => [
+      {
+        label: t(
+          'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.open',
+        ),
+        value: IncidentStatus.open,
+      },
+      {
+        label: t(
+          'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.in_progress',
+        ),
+        value: IncidentStatus.in_progress,
+      },
+      {
+        label: t(
+          'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.closed',
+        ),
+        value: IncidentStatus.closed,
+      },
+    ],
+    [t],
+  );
 
   const { points } = useSelector((state: RootState) => state.points);
   const { zones } = useSelector((state: RootState) => state.zone);
@@ -63,15 +94,14 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   );
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
-
-  const statusOptions = useMemo(
-    () => [
-      { label: 'Abierto', value: IncidentStatus.open },
-      { label: 'En progreso', value: IncidentStatus.in_progress },
-      { label: 'Cerrado', value: IncidentStatus.closed },
-    ],
-    [],
-  );
+  const {
+    getStatusMessage,
+    calculateStabilityIndex,
+    calculateGravityHeightRatio,
+    calculateRootCrownRatio,
+    calculateWindStabilityIndex,
+    getSeverityMessage,
+  } = useTreeEvaluation();
 
   useEffect(() => {
     const loadWorkOrders = async () => {
@@ -87,8 +117,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error cargando órdenes de trabajo',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.elementDetailPopup.workOrders.loadError'),
         });
       } finally {
         setIsLoading(false);
@@ -96,7 +126,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     };
 
     loadWorkOrders();
-  }, [currentContract]);
+  }, [currentContract, t]);
 
   useEffect(() => {
     const loadIncidences = async () => {
@@ -122,9 +152,49 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         setIsLoading(false);
       }
     };
-
     loadIncidences();
   }, [element.id, dispatch]);
+
+  const refreshEvaData = useCallback(async () => {
+    try {
+      setIsLoadingEva(true);
+      const response = await axiosClient.get(`/admin/evas/element/${element.id}`);
+      setEva(response.data);
+    } catch (error) {
+      console.error('Error al recargar datos EVA:', error);
+      setEva(null);
+    } finally {
+      setIsLoadingEva(false);
+    }
+  }, [element.id]);
+
+  useEffect(() => {
+    const loadEvaData = async () => {
+      if (activeIndex === 3 && !eva) {
+        try {
+          setIsLoadingEva(true);
+          const response = await axiosClient.get(`/admin/evas/element/${element.id}`);
+          setEva(response.data);
+        } catch (error) {
+          console.error('Error al cargar datos EVA:', error);
+          setEva(null);
+        } finally {
+          setIsLoadingEva(false);
+        }
+      }
+    };
+
+    loadEvaData();
+  }, [activeIndex, element.id, eva]);
+
+  useEffect(() => {
+    // Adjust popup width based on the active tab
+    if (activeIndex === 3) {
+      setPopupWidth('900px');
+    } else {
+      setPopupWidth('650px');
+    }
+  }, [activeIndex]);
 
   const handleStatusChange = useCallback(
     async (incidenceId: number, newStatus: IncidentStatus) => {
@@ -164,22 +234,17 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     async (incidentId: number) => {
       try {
         await deleteIncidence(incidentId);
-        setIncidences((prev) => prev.filter((inc) => inc.id !== incidentId));
-
-        toast.current?.show({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Incidencia eliminada correctamente',
-        });
+        const updatedIncidences = incidences.filter(
+          (inc) => inc.id !== incidentId,
+        );
+        setIncidences(updatedIncidences);
+        onDeleteElement(element.id!);
+        onClose();
       } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo eliminar la incidencia',
-        });
+        console.error('Error al eliminar la incidencia:', error);
       }
     },
-    [dispatch],
+    [incidences, onClose, onDeleteElement, element.id],
   );
 
   const handleDeleteElement = useCallback(
@@ -207,9 +272,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const getElementType = useCallback(
     (elementTypeId: number) => {
       const type = elementTypes.find((t) => t.id === elementTypeId);
-      return type?.name || 'No definido';
+      return type?.name || t('general.not_available');
     },
-    [elementTypes],
+    [elementTypes, t],
   );
 
   const getTreeType = useCallback(
@@ -290,71 +355,360 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     }
   }, []);
 
+  const handleEvaCreated = useCallback((newEva: Eva) => {
+    setEva(newEva);
+    setIsEvaModalVisible(false);
+  }, []);
+
+  const handleEvaUpdated = useCallback((updatedEva: Eva) => {
+    setEva(updatedEva);
+    setIsEditEvaModalVisible(false);
+  }, []);
+
+  const renderEvaPanel = () => {
+    if (isLoadingEva) {
+      return (
+        <div className="flex justify-center items-center py-8">
+          <p>{t('admin.pages.inventory.elementDetailPopup.eva.loading')}</p>
+        </div>
+      );
+    }
+
+    if (!eva) {
+      return (
+        <div className="text-center py-8 space-y-4">
+          <p>{t('admin.pages.inventory.elementDetailPopup.eva.noData')}</p>
+          <Button
+            label={t('admin.pages.inventory.elementDetailPopup.eva.createEva')}
+            className="p-button-sm"
+            onClick={() => setIsEvaModalVisible(true)}
+          />
+        </div>
+      );
+    }
+
+    const { message, color } = getStatusMessage(eva.status);
+    const stabilityIndex = calculateStabilityIndex(eva.height, eva.diameter);
+    const gravityHeightRatio = calculateGravityHeightRatio(
+      eva.height_estimation,
+      eva.height,
+    );
+    const rootCrownRatio = calculateRootCrownRatio(
+      eva.effective_root_area,
+      eva.crown_projection_area,
+    );
+    const windStabilityIndex = calculateWindStabilityIndex(
+      eva.height,
+      eva.crown_width,
+      eva.effective_root_area,
+    );
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+          <h3 className="text-lg font-bold mb-3">
+            {t(
+              'admin.pages.inventory.elementDetailPopup.eva.evaluationIndices',
+            )}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-medium">
+                {t('admin.pages.inventory.elementDetailPopup.eva.treeStatus')}:
+              </p>
+              <Tag
+                value={message}
+                style={{ backgroundColor: color, color: 'black' }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.eva.stabilityIndex',
+                )}
+                :
+              </p>
+              <Tag
+                value={stabilityIndex.message}
+                style={{
+                  backgroundColor: stabilityIndex.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.eva.gravityHeightRatio',
+                )}
+                :
+              </p>
+              <Tag
+                value={gravityHeightRatio.message}
+                style={{
+                  backgroundColor: gravityHeightRatio.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.eva.rootCrownRatio',
+                )}
+                :
+              </p>
+              <Tag
+                value={rootCrownRatio.message}
+                style={{
+                  backgroundColor: rootCrownRatio.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.eva.windStabilityIndex',
+                )}
+                :
+              </p>
+              <Tag
+                value={windStabilityIndex.message}
+                style={{
+                  backgroundColor: windStabilityIndex.color,
+                  color: 'black',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+          <h3 className="text-lg font-bold mb-3">
+            {t(
+              'admin.pages.inventory.elementDetailPopup.eva.environmentalFactors',
+            )}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-medium">
+                {t('admin.pages.inventory.elementDetailPopup.eva.windExposure')}
+                :
+              </p>
+              <Tag
+                value={getSeverityMessage(eva.wind).message}
+                style={{
+                  backgroundColor: getSeverityMessage(eva.wind).color,
+                  color: 'black',
+                }}
+              />
+            </div>
+            <div>
+              <p className="font-medium">
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.eva.droughtExposure',
+                )}
+                :
+              </p>
+              <Tag
+                value={getSeverityMessage(eva.drought).message}
+                style={{
+                  backgroundColor: getSeverityMessage(eva.drought).color,
+                  color: 'black',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+          <h3 className="text-lg font-bold mb-3">
+            {t('admin.pages.inventory.elementDetailPopup.eva.technicalData')}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p>
+                <strong>
+                  {t('admin.pages.inventory.elementDetailPopup.eva.height')}:
+                </strong>{' '}
+                {eva.height} m
+              </p>
+              <p>
+                <strong>
+                  {t('admin.pages.inventory.elementDetailPopup.eva.diameter')}:
+                </strong>{' '}
+                {eva.diameter} cm
+              </p>
+              <p>
+                <strong>
+                  {t('admin.pages.inventory.elementDetailPopup.eva.crownWidth')}
+                  :
+                </strong>{' '}
+                {eva.crown_width} m
+              </p>
+            </div>
+            <div>
+              <p>
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.eva.crownProjectionArea',
+                  )}
+                  :
+                </strong>{' '}
+                {eva.crown_projection_area} m²
+              </p>
+              <p>
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.eva.effectiveRootArea',
+                  )}
+                  :
+                </strong>{' '}
+                {eva.effective_root_area} m²
+              </p>
+            </div>
+          </div>
+          <div className="text-center py-4">
+            <Button
+              label={t('admin.pages.inventory.elementDetailPopup.eva.editEva')}
+              className="p-button-sm"
+              onClick={() => setIsEditEvaModalVisible(true)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="bg-white rounded-lg w-[650px] max-w-full">
+    <div
+      className="bg-white rounded-lg max-w-full"
+      style={{ width: popupWidth }}>
       <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}>
-        <TabPanel header="Información">
+        <TabPanel
+          header={t(
+            'admin.pages.inventory.elementDetailPopup.tabs.information',
+          )}>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-sm space-y-2">
               <h3 className="font-bold text-base mb-3">
-                Información del Árbol
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.information.title',
+                )}
               </h3>
               <p>
-                <strong>Descripción:</strong>{' '}
-                {element.description || 'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.description',
+                  )}
+                  :
+                </strong>{' '}
+                {element.description || t('general.not_available')}
               </p>
               <p>
-                <strong>Tipo Elemento:</strong>{' '}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.elementType',
+                  )}
+                  :
+                </strong>{' '}
                 {getElementType(element.element_type_id!)}
               </p>
               <p>
-                <strong>Familia Arbol:</strong>{' '}
-                {getTreeType(element.tree_type_id!)?.family || 'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.treeFamily',
+                  )}
+                  :
+                </strong>{' '}
+                {getTreeType(element.tree_type_id!)?.family ||
+                  t('general.not_available')}
               </p>
               <p>
-                <strong>Género:</strong>{' '}
-                {getTreeType(element.tree_type_id!)?.genus || 'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.treeGenus',
+                  )}
+                  :
+                </strong>{' '}
+                {getTreeType(element.tree_type_id!)?.genus ||
+                  t('general.not_available')}
               </p>
               <p>
-                <strong>Especie:</strong>{' '}
-                {getTreeType(element.tree_type_id!)?.species || 'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.treeSpecies',
+                  )}
+                  :
+                </strong>{' '}
+                {getTreeType(element.tree_type_id!)?.species ||
+                  t('general.not_available')}
               </p>
               <p>
-                <strong>Fecha Creación:</strong>{' '}
-                {element.created_at
-                  ? convertirFechaIsoAFormatoEuropeo(element.created_at)
-                  : 'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.creationDate',
+                  )}
+                  :
+                </strong>{' '}
+                {convertirFechaIsoAFormatoEuropeo(element.created_at!)}
               </p>
             </div>
-
             <div className="text-sm space-y-2">
-              <h3 className="font-bold text-base mb-3">Ubicación</h3>
+              <h3 className="font-bold text-base mb-3">
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.information.location.title',
+                )}
+              </h3>
               <p>
-                <strong>Zona:</strong>{' '}
-                {(element.point_id && getZoneElement(element.point_id)?.name) ||
-                  'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.location.zone',
+                  )}
+                  :
+                </strong>{' '}
+                {getZoneElement(element.point_id!)?.name ||
+                  t('general.not_available')}
               </p>
               <p>
-                <strong>Latitud:</strong> {coords?.lat || 'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.location.latitude',
+                  )}
+                  :
+                </strong>{' '}
+                {coords.lat || t('general.not_available')}
               </p>
               <p>
-                <strong>Longitud:</strong> {coords?.lng || 'No disponible'}
+                <strong>
+                  {t(
+                    'admin.pages.inventory.elementDetailPopup.information.location.longitude',
+                  )}
+                  :
+                </strong>{' '}
+                {coords.lng || t('general.not_available')}
               </p>
-
-              <Button
-                label="Eliminar Elemento"
-                className="p-button-danger p-button-sm"
-                onClick={() => handleDeleteElement(element.id!)}
-                disabled={isLoading}
-              />
+              <div className="flex gap-2">
+                <Button
+                  label={t(
+                    'admin.pages.inventory.elementDetailPopup.information.deleteElement',
+                  )}
+                  className="p-button-danger p-button-sm"
+                  onClick={() => handleDeleteElement(element.id!)}
+                />
+              </div>
             </div>
           </div>
         </TabPanel>
 
-        <TabPanel header="Incidencias">
+        <TabPanel
+          header={t(
+            'admin.pages.inventory.elementDetailPopup.tabs.incidences',
+          )}>
           <div className="space-y-4">
             {isLoading ? (
               <div className="flex justify-center">
@@ -363,19 +717,38 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             ) : incidences.length > 0 ? (
               incidences.map((incidence) => (
                 <div key={incidence.id} className="border p-4 rounded-md">
-                  <p className="font-bold">Incidencia #{incidence.id}</p>
-                  <p>
-                    <strong>📛 Nombre:</strong>{' '}
-                    {incidence.name || 'No disponible'}
+                  <p className="font-bold">
+                    {t(
+                      'admin.pages.inventory.elementDetailPopup.incidences.title',
+                    )}{' '}
+                    #{incidence.id}
                   </p>
                   <p>
-                    <strong>📅 Fecha Creación:</strong>{' '}
-                    {incidence.created_at
-                      ? convertirFechaIsoAFormatoEuropeo(incidence.created_at)
-                      : 'No disponible'}
+                    <strong>
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.incidences.name',
+                      )}
+                      :
+                    </strong>{' '}
+                    {incidence.name || t('general.not_available')}
                   </p>
                   <p>
-                    <strong>⚠️ Estado:</strong>{' '}
+                    <strong>
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.incidences.creationDate',
+                      )}
+                      :
+                    </strong>{' '}
+                    {convertirFechaIsoAFormatoEuropeo(incidence.created_at!) ||
+                      t('general.not_available')}
+                  </p>
+                  <p>
+                    <strong>
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.incidences.status',
+                      )}
+                      :
+                    </strong>{' '}
                     <Tag
                       severity={
                         incidence.status === IncidentStatus.open
@@ -386,19 +759,29 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       }
                       value={
                         incidence.status === IncidentStatus.open
-                          ? 'Abierto'
+                          ? t(
+                              'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.open',
+                            )
                           : incidence.status === IncidentStatus.in_progress
-                            ? 'En progreso'
-                            : 'Cerrado'
+                            ? t(
+                                'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.in_progress',
+                              )
+                            : t(
+                                'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.closed',
+                              )
                       }
                       className="ml-2"
                     />
                   </p>
                   <p>
-                    <strong>📝 Descripción:</strong>{' '}
-                    {incidence.description || 'No disponible'}
+                    <strong>
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.incidences.description',
+                      )}
+                      :
+                    </strong>{' '}
+                    {incidence.description || t('general.not_available')}
                   </p>
-
                   <div className="mt-3 flex gap-2">
                     <Dropdown
                       value={incidence.status}
@@ -407,35 +790,40 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                         handleStatusChange(incidence.id!, e.value)
                       }
                       className="w-[140px] p-inputtext-sm"
-                      disabled={isLoading}
                     />
                     <Button
-                      label="Eliminar incidencia"
+                      label={t(
+                        'admin.pages.inventory.elementDetailPopup.incidences.deleteIncident',
+                      )}
                       className="p-button-danger p-button-sm"
                       onClick={() => handleDeleteIncident(incidence.id!)}
-                      disabled={isLoading}
                     />
                   </div>
                 </div>
               ))
             ) : (
-              <p>No hay incidencias registradas para este elemento.</p>
+              <p>
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.incidences.noIncidences',
+                )}
+              </p>
             )}
-
             <div className="flex justify-end">
               <Button
-                label="Añadir Incidencia"
+                label={t(
+                  'admin.pages.inventory.elementDetailPopup.incidences.addIncident',
+                )}
                 className="p-button-sm"
                 onClick={handleAddIncidentClick}
-                disabled={isLoading}
               />
             </div>
           </div>
         </TabPanel>
 
-        <TabPanel header="Historial">
+        <TabPanel
+          header={t('admin.pages.inventory.elementDetailPopup.tabs.history')}>
           <div>
-            <h1>Historial de tareas</h1>
+            <h1>{t('admin.pages.inventory.elementDetailPopup.history.title')}</h1>
             {isLoading ? (
               <div className="flex justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -444,20 +832,41 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               tasksForElement.map((taskInfo, index) => (
                 <div key={index} className="border p-4 rounded-md mb-4">
                   <h4 className="font-semibold">
-                    Notas: {taskInfo.notes ?? 'No hay notas'}
+                    {t('admin.pages.inventory.elementDetailPopup.history.notes')}:{' '}
+                    {taskInfo.notes ?? t('general.no_notes')}
                   </h4>
                   <p>
-                    <strong>Tarea:</strong> {taskInfo.taskType?.name}
+                    <strong>
+                      {t('admin.pages.inventory.elementDetailPopup.history.task')}
+                      :
+                    </strong>{' '}
+                    {taskInfo.taskType?.name}
                   </p>
                   <p>
-                    <strong>Descripción:</strong>{' '}
+                    <strong>
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.history.description',
+                      )}
+                      :
+                    </strong>{' '}
                     {taskInfo.taskType?.description}
                   </p>
                   <p>
-                    <strong>Orden de Trabajo:</strong> {taskInfo.workOrderId}
+                    <strong>
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.history.workOrder',
+                      )}
+                      :
+                    </strong>{' '}
+                    {taskInfo.workOrderId}
                   </p>
                   <p>
-                    <strong>Estado:</strong>{' '}
+                    <strong>
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.history.status',
+                      )}
+                      :
+                    </strong>{' '}
                     <span className={getBadgeClass(taskInfo.workOrderStatus!)}>
                       {WorkOrderStatus[taskInfo.workOrderStatus!]}
                     </span>
@@ -465,11 +874,61 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 </div>
               ))
             ) : (
-              <p>No hay historial de tareas para este elemento.</p>
+              <p>
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.history.noTasks',
+                )}
+              </p>
             )}
           </div>
         </TabPanel>
+
+        <TabPanel
+          header={t('admin.pages.inventory.elementDetailPopup.tabs.eva')}>
+          {renderEvaPanel()}
+        </TabPanel>
       </TabView>
+
+      {/* Modals for EVA */}
+      {isEvaModalVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <Button
+              icon="pi pi-times"
+              className="p-button-rounded p-button-text absolute top-2 right-2"
+              onClick={() => setIsEvaModalVisible(false)}
+            />
+            <CreateEva
+              preselectedElementId={element.id!}
+              onClose={() => {
+                setIsEvaModalVisible(false);
+                refreshEvaData();
+              }}
+              redirectPath="/admin/inventory" 
+            />
+          </div>
+        </div>
+      )}
+
+      {isEditEvaModalVisible && eva && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <Button
+              icon="pi pi-times"
+              className="p-button-rounded p-button-text absolute top-2 right-2"
+              onClick={() => setIsEditEvaModalVisible(false)}
+            />
+            <EditEva
+              preselectedElementId={eva.id!} 
+              onClose={() => {
+              setIsEditEvaModalVisible(false);
+              refreshEvaData(); 
+              }}
+              redirectPath="/admin/inventory" 
+            />
+            </div>
+        </div>
+      )}
     </div>
   );
 };

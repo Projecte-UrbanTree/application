@@ -79,5 +79,6 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
 
         Route::put('/work-orders/{id}/status', [WorkOrderController::class, 'updateStatus']);
+        Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
     });
 });

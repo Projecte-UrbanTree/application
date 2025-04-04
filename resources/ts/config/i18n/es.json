@@ -192,6 +192,82 @@
           "cloud": "Nube"
         }
       },
+      "inventory": {
+        "elementDetailPopup": {
+          "tabs": {
+            "information": "Información",
+            "incidences": "Incidencias",
+            "history": "Historial",
+            "eva": "EVA"
+          },
+          "information": {
+            "title": "Información del Árbol",
+            "description": "Descripción",
+            "elementType": "Tipo Elemento",
+            "treeFamily": "Familia Árbol",
+            "treeGenus": "Género",
+            "treeSpecies": "Especie",
+            "creationDate": "Fecha Creación",
+            "location": {
+              "title": "Ubicación",
+              "zone": "Zona",
+              "latitude": "Latitud",
+              "longitude": "Longitud"
+            },
+            "deleteElement": "Eliminar Elemento",
+            "elementDeleted": "Elemento eliminado correctamente",
+            "elementDeleteFailed": "No se pudo eliminar el elemento"
+          },
+          "incidences": {
+            "title": "Incidencia",
+            "name": "📛 Nombre",
+            "creationDate": "📅 Fecha Creación",
+            "status": "⚠️ Estado",
+            "description": "📝 Descripción",
+            "addIncident": "Añadir Incidencia",
+            "deleteIncident": "Eliminar incidencia",
+            "noIncidences": "No hay incidencias registradas para este elemento.",
+            "statusUpdated": "Estado actualizado",
+            "statusUpdatedDetail": "Se actualizó correctamente el estado de la incidencia",
+            "statusUpdateFailed": "No se pudo actualizar el estado de la incidencia",
+            "statusOptions": {
+              "open": "Abierto",
+              "in_progress": "En progreso",
+              "closed": "Cerrado"
+            }
+          },
+          "eva": {
+            "loading": "Cargando evaluación del árbol...",
+            "noData": "No hay datos de evaluación disponibles para este árbol.",
+            "evaluationIndices": "Índices de Evaluación",
+            "treeStatus": "Estado del Árbol",
+            "stabilityIndex": "Índice de Estabilidad",
+            "gravityHeightRatio": "Relación Altura-Gravedad",
+            "rootCrownRatio": "Relación Raíz-Copa",
+            "windStabilityIndex": "Índice de Estabilidad al Viento",
+            "environmentalFactors": "Factores Ambientales",
+            "windExposure": "Exposición al Viento",
+            "droughtExposure": "Exposición a Sequía",
+            "technicalData": "Datos Técnicos",
+            "height": "Altura",
+            "diameter": "Diámetro",
+            "crownWidth": "Ancho de copa",
+            "crownProjectionArea": "Área de proyección de copa",
+            "effectiveRootArea": "Área efectiva de raíces",
+            "createEva": "Crear EVA",
+            "editEva": "Editar EVA"
+          },
+          "history": {
+            "title": "Historial del elemento (en construcción...)",
+            "notes": "Notas",
+            "task": "Tarea",
+            "description": "Descripción",
+            "workOrder": "Orden de Trabajo",
+            "status": "Estado",
+            "noTasks": "No hay tareas registradas para este elemento."
+          }
+        }
+      },
       "resources": {
         "form": {
           "fields": {

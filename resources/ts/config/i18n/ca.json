@@ -192,6 +192,82 @@
           "cloud": "Núvol"
         }
       },
+      "inventory": {
+        "elementDetailPopup": {
+          "tabs": {
+            "information": "Informació",
+            "incidences": "Incidències",
+            "history": "Historial",
+            "eva": "EVA"
+          },
+          "information": {
+            "title": "Informació de l'Arbre",
+            "description": "Descripció",
+            "elementType": "Tipus d'Element",
+            "treeFamily": "Família de l'Arbre",
+            "treeGenus": "Gènere",
+            "treeSpecies": "Espècie",
+            "creationDate": "Data de Creació",
+            "location": {
+              "title": "Ubicació",
+              "zone": "Zona",
+              "latitude": "Latitud",
+              "longitude": "Longitud"
+            },
+            "deleteElement": "Eliminar Element",
+            "elementDeleted": "Element eliminat correctament",
+            "elementDeleteFailed": "No s'ha pogut eliminar l'element"
+          },
+          "incidences": {
+            "title": "Incidència",
+            "name": "📛 Nom",
+            "creationDate": "📅 Data de Creació",
+            "status": "⚠️ Estat",
+            "description": "📝 Descripció",
+            "addIncident": "Afegir Incidència",
+            "deleteIncident": "Eliminar Incidència",
+            "noIncidences": "No hi ha incidències registrades per aquest element.",
+            "statusUpdated": "Estat actualitzat",
+            "statusUpdatedDetail": "L'estat de la incidència s'ha actualitzat correctament",
+            "statusUpdateFailed": "No s'ha pogut actualitzar l'estat de la incidència",
+            "statusOptions": {
+              "open": "Obert",
+              "in_progress": "En Progrés",
+              "closed": "Tancat"
+            }
+          },
+          "eva": {
+            "loading": "Carregant avaluació de l'arbre...",
+            "noData": "No hi ha dades d'avaluació disponibles per aquest arbre.",
+            "evaluationIndices": "Índexs d'Avaluació",
+            "treeStatus": "Estat de l'Arbre",
+            "stabilityIndex": "Índex d'Estabilitat",
+            "gravityHeightRatio": "Relació Alçada-Gravetat",
+            "rootCrownRatio": "Relació Arrel-Copa",
+            "windStabilityIndex": "Índex d'Estabilitat al Vent",
+            "environmentalFactors": "Factors Ambientals",
+            "windExposure": "Exposició al Vent",
+            "droughtExposure": "Exposició a la Sequera",
+            "technicalData": "Dades Tècniques",
+            "height": "Alçada",
+            "diameter": "Diàmetre",
+            "crownWidth": "Amplada de la Copa",
+            "crownProjectionArea": "Àrea de Projecció de la Copa",
+            "effectiveRootArea": "Àrea Efectiva de l'Arrel",
+            "createEva": "Crear EVA",
+            "editEva": "Editar EVA"
+          },
+          "history": {
+            "title": "Historial de l'element (en construcció...)",
+            "notes": "Notes",
+            "task": "Tasca",
+            "description": "Descripció",
+            "workOrder": "Ordre de Treball",
+            "status": "Estat",
+            "noTasks": "No hi ha tasques registrades per aquest element."
+          }
+        }
+      },
       "resources": {
         "form": {
           "fields": {
