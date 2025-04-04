@@ -222,8 +222,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
             <div className="block lg:hidden">
               <Button
                 onClick={() => setMenuOpen(!menuOpen)}
-                color="text-gray-800">
-                <Icon width="24px" icon="tabler:menu" color="#ffffff" />
+                className="text-gray-800">
+                <Icon icon="tabler:menu" className="h-5 w-5 text-white" />
               </Button>
             </div>
             <a href="/" className="flex-none">
@@ -238,8 +238,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 className={`text-gray-800 px-4 py-3 rounded flex items-center gap-2 ${
                   item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
                 }`}>
-                <Icon inline={true} width="24px" icon={item.icon} />{' '}
-                {item.label}
+                <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
               </Link>
             ))}
           </div>
@@ -325,7 +324,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                       ? 'bg-white border border-gray-300 text-indigo-600'
                       : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
                   }`}>
-                  <Icon width="22px" icon={item.icon} /> {item.label}
+                  <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
                 </Link>
               ))}
             {isSettingsPage &&
@@ -338,7 +337,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                       ? 'bg-white border border-gray-300 text-indigo-600'
                       : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
                   }`}>
-                  <Icon width="22px" icon={item.icon} /> {item.label}
+                  <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
                 </Link>
               ))}
           </div>

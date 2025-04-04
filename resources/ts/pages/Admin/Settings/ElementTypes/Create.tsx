@@ -7,6 +7,7 @@ import { ColorPicker } from 'primereact/colorpicker';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -85,109 +86,123 @@ export default function CreateElementType() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
+      <div className="flex justify-center p-4">
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">
-          {t('admin.pages.elementTypes.loading')}
-        </span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4 text-white"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/settings/element-types')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.elementTypes.create.title')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/settings/element-types')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.elementTypes.create.title')}
+        </h2>
+      </div>
+
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}>
             {({ errors, touched, values, setFieldValue }) => (
-              <>
-                <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">
-                      {t('admin.pages.elementTypes.columns.name')}
-                    </label>
-                    <Field
-                      name="name"
-                      as={InputText}
-                      placeholder={t(
-                        'admin.pages.elementTypes.create.placeholders.name',
-                      )}
-                      className={errors.name && touched.name ? 'p-invalid' : ''}
-                    />
-                    {errors.name && touched.name && (
-                      <small className="p-error">{errors.name}</small>
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:tag" className="h-5 w-5 mr-2" />
+                    {t('admin.pages.elementTypes.columns.name')}
+                  </label>
+                  <Field
+                    name="name"
+                    as={InputText}
+                    placeholder={t(
+                      'admin.pages.elementTypes.create.placeholders.name',
                     )}
-                  </div>
+                    className={errors.name && touched.name ? 'p-invalid' : ''}
+                  />
+                  {errors.name && touched.name && (
+                    <small className="p-error">{errors.name}</small>
+                  )}
+                </div>
 
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">
-                      {t('admin.pages.elementTypes.columns.requires_tree_type')}
-                    </label>
-                    <Dropdown
-                      value={values.requires_tree_type}
-                      options={booleanOptions}
-                      onChange={(e) =>
-                        setFieldValue('requires_tree_type', e.value)
-                      }
-                      placeholder={t(
-                        'admin.pages.elementTypes.create.placeholders.requires_tree_type',
-                      )}
-                      className={
-                        errors.requires_tree_type && touched.requires_tree_type
-                          ? 'p-invalid'
-                          : ''
-                      }
-                    />
-                    {errors.requires_tree_type &&
-                      touched.requires_tree_type && (
-                        <small className="p-error">
-                          {errors.requires_tree_type}
-                        </small>
-                      )}
-                  </div>
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:tree" className="h-5 w-5 mr-2" />
+                    {t('admin.pages.elementTypes.columns.requires_tree_type')}
+                  </label>
+                  <Dropdown
+                    value={values.requires_tree_type}
+                    options={booleanOptions}
+                    onChange={(e) =>
+                      setFieldValue('requires_tree_type', e.value)
+                    }
+                    placeholder={t(
+                      'admin.pages.elementTypes.create.placeholders.requires_tree_type',
+                    )}
+                    className={
+                      errors.requires_tree_type && touched.requires_tree_type
+                        ? 'p-invalid'
+                        : ''
+                    }
+                  />
+                  {errors.requires_tree_type &&
+                    touched.requires_tree_type && (
+                      <small className="p-error">
+                        {errors.requires_tree_type}
+                      </small>
+                    )}
+                </div>
 
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">
-                      {t('admin.pages.elementTypes.columns.description')}
-                    </label>
-                    <Field
-                      name="description"
-                      as={InputTextarea}
-                      rows={5}
-                      placeholder={t(
-                        'admin.pages.elementTypes.create.placeholders.description',
-                      )}
-                    />
-                  </div>
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:notes" className="h-5 w-5 mr-2" />
+                    {t('admin.pages.elementTypes.columns.description')}
+                  </label>
+                  <Field
+                    name="description"
+                    as={InputTextarea}
+                    rows={5}
+                    placeholder={t(
+                      'admin.pages.elementTypes.create.placeholders.description',
+                    )}
+                  />
+                </div>
 
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">Ícono</label>
-                    <Dropdown
-                      value={values.icon}
-                      options={iconList}
-                      onChange={(e) => setFieldValue('icon', e.value)}
-                      placeholder={t(
-                        'admin.pages.elementTypes.create.placeholders.icon',
-                      )}
-                      filter
-                      itemTemplate={(option) => (
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:icons" className="h-5 w-5 mr-2" />
+                    {t('admin.pages.elementTypes.create.placeholders.icon')}
+                  </label>
+                  <Dropdown
+                    value={values.icon}
+                    options={iconList}
+                    onChange={(e) => setFieldValue('icon', e.value)}
+                    placeholder={t(
+                      'admin.pages.elementTypes.create.placeholders.icon',
+                    )}
+                    filter
+                    itemTemplate={(option) => (
+                      <div className="flex align-items-center">
+                        <Icon
+                          icon={'mdi:' + option}
+                          className="mr-2 text-2xl"
+                        />
+                        <span>
+                          {t('admin.pages.elementTypes.icons.' + option)}
+                        </span>
+                      </div>
+                    )}
+                    valueTemplate={(option) =>
+                      option ? (
                         <div className="flex align-items-center">
                           <Icon
                             icon={'mdi:' + option}
@@ -197,58 +212,45 @@ export default function CreateElementType() {
                             {t('admin.pages.elementTypes.icons.' + option)}
                           </span>
                         </div>
-                      )}
-                      valueTemplate={(option) =>
-                        option ? (
-                          <div className="flex align-items-center">
-                            <Icon
-                              icon={'mdi:' + option}
-                              className="mr-2 text-2xl"
-                            />
-                            <span>
-                              {t('admin.pages.elementTypes.icons.' + option)}
-                            </span>
-                          </div>
-                        ) : null
-                      }
-                      className={errors.icon && touched.icon ? 'p-invalid' : ''}
-                    />
-                    {errors.icon && touched.icon && (
-                      <small className="p-error">{errors.icon}</small>
-                    )}
-                  </div>
+                      ) : null
+                    }
+                    className={errors.icon && touched.icon ? 'p-invalid' : ''}
+                  />
+                  {errors.icon && touched.icon && (
+                    <small className="p-error">{errors.icon}</small>
+                  )}
+                </div>
 
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">
-                      {t('admin.pages.elementTypes.columns.color')}
-                    </label>
-                    <ColorPicker
-                      value={values.color}
-                      onChange={(e) => setFieldValue('color', e.value)}
-                    />
-                  </div>
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:palette" className="h-5 w-5 mr-2" />
+                    {t('admin.pages.elementTypes.columns.color')}
+                  </label>
+                  <ColorPicker
+                    value={values.color}
+                    onChange={(e) => setFieldValue('color', e.value)}
+                  />
+                </div>
 
-                  <div className="md:col-span-2 flex justify-end mt-4">
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full md:w-auto"
-                      icon={
-                        isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                      }
-                      label={
-                        isSubmitting
-                          ? t('admin.pages.elementTypes.create.submittingText')
-                          : t('admin.pages.elementTypes.create.submitButton')
-                      }
-                    />
-                  </div>
-                </Form>
-              </>
+                <div className="md:col-span-2 flex justify-end mt-6">
+                  <Button
+                    type="submit"
+                    severity="info"
+                    disabled={isSubmitting}
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
+                    label={
+                      isSubmitting
+                        ? t('admin.pages.elementTypes.create.submittingText')
+                        : t('admin.pages.elementTypes.create.submitButton')
+                    }
+                  />
+                </div>
+              </Form>
             )}
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 }

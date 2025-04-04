@@ -84,7 +84,7 @@ export default function Resources() {
               : 'error'
           }
           text={msg}
-          className="mb-4 w-full"
+          className="block w-full !my-4"
         />
       )}
       {error && (

@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Icon } from '@iconify/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, useField } from 'formik';
+import { Formik, Form, useFormikContext } from 'formik';
 import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { Message } from 'primereact/message';
+import { Icon } from '@iconify/react';
+import axiosClient from '@/api/axiosClient';
+import { useTranslation } from 'react-i18next';
 import {
   differenceInYears,
   differenceInMonths,
@@ -16,119 +18,100 @@ import {
   subMonths,
   format,
 } from 'date-fns';
+import { Eva } from '@/utils/treeEvaluation';
 
 interface FormFieldProps {
-  as: React.ElementType;
   name: string;
   label: string;
-  [key: string]: any;
+  component: any;
+  options?: { label: string; value: number }[];
+  min?: number;
+  max?: number;
 }
 
-const FormField = ({
-  as: Component,
-  name,
-  label,
-  ...props
-}: FormFieldProps) => {
-  const [field, meta, helpers] = useField(name);
-
-  if (Component === InputNumber) {
-    return (
-      <div className="flex flex-col mb-4">
-        <label
-          htmlFor={name}
-          className="flex items-center text-sm font-medium text-gray-700 mb-1">
-          <Icon icon="tabler:input-number" className="h-5 w-5 mr-2" />
-          {label}
-        </label>
-        <InputNumber
-          id={name}
-          value={field.value}
-          onValueChange={(e) => helpers.setValue(e.value)}
-          {...props}
-          className="w-full"
-        />
-        {meta.touched && meta.error ? (
-          <small className="p-error">{meta.error}</small>
-        ) : null}
-      </div>
-    );
-  }
-
-  if (Component === Dropdown) {
-    return (
-      <div className="flex flex-col mb-4">
-        <label
-          htmlFor={name}
-          className="flex items-center text-sm font-medium text-gray-700 mb-1">
-          <Icon icon="tabler:dropdown" className="h-5 w-5 mr-2" />
-          {label}
-        </label>
-        <Dropdown
-          id={name}
-          value={field.value}
-          onChange={(e) => helpers.setValue(e.value)}
-          optionLabel="label"
-          optionValue="value"
-          {...props}
-          className="w-full"
-        />
-        {meta.touched && meta.error ? (
-          <small className="p-error">{meta.error}</small>
-        ) : null}
-      </div>
-    );
-  }
+const FormikInputNumber: React.FC<FormFieldProps> = ({ name, label, min, max }) => {
+  const { values, errors, touched, setFieldValue } = useFormikContext<any>();
 
   return (
     <div className="flex flex-col mb-4">
-      <label
-        htmlFor={name}
-        className="flex items-center text-sm font-medium text-gray-700 mb-1">
-        <Icon icon="tabler:input" className="h-5 w-5 mr-2" />
+      <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+        <Icon icon="tabler:input-number" className="h-5 w-5 mr-2" />
         {label}
       </label>
-      <Component id={name} {...field} {...props} className="w-full" />
-      {meta.touched && meta.error ? (
-        <small className="p-error">{meta.error}</small>
+      <InputNumber
+        id={name}
+        value={values[name]}
+        onValueChange={(e) => setFieldValue(name, e.value)}
+        min={min}
+        max={max}
+        className={errors[name] && touched[name] ? 'p-invalid w-full' : 'w-full'}
+      />
+      {errors[name] && touched[name] ? (
+        <small className="p-error">{String(errors[name])}</small>
+      ) : null}
+    </div>
+  );
+};
+
+const FormikDropdown: React.FC<FormFieldProps> = ({ name, label, options }) => {
+  const { values, errors, touched, setFieldValue } = useFormikContext<any>();
+
+  return (
+    <div className="flex flex-col mb-4">
+      <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+        <Icon icon="tabler:dropdown" className="h-5 w-5 mr-2" />
+        {label}
+      </label>
+      <Dropdown
+        id={name}
+        value={values[name]}
+        options={options}
+        onChange={(e) => setFieldValue(name, e.value)}
+        optionLabel="label"
+        optionValue="value"
+        className={errors[name] && touched[name] ? 'p-invalid w-full' : 'w-full'}
+      />
+      {errors[name] && touched[name] ? (
+        <small className="p-error">{String(errors[name])}</small>
       ) : null}
     </div>
   );
 };
 
 interface EditEvaProps {
-  preselectedElementId: number;
-  onClose: () => void;
-  redirectPath?: string; // Add redirectPath prop
+  preselectedElementId?: number;
+  onClose?: () => void;
+  redirectPath?: string;
+}
+
+interface DictionaryOption {
+  label: string;
+  value: number;
+}
+
+interface Dictionaries {
+  unbalancedCrown: DictionaryOption[];
+  overextendedBranches: DictionaryOption[];
+  cracks: DictionaryOption[];
+  deadBranches: DictionaryOption[];
+  inclination: DictionaryOption[];
+  VForks: DictionaryOption[];
+  cavities: DictionaryOption[];
+  barkDamage: DictionaryOption[];
+  soilLifting: DictionaryOption[];
+  cutRoots: DictionaryOption[];
+  basalRot: DictionaryOption[];
+  exposedRoots: DictionaryOption[];
+  wind: DictionaryOption[];
+  drought: DictionaryOption[];
 }
 
 export default function EditEva({ preselectedElementId, onClose, redirectPath }: EditEvaProps) {
-  const { id } = useParams();
+  const { id } = useParams<{id: string}>();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  interface DictionaryOption {
-    label: string;
-    value: number;
-  }
-
-  interface Dictionaries {
-    unbalancedCrown: DictionaryOption[];
-    overextendedBranches: DictionaryOption[];
-    cracks: DictionaryOption[];
-    deadBranches: DictionaryOption[];
-    inclination: DictionaryOption[];
-    VForks: DictionaryOption[];
-    cavities: DictionaryOption[];
-    barkDamage: DictionaryOption[];
-    soilLifting: DictionaryOption[];
-    cutRoots: DictionaryOption[];
-    basalRot: DictionaryOption[];
-    exposedRoots: DictionaryOption[];
-    wind: DictionaryOption[];
-    drought: DictionaryOption[];
-  }
-
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const elementId = preselectedElementId || id;
 
   const [initialValues, setInitialValues] = useState({
@@ -193,16 +176,14 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
           years,
           months,
         });
-        setIsLoading(false);
       } catch (error) {
         console.error(error);
+        setError(t('admin.pages.evas.list.messages.error'));
+      } finally {
         setIsLoading(false);
       }
     };
-    fetchEva();
-  }, [elementId]);
-
-  useEffect(() => {
+    
     const fetchDictionaries = async () => {
       try {
         const response = await axiosClient.get('/admin/evas/create');
@@ -234,12 +215,13 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
         console.error(error);
       }
     };
-    fetchDictionaries();
-  }, []);
+    
+    Promise.all([fetchEva(), fetchDictionaries()]);
+  }, [elementId, t]);
 
   const validationSchema = Yup.object({
     element_id: Yup.number(),
-    date_birth: Yup.date(),
+    date_birth: Yup.string(),
     years: Yup.number().min(0),
     months: Yup.number().min(0).max(11),
     height: Yup.number(),
@@ -267,6 +249,8 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setIsSubmitting(true);
+    setError(null);
     try {
       const today = new Date();
       const birthDate = subMonths(subYears(today, values.years), values.months);
@@ -307,251 +291,253 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
       await axiosClient.put(`/admin/evas/${elementId}`, payload);
 
       if (redirectPath) {
-        onClose(); // Close the popup if redirectPath is provided
+        onClose && onClose();
       } else {
-        navigate(`/admin/evas/${elementId}`, {
-          state: { success: t('messages.updateSuccess') },
+        navigate('/admin/evas', {
+          state: { success: t('admin.pages.evas.list.messages.updateSuccess') },
         });
       }
-    } catch (error) {
-      console.error('Error en handleSubmit:', error);
-      navigate(`/admin/evas/${elementId}`, {
-        state: { error: t('messages.error') },
-      });
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message ||
+          t('admin.pages.evas.list.messages.error'),
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
+      <div className="flex justify-center p-4">
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate(`/admin/evas/${elementId}`)}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.evas.edit.title')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/evas')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.evas.edit.title')}
+        </h2>
+      </div>
+
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
+          {error && (
+            <Message severity="error" text={error} className="mb-4 w-full" />
+          )}
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
             enableReinitialize>
-            {({ isSubmitting }) => (
-              <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Sección: Identificación */}
-                <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+            {() => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="md:col-span-1 p-4 rounded-lg border border-gray-300 bg-gray-100">
                   <h1 className="text-xl font-bold mb-4">
                     {t('admin.pages.evas.edit.identification')}
                   </h1>
-                  <FormField
+                  <FormikInputNumber
                     name="years"
                     label={t('admin.pages.evas.form.years')}
-                    as={InputNumber}
+                    component={InputNumber}
                     min={0}
                   />
-                  <FormField
+                  <FormikInputNumber
                     name="months"
                     label={t('admin.pages.evas.form.months')}
-                    as={InputNumber}
+                    component={InputNumber}
                     min={0}
                     max={11}
                   />
                 </div>
-                {/* Sección: Condición del árbol */}
+                
                 <div className="md:col-span-1">
-                  <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                  <div className="p-4 rounded-lg border border-gray-300 bg-gray-100">
                     <h1 className="text-xl font-bold mb-4">
                       {t('admin.pages.evas.edit.treeCondition')}
                     </h1>
 
-                    {/* Subsección: Dimensiones */}
                     <h2 className="text-lg font-semibold mb-2">
                       {t('admin.pages.evas.edit.dimensions')}
                     </h2>
-                    <FormField
+                    <FormikInputNumber
                       name="height"
                       label={`${t('admin.pages.evas.form.height')} (m)`}
-                      as={InputNumber}
+                      component={InputNumber}
                     />
-                    <FormField
+                    <FormikInputNumber
                       name="diameter"
                       label={`${t('admin.pages.evas.form.diameter')} (cm)`}
-                      as={InputNumber}
+                      component={InputNumber}
                     />
-                    <FormField
+                    <FormikInputNumber
                       name="crown_width"
                       label={`${t('admin.pages.evas.form.crown_width')} (m)`}
-                      as={InputNumber}
+                      component={InputNumber}
                     />
-                    <FormField
+                    <FormikInputNumber
                       name="crown_projection_area"
                       label={`${t('admin.pages.evas.form.crown_projection_area')} (m²)`}
-                      as={InputNumber}
+                      component={InputNumber}
                     />
-                    <FormField
+                    <FormikInputNumber
                       name="root_surface_diameter"
                       label={`${t('admin.pages.evas.form.root_surface_diameter')} (m)`}
-                      as={InputNumber}
+                      component={InputNumber}
                     />
-                    <FormField
+                    <FormikInputNumber
                       name="effective_root_area"
                       label={`${t('admin.pages.evas.form.effective_root_area')} (m²)`}
-                      as={InputNumber}
+                      component={InputNumber}
                     />
-                    <FormField
+                    <FormikInputNumber
                       name="height_estimation"
                       label={`${t('admin.pages.evas.form.height_estimation')} (m)`}
-                      as={InputNumber}
+                      component={InputNumber}
                     />
                   </div>
                 </div>
-                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50 mb-6">
-                  {/* Subsección: Estado */}
+                
+                <div className="md:col-span-2 p-4 rounded-lg border border-gray-300 bg-gray-100">
                   <h2 className="text-lg font-semibold mb-2">
                     {t('admin.pages.evas.edit.state')}
                   </h2>
 
-                  {/* Subsubsección: Copa y Ramas */}
                   <h3 className="text-md font-medium mb-2">
                     {t('admin.pages.evas.edit.crownBranches')}
                   </h3>
-                  <FormField
-                    name="unbalanced_crown"
-                    label={t('admin.pages.evas.form.unbalanced_crown')}
-                    as={Dropdown}
-                    options={dictionaries.unbalancedCrown}
-                  />
-                  <FormField
-                    name="overextended_branches"
-                    label={t('admin.pages.evas.form.overextended_branches')}
-                    as={Dropdown}
-                    options={dictionaries.overextendedBranches}
-                  />
-                  <FormField
-                    name="cracks"
-                    label={t('admin.pages.evas.form.cracks')}
-                    as={Dropdown}
-                    options={dictionaries.cracks}
-                  />
-                  <FormField
-                    name="dead_branches"
-                    label={t('admin.pages.evas.form.dead_branches')}
-                    as={Dropdown}
-                    options={dictionaries.deadBranches}
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormikDropdown
+                      name="unbalanced_crown"
+                      label={t('admin.pages.evas.form.unbalanced_crown')}
+                      component={Dropdown}
+                      options={dictionaries.unbalancedCrown}
+                    />
+                    <FormikDropdown
+                      name="overextended_branches"
+                      label={t('admin.pages.evas.form.overextended_branches')}
+                      component={Dropdown}
+                      options={dictionaries.overextendedBranches}
+                    />
+                    <FormikDropdown
+                      name="cracks"
+                      label={t('admin.pages.evas.form.cracks')}
+                      component={Dropdown}
+                      options={dictionaries.cracks}
+                    />
+                    <FormikDropdown
+                      name="dead_branches"
+                      label={t('admin.pages.evas.form.dead_branches')}
+                      component={Dropdown}
+                      options={dictionaries.deadBranches}
+                    />
+                  </div>
 
-                  {/* Subsubsección: Tronco */}
                   <h3 className="text-md font-medium mt-4 mb-2">
                     {t('admin.pages.evas.edit.trunk')}
                   </h3>
-                  <FormField
-                    name="inclination"
-                    label={t('admin.pages.evas.form.inclination')}
-                    as={Dropdown}
-                    options={dictionaries.inclination}
-                  />
-                  <FormField
-                    name="V_forks"
-                    label={t('admin.pages.evas.form.V_forks')}
-                    as={Dropdown}
-                    options={dictionaries.VForks}
-                  />
-                  <FormField
-                    name="cavities"
-                    label={t('admin.pages.evas.form.cavities')}
-                    as={Dropdown}
-                    options={dictionaries.cavities}
-                  />
-                  <FormField
-                    name="bark_damage"
-                    label={t('admin.pages.evas.form.bark_damage')}
-                    as={Dropdown}
-                    options={dictionaries.barkDamage}
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormikDropdown
+                      name="inclination"
+                      label={t('admin.pages.evas.form.inclination')}
+                      component={Dropdown}
+                      options={dictionaries.inclination}
+                    />
+                    <FormikDropdown
+                      name="V_forks"
+                      label={t('admin.pages.evas.form.V_forks')}
+                      component={Dropdown}
+                      options={dictionaries.VForks}
+                    />
+                    <FormikDropdown
+                      name="cavities"
+                      label={t('admin.pages.evas.form.cavities')}
+                      component={Dropdown}
+                      options={dictionaries.cavities}
+                    />
+                    <FormikDropdown
+                      name="bark_damage"
+                      label={t('admin.pages.evas.form.bark_damage')}
+                      component={Dropdown}
+                      options={dictionaries.barkDamage}
+                    />
+                  </div>
 
-                  {/* Subsubsección: Raíces */}
                   <h3 className="text-md font-medium mt-4 mb-2">
                     {t('admin.pages.evas.edit.roots')}
                   </h3>
-                  <FormField
-                    name="soil_lifting"
-                    label={t('admin.pages.evas.form.soil_lifting')}
-                    as={Dropdown}
-                    options={dictionaries.soilLifting}
-                  />
-                  <FormField
-                    name="cut_damaged_roots"
-                    label={t('admin.pages.evas.form.cut_damaged_roots')}
-                    as={Dropdown}
-                    options={dictionaries.cutRoots}
-                  />
-                  <FormField
-                    name="basal_rot"
-                    label={t('admin.pages.evas.form.basal_rot')}
-                    as={Dropdown}
-                    options={dictionaries.basalRot}
-                  />
-                  <FormField
-                    name="exposed_surface_roots"
-                    label={t('admin.pages.evas.form.exposed_surface_roots')}
-                    as={Dropdown}
-                    options={dictionaries.exposedRoots}
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormikDropdown
+                      name="soil_lifting"
+                      label={t('admin.pages.evas.form.soil_lifting')}
+                      component={Dropdown}
+                      options={dictionaries.soilLifting}
+                    />
+                    <FormikDropdown
+                      name="cut_damaged_roots"
+                      label={t('admin.pages.evas.form.cut_damaged_roots')}
+                      component={Dropdown}
+                      options={dictionaries.cutRoots}
+                    />
+                    <FormikDropdown
+                      name="basal_rot"
+                      label={t('admin.pages.evas.form.basal_rot')}
+                      component={Dropdown}
+                      options={dictionaries.basalRot}
+                    />
+                    <FormikDropdown
+                      name="exposed_surface_roots"
+                      label={t('admin.pages.evas.form.exposed_surface_roots')}
+                      component={Dropdown}
+                      options={dictionaries.exposedRoots}
+                    />
+                  </div>
                 </div>
-                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
-                  {/* Sección: Condición del entorno */}
-                  <div className="md:col-span-2">
+                
+                <div className="md:col-span-2 p-4 rounded-lg border border-gray-300 bg-gray-100">
+                  <div>
                     <h1 className="text-xl font-bold mb-4">
                       {t('admin.pages.evas.edit.environmentCondition')}
                     </h1>
 
-                    {/* Subsección: Factores Ambientales */}
                     <h2 className="text-lg font-semibold mb-2">
                       {t('admin.pages.evas.edit.environmentalFactors')}
                     </h2>
-
-                    {/* Subsubsección: Exposición al viento */}
-                    <FormField
-                      name="wind"
-                      label={t('admin.pages.evas.edit.windExposure')}
-                      as={Dropdown}
-                      options={dictionaries.wind}
-                    />
-
-                    {/* Subsubsección: Exposición a la sequía */}
-                    <FormField
-                      name="drought"
-                      label={t('admin.pages.evas.edit.droughtExposure')}
-                      as={Dropdown}
-                      options={dictionaries.drought}
-                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormikDropdown
+                        name="wind"
+                        label={t('admin.pages.evas.form.wind')}
+                        component={Dropdown}
+                        options={dictionaries.wind}
+                      />
+                      <FormikDropdown
+                        name="drought"
+                        label={t('admin.pages.evas.form.drought')}
+                        component={Dropdown}
+                        options={dictionaries.drought}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="md:col-span-2 flex justify-end mt-4">
+                
+                <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"
+                    severity="info"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                    }
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
                         ? t('admin.pages.evas.form.saving')
@@ -564,6 +550,6 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 }

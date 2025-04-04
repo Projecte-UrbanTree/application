@@ -95,34 +95,18 @@ export default function Evas() {
   const calculateAge = (dateString: string) => {
     const today = new Date();
     const birthDate = new Date(dateString);
+    console.log('Birth Date:', birthDate);
     const years = differenceInYears(today, birthDate);
     const months = differenceInMonths(today, birthDate) % 12;
-    if (years == 0) {
+
+    if (years === 0) {
       return `${months} ${t('admin.pages.evas.age.months')}`;
     }
 
     return `${years} ${t('admin.pages.evas.age.years')}, ${months} ${t('admin.pages.evas.age.months')}`;
   };
 
-  const getStatusColor = (eva: Eva) => {
-    const statusValues = [
-      eva.unbalanced_crown,
-      eva.overextended_branches,
-      eva.cracks,
-      eva.dead_branches,
-      eva.inclination,
-      eva.V_forks,
-      eva.cavities,
-      eva.bark_damage,
-      eva.soil_lifting,
-      eva.cut_damaged_roots,
-      eva.basal_rot,
-      eva.exposed_surface_roots,
-      eva.wind,
-      eva.drought,
-      eva.status,
-    ];
-
+  const calculateIndices = (eva: Eva) => {
     const calculateStabilityIndex = (height: number, diameter: number) => {
       const index = height / diameter;
       if (index < 50) {
@@ -187,7 +171,7 @@ export default function Evas() {
       }
     };
 
-    const indices = [
+    return [
       calculateStabilityIndex(eva.height, eva.diameter),
       calculateGravityHeightRatio(eva.height_estimation, eva.height),
       calculateRootCrownRatio(
@@ -200,16 +184,42 @@ export default function Evas() {
         eva.root_surface_diameter,
       ),
     ];
+  };
 
+  const CRITICAL = '3';
+  const HIGH = '2';
+  const MODERATE = '1';
+  const LOW = '0';
+
+  const getStatusColor = (eva: Eva) => {
+    const statusValues = [
+      eva.unbalanced_crown,
+      eva.overextended_branches,
+      eva.cracks,
+      eva.dead_branches,
+      eva.inclination,
+      eva.V_forks,
+      eva.cavities,
+      eva.bark_damage,
+      eva.soil_lifting,
+      eva.cut_damaged_roots,
+      eva.basal_rot,
+      eva.exposed_surface_roots,
+      eva.wind,
+      eva.drought,
+      eva.status,
+    ];
+
+    const indices = calculateIndices(eva);
     const allValues = [...statusValues, ...indices];
 
-    if (allValues.some((element) => String(element) === '3')) {
+    if (allValues.some((element) => String(element) === CRITICAL)) {
       return '#FF0000';
-    } else if (allValues.some((element) => String(element) === '2')) {
+    } else if (allValues.some((element) => String(element) === HIGH)) {
       return '#FFFF00';
-    } else if (allValues.some((element) => String(element) === '1')) {
+    } else if (allValues.some((element) => String(element) === MODERATE)) {
       return '#00FF00';
-    } else if (allValues.some((element) => String(element) === '0')) {
+    } else if (allValues.some((element) => String(element) === LOW)) {
       return '#6AA84F';
     } else {
       return 'gray';
@@ -235,89 +245,12 @@ export default function Evas() {
       eva.status,
     ];
 
-    const calculateStabilityIndex = (height: number, diameter: number) => {
-      const index = height / diameter;
-      if (index < 50) {
-        return 0;
-      } else if (index >= 50 && index <= 80) {
-        return 2;
-      } else if (index > 80 && index <= 100) {
-        return 3;
-      } else {
-        return -1;
-      }
-    };
-
-    const calculateGravityHeightRatio = (
-      heightEstimation: number,
-      height: number,
-    ) => {
-      const ratio = heightEstimation / height;
-      if (ratio < 0.3) {
-        return 0;
-      } else if (ratio >= 0.3 && ratio <= 0.5) {
-        return 2;
-      } else if (ratio > 0.5) {
-        return 3;
-      } else {
-        return -1;
-      }
-    };
-
-    const calculateRootCrownRatio = (
-      rootSurfaceDiameter: number,
-      crownProjectionArea: number,
-    ) => {
-      const ratio = rootSurfaceDiameter / crownProjectionArea;
-      if (ratio > 2) {
-        return 0;
-      } else if (ratio > 1.5 && ratio <= 2) {
-        return 1;
-      } else if (ratio > 1 && ratio <= 1.5) {
-        return 2;
-      } else if (ratio <= 1) {
-        return 3;
-      } else {
-        return -1;
-      }
-    };
-
-    const calculateWindStabilityIndex = (
-      height: number,
-      crown_width: number,
-      rootSurfaceDiameter: number,
-    ) => {
-      const index = (height * crown_width) / rootSurfaceDiameter;
-      if (index < 0.5) {
-        return 0;
-      } else if (index >= 0.5 && index <= 1) {
-        return 2;
-      } else if (index > 1) {
-        return 3;
-      } else {
-        return -1;
-      }
-    };
-
-    const indices = [
-      calculateStabilityIndex(eva.height, eva.diameter),
-      calculateGravityHeightRatio(eva.height_estimation, eva.height),
-      calculateRootCrownRatio(
-        eva.root_surface_diameter,
-        eva.crown_projection_area,
-      ),
-      calculateWindStabilityIndex(
-        eva.height,
-        eva.crown_width,
-        eva.root_surface_diameter,
-      ),
-    ];
-
+    const indices = calculateIndices(eva);
     const allValues = [...statusValues, ...indices];
 
-    if (allValues.some((element) => String(element) === '3')) {
+    if (allValues.some((element) => String(element) === CRITICAL)) {
       return 'tabler:x';
-    } else if (allValues.some((element) => String(element) === '2')) {
+    } else if (allValues.some((element) => String(element) === HIGH)) {
       return 'tabler:alert-circle';
     }
     return 'tabler:check';

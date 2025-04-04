@@ -271,20 +271,20 @@ const EditWorkOrder = () => {
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/work-orders')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.workOrders.form.title.edit')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/work-orders')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.workOrders.form.title.edit')}
+        </h2>
+      </div>
+      
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           {error && (
             <Message severity="error" text={error} className="mb-4 w-full" />
           )}
@@ -651,7 +651,7 @@ const EditWorkOrder = () => {
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 };
 

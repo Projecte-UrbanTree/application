@@ -688,7 +688,20 @@
       },
       "evas": {
         "show": {
-          "title": "Eva Details"
+          "title": "Eva Details",
+          "generalInfo": "General Information",
+          "indexCalculation": "Index Calculation",
+          "environmentalFactors": "Environmental Factors",
+          "treeStructure": "Tree Structure",
+          "treeCondition": "Tree Condition",
+          "element": "Element",
+          "statusFactorInfo": "The tree status factor indicates the overall health of the tree.",
+          "formulas": {
+            "stabilityIndex": "Height / Diameter",
+            "gravityHeightRatio": "Estimated Height / Height",
+            "rootCrownRatio": "Effective Root Area / Crown Projection Area",
+            "windStabilityIndex": "(Height * Crown Width) / Effective Root Area"
+          }
         },
         "dictionaries": {
           "unbalancedCrown": {
@@ -851,7 +864,11 @@
             "edit": "Edit Eva"
           },
           "saving": "Saving...",
-          "save": "Save"
+          "save": "Save",
+          "age": "Age",
+          "yearsShort": "Years",
+          "monthsShort": "Months",
+          "dateBirth": "Date of Birth"
         },
         "list": {
           "actions": {

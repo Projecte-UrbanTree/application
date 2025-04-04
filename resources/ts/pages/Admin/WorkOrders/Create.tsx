@@ -187,21 +187,31 @@ const CreateWorkOrder = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex justify-center p-4">
         <ProgressSpinner
           style={{ width: '50px', height: '50px' }}
           strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
 
   if (!currentContract) {
     return (
-      <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-        <Card className="w-full max-w-3xl shadow-lg">
-          <div className="p-6 text-center">
+      <>
+        <div className="flex items-center mb-4">
+          <Button
+            icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+            className="p-button-text mr-3"
+            onClick={() => navigate('/admin/work-orders')}
+          />
+          <h2 className="text-xl font-semibold text-gray-800">
+            {t('admin.pages.workOrders.form.title.create')}
+          </h2>
+        </div>
+        
+        <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+          <div className="p-4 text-center">
             <Icon
               icon="tabler:alert-circle"
               className="h-16 w-16 text-yellow-500 mx-auto mb-4"
@@ -219,25 +229,25 @@ const CreateWorkOrder = () => {
             />
           </div>
         </Card>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/work-orders')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.workOrders.form.title.create')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/work-orders')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.workOrders.form.title.create')}
+        </h2>
+      </div>
+
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           {error && (
             <Message severity="error" text={error} className="mb-4 w-full" />
           )}
@@ -246,7 +256,7 @@ const CreateWorkOrder = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}>
             {({ errors, touched, setFieldValue, values }) => (
-              <Form className="grid grid-cols-1 gap-4">
+              <Form className="grid grid-cols-1 gap-5">
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:calendar" className="h-5 w-5 mr-2" />
@@ -299,7 +309,7 @@ const CreateWorkOrder = () => {
                   />
                 </div>
                 <div className="my-6">
-                  <h3 className="text-2xl font-bold text-center mb-4">
+                  <h3 className="text-xl font-semibold text-center mb-4">
                     {t('admin.pages.workOrders.form.blocksTitle')}
                   </h3>
                 </div>
@@ -584,13 +594,14 @@ const CreateWorkOrder = () => {
                     </div>
                   )}
                 </FieldArray>
-                <div className="flex justify-end mt-4">
+                <div className="flex justify-end mt-6">
                   <Button
                     type="submit"
-                    icon="pi pi-check"
+                    severity="info"
+                    disabled={isSubmitting}
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={t('admin.pages.workOrders.form.submitButton.create')}
-                    className="w-full md:w-auto"
-                    loading={isSubmitting}
                   />
                 </div>
               </Form>
@@ -598,7 +609,7 @@ const CreateWorkOrder = () => {
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 };
 

@@ -10,6 +10,8 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Password } from 'primereact/password';
 import { Card } from 'primereact/card';
+import { ProgressSpinner } from 'primereact/progressspinner';
+
 export default function EditUser() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -32,6 +34,8 @@ export default function EditUser() {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -54,6 +58,7 @@ export default function EditUser() {
     };
     fetchUser();
   }, [id]);
+  
   const validationSchema = Yup.object({
     name: Yup.string().required(
       t('admin.pages.users.form.validation.name_required'),
@@ -84,7 +89,9 @@ export default function EditUser() {
         t('admin.pages.users.form.validation.password_special'),
       ),
   });
+  
   const handleSubmit = async (values: typeof initialValues) => {
+    setIsSubmitting(true);
     try {
       const data = { ...values };
       if (!data.password) {
@@ -98,46 +105,50 @@ export default function EditUser() {
       navigate('/admin/settings/users', {
         state: { error: t('admin.pages.users.list.messages.error') },
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
+  
   const roleOptions = [
     { label: t('admin.roles.admin'), value: 'admin' },
     { label: t('admin.roles.worker'), value: 'worker' },
     { label: t('admin.roles.customer'), value: 'customer' },
   ];
+  
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
+      <div className="flex justify-center p-4">
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
+  
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/settings/users')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.users.form.title.edit')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/settings/users')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.users.form.title.edit')}
+        </h2>
+      </div>
+      
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
             enableReinitialize>
-            {({ errors, touched, isSubmitting }) => (
-              <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {({ errors, touched }) => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
@@ -218,9 +229,7 @@ export default function EditUser() {
                     name="role"
                     as={Dropdown}
                     options={roleOptions}
-                    placeholder={t(
-                      'admin.pages.users.form.edit.placeholders.role',
-                    )}
+                    placeholder={t('admin.pages.users.form.edit.placeholders.role')}
                     className={errors.role && touched.role ? 'p-invalid' : ''}
                   />
                   {errors.role && touched.role && (
@@ -235,26 +244,21 @@ export default function EditUser() {
                   <Field
                     name="password"
                     as={Password}
-                    placeholder={t(
-                      'admin.pages.users.form.placeholders.passwordEdit',
-                    )}
+                    placeholder={t('admin.pages.users.form.placeholders.passwordEdit')}
                     toggleMask
-                    className={
-                      errors.password && touched.password ? 'p-invalid' : ''
-                    }
+                    className={errors.password && touched.password ? 'p-invalid' : ''}
                   />
                   {errors.password && touched.password && (
                     <small className="p-error">{errors.password}</small>
                   )}
                 </div>
-                <div className="md:col-span-2 flex justify-end mt-4">
+                <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"
+                    severity="info"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                    }
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
                         ? t('admin.pages.users.form.submittingText.edit')
@@ -267,6 +271,6 @@ export default function EditUser() {
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 }

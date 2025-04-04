@@ -764,7 +764,20 @@
       },
       "evas": {
         "show": {
-          "title": "Detalls de l'Eva"
+          "title": "Detalls de l'Eva",
+          "generalInfo": "Informació General",
+          "indexCalculation": "Càlcul de l'Índex",
+          "environmentalFactors": "Factors Ambientals",
+          "treeStructure": "Estructura de l'Arbre",
+          "treeCondition": "Condició de l'Arbre",
+          "element": "Element",
+          "statusFactorInfo": "El factor d'estat de l'arbre indica la salut general de l'arbre.",
+          "formulas": {
+            "stabilityIndex": "Alçada / Diàmetre",
+            "gravityHeightRatio": "Alçada estimada / Alçada",
+            "rootCrownRatio": "Àrea efectiva de l'arrel / Àrea de projecció de la copa",
+            "windStabilityIndex": "(Alçada * Amplada de la copa) / Àrea efectiva de l'arrel"
+          }
         },
         "dictionaries": {
           "unbalancedCrown": {
@@ -927,7 +940,11 @@
             "edit": "Editar Eva"
           },
           "saving": "Guardant...",
-          "save": "Guardar"
+          "save": "Guardar",
+          "age": "Edat",
+          "yearsShort": "Anys",
+          "monthsShort": "Mesos",
+          "dateBirth": "Data de naixement"
         },
         "list": {
           "actions": {

@@ -17,7 +17,7 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
-import { useTreeEvaluation, Eva } from '@/pages/Admin/Eva/Components/FuncionesEva';
+import { useTreeEvaluation, Eva } from '@/utils/treeEvaluation';
 import { useTranslation } from 'react-i18next';
 import axiosClient from '@/api/axiosClient';
 import CreateEva from '@/pages/Admin/Eva/Create';
@@ -26,6 +26,7 @@ import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
 import { fetchWorkOrders } from '@/api/service/workOrder';
 import { Zone } from '@/types/Zone';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -298,16 +299,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     [points, zones],
   );
 
-  const convertirFechaIsoAFormatoEuropeo = useCallback(
-    (fechaIso: string): string => {
-      const fecha = new Date(fechaIso);
-      const dia = fecha.getDate().toString().padStart(2, '0');
-      const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-      const anio = fecha.getFullYear();
-      const horas = fecha.getHours().toString().padStart(2, '0');
-      const minutos = fecha.getMinutes().toString().padStart(2, '0');
-      const segundos = fecha.getSeconds().toString().padStart(2, '0');
-      return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+  const formatDate = useCallback(
+    (isoDateString: string): string => {
+      return format(new Date(isoDateString), 'dd/MM/yyyy HH:mm:ss');
     },
     [],
   );
@@ -380,7 +374,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           <p>{t('admin.pages.inventory.elementDetailPopup.eva.noData')}</p>
           <Button
             label={t('admin.pages.inventory.elementDetailPopup.eva.createEva')}
-            className="p-button-sm"
+            className="p-button-sm p-button-primary"
             onClick={() => setIsEvaModalVisible(true)}
           />
         </div>
@@ -405,8 +399,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
     return (
       <div className="space-y-6">
-        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
-          <h3 className="text-lg font-bold mb-3">
+        <div className="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
+          <h3 className="text-lg font-bold mb-3 text-indigo-700">
             {t(
               'admin.pages.inventory.elementDetailPopup.eva.evaluationIndices',
             )}
@@ -418,7 +412,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={message}
-                style={{ backgroundColor: color, color: 'black' }}
+                severity={color === "#FFD700" ? "warning" : 
+                         color === "#008000" ? "success" : 
+                         color === "#FF0000" ? "danger" : "info"}
               />
             </div>
             <div>
@@ -430,10 +426,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={stabilityIndex.message}
-                style={{
-                  backgroundColor: stabilityIndex.color,
-                  color: 'black',
-                }}
+                severity={stabilityIndex.color === "#008000" ? "success" : 
+                          stabilityIndex.color === "#FFD700" ? "warning" : "danger"}
               />
             </div>
             <div>
@@ -445,10 +439,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={gravityHeightRatio.message}
-                style={{
-                  backgroundColor: gravityHeightRatio.color,
-                  color: 'black',
-                }}
+                severity={gravityHeightRatio.color === "#008000" ? "success" : 
+                          gravityHeightRatio.color === "#FFD700" ? "warning" : "danger"}
               />
             </div>
             <div>
@@ -460,10 +452,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={rootCrownRatio.message}
-                style={{
-                  backgroundColor: rootCrownRatio.color,
-                  color: 'black',
-                }}
+                severity={rootCrownRatio.color === "#008000" ? "success" : 
+                          rootCrownRatio.color === "#FFD700" ? "warning" : "danger"}
               />
             </div>
             <div>
@@ -475,17 +465,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={windStabilityIndex.message}
-                style={{
-                  backgroundColor: windStabilityIndex.color,
-                  color: 'black',
-                }}
+                severity={windStabilityIndex.color === "#008000" ? "success" : 
+                          windStabilityIndex.color === "#FFD700" ? "warning" : "danger"}
               />
             </div>
           </div>
         </div>
 
-        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
-          <h3 className="text-lg font-bold mb-3">
+        <div className="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
+          <h3 className="text-lg font-bold mb-3 text-indigo-700">
             {t(
               'admin.pages.inventory.elementDetailPopup.eva.environmentalFactors',
             )}
@@ -498,10 +486,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={getSeverityMessage(eva.wind).message}
-                style={{
-                  backgroundColor: getSeverityMessage(eva.wind).color,
-                  color: 'black',
-                }}
+                severity={getSeverityMessage(eva.wind).color === "#008000" ? "success" : 
+                          getSeverityMessage(eva.wind).color === "#FFD700" ? "warning" : 
+                          getSeverityMessage(eva.wind).color === "#FFA500" ? "warning" : "danger"}
               />
             </div>
             <div>
@@ -513,17 +500,16 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={getSeverityMessage(eva.drought).message}
-                style={{
-                  backgroundColor: getSeverityMessage(eva.drought).color,
-                  color: 'black',
-                }}
+                severity={getSeverityMessage(eva.drought).color === "#008000" ? "success" : 
+                          getSeverityMessage(eva.drought).color === "#FFD700" ? "warning" : 
+                          getSeverityMessage(eva.drought).color === "#FFA500" ? "warning" : "danger"}
               />
             </div>
           </div>
         </div>
 
-        <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
-          <h3 className="text-lg font-bold mb-3">
+        <div className="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
+          <h3 className="text-lg font-bold mb-3 text-indigo-700">
             {t('admin.pages.inventory.elementDetailPopup.eva.technicalData')}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -572,7 +558,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           <div className="text-center py-4">
             <Button
               label={t('admin.pages.inventory.elementDetailPopup.eva.editEva')}
-              className="p-button-sm"
+              className="p-button-sm p-button-primary"
               onClick={() => setIsEditEvaModalVisible(true)}
             />
           </div>
@@ -655,7 +641,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   )}
                   :
                 </strong>{' '}
-                {convertirFechaIsoAFormatoEuropeo(element.created_at!)}
+                {formatDate(element.created_at!)}
               </p>
             </div>
             <div className="text-sm space-y-2">
@@ -739,8 +725,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       )}
                       :
                     </strong>{' '}
-                    {convertirFechaIsoAFormatoEuropeo(incidence.created_at!) ||
-                      t('general.not_available')}
+                    {formatDate(incidence.created_at!)}
                   </p>
                   <p>
                     <strong>

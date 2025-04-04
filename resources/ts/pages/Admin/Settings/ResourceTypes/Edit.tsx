@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 export default function EditResourceType() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,7 @@ export default function EditResourceType() {
     description: '',
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchResourceType = async () => {
@@ -51,6 +53,7 @@ export default function EditResourceType() {
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setIsSubmitting(true);
     try {
       await axiosClient.put(`/admin/resource-types/${id}`, values);
       navigate('/admin/settings/resource-types', {
@@ -62,43 +65,44 @@ export default function EditResourceType() {
       navigate('/admin/settings/resource-types', {
         state: { error: t('admin.pages.resourceTypes.list.messages.error') },
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
+      <div className="flex justify-center p-4">
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/settings/resource-types')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.resourceTypes.form.title.edit')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/settings/resource-types')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.resourceTypes.form.title.edit')}
+        </h2>
+      </div>
+      
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
             enableReinitialize>
-            {({ errors, touched, isSubmitting }) => (
-              <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {({ errors, touched }) => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:tag" className="h-5 w-5 mr-2" />
@@ -133,19 +137,16 @@ export default function EditResourceType() {
                     <small className="p-error">{errors.description}</small>
                   )}
                 </div>
-                <div className="md:col-span-2 flex justify-end mt-4">
+                <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"
+                    severity="info"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                    }
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
-                        ? t(
-                            'admin.pages.resourceTypes.form.submittingText.edit',
-                          )
+                        ? t('admin.pages.resourceTypes.form.submittingText.edit')
                         : t('admin.pages.resourceTypes.form.submitButton.edit')
                     }
                   />
@@ -155,6 +156,6 @@ export default function EditResourceType() {
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 }
