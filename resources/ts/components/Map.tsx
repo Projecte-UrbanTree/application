@@ -336,7 +336,7 @@ export const MapComponent: React.FC<MapProps> = ({
         service.addZoneToMap(
           `zone-${zone.id}`,
           zonePoints,
-          zone.color || '#088',
+          zone.color || '#088'
         );
       }
     });
@@ -437,7 +437,7 @@ export const MapComponent: React.FC<MapProps> = ({
         service.addZoneToMap(
           `zone-${newZone.id}`,
           zonePoints,
-          newZone.color || '#088',
+          newZone.color || '#088'
         );
       }
 

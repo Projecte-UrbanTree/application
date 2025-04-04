@@ -137,48 +137,46 @@ export class MapService {
     });
   }
 
-  public addZoneToMap(zoneId: string, coords: number[][], zoneColor: string = '#088') {
-    if (this.map.getSource(zoneId)) {
-      if (this.map.getLayer(zoneId)) {
-        this.map.removeLayer(zoneId);
-      }
-      if (this.map.getLayer(`${zoneId}-outline`)) {
-        this.map.removeLayer(`${zoneId}-outline`);
-      }
-      this.map.removeSource(zoneId);
+  public addZoneToMap(zoneId: string, coordinates: number[][], color: string) {
+    const sourceId = `zone-${zoneId}`;
+    const layerId = `zone-${zoneId}-fill`;
+
+    if (this.map.getLayer(layerId)) {
+      this.map.removeLayer(layerId);
+    }
+    if (this.map.getSource(sourceId)) {
+      this.map.removeSource(sourceId);
     }
 
-    this.map.addSource(zoneId, {
+    this.map.addSource(sourceId, {
       type: 'geojson',
       data: {
         type: 'Feature',
+        properties: {},
         geometry: {
           type: 'Polygon',
-          coordinates: [coords],
+          coordinates: [coordinates],
         },
-        properties: {},
       },
     });
 
     this.map.addLayer({
-      id: zoneId,
+      id: layerId,
       type: 'fill',
-      source: zoneId,
+      source: sourceId,
       paint: {
-        'fill-color': zoneColor,
-        'fill-opacity': 0.5,
+        'fill-color': color,
+        'fill-opacity': 0.5
       },
     });
+  }
 
-    this.map.addLayer({
-      id: `${zoneId}-outline`,
-      type: 'line',
-      source: zoneId,
-      paint: {
-        'line-color': '#000',
-        'line-width': 2,
-      },
-    });
+  private getPolygonCenter(coordinates: number[][]): [number, number] {
+    const lngs = coordinates.map(coord => coord[0]);
+    const lats = coordinates.map(coord => coord[1]);
+    const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
+    const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
+    return [centerLng, centerLat];
   }
 
   private createCustomMarkerElement(elementType: ElementType): HTMLElement {
