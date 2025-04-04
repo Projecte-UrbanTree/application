@@ -28,7 +28,7 @@ interface WorkOrder {
   }[];
 }
 
-export const InProgressWorkOrders = () => {
+const InProgressWorkOrders = () => {
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
@@ -149,3 +149,5 @@ export const InProgressWorkOrders = () => {
     </Card>
   );
 };
+
+export default InProgressWorkOrders;

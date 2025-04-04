@@ -216,17 +216,112 @@ export default function Evas() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+  const getStatusIcon = (eva: Eva) => {
+    const statusValues = [
+      eva.unbalanced_crown,
+      eva.overextended_branches,
+      eva.cracks,
+      eva.dead_branches,
+      eva.inclination,
+      eva.V_forks,
+      eva.cavities,
+      eva.bark_damage,
+      eva.soil_lifting,
+      eva.cut_damaged_roots,
+      eva.basal_rot,
+      eva.exposed_surface_roots,
+      eva.wind,
+      eva.drought,
+      eva.status,
+    ];
+
+    const calculateStabilityIndex = (height: number, diameter: number) => {
+      const index = height / diameter;
+      if (index < 50) {
+        return 0;
+      } else if (index >= 50 && index <= 80) {
+        return 2;
+      } else if (index > 80 && index <= 100) {
+        return 3;
+      } else {
+        return -1;
+      }
+    };
+
+    const calculateGravityHeightRatio = (
+      heightEstimation: number,
+      height: number,
+    ) => {
+      const ratio = heightEstimation / height;
+      if (ratio < 0.3) {
+        return 0;
+      } else if (ratio >= 0.3 && ratio <= 0.5) {
+        return 2;
+      } else if (ratio > 0.5) {
+        return 3;
+      } else {
+        return -1;
+      }
+    };
+
+    const calculateRootCrownRatio = (
+      rootSurfaceDiameter: number,
+      crownProjectionArea: number,
+    ) => {
+      const ratio = rootSurfaceDiameter / crownProjectionArea;
+      if (ratio > 2) {
+        return 0;
+      } else if (ratio > 1.5 && ratio <= 2) {
+        return 1;
+      } else if (ratio > 1 && ratio <= 1.5) {
+        return 2;
+      } else if (ratio <= 1) {
+        return 3;
+      } else {
+        return -1;
+      }
+    };
+
+    const calculateWindStabilityIndex = (
+      height: number,
+      crown_width: number,
+      rootSurfaceDiameter: number,
+    ) => {
+      const index = (height * crown_width) / rootSurfaceDiameter;
+      if (index < 0.5) {
+        return 0;
+      } else if (index >= 0.5 && index <= 1) {
+        return 2;
+      } else if (index > 1) {
+        return 3;
+      } else {
+        return -1;
+      }
+    };
+
+    const indices = [
+      calculateStabilityIndex(eva.height, eva.diameter),
+      calculateGravityHeightRatio(eva.height_estimation, eva.height),
+      calculateRootCrownRatio(
+        eva.root_surface_diameter,
+        eva.crown_projection_area,
+      ),
+      calculateWindStabilityIndex(
+        eva.height,
+        eva.crown_width,
+        eva.root_surface_diameter,
+      ),
+    ];
+
+    const allValues = [...statusValues, ...indices];
+
+    if (allValues.some((element) => String(element) === '3')) {
+      return 'tabler:x';
+    } else if (allValues.some((element) => String(element) === '2')) {
+      return 'tabler:alert-circle';
+    }
+    return 'tabler:check';
+  };
 
   return (
     <>
@@ -242,77 +337,83 @@ export default function Evas() {
           className="mb-4 w-full"
         />
       )}
-      <CrudPanel
-        title={t('admin.pages.evas.title')}
-        onCreate={() => navigate('/admin/evas/create')}>
-        <DataTable
-          value={evas}
-          paginator
-          rows={10}
-          stripedRows
-          showGridlines
-          className="p-datatable-sm">
-          <Column
-            header={t('admin.pages.evas.columns.name')}
-            body={(rowData: Eva) => <span>{rowData.element_id || 'N/A'}</span>}
-          />
-          <Column
-            header={t('admin.pages.evas.columns.coordinates')}
-            body={(rowData: Eva) => (
-              <span>
-                {rowData.element?.point
-                  ? `${rowData.element.point.latitude}, ${rowData.element.point.longitude}`
-                  : 'N/A'}
-              </span>
-            )}
-          />
-          <Column
-            header={t('admin.pages.evas.columns.age')}
-            body={(rowData: Eva) => (
-              <span>{calculateAge(rowData.date_birth)}</span>
-            )}
-          />
-          <Column
-            field="status"
-            header={t('admin.pages.evas.columns.status')}
-            body={(rowData: Eva) => (
-              <div
-                style={{
-                  backgroundColor: getStatusColor(rowData),
-                  borderRadius: '50%',
-                  width: '20px',
-                  height: '20px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  margin: 'auto',
-                }}
-              />
-            )}
-          />
-          <Column
-            header={t('admin.pages.evas.columns.actions')}
-            body={(rowData: Eva) => (
-              <div className="flex justify-center gap-2">
-                <Button
-                  icon={<Icon icon="tabler:eye" className="h-5 w-5" />}
-                  className="p-button-rounded p-button-info"
-                  tooltip={t('admin.pages.evas.list.actions.show')}
-                  tooltipOptions={{ position: 'top' }}
-                  onClick={() => navigate(`/admin/evas/${rowData.id}`)}
+      {isLoading ? (
+        <div className="flex justify-center p-4">
+          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+        </div>
+      ) : evas.length === 0 ? (
+        <div className="p-4 text-center">
+          <p className="text-gray-600">{t('admin.pages.evas.list.noData')}</p>
+        </div>
+      ) : (
+        <CrudPanel
+          title={t('admin.pages.evas.title')}
+          onCreate={() => navigate('/admin/evas/create')}
+        >
+          <DataTable
+            value={evas}
+            paginator
+            rows={10}
+            stripedRows
+            showGridlines
+            className="p-datatable-sm"
+          >
+            <Column
+              header={t('admin.pages.evas.columns.name')}
+              body={(rowData: Eva) => <span>{rowData.element_id || 'N/A'}</span>}
+            />
+            <Column
+              header={t('admin.pages.evas.columns.details')}
+              body={(rowData: Eva) => (
+                <span>
+                  {rowData.element?.element_type?.name || 'N/A'} -{' '}
+                  {rowData.element?.point
+                    ? `${rowData.element.point.latitude}, ${rowData.element.point.longitude}`
+                    : 'N/A'}
+                </span>
+              )}
+            />
+            <Column
+              header={t('admin.pages.evas.columns.age')}
+              body={(rowData: Eva) => (
+                <span>{calculateAge(rowData.date_birth)}</span>
+              )}
+            />
+            <Column
+              field="status"
+              header={t('admin.pages.evas.columns.status')}
+              body={(rowData: Eva) => (
+                <Icon
+                  icon={getStatusIcon(rowData)}
+                  className="h-5 w-5 mx-auto"
+                  style={{ color: getStatusColor(rowData) }}
                 />
-                <Button
-                  icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
-                  className="p-button-rounded p-button-danger"
-                  tooltip={t('admin.pages.evas.list.actions.delete')}
-                  tooltipOptions={{ position: 'top' }}
-                  onClick={() => handleDelete(rowData.id)}
-                />
-              </div>
-            )}
-          />
-        </DataTable>
-      </CrudPanel>
+              )}
+            />
+            <Column
+              header={t('admin.pages.evas.columns.actions')}
+              body={(rowData: Eva) => (
+                <div className="flex justify-center gap-2">
+                  <Button
+                    icon={<Icon icon="tabler:eye" className="h-5 w-5" />}
+                    className="p-button-outlined p-button-indigo p-button-sm"
+                    tooltip={t('admin.pages.evas.list.actions.show')}
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() => navigate(`/admin/evas/${rowData.id}`)}
+                  />
+                  <Button
+                    icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
+                    className="p-button-outlined p-button-danger p-button-sm"
+                    tooltip={t('admin.pages.evas.list.actions.delete')}
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() => handleDelete(rowData.id)}
+                  />
+                </div>
+              )}
+            />
+          </DataTable>
+        </CrudPanel>
+      )}
     </>
   );
 }

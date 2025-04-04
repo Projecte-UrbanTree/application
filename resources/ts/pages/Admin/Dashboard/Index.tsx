@@ -1,6 +1,6 @@
-import { Welcome } from '@/pages/Admin/Dashboard/Components/Welcome';
-import { InProgressWorkOrders } from '@/pages/Admin/Dashboard/Components/InProgressWorkOrders';
-import { DashboardSummary } from '@/pages/Admin/Dashboard/Components/DashboardSummary';
+import Welcome from './Components/Welcome';
+import InProgressWorkOrders from './Components/InProgressWorkOrders';
+import DashboardSummary from './Components/DashboardSummary';
 import { Card } from 'primereact/card';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   return (
-    <>
+    <div className="space-y-4">
       <Welcome />
       <DashboardSummary />
 
@@ -48,6 +48,6 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
-    </>
+    </div>
   );
 }

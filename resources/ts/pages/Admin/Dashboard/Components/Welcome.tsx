@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Icon } from '@iconify/react';
 import { Card } from 'primereact/card';
 
-export function Welcome() {
+const Welcome = () => {
   const { user } = useAuth();
   const { t } = useI18n();
 
@@ -28,3 +28,5 @@ export function Welcome() {
     </Card>
   );
 }
+
+export default Welcome;

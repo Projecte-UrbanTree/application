@@ -61,18 +61,6 @@ export default function TaskTypes() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
-
   return (
     <>
       {msg && (
@@ -87,50 +75,54 @@ export default function TaskTypes() {
           className="mb-4 w-full"
         />
       )}
-      <CrudPanel
-        title={t('admin.pages.taskTypes.title')}
-        onCreate={() => navigate('/admin/settings/task-types/create')}>
-        <DataTable
-          value={taskTypes}
-          paginator
-          rows={10}
-          stripedRows
-          showGridlines
-          loading={isLoading}
-          className="p-datatable-sm">
-          <Column
-            field="name"
-            header={t('admin.pages.taskTypes.list.columns.name')}
-          />
-          <Column
-            field="description"
-            header={t('admin.pages.taskTypes.list.columns.description')}
-          />
-          <Column
-            header={t('admin.pages.taskTypes.list.actions.label')}
-            body={(rowData: TaskType) => (
-              <div className="flex justify-center gap-2">
-                <Button
-                  icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
-                  className="p-button-rounded p-button-info"
-                  onClick={() =>
-                    navigate(`/admin/settings/task-types/edit/${rowData.id}`)
-                  }
-                  tooltip={t('admin.pages.taskTypes.list.actions.edit')}
-                  tooltipOptions={{ position: 'top' }}
-                />
-                <Button
-                  icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
-                  className="p-button-rounded p-button-danger"
-                  onClick={() => handleDelete(rowData.id)}
-                  tooltip={t('admin.pages.taskTypes.list.actions.delete')}
-                  tooltipOptions={{ position: 'top' }}
-                />
-              </div>
-            )}
-          />
-        </DataTable>
-      </CrudPanel>
+      {isLoading ? (
+        <div className="flex justify-center p-4">
+          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+        </div>
+      ) : taskTypes.length === 0 ? (
+        <div className="p-4 text-center">
+          <p className="text-gray-600">{t('admin.pages.taskTypes.list.noData')}</p>
+        </div>
+      ) : (
+        <CrudPanel
+          title={t('admin.pages.taskTypes.title')}
+          onCreate={() => navigate('/admin/settings/task-types/create')}
+        >
+          <DataTable value={taskTypes} paginator rows={10} stripedRows showGridlines className="p-datatable-sm">
+            <Column
+              field="name"
+              header={t('admin.pages.taskTypes.list.columns.name')}
+            />
+            <Column
+              field="description"
+              header={t('admin.pages.taskTypes.list.columns.description')}
+            />
+            <Column
+              header={t('admin.pages.taskTypes.list.actions.label')}
+              body={(rowData: TaskType) => (
+                <div className="flex justify-center gap-2">
+                  <Button
+                    icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
+                    className="p-button-outlined p-button-indigo p-button-sm"
+                    onClick={() =>
+                      navigate(`/admin/settings/task-types/edit/${rowData.id}`)
+                    }
+                    tooltip={t('admin.pages.taskTypes.list.actions.edit')}
+                    tooltipOptions={{ position: 'top' }}
+                  />
+                  <Button
+                    icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
+                    className="p-button-outlined p-button-danger p-button-sm"
+                    onClick={() => handleDelete(rowData.id)}
+                    tooltip={t('admin.pages.taskTypes.list.actions.delete')}
+                    tooltipOptions={{ position: 'top' }}
+                  />
+                </div>
+              )}
+            />
+          </DataTable>
+        </CrudPanel>
+      )}
     </>
   );
 }

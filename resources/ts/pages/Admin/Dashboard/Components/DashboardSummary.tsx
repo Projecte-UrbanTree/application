@@ -14,7 +14,7 @@ interface SummaryData {
   pendingReports: number;
 }
 
-export const DashboardSummary = () => {
+const DashboardSummary = () => {
   const [summaryData, setSummaryData] = useState<SummaryData>({
     totalWorkOrders: 0,
     inProgressWorkOrders: 0,
@@ -154,3 +154,6 @@ export const DashboardSummary = () => {
     </div>
   );
 };
+
+
+export default DashboardSummary;

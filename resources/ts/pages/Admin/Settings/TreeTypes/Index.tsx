@@ -9,6 +9,7 @@ import { Icon } from '@iconify/react';
 import axiosClient from '@/api/axiosClient';
 import { useTranslation } from 'react-i18next';
 import CrudPanel from '@/components/CrudPanel';
+
 export default function TreeTypes() {
   const [isLoading, setIsLoading] = useState(true);
   interface TreeType {
@@ -24,6 +25,7 @@ export default function TreeTypes() {
   const successMsg = location.state?.success;
   const errorMsg = location.state?.error;
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+
   useEffect(() => {
     const fetchTreeTypes = async () => {
       try {
@@ -37,12 +39,14 @@ export default function TreeTypes() {
     };
     fetchTreeTypes();
   }, []);
+
   useEffect(() => {
     if (msg) {
       const timer = setTimeout(() => setMsg(null), 4000);
       return () => clearTimeout(timer);
     }
   }, [msg]);
+
   const handleDelete = async (treeTypeId: number) => {
     if (!window.confirm(t('admin.pages.treeTypes.list.messages.deleteConfirm')))
       return;
@@ -54,17 +58,7 @@ export default function TreeTypes() {
       console.error(error);
     }
   };
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
+
   return (
     <>
       {msg && (
@@ -79,44 +73,57 @@ export default function TreeTypes() {
           className="mb-4 w-full"
         />
       )}
-      <CrudPanel
-        title="admin.pages.treeTypes.list.title"
-        onCreate={() => navigate('/admin/settings/tree-types/create')}>
-        <DataTable
-          value={treeTypes}
-          paginator
-          rows={10}
-          stripedRows
-          showGridlines
-          className="p-datatable-sm">
-          <Column field="family" header={t('admin.fields.family')} />
-          <Column field="genus" header={t('admin.fields.genus')} />
-          <Column field="species" header={t('admin.fields.species')} />
-          <Column
-            header={t('admin.pages.treeTypes.list.actions.label')}
-            body={(rowData: { id: number }) => (
-              <div className="flex justify-center gap-2">
-                <Button
-                  icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
-                  className="p-button-rounded p-button-info"
-                  tooltip={t('admin.pages.treeTypes.list.actions.edit')}
-                  tooltipOptions={{ position: 'top' }}
-                  onClick={() =>
-                    navigate(`/admin/settings/tree-types/edit/${rowData.id}`)
-                  }
-                />
-                <Button
-                  icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
-                  className="p-button-rounded p-button-danger"
-                  tooltip={t('admin.pages.treeTypes.list.actions.delete')}
-                  tooltipOptions={{ position: 'top' }}
-                  onClick={() => handleDelete(rowData.id)}
-                />
-              </div>
-            )}
+      {isLoading ? (
+        <div className="flex justify-center p-4">
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
           />
-        </DataTable>
-      </CrudPanel>
+        </div>
+      ) : treeTypes.length === 0 ? (
+        <div className="p-4 text-center">
+          <p className="text-gray-600">No Data</p>
+        </div>
+      ) : (
+        <CrudPanel
+          title="admin.pages.treeTypes.list.title"
+          onCreate={() => navigate('/admin/settings/tree-types/create')}>
+          <DataTable
+            value={treeTypes}
+            paginator
+            rows={10}
+            stripedRows
+            showGridlines
+            className="p-datatable-sm">
+            <Column field="family" header={t('admin.fields.family')} />
+            <Column field="genus" header={t('admin.fields.genus')} />
+            <Column field="species" header={t('admin.fields.species')} />
+            <Column
+              header={t('admin.pages.treeTypes.list.actions.label')}
+              body={(rowData: { id: number }) => (
+                <div className="flex justify-center gap-2">
+                  <Button
+                    icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
+                    className="p-button-outlined p-button-indigo p-button-sm"
+                    tooltip={t('admin.pages.treeTypes.list.actions.edit')}
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() =>
+                      navigate(`/admin/settings/tree-types/edit/${rowData.id}`)
+                    }
+                  />
+                  <Button
+                    icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
+                    className="p-button-outlined p-button-danger p-button-sm"
+                    tooltip={t('admin.pages.treeTypes.list.actions.delete')}
+                    tooltipOptions={{ position: 'top' }}
+                    onClick={() => handleDelete(rowData.id)}
+                  />
+                </div>
+              )}
+            />
+          </DataTable>
+        </CrudPanel>
+      )}
     </>
   );
 }

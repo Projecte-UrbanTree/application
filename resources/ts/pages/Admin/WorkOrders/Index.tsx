@@ -356,93 +356,118 @@ export default function WorkOrders() {
     [navigate, handleDelete, t],
   );
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
-      </div>
-    );
-  }
-
   return (
     <>
       {msg && (
         <Message severity={msgSeverity} text={msg} className="mb-4 w-full" />
       )}
-      <CrudPanel
-        title="admin.pages.workOrders.title"
-        onCreate={() => navigate('/admin/work-orders/create')}
-        createDisabled={!currentContract || currentContract.id === 0}
-        createTooltip={
-          !currentContract || currentContract.id === 0
-            ? t('admin.tooltips.selectContract')
-            : undefined
-        }>
-        <DataTable
-          value={filteredWorkOrders}
-          expandedRows={expandedRows}
-          onRowToggle={(e) => setExpandedRows(e.data)}
-          rowExpansionTemplate={rowExpansionTemplate}
-          dataKey="id"
-          paginator
-          rows={10}
-          stripedRows
-          showGridlines
-          emptyMessage={t('admin.pages.workOrders.list.messages.noData')}
-          className="p-datatable-sm">
-          <Column
-            expander
-            style={{ width: '3rem' }}
-            className="expander-column"
-          />
-          <Column
-            field="id"
-            header={t('admin.pages.workOrders.list.columns.id')}
-            body={(rowData) => `OT-${rowData.id}`}
-          />
-          {(!currentContract || currentContract.id === 0) && (
+      {isLoading ? (
+        <div className="flex justify-center p-4">
+          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+        </div>
+      ) : filteredWorkOrders.length === 0 ? (
+        <div className="p-4 text-center">
+          <p className="text-gray-600">
+            {t('admin.pages.workOrders.list.messages.noData')}
+          </p>
+        </div>
+      ) : (
+        <CrudPanel
+          title="admin.pages.workOrders.title"
+          onCreate={() => navigate('/admin/work-orders/create')}
+          createDisabled={!currentContract || currentContract.id === 0}
+          createTooltip={
+            !currentContract || currentContract.id === 0
+              ? t('admin.tooltips.selectContract')
+              : undefined
+          }>
+          <DataTable
+            value={filteredWorkOrders}
+            expandedRows={expandedRows}
+            onRowToggle={(e) => setExpandedRows(e.data)}
+            rowExpansionTemplate={rowExpansionTemplate}
+            dataKey="id"
+            paginator
+            rows={10}
+            stripedRows
+            showGridlines
+            emptyMessage={t('admin.pages.workOrders.list.messages.noData')}
+            className="p-datatable-sm">
             <Column
-              field="contract.name"
-              header={t('admin.pages.workOrders.list.columns.contract')}
-              body={(rowData) => rowData.contract?.name || '-'}
+              expander
+              style={{ width: '3rem' }}
+              className="expander-column"
             />
-          )}
-          <Column
-            field="date"
-            header={t('admin.pages.workOrders.list.columns.date')}
-            body={(rowData) => new Date(rowData.date).toLocaleDateString()}
-          />
-          <Column
-            header={t('admin.pages.workOrders.list.columns.users')}
-            body={(rowData) =>
-              rowData.users && rowData.users.length > 0
-                ? rowData.users
-                    .map(
-                      (user: { id: number; name: string; surname: string }) =>
-                        `${user.name} ${user.surname}`,
-                    )
-                    .join(', ')
-                : t('admin.pages.workOrders.details.noUsers')
-            }
-          />
-          <Column
-            header={t('admin.pages.workOrders.list.columns.status')}
-            body={(rowData) => getStatusBadge(rowData.status)}
-          />
-          <Column
-            header={t('admin.pages.workOrders.list.columns.reportStatus')}
-            body={(rowData) => getReportStatusBadge(rowData.work_reports)}
-          />
-          <Column
-            header={t('admin.pages.workOrders.list.actions.label')}
-            body={actionButtons}
-          />
-        </DataTable>
-      </CrudPanel>
+            <Column
+              field="id"
+              header={t('admin.pages.workOrders.list.columns.id')}
+              body={(rowData) => `OT-${rowData.id}`}
+            />
+            {(!currentContract || currentContract.id === 0) && (
+              <Column
+                field="contract.name"
+                header={t('admin.pages.workOrders.list.columns.contract')}
+                body={(rowData) => rowData.contract?.name || '-'}
+              />
+            )}
+            <Column
+              field="date"
+              header={t('admin.pages.workOrders.list.columns.date')}
+              body={(rowData) => new Date(rowData.date).toLocaleDateString()}
+            />
+            <Column
+              header={t('admin.pages.workOrders.list.columns.users')}
+              body={(rowData) =>
+                rowData.users && rowData.users.length > 0
+                  ? rowData.users
+                      .map(
+                        (user: { id: number; name: string; surname: string }) =>
+                          `${user.name} ${user.surname}`,
+                      )
+                      .join(', ')
+                  : t('admin.pages.workOrders.details.noUsers')
+              }
+            />
+            <Column
+              header={t('admin.pages.workOrders.list.columns.status')}
+              body={(rowData) => getStatusBadge(rowData.status)}
+            />
+            <Column
+              header={t('admin.pages.workOrders.list.columns.reportStatus')}
+              body={(rowData) => getReportStatusBadge(rowData.work_reports)}
+            />
+            <Column
+              header={t('admin.pages.workOrders.list.actions.label')}
+              body={(rowData) => (
+                <div className="flex justify-end gap-2">
+                  <Button
+                    icon={<Icon icon="tabler:edit" />}
+                    className="p-button-outlined p-button-indigo p-button-sm"
+                    onClick={() =>
+                      navigate(`/admin/work-orders/edit/${rowData.id}`)
+                    }
+                    title={t('admin.pages.workOrders.list.actions.edit')}
+                  />
+                  <Button
+                    icon={<Icon icon="tabler:trash" />}
+                    className="p-button-outlined p-button-danger p-button-sm"
+                    onClick={() => handleDelete(rowData.id)}
+                    title={t('admin.pages.workOrders.list.actions.delete')}
+                  />
+                  {rowData.status === 1 || rowData.status === 2 || rowData.status === 3 ? (
+                    <Button
+                      icon={<Icon icon="tabler:file-text" />}
+                      className="p-button-outlined p-button-info p-button-sm"
+                      onClick={() => navigate(`/admin/work-reports/${rowData.id}`)}
+                      title={t('admin.pages.workOrders.list.actions.viewReport')}
+                    />
+                  ) : null}
+                </div>
+              )}
+            />
+          </DataTable>
+        </CrudPanel>
+      )}
     </>
   );
 }
