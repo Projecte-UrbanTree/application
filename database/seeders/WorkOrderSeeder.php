@@ -135,6 +135,5 @@ class WorkOrderSeeder extends Seeder
             ],
 
         ]);
-
     }
 }

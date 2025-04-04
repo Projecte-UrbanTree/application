@@ -15,7 +15,8 @@ use Tests\TestCase;
  */
 class AccountTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Test that an authenticated admin user can retrieve their profile
