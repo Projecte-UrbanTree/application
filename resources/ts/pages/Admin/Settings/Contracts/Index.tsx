@@ -142,7 +142,7 @@ export default function Contracts() {
                     return (
                       <Badge
                         value={t('admin.status.active')}
-                        severity="warning"
+                        severity="success"
                       />
                     );
                   case 1:
