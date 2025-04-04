@@ -32,7 +32,7 @@ class ElementController extends Controller
         $validate = $request->validate([
             'description' => ['nullable', 'string', 'max:255'],
             'element_type_id' => ['required', 'integer'],
-            'tree_type_id' => ['required', 'integer'],
+            'tree_type_id' => ['nullable', 'integer'],
             'point_id' => ['required', 'integer'],
         ]);
         $element = Element::create($validate);
