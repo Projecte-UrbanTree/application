@@ -18,7 +18,7 @@ export default function Contracts() {
     name: string;
     start_date: string;
     end_date: string;
-    final_price: string;
+    final_price: number;
     status: number;
   }
 
@@ -62,6 +62,15 @@ export default function Contracts() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const formatPrice = (price: number): string => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
   };
 
   if (isLoading) {
@@ -115,6 +124,7 @@ export default function Contracts() {
           <Column
             field="final_price"
             header={t('admin.pages.contracts.list.columns.final_price')}
+            body={(rowData: Contract) => formatPrice(rowData.final_price)}
           />
           <Column
             field="status"

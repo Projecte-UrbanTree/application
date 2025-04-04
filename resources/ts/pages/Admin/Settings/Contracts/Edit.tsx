@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Icon } from '@iconify/react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Calendar } from 'primereact/calendar';
-import { InputNumber } from 'primereact/inputnumber';
-import { Dropdown } from 'primereact/dropdown';
-import { Card } from 'primereact/card';
+import { useState, useEffect } from "react";
+import { Icon } from "@iconify/react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Formik, Form, Field, FieldProps } from "formik";
+import * as Yup from "yup";
+import axiosClient from "@/api/axiosClient";
+import { useTranslation } from "react-i18next";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { Calendar } from "primereact/calendar";
+import { InputNumber } from "primereact/inputnumber";
+import { Dropdown } from "primereact/dropdown";
+import { Card } from "primereact/card";
 
 export default function EditContract() {
   const { id } = useParams<{ id: string }>();
@@ -31,26 +31,31 @@ export default function EditContract() {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchContract = async () => {
-      try {
-        const response = await axiosClient.get(`/admin/contracts/${id}`);
-        const contract = response.data;
-        setInitialValues({
-          name: contract.name,
-          start_date: new Date(contract.start_date),
-          end_date: new Date(contract.end_date),
-          final_price: contract.final_price,
-          status: contract.status,
-        });
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-    fetchContract();
-  }, [id]);
+    useEffect(() => {
+        const parseDateLocal = (dateString: string) => {
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        };
+
+        const fetchContract = async () => {
+            try {
+                const response = await axiosClient.get(`/admin/contracts/${id}`);
+                const contract = response.data;
+                setInitialValues({
+                    name: contract.name,
+                    start_date: parseDateLocal(contract.start_date),
+                    end_date: parseDateLocal(contract.end_date),
+                    final_price: contract.final_price,
+                    status: contract.status
+                });
+                setIsLoading(false);
+            } catch (error) {
+                console.error(error);
+                setIsLoading(false);
+            }
+        };
+        fetchContract();
+    }, [id]);
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -68,9 +73,11 @@ export default function EditContract() {
         Yup.ref('start_date'),
         t('admin.pages.contracts.form.validation.end_date_after_start_date'),
       ),
-    final_price: Yup.number().required(
-      t('admin.pages.contracts.form.validation.final_price_required'),
-    ),
+    final_price: Yup.number()
+      .integer(t('admin.pages.contracts.form.validation.must_be_integer'))
+      .required(
+        t('admin.pages.contracts.form.validation.final_price_required'),
+      ),
     status: Yup.number()
       .oneOf(
         [0, 1, 2],
@@ -79,20 +86,19 @@ export default function EditContract() {
       .required(t('admin.pages.contracts.form.validation.status_required')),
   });
 
-  const handleSubmit = async (values: typeof initialValues) => {
-    try {
-      await axiosClient.put(`/admin/contracts/${id}`, values);
-      navigate('/admin/settings/contracts', {
-        state: {
-          success: t('admin.pages.contracts.list.messages.updateSuccess'),
-        },
-      });
-    } catch (error) {
-      navigate('/admin/settings/contracts', {
-        state: { error: t('admin.pages.contracts.list.messages.error') },
-      });
-    }
-  };
+    const handleSubmit = async (values: typeof initialValues) => {
+        const payload = {
+            ...values,
+            start_date: values.start_date ? values.start_date.toLocaleDateString('en-CA') : null,
+            end_date: values.end_date ? values.end_date.toLocaleDateString('en-CA') : null,
+        };
+        try {
+            await axiosClient.put(`/admin/contracts/${id}`, payload);
+            navigate("/admin/settings/contracts", { state: { success: t("admin.pages.contracts.list.messages.updateSuccess") } });
+        } catch (error) {
+            navigate("/admin/settings/contracts", { state: { error: t("admin.pages.contracts.list.messages.error") } });
+        }
+    };
 
   const statusOptions = [
     { label: t('admin.status.active'), value: 0 },
@@ -132,7 +138,7 @@ export default function EditContract() {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
             enableReinitialize>
-            {({ errors, touched, isSubmitting }) => (
+            {({ errors, touched, isSubmitting, setFieldValue, values }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
@@ -191,10 +197,15 @@ export default function EditContract() {
                     />
                     {t('admin.fields.final_price')}
                   </label>
-                  <Field
-                    name="final_price"
-                    as={InputNumber}
+                  <InputNumber
+                    value={values.final_price}
+                    onValueChange={(e) => setFieldValue('final_price', e.value || 0)}
                     placeholder={t('admin.fields.final_price')}
+                    minFractionDigits={0}
+                    maxFractionDigits={0}
+                    mode="decimal"
+                    showButtons
+                    min={0}
                     className={
                       errors.final_price && touched.final_price
                         ? 'p-invalid'
