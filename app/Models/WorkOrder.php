@@ -33,11 +33,11 @@ class WorkOrder extends Model
     /**
      * Get the work reports associated with the work order.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function workReports()
     {
-        return $this->belongsTo(WorkReport::class, 'work_order_id');
+        return $this->hasMany(WorkReport::class, 'work_order_id');
     }
 
     /**
