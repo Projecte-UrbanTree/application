@@ -296,17 +296,6 @@ export default function Evas() {
               body={(rowData: Eva) => <span>{rowData.element_id || 'N/A'}</span>}
             />
             <Column
-              header={t('admin.pages.evas.columns.details')}
-              body={(rowData: Eva) => (
-                <span>
-                  {rowData.element?.element_type?.name || 'N/A'} -{' '}
-                  {rowData.element?.point
-                    ? `${rowData.element.point.latitude}, ${rowData.element.point.longitude}`
-                    : 'N/A'}
-                </span>
-              )}
-            />
-            <Column
               header={t('admin.pages.evas.columns.age')}
               body={(rowData: Eva) => (
                 <span>{calculateAge(rowData.date_birth)}</span>
