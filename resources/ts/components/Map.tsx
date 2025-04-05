@@ -3,7 +3,7 @@ import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
 import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { Zone } from '@/types/Zone';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as turf from '@turf/turf';
 import { SaveZoneForm } from './Admin/Inventory/SaveZoneForm';
@@ -18,7 +18,10 @@ import { SavePointsProps } from '@/api/service/pointService';
 import { eventSubject, ZoneEvent } from './Admin/Inventory/Zones';
 import { MapService } from '@/api/service/mapService';
 import { Toast } from 'primereact/toast';
-import { deleteElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice';
+import {
+  deleteElementAsync,
+  fetchElementsAsync,
+} from '@/store/slice/elementSlice';
 import IncidentForm from './Admin/Inventory/IncidentForm';
 import { Element } from '@/types/Element';
 import ElementDetailPopup from './Admin/Inventory/ElementDetailPopup';
@@ -57,6 +60,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const mapServiceRef = useRef<MapService | null>(null);
   const toast = useRef<Toast>(null);
   const dispatch = useDispatch<AppDispatch>();
+
   const { points } = useSelector((state: RootState) => state.points);
   const { zones: zonesRedux } = useSelector((state: RootState) => state.zone);
   const { elements } = useSelector((state: RootState) => state.element);
@@ -72,26 +76,30 @@ export const MapComponent: React.FC<MapProps> = ({
     null,
   );
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
-  const [selectedZoneForElement, setSelectedZoneForElement] = useState<Zone | null>(
+  const [selectedZoneForElement, setSelectedZoneForElement] =
+    useState<Zone | null>(null);
+  const [selectedElementId, setSelectedElementId] = useState<number | null>(
     null,
   );
-  const [selectedElementId, setSelectedElementId] = useState<number | null>(null);
   const [selectedElement, setSelectedElement] = useState<Element | null>(null);
   const [elementModalVisible, setElementModalVisible] = useState(false);
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
-  const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
-  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [selectedElementToDelete, setSelectedElementToDelete] =
+    useState<Element | null>(null);
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<
+    Record<string, boolean>
+  >({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [lastContractId, setLastContractId] = useState<number | null>(null);
 
-  const handleBackToIncidentTab = () => {
-
+  const handleBackToIncidentTab = useCallback(() => {
     setIncidentModalVisible(false);
     setElementModalVisible(true);
     setActiveTabIndex(1);
-  };
+  }, []);
 
   // load data
   useEffect(() => {
@@ -105,9 +113,14 @@ export const MapComponent: React.FC<MapProps> = ({
     loadData();
   }, []);
 
-  // incialize the map
+  // initialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
+
+    while (mapContainerRef.current.firstChild) {
+      mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
+    }
+
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
     service.addBasicControls();
     service.addGeocoder();
@@ -122,8 +135,22 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     });
     mapServiceRef.current = service;
-  }, [userValue.role]);
 
+    const loadData = async () => {
+      try {
+        const [treeTypesData, elementTypesData] = await Promise.all([
+          fetchTreeTypes(),
+          fetchElementType(),
+        ]);
+        setTreeTypes(treeTypesData);
+        setElementTypes(elementTypesData);
+      } catch (error) {
+        console.error('Error al cargar los tipos:', error);
+      }
+    };
+
+    loadData();
+  }, [userValue.role]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -137,11 +164,29 @@ export const MapComponent: React.FC<MapProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // load points if contract is active
+  // Detect contract changes and reload data
   useEffect(() => {
     if (!currentContract) return;
-    dispatch(fetchPointsAsync());
-  }, [currentContract, dispatch]);
+
+    if (currentContract.id !== lastContractId) {
+      setLastContractId(currentContract.id!);
+
+      const loadContractData = async () => {
+        try {
+          await dispatch(fetchPointsAsync()).unwrap();
+          await dispatch(fetchElementsAsync()).unwrap();
+        } catch (error) {
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error al cargar los datos del contrato',
+          });
+        }
+      };
+
+      loadContractData();
+    }
+  }, [dispatch, currentContract, lastContractId]);
 
   // fly to a selected zone
   useEffect(() => {
@@ -153,52 +198,58 @@ export const MapComponent: React.FC<MapProps> = ({
     }
   }, [selectedZone, points]);
 
-  const handleElementCreation = (zone: Zone) => {
-    setSelectedZoneForElement(zone);
-    onCreatingElementChange(true);
-    
-    const service = mapServiceRef.current;
-    if (!service) return;
+  const handleElementCreation = useCallback(
+    (zone: Zone) => {
+      setSelectedZoneForElement(zone);
+      onCreatingElementChange(true);
 
-    service.disableSingleClick();
-    setNewPointCoord(null);
-    
-    service.enableSingleClick((lngLat) => {
-      const clickedPoint = turf.point([lngLat.lng, lngLat.lat]);
-      const zonePoints = points
-        .filter(p => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
-        .map(p => [p.longitude!, p.latitude!]);
-      
-      if (zonePoints.length > 0) {
-        zonePoints.push(zonePoints[0]);
-        const zonePolygon = turf.polygon([zonePoints]);
+      const service = mapServiceRef.current;
+      if (!service) return;
 
-        if (turf.booleanPointInPolygon(clickedPoint, zonePolygon)) {
-          setNewPointCoord([lngLat.lng, lngLat.lat]);
-          setModalAddPointVisible(true);
-          onCreatingElementChange(false);
-          service.disableSingleClick();
-        } else {
-          onCreatingElementChange(false);
-          setSelectedZoneForElement(null);
-          service.disableSingleClick();
-          toast.current?.show({
-            severity: 'error',
-            summary: 'Aviso',
-            detail: 'No es pot crear un element fora de la zona o zona seleccionada',
-            life: 3000,
-            sticky: false,
-            style: { 
-              fontWeight: 'bold',
-              fontSize: '1.1em',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              border: '1px solid #f00'
-            }
-          });
+      service.disableSingleClick();
+      setNewPointCoord(null);
+
+      service.enableSingleClick((lngLat) => {
+        const clickedPoint = turf.point([lngLat.lng, lngLat.lat]);
+        const zonePoints = points
+          .filter(
+            (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
+          )
+          .map((p) => [p.longitude!, p.latitude!]);
+
+        if (zonePoints.length > 0) {
+          zonePoints.push(zonePoints[0]);
+          const zonePolygon = turf.polygon([zonePoints]);
+
+          if (turf.booleanPointInPolygon(clickedPoint, zonePolygon)) {
+            setNewPointCoord([lngLat.lng, lngLat.lat]);
+            setModalAddPointVisible(true);
+            onCreatingElementChange(false);
+            service.disableSingleClick();
+          } else {
+            onCreatingElementChange(false);
+            setSelectedZoneForElement(null);
+            service.disableSingleClick();
+            toast.current?.show({
+              severity: 'error',
+              summary: 'Aviso',
+              detail:
+                'No es pot crear un element fora de la zona o zona seleccionada',
+              life: 3000,
+              sticky: false,
+              style: {
+                fontWeight: 'bold',
+                fontSize: '1.1em',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                border: '1px solid #f00',
+              },
+            });
+          }
         }
-      }
-    });
-  };
+      });
+    },
+    [points, onCreatingElementChange],
+  );
 
   useEffect(() => {
     const service = mapServiceRef.current;
@@ -208,7 +259,7 @@ export const MapComponent: React.FC<MapProps> = ({
       next: (data: ZoneEvent) => {
         if (data.isCreatingElement !== undefined) {
           const { isCreatingElement, zone } = data;
-          
+
           if (isCreatingElement && zone) {
             handleElementCreation(zone);
           } else {
@@ -222,17 +273,23 @@ export const MapComponent: React.FC<MapProps> = ({
         if (data.hiddenElementTypes) {
           const { zoneId, elementTypeId, hidden } = data.hiddenElementTypes;
           const key = `${zoneId}-${elementTypeId}`;
-          
-          setHiddenElementTypes(prev => ({
+
+          setHiddenElementTypes((prev) => ({
             ...prev,
-            [key]: hidden
+            [key]: hidden,
           }));
 
           updateElementVisibility(zoneId, elementTypeId, hidden, service);
         }
       },
-      error: (err: Error) => console.log('ERROR STREAM: ', err.message),
-      complete: () => console.log('STREAM COMPLETADO'),
+      error: (err: Error) => {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error en el stream de eventos',
+        });
+      },
+      complete: () => {},
     });
 
     return () => {
@@ -242,19 +299,18 @@ export const MapComponent: React.FC<MapProps> = ({
       setNewPointCoord(null);
       service.disableSingleClick();
     };
-  }, [points]);
+  }, [points, handleElementCreation]);
 
-  const handleElementFormClose = () => {
+  const handleElementFormClose = useCallback(() => {
     setModalAddPointVisible(false);
     onCreatingElementChange(false);
     setNewPointCoord(null);
     mapServiceRef.current?.disableSingleClick();
     onElementAdd();
-  };
+  }, [onCreatingElementChange, onElementAdd]);
 
   // draw zones
   useEffect(() => {
-    
     const service = mapServiceRef.current;
     if (!service) return;
     if (!service.isStyleLoaded()) {
@@ -272,12 +328,16 @@ export const MapComponent: React.FC<MapProps> = ({
     filteredZones.forEach((zone: Zone) => {
       const zonePoints = points
         .filter(
-          (p) => p.zone_id === zone.id && p.type == TypePoint.zone_delimiter,
+          (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
         )
         .map((p) => [p.longitude!, p.latitude!] as [number, number]);
       if (zonePoints.length > 2) {
         zonePoints.push(zonePoints[0]);
-        service.addZoneToMap(`zone-${zone.id}`, zonePoints, zone.color || '#088');
+        service.addZoneToMap(
+          `zone-${zone.id}`,
+          zonePoints,
+          zone.color || '#088'
+        );
       }
     });
   }
@@ -285,18 +345,19 @@ export const MapComponent: React.FC<MapProps> = ({
   // draw elements
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service) return;
+    if (!service || !currentContract) return;
+
     if (!service.isStyleLoaded()) {
       service.onceStyleLoad(() => updateElements(service));
     } else {
       updateElements(service);
     }
-  }, [elements, currentContract, points, dispatch]);
+  }, [elements, currentContract, points]);
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
 
-    const handleDeleteElement = async (elementId: number) => {
+    const handleElementDelete = async (elementId: number) => {
       try {
         await dispatch(deleteElementAsync(elementId));
         toast.current?.show({
@@ -339,7 +400,7 @@ export const MapComponent: React.FC<MapProps> = ({
           filteredPoints,
           treeTypes,
           elementTypes,
-          handleDeleteElement,
+          handleElementDelete,
           handleElementClick,
         );
       });
@@ -349,34 +410,46 @@ export const MapComponent: React.FC<MapProps> = ({
         filteredPoints,
         treeTypes,
         elementTypes,
-        handleDeleteElement,
+        handleElementDelete,
         handleElementClick,
       );
     }
   }
 
   // save drawed zone
-  async function handleZoneSaved(newZone: Zone, newPoints: SavePointsProps[]) {
-    onModalVisibleChange(false);
-    onDrawingModeChange(false);
-    onEnabledButtonChange(false);
+  const handleZoneSaved = useCallback(
+    async (newZone: Zone, newPoints: SavePointsProps[]) => {
+      onModalVisibleChange(false);
+      onDrawingModeChange(false);
+      onEnabledButtonChange(false);
 
-    const service = mapServiceRef.current;
-    if (!service) return;
+      const service = mapServiceRef.current;
+      if (!service) return;
 
-    service.clearDraw();
+      service.clearDraw();
 
-    const zonePoints = newPoints.map(
-      (p) => [p.longitude, p.latitude] as [number, number],
-    );
+      const zonePoints = newPoints.map(
+        (p) => [p.longitude, p.latitude] as [number, number],
+      );
 
-    if (zonePoints.length > 2) {
-      zonePoints.push(zonePoints[0]);
-      service.addZoneToMap(`zone-${newZone.id}`, zonePoints, newZone.color || '#088');
-    }
+      if (zonePoints.length > 2) {
+        zonePoints.push(zonePoints[0]);
+        service.addZoneToMap(
+          `zone-${newZone.id}`,
+          zonePoints,
+          newZone.color || '#088'
+        );
+      }
 
-    await dispatch(fetchPointsAsync());
-  }
+      await dispatch(fetchPointsAsync());
+    },
+    [
+      dispatch,
+      onDrawingModeChange,
+      onEnabledButtonChange,
+      onModalVisibleChange,
+    ],
+  );
 
   function detectCollision(
     allPoints: Point[],
@@ -430,21 +503,30 @@ export const MapComponent: React.FC<MapProps> = ({
     }
   };
 
-  const updateElementVisibility = (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
-    const pointsInZone = points.filter(p => p.zone_id === zoneId);
-    const pointIds = pointsInZone.map(p => p.id);
-    
-    const elementsToUpdate = elements.filter(element => 
-      element.element_type_id === elementTypeId && 
-      pointIds.includes(element.point_id!)
-    );
-    
-    elementsToUpdate.forEach(element => {
-      if (element.id) {
-        service.updateMarkerVisibility(element.id, !hidden);
-      }
-    });
-  };
+  const updateElementVisibility = useCallback(
+    (
+      zoneId: number,
+      elementTypeId: number,
+      hidden: boolean,
+      service: MapService,
+    ) => {
+      const pointsInZone = points.filter((p) => p.zone_id === zoneId);
+      const pointIds = pointsInZone.map((p) => p.id);
+
+      const elementsToUpdate = elements.filter(
+        (element) =>
+          element.element_type_id === elementTypeId &&
+          pointIds.includes(element.point_id!),
+      );
+
+      elementsToUpdate.forEach((element) => {
+        if (element.id) {
+          service.updateMarkerVisibility(element.id, !hidden);
+        }
+      });
+    },
+    [elements, points],
+  );
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -510,8 +592,8 @@ export const MapComponent: React.FC<MapProps> = ({
             treeTypes={treeTypes}
             elementTypes={elementTypes}
             onOpenIncidentForm={() => setIncidentModalVisible(true)}
-            getCoordElement={() =>
-              mapServiceRef.current?.getCoordElement(selectedElement, points)!
+            getCoordElement={(element, pts) =>
+              mapServiceRef.current?.getCoordElement(element, pts)!
             }
             initialTabIndex={activeTabIndex}
           />

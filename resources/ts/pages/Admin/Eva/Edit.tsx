@@ -96,7 +96,13 @@ const FormField = ({
   );
 };
 
-export default function EditEva() {
+interface EditEvaProps {
+  preselectedElementId: number;
+  onClose: () => void;
+  redirectPath?: string; // Add redirectPath prop
+}
+
+export default function EditEva({ preselectedElementId, onClose, redirectPath }: EditEvaProps) {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -122,6 +128,8 @@ export default function EditEva() {
     wind: DictionaryOption[];
     drought: DictionaryOption[];
   }
+
+  const elementId = preselectedElementId || id;
 
   const [initialValues, setInitialValues] = useState({
     element_id: 0,
@@ -174,7 +182,7 @@ export default function EditEva() {
   useEffect(() => {
     const fetchEva = async () => {
       try {
-        const response = await axiosClient.get(`/admin/evas/${id}`);
+        const response = await axiosClient.get(`/admin/evas/${elementId}`);
         const data = response.data;
         const today = new Date();
         const birthDate = new Date(data.date_birth);
@@ -192,7 +200,7 @@ export default function EditEva() {
       }
     };
     fetchEva();
-  }, [id]);
+  }, [elementId]);
 
   useEffect(() => {
     const fetchDictionaries = async () => {
@@ -296,13 +304,20 @@ export default function EditEva() {
         height_estimation: Number(updatedValues.height_estimation),
       };
 
-      await axiosClient.put(`/admin/evas/${id}`, payload);
-      navigate(`/admin/evas/${id}`, {
-        state: { success: t('messages.updateSuccess') },
-      });
+      await axiosClient.put(`/admin/evas/${elementId}`, payload);
+
+      if (redirectPath) {
+        onClose(); // Close the popup if redirectPath is provided
+      } else {
+        navigate(`/admin/evas/${elementId}`, {
+          state: { success: t('messages.updateSuccess') },
+        });
+      }
     } catch (error) {
       console.error('Error en handleSubmit:', error);
-      navigate(`/admin/evas/${id}`, { state: { error: t('messages.error') } });
+      navigate(`/admin/evas/${elementId}`, {
+        state: { error: t('messages.error') },
+      });
     }
   };
 
@@ -325,7 +340,7 @@ export default function EditEva() {
           <Button
             className="p-button-text mr-4"
             style={{ color: '#fff' }}
-            onClick={() => navigate(`/admin/evas/${id}`)}>
+            onClick={() => navigate(`/admin/evas/${elementId}`)}>
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
           <h2 className="text-white text-3xl font-bold">

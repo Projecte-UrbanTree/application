@@ -81,7 +81,7 @@ interface WorkReport {
   report_status: number;
   report_incidents: string;
   work_order_id: number;
-  work_orders: WorkOrder;
+  work_order: WorkOrder;
   resources: Resources[];
   work_report_resources: WorkReportResources[];
 }
@@ -177,7 +177,7 @@ const WorkReportDetail = () => {
         try {
           await axiosClient.put(
             `/admin/work-orders/${workReport.work_order_id}/status`,
-            { status: calculateWorkOrderStatus(workReport.work_orders) },
+            { status: calculateWorkOrderStatus(workReport.work_order) },
           );
         } catch (woError) {
           console.error('Work order update failed:', woError);
@@ -534,7 +534,7 @@ const WorkReportDetail = () => {
                 </h2>
                 <div className="flex items-center gap-2">
                   <p className="text-blue-100 m-0 text-xs sm:text-sm">
-                    {formatDate(workReport.work_orders.date)}
+                    {formatDate(workReport.work_order.date)}
                   </p>
                   {getReportStatusBadge(workReport.report_status)}
                 </div>
@@ -549,7 +549,7 @@ const WorkReportDetail = () => {
                 {t('admin.pages.workReport.columns.users')}
               </h3>
               <ul className="list-disc pl-5">
-                {workReport.work_orders.users.map((user) => (
+                {workReport.work_order.users.map((user) => (
                   <li key={user.id} className="my-2">
                     <Tag
                       style={{
@@ -569,16 +569,14 @@ const WorkReportDetail = () => {
             </div>
 
             <Accordion multiple activeIndex={activeTabs}>
-              {workReport.work_orders.work_orders_blocks?.length ? (
-                workReport.work_orders.work_orders_blocks.map(
-                  (block, index) => (
-                    <AccordionTab
-                      key={block.id}
-                      header={`${t('admin.pages.workReport.details.block')} ${index + 1}`}>
-                      {renderBlockDetails(block)}
-                    </AccordionTab>
-                  ),
-                )
+              {workReport.work_order.work_orders_blocks?.length ? (
+                workReport.work_order.work_orders_blocks.map((block, index) => (
+                  <AccordionTab
+                    key={block.id}
+                    header={`${t('admin.pages.workReport.details.block')} ${index + 1}`}>
+                    {renderBlockDetails(block)}
+                  </AccordionTab>
+                ))
               ) : (
                 <AccordionTab
                   header={t('admin.pages.workReport.details.noBlocks')}>

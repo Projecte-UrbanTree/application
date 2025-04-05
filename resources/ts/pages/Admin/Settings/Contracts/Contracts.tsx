@@ -10,15 +10,23 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useContracts } from '@/hooks/useContracts';
+
 
 export default function Contracts() {
+  const { fetchContracts } = useContracts();
+
+  useEffect(() => {
+    fetchContracts();
+  }, [fetchContracts]);
+
   const [isLoading, setIsLoading] = useState(true);
   interface Contract {
     id: number;
     name: string;
     start_date: string;
     end_date: string;
-    final_price: string;
+    final_price: number;
     status: number;
   }
 
@@ -62,6 +70,15 @@ export default function Contracts() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const formatPrice = (price: number): string => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
   };
 
   if (isLoading) {
@@ -115,6 +132,7 @@ export default function Contracts() {
           <Column
             field="final_price"
             header={t('admin.pages.contracts.list.columns.final_price')}
+            body={(rowData: Contract) => formatPrice(rowData.final_price)}
           />
           <Column
             field="status"
@@ -171,6 +189,13 @@ export default function Contracts() {
                   tooltip={t('admin.pages.contracts.list.actions.delete')}
                   tooltipOptions={{ position: 'top' }}
                   onClick={() => handleDelete(rowData.id)}
+                />
+                <Button
+                  icon={<Icon icon="tabler:copy" className="h-5 w-5" />}
+                  className="p-button-rounded p-button-info"
+                  tooltip={t('admin.pages.contracts.list.actions.duplicate')}
+                  tooltipOptions={{ position: 'top' }}
+                  onClick={() => navigate(`/admin/settings/contracts/${rowData.id}/duplicate`)}
                 />
               </div>
             )}

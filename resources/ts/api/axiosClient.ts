@@ -1,7 +1,6 @@
-import { defaultContract } from '@/components/Admin/Dashboard/AdminDashboardWrapper';
 import store from '@/store/store';
 import { Contract } from '@/types/Contract';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost/api',
@@ -13,10 +12,11 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
-    const currentContract: Contract =
-      store.getState().contract.currentContract ?? defaultContract;
+    const currentContract: Contract = store.getState().contract
+      .currentContract ?? { id: 0 };
 
     if (token) {
+      config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
       config.headers['X-Contract-Id'] = currentContract.id;
     }

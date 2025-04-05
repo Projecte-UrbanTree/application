@@ -59,13 +59,17 @@
             "start_date_required": "La fecha de inicio es obligatoria",
             "status_invalid": "Estado no válido",
             "status_required": "El estado es obligatorio"
-          }
+          },
+          "name": "Nombre del contrato",
+          "startDate": "Fecha de inicio del contrato",
+          "endDate": "Fecha de finalización del contrato"
         },
         "list": {
           "actions": {
             "delete": "Eliminar contrato",
             "edit": "Editar contrato",
-            "label": "Acciones"
+            "label": "Acciones",
+            "duplicate": "Duplicar contrato"
           },
           "columns": {
             "end_date": "Fecha de finalización",
@@ -82,9 +86,29 @@
             "updateSuccess": "Contrato actualizado correctamente"
           }
         },
-        "title": "Contratos"
+        "title": "Contratos",
+        "duplicate": {
+          "title": "Duplicar contrato",
+          "submit": "Duplicar contrato",
+          "success": "Contrato duplicado correctamente",
+          "submitting": "Duplicando..."
+        }
       },
       "dashboard": {
+        "quickActions": "Acciones rápidas",
+        "createWorkOrder": "Crear orden de trabajo",
+        "reviewReports": "Revisar informes",
+        "manageUsers": "Gestionar usuarios",
+        "recentActivity": "Actividad reciente",
+        "workOrderCompleted": "Orden de trabajo completada",
+        "ago": "atrás",
+        "reportSubmitted": "Informe enviado",
+        "workOrderAssigned": "Orden de trabajo asignada",
+        "totalWorkOrders": "Total de órdenes",
+        "inProgressWorkOrders": "En progreso",
+        "noInProgressWorkOrders": "No hay órdenes de trabajo en progreso",
+        "completedWorkOrders": "Completadas",
+        "pendingReports": "Informes pendientes",
         "stats": {
           "widgets": {
             "contracts": "Contratos",
@@ -93,11 +117,14 @@
             "workOrders": "Órdenes de trabajo"
           }
         },
-        "title": "Panel de control",
+        "title": "Panel",
         "welcome": {
           "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
-          "message": "Nos alegra verte de nuevo. Aquí tienes un resumen rápido de tus datos."
-        }
+          "message": "Tienes a tu disposición un resumen rápido de tus datos."
+        },
+        "viewAll": "Ver todas las actividades",
+        "noActivity": "Sin actividad reciente",
+        "actions": "Acciones"
       },
       "elementTypes": {
         "title": "Tipos de elementos",
@@ -173,6 +200,82 @@
           "lightning-bolt": "Rayo",
           "grass": "Hierba",
           "cloud": "Nube"
+        }
+      },
+      "inventory": {
+        "elementDetailPopup": {
+          "tabs": {
+            "information": "Información",
+            "incidences": "Incidencias",
+            "history": "Historial",
+            "eva": "EVA"
+          },
+          "information": {
+            "title": "Información del Árbol",
+            "description": "Descripción",
+            "elementType": "Tipo Elemento",
+            "treeFamily": "Familia Árbol",
+            "treeGenus": "Género",
+            "treeSpecies": "Especie",
+            "creationDate": "Fecha Creación",
+            "location": {
+              "title": "Ubicación",
+              "zone": "Zona",
+              "latitude": "Latitud",
+              "longitude": "Longitud"
+            },
+            "deleteElement": "Eliminar Elemento",
+            "elementDeleted": "Elemento eliminado correctamente",
+            "elementDeleteFailed": "No se pudo eliminar el elemento"
+          },
+          "incidences": {
+            "title": "Incidencia",
+            "name": "📛 Nombre",
+            "creationDate": "📅 Fecha Creación",
+            "status": "⚠️ Estado",
+            "description": "📝 Descripción",
+            "addIncident": "Añadir Incidencia",
+            "deleteIncident": "Eliminar incidencia",
+            "noIncidences": "No hay incidencias registradas para este elemento.",
+            "statusUpdated": "Estado actualizado",
+            "statusUpdatedDetail": "Se actualizó correctamente el estado de la incidencia",
+            "statusUpdateFailed": "No se pudo actualizar el estado de la incidencia",
+            "statusOptions": {
+              "open": "Abierto",
+              "in_progress": "En progreso",
+              "closed": "Cerrado"
+            }
+          },
+          "eva": {
+            "loading": "Cargando evaluación del árbol...",
+            "noData": "No hay datos de evaluación disponibles para este árbol.",
+            "evaluationIndices": "Índices de Evaluación",
+            "treeStatus": "Estado del Árbol",
+            "stabilityIndex": "Índice de Estabilidad",
+            "gravityHeightRatio": "Relación Altura-Gravedad",
+            "rootCrownRatio": "Relación Raíz-Copa",
+            "windStabilityIndex": "Índice de Estabilidad al Viento",
+            "environmentalFactors": "Factores Ambientales",
+            "windExposure": "Exposición al Viento",
+            "droughtExposure": "Exposición a Sequía",
+            "technicalData": "Datos Técnicos",
+            "height": "Altura",
+            "diameter": "Diámetro",
+            "crownWidth": "Ancho de copa",
+            "crownProjectionArea": "Área de proyección de copa",
+            "effectiveRootArea": "Área efectiva de raíces",
+            "createEva": "Crear EVA",
+            "editEva": "Editar EVA"
+          },
+          "history": {
+            "title": "Historial del elemento (en construcción...)",
+            "notes": "Notas",
+            "task": "Tarea",
+            "description": "Descripción",
+            "workOrder": "Orden de Trabajo",
+            "status": "Estado",
+            "noTasks": "No hay tareas registradas para este elemento."
+          }
         }
       },
       "resources": {
@@ -295,7 +398,13 @@
         "hoursWorked": "Horas trabajadas",
         "fuelConsumption": "Consumo de combustible",
         "noData": "No hay datos para mostrar",
-        "exportCSV": "Exportar a CSV"
+        "exportCSV": "Exportar a CSV",
+        "total": "Total",
+        "noDataResourcePeriod": "No hay datos disponibles para el tipo de recurso seleccionado y período",
+        "selectResource": "Selecciona un tipo de recurso",
+        "selectResourcePlaceholder": "Busca tu tipo de recurso aquí...",
+        "noResourcesAvailable": "No hay recursos disponibles",
+        "selectResourcePrompt": "Por favor, selecciona un recurso para ver su uso"
       },
       "taskTypes": {
         "form": {
@@ -905,6 +1014,26 @@
           "rejecting": "Rechazando bloque...",
           "reject": "Bloque rechazado"
         }
+      },
+      "workers": {
+        "title": "Gestión de Trabajadores",
+        "contractWorkers": "Trabajadores del Contrato",
+        "assignRemoveWorkers": "Asignar/Eliminar Trabajadores",
+        "selectWorkers": "Seleccionar Trabajadores",
+        "selected": "Seleccionado",
+        "workersForContract": "Trabajadores para el Contrato",
+        "noWorkersAssigned": "No hay trabajadores asignados a este contrato",
+        "useDropdownToAssign": "Usa el menú desplegable de arriba para asignar trabajadores",
+        "selectWorkerHelp": "Selecciona o deselecciona trabajadores para asignarlos a este contrato",
+        "noWorkersFound": "No se encontraron trabajadores",
+        "name": "Nombre",
+        "email": "Correo Electrónico",
+        "company": "Empresa",
+        "dni": "DNI",
+        "pleaseSelectContract": "Por favor, selecciona primero un contrato",
+        "updatedSuccessfully": "Trabajadores actualizados correctamente",
+        "failedToLoad": "Error al cargar los trabajadores",
+        "failedToUpdate": "Error al actualizar los trabajadores"
       }
     },
     "profileDropdown": {

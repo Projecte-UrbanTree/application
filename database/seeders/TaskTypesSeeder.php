@@ -15,15 +15,15 @@ class TaskTypesSeeder extends Seeder
         DB::table('task_types')->insert([
             [
                 'name' => 'Podar',
-                'description' => 'Task 1 description',
+                'description' => 'Podar arbolat, arbustos y plantes',
             ],
             [
                 'name' => 'Regar',
-                'description' => 'Task 2 description',
+                'description' => 'Reg general',
             ],
             [
-                'name' => 'Cortar',
-                'description' => 'Task 3 description',
+                'name' => 'Tractament',
+                'description' => 'Tractament fitosanitari',
             ],
         ]);
     }

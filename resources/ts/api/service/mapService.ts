@@ -9,7 +9,8 @@ import { Point, TypePoint } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
 import { ElementType } from '@/types/ElementType';
 import ReactDOM from 'react-dom/client';
-import { renderElementPopup } from '@/components/Admin/Inventory/ElementComponent';
+import React from 'react';
+import { Icon } from '@iconify/react';
 
 export class MapService {
   public map!: mapboxgl.Map;
@@ -19,7 +20,6 @@ export class MapService {
 
   constructor(container: HTMLDivElement, token: string) {
     mapboxgl.accessToken = token;
-
     this.map = new mapboxgl.Map({
       container,
       style: 'mapbox://styles/mapbox/standard-satellite',
@@ -52,18 +52,13 @@ export class MapService {
     this.map.addControl(geocoder, 'top-left');
   }
 
-  public enableDraw(
-    isAdmin: boolean,
-    onDrawUpdate: (coords: number[][]) => void,
-  ) {
+  public enableDraw(isAdmin: boolean, onDrawUpdate: (coords: number[][]) => void) {
     if (!isAdmin) return;
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: { polygon: true, trash: true },
     });
-
     this.map.addControl(this.draw);
-
     this.map.on('draw.create', () => this.handleDraw(onDrawUpdate));
     this.map.on('draw.update', () => this.handleDraw(onDrawUpdate));
     this.map.on('draw.delete', () => this.handleDraw(onDrawUpdate));
@@ -76,12 +71,10 @@ export class MapService {
   private handleDraw(onDrawUpdate: (coords: number[][]) => void) {
     if (!this.draw) return;
     const data = this.draw.getAll();
-
     if (data.features.length > 0) {
       const polygon = data.features[0];
       if (polygon.geometry.type === 'Polygon') {
         const coords = polygon.geometry.coordinates[0] ?? [];
-
         if (coords.length < 3) {
           if (polygon.id) {
             this.draw.delete(polygon.id as string);
@@ -89,7 +82,6 @@ export class MapService {
           onDrawUpdate([]);
           return;
         }
-
         onDrawUpdate(coords as number[][]);
       }
     } else {
@@ -97,15 +89,11 @@ export class MapService {
     }
   }
 
-  public enableSingleClick(
-    callback: (lngLat: { lng: number; lat: number }) => void,
-  ) {
+  public enableSingleClick(callback: (lngLat: { lng: number; lat: number }) => void) {
     this.disableSingleClick();
-
     this.singleClickListener = (e) => {
       callback(e.lngLat);
     };
-
     this.map.on('click', this.singleClickListener);
   }
 
@@ -125,6 +113,10 @@ export class MapService {
   }
 
   public removeLayersAndSources(prefix: string) {
+    if (!this.map || !this.map.isStyleLoaded()) {
+      return;
+    }
+
     const style = this.map.getStyle();
     if (!style?.layers) return;
 
@@ -145,47 +137,103 @@ export class MapService {
     });
   }
 
-  public addZoneToMap(zoneId: string, coords: number[][], zoneColor: string = '#088') {
-    if (this.map.getSource(zoneId)) {
-      if (this.map.getLayer(zoneId)) {
-        this.map.removeLayer(zoneId);
-      }
-      if (this.map.getLayer(`${zoneId}-outline`)) {
-        this.map.removeLayer(`${zoneId}-outline`);
-      }
-      this.map.removeSource(zoneId);
+  public addZoneToMap(zoneId: string, coordinates: number[][], color: string) {
+    const sourceId = `zone-${zoneId}`;
+    const layerId = `zone-${zoneId}-fill`;
+
+    if (this.map.getLayer(layerId)) {
+      this.map.removeLayer(layerId);
+    }
+    if (this.map.getSource(sourceId)) {
+      this.map.removeSource(sourceId);
     }
 
-    this.map.addSource(zoneId, {
+    this.map.addSource(sourceId, {
       type: 'geojson',
       data: {
         type: 'Feature',
+        properties: {},
         geometry: {
           type: 'Polygon',
-          coordinates: [coords],
+          coordinates: [coordinates],
         },
-        properties: {},
-      },
-    });
-    this.map.addLayer({
-      id: zoneId,
-      type: 'fill',
-      source: zoneId,
-      paint: {
-        'fill-color': zoneColor,
-        'fill-opacity': 0.5,
       },
     });
 
     this.map.addLayer({
-      id: `${zoneId}-outline`,
-      type: 'line',
-      source: zoneId,
+      id: layerId,
+      type: 'fill',
+      source: sourceId,
       paint: {
-        'line-color': '#000',
-        'line-width': 2,
+        'fill-color': color,
+        'fill-opacity': 0.5
       },
     });
+  }
+
+  private getPolygonCenter(coordinates: number[][]): [number, number] {
+    const lngs = coordinates.map(coord => coord[0]);
+    const lats = coordinates.map(coord => coord[1]);
+    const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
+    const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
+    return [centerLng, centerLat];
+  }
+
+  private createCustomMarkerElement(elementType: ElementType): HTMLElement {
+    const container = document.createElement('div');
+    const root = ReactDOM.createRoot(container);
+
+    const iconName = elementType.icon?.trim()
+      ? elementType.icon.includes(':')
+        ? elementType.icon
+        : `mdi:${elementType.icon}`
+      : 'mdi:map-marker';
+
+    const bgColor = elementType.color
+      ? elementType.color.startsWith('#')
+        ? elementType.color
+        : `#${elementType.color}`
+      : '#2D4356';
+
+    root.render(
+      React.createElement(
+        'div',
+        {
+          className: 'element-marker',
+          style: {
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: bgColor,
+            boxShadow: '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)',
+            cursor: 'pointer',
+            border: '2px solid #fff',
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          },
+          onMouseEnter: (e: any) => {
+            e.currentTarget.style.transform = 'scale(1.1)';
+            e.currentTarget.style.boxShadow =
+              '0 5px 10px rgba(0,0,0,0.25), 0 3px 6px rgba(0,0,0,0.22)';
+          },
+          onMouseLeave: (e: any) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow =
+              '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)';
+          },
+        },
+        React.createElement(Icon, {
+          icon: iconName,
+          width: 22,
+          height: 22,
+          color: '#FFFFFF',
+        }),
+      ),
+    );
+
+    return container;
   }
 
   public addElementMarkers(
@@ -197,38 +245,37 @@ export class MapService {
     onElementClick?: (element: Element) => void,
   ) {
     this.removeElementMarkers();
-    const filteredPoints = points.filter((p) => p.type === TypePoint.element);
 
     elements.forEach((element) => {
-      const coords = this.getCoordElement(element, filteredPoints);
-      if (!coords) {
-        console.warn('Elemento sin coordenadas:', element);
-        return;
-      }
+      const point = points.find((p) => p.id === element.point_id);
+      if (!point?.latitude || !point?.longitude) return;
 
-      const marker = new mapboxgl.Marker({ color: '#FF0000' })
-        .setLngLat([coords.lng, coords.lat])
+      const elementType = elementTypes.find((et) => et.id === element.element_type_id);
+      if (!elementType) return;
+
+      const markerElement = this.createCustomMarkerElement(elementType);
+      const marker = new mapboxgl.Marker({
+        element: markerElement,
+        anchor: 'center',
+      })
+        .setLngLat([point.longitude, point.latitude])
         .addTo(this.map);
 
-      marker.getElement().addEventListener('click', () => {
-        if (onElementClick) {
+      if (onElementClick) {
+        marker.getElement().addEventListener('click', () => {
           onElementClick(element);
-        }
-      });
+        });
+      }
 
       this.elementMarkers.push({ marker, elementId: element.id! });
     });
   }
 
   public removeElementMarker(elementId: number) {
-    const markerObj = this.elementMarkers.find(
-      (m) => m.elementId === elementId,
-    );
+    const markerObj = this.elementMarkers.find((m) => m.elementId === elementId);
     if (markerObj) {
       markerObj.marker.remove();
-      this.elementMarkers = this.elementMarkers.filter(
-        (m) => m.elementId !== elementId,
-      );
+      this.elementMarkers = this.elementMarkers.filter((m) => m.elementId !== elementId);
     }
   }
 
@@ -242,11 +289,7 @@ export class MapService {
     points: Point[],
   ): { lat: number; lng: number } | null {
     const point = points.find((p) => p.id === element.point_id);
-    if (
-      !point ||
-      point.latitude === undefined ||
-      point.longitude === undefined
-    ) {
+    if (!point || point.latitude === undefined || point.longitude === undefined) {
       return null;
     }
     return { lat: point.latitude, lng: point.longitude };
@@ -266,11 +309,7 @@ export class MapService {
     const markerObj = this.elementMarkers.find((m) => m.elementId === elementId);
     if (markerObj) {
       const markerElement = markerObj.marker.getElement();
-      if (visible) {
-        markerElement.style.display = '';
-      } else {
-        markerElement.style.display = 'none';
-      }
+      markerElement.style.display = visible ? '' : 'none';
     }
   }
 }

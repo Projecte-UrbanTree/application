@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\Admin\AccountController;
 use App\Http\Controllers\Api\Admin\ContractController;
+use App\Http\Controllers\Api\Admin\ContractUserController;
+use App\Http\Controllers\Api\Admin\ElementController;
 use App\Http\Controllers\Api\Admin\ElementTypeController;
 use App\Http\Controllers\Api\Admin\EvaController;
 use App\Http\Controllers\Api\Admin\IncidentsController;
@@ -17,7 +19,7 @@ use App\Http\Controllers\Api\Admin\WorkReportController;
 use App\Http\Controllers\Api\Admin\ZoneController;
 use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\ElementController;
+use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -34,11 +36,12 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('contracts', [UserContractController::class, 'index']);
 
     /* Admin protected routes */
-    Route::middleware(RoleMiddleware::class . ':admin')->prefix('admin')->group(function () {
-        Route::post('select-contract', [ContractController::class, 'selectContract']);
-        Route::get('get-selected-contract', [ContractController::class, 'getSelectedContract']);
+    Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
+
+        Route::post('contracts/{id}/duplicate', [ContractController::class, 'duplicate']);
 
         Route::get('stats', function (Request $request) {
             return response()->json([
@@ -55,6 +58,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route for stats
         Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
         Route::get('statistics', [StatisticsController::class, 'index']);
+
+        // Contract users routes
+        Route::get('contracts/{contract}/users', [ContractUserController::class, 'index']);
+        Route::post('contracts/{contract}/users/{user}', [ContractUserController::class, 'store']);
+        Route::delete('contracts/{contract}/users/{user}', [ContractUserController::class, 'destroy']);
 
         Route::resources([
             'contracts' => ContractController::class,
@@ -75,5 +83,6 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
 
         Route::put('/work-orders/{id}/status', [WorkOrderController::class, 'updateStatus']);
+        Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
     });
 });
