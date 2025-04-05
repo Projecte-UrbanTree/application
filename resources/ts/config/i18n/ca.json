@@ -174,7 +174,8 @@
             "delete": "Elimina contracte",
             "edit": "Edita contracte",
             "label": "Accions",
-            "duplicate": "Duplicar contracte"
+            "duplicate": "Duplicar contracte",
+            "create": "Crear contracte"
           },
           "columns": {
             "end_date": "Data de fi",
@@ -305,6 +306,14 @@
           "lightning-bolt": "Raig",
           "grass": "Gespa",
           "cloud": "Núvol"
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar tipus d'element",
+            "edit": "Editar tipus d'element",
+            "label": "Accions",
+            "create": "Crear tipus d'element"
+          }
         }
       },
       "evas": {
@@ -494,7 +503,8 @@
         "list": {
           "actions": {
             "show": "Mostrar Eva",
-            "delete": "Eliminar Eva"
+            "delete": "Eliminar Eva",
+            "create": "Crear EVA"
           },
           "messages": {
             "createSuccess": "Eva creada correctament",
@@ -671,7 +681,8 @@
           "actions": {
             "delete": "Eliminar tipus de recurs",
             "edit": "Editar tipus de recurs",
-            "label": "Accions"
+            "label": "Accions",
+            "create": "Crear recurs"
           },
           "columns": {
             "description": "Descripció",
@@ -721,7 +732,8 @@
           "actions": {
             "delete": "Elimina tipus de recurs",
             "edit": "Edita tipus de recurs",
-            "label": "Accions"
+            "label": "Accions",
+            "create": "Crear tipus de recurs"
           },
           "columns": {
             "description": "Descripció",
@@ -789,7 +801,8 @@
           "actions": {
             "delete": "Eliminar tipus de recurs",
             "edit": "Editar tipus de recurs",
-            "label": "Accions"
+            "label": "Accions",
+            "create": "Crear tipus de tasca"
           },
           "columns": {
             "description": "Descripció",
@@ -835,7 +848,8 @@
           "actions": {
             "delete": "Elimina Tipus d'Arbre",
             "edit": "Edita Tipus d'Arbre",
-            "label": "Accions"
+            "label": "Accions",
+            "create": "Crear tipus d'arbre"
           },
           "columns": {
             "family": "Família",
@@ -890,7 +904,8 @@
           "actions": {
             "delete": "Elimina usuari",
             "edit": "Edita usuari",
-            "label": "Accions"
+            "label": "Accions",
+            "create": "Crear usuari"
           },
           "columns": {
             "company": "Empresa",
@@ -984,7 +999,8 @@
             "delete": "Eliminar ordre de treball",
             "edit": "Editar ordre de treball",
             "label": "Accions",
-            "viewReport": "Veure informe"
+            "viewReport": "Veure informe",
+            "create": "Crear ordre de treball"
           },
           "columns": {
             "contract": "Contracte",

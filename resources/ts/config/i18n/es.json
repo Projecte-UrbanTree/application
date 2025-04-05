@@ -185,7 +185,8 @@
             "delete": "Eliminar contrato",
             "edit": "Editar contrato",
             "label": "Acciones",
-            "duplicate": "Duplicar contrato"
+            "duplicate": "Duplicar contrato",
+            "create": "Crear contrato"
           },
           "columns": {
             "end_date": "Fecha de finalización",
@@ -317,6 +318,14 @@
           "lightning-bolt": "Rayo",
           "grass": "Hierba",
           "cloud": "Nube"
+        },
+        "list": {
+          "actions": {
+            "delete": "Eliminar tipo de elemento",
+            "edit": "Editar tipo de elemento",
+            "label": "Acciones",
+            "create": "Crear tipo de elemento"
+          }
         }
       },
       
@@ -378,7 +387,8 @@
         "list": {
           "actions": {
             "show": "Mostrar Eva",
-            "delete": "Eliminar Eva"
+            "delete": "Eliminar Eva",
+            "create": "Crear EVA"
           },
           "messages": {
             "createSuccess": "Eva creada correctamente",
@@ -687,7 +697,8 @@
           "actions": {
             "delete": "Eliminar recurso",
             "edit": "Editar recurso",
-            "label": "Acciones"
+            "label": "Acciones",
+            "create": "Crear recurso"
           },
           "columns": {
             "description": "Descripción",
@@ -737,7 +748,8 @@
           "actions": {
             "delete": "Eliminar tipo de recurso",
             "edit": "Editar tipo de recurso",
-            "label": "Acciones"
+            "label": "Acciones",
+            "create": "Crear tipo de recurso"
           },
           "columns": {
             "description": "Descripción",
@@ -807,7 +819,8 @@
           "actions": {
             "delete": "Eliminar tipo de tarea",
             "edit": "Editar tipo de tarea",
-            "label": "Acciones"
+            "label": "Acciones",
+            "create": "Crear tipo de tarea"
           },
           "columns": {
             "description": "Descripción",
@@ -853,7 +866,8 @@
           "actions": {
             "delete": "Eliminar tipo de árbol",
             "edit": "Editar tipo de árbol",
-            "label": "Acciones"
+            "label": "Acciones",
+            "create": "Crear tipo de árbol"
           },
           "columns": {
             "family": "Familia",
@@ -908,7 +922,8 @@
           "actions": {
             "delete": "Eliminar usuario",
             "edit": "Editar usuario",
-            "label": "Acciones"
+            "label": "Acciones",
+            "create": "Crear usuario"
           },
           "columns": {
             "company": "Empresa",
@@ -1003,7 +1018,8 @@
             "delete": "Eliminar orden de trabajo",
             "edit": "Editar orden de trabajo",
             "label": "Acciones",
-            "viewReport": "Ver Parte"
+            "viewReport": "Ver Parte",
+            "create": "Crear orden de trabajo"
           },
           "columns": {
             "contract": "Contrato",

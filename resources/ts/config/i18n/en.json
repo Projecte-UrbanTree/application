@@ -185,7 +185,8 @@
             "delete": "Delete contract",
             "edit": "Edit contract",
             "label": "Actions",
-            "duplicate": "Duplicate contract"
+            "duplicate": "Duplicate contract",
+            "create": "Create Contract"
           },
           "columns": {
             "end_date": "End Date",
@@ -317,6 +318,14 @@
           "lightning-bolt": "Lightning Bolt",
           "grass": "Grass",
           "cloud": "Cloud"
+        },
+        "list": {
+          "actions": {
+            "delete": "Delete element type",
+            "edit": "Edit element type",
+            "label": "Actions",
+            "create": "Create Element Type"
+          }
         }
       },
       
@@ -378,7 +387,8 @@
         "list": {
           "actions": {
             "show": "Show Eva",
-            "delete": "Delete Eva"
+            "delete": "Delete Eva",
+            "create": "Create EVA"
           },
           "messages": {
             "createSuccess": "Eva created successfully",
@@ -687,7 +697,8 @@
           "actions": {
             "delete": "Delete resource",
             "edit": "Edit resource",
-            "label": "Actions"
+            "label": "Actions",
+            "create": "Create Resource"
           },
           "columns": {
             "description": "Description",
@@ -737,7 +748,8 @@
           "actions": {
             "delete": "Delete resource type",
             "edit": "Edit resource type",
-            "label": "Actions"
+            "label": "Actions",
+            "create": "Create Resource Type"
           },
           "columns": {
             "description": "Description",
@@ -807,7 +819,8 @@
           "actions": {
             "delete": "Delete task type",
             "edit": "Edit task type",
-            "label": "Actions"
+            "label": "Actions",
+            "create": "Create Task Type"
           },
           "columns": {
             "description": "Description",
@@ -853,7 +866,8 @@
           "actions": {
             "delete": "Delete Tree Type",
             "edit": "Edit Tree Type",
-            "label": "Actions"
+            "label": "Actions",
+            "create": "Create Tree Type"
           },
           "columns": {
             "family": "Family",
@@ -908,7 +922,8 @@
           "actions": {
             "delete": "Delete User",
             "edit": "Edit User",
-            "label": "Actions"
+            "label": "Actions",
+            "create": "Create User"
           },
           "columns": {
             "company": "Company",
@@ -1003,7 +1018,8 @@
             "delete": "Delete work order",
             "edit": "Edit work order",
             "label": "Actions",
-            "viewReport": "View report"
+            "viewReport": "View report",
+            "create": "Create Work Order"
           },
           "columns": {
             "contract": "Contract",

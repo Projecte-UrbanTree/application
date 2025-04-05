@@ -132,7 +132,14 @@ export default function ResourceTypes() {
         </div>
       ) : resourceTypes.length === 0 ? (
         <div className="p-4 text-center">
-          <p className="text-gray-600">No Data</p>
+          <p className="text-gray-600">
+            {t('admin.pages.resourceTypes.list.noData')}
+          </p>
+          <Button
+            label={t('admin.pages.resourceTypes.list.actions.create')}
+            onClick={() => navigate('/admin/settings/resource-types/create')}
+            className="mt-2"
+          />
         </div>
       ) : (
         <CrudPanel

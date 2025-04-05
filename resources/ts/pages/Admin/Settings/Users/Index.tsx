@@ -79,6 +79,11 @@ export default function Users() {
       ) : users.length === 0 ? (
         <div className="p-4 text-center">
           <p className="text-gray-600">{t('admin.pages.users.list.noData')}</p>
+          <Button
+            label={t('admin.pages.users.list.actions.create')}
+            onClick={() => navigate('/admin/settings/users/create')}
+            className="mt-2"
+          />
         </div>
       ) : (
         <CrudPanel

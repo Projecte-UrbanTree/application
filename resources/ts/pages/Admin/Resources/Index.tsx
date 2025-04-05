@@ -102,6 +102,11 @@ export default function Resources() {
             <p className="text-gray-600">
               {t('admin.pages.resources.list.noResources')}
             </p>
+            <Button
+              label={t('admin.pages.resources.list.actions.create')}
+              onClick={() => navigate('/admin/resources/create')}
+              className="mt-2"
+            />
           </div>
         ) : (
           <CrudPanel

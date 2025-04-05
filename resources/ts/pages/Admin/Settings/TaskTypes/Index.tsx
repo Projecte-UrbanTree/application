@@ -82,6 +82,11 @@ export default function TaskTypes() {
       ) : taskTypes.length === 0 ? (
         <div className="p-4 text-center">
           <p className="text-gray-600">{t('admin.pages.taskTypes.list.noData')}</p>
+          <Button
+            label={t('admin.pages.taskTypes.list.actions.create')}
+            onClick={() => navigate('/admin/settings/task-types/create')}
+            className="mt-2"
+          />
         </div>
       ) : (
         <CrudPanel

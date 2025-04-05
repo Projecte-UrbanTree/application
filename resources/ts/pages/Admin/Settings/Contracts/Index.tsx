@@ -102,6 +102,11 @@ export default function Contracts() {
       ) : contracts.length === 0 ? (
         <div className="p-4 text-center">
           <p className="text-gray-600">{t('admin.pages.contracts.list.noData')}</p>
+          <Button
+            label={t('admin.pages.contracts.list.actions.create')}
+            onClick={() => navigate('/admin/settings/contracts/create')}
+            className="mt-2"
+          />
         </div>
       ) : (
         <CrudPanel

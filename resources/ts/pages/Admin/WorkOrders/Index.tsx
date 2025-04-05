@@ -327,6 +327,11 @@ export default function WorkOrders() {
           <p className="text-gray-600">
             {t('admin.pages.workOrders.list.messages.noData')}
           </p>
+          <Button
+            label={t('admin.pages.workOrders.list.actions.create')}
+            onClick={() => navigate('/admin/work-orders/create')}
+            className="mt-2"
+          />
         </div>
       ) : (
         <CrudPanel
