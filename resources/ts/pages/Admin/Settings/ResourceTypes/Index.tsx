@@ -51,38 +51,6 @@ export default function ResourceTypes() {
     }
   }, [msg]);
 
-  const handleCreate = async (values: ResourceType) => {
-    try {
-      const response = await axiosClient.post('/admin/resource-types', values);
-      setResourceTypes((prevResourceTypes) => [
-        ...prevResourceTypes,
-        response.data,
-      ]);
-      setMsg(t('admin.pages.resourceTypes.createSuccess'));
-    } catch (error) {
-      console.error(error);
-      setMsg(t('admin.pages.resourceTypes.error'));
-    }
-  };
-
-  const handleEdit = async (id: number, values: ResourceType) => {
-    try {
-      const response = await axiosClient.put(
-        `/admin/resource-types/${id}`,
-        values,
-      );
-      setResourceTypes((prevResourceTypes) =>
-        prevResourceTypes.map((resourceType) =>
-          resourceType.id === id ? response.data : resourceType,
-        ),
-      );
-      setMsg(t('admin.pages.resourceTypes.updateSuccess'));
-    } catch (error) {
-      console.error(error);
-      setMsg(t('admin.pages.resourceTypes.error'));
-    }
-  };
-
   const handleDelete = async (id: number) => {
     if (
       window.confirm(t('admin.pages.resourceTypes.list.messages.deleteConfirm'))

@@ -52,15 +52,15 @@ export default function ElementsTypes() {
   }, [msg]);
 
   const handleDelete = async (elementTypeId: number) => {
-    if (!window.confirm(t('admin.pages.elementTypes.deleteConfirm'))) return;
+    if (!window.confirm(t('admin.pages.elementTypes.list.messages.deleteConfirm')))
+      return;
     try {
       await axiosClient.delete(`/admin/element-types/${elementTypeId}`);
-      setElementTypes(
-        elementTypes.filter((elementype) => elementype.id !== elementTypeId),
-      );
-      setMsg(t('admin.pages.elementTypes.deletedSuccess'));
+      setElementTypes(elementTypes.filter((et) => et.id !== elementTypeId));
+      setMsg(t('admin.pages.elementTypes.list.messages.deleteSuccess'));
     } catch (error) {
       console.error(error);
+      setMsg(t('admin.pages.elementTypes.list.messages.error'));
     }
   };
 
@@ -87,26 +87,13 @@ export default function ElementsTypes() {
     return rowData.requires_tree_type ? 'Si' : 'No';
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-        />
-        <span className="mt-2 text-blue-600">
-          {t('admin.pages.elementTypes.loading')}
-        </span>
-      </div>
-    );
-  }
-
   return (
     <>
       {msg && (
         <Message
           severity={
-            successMsg || msg === t('admin.pages.elementTypes.deletedSuccess')
+            msg === t('admin.pages.elementTypes.list.messages.deleteSuccess') ||
+            msg === successMsg
               ? 'success'
               : 'error'
           }
@@ -120,12 +107,18 @@ export default function ElementsTypes() {
         </div>
       ) : elementTypes.length === 0 ? (
         <div className="p-4 text-center">
-          <p className="text-gray-600">No Data</p>
+          <p className="text-gray-600">{t('admin.pages.elementTypes.list.noData')}</p>
+          <Button
+            label={t('admin.pages.elementTypes.list.actions.create')}
+            onClick={() => navigate('/admin/settings/element-types/create')}
+            className="mt-2"
+          />
         </div>
       ) : (
         <CrudPanel
           title={t('admin.pages.elementTypes.title')}
-          onCreate={() => navigate('/admin/settings/element-types/create')}>
+          onCreate={() => navigate('/admin/settings/element-types/create')}
+        >
           <DataTable
             value={elementTypes}
             paginator

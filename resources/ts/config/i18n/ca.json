@@ -799,8 +799,8 @@
         },
         "list": {
           "actions": {
-            "delete": "Eliminar tipus de recurs",
-            "edit": "Editar tipus de recurs",
+            "delete": "Eliminar tipus de tasca",
+            "edit": "Editar tipus de tasca",
             "label": "Accions",
             "create": "Crear tipus de tasca"
           },

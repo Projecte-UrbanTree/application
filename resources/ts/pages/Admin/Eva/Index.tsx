@@ -95,7 +95,6 @@ export default function Evas() {
   const calculateAge = (dateString: string) => {
     const today = new Date();
     const birthDate = new Date(dateString);
-    console.log('Birth Date:', birthDate);
     const years = differenceInYears(today, birthDate);
     const months = differenceInMonths(today, birthDate) % 12;
 
