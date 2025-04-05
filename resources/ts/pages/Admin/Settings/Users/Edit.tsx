@@ -105,9 +105,8 @@ export default function EditUser() {
       navigate('/admin/settings/users');
     } catch (error) {
       showToast('error', t('admin.pages.users.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   const roleOptions = [

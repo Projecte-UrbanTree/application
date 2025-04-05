@@ -34,9 +34,8 @@ export default function EditTaskType() {
           description: data.description || '',
         });
       } catch {
-      } finally {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     fetchTaskType();
   }, [id]);
@@ -62,9 +61,8 @@ export default function EditTaskType() {
       navigate('/admin/settings/task-types');
     } catch {
       showToast('error', t('admin.pages.taskTypes.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

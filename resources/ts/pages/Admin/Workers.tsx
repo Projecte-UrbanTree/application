@@ -66,13 +66,13 @@ export default function Workers() {
         (user: User) => user.role === 'worker',
       );
       setAllWorkers(workerUsers);
+      setSelectLoading(false);
     } catch (error) {
       showToast(
         'error',
         t('general.error'),
         t('admin.pages.workers.failedToLoad'),
       );
-    } finally {
       setSelectLoading(false);
     }
   };
@@ -85,6 +85,7 @@ export default function Workers() {
       const contractWorkers = response.data;
       setWorkers(contractWorkers);
       updateSelectedWorkers(contractWorkers);
+      setLoading(false);
     } catch (error) {
       showToast(
         'error',
@@ -92,6 +93,7 @@ export default function Workers() {
         t('admin.pages.workers.failedToLoad'),
       );
       resetWorkersData();
+      setLoading(false);
     }
   };
 

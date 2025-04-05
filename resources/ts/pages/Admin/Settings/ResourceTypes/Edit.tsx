@@ -66,9 +66,8 @@ export default function EditResourceType() {
       navigate('/admin/settings/resource-types');
     } catch (error) {
       showToast('error', t('admin.pages.resourceTypes.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

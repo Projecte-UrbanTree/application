@@ -69,7 +69,6 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
         summary: 'Error',
         detail: 'No se pudo crear la incidencia',
       });
-    } finally {
       setIsSubmitting(false);
     }
   }, [

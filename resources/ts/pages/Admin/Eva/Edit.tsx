@@ -194,7 +194,6 @@ export default function EditEva({
       } catch (error) {
         console.error(error);
         setError(t('admin.pages.evas.list.messages.error'));
-      } finally {
         setIsLoading(false);
       }
     };
@@ -316,9 +315,8 @@ export default function EditEva({
         error.response?.data?.message ||
           t('admin.pages.evas.list.messages.error'),
       );
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

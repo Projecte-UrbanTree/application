@@ -113,7 +113,6 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
 
       onClose();
     } catch (error) {
-    } finally {
       setIsSubmitting(false);
     }
   };

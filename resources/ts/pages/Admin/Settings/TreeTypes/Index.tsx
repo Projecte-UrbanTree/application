@@ -30,10 +30,10 @@ export default function TreeTypes() {
       try {
         const response = await axiosClient.get('/admin/tree-types');
         setTreeTypes(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
         showToast('error', t('admin.pages.treeTypes.list.messages.error'));
-      } finally {
         setIsLoading(false);
       }
     };

@@ -52,9 +52,8 @@ export default function CreateResourceType() {
     } catch (error) {
       console.error(error);
       showToast('error', t('admin.pages.resourceTypes.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

@@ -36,10 +36,10 @@ export default function ShowEva() {
       try {
         const response = await axiosClient.get(`/admin/evas/${id}`);
         setEva(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
         setErrorMessage(t('admin.pages.evas.show.loadError'));
-      } finally {
         setIsLoading(false);
       }
     };

@@ -171,10 +171,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         `/admin/evas/element/${element.id}`,
       );
       setEva(response.data);
+      setIsLoadingEva(false);
     } catch (error) {
       console.error('Error al recargar datos EVA:', error);
       setEva(null);
-    } finally {
       setIsLoadingEva(false);
     }
   }, [element.id]);
@@ -188,10 +188,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             `/admin/evas/element/${element.id}`,
           );
           setEva(response.data);
+          setIsLoadingEva(false);
         } catch (error) {
           console.error('Error al cargar datos EVA:', error);
           setEva(null);
-        } finally {
           setIsLoadingEva(false);
         }
       }

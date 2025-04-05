@@ -79,9 +79,8 @@ export default function EditTreeType() {
       navigate('/admin/settings/tree-types');
     } catch (error) {
       showToast('error', t('admin.pages.treeTypes.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

@@ -111,9 +111,8 @@ export default function EditContract() {
       navigate('/admin/settings/contracts');
     } catch (error) {
       showToast('error', t('admin.pages.contracts.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   const statusOptions = [

@@ -240,7 +240,7 @@ const CreateEva = ({
       await axiosClient.post('/admin/evas', updatedValues);
 
       if (redirectPath) {
-        onClose(); // Close the popup if redirectPath is provided
+        onClose();
       } else {
         showToast('success', t('admin.pages.evas.list.messages.createSuccess'));
         navigate('/admin/evas');
@@ -250,8 +250,8 @@ const CreateEva = ({
         error.response?.data?.message ||
           t('admin.pages.evas.list.messages.error'),
       );
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (loading) {

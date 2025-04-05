@@ -74,9 +74,9 @@ export default function CreateElementType() {
       navigate('/admin/settings/element-types');
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
+      showToast('error', t('admin.pages.elementTypes.error'));
     }
+    setIsSubmitting(false);
   };
 
   const searchIcons = (event: { query: string }) => {

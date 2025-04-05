@@ -42,9 +42,8 @@ export default function EditResource() {
         setResourceTypes(data.resource_types);
       } catch (error) {
         console.error(error);
-      } finally {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     fetchData();
   }, [id]);
@@ -85,9 +84,8 @@ export default function EditResource() {
       navigate('/admin/resources');
     } catch (error) {
       showToast('error', t('admin.pages.resources.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

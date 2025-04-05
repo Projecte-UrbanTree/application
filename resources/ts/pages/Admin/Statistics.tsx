@@ -235,6 +235,7 @@ export default function Stats() {
         setSelectedResourceInfo(null);
         setSelectedResourceChartData([]);
       }
+      setIsLoading(false);
     } catch (err) {
       console.error('Error fetching statistics:', err);
       setRawDays([]);
@@ -248,7 +249,6 @@ export default function Stats() {
       setSelectedResourceId(null);
       setSelectedResourceInfo(null);
       setSelectedResourceChartData([]);
-    } finally {
       setIsLoading(false);
     }
   };

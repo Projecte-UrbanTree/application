@@ -61,9 +61,9 @@ export default function CreateTreeType() {
       navigate('/admin/settings/tree-types');
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
+      showToast('error', t('admin.pages.treeTypes.list.messages.error'));
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

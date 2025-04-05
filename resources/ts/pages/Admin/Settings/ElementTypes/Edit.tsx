@@ -93,9 +93,8 @@ export default function EditElementType() {
       navigate('/admin/settings/element-types');
     } catch (error) {
       showToast('error', t('admin.pages.elementTypes.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   const booleanOptions = [

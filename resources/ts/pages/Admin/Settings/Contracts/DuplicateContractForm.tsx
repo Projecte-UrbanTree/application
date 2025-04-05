@@ -38,9 +38,9 @@ export default function DuplicateContractForm() {
           start_date: null,
           end_date: null,
         });
+        setIsLoading(false);
       } catch (error) {
         console.error('Error carregant el contracte original', error);
-      } finally {
         setIsLoading(false);
       }
     };

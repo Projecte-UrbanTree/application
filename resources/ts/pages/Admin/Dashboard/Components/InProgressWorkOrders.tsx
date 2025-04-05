@@ -55,9 +55,9 @@ const InProgressWorkOrders = () => {
             : inProgressOrders;
 
         setWorkOrders(filteredOrders);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching in-progress work orders:', error);
-      } finally {
         setLoading(false);
       }
     };

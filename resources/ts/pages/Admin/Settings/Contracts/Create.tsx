@@ -76,9 +76,9 @@ export default function CreateContract() {
       navigate('/admin/settings/contracts');
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
+      showToast('error', t('admin.pages.contracts.list.messages.error'));
     }
+    setIsSubmitting(false);
   };
 
   const statusOptions = [

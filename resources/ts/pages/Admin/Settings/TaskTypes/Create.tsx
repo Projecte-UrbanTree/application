@@ -51,9 +51,8 @@ export default function CreateTaskType() {
     } catch (error) {
       console.error(error);
       showToast('error', t('admin.pages.taskTypes.list.messages.error'));
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

@@ -29,9 +29,8 @@ export default function CreateResource() {
         setResourceTypes(data.resource_types);
       } catch (error) {
         console.error(error);
-      } finally {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     fetchResourceTypes();
   }, []);
@@ -80,9 +79,9 @@ export default function CreateResource() {
       navigate('/admin/resources');
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
+      showToast('error', t('admin.pages.resources.list.messages.error'));
     }
+    setIsSubmitting(false);
   };
 
   if (isLoading) {

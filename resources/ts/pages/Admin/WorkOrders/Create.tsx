@@ -48,9 +48,8 @@ const CreateWorkOrder = () => {
       setTreeTypes(response.data.tree_types);
     } catch (error) {
       console.error('Error fetching initial data:', error);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   }, [currentContract]);
 
   useEffect(() => {
@@ -152,9 +151,9 @@ const CreateWorkOrder = () => {
         error.response?.data?.message ||
           t('admin.pages.workOrders.list.messages.error'),
       );
-      setSubmitting(false);
-      setIsSubmitting(false);
     }
+    setSubmitting(false);
+    setIsSubmitting(false);
   };
 
   const userTemplate = useCallback(

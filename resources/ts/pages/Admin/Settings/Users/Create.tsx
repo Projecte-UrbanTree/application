@@ -77,9 +77,9 @@ export default function CreateUser() {
       navigate('/admin/settings/users');
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
+      showToast('error', t('admin.pages.users.list.messages.error'));
     }
+    setIsSubmitting(false);
   };
 
   const roleOptions = [

@@ -36,10 +36,10 @@ export default function WorkOrders() {
     try {
       const data = await fetchWorkOrders();
       setWorkOrders(data);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching work orders:', error);
       showToast('error', t('admin.pages.workOrders.list.messages.error'));
-    } finally {
       setIsLoading(false);
     }
   }, [t, showToast]);

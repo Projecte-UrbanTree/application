@@ -66,9 +66,9 @@ const DashboardSummary = () => {
           completedWorkOrders: completed,
           pendingReports: pendingReports,
         });
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching summary data:', error);
-      } finally {
         setLoading(false);
       }
     };
