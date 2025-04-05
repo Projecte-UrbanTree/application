@@ -74,7 +74,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   }, []);
 
   const handleSave = async () => {
-    if (!selectedElementType || (requiresTreeType && !selectedTreeType)) return;
+    if (!selectedElementType) return;
 
     setIsSubmitting(true);
 
@@ -99,9 +99,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       const elementData: Element = {
         description,
         element_type_id: selectedElementType,
-        tree_type_id: requiresTreeType
-          ? (selectedTreeType ?? undefined)
-          : undefined,
+        tree_type_id: requiresTreeType && selectedTreeType ? selectedTreeType : undefined,
         point_id: savedPoint.id,
       };
 
