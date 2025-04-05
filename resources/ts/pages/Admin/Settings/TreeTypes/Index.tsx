@@ -86,7 +86,7 @@ export default function TreeTypes() {
         </div>
       ) : (
         <CrudPanel
-          title="admin.pages.treeTypes.list.title"
+          title="admin.pages.treeTypes.title"
           onCreate={() => navigate('/admin/settings/tree-types/create')}>
           <DataTable
             value={treeTypes}
