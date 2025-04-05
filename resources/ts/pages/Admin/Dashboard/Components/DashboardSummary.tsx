@@ -32,7 +32,6 @@ const DashboardSummary = () => {
     const fetchSummaryData = async () => {
       try {
         setLoading(true);
-        // Fetch work orders to calculate stats
         const response = await axiosClient.get('/admin/work-orders');
 
         let filteredOrders = response.data;
@@ -42,7 +41,6 @@ const DashboardSummary = () => {
           );
         }
 
-        // Calculate summary data
         const inProgress = filteredOrders.filter(
           (order: any) => order.status === 1,
         ).length;

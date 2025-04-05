@@ -32,7 +32,6 @@ export default function CreateUser() {
   };
 
   useEffect(() => {
-    // Simulate initial loading if needed
     setIsLoading(false);
   }, []);
 

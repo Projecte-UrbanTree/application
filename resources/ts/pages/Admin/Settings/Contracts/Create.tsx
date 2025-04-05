@@ -31,7 +31,6 @@ export default function CreateContract() {
   };
 
   useEffect(() => {
-    // Simulate initial loading if needed
     setIsLoading(false);
   }, []);
 

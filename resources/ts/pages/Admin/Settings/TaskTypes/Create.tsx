@@ -25,7 +25,6 @@ export default function CreateTaskType() {
   };
 
   useEffect(() => {
-    // Simulate initial loading if needed
     setIsLoading(false);
   }, []);
 
@@ -78,7 +77,6 @@ export default function CreateTaskType() {
           {t('admin.pages.taskTypes.form.title.create')}
         </h2>
       </div>
-
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik

@@ -304,7 +304,7 @@ const CreateEva = ({
                     }))}
                     optionLabel="label"
                     optionValue="value"
-                    disabled={!!preselectedElementId} // Disable if preselectedElementId is provided
+                    disabled={!!preselectedElementId}
                   />
                   <FormField
                     name="years"

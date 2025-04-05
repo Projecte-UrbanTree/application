@@ -25,7 +25,6 @@ export default function CreateResourceType() {
   };
 
   useEffect(() => {
-    // Simulate initial loading if needed
     setIsLoading(false);
   }, []);
 

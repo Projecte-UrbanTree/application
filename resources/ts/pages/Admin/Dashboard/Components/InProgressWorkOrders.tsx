@@ -41,12 +41,10 @@ const InProgressWorkOrders = () => {
     const fetchInProgressOrders = async () => {
       try {
         const response = await axiosClient.get('/admin/work-orders');
-        // Filter for status 1 (in progress)
         const inProgressOrders = response.data.filter(
           (order: WorkOrder) => order.status === 1,
         );
 
-        // Apply contract filter if a contract is selected
         const filteredOrders =
           currentContract && currentContract.id !== 0
             ? inProgressOrders.filter(

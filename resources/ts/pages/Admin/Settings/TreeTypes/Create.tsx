@@ -26,7 +26,6 @@ export default function CreateTreeType() {
   };
 
   useEffect(() => {
-    // Simulate initial loading if needed
     setIsLoading(false);
   }, []);
 

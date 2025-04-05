@@ -201,7 +201,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   }, [activeIndex, element.id, eva]);
 
   useEffect(() => {
-    // Adjust popup width based on the active tab
     if (activeIndex === 3) {
       setPopupWidth('900px');
     } else {
