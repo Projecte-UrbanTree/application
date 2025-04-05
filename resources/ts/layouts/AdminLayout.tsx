@@ -14,6 +14,8 @@ import { fetchAllContracts, selectContract } from '@/store/slice/contractSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Contract } from '@/types/Contract';
 
+const SELECTED_CONTRACT_KEY = 'selectedContractId';
+
 const defaultContract: Contract = {
   id: 0,
   name: 'Ver todos',
@@ -33,6 +35,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   const location = useLocation();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
   const { allContracts, currentContract } = useSelector(
     (state: RootState) => state.contract,
@@ -83,25 +86,36 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   }, [titleI18n, t]);
 
   useEffect(() => {
-    if (
-      (isInventoryPage || isWorkersPage) &&
-      (!currentContract || currentContract.id === defaultContract.id) &&
-      activeContracts.length > 0
-    ) {
-      dispatch(selectContract(activeContracts[0]?.id ?? 0));
+    if ((isInventoryPage || isWorkersPage) && 
+        activeContracts.length > 0 && 
+        !initialized) {
+      
+      const savedContractId = localStorage.getItem(SELECTED_CONTRACT_KEY);
+      
+      if (savedContractId) {
+        const contractId = parseInt(savedContractId);
+        const contractExists = activeContracts.some(c => c.id === contractId);
+        
+        if (contractExists) {
+          dispatch(selectContract(contractId));
+          setInitialized(true);
+          return;
+        }
+      }
+      
+      if (!currentContract || !activeContracts.some(c => c.id === currentContract.id)) {
+        dispatch(selectContract(activeContracts[0]?.id ?? 0));
+      }
+      
+      setInitialized(true);
     }
-  }, [
-    isInventoryPage,
-    isWorkersPage,
-    currentContract,
-    activeContracts,
-    dispatch,
-  ]);
+  }, [isInventoryPage, isWorkersPage, activeContracts.length, initialized]);
 
   const handleContractChange = useCallback(
     (e: DropdownChangeEvent) => {
       const newContractId = e.value;
       dispatch(selectContract(newContractId));
+      localStorage.setItem(SELECTED_CONTRACT_KEY, newContractId.toString());
     },
     [dispatch],
   );
