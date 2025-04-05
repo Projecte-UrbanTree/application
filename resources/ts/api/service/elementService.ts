@@ -1,6 +1,8 @@
 import { AxiosResponse } from 'axios';
-import axiosClient from '../axiosClient';
+
 import { Element } from '@/types/Element';
+
+import axiosClient from '../axiosClient';
 
 export const fetchElements = async (): Promise<Element[]> => {
   const response: AxiosResponse =

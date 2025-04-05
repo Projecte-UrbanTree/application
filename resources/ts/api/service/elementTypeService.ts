@@ -1,6 +1,8 @@
 import { AxiosResponse } from 'axios';
-import axiosClient from '../axiosClient';
+
 import { ElementType } from '@/types/ElementType';
+
+import axiosClient from '../axiosClient';
 
 export const fetchElementType = async (): Promise<ElementType[]> => {
   const response: AxiosResponse =

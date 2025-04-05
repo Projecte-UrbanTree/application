@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import { useContracts } from '@/hooks/useContracts';
+
 import { useAuth } from '@/hooks/useAuth';
+import { useContracts } from '@/hooks/useContracts';
+
 import Preloader from './Preloader';
 
 type DataInitializerProps = {

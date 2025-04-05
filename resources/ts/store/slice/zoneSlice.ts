@@ -1,6 +1,7 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { fetchZones, saveZone } from '@/api/service/zoneService';
 import { Zone } from '@/types/Zone';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ZoneState {
   zones: Zone[];

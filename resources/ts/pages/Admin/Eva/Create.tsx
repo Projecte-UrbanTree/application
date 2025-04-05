@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Formik, Form, useField } from 'formik';
-import * as Yup from 'yup';
+import { Icon } from '@iconify/react';
+import { format, subMonths, subYears } from 'date-fns';
+import { Form, Formik, useField } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import { Calendar } from 'primereact/calendar';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import { InputNumber } from 'primereact/inputnumber';
 import { Message } from 'primereact/message';
-import { subYears, subMonths, format } from 'date-fns';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 const FormField = ({ as: Component, name, label, ...props }: any) => {
   const [field, meta, helpers] = useField(name);
@@ -84,17 +85,22 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
 interface CreateEvaProps {
   preselectedElementId: number;
   onClose: () => void;
-  redirectPath?: string; // Add redirectPath prop
+  redirectPath?: string;
 }
 
-const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaProps) => {
+const CreateEva = ({
+  preselectedElementId,
+  onClose,
+  redirectPath,
+}: CreateEvaProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { showToast } = useToast();
   const [elements, setElements] = useState<any[]>([]);
   const [dictionaries, setDictionaries] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { t } = useTranslation();
 
   useEffect(() => {
     axiosClient
@@ -234,48 +240,46 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
       await axiosClient.post('/admin/evas', updatedValues);
 
       if (redirectPath) {
-        onClose(); // Close the popup if redirectPath is provided
+        onClose();
       } else {
-        navigate('/admin/evas', {
-          state: { success: t('admin.pages.evas.list.messages.createSuccess') },
-        });
+        showToast('success', t('admin.pages.evas.list.messages.createSuccess'));
+        navigate('/admin/evas');
       }
     } catch (error: any) {
       setError(
         error.response?.data?.message ||
           t('admin.pages.evas.list.messages.error'),
       );
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex justify-center p-4">
         <ProgressSpinner
           style={{ width: '50px', height: '50px' }}
           strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6 min-h-screen">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/evas')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.evas.form.title.create')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/evas')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.evas.form.title.create')}
+        </h2>
+      </div>
+
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           {error && (
             <Message severity="error" text={error} className="mb-4 w-full" />
           )}
@@ -283,10 +287,10 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}>
-            {({ isSubmitting }) => (
-              <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {() => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Sección: Identificación */}
-                <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                <div className="md:col-span-1 p-4 rounded-lg border border-gray-300 bg-gray-100">
                   <h1 className="text-xl font-bold mb-4">
                     {t('admin.pages.evas.create.identification')}
                   </h1>
@@ -300,7 +304,7 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
                     }))}
                     optionLabel="label"
                     optionValue="value"
-                    disabled={!!preselectedElementId} // Disable if preselectedElementId is provided
+                    disabled={!!preselectedElementId}
                   />
                   <FormField
                     name="years"
@@ -318,7 +322,7 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
                 </div>
                 {/* Sección: Condición del árbol */}
                 <div className="md:col-span-1">
-                  <div className="md:col-span-1 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                  <div className="p-4 rounded-lg border border-gray-300 bg-gray-100">
                     <h1 className="text-xl font-bold mb-4">
                       {t('admin.pages.evas.create.treeCondition')}
                     </h1>
@@ -364,7 +368,7 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
                     />
                   </div>
                 </div>
-                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50 mb-6">
+                <div className="md:col-span-2 p-4 rounded-lg border border-gray-300 bg-gray-100">
                   {/* Subsección: Estado */}
                   <h2 className="text-lg font-semibold mb-2">
                     {t('admin.pages.evas.create.state')}
@@ -374,92 +378,98 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
                   <h3 className="text-md font-medium mb-2">
                     {t('admin.pages.evas.create.crownBranches')}
                   </h3>
-                  <FormField
-                    name="unbalancedCrown"
-                    label={t('admin.pages.evas.form.unbalanced_crown')}
-                    as={Dropdown}
-                    options={dictionaries.unbalancedCrown}
-                  />
-                  <FormField
-                    name="overextendedBranches"
-                    label={t('admin.pages.evas.form.overextended_branches')}
-                    as={Dropdown}
-                    options={dictionaries.overextendedBranches}
-                  />
-                  <FormField
-                    name="cracks"
-                    label={t('admin.pages.evas.form.cracks')}
-                    as={Dropdown}
-                    options={dictionaries.cracks}
-                  />
-                  <FormField
-                    name="deadBranches"
-                    label={t('admin.pages.evas.form.dead_branches')}
-                    as={Dropdown}
-                    options={dictionaries.deadBranches}
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      name="unbalancedCrown"
+                      label={t('admin.pages.evas.form.unbalanced_crown')}
+                      as={Dropdown}
+                      options={dictionaries.unbalancedCrown}
+                    />
+                    <FormField
+                      name="overextendedBranches"
+                      label={t('admin.pages.evas.form.overextended_branches')}
+                      as={Dropdown}
+                      options={dictionaries.overextendedBranches}
+                    />
+                    <FormField
+                      name="cracks"
+                      label={t('admin.pages.evas.form.cracks')}
+                      as={Dropdown}
+                      options={dictionaries.cracks}
+                    />
+                    <FormField
+                      name="deadBranches"
+                      label={t('admin.pages.evas.form.dead_branches')}
+                      as={Dropdown}
+                      options={dictionaries.deadBranches}
+                    />
+                  </div>
 
                   {/* Subsubsección: Tronco */}
                   <h3 className="text-md font-medium mt-4 mb-2">
                     {t('admin.pages.evas.create.trunk')}
                   </h3>
-                  <FormField
-                    name="inclination"
-                    label={t('admin.pages.evas.form.inclination')}
-                    as={Dropdown}
-                    options={dictionaries.inclination}
-                  />
-                  <FormField
-                    name="VForks"
-                    label={t('admin.pages.evas.form.V_forks')}
-                    as={Dropdown}
-                    options={dictionaries.VForks}
-                  />
-                  <FormField
-                    name="cavities"
-                    label={t('admin.pages.evas.form.cavities')}
-                    as={Dropdown}
-                    options={dictionaries.cavities}
-                  />
-                  <FormField
-                    name="barkDamage"
-                    label={t('admin.pages.evas.form.bark_damage')}
-                    as={Dropdown}
-                    options={dictionaries.barkDamage}
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      name="inclination"
+                      label={t('admin.pages.evas.form.inclination')}
+                      as={Dropdown}
+                      options={dictionaries.inclination}
+                    />
+                    <FormField
+                      name="VForks"
+                      label={t('admin.pages.evas.form.V_forks')}
+                      as={Dropdown}
+                      options={dictionaries.VForks}
+                    />
+                    <FormField
+                      name="cavities"
+                      label={t('admin.pages.evas.form.cavities')}
+                      as={Dropdown}
+                      options={dictionaries.cavities}
+                    />
+                    <FormField
+                      name="barkDamage"
+                      label={t('admin.pages.evas.form.bark_damage')}
+                      as={Dropdown}
+                      options={dictionaries.barkDamage}
+                    />
+                  </div>
 
                   {/* Subsubsección: Raíces */}
                   <h3 className="text-md font-medium mt-4 mb-2">
                     {t('admin.pages.evas.create.roots')}
                   </h3>
-                  <FormField
-                    name="soilLifting"
-                    label={t('admin.pages.evas.form.soil_lifting')}
-                    as={Dropdown}
-                    options={dictionaries.soilLifting}
-                  />
-                  <FormField
-                    name="cutRoots"
-                    label={t('admin.pages.evas.form.cut_damaged_roots')}
-                    as={Dropdown}
-                    options={dictionaries.cutRoots}
-                  />
-                  <FormField
-                    name="basalRot"
-                    label={t('admin.pages.evas.form.basal_rot')}
-                    as={Dropdown}
-                    options={dictionaries.basalRot}
-                  />
-                  <FormField
-                    name="exposedRoots"
-                    label={t('admin.pages.evas.form.exposed_surface_roots')}
-                    as={Dropdown}
-                    options={dictionaries.exposedRoots}
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      name="soilLifting"
+                      label={t('admin.pages.evas.form.soil_lifting')}
+                      as={Dropdown}
+                      options={dictionaries.soilLifting}
+                    />
+                    <FormField
+                      name="cutRoots"
+                      label={t('admin.pages.evas.form.cut_damaged_roots')}
+                      as={Dropdown}
+                      options={dictionaries.cutRoots}
+                    />
+                    <FormField
+                      name="basalRot"
+                      label={t('admin.pages.evas.form.basal_rot')}
+                      as={Dropdown}
+                      options={dictionaries.basalRot}
+                    />
+                    <FormField
+                      name="exposedRoots"
+                      label={t('admin.pages.evas.form.exposed_surface_roots')}
+                      as={Dropdown}
+                      options={dictionaries.exposedRoots}
+                    />
+                  </div>
                 </div>
-                <div className="md:col-span-2 p-4 rounded-lg border-2 border-gray-300 bg-gray-50">
+                <div className="md:col-span-2 p-4 rounded-lg border border-gray-300 bg-gray-100">
                   {/* Sección: Condición del entorno */}
-                  <div className="md:col-span-2">
+                  <div>
                     <h1 className="text-xl font-bold mb-4">
                       {t('admin.pages.evas.create.environmentCondition')}
                     </h1>
@@ -468,32 +478,32 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
                     <h2 className="text-lg font-semibold mb-2">
                       {t('admin.pages.evas.create.environmentalFactors')}
                     </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Subsubsección: Exposición al viento */}
+                      <FormField
+                        name="wind"
+                        label={t('admin.pages.evas.form.wind')}
+                        as={Dropdown}
+                        options={dictionaries.wind}
+                      />
 
-                    {/* Subsubsección: Exposición al viento */}
-                    <FormField
-                      name="wind"
-                      label={t('admin.pages.evas.form.wind')}
-                      as={Dropdown}
-                      options={dictionaries.wind}
-                    />
-
-                    {/* Subsubsección: Exposición a la sequía */}
-                    <FormField
-                      name="drought"
-                      label={t('admin.pages.evas.form.drought')}
-                      as={Dropdown}
-                      options={dictionaries.drought}
-                    />
+                      {/* Subsubsección: Exposición a la sequía */}
+                      <FormField
+                        name="drought"
+                        label={t('admin.pages.evas.form.drought')}
+                        as={Dropdown}
+                        options={dictionaries.drought}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="md:col-span-2 flex justify-end mt-4">
+                <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"
+                    severity="info"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                    }
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
                         ? t('admin.pages.evas.form.saving')
@@ -506,7 +516,7 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 };
 

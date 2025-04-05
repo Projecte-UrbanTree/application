@@ -1,12 +1,11 @@
-import React, { ReactNode } from 'react';
-
 import { Toast } from 'primereact/toast';
+import React, { ReactNode } from 'react';
 
 interface ToastContextType {
   showToast: (
     severity: 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast',
     summary: string,
-    detail: string,
+    detail?: string,
     life?: number,
   ) => void;
 }

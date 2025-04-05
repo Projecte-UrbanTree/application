@@ -15,7 +15,8 @@ use Tests\TestCase;
  */
 class AuthTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     /**
      * Test that a user can login with valid credentials

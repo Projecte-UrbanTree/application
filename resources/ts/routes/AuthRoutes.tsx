@@ -1,11 +1,10 @@
 import React from 'react';
-import UnauthenticatedRoute from '@/middlewares/UnauthenticatedRoute';
+import { RouteObject } from 'react-router-dom';
 
 import AuthLayout from '@/layouts/AuthLayout';
-import Login from '@/pages/Login';
+import UnauthenticatedRoute from '@/middlewares/UnauthenticatedRoute';
+import Login from '@/pages/Login/Index';
 import Logout from '@/pages/Logout';
-
-import { RouteObject } from 'react-router-dom';
 
 const AuthRoutes: RouteObject[] = [
   {
