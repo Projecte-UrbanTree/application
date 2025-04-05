@@ -309,7 +309,13 @@ class WorkOrderController extends Controller
             ]);
 
             if (isset($blockData['zones']) && is_array($blockData['zones'])) {
-                $zoneIds = collect($blockData['zones'])->pluck('id')->filter()->values()->toArray();
+                $zoneIds = collect($blockData['zones'])->map(function ($zone) {
+                    if (is_array($zone) && isset($zone['id'])) {
+                        return $zone['id'];
+                    }
+                    return $zone;
+                })->filter()->values()->toArray();
+
                 if (!empty($zoneIds)) {
                     $block->zones()->attach($zoneIds);
                 }
