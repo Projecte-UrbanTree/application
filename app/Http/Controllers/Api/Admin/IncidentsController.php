@@ -30,9 +30,10 @@ class IncidentsController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'description' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
+            'element_id' => ['required', 'integer', 'exists:elements,id'],
         ]);
 
         $incidence = Incidence::create($validated);
@@ -52,9 +53,10 @@ class IncidentsController extends Controller
         $incidence = Incidence::findOrFail($id);
 
         $validated = $request->validate([
-            'description' => ['sometimes', 'string', 'max:255'],
-            'type' => ['sometimes', 'string', 'max:255'],
+            'name' => ['sometimes', 'string', 'max:255'],
+            'description' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'string', 'max:255'],
+            'element_id' => ['sometimes', 'integer', 'exists:elements,id'],
         ]);
 
         $incidence->update($validated);
