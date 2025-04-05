@@ -401,14 +401,6 @@ export default function Stats() {
     value: res.id,
   }));
 
-  const maxDate = customFromDate
-    ? new Date(
-        customFromDate.getFullYear() + 1,
-        customFromDate.getMonth(),
-        customFromDate.getDate(),
-      )
-    : new Date();
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-end gap-4 bg-white rounded border border-gray-300 shadow-sm p-6">

@@ -133,7 +133,7 @@ const WorkReportDetail = () => {
         if (response.data?.work_order?.work_orders_blocks) {
           setActiveTabs(
             response.data.work_order.work_orders_blocks.map(
-              (_: any, i: number) => i,
+              (_: WorkOrderBlock, i: number) => i,
             ),
           );
         }
@@ -215,7 +215,7 @@ const WorkReportDetail = () => {
     return (
       <Badge
         value={statusConfig.value}
-        severity={statusConfig.severity as any}
+        severity={statusConfig.severity as "success" | "info" | "warning" | "danger" | undefined}
         className={statusConfig.className}
       />
     );

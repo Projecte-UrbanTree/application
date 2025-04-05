@@ -67,7 +67,7 @@ export default function Workers() {
       );
       setAllWorkers(workerUsers);
       setSelectLoading(false);
-    } catch (error) {
+    } catch {
       showToast(
         'error',
         t('general.error'),
@@ -86,7 +86,7 @@ export default function Workers() {
       setWorkers(contractWorkers);
       updateSelectedWorkers(contractWorkers);
       setLoading(false);
-    } catch (error) {
+    } catch {
       showToast(
         'error',
         t('general.error'),

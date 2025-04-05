@@ -24,7 +24,7 @@ import {
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
-  const [expandedRows, setExpandedRows] = useState<any>({});
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showToast } = useToast();
