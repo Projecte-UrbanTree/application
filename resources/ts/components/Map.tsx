@@ -322,25 +322,47 @@ export const MapComponent: React.FC<MapProps> = ({
   }, [zonesRedux, points, currentContract]);
 
   function updateZones(service: MapService) {
-    service.removeLayersAndSources('zone-');
-    const filteredZones = zonesRedux.filter(
-      (z) => z.contract_id === currentContract?.id,
-    );
-    filteredZones.forEach((zone: Zone) => {
-      const zonePoints = points
-        .filter(
-          (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
-        )
-        .map((p) => [p.longitude!, p.latitude!] as [number, number]);
-      if (zonePoints.length > 2) {
-        zonePoints.push(zonePoints[0]);
-        service.addZoneToMap(
-          `zone-${zone.id}`,
-          zonePoints,
-          zone.color || '#088'
-        );
-      }
-    });
+    if (!service) return;
+    
+    try {
+      service.removeLayersAndSources('zone-');
+      
+      if (!currentContract?.id) return;
+      
+      const filteredZones = zonesRedux.filter(
+        (z) => z.contract_id === currentContract.id,
+      );
+      
+      filteredZones.forEach((zone: Zone) => {
+        if (!zone.id) return;
+        
+        const zonePoints = points
+          .filter(
+            (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
+          )
+          .map((p) => {
+            if (typeof p.longitude !== 'number' || typeof p.latitude !== 'number') {
+              console.warn('Invalid point coordinates for zone', zone.id);
+              return null;
+            }
+            return [p.longitude, p.latitude] as [number, number];
+          })
+          .filter(Boolean) as [number, number][];
+          
+        if (zonePoints.length > 2) {
+          zonePoints.push(zonePoints[0]); // Close the polygon
+          service.addZoneToMap(
+            `zone-${zone.id}`,
+            zonePoints,
+            zone.color || '#088'
+          );
+        } else {
+          console.warn(`Not enough points to render zone ${zone.id}, found ${zonePoints.length}`);
+        }
+      });
+    } catch (error) {
+      console.error('Error updating zones:', error);
+    }
   }
 
   // draw elements

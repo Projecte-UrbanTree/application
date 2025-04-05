@@ -22,25 +22,18 @@ import {
   updateIncidence,
 } from '@/api/service/incidentService';
 import { fetchWorkOrders } from '@/api/service/workOrder';
+import { useTreeEvaluation, Eva } from '@/components/FunctionsEva';
 import CreateEva from '@/pages/Admin/Eva/Create';
 import EditEva from '@/pages/Admin/Eva/Edit';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
+import { deleteIncidentAsync } from '@/store/slice/incidentSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import { Point } from '@/types/Point';
-import { deleteElementAsync } from '@/store/slice/elementSlice';
-import { useTreeEvaluation, Eva } from '@/components/FuncionesEva';
-import { useTranslation } from 'react-i18next';
-import axiosClient from '@/api/axiosClient';
-import CreateEva from '@/pages/Admin/Eva/Create';
-import EditEva from '@/pages/Admin/Eva/Edit';
-import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
-import { fetchWorkOrders } from '@/api/service/workOrder';
-import { Zone } from '@/types/Zone';
-import { useNavigate } from 'react-router-dom';
-import { deleteIncidentAsync } from '@/store/slice/incidentSlice';
+import { TreeTypes } from '@/types/TreeTypes';
+import { WorkOrder, WorkOrderStatus, WorkOrderBlock, WorkOrderBlockTask } from '@/types/WorkOrders';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -302,7 +295,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   );
 
   const getTreeType = useCallback(
-    (treeTypeId: number) => {
+    (treeTypeId?: number) => {
+      if (!treeTypeId) return null;
       return treeTypes.find((t) => t.id === treeTypeId);
     },
     [treeTypes],
@@ -334,14 +328,14 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
     return workOrders.flatMap(
       (workOrder) =>
-        workOrder.work_orders_blocks?.flatMap((block) => {
+        workOrder.work_orders_blocks?.flatMap((block: WorkOrderBlock) => {
           const zoneMatches = block.zones?.some(
-            (zone) => zone.id === elementZone.id,
+            (zone: { id: number }) => zone.id === elementZone.id,
           );
 
           if (zoneMatches) {
             return (
-              block.block_tasks?.map((task) => ({
+              block.block_tasks?.map((task: WorkOrderBlockTask) => ({
                 workOrderId: workOrder.id,
                 workOrderStatus: workOrder.status,
                 taskType: task.tasks_type,
@@ -354,15 +348,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     );
   }, [element.point_id, getZoneElement, workOrders]);
 
-  const getBadgeClass = useCallback((status: WorkOrderStatus): string => {
+  const getBadgeClass = useCallback((status: number): string => {
     switch (status) {
-      case WorkOrderStatus['Pendiente']:
+      case WorkOrderStatus.NOT_STARTED:
         return 'bg-yellow-500 text-white px-2 py-1 rounded';
-      case WorkOrderStatus['En progreso']:
+      case WorkOrderStatus.IN_PROGRESS:
         return 'bg-blue-500 text-white px-2 py-1 rounded';
-      case WorkOrderStatus['Completado']:
+      case WorkOrderStatus.COMPLETED:
         return 'bg-green-500 text-white px-2 py-1 rounded';
-      case WorkOrderStatus['Cancelado']:
+      case WorkOrderStatus.REPORT_SENT:
         return 'bg-red-500 text-white px-2 py-1 rounded';
       default:
         return 'bg-gray-500 text-white px-2 py-1 rounded';
@@ -669,7 +663,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   )}
                   :
                 </strong>{' '}
-                {getTreeType(element.tree_type_id!)?.family ||
+                {element.tree_type_id && getTreeType(element.tree_type_id)?.family || 
                   t('general.not_available')}
               </p>
               <p>

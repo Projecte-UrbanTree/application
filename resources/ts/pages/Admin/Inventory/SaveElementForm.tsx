@@ -57,7 +57,8 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       );
 
       if (selectedElementType) {
-        const needsTreeType = selectedElementType.requires_tree_type === 1;
+        const needsTreeType = selectedElementType.requires_tree_type === true || 
+                             selectedElementType.requires_tree_type === 1;
         setRequiresTreeType(needsTreeType);
 
         if (!needsTreeType) {

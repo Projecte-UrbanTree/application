@@ -64,16 +64,16 @@ export interface WorkOrder {
   work_reports?: WorkReport[];
 }
 
-export const WorkOrderStatus = {
-  NOT_STARTED: 0,
-  IN_PROGRESS: 1,
-  COMPLETED: 2,
-  REPORT_SENT: 3,
-};
+export enum WorkOrderStatus {
+  NOT_STARTED = 0,
+  IN_PROGRESS = 1,
+  COMPLETED = 2,
+  REPORT_SENT = 3,
+}
 
-export const WorkReportStatus = {
-  PENDING: 0,
-  COMPLETED: 1,
-  REJECTED: 2,
-  CLOSED_WITH_INCIDENTS: 3,
-};
+export enum WorkReportStatus {
+  PENDING = 0,
+  COMPLETED = 1,
+  REJECTED = 2,
+  CLOSED_WITH_INCIDENTS = 3,
+}
