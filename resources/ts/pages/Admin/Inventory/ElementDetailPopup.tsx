@@ -22,9 +22,8 @@ import { useTranslation } from 'react-i18next';
 import axiosClient from '@/api/axiosClient';
 import CreateEva from '@/pages/Admin/Eva/Create';
 import EditEva from '@/pages/Admin/Eva/Edit';
-import { WorkOrder, WorkOrderStatus, WorkReport } from '@/types/WorkOrder';
+import { WorkOrder, WorkOrderStatus } from '@/types/WorkOrders';
 import { fetchWorkOrders } from '@/api/service/workOrder';
-import { Zone } from '@/types/Zone';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 

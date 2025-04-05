@@ -53,11 +53,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('account', [AccountController::class, 'show']);
         Route::put('account', [AccountController::class, 'update']);
         Route::put('account/password', [AccountController::class, 'updatePassword']);
-        // Route for stats
+
         Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
         Route::get('statistics', [StatisticsController::class, 'index']);
 
-        // Contract users routes
         Route::get('contracts/{contract}/users', [WorkerController::class, 'index']);
         Route::post('contracts/{contract}/users/{user}', [WorkerController::class, 'store']);
         Route::delete('contracts/{contract}/users/{user}', [WorkerController::class, 'destroy']);
@@ -80,6 +79,9 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
 
         Route::put('/work-orders/{id}/status', [WorkOrderController::class, 'updateStatus']);
+        
+        Route::get('/work-orders/{id}/calculate-status', [WorkOrderController::class, 'calculateStatus']);
+        
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
     });
 });

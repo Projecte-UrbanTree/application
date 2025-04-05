@@ -13,46 +13,12 @@ import CrudPanel from '@/components/CrudPanel';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-
-interface WorkOrderBlockTask {
-  id: number;
-  element_type: { name: string };
-  tasks_type: { name: string };
-  tree_type?: { species: string } | null;
-}
-
-interface WorkOrderBlock {
-  id: number;
-  notes: string;
-  zones: { id: number; name: string }[];
-  block_tasks?: WorkOrderBlockTask[];
-}
-
-interface WorkReport {
-  id: number;
-  observation: string;
-  spent_fuel: number;
-  report_status: number;
-  report_incidents: string;
-}
-
-interface WorkOrder {
-  id: number;
-  date: string;
-  status: number;
-  contract: {
-    id: number;
-    name: string;
-  };
-  contract_id: number;
-  users: {
-    id: number;
-    name: string;
-    surname: string;
-  }[];
-  work_orders_blocks: WorkOrderBlock[];
-  work_reports?: WorkReport[];
-}
+import { 
+  WorkOrder, 
+  WorkOrderStatus, 
+  WorkReportStatus 
+} from '@/types/WorkOrders';
+import { fetchWorkOrders } from '@/api/service/workOrder';
 
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
@@ -82,24 +48,22 @@ export default function WorkOrders() {
     }
   }, [msg]);
 
-  const fetchWorkOrders = useCallback(async () => {
+  const loadWorkOrders = useCallback(async () => {
     try {
-      const response = await axiosClient.get('/admin/work-orders');
-      const transformedData = response.data.map((order: any) => ({
-        ...order,
-        workOrdersBlocks: order.work_orders_blocks,
-      }));
-      setWorkOrders(transformedData);
+      const data = await fetchWorkOrders();
+      setWorkOrders(data);
     } catch (error) {
       console.error('Error fetching work orders:', error);
+      setMsg(t('admin.pages.workOrders.list.messages.error'));
+      setMsgSeverity('error');
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
-    fetchWorkOrders();
-  }, [fetchWorkOrders]);
+    loadWorkOrders();
+  }, [loadWorkOrders]);
 
   const handleDelete = useCallback(
     async (id: number) => {
@@ -124,32 +88,33 @@ export default function WorkOrders() {
   const getStatusBadge = useCallback(
     (status: number) => {
       switch (status) {
-        case 0:
+        case WorkOrderStatus.NOT_STARTED:
           return (
             <Badge
               value={t('admin.pages.workOrders.status.notStarted')}
               severity="danger"
             />
           );
-        case 1:
+        case WorkOrderStatus.IN_PROGRESS:
           return (
             <Badge
               value={t('admin.pages.workOrders.status.inProgress')}
               severity="warning"
             />
           );
-        case 2:
+        case WorkOrderStatus.COMPLETED:
           return (
             <Badge
               value={t('admin.pages.workOrders.status.completed')}
               severity="success"
             />
           );
-        case 3:
+        case WorkOrderStatus.REPORT_SENT:
           return (
             <Badge
               value={t('admin.pages.workOrders.status.reportSent')}
               severity="info"
+              className="bg-amber-600 text-white"
             />
           );
         default:
@@ -165,45 +130,39 @@ export default function WorkOrders() {
   );
 
   const getReportStatusBadge = useCallback(
-    (reports: WorkReport[] | undefined) => {
+    (reports: WorkOrder['work_reports']) => {
       if (!reports || reports.length === 0) {
-        return (
-          <Badge
-            value={t('admin.pages.workOrders.reportStatus.pending')}
-            severity="warning"
-          />
-        );
+        return null;
       }
       const latestReport = reports[reports.length - 1];
       switch (latestReport.report_status) {
-        case 0:
+        case WorkReportStatus.PENDING:
           return (
             <Badge
               value={t('admin.pages.workOrders.reportStatus.pending')}
               severity="warning"
             />
           );
-        case 1:
+        case WorkReportStatus.COMPLETED:
           return (
             <Badge
               value={t('admin.pages.workOrders.reportStatus.completed')}
               severity="success"
             />
           );
-        case 2:
+        case WorkReportStatus.REJECTED:
           return (
             <Badge
               value={t('admin.pages.workOrders.reportStatus.rejected')}
               severity="danger"
             />
           );
-        case 3:
+        case WorkReportStatus.CLOSED_WITH_INCIDENTS:
           return (
             <Badge
-              value={t(
-                'admin.pages.workOrders.reportStatus.closedWithIncidents',
-              )}
+              value={t('admin.pages.workOrders.reportStatus.closedWithIncidents')}
               severity="danger"
+              className="bg-amber-600 text-white"
             />
           );
         default:
@@ -226,7 +185,7 @@ export default function WorkOrders() {
           <Accordion multiple activeIndex={activeTabs}>
             {data.work_orders_blocks?.length ? (
               data.work_orders_blocks.map((block, index) => {
-                const tasks = block.block_tasks || block['block_tasks'] || [];
+                const tasks = block.block_tasks || [];
                 return (
                   <AccordionTab
                     key={block.id}
@@ -317,10 +276,8 @@ export default function WorkOrders() {
 
   const actionButtons = useCallback(
     (rowData: WorkOrder) => {
-      const isEditable =
-        rowData.status !== 1 && rowData.status !== 2 && rowData.status !== 3;
-      const canViewReport =
-        rowData.status === 1 || rowData.status === 2 || rowData.status === 3;
+      const isEditable = rowData.status === WorkOrderStatus.NOT_STARTED;
+      const canViewReport = rowData.status === WorkOrderStatus.REPORT_SENT;
 
       return (
         <div className="flex justify-end gap-2">
@@ -328,7 +285,7 @@ export default function WorkOrders() {
             <>
               <Button
                 icon={<Icon icon="tabler:edit" />}
-                className="p-button-rounded p-button-primary"
+                className="p-button-outlined p-button-indigo p-button-sm"
                 onClick={() =>
                   navigate(`/admin/work-orders/edit/${rowData.id}`)
                 }
@@ -336,7 +293,7 @@ export default function WorkOrders() {
               />
               <Button
                 icon={<Icon icon="tabler:trash" />}
-                className="p-button-rounded p-button-danger"
+                className="p-button-outlined p-button-danger p-button-sm"
                 onClick={() => handleDelete(rowData.id)}
                 title={t('admin.pages.workOrders.list.actions.delete')}
               />
@@ -345,7 +302,7 @@ export default function WorkOrders() {
           {canViewReport && (
             <Button
               icon={<Icon icon="tabler:file-text" />}
-              className="p-button-rounded p-button-info"
+              className="p-button-outlined p-button-info p-button-sm"
               onClick={() => navigate(`/admin/work-reports/${rowData.id}`)}
               title={t('admin.pages.workOrders.list.actions.viewReport')}
             />
@@ -421,8 +378,7 @@ export default function WorkOrders() {
                 rowData.users && rowData.users.length > 0
                   ? rowData.users
                       .map(
-                        (user: { id: number; name: string; surname: string }) =>
-                          `${user.name} ${user.surname}`,
+                        (user) => `${user.name} ${user.surname}`,
                       )
                       .join(', ')
                   : t('admin.pages.workOrders.details.noUsers')
@@ -438,32 +394,7 @@ export default function WorkOrders() {
             />
             <Column
               header={t('admin.pages.workOrders.list.actions.label')}
-              body={(rowData) => (
-                <div className="flex justify-end gap-2">
-                  <Button
-                    icon={<Icon icon="tabler:edit" />}
-                    className="p-button-outlined p-button-indigo p-button-sm"
-                    onClick={() =>
-                      navigate(`/admin/work-orders/edit/${rowData.id}`)
-                    }
-                    title={t('admin.pages.workOrders.list.actions.edit')}
-                  />
-                  <Button
-                    icon={<Icon icon="tabler:trash" />}
-                    className="p-button-outlined p-button-danger p-button-sm"
-                    onClick={() => handleDelete(rowData.id)}
-                    title={t('admin.pages.workOrders.list.actions.delete')}
-                  />
-                  {rowData.status === 1 || rowData.status === 2 || rowData.status === 3 ? (
-                    <Button
-                      icon={<Icon icon="tabler:file-text" />}
-                      className="p-button-outlined p-button-info p-button-sm"
-                      onClick={() => navigate(`/admin/work-reports/${rowData.id}`)}
-                      title={t('admin.pages.workOrders.list.actions.viewReport')}
-                    />
-                  ) : null}
-                </div>
-              )}
+              body={actionButtons}
             />
           </DataTable>
         </CrudPanel>
