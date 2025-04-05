@@ -42,6 +42,10 @@ export interface ZoneEvent {
     elementTypeId: number;
     hidden: boolean;
   };
+  hiddenZone?: {
+    zoneId: number;
+    hidden: boolean;
+  };
 }
 
 export const eventSubject = new Subject<ZoneEvent>();
@@ -59,29 +63,18 @@ export const Zones = ({
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [hiddenElementTypes, setHiddenElementTypes] = useState<
-    Record<string, boolean>
-  >({});
-  const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(
-    null,
-  );
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
+  const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(null);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
 
-  const { zones, loading: zonesLoading } = useSelector(
-    (state: RootState) => state.zone,
-  );
-  const { points, loading: pointsLoading } = useSelector(
-    (state: RootState) => state.points,
-  );
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
-  );
-  const { elements, loading: elementsLoading } = useSelector(
-    (state: RootState) => state.element,
-  );
+  const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
+  const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
+  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
 
   const uniqueZones = useMemo(
     () => Array.from(new Map(zones.map((z) => [z.id, z])).values()),
@@ -166,7 +159,7 @@ export const Zones = ({
         setSelectedZoneToAdd(data.zone || null);
         stopCreatingElement(data.isCreatingElement);
       },
-      error: (err: Error) => {
+      error: () => {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -204,24 +197,23 @@ export const Zones = ({
 
   const countElementsByTypeInZone = useCallback(
     (zoneId: number) => {
-      const pointIdsInZone = points
-        .filter((point) => point.zone_id === zoneId)
-        .map((point) => point.id);
-
-      const elementsInZone = elements.filter((element) =>
-        pointIdsInZone.includes(element.point_id),
+      const pointIdsInZone = new Set(
+        points
+          .filter((point) => point.zone_id === zoneId)
+          .map((point) => point.id)
       );
 
-      return elementsInZone.reduce(
-        (acc, element) => {
-          if (element.element_type_id) {
-            acc[element.element_type_id] =
-              (acc[element.element_type_id] || 0) + 1;
-          }
-          return acc;
-        },
-        {} as Record<number, number>,
-      );
+      return elements
+        .filter((element) => pointIdsInZone.has(element.point_id))
+        .reduce(
+          (acc, element) => {
+            if (element.element_type_id) {
+              acc[element.element_type_id] = (acc[element.element_type_id] || 0) + 1;
+            }
+            return acc;
+          },
+          {} as Record<number, number>,
+        );
     },
     [points, elements],
   );
@@ -246,6 +238,26 @@ export const Zones = ({
       });
     },
     [hiddenElementTypes],
+  );
+
+  const toggleZoneVisibility = useCallback(
+    (zoneId: number) => {
+      const isHidden = hiddenZones[zoneId] || false;
+      
+      setHiddenZones((prev) => ({
+        ...prev,
+        [zoneId]: !isHidden,
+      }));
+
+      eventSubject.next({
+        isCreatingElement: false,
+        hiddenZone: {
+          zoneId,
+          hidden: !isHidden,
+        },
+      });
+    },
+    [hiddenZones],
   );
 
   const renderElementTypeItem = useCallback(
@@ -343,20 +355,32 @@ export const Zones = ({
                     <div className="flex items-center gap-2">
                       <div
                         className="w-4 h-4 rounded-full"
-                        style={{
-                          backgroundColor: zone.color || 'gray',
-                        }}
+                        style={{ backgroundColor: zone.color || 'gray' }}
                       />
                       <span className="text-sm font-medium">{zone.name}</span>
                     </div>
-                    <Button
-                      icon={<Icon icon="mdi:map-marker" width="20" />}
-                      className="p-button-text p-2"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectedZone(zone);
-                      }}
-                    />
+                    <div className="flex items-center gap-2">
+                      <Button
+                        icon={<Icon icon={hiddenZones[zone.id!] ? 'mdi:eye-off' : 'mdi:eye'} width="20" />}
+                        className={`p-button-text p-2 ${hiddenZones[zone.id!] ? 'text-gray-400' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleZoneVisibility(zone.id!);
+                        }}
+                        tooltip="Mostrar/Ocultar zona"
+                        tooltipOptions={{ position: 'top' }}
+                      />
+                      <Button
+                        icon={<Icon icon="mdi:map-marker" width="20" />}
+                        className="p-button-text p-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectedZone(zone);
+                        }}
+                        tooltip="Centrar en mapa"
+                        tooltipOptions={{ position: 'top' }}
+                      />
+                    </div>
                   </div>
                 }>
                 <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
@@ -383,27 +407,25 @@ export const Zones = ({
 
                 <div className="p-2 text-sm text-gray-700">
                   <strong>Elementos en esta zona</strong>
-                  {elementTypes.map((elementType: ElementType) => {
-                    const elementCountByType = countElementsByTypeInZone(
-                      zone.id!,
-                    );
-                    const count = elementCountByType[elementType.id!] || 0;
+                  {(() => {
+                    const elementCountByType = countElementsByTypeInZone(zone.id!);
+                    const hasElements = elementTypes.some(et => (elementCountByType[et.id!] || 0) > 0);
+                    
+                    if (!hasElements) {
+                      return (
+                        <p className="text-gray-500 mt-2">
+                          No hay elementos marcados en esta zona.
+                        </p>
+                      );
+                    }
 
-                    return count > 0
-                      ? renderElementTypeItem(elementType, zone, count)
-                      : null;
-                  })}
-
-                  {elementTypes.every((elementType: ElementType) => {
-                    const elementCountByType = countElementsByTypeInZone(
-                      zone.id!,
-                    );
-                    return (elementCountByType[elementType.id!] || 0) === 0;
-                  }) && (
-                    <p className="text-gray-500 mt-2">
-                      No hay elementos marcados en esta zona.
-                    </p>
-                  )}
+                    return elementTypes.map((elementType) => {
+                      const count = elementCountByType[elementType.id!] || 0;
+                      return count > 0 
+                        ? renderElementTypeItem(elementType, zone, count) 
+                        : null;
+                    });
+                  })()}
                 </div>
               </AccordionTab>
             ))}
@@ -426,8 +448,8 @@ export const Zones = ({
               label="Eliminar"
               className="p-button-danger"
               onClick={() => {
-                if (selectedZoneToDelete) {
-                  handleDeleteZone(selectedZoneToDelete.id!);
+                if (selectedZoneToDelete?.id) {
+                  handleDeleteZone(selectedZoneToDelete.id);
                   setIsConfirmDialogVisible(false);
                 }
               }}

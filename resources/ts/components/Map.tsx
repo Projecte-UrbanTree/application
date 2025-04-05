@@ -56,7 +56,6 @@ export const MapComponent: React.FC<MapProps> = ({
   modalVisible,
   onModalVisibleChange,
 }) => {
-  // refs
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapServiceRef = useRef<MapService | null>(null);
   const toast = useRef<Toast>(null);
@@ -65,34 +64,22 @@ export const MapComponent: React.FC<MapProps> = ({
   const { points } = useSelector((state: RootState) => state.points);
   const { zones: zonesRedux } = useSelector((state: RootState) => state.zone);
   const { elements } = useSelector((state: RootState) => state.element);
-  const currentContract = useSelector(
-    (state: RootState) => state.contract.currentContract,
-  );
+  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
   const userValue = useSelector((state: RootState) => state.user);
 
-  // states
   const [coordinates, setCoordinates] = useState<number[][]>([]);
-  const [isAddingPoint, setIsAddingPoint] = useState(false);
-  const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(
-    null,
-  );
+  const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(null);
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
-  const [selectedZoneForElement, setSelectedZoneForElement] =
-    useState<Zone | null>(null);
-  const [selectedElementId, setSelectedElementId] = useState<number | null>(
-    null,
-  );
+  const [selectedZoneForElement, setSelectedZoneForElement] = useState<Zone | null>(null);
+  const [selectedElementId, setSelectedElementId] = useState<number | null>(null);
   const [selectedElement, setSelectedElement] = useState<Element | null>(null);
   const [elementModalVisible, setElementModalVisible] = useState(false);
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
-  const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
-  const [selectedElementToDelete, setSelectedElementToDelete] =
-    useState<Element | null>(null);
-  const [hiddenElementTypes, setHiddenElementTypes] = useState<
-    Record<string, boolean>
-  >({});
+  const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [lastContractId, setLastContractId] = useState<number | null>(null);
 
@@ -102,19 +89,26 @@ export const MapComponent: React.FC<MapProps> = ({
     setActiveTabIndex(1);
   }, []);
 
-  // load data
   useEffect(() => {
     const loadData = async () => {
-      const treeTypesFetch = await fetchTreeTypes();
-      const elementTypeFetch = await fetchElementType();
-
-      setTreeTypes(treeTypesFetch);
-      setElementTypes(elementTypeFetch);
+      try {
+        const [treeTypesFetch, elementTypeFetch] = await Promise.all([
+          fetchTreeTypes(),
+          fetchElementType()
+        ]);
+        setTreeTypes(treeTypesFetch);
+        setElementTypes(elementTypeFetch);
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error loading types'
+        });
+      }
     };
     loadData();
   }, []);
 
-  // initialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
@@ -136,68 +130,89 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     });
     mapServiceRef.current = service;
-
-    const loadData = async () => {
-      try {
-        const [treeTypesData, elementTypesData] = await Promise.all([
-          fetchTreeTypes(),
-          fetchElementType(),
-        ]);
-        setTreeTypes(treeTypesData);
-        setElementTypes(elementTypesData);
-      } catch (error) {
-        console.error('Error al cargar los tipos:', error);
-      }
-    };
-
-    loadData();
-  }, [userValue.role]);
+  }, [userValue.role, onDrawingModeChange, onEnabledButtonChange]);
 
   useEffect(() => {
-    const handleResize = () => {
-      const service = mapServiceRef.current;
-      if (service) {
-        service.resizeMap();
-      }
-    };
-
+    const handleResize = () => mapServiceRef.current?.resizeMap();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Detect contract changes and reload data
   useEffect(() => {
-    if (!currentContract) return;
+    if (!currentContract || currentContract.id === lastContractId) return;
+    
+    setLastContractId(currentContract.id!);
+    
+    const loadContractData = async () => {
+      try {
+        await Promise.all([
+          dispatch(fetchPointsAsync()).unwrap(),
+          dispatch(fetchElementsAsync()).unwrap()
+        ]);
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al cargar los datos del contrato',
+        });
+      }
+    };
 
-    if (currentContract.id !== lastContractId) {
-      setLastContractId(currentContract.id!);
-
-      const loadContractData = async () => {
-        try {
-          await dispatch(fetchPointsAsync()).unwrap();
-          await dispatch(fetchElementsAsync()).unwrap();
-        } catch (error) {
-          toast.current?.show({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al cargar los datos del contrato',
-          });
-        }
-      };
-
-      loadContractData();
-    }
+    loadContractData();
   }, [dispatch, currentContract, lastContractId]);
 
-  // fly to a selected zone
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !selectedZone || !points.length) return;
+    
     const firstPoint = points.find((p) => p.zone_id === selectedZone.id);
     if (firstPoint?.longitude && firstPoint?.latitude) {
       service.flyTo([firstPoint.longitude, firstPoint.latitude]);
     }
   }, [selectedZone, points]);
+
+  const updateElementVisibility = useCallback(
+    (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
+      const pointsInZone = points.filter((p) => p.zone_id === zoneId);
+      const pointIds = new Set(pointsInZone.map((p) => p.id));
+
+      elements
+        .filter((element) => element.element_type_id === elementTypeId && pointIds.has(element.point_id!))
+        .forEach((element) => {
+          if (element.id) {
+            service.updateMarkerVisibility(element.id, !hidden);
+          }
+        });
+    },
+    [elements, points]
+  );
+
+  const toggleZoneVisibility = useCallback(
+    (zoneId: number, hidden: boolean) => {
+      const service = mapServiceRef.current;
+      if (!service) return;
+
+      const zoneLayerId = `zone-${zoneId}-fill`;
+      service.updateZoneVisibility(zoneLayerId, !hidden);
+
+      const pointIdsInZone = new Set(
+        points
+          .filter((p) => p.zone_id === zoneId)
+          .map((p) => p.id)
+      );
+
+      elements
+        .filter((element) => pointIdsInZone.has(element.point_id))
+        .forEach((element) => {
+          if (element.id) {
+            service.updateMarkerVisibility(element.id, !hidden);
+          }
+        });
+
+      setHiddenZones((prev) => ({ ...prev, [zoneId]: hidden }));
+    },
+    [elements, points]
+  );
 
   const handleElementCreation = useCallback(
     (zone: Zone) => {
@@ -234,8 +249,7 @@ export const MapComponent: React.FC<MapProps> = ({
             toast.current?.show({
               severity: 'error',
               summary: 'Aviso',
-              detail:
-                'No es pot crear un element fora de la zona o zona seleccionada',
+              detail: 'No es pot crear un element fora de la zona o zona seleccionada',
               life: 3000,
               sticky: false,
               style: {
@@ -249,7 +263,7 @@ export const MapComponent: React.FC<MapProps> = ({
         }
       });
     },
-    [points, onCreatingElementChange],
+    [points, onCreatingElementChange]
   );
 
   useEffect(() => {
@@ -282,15 +296,19 @@ export const MapComponent: React.FC<MapProps> = ({
 
           updateElementVisibility(zoneId, elementTypeId, hidden, service);
         }
+
+        if (data.hiddenZone) {
+          const { zoneId, hidden } = data.hiddenZone;
+          toggleZoneVisibility(zoneId, hidden);
+        }
       },
-      error: (err: Error) => {
+      error: () => {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
           detail: 'Error en el stream de eventos',
         });
       },
-      complete: () => {},
     });
 
     return () => {
@@ -300,7 +318,7 @@ export const MapComponent: React.FC<MapProps> = ({
       setNewPointCoord(null);
       service.disableSingleClick();
     };
-  }, [points, handleElementCreation]);
+  }, [points, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange]);
 
   const handleElementFormClose = useCallback(() => {
     setModalAddPointVisible(false);
@@ -310,7 +328,6 @@ export const MapComponent: React.FC<MapProps> = ({
     onElementAdd();
   }, [onCreatingElementChange, onElementAdd]);
 
-  // draw zones
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service) return;
@@ -322,50 +339,43 @@ export const MapComponent: React.FC<MapProps> = ({
   }, [zonesRedux, points, currentContract]);
 
   function updateZones(service: MapService) {
-    if (!service) return;
+    if (!service || !currentContract?.id) return;
     
     try {
       service.removeLayersAndSources('zone-');
       
-      if (!currentContract?.id) return;
-      
-      const filteredZones = zonesRedux.filter(
-        (z) => z.contract_id === currentContract.id,
-      );
-      
-      filteredZones.forEach((zone: Zone) => {
-        if (!zone.id) return;
-        
-        const zonePoints = points
-          .filter(
-            (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
-          )
-          .map((p) => {
-            if (typeof p.longitude !== 'number' || typeof p.latitude !== 'number') {
-              console.warn('Invalid point coordinates for zone', zone.id);
-              return null;
-            }
-            return [p.longitude, p.latitude] as [number, number];
-          })
-          .filter(Boolean) as [number, number][];
+      zonesRedux
+        .filter((z) => z.contract_id === currentContract.id)
+        .forEach((zone: Zone) => {
+          if (!zone.id) return;
           
-        if (zonePoints.length > 2) {
-          zonePoints.push(zonePoints[0]); // Close the polygon
-          service.addZoneToMap(
-            `zone-${zone.id}`,
-            zonePoints,
-            zone.color || '#088'
-          );
-        } else {
-          console.warn(`Not enough points to render zone ${zone.id}, found ${zonePoints.length}`);
-        }
-      });
+          const zonePoints = points
+            .filter((p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
+            .map((p) => {
+              if (typeof p.longitude !== 'number' || typeof p.latitude !== 'number') {
+                return null;
+              }
+              return [p.longitude, p.latitude] as [number, number];
+            })
+            .filter(Boolean) as [number, number][];
+            
+          if (zonePoints.length > 2) {
+            zonePoints.push(zonePoints[0]);
+            const sourceId = `zone-${zone.id}`;
+            const layerId = `zone-${zone.id}-fill`;
+            
+            service.addZoneToMap(sourceId, layerId, zonePoints, zone.color || '#088');
+
+            if (hiddenZones[zone.id]) {
+              service.updateZoneVisibility(layerId, false);
+            }
+          }
+        });
     } catch (error) {
       console.error('Error updating zones:', error);
     }
   }
 
-  // draw elements
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !currentContract) return;
@@ -404,42 +414,62 @@ export const MapComponent: React.FC<MapProps> = ({
     };
 
     service.removeElementMarkers();
-    const filteredZones = zonesRedux.filter(
-      (zone) => zone.contract_id === currentContract.id,
+    
+    const zoneIds = new Set(
+      zonesRedux
+        .filter((zone) => zone.contract_id === currentContract.id)
+        .map((zone) => zone.id)
     );
-    const zoneIds = new Set(filteredZones.map((zone) => zone.id));
-    const filteredPoints = points.filter(
-      (point) => point.zone_id && zoneIds.has(point.zone_id),
+    
+    const pointIds = new Set(
+      points
+        .filter((point) => point.zone_id && zoneIds.has(point.zone_id))
+        .map((point) => point.id)
     );
-    const pointIds = new Set(filteredPoints.map((point) => point.id));
+    
     const filteredElements = elements.filter(
-      (element) => element.point_id && pointIds.has(element.point_id),
+      (element) => element.point_id && pointIds.has(element.point_id)
     );
 
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => {
-        service.addElementMarkers(
-          filteredElements,
-          filteredPoints,
-          treeTypes,
-          elementTypes,
-          handleElementDelete,
-          handleElementClick,
-        );
-      });
-    } else {
+    const renderMarkers = () => {
       service.addElementMarkers(
         filteredElements,
-        filteredPoints,
+        points.filter((point) => point.zone_id && zoneIds.has(point.zone_id)),
         treeTypes,
         elementTypes,
         handleElementDelete,
         handleElementClick,
       );
+      
+      // Apply visibility settings
+      Object.entries(hiddenZones).forEach(([zoneId, isHidden]) => {
+        if (isHidden) {
+          const zoneIdNum = Number(zoneId);
+          points
+            .filter((p) => p.zone_id === zoneIdNum)
+            .forEach((point) => {
+              filteredElements
+                .filter((element) => element.point_id === point.id && element.id)
+                .forEach((element) => service.updateMarkerVisibility(element.id!, false));
+            });
+        }
+      });
+
+      Object.entries(hiddenElementTypes).forEach(([key, isHidden]) => {
+        if (isHidden) {
+          const [zoneId, elementTypeId] = key.split('-').map(Number);
+          updateElementVisibility(zoneId, elementTypeId, true, service);
+        }
+      });
+    };
+
+    if (!service.isStyleLoaded()) {
+      service.onceStyleLoad(renderMarkers);
+    } else {
+      renderMarkers();
     }
   }
 
-  // save drawed zone
   const handleZoneSaved = useCallback(
     async (newZone: Zone, newPoints: SavePointsProps[]) => {
       onModalVisibleChange(false);
@@ -459,6 +489,7 @@ export const MapComponent: React.FC<MapProps> = ({
         zonePoints.push(zonePoints[0]);
         service.addZoneToMap(
           `zone-${newZone.id}`,
+          `zone-${newZone.id}-fill`,
           zonePoints,
           newZone.color || '#088'
         );
@@ -474,38 +505,7 @@ export const MapComponent: React.FC<MapProps> = ({
     ],
   );
 
-  function detectCollision(
-    allPoints: Point[],
-    contractId: number,
-    zones: Zone[],
-    newPolygonCoords: number[][],
-  ): boolean {
-    if (contractId === 0) return false;
-    const filteredZones = zones.filter((z) => z.contract_id === contractId);
-    const createdPoly = turf.polygon([newPolygonCoords]);
-    for (let i = 0; i < filteredZones.length; i++) {
-      const existingPoly = getZonePolygon(filteredZones[i], allPoints);
-      const polyIntersection = turf.intersect(
-        turf.featureCollection([createdPoly]),
-        turf.featureCollection([existingPoly]).features[0],
-      );
-      if (polyIntersection) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  function getZonePolygon(zone: Zone, allPoints: Point[]) {
-    const zonePoints = allPoints.filter((p) => p.zone_id === zone.id);
-    const coords: number[][] = [];
-    for (let i = 0; i < zonePoints.length; i++) {
-      coords.push([zonePoints[i].longitude!, zonePoints[i].latitude!]);
-    }
-    return turf.polygon([coords]);
-  }
-
-  const handleElementDelete = async (elementId: number) => {
+  const handleElementDelete = useCallback(async (elementId: number) => {
     try {
       await dispatch(deleteElementAsync(elementId));
       await dispatch(fetchElementsAsync());
@@ -524,32 +524,7 @@ export const MapComponent: React.FC<MapProps> = ({
         detail: 'Error al eliminar el elemento',
       });
     }
-  };
-
-  const updateElementVisibility = useCallback(
-    (
-      zoneId: number,
-      elementTypeId: number,
-      hidden: boolean,
-      service: MapService,
-    ) => {
-      const pointsInZone = points.filter((p) => p.zone_id === zoneId);
-      const pointIds = pointsInZone.map((p) => p.id);
-
-      const elementsToUpdate = elements.filter(
-        (element) =>
-          element.element_type_id === elementTypeId &&
-          pointIds.includes(element.point_id!),
-      );
-
-      elementsToUpdate.forEach((element) => {
-        if (element.id) {
-          service.updateMarkerVisibility(element.id, !hidden);
-        }
-      });
-    },
-    [elements, points],
-  );
+  }, [dispatch]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
