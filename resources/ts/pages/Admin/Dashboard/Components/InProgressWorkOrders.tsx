@@ -67,20 +67,6 @@ const InProgressWorkOrders = () => {
     navigate(`/admin/work-reports/${id}`);
   };
 
-  const header = (
-    <div className="flex justify-between items-center">
-      <h3 className="text-lg font-semibold">
-        {t('admin.pages.dashboard.inProgressWorkOrders')}
-      </h3>
-      <Button
-        icon={<Icon icon="tabler:list" />}
-        label={t('admin.pages.dashboard.viewAll')}
-        className="p-button-outlined p-button-indigo p-button-sm"
-        onClick={() => navigate('/admin/work-orders')}
-      />
-    </div>
-  );
-
   const actionTemplate = (rowData: WorkOrder) => {
     return (
       <Button
