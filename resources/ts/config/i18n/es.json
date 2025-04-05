@@ -20,7 +20,7 @@
       "title": "Error {{errorCode}}"
     }
   },
-  
+
   "general": {
     "allContracts": "Todos los contratos",
     "genericError": "Ocurrió un error. Por favor, inténtalo de nuevo más tarde.",
@@ -43,7 +43,7 @@
       "reject": "Bloque rechazado"
     }
   },
-  
+
   "admin": {
     "menu": {
       "management": "Gestión",
@@ -68,34 +68,34 @@
         "users": "Usuarios"
       }
     },
-    
+
     "profileDropdown": {
       "accountSettings": "Configuración de la cuenta",
       "license": "Licencia",
       "logout": "Cerrar sesión"
     },
-    
+
     "roles": {
       "admin": "Administrador",
       "customer": "Cliente",
       "unknown": "Desconocido",
       "worker": "Operario"
     },
-    
+
     "status": {
       "active": "Activo",
       "completed": "Completado",
       "inactive": "Inactivo"
     },
-    
+
     "tooltips": {
       "selectContract": "Primero, selecciona un contrato"
     },
-    
+
     "buttons": {
       "createNew": "Crear nuevo"
     },
-    
+
     "fields": {
       "company": "Efmpresa",
       "description": "Descripción",
@@ -120,7 +120,7 @@
       "status": "Estado",
       "surname": "Apellido"
     },
-    
+
     "pages": {
       "account": {
         "title": "Configuración de la Cuenta",
@@ -146,7 +146,7 @@
           "passwordCurrentWrong": "La contraseña actual es incorrecta"
         }
       },
-      
+
       "contracts": {
         "title": "Contratos",
         "form": {
@@ -210,7 +210,7 @@
           "submitting": "Duplicando..."
         }
       },
-      
+
       "dashboard": {
         "title": "Panel",
         "welcome": {
@@ -243,7 +243,7 @@
           }
         }
       },
-      
+
       "elementTypes": {
         "title": "Tipos de elementos",
         "loading": "Cargando...",
@@ -328,7 +328,7 @@
           }
         }
       },
-      
+
       "evas": {
         "title": "Evas",
         "age": {
@@ -576,7 +576,7 @@
         "windExposure": "Exposición al viento",
         "droughtExposure": "Exposición a la sequía"
       },
-      
+
       "inventory": {
         "elementDetailPopup": {
           "tabs": {
@@ -653,7 +653,7 @@
           }
         }
       },
-      
+
       "resources": {
         "title": "Recursos",
         "form": {
@@ -717,7 +717,7 @@
           }
         }
       },
-      
+
       "resourceTypes": {
         "title": "Tipos de recurso",
         "form": {
@@ -764,7 +764,7 @@
           }
         }
       },
-      
+
       "stats": {
         "title": "Estadísticas",
         "week": "Esta semana",
@@ -785,7 +785,7 @@
         "noResourcesAvailable": "No hay recursos disponibles",
         "selectResourcePrompt": "Por favor, selecciona un recurso para ver su uso"
       },
-      
+
       "taskTypes": {
         "title": "Tipos de tarea",
         "form": {
@@ -835,7 +835,7 @@
           }
         }
       },
-      
+
       "treeTypes": {
         "title": "Tipos de árbol",
         "form": {
@@ -883,7 +883,7 @@
           }
         }
       },
-      
+
       "users": {
         "title": "Usuarios",
         "form": {
@@ -942,7 +942,7 @@
           }
         }
       },
-      
+
       "workOrders": {
         "title": "Órdenes de trabajo",
         "details": {
@@ -1053,7 +1053,7 @@
           "unknown": "Desconocido"
         }
       },
-      
+
       "workReport": {
         "title": "Parte de Trabajo",
         "not_found": "No se encontró el Parte de Trabajo",
@@ -1125,7 +1125,7 @@
           "editObservationPlaceholder": "Introduce tu observación actualizada aquí..."
         }
       },
-      
+
       "work_reports": {
         "title": "Informe de Trabajo",
         "not_found": "Informe de Trabajo no encontrado",
@@ -1150,7 +1150,7 @@
           "reject": "Bloque rechazado"
         }
       },
-      
+
       "workers": {
         "title": "Gestión de Trabajadores",
         "assignRemoveWorkers": "Asignar/Eliminar Trabajadores",

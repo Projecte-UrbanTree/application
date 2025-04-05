@@ -1,4 +1,5 @@
 import { RouteObject } from 'react-router-dom';
+
 import AuthenticatedRoute from '@/middlewares/AuthenticatedRoute';
 import { Roles } from '@/types/Role';
 

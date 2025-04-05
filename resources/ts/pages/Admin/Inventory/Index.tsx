@@ -1,8 +1,9 @@
-import { Zones } from '@/pages/Admin/Inventory/Zones';
-import { MapComponent } from '@/components/Map';
-import { Zone } from '@/types/Zone';
-import { useState, useEffect, useRef, useCallback } from 'react';
 import { Toast } from 'primereact/toast';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { MapComponent } from '@/components/Map';
+import { Zones } from '@/pages/Admin/Inventory/Zones';
+import { Zone } from '@/types/Zone';
 
 export default function Inventory() {
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);

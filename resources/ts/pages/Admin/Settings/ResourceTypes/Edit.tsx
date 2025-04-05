@@ -1,19 +1,22 @@
-import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditResourceType() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState<{
     name: string;
     description: string;
@@ -56,15 +59,13 @@ export default function EditResourceType() {
     setIsSubmitting(true);
     try {
       await axiosClient.put(`/admin/resource-types/${id}`, values);
-      navigate('/admin/settings/resource-types', {
-        state: {
-          success: t('admin.pages.resourceTypes.list.messages.updateSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.resourceTypes.list.messages.updateSuccess'),
+      );
+      navigate('/admin/settings/resource-types');
     } catch (error) {
-      navigate('/admin/settings/resource-types', {
-        state: { error: t('admin.pages.resourceTypes.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.resourceTypes.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -93,7 +94,7 @@ export default function EditResourceType() {
           {t('admin.pages.resourceTypes.form.title.edit')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik
@@ -146,7 +147,9 @@ export default function EditResourceType() {
                     icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
-                        ? t('admin.pages.resourceTypes.form.submittingText.edit')
+                        ? t(
+                            'admin.pages.resourceTypes.form.submittingText.edit',
+                          )
                         : t('admin.pages.resourceTypes.form.submitButton.edit')
                     }
                   />

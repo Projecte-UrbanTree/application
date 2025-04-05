@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/CrudPanel';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Button } from 'primereact/button';
-import { Icon } from '@iconify/react';
+import { useToast } from '@/hooks/useToast';
 
 interface TreeType {
   id: number;
@@ -20,10 +21,7 @@ interface TreeType {
 export default function TreeTypes() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const successMsg = location.state?.success;
-  const errorMsg = location.state?.error;
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+  const { showToast } = useToast();
   const [treeTypes, setTreeTypes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,44 +32,38 @@ export default function TreeTypes() {
         setTreeTypes(response.data);
       } catch (error) {
         console.error(error);
+        showToast('error', t('admin.pages.treeTypes.list.messages.error'));
       } finally {
         setIsLoading(false);
       }
     };
     fetchTreeTypes();
-  }, []);
-
-  useEffect(() => {
-    if (msg) {
-      const timer = setTimeout(() => setMsg(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [msg]);
+  }, [t, showToast]);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm(t('admin.pages.treeTypes.list.messages.deleteConfirm'))) return;
+    if (!window.confirm(t('admin.pages.treeTypes.list.messages.deleteConfirm')))
+      return;
     try {
       await axiosClient.delete(`/admin/tree-types/${id}`);
       setTreeTypes(treeTypes.filter((tt) => tt.id !== id));
-      setMsg(t('admin.pages.treeTypes.list.messages.deleteSuccess'));
+      showToast(
+        'success',
+        t('admin.pages.treeTypes.list.messages.deleteSuccess'),
+      );
     } catch (error) {
       console.error(error);
-      setMsg(t('admin.pages.treeTypes.list.messages.error'));
+      showToast('error', t('admin.pages.treeTypes.list.messages.error'));
     }
   };
 
   return (
     <>
-      {msg && (
-        <Message
-          severity={msg === successMsg ? 'success' : 'error'}
-          text={msg}
-          className="mb-4 w-full"
-        />
-      )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : treeTypes.length === 0 ? (
         <div className="p-4 text-center">
@@ -87,16 +79,14 @@ export default function TreeTypes() {
       ) : (
         <CrudPanel
           title={t('admin.pages.treeTypes.title')}
-          onCreate={() => navigate('/admin/settings/tree-types/create')}
-        >
+          onCreate={() => navigate('/admin/settings/tree-types/create')}>
           <DataTable
             value={treeTypes}
             paginator
             rows={10}
             stripedRows
             showGridlines
-            className="p-datatable-sm"
-          >
+            className="p-datatable-sm">
             <Column field="family" header={t('admin.fields.family')} />
             <Column field="genus" header={t('admin.fields.genus')} />
             <Column field="species" header={t('admin.fields.species')} />
@@ -107,7 +97,9 @@ export default function TreeTypes() {
                   <Button
                     icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
                     className="p-button-outlined p-button-indigo p-button-sm"
-                    onClick={() => navigate(`/admin/settings/tree-types/edit/${rowData.id}`)}
+                    onClick={() =>
+                      navigate(`/admin/settings/tree-types/edit/${rowData.id}`)
+                    }
                     tooltip={t('admin.pages.treeTypes.list.actions.edit')}
                     tooltipOptions={{ position: 'top' }}
                   />

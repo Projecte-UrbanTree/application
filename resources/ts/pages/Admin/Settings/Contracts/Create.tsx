@@ -1,21 +1,24 @@
-import { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Calendar } from 'primereact/calendar';
-import { InputNumber } from 'primereact/inputnumber';
-import { Dropdown } from 'primereact/dropdown';
-import { Card } from 'primereact/card';
 import { Icon } from '@iconify/react';
+import { Field, Form, Formik } from 'formik';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function CreateContract() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,11 +69,11 @@ export default function CreateContract() {
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/contracts', values);
-      navigate('/admin/settings/contracts', {
-        state: {
-          success: t('admin.pages.contracts.list.messages.createSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.contracts.list.messages.createSuccess'),
+      );
+      navigate('/admin/settings/contracts');
     } catch (error) {
       console.error(error);
     } finally {
@@ -131,7 +134,7 @@ export default function CreateContract() {
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:calendar" className="h-5 w-5 mr-2" />
@@ -149,7 +152,7 @@ export default function CreateContract() {
                     <small className="p-error">{errors.start_date}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:calendar" className="h-5 w-5 mr-2" />
@@ -167,7 +170,7 @@ export default function CreateContract() {
                     <small className="p-error">{errors.end_date}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon
@@ -178,7 +181,9 @@ export default function CreateContract() {
                   </label>
                   <InputNumber
                     value={values.final_price}
-                    onValueChange={(e) => setFieldValue('final_price', e.value || 0)}
+                    onValueChange={(e) =>
+                      setFieldValue('final_price', e.value || 0)
+                    }
                     placeholder={t('admin.fields.final_price')}
                     minFractionDigits={0}
                     maxFractionDigits={0}
@@ -195,7 +200,7 @@ export default function CreateContract() {
                     <small className="p-error">{errors.final_price}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:status" className="h-5 w-5 mr-2" />
@@ -216,7 +221,7 @@ export default function CreateContract() {
                     <small className="p-error">{errors.status}</small>
                   )}
                 </div>
-                
+
                 <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"

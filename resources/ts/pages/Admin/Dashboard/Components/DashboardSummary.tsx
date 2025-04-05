@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Card } from 'primereact/card';
 import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
+import { Card } from 'primereact/card';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+
+import axiosClient from '@/api/axiosClient';
 import { RootState } from '@/store/store';
 
 interface SummaryData {
@@ -154,6 +155,5 @@ const DashboardSummary = () => {
     </div>
   );
 };
-
 
 export default DashboardSummary;

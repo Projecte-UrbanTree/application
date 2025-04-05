@@ -1,20 +1,21 @@
-import axiosClient from '@/api/axiosClient';
-import CrudPanel from '@/components/CrudPanel';
 import { Icon } from '@iconify/react';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useContracts } from '@/hooks/useContracts';
+import { useNavigate } from 'react-router-dom';
 
+import axiosClient from '@/api/axiosClient';
+import CrudPanel from '@/components/CrudPanel';
+import { useContracts } from '@/hooks/useContracts';
+import { useToast } from '@/hooks/useToast';
 
 export default function Contracts() {
   const { fetchContracts } = useContracts();
+  const { showToast } = useToast();
 
   useEffect(() => {
     fetchContracts();
@@ -31,13 +32,8 @@ export default function Contracts() {
   }
 
   const [contracts, setContracts] = useState<Contract[]>([]);
-  const location = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const successMsg = location.state?.success;
-  const errorMsg = location.state?.error;
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
 
   useEffect(() => {
     const fetchContracts = async () => {
@@ -47,18 +43,12 @@ export default function Contracts() {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
+        showToast('error', t('admin.pages.contracts.list.messages.error'));
         setIsLoading(false);
       }
     };
     fetchContracts();
-  }, []);
-
-  useEffect(() => {
-    if (msg) {
-      const timer = setTimeout(() => setMsg(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [msg]);
+  }, [t, showToast]);
 
   const handleDelete = async (contractId: number) => {
     if (!window.confirm(t('admin.pages.contracts.list.messages.deleteConfirm')))
@@ -66,9 +56,13 @@ export default function Contracts() {
     try {
       await axiosClient.delete(`/admin/contracts/${contractId}`);
       setContracts(contracts.filter((contract) => contract.id !== contractId));
-      setMsg(t('admin.pages.contracts.list.messages.deleteSuccess'));
+      showToast(
+        'success',
+        t('admin.pages.contracts.list.messages.deleteSuccess'),
+      );
     } catch (error) {
       console.error(error);
+      showToast('error', t('admin.pages.contracts.list.messages.deleteError'));
     }
   };
 
@@ -83,25 +77,18 @@ export default function Contracts() {
 
   return (
     <>
-      {msg && (
-        <Message
-          severity={
-            successMsg ||
-            msg === t('admin.pages.contracts.list.messages.deleteSuccess')
-              ? 'success'
-              : 'error'
-          }
-          text={msg}
-          className="mb-4 w-full"
-        />
-      )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : contracts.length === 0 ? (
         <div className="p-4 text-center">
-          <p className="text-gray-600">{t('admin.pages.contracts.list.noData')}</p>
+          <p className="text-gray-600">
+            {t('admin.pages.contracts.list.noData')}
+          </p>
           <Button
             label={t('admin.pages.contracts.list.actions.create')}
             onClick={() => navigate('/admin/settings/contracts/create')}
@@ -111,16 +98,14 @@ export default function Contracts() {
       ) : (
         <CrudPanel
           title={t('admin.pages.contracts.title')}
-          onCreate={() => navigate('/admin/settings/contracts/create')}
-        >
+          onCreate={() => navigate('/admin/settings/contracts/create')}>
           <DataTable
             value={contracts}
             paginator
             rows={10}
             stripedRows
             showGridlines
-            className="p-datatable-sm"
-          >
+            className="p-datatable-sm">
             <Column
               field="name"
               header={t('admin.pages.contracts.list.columns.name')}
@@ -199,7 +184,11 @@ export default function Contracts() {
                     className="p-button-outlined p-button-indigo p-button-sm"
                     tooltip={t('admin.pages.contracts.list.actions.duplicate')}
                     tooltipOptions={{ position: 'top' }}
-                    onClick={() => navigate(`/admin/settings/contracts/${rowData.id}/duplicate`)}
+                    onClick={() =>
+                      navigate(
+                        `/admin/settings/contracts/${rowData.id}/duplicate`,
+                      )
+                    }
                   />
                 </div>
               )}

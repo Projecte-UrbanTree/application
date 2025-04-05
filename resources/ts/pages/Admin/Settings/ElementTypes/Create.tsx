@@ -1,4 +1,3 @@
-import axiosClient from '@/api/axiosClient';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
@@ -13,9 +12,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
+
 export default function CreateElementType() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [filteredIcons, setFilteredIcons] = useState<string[]>([]);
   const iconInputRef = useRef(null);
@@ -67,9 +70,8 @@ export default function CreateElementType() {
     setIsSubmitting(true);
     try {
       await axiosClient.post('/admin/element-types', values);
-      navigate('/admin/settings/element-types', {
-        state: { success: t('admin.pages.elementTypes.success') },
-      });
+      showToast('success', t('admin.pages.elementTypes.success'));
+      navigate('/admin/settings/element-types');
     } catch (error) {
       console.error(error);
     } finally {
@@ -154,12 +156,11 @@ export default function CreateElementType() {
                         : ''
                     }
                   />
-                  {errors.requires_tree_type &&
-                    touched.requires_tree_type && (
-                      <small className="p-error">
-                        {errors.requires_tree_type}
-                      </small>
-                    )}
+                  {errors.requires_tree_type && touched.requires_tree_type && (
+                    <small className="p-error">
+                      {errors.requires_tree_type}
+                    </small>
+                  )}
                 </div>
 
                 <div className="flex flex-col">

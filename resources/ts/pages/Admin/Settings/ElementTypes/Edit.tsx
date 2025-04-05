@@ -1,4 +1,3 @@
-import axiosClient from '@/api/axiosClient';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
@@ -13,10 +12,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
+
 export default function EditElementType() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState<{
     name: string;
     requires_tree_type: boolean;
@@ -86,13 +89,10 @@ export default function EditElementType() {
         requires_tree_type: values.requires_tree_type ? 1 : 0,
       };
       await axiosClient.put(`/admin/element-types/${id}`, updatedValues);
-      navigate('/admin/settings/element-types', {
-        state: { success: t('admin.pages.elementTypes.update') },
-      });
+      showToast('success', t('admin.pages.elementTypes.update'));
+      navigate('/admin/settings/element-types');
     } catch (error) {
-      navigate('/admin/settings/element-types', {
-        state: { error: t('admin.pages.elementTypes.error') },
-      });
+      showToast('error', t('admin.pages.elementTypes.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -126,7 +126,7 @@ export default function EditElementType() {
           {t('admin.pages.elementTypes.edit.title')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik

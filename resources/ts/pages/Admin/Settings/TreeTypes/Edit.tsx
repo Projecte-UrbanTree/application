@@ -1,19 +1,22 @@
-import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditTreeType() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState<{
     family: string;
     genus: string;
@@ -25,7 +28,7 @@ export default function EditTreeType() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   useEffect(() => {
     const fetchTreeType = async () => {
       try {
@@ -44,7 +47,7 @@ export default function EditTreeType() {
     };
     fetchTreeType();
   }, [id]);
-  
+
   const validationSchema = Yup.object({
     family: Yup.string()
       .matches(
@@ -63,26 +66,24 @@ export default function EditTreeType() {
       t('admin.pages.treeTypes.form.validation.alphanumeric.species'),
     ),
   });
-  
+
   const handleSubmit = async (values: typeof initialValues) => {
     setIsSubmitting(true);
     try {
       const data = { ...values };
       await axiosClient.put(`/admin/tree-types/${id}`, data);
-      navigate('/admin/settings/tree-types', {
-        state: {
-          success: t('admin.pages.treeTypes.list.messages.updateSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.treeTypes.list.messages.updateSuccess'),
+      );
+      navigate('/admin/settings/tree-types');
     } catch (error) {
-      navigate('/admin/settings/tree-types', {
-        state: { error: t('admin.pages.treeTypes.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.treeTypes.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   if (isLoading) {
     return (
       <div className="flex justify-center p-4">
@@ -93,7 +94,7 @@ export default function EditTreeType() {
       </div>
     );
   }
-  
+
   return (
     <>
       <div className="flex items-center mb-4">
@@ -106,7 +107,7 @@ export default function EditTreeType() {
           {t('admin.pages.treeTypes.form.title.edit')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik

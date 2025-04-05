@@ -1,11 +1,12 @@
-import Welcome from './Components/Welcome';
-import InProgressWorkOrders from './Components/InProgressWorkOrders';
-import DashboardSummary from './Components/DashboardSummary';
+import { Icon } from '@iconify/react';
+import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'primereact/button';
-import { Icon } from '@iconify/react';
+
+import DashboardSummary from './Components/DashboardSummary';
+import InProgressWorkOrders from './Components/InProgressWorkOrders';
+import Welcome from './Components/Welcome';
 
 export default function Dashboard() {
   const { t } = useTranslation();

@@ -1,6 +1,7 @@
-import React from 'react';
-import LangSelector from '@/components/LangSelector';
 import logo from '@images/logo.png';
+import React from 'react';
+
+import LangSelector from '@/components/LangSelector';
 
 interface AuthLayoutProps {
   children: React.ReactNode;

@@ -1,32 +1,35 @@
-import { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { useTranslation } from 'react-i18next';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function CreateTreeType() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const initialValues = {
     family: '',
     genus: '',
     species: '',
   };
-  
+
   useEffect(() => {
     // Simulate initial loading if needed
     setIsLoading(false);
   }, []);
-  
+
   const validationSchema = Yup.object({
     family: Yup.string()
       .matches(
@@ -45,17 +48,17 @@ export default function CreateTreeType() {
       t('admin.pages.treeTypes.form.validation.alphanumeric.species'),
     ),
   });
-  
+
   const handleSubmit = async (values: typeof initialValues) => {
     setIsSubmitting(true);
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/tree-types', values);
-      navigate('/admin/settings/tree-types', {
-        state: {
-          success: t('admin.pages.treeTypes.list.messages.createSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.treeTypes.list.messages.createSuccess'),
+      );
+      navigate('/admin/settings/tree-types');
     } catch (error) {
       console.error(error);
     } finally {
@@ -73,7 +76,7 @@ export default function CreateTreeType() {
       </div>
     );
   }
-  
+
   return (
     <>
       <div className="flex items-center mb-4">
@@ -86,7 +89,7 @@ export default function CreateTreeType() {
           {t('admin.pages.treeTypes.form.title.create')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik
@@ -112,7 +115,7 @@ export default function CreateTreeType() {
                     <small className="p-error">{errors.family}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:tree" className="h-5 w-5 mr-2" />
@@ -128,7 +131,7 @@ export default function CreateTreeType() {
                     <small className="p-error">{errors.genus}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:tree" className="h-5 w-5 mr-2" />
@@ -146,7 +149,7 @@ export default function CreateTreeType() {
                     <small className="p-error">{errors.species}</small>
                   )}
                 </div>
-                
+
                 <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"

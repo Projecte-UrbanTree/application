@@ -1,21 +1,24 @@
-import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
-import { Password } from 'primereact/password';
 import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditUser() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState<{
     name: string;
     surname: string;
@@ -35,7 +38,7 @@ export default function EditUser() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -58,7 +61,7 @@ export default function EditUser() {
     };
     fetchUser();
   }, [id]);
-  
+
   const validationSchema = Yup.object({
     name: Yup.string().required(
       t('admin.pages.users.form.validation.name_required'),
@@ -89,7 +92,7 @@ export default function EditUser() {
         t('admin.pages.users.form.validation.password_special'),
       ),
   });
-  
+
   const handleSubmit = async (values: typeof initialValues) => {
     setIsSubmitting(true);
     try {
@@ -98,24 +101,21 @@ export default function EditUser() {
         delete data.password;
       }
       await axiosClient.put(`/admin/users/${id}`, data);
-      navigate('/admin/settings/users', {
-        state: { success: t('admin.pages.users.list.messages.updateSuccess') },
-      });
+      showToast('success', t('admin.pages.users.list.messages.updateSuccess'));
+      navigate('/admin/settings/users');
     } catch (error) {
-      navigate('/admin/settings/users', {
-        state: { error: t('admin.pages.users.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.users.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   const roleOptions = [
     { label: t('admin.roles.admin'), value: 'admin' },
     { label: t('admin.roles.worker'), value: 'worker' },
     { label: t('admin.roles.customer'), value: 'customer' },
   ];
-  
+
   if (isLoading) {
     return (
       <div className="flex justify-center p-4">
@@ -126,7 +126,7 @@ export default function EditUser() {
       </div>
     );
   }
-  
+
   return (
     <>
       <div className="flex items-center mb-4">
@@ -139,7 +139,7 @@ export default function EditUser() {
           {t('admin.pages.users.form.title.edit')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik
@@ -229,7 +229,9 @@ export default function EditUser() {
                     name="role"
                     as={Dropdown}
                     options={roleOptions}
-                    placeholder={t('admin.pages.users.form.edit.placeholders.role')}
+                    placeholder={t(
+                      'admin.pages.users.form.edit.placeholders.role',
+                    )}
                     className={errors.role && touched.role ? 'p-invalid' : ''}
                   />
                   {errors.role && touched.role && (
@@ -244,9 +246,13 @@ export default function EditUser() {
                   <Field
                     name="password"
                     as={Password}
-                    placeholder={t('admin.pages.users.form.placeholders.passwordEdit')}
+                    placeholder={t(
+                      'admin.pages.users.form.placeholders.passwordEdit',
+                    )}
                     toggleMask
-                    className={errors.password && touched.password ? 'p-invalid' : ''}
+                    className={
+                      errors.password && touched.password ? 'p-invalid' : ''
+                    }
                   />
                   {errors.password && touched.password && (
                     <small className="p-error">{errors.password}</small>

@@ -1,8 +1,9 @@
+import { useDispatch, useSelector } from 'react-redux';
+
 import axiosClient from '@/api/axiosClient';
 import { setContractState } from '@/store/slice/contractSlice';
-import { Contract } from '@/types/Contract';
-import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { Contract } from '@/types/Contract';
 
 export function useContracts() {
   const dispatch = useDispatch();

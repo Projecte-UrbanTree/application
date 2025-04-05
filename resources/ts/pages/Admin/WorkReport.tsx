@@ -1,22 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
-import axiosClient from '@/api/axiosClient';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
-import { SplitButton } from 'primereact/splitbutton';
-import { Toast } from 'primereact/toast';
-import { Tag } from 'primereact/tag';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
-import { 
-  WorkReport as WorkReportType, 
-  WorkReportStatus,
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { SplitButton } from 'primereact/splitbutton';
+import { Tag } from 'primereact/tag';
+import { Toast } from 'primereact/toast';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import axiosClient from '@/api/axiosClient';
+import {
   WorkOrderBlock,
-  WorkOrderBlockTask
+  WorkReport as WorkReportType,
+  WorkReportStatus,
 } from '@/types/WorkOrders';
 
 const WorkReportDetail = () => {
@@ -40,27 +40,29 @@ const WorkReportDetail = () => {
       });
       return;
     }
-    
+
     try {
       await axiosClient.put(`/admin/work-reports/${id}`, {
         report_status: WorkReportStatus.CLOSED_WITH_INCIDENTS,
         observation: observationNotes,
       });
-      
+
       toast.current?.show({
         severity: 'warn',
         summary: t('general.messages.close_with_incidents'),
         detail: t('admin.pages.workReport.messages.closing_with_incidents'),
       });
       setShowObservationDialog(false);
-      
+
       setTimeout(() => navigate('/admin/work-orders'), 1500);
     } catch (err) {
       console.error('Error closing with observations:', err);
       toast.current?.show({
         severity: 'error',
         summary: t('general.messages.error'),
-        detail: t('admin.pages.workReport.messages.error_updating_observations'),
+        detail: t(
+          'admin.pages.workReport.messages.error_updating_observations',
+        ),
       });
     }
   };
@@ -70,13 +72,13 @@ const WorkReportDetail = () => {
       label: t('general.actions.close_with_incidents'),
       icon: 'pi pi-exclamation-triangle',
       command: () => setShowObservationDialog(true),
-      disabled: workReport?.report_status !== WorkReportStatus.PENDING
+      disabled: workReport?.report_status !== WorkReportStatus.PENDING,
     },
     {
       label: t('general.actions.reject'),
       icon: 'pi pi-times',
       command: () => handleStatusChange(WorkReportStatus.REJECTED),
-      disabled: workReport?.report_status !== WorkReportStatus.PENDING
+      disabled: workReport?.report_status !== WorkReportStatus.PENDING,
     },
   ];
 
@@ -127,13 +129,15 @@ const WorkReportDetail = () => {
       try {
         const response = await axiosClient.get(`/admin/work-reports/${id}`);
         setWorkReport(response.data);
-        
+
         if (response.data?.work_order?.work_orders_blocks) {
           setActiveTabs(
-            response.data.work_order.work_orders_blocks.map((_: any, i: number) => i)
+            response.data.work_order.work_orders_blocks.map(
+              (_: any, i: number) => i,
+            ),
           );
         }
-        
+
         setLoading(false);
       } catch (err) {
         setError(t('admin.pages.error.fetching_data'));
@@ -172,12 +176,14 @@ const WorkReportDetail = () => {
         icon: 'pi pi-check',
       },
     };
-    
-    return statuses[status as keyof typeof statuses] || {
-      label: t('admin.pages.workReport.taskStatus.unknown'),
-      color: 'p-button-secondary',
-      icon: 'pi pi-question',
-    };
+
+    return (
+      statuses[status as keyof typeof statuses] || {
+        label: t('admin.pages.workReport.taskStatus.unknown'),
+        color: 'p-button-secondary',
+        icon: 'pi pi-question',
+      }
+    );
   };
 
   const getReportStatusBadge = (status: number) => {
@@ -200,12 +206,12 @@ const WorkReportDetail = () => {
         className: 'bg-amber-600 text-white',
       },
     };
-    
+
     const statusConfig = statuses[status as keyof typeof statuses] || {
       value: t('admin.pages.workReport.reportStatus.unknown'),
       severity: 'secondary',
     };
-    
+
     return (
       <Badge
         value={statusConfig.value}
@@ -304,18 +310,24 @@ const WorkReportDetail = () => {
   };
 
   const renderResources = () => {
-    if (!workReport || !workReport.work_report_resources || workReport.work_report_resources.length === 0) {
+    if (
+      !workReport ||
+      !workReport.work_report_resources ||
+      workReport.work_report_resources.length === 0
+    ) {
       return (
         <div className="mb-8 mt-8">
           <h3 className="font-semibold text-primary-700 flex items-center gap-2 mb-4">
             <Icon icon="tabler:package" />
             {t('admin.pages.workReport.details.resources')}
           </h3>
-          <p className="text-gray-500">{t('admin.pages.workReport.details.noResources')}</p>
+          <p className="text-gray-500">
+            {t('admin.pages.workReport.details.noResources')}
+          </p>
         </div>
       );
     }
-    
+
     return (
       <div className="mb-8 mt-8">
         <h3 className="font-semibold text-primary-700 flex items-center gap-2 mb-4">
@@ -414,7 +426,8 @@ const WorkReportDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-white">
-                  {t('admin.pages.workReport.title')} - OT-{workReport.work_order.id}
+                  {t('admin.pages.workReport.title')} - OT-
+                  {workReport.work_order.id}
                 </h2>
                 <p className="text-sm text-white">
                   {formatDate(workReport.work_order.date)}
@@ -430,7 +443,8 @@ const WorkReportDetail = () => {
                 {t('admin.pages.workReport.columns.users')}
               </h3>
               <ul className="list-disc pl-5">
-                {workReport.work_order.users && workReport.work_order.users.length > 0 ? (
+                {workReport.work_order.users &&
+                workReport.work_order.users.length > 0 ? (
                   workReport.work_order.users.map((user) => (
                     <li key={user.id} className="text-gray-800">
                       {`${user.name} ${user.surname}`}
@@ -469,9 +483,7 @@ const WorkReportDetail = () => {
               </Accordion>
             </section>
 
-            <section>
-              {renderResources()}
-            </section>
+            <section>{renderResources()}</section>
 
             <section className="grid grid-cols-1 gap-6">
               <div className="p-6 bg-primary-50 border border-primary-200 rounded-lg">
@@ -480,10 +492,11 @@ const WorkReportDetail = () => {
                   {t('admin.pages.workReport.details.fuelSpent')}
                 </h4>
                 <p className="mt-3 text-gray-600">
-                  {workReport.spent_fuel} {t('admin.pages.workReport.details.liters')}
+                  {workReport.spent_fuel}{' '}
+                  {t('admin.pages.workReport.details.liters')}
                 </p>
               </div>
-              
+
               <div className="p-6 bg-primary-50 border border-primary-200 rounded-lg">
                 <h4 className="font-semibold flex items-center gap-2 text-primary-700">
                   <Icon icon="tabler:alert-triangle" />

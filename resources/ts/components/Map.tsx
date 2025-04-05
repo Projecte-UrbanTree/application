@@ -1,30 +1,31 @@
-import { RootState, AppDispatch } from '@/store/store';
-import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
-import { Point, TypePoint } from '@/types/Point';
-import { Roles } from '@/types/Role';
-import { Zone } from '@/types/Zone';
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import * as turf from '@turf/turf';
-import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
-import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import { TreeTypes } from '@/types/TreeTypes';
-import { fetchTreeTypes } from '@/api/service/treeTypesService';
-import { fetchElementType } from '@/api/service/elementTypeService';
-import { ElementType } from '@/types/ElementType';
-import { SavePointsProps } from '@/api/service/pointService';
-import { eventSubject, ZoneEvent } from '../pages/Admin/Inventory/Zones';
-import { MapService } from '@/api/service/mapService';
 import { Toast } from 'primereact/toast';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { fetchElementType } from '@/api/service/elementTypeService';
+import { MapService } from '@/api/service/mapService';
+import { SavePointsProps } from '@/api/service/pointService';
+import { fetchTreeTypes } from '@/api/service/treeTypesService';
 import {
   deleteElementAsync,
   fetchElementsAsync,
 } from '@/store/slice/elementSlice';
-import IncidentForm from '../pages/Admin/Inventory/IncidentForm';
+import { fetchPointsAsync } from '@/store/slice/pointSlice';
+import { AppDispatch, RootState } from '@/store/store';
 import { Element } from '@/types/Element';
+import { ElementType } from '@/types/ElementType';
+import { Point, TypePoint } from '@/types/Point';
+import { Roles } from '@/types/Role';
+import { TreeTypes } from '@/types/TreeTypes';
+import { Zone } from '@/types/Zone';
+
 import ElementDetailPopup from '../pages/Admin/Inventory/ElementDetailPopup';
+import IncidentForm from '../pages/Admin/Inventory/IncidentForm';
+import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
+import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
+import { eventSubject, ZoneEvent } from '../pages/Admin/Inventory/Zones';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 

@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { useTranslation } from 'react-i18next';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function CreateResourceType() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,16 +44,14 @@ export default function CreateResourceType() {
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/resource-types', values);
-      navigate('/admin/settings/resource-types', {
-        state: {
-          success: t('admin.pages.resourceTypes.list.messages.createSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.resourceTypes.list.messages.createSuccess'),
+      );
+      navigate('/admin/settings/resource-types');
     } catch (error) {
       console.error(error);
-      navigate('/admin/settings/resource-types', {
-        state: { error: t('admin.pages.resourceTypes.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.resourceTypes.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }

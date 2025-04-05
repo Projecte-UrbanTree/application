@@ -1,11 +1,12 @@
-import React, { useRef, useState, useCallback } from 'react';
 import { Button } from 'primereact/button';
-import { Incidence, IncidentStatus } from '@/types/Incident';
-import { saveIncidence } from '@/api/service/incidentService';
-import { AppDispatch } from '@/store/store';
-import { useDispatch } from 'react-redux';
 import { Toast } from 'primereact/toast';
+import React, { useCallback, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { saveIncidence } from '@/api/service/incidentService';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
+import { AppDispatch } from '@/store/store';
+import { Incidence, IncidentStatus } from '@/types/Incident';
 
 interface IncidentFormProps {
   elementId: number;

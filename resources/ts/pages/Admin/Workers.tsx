@@ -1,15 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
-import axiosClient from '@/api/axiosClient';
-import { useSelector } from 'react-redux';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { MultiSelect } from 'primereact/multiselect';
-import { RootState } from '@/store/store';
 import { Icon } from '@iconify/react';
-import { useTranslation } from 'react-i18next';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { MultiSelect } from 'primereact/multiselect';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
+import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/CrudPanel';
 import { useToast } from '@/hooks/useToast';
+import { RootState } from '@/store/store';
 
 interface User {
   id: number;
@@ -152,11 +153,15 @@ export default function Workers() {
     if (!contractId) return;
 
     for (const worker of workersToAdd) {
-      await axiosClient.post(`/admin/contracts/${contractId}/users/${worker.id}`);
+      await axiosClient.post(
+        `/admin/contracts/${contractId}/users/${worker.id}`,
+      );
     }
 
     for (const worker of workersToRemove) {
-      await axiosClient.delete(`/admin/contracts/${contractId}/users/${worker.id}`);
+      await axiosClient.delete(
+        `/admin/contracts/${contractId}/users/${worker.id}`,
+      );
     }
   };
 
@@ -165,8 +170,13 @@ export default function Workers() {
 
   const renderNoContractSelected = () => (
     <div className="p-6 bg-gray-50 border border-gray-300 rounded-lg text-center text-gray-700">
-      <Icon icon="mdi:file-document-alert" className="text-3xl mb-3 text-gray-500" />
-      <p className="font-medium">{t('admin.pages.workers.pleaseSelectContract')}</p>
+      <Icon
+        icon="mdi:file-document-alert"
+        className="text-3xl mb-3 text-gray-500"
+      />
+      <p className="font-medium">
+        {t('admin.pages.workers.pleaseSelectContract')}
+      </p>
     </div>
   );
 
@@ -223,47 +233,47 @@ export default function Workers() {
 
   return (
     <CrudPanel title="admin.pages.workers.title">
-      {!currentContract?.id
-        ? renderNoContractSelected()
-        : (
-          <div className="space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-300">
-              <div className="space-y-3">
-                <label className="block text-sm font-medium text-gray-700">
-                  {t('admin.pages.workers.assignRemoveWorkers')}
-                </label>
-                <MultiSelect
-                  value={selectedWorkers}
-                  options={allWorkers}
-                  onChange={handleWorkersChange}
-                  optionLabel="name"
-                  itemTemplate={(option: User) => (
-                    <div className="flex items-center gap-2">
-                      <Icon icon="mdi:account" className="text-gray-600" />
-                      <span>
-                        {option.name} {option.surname}
-                      </span>
-                    </div>
-                  )}
-                  placeholder={t('admin.pages.workers.selectWorkers')}
-                  filter
-                  showSelectAll={false}
-                  loading={selectLoading}
-                  className="w-full rounded-lg border border-gray-300"
-                  display="chip"
-                  dataKey="id"
-                  maxSelectedLabels={3}
-                  selectedItemsLabel={`${t('admin.pages.workers.selected')} {0}`}
-                />
-                <p className="text-sm text-gray-500">
-                  {t('admin.pages.workers.selectWorkerHelp')}
-                </p>
-              </div>
+      {!currentContract?.id ? (
+        renderNoContractSelected()
+      ) : (
+        <div className="space-y-6">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-300">
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-gray-700">
+                {t('admin.pages.workers.assignRemoveWorkers')}
+              </label>
+              <MultiSelect
+                value={selectedWorkers}
+                options={allWorkers}
+                onChange={handleWorkersChange}
+                optionLabel="name"
+                itemTemplate={(option: User) => (
+                  <div className="flex items-center gap-2">
+                    <Icon icon="mdi:account" className="text-gray-600" />
+                    <span>
+                      {option.name} {option.surname}
+                    </span>
+                  </div>
+                )}
+                placeholder={t('admin.pages.workers.selectWorkers')}
+                filter
+                showSelectAll={false}
+                loading={selectLoading}
+                className="w-full rounded-lg border border-gray-300"
+                display="chip"
+                dataKey="id"
+                maxSelectedLabels={3}
+                selectedItemsLabel={`${t('admin.pages.workers.selected')} {0}`}
+              />
+              <p className="text-sm text-gray-500">
+                {t('admin.pages.workers.selectWorkerHelp')}
+              </p>
             </div>
-
-            {renderWorkersTable()}
           </div>
-        )}
+
+          {renderWorkersTable()}
+        </div>
+      )}
     </CrudPanel>
   );
 }

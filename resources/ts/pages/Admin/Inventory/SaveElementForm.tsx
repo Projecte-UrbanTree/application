@@ -1,15 +1,19 @@
-import React, { useState, useCallback } from 'react';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+
+import { fetchElementType } from '@/api/service/elementTypeService';
+import { SavePointsProps } from '@/api/service/pointService';
+import {
+  fetchElementsAsync,
+  saveElementAsync,
+} from '@/store/slice/elementSlice';
+import { fetchPointsAsync, savePointsAsync } from '@/store/slice/pointSlice';
 import { AppDispatch } from '@/store/store';
-import { savePointsAsync, fetchPointsAsync } from '@/store/slice/pointSlice';
-import { saveElementAsync, fetchElementsAsync } from '@/store/slice/elementSlice';
 import { Element } from '@/types/Element';
 import { TypePoint } from '@/types/Point';
-import { SavePointsProps } from '@/api/service/pointService';
-import { fetchElementType } from '@/api/service/elementTypeService';
 
 interface SaveElementFormProps {
   zoneId: number;
@@ -27,7 +31,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   treeTypes,
 }) => {
   const [description, setDescription] = useState<string | null>(null);
-  const [selectedElementType, setSelectedElementType] = useState<number | null>(null);
+  const [selectedElementType, setSelectedElementType] = useState<number | null>(
+    null,
+  );
   const [selectedTreeType, setSelectedTreeType] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [requiresTreeType, setRequiresTreeType] = useState<boolean>(false);
@@ -43,15 +49,17 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   const handleElementTypeChange = useCallback(async (e: { value: number }) => {
     const elementTypeId = e.value;
     setSelectedElementType(elementTypeId);
-    
+
     try {
       const allElementTypes = await fetchElementType();
-      const selectedElementType = allElementTypes.find(et => et.id === elementTypeId);
-      
+      const selectedElementType = allElementTypes.find(
+        (et) => et.id === elementTypeId,
+      );
+
       if (selectedElementType) {
         const needsTreeType = selectedElementType.requires_tree_type === 1;
         setRequiresTreeType(needsTreeType);
-        
+
         if (!needsTreeType) {
           setSelectedTreeType(null);
         }
@@ -91,7 +99,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       const elementData: Element = {
         description,
         element_type_id: selectedElementType,
-        tree_type_id: requiresTreeType ? selectedTreeType ?? undefined : undefined,
+        tree_type_id: requiresTreeType
+          ? (selectedTreeType ?? undefined)
+          : undefined,
         point_id: savedPoint.id,
       };
 
@@ -108,7 +118,8 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
     }
   };
 
-  const formIsValid = selectedElementType !== null && 
+  const formIsValid =
+    selectedElementType !== null &&
     (!requiresTreeType || selectedTreeType !== null);
 
   return (

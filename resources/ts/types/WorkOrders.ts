@@ -2,7 +2,12 @@ export interface WorkOrderBlockTask {
   id: number;
   element_type: { id?: number; name: string };
   tasks_type: { id?: number; name: string; description?: string };
-  tree_type?: { id?: number; family?: string; genus?: string; species: string } | null;
+  tree_type?: {
+    id?: number;
+    family?: string;
+    genus?: string;
+    species: string;
+  } | null;
   status?: number;
   spent_time?: number;
 }

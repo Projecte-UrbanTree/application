@@ -1,17 +1,18 @@
-import { useI18n } from '@/hooks/useI18n';
-import { useAuth } from '@/hooks/useAuth';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import logo from '@images/logo.png';
 import { Avatar } from 'primereact/avatar';
 import { Button } from 'primereact/button';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
-import { Icon } from '@iconify/react';
-import LangSelector from '@/components/LangSelector';
-import { selectContract, fetchAllContracts } from '@/store/slice/contractSlice';
-import { Contract } from '@/types/Contract';
-import logo from '@images/logo.png';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+
+import LangSelector from '@/components/LangSelector';
+import { useAuth } from '@/hooks/useAuth';
+import { useI18n } from '@/hooks/useI18n';
+import { fetchAllContracts, selectContract } from '@/store/slice/contractSlice';
 import { AppDispatch, RootState } from '@/store/store';
+import { Contract } from '@/types/Contract';
 
 const defaultContract: Contract = {
   id: 0,

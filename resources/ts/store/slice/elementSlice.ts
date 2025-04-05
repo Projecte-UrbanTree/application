@@ -1,9 +1,10 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import {
   deleteElement,
   fetchElements,
   saveElements,
 } from '@/api/service/elementService';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Element } from '@/types/Element';
 
 interface ElementState {

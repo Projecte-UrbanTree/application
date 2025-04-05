@@ -1,13 +1,14 @@
-import axiosClient from '@/api/axiosClient';
 import { differenceInMonths } from 'date-fns';
-import { Chart } from 'primereact/chart';
-import { Skeleton } from 'primereact/skeleton';
 import { Button } from 'primereact/button';
-import { SelectButton } from 'primereact/selectbutton';
 import { Calendar } from 'primereact/calendar';
+import { Chart } from 'primereact/chart';
+import { Dropdown } from 'primereact/dropdown';
+import { SelectButton } from 'primereact/selectbutton';
+import { Skeleton } from 'primereact/skeleton';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'primereact/dropdown';
+
+import axiosClient from '@/api/axiosClient';
 
 function formatDateSpanish(date: Date): string {
   if (!(date instanceof Date) || isNaN(date.getTime())) {

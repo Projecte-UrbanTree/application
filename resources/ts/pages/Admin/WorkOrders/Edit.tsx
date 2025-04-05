@@ -1,26 +1,29 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { Calendar } from 'primereact/calendar';
-import { MultiSelect } from 'primereact/multiselect';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { RootState } from '@/store/store';
-import { useTranslation } from 'react-i18next';
+import { ErrorMessage, FieldArray, Form, Formik } from 'formik';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Message } from 'primereact/message';
+import { MultiSelect } from 'primereact/multiselect';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
+import { RootState } from '@/store/store';
 
 const EditWorkOrder = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
@@ -142,11 +145,11 @@ const EditWorkOrder = () => {
         blocks: formattedBlocks,
       });
 
-      navigate('/admin/work-orders', {
-        state: {
-          success: t('admin.pages.workOrders.list.messages.updateSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.workOrders.list.messages.updateSuccess'),
+      );
+      navigate('/admin/work-orders');
     } catch (error: any) {
       setError(
         error.response?.data?.message ||
@@ -304,270 +307,261 @@ const EditWorkOrder = () => {
                           )
                         }
                         multiple>
-                        {values.blocks.map(
-                          (block: any, index: number) => (
-                            <AccordionTab
-                              key={index}
-                              header={
-                                <div className="flex items-center justify-between w-full">
-                                  <span>
-                                    {t(
-                                      'admin.pages.workOrders.form.fields.block',
-                                    )}{' '}
-                                    {index + 1}
-                                  </span>
-                                  {values.blocks.length > 1 && (
-                                    <Button
-                                      icon={
-                                        <Icon
-                                          icon="tabler:trash"
-                                          className="h-5 w-5"
-                                        />
-                                      }
-                                      className="p-button-outlined p-button-danger p-button-sm"
-                                      tooltip={t(
-                                        'admin.pages.workOrders.form.removeBlock',
-                                      )}
-                                      tooltipOptions={{ position: 'top' }}
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        remove(index);
-                                      }}
-                                      type="button"
-                                    />
-                                  )}
-                                </div>
-                              }>
-                              <div className="flex flex-col mb-3">
-                                <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                                  <Icon
-                                    icon="tabler:map-pin"
-                                    className="h-5 w-5 mr-2"
-                                  />
+                        {values.blocks.map((block: any, index: number) => (
+                          <AccordionTab
+                            key={index}
+                            header={
+                              <div className="flex items-center justify-between w-full">
+                                <span>
                                   {t(
-                                    'admin.pages.workOrders.form.fields.zones',
-                                  )}
-                                </label>
-                                <MultiSelect
-                                  value={values.blocks[index].zones}
-                                  options={zones}
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `blocks[${index}].zones`,
-                                      e.value,
-                                    )
-                                  }
-                                  optionLabel="name"
-                                  placeholder={t(
-                                    'admin.pages.workOrders.form.placeholders.zones',
-                                  )}
-                                  filter
-                                  className="w-full"
-                                  display="chip"
-                                />
-                                <ErrorMessage
-                                  name={`blocks[${index}].zones`}
-                                  component="small"
-                                  className="p-error"
-                                />
+                                    'admin.pages.workOrders.form.fields.block',
+                                  )}{' '}
+                                  {index + 1}
+                                </span>
+                                {values.blocks.length > 1 && (
+                                  <Button
+                                    icon={
+                                      <Icon
+                                        icon="tabler:trash"
+                                        className="h-5 w-5"
+                                      />
+                                    }
+                                    className="p-button-outlined p-button-danger p-button-sm"
+                                    tooltip={t(
+                                      'admin.pages.workOrders.form.removeBlock',
+                                    )}
+                                    tooltipOptions={{ position: 'top' }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      remove(index);
+                                    }}
+                                    type="button"
+                                  />
+                                )}
                               </div>
-                              <FieldArray name={`blocks[${index}].tasks`}>
-                                {({ remove: removeTask, push: pushTask }) => (
-                                  <div className="space-y-3 mt-6">
-                                    {values.blocks[index].tasks.map(
-                                      (task: any, taskIndex: number) => (
-                                        <div
-                                          key={taskIndex}
-                                          className="p-2 border border-gray-300 rounded-lg">
-                                          <div className="flex justify-between items-center mb-2">
-                                            <h5 className="text-sm font-semibold">
+                            }>
+                            <div className="flex flex-col mb-3">
+                              <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                <Icon
+                                  icon="tabler:map-pin"
+                                  className="h-5 w-5 mr-2"
+                                />
+                                {t('admin.pages.workOrders.form.fields.zones')}
+                              </label>
+                              <MultiSelect
+                                value={values.blocks[index].zones}
+                                options={zones}
+                                onChange={(e) =>
+                                  setFieldValue(
+                                    `blocks[${index}].zones`,
+                                    e.value,
+                                  )
+                                }
+                                optionLabel="name"
+                                placeholder={t(
+                                  'admin.pages.workOrders.form.placeholders.zones',
+                                )}
+                                filter
+                                className="w-full"
+                                display="chip"
+                              />
+                              <ErrorMessage
+                                name={`blocks[${index}].zones`}
+                                component="small"
+                                className="p-error"
+                              />
+                            </div>
+                            <FieldArray name={`blocks[${index}].tasks`}>
+                              {({ remove: removeTask, push: pushTask }) => (
+                                <div className="space-y-3 mt-6">
+                                  {values.blocks[index].tasks.map(
+                                    (task: any, taskIndex: number) => (
+                                      <div
+                                        key={taskIndex}
+                                        className="p-2 border border-gray-300 rounded-lg">
+                                        <div className="flex justify-between items-center mb-2">
+                                          <h5 className="text-sm font-semibold">
+                                            {t(
+                                              'admin.pages.workOrders.form.fields.task',
+                                            )}{' '}
+                                            {taskIndex + 1}
+                                          </h5>
+                                          {values.blocks[index].tasks.length >
+                                            1 && (
+                                            <Button
+                                              icon={
+                                                <Icon
+                                                  icon="tabler:trash"
+                                                  className="h-4 w-4"
+                                                />
+                                              }
+                                              className="p-button-outlined p-button-danger p-button-sm"
+                                              tooltip={t(
+                                                'admin.pages.workOrders.form.removeTask',
+                                              )}
+                                              tooltipOptions={{
+                                                position: 'top',
+                                              }}
+                                              onClick={() =>
+                                                removeTask(taskIndex)
+                                              }
+                                              type="button"
+                                            />
+                                          )}
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                          <div className="flex flex-col">
+                                            <label className="text-xs font-medium text-gray-700 mb-1">
                                               {t(
-                                                'admin.pages.workOrders.form.fields.task',
-                                              )}{' '}
-                                              {taskIndex + 1}
-                                            </h5>
-                                            {values.blocks[index].tasks.length >
-                                              1 && (
-                                              <Button
-                                                icon={
-                                                  <Icon
-                                                    icon="tabler:trash"
-                                                    className="h-4 w-4"
-                                                  />
-                                                }
-                                                className="p-button-outlined p-button-danger p-button-sm"
-                                                tooltip={t(
-                                                  'admin.pages.workOrders.form.removeTask',
-                                                )}
-                                                tooltipOptions={{
-                                                  position: 'top',
-                                                }}
-                                                onClick={() =>
-                                                  removeTask(taskIndex)
-                                                }
-                                                type="button"
-                                              />
-                                            )}
+                                                'admin.pages.workOrders.form.fields.taskType',
+                                              )}
+                                            </label>
+                                            <Dropdown
+                                              value={task.task_type_id}
+                                              options={taskTypes}
+                                              onChange={(e) =>
+                                                setFieldValue(
+                                                  `blocks[${index}].tasks[${taskIndex}].task_type_id`,
+                                                  e.value,
+                                                )
+                                              }
+                                              optionLabel="name"
+                                              optionValue="id"
+                                              placeholder={t(
+                                                'admin.pages.workOrders.form.placeholders.taskType',
+                                              )}
+                                              className="w-full"
+                                            />
+                                            <ErrorMessage
+                                              name={`blocks[${index}].tasks[${taskIndex}].task_type_id`}
+                                              component="small"
+                                              className="p-error"
+                                            />
                                           </div>
-                                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                                            <div className="flex flex-col">
-                                              <label className="text-xs font-medium text-gray-700 mb-1">
-                                                {t(
-                                                  'admin.pages.workOrders.form.fields.taskType',
-                                                )}
-                                              </label>
-                                              <Dropdown
-                                                value={task.task_type_id}
-                                                options={taskTypes}
-                                                onChange={(e) =>
-                                                  setFieldValue(
-                                                    `blocks[${index}].tasks[${taskIndex}].task_type_id`,
-                                                    e.value,
-                                                  )
-                                                }
-                                                optionLabel="name"
-                                                optionValue="id"
-                                                placeholder={t(
-                                                  'admin.pages.workOrders.form.placeholders.taskType',
-                                                )}
-                                                className="w-full"
-                                              />
-                                              <ErrorMessage
-                                                name={`blocks[${index}].tasks[${taskIndex}].task_type_id`}
-                                                component="small"
-                                                className="p-error"
-                                              />
-                                            </div>
-                                            <div className="flex flex-col">
-                                              <label className="text-xs font-medium text-gray-700 mb-1">
-                                                {t(
-                                                  'admin.pages.workOrders.form.fields.elementType',
-                                                )}
-                                              </label>
-                                              <Dropdown
-                                                value={task.element_type_id}
-                                                options={elementTypes}
-                                                onChange={(e) => {
-                                                  setFieldValue(
-                                                    `blocks[${index}].tasks[${taskIndex}].element_type_id`,
-                                                    e.value,
-                                                  );
-                                                  if (
-                                                    !requiresTreeType(e.value)
-                                                  ) {
-                                                    setFieldValue(
-                                                      `blocks[${index}].tasks[${taskIndex}].tree_type_id`,
-                                                      null,
-                                                    );
-                                                  }
-                                                }}
-                                                optionLabel="name"
-                                                optionValue="id"
-                                                placeholder={t(
-                                                  'admin.pages.workOrders.form.placeholders.elementType',
-                                                )}
-                                                className="w-full"
-                                              />
-                                              <ErrorMessage
-                                                name={`blocks[${index}].tasks[${taskIndex}].element_type_id`}
-                                                component="small"
-                                                className="p-error"
-                                              />
-                                            </div>
-                                            <div className="flex flex-col">
-                                              <label className="text-xs font-medium text-gray-700 mb-1">
-                                                {t(
-                                                  'admin.pages.workOrders.form.fields.treeType',
-                                                )}
-                                              </label>
-                                              <Dropdown
-                                                value={task.tree_type_id}
-                                                options={treeTypes}
-                                                onChange={(e) =>
+                                          <div className="flex flex-col">
+                                            <label className="text-xs font-medium text-gray-700 mb-1">
+                                              {t(
+                                                'admin.pages.workOrders.form.fields.elementType',
+                                              )}
+                                            </label>
+                                            <Dropdown
+                                              value={task.element_type_id}
+                                              options={elementTypes}
+                                              onChange={(e) => {
+                                                setFieldValue(
+                                                  `blocks[${index}].tasks[${taskIndex}].element_type_id`,
+                                                  e.value,
+                                                );
+                                                if (
+                                                  !requiresTreeType(e.value)
+                                                ) {
                                                   setFieldValue(
                                                     `blocks[${index}].tasks[${taskIndex}].tree_type_id`,
-                                                    e.value,
-                                                  )
+                                                    null,
+                                                  );
                                                 }
-                                                optionLabel="species"
-                                                optionValue="id"
-                                                placeholder={t(
-                                                  'admin.pages.workOrders.form.placeholders.treeType',
-                                                )}
-                                                className="w-full"
-                                                disabled={
-                                                  !requiresTreeType(
-                                                    task.element_type_id,
-                                                  )
-                                                }
-                                              />
-                                            </div>
+                                              }}
+                                              optionLabel="name"
+                                              optionValue="id"
+                                              placeholder={t(
+                                                'admin.pages.workOrders.form.placeholders.elementType',
+                                              )}
+                                              className="w-full"
+                                            />
+                                            <ErrorMessage
+                                              name={`blocks[${index}].tasks[${taskIndex}].element_type_id`}
+                                              component="small"
+                                              className="p-error"
+                                            />
+                                          </div>
+                                          <div className="flex flex-col">
+                                            <label className="text-xs font-medium text-gray-700 mb-1">
+                                              {t(
+                                                'admin.pages.workOrders.form.fields.treeType',
+                                              )}
+                                            </label>
+                                            <Dropdown
+                                              value={task.tree_type_id}
+                                              options={treeTypes}
+                                              onChange={(e) =>
+                                                setFieldValue(
+                                                  `blocks[${index}].tasks[${taskIndex}].tree_type_id`,
+                                                  e.value,
+                                                )
+                                              }
+                                              optionLabel="species"
+                                              optionValue="id"
+                                              placeholder={t(
+                                                'admin.pages.workOrders.form.placeholders.treeType',
+                                              )}
+                                              className="w-full"
+                                              disabled={
+                                                !requiresTreeType(
+                                                  task.element_type_id,
+                                                )
+                                              }
+                                            />
                                           </div>
                                         </div>
-                                      ),
-                                    )}
-                                    <div className="flex justify-center mt-2">
-                                      <Button
-                                        type="button"
-                                        icon={
-                                          <Icon
-                                            icon="tabler:plus"
-                                            className="h-5 w-5 mr-2"
-                                          />
-                                        }
-                                        label={t(
-                                          'admin.pages.workOrders.form.buttons.addTask',
-                                        )}
-                                        className="p-button-outlined p-button-sm w-full"
-                                        onClick={() =>
-                                          pushTask({
-                                            task_type_id: null,
-                                            element_type_id: null,
-                                            tree_type_id: null,
-                                          })
-                                        }
-                                      />
-                                    </div>
+                                      </div>
+                                    ),
+                                  )}
+                                  <div className="flex justify-center mt-2">
+                                    <Button
+                                      type="button"
+                                      icon={
+                                        <Icon
+                                          icon="tabler:plus"
+                                          className="h-5 w-5 mr-2"
+                                        />
+                                      }
+                                      label={t(
+                                        'admin.pages.workOrders.form.buttons.addTask',
+                                      )}
+                                      className="p-button-outlined p-button-sm w-full"
+                                      onClick={() =>
+                                        pushTask({
+                                          task_type_id: null,
+                                          element_type_id: null,
+                                          tree_type_id: null,
+                                        })
+                                      }
+                                    />
                                   </div>
-                                )}
-                              </FieldArray>
-                              <div className="flex flex-col mt-3">
-                                <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                                  <Icon
-                                    icon="tabler:notes"
-                                    className="h-5 w-5 mr-2"
-                                  />
-                                  {t(
-                                    'admin.pages.workOrders.form.fields.notes',
-                                  )}
-                                </label>
-                                <InputTextarea
-                                  rows={3}
-                                  value={values.blocks[index].notes}
-                                  onChange={(e) =>
-                                    setFieldValue(
-                                      `blocks[${index}].notes`,
-                                      e.target.value,
-                                    )
-                                  }
-                                  className="w-full"
-                                  placeholder={t(
-                                    'admin.pages.workOrders.form.placeholders.notes',
-                                  )}
+                                </div>
+                              )}
+                            </FieldArray>
+                            <div className="flex flex-col mt-3">
+                              <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                                <Icon
+                                  icon="tabler:notes"
+                                  className="h-5 w-5 mr-2"
                                 />
-                              </div>
-                            </AccordionTab>
-                          ),
-                        )}
+                                {t('admin.pages.workOrders.form.fields.notes')}
+                              </label>
+                              <InputTextarea
+                                rows={3}
+                                value={values.blocks[index].notes}
+                                onChange={(e) =>
+                                  setFieldValue(
+                                    `blocks[${index}].notes`,
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full"
+                                placeholder={t(
+                                  'admin.pages.workOrders.form.placeholders.notes',
+                                )}
+                              />
+                            </div>
+                          </AccordionTab>
+                        ))}
                       </Accordion>
                       <div className="flex justify-center">
                         <Button
                           type="button"
                           icon={
-                            <Icon
-                              icon="tabler:plus"
-                              className="h-5 w-5 mr-2"
-                            />
+                            <Icon icon="tabler:plus" className="h-5 w-5 mr-2" />
                           }
                           label={t(
                             'admin.pages.workOrders.form.buttons.addBlock',

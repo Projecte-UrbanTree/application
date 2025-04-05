@@ -1,31 +1,38 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { Element } from '@/types/Element';
+import { format } from 'date-fns';
 import { Button } from 'primereact/button';
-import { TabView, TabPanel } from 'primereact/tabview';
-import { Tag } from 'primereact/tag';
 import { Dropdown } from 'primereact/dropdown';
-import { Incidence, IncidentStatus } from '@/types/Incident';
+import { TabPanel, TabView } from 'primereact/tabview';
+import { Tag } from 'primereact/tag';
+import { Toast } from 'primereact/toast';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import axiosClient from '@/api/axiosClient';
 import {
   deleteIncidence,
   fetchIncidence,
   updateIncidence,
 } from '@/api/service/incidentService';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store/store';
-import { Toast } from 'primereact/toast';
-import { TreeTypes } from '@/types/TreeTypes';
-import { ElementType } from '@/types/ElementType';
-import { Point } from '@/types/Point';
-import { deleteElementAsync } from '@/store/slice/elementSlice';
-import { useTreeEvaluation, Eva } from '@/utils/treeEvaluation';
-import { useTranslation } from 'react-i18next';
-import axiosClient from '@/api/axiosClient';
+import { fetchWorkOrders } from '@/api/service/workOrder';
 import CreateEva from '@/pages/Admin/Eva/Create';
 import EditEva from '@/pages/Admin/Eva/Edit';
+import { deleteElementAsync } from '@/store/slice/elementSlice';
+import { AppDispatch, RootState } from '@/store/store';
+import { Element } from '@/types/Element';
+import { ElementType } from '@/types/ElementType';
+import { Incidence, IncidentStatus } from '@/types/Incident';
+import { Point } from '@/types/Point';
+import { TreeTypes } from '@/types/TreeTypes';
 import { WorkOrder, WorkOrderStatus } from '@/types/WorkOrders';
-import { fetchWorkOrders } from '@/api/service/workOrder';
-import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
+import { Eva, useTreeEvaluation } from '@/utils/treeEvaluation';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -118,7 +125,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         toast.current?.show({
           severity: 'error',
           summary: t('general.error'),
-          detail: t('admin.pages.inventory.elementDetailPopup.workOrders.loadError'),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.workOrders.loadError',
+          ),
         });
       } finally {
         setIsLoading(false);
@@ -158,7 +167,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const refreshEvaData = useCallback(async () => {
     try {
       setIsLoadingEva(true);
-      const response = await axiosClient.get(`/admin/evas/element/${element.id}`);
+      const response = await axiosClient.get(
+        `/admin/evas/element/${element.id}`,
+      );
       setEva(response.data);
     } catch (error) {
       console.error('Error al recargar datos EVA:', error);
@@ -173,7 +184,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       if (activeIndex === 3 && !eva) {
         try {
           setIsLoadingEva(true);
-          const response = await axiosClient.get(`/admin/evas/element/${element.id}`);
+          const response = await axiosClient.get(
+            `/admin/evas/element/${element.id}`,
+          );
           setEva(response.data);
         } catch (error) {
           console.error('Error al cargar datos EVA:', error);
@@ -298,12 +311,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     [points, zones],
   );
 
-  const formatDate = useCallback(
-    (isoDateString: string): string => {
-      return format(new Date(isoDateString), 'dd/MM/yyyy HH:mm:ss');
-    },
-    [],
-  );
+  const formatDate = useCallback((isoDateString: string): string => {
+    return format(new Date(isoDateString), 'dd/MM/yyyy HH:mm:ss');
+  }, []);
 
   const tasksForElement = useMemo(() => {
     if (!element.point_id) return [];
@@ -411,9 +421,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={message}
-                severity={color === "#FFD700" ? "warning" : 
-                         color === "#008000" ? "success" : 
-                         color === "#FF0000" ? "danger" : "info"}
+                severity={
+                  color === '#FFD700'
+                    ? 'warning'
+                    : color === '#008000'
+                      ? 'success'
+                      : color === '#FF0000'
+                        ? 'danger'
+                        : 'info'
+                }
               />
             </div>
             <div>
@@ -425,8 +441,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={stabilityIndex.message}
-                severity={stabilityIndex.color === "#008000" ? "success" : 
-                          stabilityIndex.color === "#FFD700" ? "warning" : "danger"}
+                severity={
+                  stabilityIndex.color === '#008000'
+                    ? 'success'
+                    : stabilityIndex.color === '#FFD700'
+                      ? 'warning'
+                      : 'danger'
+                }
               />
             </div>
             <div>
@@ -438,8 +459,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={gravityHeightRatio.message}
-                severity={gravityHeightRatio.color === "#008000" ? "success" : 
-                          gravityHeightRatio.color === "#FFD700" ? "warning" : "danger"}
+                severity={
+                  gravityHeightRatio.color === '#008000'
+                    ? 'success'
+                    : gravityHeightRatio.color === '#FFD700'
+                      ? 'warning'
+                      : 'danger'
+                }
               />
             </div>
             <div>
@@ -451,8 +477,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={rootCrownRatio.message}
-                severity={rootCrownRatio.color === "#008000" ? "success" : 
-                          rootCrownRatio.color === "#FFD700" ? "warning" : "danger"}
+                severity={
+                  rootCrownRatio.color === '#008000'
+                    ? 'success'
+                    : rootCrownRatio.color === '#FFD700'
+                      ? 'warning'
+                      : 'danger'
+                }
               />
             </div>
             <div>
@@ -464,8 +495,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={windStabilityIndex.message}
-                severity={windStabilityIndex.color === "#008000" ? "success" : 
-                          windStabilityIndex.color === "#FFD700" ? "warning" : "danger"}
+                severity={
+                  windStabilityIndex.color === '#008000'
+                    ? 'success'
+                    : windStabilityIndex.color === '#FFD700'
+                      ? 'warning'
+                      : 'danger'
+                }
               />
             </div>
           </div>
@@ -485,9 +521,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={getSeverityMessage(eva.wind).message}
-                severity={getSeverityMessage(eva.wind).color === "#008000" ? "success" : 
-                          getSeverityMessage(eva.wind).color === "#FFD700" ? "warning" : 
-                          getSeverityMessage(eva.wind).color === "#FFA500" ? "warning" : "danger"}
+                severity={
+                  getSeverityMessage(eva.wind).color === '#008000'
+                    ? 'success'
+                    : getSeverityMessage(eva.wind).color === '#FFD700'
+                      ? 'warning'
+                      : getSeverityMessage(eva.wind).color === '#FFA500'
+                        ? 'warning'
+                        : 'danger'
+                }
               />
             </div>
             <div>
@@ -499,9 +541,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
               <Tag
                 value={getSeverityMessage(eva.drought).message}
-                severity={getSeverityMessage(eva.drought).color === "#008000" ? "success" : 
-                          getSeverityMessage(eva.drought).color === "#FFD700" ? "warning" : 
-                          getSeverityMessage(eva.drought).color === "#FFA500" ? "warning" : "danger"}
+                severity={
+                  getSeverityMessage(eva.drought).color === '#008000'
+                    ? 'success'
+                    : getSeverityMessage(eva.drought).color === '#FFD700'
+                      ? 'warning'
+                      : getSeverityMessage(eva.drought).color === '#FFA500'
+                        ? 'warning'
+                        : 'danger'
+                }
               />
             </div>
           </div>
@@ -807,7 +855,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         <TabPanel
           header={t('admin.pages.inventory.elementDetailPopup.tabs.history')}>
           <div>
-            <h1>{t('admin.pages.inventory.elementDetailPopup.history.title')}</h1>
+            <h1>
+              {t('admin.pages.inventory.elementDetailPopup.history.title')}
+            </h1>
             {isLoading ? (
               <div className="flex justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -816,12 +866,16 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               tasksForElement.map((taskInfo, index) => (
                 <div key={index} className="border p-4 rounded-md mb-4">
                   <h4 className="font-semibold">
-                    {t('admin.pages.inventory.elementDetailPopup.history.notes')}:{' '}
-                    {taskInfo.notes ?? t('general.no_notes')}
+                    {t(
+                      'admin.pages.inventory.elementDetailPopup.history.notes',
+                    )}
+                    : {taskInfo.notes ?? t('general.no_notes')}
                   </h4>
                   <p>
                     <strong>
-                      {t('admin.pages.inventory.elementDetailPopup.history.task')}
+                      {t(
+                        'admin.pages.inventory.elementDetailPopup.history.task',
+                      )}
                       :
                     </strong>{' '}
                     {taskInfo.taskType?.name}
@@ -859,9 +913,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               ))
             ) : (
               <p>
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.history.noTasks',
-                )}
+                {t('admin.pages.inventory.elementDetailPopup.history.noTasks')}
               </p>
             )}
           </div>
@@ -888,7 +940,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 setIsEvaModalVisible(false);
                 refreshEvaData();
               }}
-              redirectPath="/admin/inventory" 
+              redirectPath="/admin/inventory"
             />
           </div>
         </div>
@@ -896,21 +948,21 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
       {isEditEvaModalVisible && eva && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <Button
               icon="pi pi-times"
               className="p-button-rounded p-button-text absolute top-2 right-2"
               onClick={() => setIsEditEvaModalVisible(false)}
             />
             <EditEva
-              preselectedElementId={eva.id!} 
+              preselectedElementId={eva.id!}
               onClose={() => {
-              setIsEditEvaModalVisible(false);
-              refreshEvaData(); 
+                setIsEditEvaModalVisible(false);
+                refreshEvaData();
               }}
-              redirectPath="/admin/inventory" 
+              redirectPath="/admin/inventory"
             />
-            </div>
+          </div>
         </div>
       )}
     </div>

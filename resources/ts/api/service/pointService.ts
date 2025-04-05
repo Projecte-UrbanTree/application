@@ -1,5 +1,7 @@
-import { Point, TypePoint } from '@/types/Point';
 import { AxiosResponse } from 'axios';
+
+import { Point, TypePoint } from '@/types/Point';
+
 import axiosClient from '../axiosClient';
 
 export const fetchPoints = async (): Promise<Point[]> => {

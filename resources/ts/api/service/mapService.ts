@@ -1,16 +1,18 @@
-import mapboxgl, { Marker } from 'mapbox-gl';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+
+import { Icon } from '@iconify/react';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import mapboxgl from 'mapbox-gl';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
 import { Element } from '@/types/Element';
+import { ElementType } from '@/types/ElementType';
 import { Point, TypePoint } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
-import { ElementType } from '@/types/ElementType';
-import ReactDOM from 'react-dom/client';
-import React from 'react';
-import { Icon } from '@iconify/react';
 
 export class MapService {
   public map!: mapboxgl.Map;

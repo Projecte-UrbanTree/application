@@ -1,25 +1,28 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Formik, Form, FieldArray, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { Calendar } from 'primereact/calendar';
-import { MultiSelect } from 'primereact/multiselect';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { RootState } from '@/store/store';
-import { useTranslation } from 'react-i18next';
+import { ErrorMessage, FieldArray, Form, Formik } from 'formik';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Message } from 'primereact/message';
+import { MultiSelect } from 'primereact/multiselect';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
+import { RootState } from '@/store/store';
 
 const CreateWorkOrder = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
@@ -139,11 +142,11 @@ const CreateWorkOrder = () => {
         contract_id: currentContract?.id,
         blocks: formattedBlocks,
       });
-      navigate('/admin/work-orders', {
-        state: {
-          success: t('admin.pages.workOrders.list.messages.createSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.workOrders.list.messages.createSuccess'),
+      );
+      navigate('/admin/work-orders');
     } catch (error: any) {
       setError(
         error.response?.data?.message ||
@@ -209,7 +212,7 @@ const CreateWorkOrder = () => {
             {t('admin.pages.workOrders.form.title.create')}
           </h2>
         </div>
-        
+
         <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
           <div className="p-4 text-center">
             <Icon
@@ -344,7 +347,9 @@ const CreateWorkOrder = () => {
                                       />
                                     }
                                     className="p-button-outlined p-button-danger p-button-sm"
-                                    tooltip={t('admin.pages.workOrders.form.removeBlock')}
+                                    tooltip={t(
+                                      'admin.pages.workOrders.form.removeBlock',
+                                    )}
                                     tooltipOptions={{ position: 'top' }}
                                     onClick={(e) => {
                                       e.stopPropagation();
@@ -412,8 +417,12 @@ const CreateWorkOrder = () => {
                                                 />
                                               }
                                               className="p-button-outlined p-button-danger p-button-sm"
-                                              tooltip={t('admin.pages.workOrders.form.removeTask')}
-                                              tooltipOptions={{ position: 'top' }}
+                                              tooltip={t(
+                                                'admin.pages.workOrders.form.removeTask',
+                                              )}
+                                              tooltipOptions={{
+                                                position: 'top',
+                                              }}
                                               onClick={() =>
                                                 removeTask(taskIndex)
                                               }
@@ -521,7 +530,12 @@ const CreateWorkOrder = () => {
                                   <div className="flex justify-center mt-2">
                                     <Button
                                       type="button"
-                                      icon={<Icon icon="tabler:plus" className="h-5 w-5 mr-2" />}
+                                      icon={
+                                        <Icon
+                                          icon="tabler:plus"
+                                          className="h-5 w-5 mr-2"
+                                        />
+                                      }
                                       label={t(
                                         'admin.pages.workOrders.form.buttons.addTask',
                                       )}
@@ -567,7 +581,9 @@ const CreateWorkOrder = () => {
                       <div className="flex justify-center">
                         <Button
                           type="button"
-                          icon={<Icon icon="tabler:plus" className="h-5 w-5 mr-2" />}
+                          icon={
+                            <Icon icon="tabler:plus" className="h-5 w-5 mr-2" />
+                          }
                           label={t(
                             'admin.pages.workOrders.form.buttons.addBlock',
                           )}

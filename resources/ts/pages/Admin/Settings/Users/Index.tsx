@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Badge } from 'primereact/badge';
-import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
+import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/CrudPanel';
+import { useToast } from '@/hooks/useToast';
+
 export default function Users() {
   const [isLoading, setIsLoading] = useState(true);
   interface User {
@@ -22,12 +24,10 @@ export default function Users() {
     role: string;
   }
   const [users, setUsers] = useState<User[]>([]);
-  const location = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const successMsg = location.state?.success;
-  const errorMsg = location.state?.error;
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+  const { showToast } = useToast();
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -36,45 +36,34 @@ export default function Users() {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
+        showToast('error', t('admin.pages.users.list.messages.error'));
         setIsLoading(false);
       }
     };
     fetchUsers();
-  }, []);
-  useEffect(() => {
-    if (msg) {
-      const timer = setTimeout(() => setMsg(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [msg]);
+  }, [t, showToast]);
+
   const handleDelete = async (userId: number) => {
     if (!window.confirm(t('admin.pages.users.list.messages.deleteConfirm')))
       return;
     try {
       await axiosClient.delete(`/admin/users/${userId}`);
       setUsers(users.filter((user) => user.id !== userId));
-      setMsg(t('admin.pages.users.list.messages.deleteSuccess'));
+      showToast('success', t('admin.pages.users.list.messages.deleteSuccess'));
     } catch (error) {
       console.error(error);
+      showToast('error', t('admin.pages.users.list.messages.deleteError'));
     }
   };
+
   return (
     <>
-      {msg && (
-        <Message
-          severity={
-            successMsg ||
-            msg === t('admin.pages.users.list.messages.deleteSuccess')
-              ? 'success'
-              : 'error'
-          }
-          text={msg}
-          className="mb-4 w-full"
-        />
-      )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : users.length === 0 ? (
         <div className="p-4 text-center">
@@ -88,16 +77,14 @@ export default function Users() {
       ) : (
         <CrudPanel
           title="admin.pages.users.title"
-          onCreate={() => navigate('/admin/settings/users/create')}
-        >
+          onCreate={() => navigate('/admin/settings/users/create')}>
           <DataTable
             value={users}
             paginator
             rows={10}
             stripedRows
             showGridlines
-            className="p-datatable-sm"
-          >
+            className="p-datatable-sm">
             <Column
               field="name"
               header={t('admin.pages.users.list.columns.name')}
@@ -123,11 +110,17 @@ export default function Users() {
                     );
                   case 'worker':
                     return (
-                      <Badge severity="success" value={t('admin.roles.worker')} />
+                      <Badge
+                        severity="success"
+                        value={t('admin.roles.worker')}
+                      />
                     );
                   case 'customer':
                     return (
-                      <Badge severity="info" value={t('admin.roles.customer')} />
+                      <Badge
+                        severity="info"
+                        value={t('admin.roles.customer')}
+                      />
                     );
                   default:
                     return (

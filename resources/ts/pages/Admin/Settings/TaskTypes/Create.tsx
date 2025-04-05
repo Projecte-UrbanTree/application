@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { useTranslation } from 'react-i18next';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function CreateTaskType() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,16 +43,14 @@ export default function CreateTaskType() {
     setIsSubmitting(true);
     try {
       await axiosClient.post('/admin/task-types', values);
-      navigate('/admin/settings/task-types', {
-        state: {
-          success: t('admin.pages.taskTypes.list.messages.createSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.taskTypes.list.messages.createSuccess'),
+      );
+      navigate('/admin/settings/task-types');
     } catch (error) {
       console.error(error);
-      navigate('/admin/settings/task-types', {
-        state: { error: t('admin.pages.taskTypes.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.taskTypes.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }

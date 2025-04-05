@@ -1,6 +1,3 @@
-import axiosClient from '@/api/axiosClient';
-import type { Resource } from '@/types/Resource';
-import type { ResourceType } from '@/types/ResourceType';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
@@ -13,10 +10,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
+import type { Resource } from '@/types/Resource';
+import type { ResourceType } from '@/types/ResourceType';
+
 export default function EditResource() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState<Resource>({
     id: 0,
     name: '',
@@ -75,20 +78,18 @@ export default function EditResource() {
     try {
       const data = { ...values };
       await axiosClient.put(`/admin/resources/${id}`, data);
-      navigate('/admin/resources', {
-        state: {
-          success: t('admin.pages.resources.list.messages.updateSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.resources.list.messages.updateSuccess'),
+      );
+      navigate('/admin/resources');
     } catch (error) {
-      navigate('/admin/resources', {
-        state: { error: t('admin.pages.resources.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.resources.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   if (isLoading) {
     return (
       <div className="flex justify-center p-4">
@@ -99,7 +100,7 @@ export default function EditResource() {
       </div>
     );
   }
-  
+
   return (
     <>
       <div className="flex items-center mb-4">
@@ -112,7 +113,7 @@ export default function EditResource() {
           {t('admin.pages.resources.form.title.edit')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik
@@ -219,9 +220,7 @@ export default function EditResource() {
                     severity="info"
                     disabled={isSubmitting}
                     className="p-button-sm"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : undefined
-                    }
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
                         ? t('admin.pages.resources.form.submittingText.edit')

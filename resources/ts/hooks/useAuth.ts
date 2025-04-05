@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import {
-  setUserData,
-  setAuthenticated,
-  clearUserData,
-} from '@/store/slice/userSlice';
+
 import axiosClient from '@/api/axiosClient';
+import {
+  clearUserData,
+  setAuthenticated,
+  setUserData,
+} from '@/store/slice/userSlice';
+import { RootState } from '@/store/store';
 
 export function useAuth() {
   const dispatch = useDispatch();

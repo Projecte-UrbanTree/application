@@ -37,10 +37,10 @@ export interface Eva {
     point?: {
       latitude: number;
       longitude: number;
-    },
+    };
     element_type?: {
       name: string;
-    }
+    };
   };
 }
 
@@ -50,7 +50,10 @@ export const useTreeEvaluation = () => {
   const getStatusMessage = (status: number): EvaluationResult => {
     const percentage = (status / 36) * 100;
     if (percentage >= 0 && percentage <= 24) {
-      return { message: t('admin.pages.evas.status.low'), color: 'var(--green-500)' };
+      return {
+        message: t('admin.pages.evas.status.low'),
+        color: 'var(--green-500)',
+      };
     }
     if (percentage >= 25 && percentage <= 49) {
       return {
@@ -59,7 +62,10 @@ export const useTreeEvaluation = () => {
       };
     }
     if (percentage >= 50 && percentage <= 74) {
-      return { message: t('admin.pages.evas.status.high'), color: 'var(--yellow-500)' };
+      return {
+        message: t('admin.pages.evas.status.high'),
+        color: 'var(--yellow-500)',
+      };
     }
     if (percentage >= 75 && percentage <= 100) {
       return {
@@ -67,7 +73,10 @@ export const useTreeEvaluation = () => {
         color: 'var(--red-500)',
       };
     }
-    return { message: t('admin.pages.evas.status.pending'), color: 'var(--gray-500)' };
+    return {
+      message: t('admin.pages.evas.status.pending'),
+      color: 'var(--gray-500)',
+    };
   };
 
   const calculateStabilityIndex = (

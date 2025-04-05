@@ -1,24 +1,25 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, useFormikContext } from 'formik';
-import * as Yup from 'yup';
+import { Icon } from '@iconify/react';
+import {
+  differenceInMonths,
+  differenceInYears,
+  format,
+  subMonths,
+  subYears,
+} from 'date-fns';
+import { Form, Formik, useFormikContext } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import { ProgressSpinner } from 'primereact/progressspinner';
+import { InputNumber } from 'primereact/inputnumber';
 import { Message } from 'primereact/message';
-import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  differenceInYears,
-  differenceInMonths,
-  subYears,
-  subMonths,
-  format,
-} from 'date-fns';
-import { Eva } from '@/utils/treeEvaluation';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 interface FormFieldProps {
   name: string;
@@ -29,7 +30,12 @@ interface FormFieldProps {
   max?: number;
 }
 
-const FormikInputNumber: React.FC<FormFieldProps> = ({ name, label, min, max }) => {
+const FormikInputNumber: React.FC<FormFieldProps> = ({
+  name,
+  label,
+  min,
+  max,
+}) => {
   const { values, errors, touched, setFieldValue } = useFormikContext<any>();
 
   return (
@@ -44,7 +50,9 @@ const FormikInputNumber: React.FC<FormFieldProps> = ({ name, label, min, max }) 
         onValueChange={(e) => setFieldValue(name, e.value)}
         min={min}
         max={max}
-        className={errors[name] && touched[name] ? 'p-invalid w-full' : 'w-full'}
+        className={
+          errors[name] && touched[name] ? 'p-invalid w-full' : 'w-full'
+        }
       />
       {errors[name] && touched[name] ? (
         <small className="p-error">{String(errors[name])}</small>
@@ -69,7 +77,9 @@ const FormikDropdown: React.FC<FormFieldProps> = ({ name, label, options }) => {
         onChange={(e) => setFieldValue(name, e.value)}
         optionLabel="label"
         optionValue="value"
-        className={errors[name] && touched[name] ? 'p-invalid w-full' : 'w-full'}
+        className={
+          errors[name] && touched[name] ? 'p-invalid w-full' : 'w-full'
+        }
       />
       {errors[name] && touched[name] ? (
         <small className="p-error">{String(errors[name])}</small>
@@ -106,10 +116,15 @@ interface Dictionaries {
   drought: DictionaryOption[];
 }
 
-export default function EditEva({ preselectedElementId, onClose, redirectPath }: EditEvaProps) {
-  const { id } = useParams<{id: string}>();
+export default function EditEva({
+  preselectedElementId,
+  onClose,
+  redirectPath,
+}: EditEvaProps) {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const elementId = preselectedElementId || id;
@@ -183,7 +198,7 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
         setIsLoading(false);
       }
     };
-    
+
     const fetchDictionaries = async () => {
       try {
         const response = await axiosClient.get('/admin/evas/create');
@@ -215,7 +230,7 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
         console.error(error);
       }
     };
-    
+
     Promise.all([fetchEva(), fetchDictionaries()]);
   }, [elementId, t]);
 
@@ -293,9 +308,8 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
       if (redirectPath) {
         onClose && onClose();
       } else {
-        navigate('/admin/evas', {
-          state: { success: t('admin.pages.evas.list.messages.updateSuccess') },
-        });
+        showToast('success', t('admin.pages.evas.list.messages.updateSuccess'));
+        navigate('/admin/evas');
       }
     } catch (error: any) {
       setError(
@@ -361,7 +375,7 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
                     max={11}
                   />
                 </div>
-                
+
                 <div className="md:col-span-1">
                   <div className="p-4 rounded-lg border border-gray-300 bg-gray-100">
                     <h1 className="text-xl font-bold mb-4">
@@ -408,7 +422,7 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
                     />
                   </div>
                 </div>
-                
+
                 <div className="md:col-span-2 p-4 rounded-lg border border-gray-300 bg-gray-100">
                   <h2 className="text-lg font-semibold mb-2">
                     {t('admin.pages.evas.edit.state')}
@@ -504,7 +518,7 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
                     />
                   </div>
                 </div>
-                
+
                 <div className="md:col-span-2 p-4 rounded-lg border border-gray-300 bg-gray-100">
                   <div>
                     <h1 className="text-xl font-bold mb-4">
@@ -530,7 +544,7 @@ export default function EditEva({ preselectedElementId, onClose, redirectPath }:
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"

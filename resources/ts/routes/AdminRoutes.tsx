@@ -1,21 +1,27 @@
-import AuthenticatedRoute from '@/middlewares/AuthenticatedRoute';
+import { Navigate, RouteObject } from 'react-router-dom';
 
+import AdminLayout from '@/layouts/AdminLayout';
+import AuthenticatedRoute from '@/middlewares/AuthenticatedRoute';
 import Account from '@/pages/Admin/Account';
 import AdminDashboard from '@/pages/Admin/Dashboard/Index';
+import CreateEva from '@/pages/Admin/Eva/Create';
+import EditEva from '@/pages/Admin/Eva/Edit';
+import Eva from '@/pages/Admin/Eva/Index';
+import ShowEva from '@/pages/Admin/Eva/Show';
 import AdminInventory from '@/pages/Admin/Inventory/Index';
-import AdminContracts from '@/pages/Admin/Settings/Contracts/Index';
+import CreateResource from '@/pages/Admin/Resources/Create';
+import EditResource from '@/pages/Admin/Resources/Edit';
+import AdminResources from '@/pages/Admin/Resources/Index';
 import CreateContract from '@/pages/Admin/Settings/Contracts/Create';
-import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
 import DuplicateContractForm from '@/pages/Admin/Settings/Contracts/DuplicateContractForm';
+import EditContract from '@/pages/Admin/Settings/Contracts/Edit';
+import AdminContracts from '@/pages/Admin/Settings/Contracts/Index';
 import CreateElementTypes from '@/pages/Admin/Settings/ElementTypes/Create';
 import EditElementTypes from '@/pages/Admin/Settings/ElementTypes/Edit';
 import AdminElementTypes from '@/pages/Admin/Settings/ElementTypes/Index';
 import CreateResourceType from '@/pages/Admin/Settings/ResourceTypes/Create';
 import EditResourceType from '@/pages/Admin/Settings/ResourceTypes/Edit';
 import AdminResourceTypes from '@/pages/Admin/Settings/ResourceTypes/Index';
-import CreateResource from '@/pages/Admin/Resources/Create';
-import EditResource from '@/pages/Admin/Resources/Edit';
-import AdminResources from '@/pages/Admin/Resources/Index';
 import CreateTaskType from '@/pages/Admin/Settings/TaskTypes/Create';
 import EditTaskType from '@/pages/Admin/Settings/TaskTypes/Edit';
 import AdminTaskTypes from '@/pages/Admin/Settings/TaskTypes/Index';
@@ -31,13 +37,6 @@ import CreateWorkOrder from '@/pages/Admin/WorkOrders/Create';
 import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders/Index';
 import WorkReport from '@/pages/Admin/WorkReport';
-import Eva from '@/pages/Admin/Eva/Index';
-import EditEva from '@/pages/Admin/Eva/Edit';
-import ShowEva from '@/pages/Admin/Eva/Show';
-import CreateEva from '@/pages/Admin/Eva/Create';
-
-import { Navigate, RouteObject } from 'react-router-dom';
-import AdminLayout from '@/layouts/AdminLayout';
 import { Roles } from '@/types/Role';
 
 const AdminRoutes: RouteObject[] = [

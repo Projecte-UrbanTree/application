@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+
 import { contractSlice } from './slice/contractSlice';
+import elementSlice from './slice/elementSlice';
+import pointSlice from './slice/pointSlice';
 import { userSlice } from './slice/userSlice';
 import zoneSlice from './slice/zoneSlice';
-import pointSlice from './slice/pointSlice';
-import elementSlice from './slice/elementSlice';
 
 const store = configureStore({
   reducer: {

@@ -1,7 +1,8 @@
-import { useI18n } from '@/hooks/useI18n';
-import { useAuth } from '@/hooks/useAuth';
 import { Icon } from '@iconify/react';
 import { Card } from 'primereact/card';
+
+import { useAuth } from '@/hooks/useAuth';
+import { useI18n } from '@/hooks/useI18n';
 
 const Welcome = () => {
   const { user } = useAuth();
@@ -27,6 +28,6 @@ const Welcome = () => {
       </div>
     </Card>
   );
-}
+};
 
 export default Welcome;

@@ -1,14 +1,15 @@
-import axiosClient from '@/api/axiosClient';
-import CrudPanel from '@/components/CrudPanel';
 import { Icon } from '@iconify/react';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+import axiosClient from '@/api/axiosClient';
+import CrudPanel from '@/components/CrudPanel';
+import { useToast } from '@/hooks/useToast';
 
 export default function ElementsTypes() {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,13 +23,9 @@ export default function ElementsTypes() {
   }
 
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
-  const location = useLocation();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const successMsg = location.state?.success;
-  const errorMsg = location.state?.error;
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchElementTypes = async () => {
@@ -38,29 +35,28 @@ export default function ElementsTypes() {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
+        showToast('error', t('admin.pages.elementTypes.list.messages.error'));
         setIsLoading(false);
       }
     };
     fetchElementTypes();
-  }, []);
-
-  useEffect(() => {
-    if (msg) {
-      const timer = setTimeout(() => setMsg(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [msg]);
+  }, [t, showToast]);
 
   const handleDelete = async (elementTypeId: number) => {
-    if (!window.confirm(t('admin.pages.elementTypes.list.messages.deleteConfirm')))
+    if (
+      !window.confirm(t('admin.pages.elementTypes.list.messages.deleteConfirm'))
+    )
       return;
     try {
       await axiosClient.delete(`/admin/element-types/${elementTypeId}`);
       setElementTypes(elementTypes.filter((et) => et.id !== elementTypeId));
-      setMsg(t('admin.pages.elementTypes.list.messages.deleteSuccess'));
+      showToast(
+        'success',
+        t('admin.pages.elementTypes.list.messages.deleteSuccess'),
+      );
     } catch (error) {
       console.error(error);
-      setMsg(t('admin.pages.elementTypes.list.messages.error'));
+      showToast('error', t('admin.pages.elementTypes.list.messages.error'));
     }
   };
 
@@ -89,25 +85,18 @@ export default function ElementsTypes() {
 
   return (
     <>
-      {msg && (
-        <Message
-          severity={
-            msg === t('admin.pages.elementTypes.list.messages.deleteSuccess') ||
-            msg === successMsg
-              ? 'success'
-              : 'error'
-          }
-          text={msg}
-          className="mb-4 w-full"
-        />
-      )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : elementTypes.length === 0 ? (
         <div className="p-4 text-center">
-          <p className="text-gray-600">{t('admin.pages.elementTypes.list.noData')}</p>
+          <p className="text-gray-600">
+            {t('admin.pages.elementTypes.list.noData')}
+          </p>
           <Button
             label={t('admin.pages.elementTypes.list.actions.create')}
             onClick={() => navigate('/admin/settings/element-types/create')}
@@ -117,8 +106,7 @@ export default function ElementsTypes() {
       ) : (
         <CrudPanel
           title={t('admin.pages.elementTypes.title')}
-          onCreate={() => navigate('/admin/settings/element-types/create')}
-        >
+          onCreate={() => navigate('/admin/settings/element-types/create')}>
           <DataTable
             value={elementTypes}
             paginator
@@ -161,7 +149,9 @@ export default function ElementsTypes() {
                     tooltip={t('admin.pages.elementTypes.editButton')}
                     tooltipOptions={{ position: 'top' }}
                     onClick={() =>
-                      navigate(`/admin/settings/element-types/edit/${rowData.id}`)
+                      navigate(
+                        `/admin/settings/element-types/edit/${rowData.id}`,
+                      )
                     }
                   />
                   <Button

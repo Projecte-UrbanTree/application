@@ -1,6 +1,5 @@
-import axiosClient from '@/api/axiosClient';
-import { useToast } from '@/hooks/useToast';
 import { Icon } from '@iconify/react';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
@@ -8,8 +7,10 @@ import { Password } from 'primereact/password';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function Account() {
   const navigate = useNavigate();

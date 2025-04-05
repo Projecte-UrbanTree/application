@@ -1,23 +1,26 @@
-import { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { useTranslation } from 'react-i18next';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
-import { Password } from 'primereact/password';
 import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function CreateUser() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const initialValues = {
     name: '',
     surname: '',
@@ -27,12 +30,12 @@ export default function CreateUser() {
     role: 'worker',
     password: '',
   };
-  
+
   useEffect(() => {
     // Simulate initial loading if needed
     setIsLoading(false);
   }, []);
-  
+
   const validationSchema = Yup.object({
     name: Yup.string().required(
       t('admin.pages.users.form.validation.name_required'),
@@ -64,22 +67,21 @@ export default function CreateUser() {
       )
       .required(t('admin.pages.users.form.validation.password_required')),
   });
-  
+
   const handleSubmit = async (values: typeof initialValues) => {
     setIsSubmitting(true);
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/users', values);
-      navigate('/admin/settings/users', {
-        state: { success: t('admin.pages.users.list.messages.createSuccess') },
-      });
+      showToast('success', t('admin.pages.users.list.messages.createSuccess'));
+      navigate('/admin/settings/users');
     } catch (error) {
       console.error(error);
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   const roleOptions = [
     { label: t('admin.roles.admin'), value: 'admin' },
     { label: t('admin.roles.worker'), value: 'worker' },
@@ -96,7 +98,7 @@ export default function CreateUser() {
       </div>
     );
   }
-  
+
   return (
     <>
       <div className="flex items-center mb-4">
@@ -133,7 +135,7 @@ export default function CreateUser() {
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:user" className="h-5 w-5 mr-2" />
@@ -151,7 +153,7 @@ export default function CreateUser() {
                     <small className="p-error">{errors.surname}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:mail" className="h-5 w-5 mr-2" />
@@ -169,7 +171,7 @@ export default function CreateUser() {
                     <small className="p-error">{errors.email}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:building" className="h-5 w-5 mr-2" />
@@ -181,7 +183,7 @@ export default function CreateUser() {
                     placeholder={t('admin.fields.company')}
                   />
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:id" className="h-5 w-5 mr-2" />
@@ -193,7 +195,7 @@ export default function CreateUser() {
                     placeholder={t('admin.fields.dni')}
                   />
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:users" className="h-5 w-5 mr-2" />
@@ -212,7 +214,7 @@ export default function CreateUser() {
                     <small className="p-error">{errors.role}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:lock" className="h-5 w-5 mr-2" />
@@ -233,7 +235,7 @@ export default function CreateUser() {
                     <small className="p-error">{errors.password}</small>
                   )}
                 </div>
-                
+
                 <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"

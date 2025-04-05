@@ -1,24 +1,25 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Badge } from 'primereact/badge';
-import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useLocation } from 'react-router-dom';
-import CrudPanel from '@/components/CrudPanel';
 import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { 
-  WorkOrder, 
-  WorkOrderStatus, 
-  WorkReportStatus 
-} from '@/types/WorkOrders';
+import { useNavigate } from 'react-router-dom';
+
+import axiosClient from '@/api/axiosClient';
 import { fetchWorkOrders } from '@/api/service/workOrder';
+import CrudPanel from '@/components/CrudPanel';
+import { useToast } from '@/hooks/useToast';
+import { RootState } from '@/store/store';
+import {
+  WorkOrder,
+  WorkOrderStatus,
+  WorkReportStatus,
+} from '@/types/WorkOrders';
 
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,27 +27,10 @@ export default function WorkOrders() {
   const [expandedRows, setExpandedRows] = useState<any>({});
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const successMsg = location.state?.success;
-  const errorMsg = location.state?.error;
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
-  const [msgSeverity, setMsgSeverity] = useState<'success' | 'error'>(
-    successMsg ? 'success' : 'error',
-  );
+  const { showToast } = useToast();
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
-
-  useEffect(() => {
-    if (location.state) window.history.replaceState({}, document.title);
-  }, [location]);
-
-  useEffect(() => {
-    if (msg) {
-      const timer = setTimeout(() => setMsg(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [msg]);
 
   const loadWorkOrders = useCallback(async () => {
     try {
@@ -54,12 +38,11 @@ export default function WorkOrders() {
       setWorkOrders(data);
     } catch (error) {
       console.error('Error fetching work orders:', error);
-      setMsg(t('admin.pages.workOrders.list.messages.error'));
-      setMsgSeverity('error');
+      showToast('error', t('admin.pages.workOrders.list.messages.error'));
     } finally {
       setIsLoading(false);
     }
-  }, [t]);
+  }, [t, showToast]);
 
   useEffect(() => {
     loadWorkOrders();
@@ -73,16 +56,17 @@ export default function WorkOrders() {
         try {
           await axiosClient.delete(`/admin/work-orders/${id}`);
           setWorkOrders((prev) => prev.filter((wo) => wo.id !== id));
-          setMsg(t('admin.pages.workOrders.list.messages.deleteSuccess'));
-          setMsgSeverity('success');
+          showToast(
+            'success',
+            t('admin.pages.workOrders.list.messages.deleteSuccess'),
+          );
         } catch (error) {
           console.error('Error deleting work order:', error);
-          setMsg(t('admin.pages.workOrders.list.messages.error'));
-          setMsgSeverity('error');
+          showToast('error', t('admin.pages.workOrders.list.messages.error'));
         }
       }
     },
-    [t],
+    [t, showToast],
   );
 
   const getStatusBadge = useCallback(
@@ -160,7 +144,9 @@ export default function WorkOrders() {
         case WorkReportStatus.CLOSED_WITH_INCIDENTS:
           return (
             <Badge
-              value={t('admin.pages.workOrders.reportStatus.closedWithIncidents')}
+              value={t(
+                'admin.pages.workOrders.reportStatus.closedWithIncidents',
+              )}
               severity="danger"
               className="bg-amber-600 text-white"
             />
@@ -315,12 +301,12 @@ export default function WorkOrders() {
 
   return (
     <>
-      {msg && (
-        <Message severity={msgSeverity} text={msg} className="mb-4 w-full" />
-      )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : filteredWorkOrders.length === 0 ? (
         <div className="p-4 text-center">
@@ -382,9 +368,7 @@ export default function WorkOrders() {
               body={(rowData) =>
                 rowData.users && rowData.users.length > 0
                   ? rowData.users
-                      .map(
-                        (user) => `${user.name} ${user.surname}`,
-                      )
+                      .map((user) => `${user.name} ${user.surname}`)
                       .join(', ')
                   : t('admin.pages.workOrders.details.noUsers')
               }

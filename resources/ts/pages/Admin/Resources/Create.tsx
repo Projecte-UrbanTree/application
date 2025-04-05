@@ -1,5 +1,3 @@
-import axiosClient from '@/api/axiosClient';
-import type { ResourceType } from '@/types/ResourceType';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
@@ -12,9 +10,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
+import type { ResourceType } from '@/types/ResourceType';
+
 export default function CreateResource() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
@@ -70,11 +73,11 @@ export default function CreateResource() {
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/resources', values);
-      navigate('/admin/resources', {
-        state: {
-          success: t('admin.pages.resources.list.messages.createSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.resources.list.messages.createSuccess'),
+      );
+      navigate('/admin/resources');
     } catch (error) {
       console.error(error);
     } finally {
@@ -85,7 +88,10 @@ export default function CreateResource() {
   if (isLoading) {
     return (
       <div className="flex justify-center p-4">
-        <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
+        />
       </div>
     );
   }
@@ -102,7 +108,7 @@ export default function CreateResource() {
           {t('admin.pages.resources.form.title.create')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik
@@ -205,9 +211,11 @@ export default function CreateResource() {
                     disabled={isSubmitting}
                     className="p-button-sm"
                     icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
-                    label={isSubmitting
-                      ? t('admin.pages.resources.form.submittingText.create')
-                      : t('admin.pages.resources.form.submitButton.create')}
+                    label={
+                      isSubmitting
+                        ? t('admin.pages.resources.form.submittingText.create')
+                        : t('admin.pages.resources.form.submitButton.create')
+                    }
                   />
                 </div>
               </Form>

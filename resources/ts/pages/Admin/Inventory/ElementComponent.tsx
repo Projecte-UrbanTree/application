@@ -1,9 +1,10 @@
-import { Element } from '@/types/Element';
 import { Button } from 'primereact/button';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
-import ReactDOM from 'react-dom/client';
-import React from 'react';
 
 interface ElementPopupProps {
   element: Element;

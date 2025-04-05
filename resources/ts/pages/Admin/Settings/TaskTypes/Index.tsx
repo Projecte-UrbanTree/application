@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/CrudPanel';
+import { useToast } from '@/hooks/useToast';
 
 interface TaskType {
   id: number;
@@ -21,11 +22,7 @@ export default function TaskTypes() {
   const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const successMsg = location.state?.success;
-  const errorMsg = location.state?.error;
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchTaskTypes = async () => {
@@ -34,19 +31,13 @@ export default function TaskTypes() {
         setTaskTypes(response.data);
       } catch (error) {
         console.error(error);
+        showToast('error', t('admin.pages.taskTypes.list.messages.error'));
       } finally {
         setIsLoading(false);
       }
     };
     fetchTaskTypes();
-  }, []);
-
-  useEffect(() => {
-    if (msg) {
-      const timer = setTimeout(() => setMsg(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [msg]);
+  }, [t, showToast]);
 
   const handleDelete = async (id: number) => {
     if (!window.confirm(t('admin.pages.taskTypes.list.messages.deleteConfirm')))
@@ -54,34 +45,30 @@ export default function TaskTypes() {
     try {
       await axiosClient.delete(`/admin/task-types/${id}`);
       setTaskTypes(taskTypes.filter((tt) => tt.id !== id));
-      setMsg(t('admin.pages.taskTypes.list.messages.deleteSuccess'));
+      showToast(
+        'success',
+        t('admin.pages.taskTypes.list.messages.deleteSuccess'),
+      );
     } catch (error) {
       console.error(error);
-      setMsg(t('admin.pages.taskTypes.list.messages.error'));
+      showToast('error', t('admin.pages.taskTypes.list.messages.error'));
     }
   };
 
   return (
     <>
-      {msg && (
-        <Message
-          severity={
-            msg === t('admin.pages.taskTypes.list.messages.deleteSuccess') ||
-            msg === successMsg
-              ? 'success'
-              : 'error'
-          }
-          text={msg}
-          className="mb-4 w-full"
-        />
-      )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : taskTypes.length === 0 ? (
         <div className="p-4 text-center">
-          <p className="text-gray-600">{t('admin.pages.taskTypes.list.noData')}</p>
+          <p className="text-gray-600">
+            {t('admin.pages.taskTypes.list.noData')}
+          </p>
           <Button
             label={t('admin.pages.taskTypes.list.actions.create')}
             onClick={() => navigate('/admin/settings/task-types/create')}
@@ -91,9 +78,14 @@ export default function TaskTypes() {
       ) : (
         <CrudPanel
           title={t('admin.pages.taskTypes.title')}
-          onCreate={() => navigate('/admin/settings/task-types/create')}
-        >
-          <DataTable value={taskTypes} paginator rows={10} stripedRows showGridlines className="p-datatable-sm">
+          onCreate={() => navigate('/admin/settings/task-types/create')}>
+          <DataTable
+            value={taskTypes}
+            paginator
+            rows={10}
+            stripedRows
+            showGridlines
+            className="p-datatable-sm">
             <Column
               field="name"
               header={t('admin.pages.taskTypes.list.columns.name')}

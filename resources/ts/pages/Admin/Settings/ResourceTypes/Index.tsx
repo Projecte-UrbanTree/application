@@ -1,17 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Message } from 'primereact/message';
-import { ProgressSpinner } from 'primereact/progressspinner';
-
 import { Icon } from '@iconify/react';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
 import CrudPanel from '@/components/CrudPanel';
+import { useToast } from '@/hooks/useToast';
 
 interface ResourceType {
   id: number;
@@ -23,11 +21,8 @@ export default function ResourceTypes() {
   const [isLoading, setIsLoading] = useState(true);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
   const navigate = useNavigate();
-  const location = useLocation();
-  const successMsg = location.state?.success;
-  const errorMsg = location.state?.error;
-  const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
   const { t } = useTranslation();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchResourceTypes = async () => {
@@ -37,19 +32,13 @@ export default function ResourceTypes() {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
+        showToast('error', t('admin.pages.resourceTypes.list.messages.error'));
         setIsLoading(false);
       }
     };
 
     fetchResourceTypes();
-  }, []);
-
-  useEffect(() => {
-    if (msg) {
-      const timer = setTimeout(() => setMsg(null), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [msg]);
+  }, [t, showToast]);
 
   const handleDelete = async (id: number) => {
     if (
@@ -60,10 +49,16 @@ export default function ResourceTypes() {
         setResourceTypes((prevResourceTypes) =>
           prevResourceTypes.filter((resourceType) => resourceType.id !== id),
         );
-        setMsg(t('admin.pages.resourceTypes.list.messages.deleteSuccess'));
+        showToast(
+          'success',
+          t('admin.pages.resourceTypes.list.messages.deleteSuccess'),
+        );
       } catch (error) {
         console.error(error);
-        setMsg(t('admin.pages.resourceTypes.list.messages.deleteError'));
+        showToast(
+          'error',
+          t('admin.pages.resourceTypes.list.messages.deleteError'),
+        );
       }
     }
   };
@@ -82,21 +77,12 @@ export default function ResourceTypes() {
 
   return (
     <>
-      {msg && (
-        <Message
-          severity={
-            successMsg ||
-            msg === t('admin.pages.resourceTypes.list.messages.deleteSuccess')
-              ? 'success'
-              : 'error'
-          }
-          text={msg}
-          className="mb-4 w-full"
-        />
-      )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : resourceTypes.length === 0 ? (
         <div className="p-4 text-center">

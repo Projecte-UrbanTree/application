@@ -1,4 +1,5 @@
 import { Zone } from '@/types/Zone';
+
 import axiosClient from '../axiosClient';
 
 export const fetchZones = async (): Promise<Zone[]> => {

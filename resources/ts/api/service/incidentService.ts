@@ -1,5 +1,7 @@
-import { Incidence } from '@/types/Incident';
 import { AxiosResponse } from 'axios';
+
+import { Incidence } from '@/types/Incident';
+
 import axiosClient from '../axiosClient';
 
 export const fetchIncidence = async (): Promise<Incidence[]> => {

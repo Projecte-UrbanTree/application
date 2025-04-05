@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import { Icon } from '@iconify/react';
+import { differenceInMonths, differenceInYears } from 'date-fns';
 import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import { Message } from 'primereact/message';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import axiosClient from '@/api/axiosClient';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/CrudPanel';
-import { Icon } from '@iconify/react';
-import { differenceInYears, differenceInMonths } from 'date-fns';
 
 export default function Evas() {
   const [isLoading, setIsLoading] = useState(true);
@@ -271,7 +272,10 @@ export default function Evas() {
       )}
       {isLoading ? (
         <div className="flex justify-center p-4">
-          <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          <ProgressSpinner
+            style={{ width: '50px', height: '50px' }}
+            strokeWidth="4"
+          />
         </div>
       ) : evas.length === 0 ? (
         <div className="p-4 text-center">
@@ -285,19 +289,19 @@ export default function Evas() {
       ) : (
         <CrudPanel
           title={t('admin.pages.evas.title')}
-          onCreate={() => navigate('/admin/evas/create')}
-        >
+          onCreate={() => navigate('/admin/evas/create')}>
           <DataTable
             value={evas}
             paginator
             rows={10}
             stripedRows
             showGridlines
-            className="p-datatable-sm"
-          >
+            className="p-datatable-sm">
             <Column
               header={t('admin.pages.evas.columns.name')}
-              body={(rowData: Eva) => <span>{rowData.element_id || 'N/A'}</span>}
+              body={(rowData: Eva) => (
+                <span>{rowData.element_id || 'N/A'}</span>
+              )}
             />
             <Column
               header={t('admin.pages.evas.columns.age')}

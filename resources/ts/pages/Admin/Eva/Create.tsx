@@ -1,17 +1,19 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Formik, Form, useField } from 'formik';
-import * as Yup from 'yup';
+import { Icon } from '@iconify/react';
+import { format, subMonths, subYears } from 'date-fns';
+import { Form, Formik, useField } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
-import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Icon } from '@iconify/react';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
+import { InputNumber } from 'primereact/inputnumber';
 import { Message } from 'primereact/message';
-import { subYears, subMonths, format } from 'date-fns';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 const FormField = ({ as: Component, name, label, ...props }: any) => {
   const [field, meta, helpers] = useField(name);
@@ -86,14 +88,19 @@ interface CreateEvaProps {
   redirectPath?: string;
 }
 
-const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaProps) => {
+const CreateEva = ({
+  preselectedElementId,
+  onClose,
+  redirectPath,
+}: CreateEvaProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { showToast } = useToast();
   const [elements, setElements] = useState<any[]>([]);
   const [dictionaries, setDictionaries] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { t } = useTranslation();
 
   useEffect(() => {
     axiosClient
@@ -235,9 +242,8 @@ const CreateEva = ({ preselectedElementId, onClose, redirectPath }: CreateEvaPro
       if (redirectPath) {
         onClose(); // Close the popup if redirectPath is provided
       } else {
-        navigate('/admin/evas', {
-          state: { success: t('admin.pages.evas.list.messages.createSuccess') },
-        });
+        showToast('success', t('admin.pages.evas.list.messages.createSuccess'));
+        navigate('/admin/evas');
       }
     } catch (error: any) {
       setError(

@@ -1,19 +1,22 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axiosClient from '@/api/axiosClient';
-import { useTranslation } from 'react-i18next';
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Card } from 'primereact/card';
 import { Icon } from '@iconify/react';
+import { Field, Form, Formik } from 'formik';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditTaskType() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState({
     name: '',
     description: '',
@@ -52,15 +55,13 @@ export default function EditTaskType() {
     setIsSubmitting(true);
     try {
       await axiosClient.put(`/admin/task-types/${id}`, values);
-      navigate('/admin/settings/task-types', {
-        state: {
-          success: t('admin.pages.taskTypes.list.messages.updateSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.taskTypes.list.messages.updateSuccess'),
+      );
+      navigate('/admin/settings/task-types');
     } catch {
-      navigate('/admin/settings/task-types', {
-        state: { error: t('admin.pages.taskTypes.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.taskTypes.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -89,7 +90,7 @@ export default function EditTaskType() {
           {t('admin.pages.taskTypes.form.title.edit')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik
@@ -107,7 +108,9 @@ export default function EditTaskType() {
                   <Field
                     name="name"
                     as={InputText}
-                    placeholder={t('admin.pages.taskTypes.form.placeholders.name')}
+                    placeholder={t(
+                      'admin.pages.taskTypes.form.placeholders.name',
+                    )}
                     className={errors.name && touched.name ? 'p-invalid' : ''}
                   />
                   {errors.name && touched.name && (
@@ -123,8 +126,14 @@ export default function EditTaskType() {
                   <Field
                     name="description"
                     as={InputText}
-                    placeholder={t('admin.pages.taskTypes.form.placeholders.description')}
-                    className={errors.description && touched.description ? 'p-invalid' : ''}
+                    placeholder={t(
+                      'admin.pages.taskTypes.form.placeholders.description',
+                    )}
+                    className={
+                      errors.description && touched.description
+                        ? 'p-invalid'
+                        : ''
+                    }
                   />
                   {errors.description && touched.description && (
                     <small className="p-error">{errors.description}</small>

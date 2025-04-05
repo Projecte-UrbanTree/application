@@ -1,19 +1,20 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as turf from '@turf/turf';
+import { Button } from 'primereact/button';
+import { ColorPicker } from 'primereact/colorpicker';
+import { InputText } from 'primereact/inputtext';
+import { Toast } from 'primereact/toast';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import * as yup from 'yup';
+
 import { savePoints, SavePointsProps } from '@/api/service/pointService';
 import { saveZoneAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Contract } from '@/types/Contract';
 import { TypePoint } from '@/types/Point';
 import { Zone } from '@/types/Zone';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from 'primereact/button';
-import { ColorPicker } from 'primereact/colorpicker';
-import { InputText } from 'primereact/inputtext';
-import { Toast } from 'primereact/toast';
-import { useEffect, useRef, useCallback, useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import * as yup from 'yup';
-import * as turf from '@turf/turf';
 
 const schema = yup.object().shape({
   name: yup.string().required('El nombre es obligatorio'),
@@ -41,7 +42,7 @@ export const SaveZoneForm = ({
   onClose: onCloseProp,
 }: SaveZoneProps) => {
   const currentContract = useSelector<RootState, Contract | null>(
-    (state) => state.contract.currentContract
+    (state) => state.contract.currentContract,
   );
   const zones = useSelector((state: RootState) => state.zone.zones);
   const points = useSelector((state: RootState) => state.points.points);
@@ -49,13 +50,16 @@ export const SaveZoneForm = ({
 
   const toast = useRef<Toast>(null);
 
-  const defaultValues = useMemo(() => ({
-    name: '',
-    description: '',
-    color: '#FF5733',
-    contractId: currentContract?.id || 0,
-    coordinates: coordinates,
-  }), [coordinates, currentContract?.id]);
+  const defaultValues = useMemo(
+    () => ({
+      name: '',
+      description: '',
+      color: '#FF5733',
+      contractId: currentContract?.id || 0,
+      coordinates: coordinates,
+    }),
+    [coordinates, currentContract?.id],
+  );
 
   const {
     control,
@@ -75,104 +79,124 @@ export const SaveZoneForm = ({
     }
   }, [coordinates, currentContract, setValue]);
 
-  const checkZonesOverlap = useCallback((newPolygonCoords: number[][]): boolean => {
-    if (!currentContract?.id) return false;
-    
-    try {
-      const closedCoords = [...newPolygonCoords];
-      if (
-        closedCoords.length > 0 &&
-        (closedCoords[0][0] !== closedCoords[closedCoords.length - 1][0] ||
-         closedCoords[0][1] !== closedCoords[closedCoords.length - 1][1])
-      ) {
-        closedCoords.push([...closedCoords[0]]);
-      }
+  const checkZonesOverlap = useCallback(
+    (newPolygonCoords: number[][]): boolean => {
+      if (!currentContract?.id) return false;
 
-      const newPolygon = turf.polygon([closedCoords]);
-      
-      const filteredZones = zones.filter(z => z.contract_id === currentContract.id);
-      
-      return filteredZones.some(zone => {
-        const zonePoints = points
-          .filter(p => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
-          .map(p => [p.longitude!, p.latitude!]);
-          
-        if (zonePoints.length < 3) return false;
-
-        const closedZonePoints = [...zonePoints];
+      try {
+        const closedCoords = [...newPolygonCoords];
         if (
-          closedZonePoints[0][0] !== closedZonePoints[closedZonePoints.length - 1][0] ||
-          closedZonePoints[0][1] !== closedZonePoints[closedZonePoints.length - 1][1]
+          closedCoords.length > 0 &&
+          (closedCoords[0][0] !== closedCoords[closedCoords.length - 1][0] ||
+            closedCoords[0][1] !== closedCoords[closedCoords.length - 1][1])
         ) {
-          closedZonePoints.push([...closedZonePoints[0]]);
+          closedCoords.push([...closedCoords[0]]);
         }
-        
-        try {
-          const existingPolygon = turf.polygon([closedZonePoints]);
-          
-          return (
-            turf.booleanOverlap(newPolygon, existingPolygon) || 
-            turf.booleanContains(existingPolygon, newPolygon) ||
-            turf.booleanContains(newPolygon, existingPolygon)
-          );
-        } catch (err) {
-          console.error('Error al analizar intersección de polígonos:', err);
-          return false;
-        }
-      });
-    } catch (err) {
-      console.error('Error en checkZonesOverlap:', err);
-      return false;
-    }
-  }, [currentContract, zones, points]);
 
-  const onSubmit = useCallback(async (data: Zone) => {
-    if (isSubmitting) return;
+        const newPolygon = turf.polygon([closedCoords]);
 
-    if (checkZonesOverlap(coordinates)) {
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se puede crear una zona encima de otra zona existente',
-        sticky: true,
-        life: 5000
-      });
-      return;
-    }
+        const filteredZones = zones.filter(
+          (z) => z.contract_id === currentContract.id,
+        );
 
-    try {
-      const createdZone = await dispatch(
-        saveZoneAsync({ data, contractId: currentContract?.id || 0 }),
-      ).unwrap();
+        return filteredZones.some((zone) => {
+          const zonePoints = points
+            .filter(
+              (p) =>
+                p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
+            )
+            .map((p) => [p.longitude!, p.latitude!]);
 
-      if (!createdZone?.id) {
-        throw new Error('No se pudo obtener el ID de la zona creada.');
+          if (zonePoints.length < 3) return false;
+
+          const closedZonePoints = [...zonePoints];
+          if (
+            closedZonePoints[0][0] !==
+              closedZonePoints[closedZonePoints.length - 1][0] ||
+            closedZonePoints[0][1] !==
+              closedZonePoints[closedZonePoints.length - 1][1]
+          ) {
+            closedZonePoints.push([...closedZonePoints[0]]);
+          }
+
+          try {
+            const existingPolygon = turf.polygon([closedZonePoints]);
+
+            return (
+              turf.booleanOverlap(newPolygon, existingPolygon) ||
+              turf.booleanContains(existingPolygon, newPolygon) ||
+              turf.booleanContains(newPolygon, existingPolygon)
+            );
+          } catch (err) {
+            console.error('Error al analizar intersección de polígonos:', err);
+            return false;
+          }
+        });
+      } catch (err) {
+        console.error('Error en checkZonesOverlap:', err);
+        return false;
+      }
+    },
+    [currentContract, zones, points],
+  );
+
+  const onSubmit = useCallback(
+    async (data: Zone) => {
+      if (isSubmitting) return;
+
+      if (checkZonesOverlap(coordinates)) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se puede crear una zona encima de otra zona existente',
+          sticky: true,
+          life: 5000,
+        });
+        return;
       }
 
-      const pointsData: SavePointsProps[] = coordinates.map((coord) => ({
-        latitude: coord[1],
-        longitude: coord[0],
-        type: TypePoint.zone_delimiter,
-        zone_id: createdZone.id!,
-      }));
+      try {
+        const createdZone = await dispatch(
+          saveZoneAsync({ data, contractId: currentContract?.id || 0 }),
+        ).unwrap();
 
-      await savePoints(pointsData);
+        if (!createdZone?.id) {
+          throw new Error('No se pudo obtener el ID de la zona creada.');
+        }
 
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Zona y puntos guardados correctamente',
-      });
+        const pointsData: SavePointsProps[] = coordinates.map((coord) => ({
+          latitude: coord[1],
+          longitude: coord[0],
+          type: TypePoint.zone_delimiter,
+          zone_id: createdZone.id!,
+        }));
 
-      onCloseProp(createdZone, pointsData);
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo guardar la zona',
-      });
-    }
-  }, [coordinates, currentContract, dispatch, isSubmitting, onCloseProp, checkZonesOverlap]);
+        await savePoints(pointsData);
+
+        toast.current?.show({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Zona y puntos guardados correctamente',
+        });
+
+        onCloseProp(createdZone, pointsData);
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo guardar la zona',
+        });
+      }
+    },
+    [
+      coordinates,
+      currentContract,
+      dispatch,
+      isSubmitting,
+      onCloseProp,
+      checkZonesOverlap,
+    ],
+  );
 
   const handleCancel = useCallback(() => {
     onCloseProp({} as Zone, []);

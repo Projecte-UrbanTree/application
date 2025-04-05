@@ -1,22 +1,25 @@
-import { useState, useEffect } from "react";
-import { Icon } from "@iconify/react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import axiosClient from "@/api/axiosClient";
-import { useTranslation } from "react-i18next";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import { Calendar } from "primereact/calendar";
-import { InputNumber } from "primereact/inputnumber";
-import { Dropdown } from "primereact/dropdown";
-import { Card } from "primereact/card";
-import { ProgressSpinner } from "primereact/progressspinner";
+import { Icon } from '@iconify/react';
+import { Field, Form, Formik } from 'formik';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
+import { InputText } from 'primereact/inputtext';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditContract() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState<{
     name: string;
     start_date: Date | null;
@@ -48,7 +51,7 @@ export default function EditContract() {
           start_date: parseDateLocal(contract.start_date),
           end_date: parseDateLocal(contract.end_date),
           final_price: contract.final_price,
-          status: contract.status
+          status: contract.status,
         });
         setIsLoading(false);
       } catch (error) {
@@ -93,17 +96,21 @@ export default function EditContract() {
     try {
       const payload = {
         ...values,
-        start_date: values.start_date ? values.start_date.toLocaleDateString('en-CA') : null,
-        end_date: values.end_date ? values.end_date.toLocaleDateString('en-CA') : null,
+        start_date: values.start_date
+          ? values.start_date.toLocaleDateString('en-CA')
+          : null,
+        end_date: values.end_date
+          ? values.end_date.toLocaleDateString('en-CA')
+          : null,
       };
       await axiosClient.put(`/admin/contracts/${id}`, payload);
-      navigate("/admin/settings/contracts", { 
-        state: { success: t("admin.pages.contracts.list.messages.updateSuccess") } 
-      });
+      showToast(
+        'success',
+        t('admin.pages.contracts.list.messages.updateSuccess'),
+      );
+      navigate('/admin/settings/contracts');
     } catch (error) {
-      navigate("/admin/settings/contracts", { 
-        state: { error: t("admin.pages.contracts.list.messages.error") } 
-      });
+      showToast('error', t('admin.pages.contracts.list.messages.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -138,7 +145,7 @@ export default function EditContract() {
           {t('admin.pages.contracts.form.title.edit')}
         </h2>
       </div>
-      
+
       <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
         <div className="p-0">
           <Formik
@@ -207,7 +214,9 @@ export default function EditContract() {
                   </label>
                   <InputNumber
                     value={values.final_price}
-                    onValueChange={(e) => setFieldValue('final_price', e.value || 0)}
+                    onValueChange={(e) =>
+                      setFieldValue('final_price', e.value || 0)
+                    }
                     placeholder={t('admin.fields.final_price')}
                     minFractionDigits={0}
                     maxFractionDigits={0}
