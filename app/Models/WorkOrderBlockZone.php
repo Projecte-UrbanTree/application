@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class WorkOrderBlockZone
  *
  * Represents the relationship between a work order block and a zone.
- *
- * @package App\Models
  */
 class WorkOrderBlockZone extends Model
 {

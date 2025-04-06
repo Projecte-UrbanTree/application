@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class WorkOrderBlockTask
  *
  * Represents a task within a work order block.
- *
- * @package App\Models
  */
 class WorkOrderBlockTask extends Model
 {

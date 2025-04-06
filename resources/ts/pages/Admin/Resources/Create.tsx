@@ -9,9 +9,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 
 import axiosClient from '@/api/axiosClient';
 import { useToast } from '@/hooks/useToast';
+import { RootState } from '@/store/store';
 import type { ResourceType } from '@/types/ResourceType';
 
 export default function CreateResource() {
@@ -21,14 +23,16 @@ export default function CreateResource() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
+  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const { data } = await axiosClient.get(`/admin/resources/create`);
-        setResourceTypes(data.resource_types);
+        const { data } = await axiosClient.get(`/admin/resource-types`);
+        setResourceTypes(data);
       } catch (error) {
         console.error(error);
+        showToast('error', 'Error loading resource types');
       }
       setIsLoading(false);
     };
@@ -68,18 +72,31 @@ export default function CreateResource() {
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
+    if (!currentContract || currentContract.id === 0) {
+      showToast('error', 'Por favor seleccione un contrato antes de crear un recurso');
+      return;
+    }
+    
     setIsSubmitting(true);
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
-      await axiosClient.post('/admin/resources', values);
+      await axiosClient.post('/admin/resources', {
+        ...values,
+        contract_id: currentContract.id
+      });
       showToast(
         'success',
         t('admin.pages.resources.list.messages.createSuccess'),
       );
       navigate('/admin/resources');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      showToast('error', t('admin.pages.resources.list.messages.error'));
+
+      if (error.response && error.response.data && error.response.data.message) {
+        showToast('error', error.response.data.message);
+      } else {
+        showToast('error', t('admin.pages.resources.list.messages.error'));
+      }
     }
     setIsSubmitting(false);
   };

@@ -24,7 +24,7 @@ class TaskTypeController extends Controller
     /**
      * Store a newly created task type in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created task type.
      */
     public function store(Request $request): JsonResponse
@@ -42,7 +42,7 @@ class TaskTypeController extends Controller
     /**
      * Display the specified task type.
      *
-     * @param int $id The ID of the task type to retrieve.
+     * @param  int  $id  The ID of the task type to retrieve.
      * @return JsonResponse A JSON response containing the task type details.
      */
     public function show($id): JsonResponse
@@ -55,8 +55,8 @@ class TaskTypeController extends Controller
     /**
      * Update the specified task type in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $id The ID of the task type to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the task type to update.
      * @return JsonResponse A JSON response containing the updated task type.
      */
     public function update(Request $request, $id): JsonResponse
@@ -76,7 +76,7 @@ class TaskTypeController extends Controller
     /**
      * Remove the specified task type from storage.
      *
-     * @param int $id The ID of the task type to delete.
+     * @param  int  $id  The ID of the task type to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy($id): JsonResponse

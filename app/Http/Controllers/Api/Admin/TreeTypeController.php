@@ -24,7 +24,7 @@ class TreeTypeController extends Controller
     /**
      * Store a newly created tree type in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created tree type.
      */
     public function store(Request $request): JsonResponse
@@ -43,7 +43,7 @@ class TreeTypeController extends Controller
     /**
      * Display the specified tree type.
      *
-     * @param int $id The ID of the tree type to retrieve.
+     * @param  int  $id  The ID of the tree type to retrieve.
      * @return JsonResponse A JSON response containing the tree type details.
      */
     public function show($id): JsonResponse
@@ -56,8 +56,8 @@ class TreeTypeController extends Controller
     /**
      * Update the specified tree type in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $id The ID of the tree type to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the tree type to update.
      * @return JsonResponse A JSON response containing the updated tree type.
      */
     public function update(Request $request, $id): JsonResponse
@@ -78,7 +78,7 @@ class TreeTypeController extends Controller
     /**
      * Remove the specified tree type from storage.
      *
-     * @param int $id The ID of the tree type to delete.
+     * @param  int  $id  The ID of the tree type to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy($id): JsonResponse

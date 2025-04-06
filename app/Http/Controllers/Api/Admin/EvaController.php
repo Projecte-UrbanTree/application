@@ -45,7 +45,7 @@ class EvaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id The ID of the EVA to retrieve.
+     * @param  int  $id  The ID of the EVA to retrieve.
      * @return JsonResponse A JSON response containing the EVA details.
      */
     public function show(int $id): JsonResponse
@@ -58,7 +58,7 @@ class EvaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created EVA.
      */
     public function store(Request $request): JsonResponse
@@ -80,7 +80,7 @@ class EvaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id The ID of the EVA to edit.
+     * @param  int  $id  The ID of the EVA to edit.
      * @return JsonResponse A JSON response containing data for editing the EVA.
      */
     public function edit(int $id): JsonResponse
@@ -96,8 +96,8 @@ class EvaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $id The ID of the EVA to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the EVA to update.
      * @return JsonResponse A JSON response confirming the update.
      */
     public function update(Request $request, int $id): JsonResponse
@@ -117,7 +117,7 @@ class EvaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id The ID of the EVA to delete.
+     * @param  int  $id  The ID of the EVA to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy(int $id): JsonResponse
@@ -130,7 +130,7 @@ class EvaController extends Controller
     /**
      * Get EVA by element ID.
      *
-     * @param int $elementId The ID of the element to retrieve the EVA for.
+     * @param  int  $elementId  The ID of the element to retrieve the EVA for.
      * @return JsonResponse A JSON response containing the EVA details or an error message.
      */
     public function getByElementId(int $elementId): JsonResponse
@@ -139,7 +139,7 @@ class EvaController extends Controller
             ->where('element_id', $elementId)
             ->first();
 
-        if (!$eva) {
+        if (! $eva) {
             return response()->json(['message' => 'No EVA found for this element'], 404);
         }
 
