@@ -38,6 +38,9 @@ import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders/Index';
 import WorkReport from '@/pages/Admin/WorkReport';
 import { Roles } from '@/types/Role';
+import Sensors from '@/pages/Admin/Sensor/Sensors';
+import CreateSensor from '@/pages/Admin/Sensor/Create';
+import EditSensor from '@/pages/Admin/Sensor/Edit';
 
 const AdminRoutes: RouteObject[] = [
   {
