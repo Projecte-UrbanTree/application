@@ -165,7 +165,7 @@ const ShowSensor: React.FC = () => {
   const fieldGroups = {
     identification: {
       title: t('admin.pages.sensors.identification'),
-      fields: ['id', 'dev_eui', 'device_name'],
+      fields: ['dev_eui', 'device_name'],
       bgColor: 'bg-blue-50'
     },
     status: {

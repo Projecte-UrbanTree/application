@@ -29,25 +29,25 @@ export default function CreateSensor() {
 
   const validationSchema = Yup.object({
     dev_eui: Yup.string()
-      .required('EUI is required')
-      .min(8, 'EUI must be at least 8 characters')
-      .max(32, 'EUI must be less than 32 characters')
-      .matches(/^[a-fA-F0-9]+$/, 'EUI must be hexadecimal format (0-9, a-f)'),
+      .required(t('admin.pages.sensors.form.validation.eui_required'))
+      .min(8, t('admin.pages.sensors.form.validation.eui_min'))
+      .max(32, t('admin.pages.sensors.form.validation.eui_max'))
+      .matches(/^[a-zA-Z0-9]+$/, t('admin.pages.sensors.form.validation.eui_format')),
     dev_name: Yup.string()
-      .required('Name is required')
-      .min(3, 'Name must be at least 3 characters')
-      .max(50, 'Name must be less than 50 characters')
-      .matches(/^[a-zA-Z0-9\s\-_]+$/, 'Name can only contain letters, numbers, spaces, hyphens and underscores'),
+      .required(t('admin.pages.sensors.form.validation.name_required'))
+      .min(3, t('admin.pages.sensors.form.validation.name_min'))
+      .max(50, t('admin.pages.sensors.form.validation.name_max'))
+      .matches(/^[a-zA-Z0-9\s\-_]+$/, t('admin.pages.sensors.form.validation.name_format')),
     longitude: Yup.string()
-      .required('Longitude is required')
-      .test('is-longitude', 'Invalid longitude (must be between -180 and 180)', value => {
+      .required(t('admin.pages.sensors.form.validation.longitude_required'))
+      .test('is-longitude', t('admin.pages.sensors.form.validation.longitude_format'), value => {
         if (!value) return true;
         const num = parseFloat(value);
         return !isNaN(num) && num >= -180 && num <= 180;
       }),
     latitude: Yup.string()
-      .required('Latitude is required')
-      .test('is-latitude', 'Invalid latitude (must be between -90 and 90)', value => {
+      .required(t('admin.pages.sensors.form.validation.latitude_required'))
+      .test('is-latitude', t('admin.pages.sensors.form.validation.latitude_format'), value => {
         if (!value) return true;
         const num = parseFloat(value);
         return !isNaN(num) && num >= -90 && num <= 90;
@@ -56,18 +56,12 @@ export default function CreateSensor() {
 
   const handleSubmit = async (values: typeof initialValues) => {
     if (!currentContract?.id) {
-      showToast('error', 'Debe seleccionar un contrato válido');
+      showToast('error', t('admin.pages.sensors.errors.no_contract'));
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // Check if the EUI exists in the API
-      const existingSensor = await fetchSensorByEUI(values.dev_eui.trim());
-      if (!existingSensor) {
-        throw new Error(`Sensor with EUI "${values.dev_eui}" does not exist in the system`);
-      }
-      
       const payload = {
         eui: values.dev_eui.trim(),
         name: values.dev_name.trim(),
@@ -76,26 +70,23 @@ export default function CreateSensor() {
         contract_id: currentContract.id,
       };
 
-      await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/sensors', payload);
-      showToast('success', 'Sensor created successfully!');
+      showToast('success', t('admin.pages.sensors.list.messages.createSuccess'));
       navigate('/admin/sensors');
     } catch (error: any) {
       console.error('Error creating sensor:', error);
 
       if (error.response?.status === 422 && error.response?.data?.errors?.eui) {
-        // This is a validation error for the EUI field
         if (error.response.data.errors.eui.includes('The eui has already been taken.')) {
-          showToast('error', `Sensor with EUI "${values.dev_eui}" already exists`);
+          showToast('error', t('admin.pages.sensors.list.messages.euiTaken'));
           return;
         }
       }
 
-      // Handle other errors
       if (error.response && error.response.data && error.response.data.message) {
         showToast('error', error.response.data.message);
       } else {
-        showToast('error', 'Failed to create sensor');
+        showToast('error', t('admin.pages.sensors.list.messages.error'));
       }
     } finally {
       setIsSubmitting(false);
@@ -111,7 +102,7 @@ export default function CreateSensor() {
           onClick={() => navigate('/admin/sensors')}
         />
         <h2 className="text-xl font-semibold text-gray-800">
-          Create Sensor
+          {t('admin.pages.sensors.title.create')}
         </h2>
       </div>
 
@@ -127,12 +118,12 @@ export default function CreateSensor() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:id" className="h-5 w-5 mr-2" />
-                    EUI
+                    {t('admin.pages.sensors.fields.eui')}
                   </label>
                   <Field
                     name="dev_eui"
                     as={InputText}
-                    placeholder="Enter EUI (Hexadecimal)"
+                    placeholder={t('admin.pages.sensors.fields.eui')}
                     className={errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''}
                   />
                   {errors.dev_eui && touched.dev_eui && (
@@ -143,12 +134,12 @@ export default function CreateSensor() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:device" className="h-5 w-5 mr-2" />
-                    Name
+                    {t('admin.pages.sensors.fields.name')}
                   </label>
                   <Field
                     name="dev_name"
                     as={InputText}
-                    placeholder="Enter Name"
+                    placeholder={t('admin.pages.sensors.fields.name')}
                     className={errors.dev_name && touched.dev_name ? 'p-invalid' : ''}
                   />
                   {errors.dev_name && touched.dev_name && (
@@ -159,12 +150,12 @@ export default function CreateSensor() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                    Longitude
+                    {t('admin.pages.sensors.fields.longitude')}
                   </label>
                   <Field
                     name="longitude"
                     as={InputText}
-                    placeholder="Enter Longitude (-180 to 180)"
+                    placeholder={t('admin.pages.sensors.fields.longitude')}
                     className={errors.longitude && touched.longitude ? 'p-invalid' : ''}
                   />
                   {errors.longitude && touched.longitude && (
@@ -175,12 +166,12 @@ export default function CreateSensor() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                    Latitude
+                    {t('admin.pages.sensors.fields.latitude')}
                   </label>
                   <Field
                     name="latitude"
                     as={InputText}
-                    placeholder="Enter Latitude (-90 to 90)"
+                    placeholder={t('admin.pages.sensors.fields.latitude')}
                     className={errors.latitude && touched.latitude ? 'p-invalid' : ''}
                   />
                   {errors.latitude && touched.latitude && (
@@ -195,7 +186,11 @@ export default function CreateSensor() {
                     disabled={isSubmitting}
                     className="p-button-sm"
                     icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
-                    label={isSubmitting ? 'Creating Sensor...' : 'Create Sensor'}
+                    label={
+                      isSubmitting
+                        ? t('admin.pages.sensors.form.submittingText.create')
+                        : t('admin.pages.sensors.form.submitButton.create')
+                    }
                   />
                 </div>
               </Form>

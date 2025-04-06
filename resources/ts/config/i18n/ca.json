@@ -1148,6 +1148,87 @@
         "updatedSuccessfully": "Treballadors actualitzats correctament",
         "failedToLoad": "Error en carregar els treballadors",
         "failedToUpdate": "Error en actualitzar els treballadors"
+      },
+      "sensors": {
+        "title": {
+          "title": "Sensors",
+          "create": "Crear Sensor",
+          "edit": "Editar Sensor",
+          "delete": "Eliminar Sensor"
+        },
+        "loading": "Carregant dades del sensor...",
+        "backButton": "Torna enrere",
+        "notFound": "Sensor no trobat",
+        "loadError": "Error en carregar les dades del sensor.",
+        "identification": "Identificació",
+        "status": "Estat",
+        "soilMeasurements": "Mesures del sòl",
+        "fields": {
+          "id": "ID",
+          "dev_eui": "DevEUI",
+          "device_name": "Nom del dispositiu",
+          "bat": "Bateria",
+          "battery": "Bateria",
+          "rssi": "RSSI",
+          "snr": "SNR",
+          "last_seen": "Última actualització",
+          "temp_soil": "Temperatura del sòl",
+          "ph1_soil": "pH del sòl",
+          "water_soil": "Humitat del sòl",
+          "conductor_soil": "Conductivitat del sòl",
+          "eui": "DevEUI",
+          "name": "Nom del dispositiu",
+          "longitude": "Longitud",
+          "latitude": "Latitud"
+        },
+        "form": {
+          "title": {
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
+          },
+          "validation": {
+            "eui_required": "El EUI és obligatori",
+            "eui_min": "El EUI ha de tenir almenys 8 caràcters",
+            "eui_max": "El EUI ha de tenir menys de 32 caràcters",
+            "eui_format": "El EUI ha d'estar en format hexadecimal (0-9, a-f)",
+            "name_required": "El nom és obligatori",
+            "name_min": "El nom ha de tenir almenys 3 caràcters",
+            "name_max": "El nom ha de tenir menys de 50 caràcters",
+            "name_format": "El nom només pot contenir lletres, números, espais, guions i guions baixos",
+            "longitude_required": "La longitud és obligatòria",
+            "longitude_format": "Longitud no vàlida (ha de ser entre -180 i 180)",
+            "latitude_required": "La latitud és obligatòria",
+            "latitude_format": "Latitud no vàlida (ha de ser entre -90 i 90)"
+          },
+          "submitButton": {
+            "create": "Crear Sensor",
+            "edit": "Actualitzar Sensor"
+          },
+          "submittingText": {
+            "create": "Creant...",
+            "edit": "Actualitzant..."
+          }
+        },
+        "list": {
+          "messages": {
+            "createSuccess": "Sensor creat correctament",
+            "updateSuccess": "Sensor actualitzat correctament",
+            "euiTaken": "El EUI ja està en ús",
+            "error": "Error en guardar el sensor",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest sensor?",
+            "deleteError": "Error en eliminar el sensor",
+            "deletedSuccess": "Sensor eliminat correctament"
+          },
+          "actions": {
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
+          }
+        },
+        "errors": {
+          "no_contract": "Has de seleccionar un contracte vàlid"
+        }
       }
     }
   }

@@ -1169,6 +1169,88 @@
         "updatedSuccessfully": "Workers updated successfully",
         "failedToLoad": "Failed to load workers",
         "failedToUpdate": "Failed to update workers"
+      },
+
+      "sensors": {
+        "title": {
+          "title": "Sensors",
+          "create": "Create Sensor",
+          "edit": "Edit Sensor",
+          "delete": "Delete Sensor"
+        },
+        "loading": "Loading sensor data...",
+        "backButton": "Go back",
+        "notFound": "Sensor not found",
+        "loadError": "Error loading sensor data.",
+        "identification": "Identification",
+        "status": "Status",
+        "soilMeasurements": "Soil Measurements",
+        "fields": {
+          "id": "ID",
+          "dev_eui": "DevEUI",
+          "device_name": "Device Name",
+          "bat": "Battery",
+          "battery": "Battery",
+          "rssi": "RSSI",
+          "snr": "SNR",
+          "last_seen": "Last Seen",
+          "temp_soil": "Soil Temperature",
+          "ph1_soil": "Soil pH",
+          "water_soil": "Soil Moisture",
+          "conductor_soil": "Soil Conductivity",
+          "eui": "DevEUI",
+          "name": "Device Name",
+          "longitude": "Longitude",
+          "latitude": "Latitude"
+        },
+        "form": {
+          "title": {
+            "create": "Create Sensor",
+            "edit": "Edit Sensor",
+            "delete": "Delete Sensor"
+          },
+          "validation": {
+            "eui_required": "EUI is required",
+            "eui_min": "EUI must be at least 8 characters",
+            "eui_max": "EUI must be less than 32 characters",
+            "eui_format": "EUI must be in hexadecimal format (0-9, a-f)",
+            "name_required": "Name is required",
+            "name_min": "Name must be at least 3 characters",
+            "name_max": "Name must be less than 50 characters",
+            "name_format": "Name can only contain letters, numbers, spaces, dashes, and underscores",
+            "longitude_required": "Longitude is required",
+            "longitude_format": "Invalid longitude (must be between -180 and 180)",
+            "latitude_required": "Latitude is required",
+            "latitude_format": "Invalid latitude (must be between -90 and 90)"
+          },
+          "submitButton": {
+            "create": "Create Sensor",
+            "edit": "Update Sensor"
+          },
+          "submittingText": {
+            "create": "Creating...",
+            "edit": "Updating..."
+          }
+        },
+        "list": {
+          "messages": {
+            "createSuccess": "Sensor created successfully",
+            "updateSuccess": "Sensor updated successfully",
+            "euiTaken": "EUI is already in use",
+            "error": "Error saving sensor",
+            "deleteConfirm": "Are you sure you want to delete this sensor?",
+            "deleteError": "Error deleting sensor",
+            "deletedSuccess": "Sensor deleted successfully"
+          },
+          "actions": {
+            "create": "Create Sensor",
+            "edit": "Edit Sensor",
+            "delete": "Delete Sensor"
+          }
+        },
+        "errors": {
+          "no_contract": "You must select a valid contract"
+        }
       }
     }
   }

@@ -85,14 +85,14 @@ const Sensors: React.FC = () => {
   }, [location.state]);
 
   const handleDelete = async (sensorId: number) => {
-    if (!window.confirm(t('admin.pages.sensors.deleteConfirm'))) return;
+    if (!window.confirm(t('admin.pages.sensors.list.messages.deleteConfirm'))) return;
     try {
       await axiosClient.delete(`/admin/sensors/${sensorId}`);
       setSensors(sensors.filter((sensor) => sensor.id !== sensorId));
-      setSuccessMessage(t('admin.pages.sensors.deletedSuccess'));
+      setSuccessMessage(t('admin.pages.sensors.list.messages.deletedSuccess'));
     } catch (error) {
       console.error(error);
-      setError(t('admin.pages.sensors.deleteError'));
+      setError(t('admin.pages.sensors.list.messages.deleteError'));
     }
   };
 
@@ -103,12 +103,12 @@ const Sensors: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">
-          {t('admin.pages.sensors.title')}
+          {t('admin.pages.sensors.title.title')}
         </h1>
         <button
           onClick={() => navigate('/admin/sensors/create')}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
-          {t('admin.pages.sensors.createButton')}
+          {t('admin.pages.sensors.form.title.create')}
         </button>
       </div>
 
@@ -142,13 +142,13 @@ const Sensors: React.FC = () => {
                   <button
                     onClick={() => navigate(`/admin/sensors/edit/${sensor.id}`)}
                     className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
-                    title={t('admin.pages.sensors.editButton')}>
+                    title={t('admin.pages.sensors.form.title.edit')}>
                     <PencilIcon className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => handleDelete(sensor.id)}
                     className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer"
-                    title={t('admin.pages.sensors.deleteButton')}>
+                    title={t('admin.pages.sensors.form.title.delete')}>
                     <TrashIcon className="w-5 h-5" />
                   </button>
                 </div>
