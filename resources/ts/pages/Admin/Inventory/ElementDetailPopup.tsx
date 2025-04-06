@@ -4,6 +4,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { TabPanel, TabView } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
 import { Toast } from 'primereact/toast';
+import { Card } from 'primereact/card';
+import { Divider } from 'primereact/divider';
 import React, {
   useCallback,
   useEffect,
@@ -326,42 +328,72 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     const elementZone = getZoneElement(element.point_id);
     if (!elementZone) return [];
 
-    return workOrders.flatMap(
-      (workOrder) =>
-        workOrder.work_orders_blocks?.flatMap((block: WorkOrderBlock) => {
-          const zoneMatches = block.zones?.some(
-            (zone: { id: number }) => zone.id === elementZone.id,
-          );
-
-          if (zoneMatches) {
-            return (
-              block.block_tasks?.map((task: WorkOrderBlockTask) => ({
-                workOrderId: workOrder.id,
-                workOrderStatus: workOrder.status,
-                taskType: task.tasks_type,
-                notes: block.notes,
-              })) || []
-            );
+    const filteredTasks = [];
+    
+    for (const workOrder of workOrders) {
+      if (workOrder.work_orders_blocks && workOrder.work_orders_blocks.length > 0) {
+        for (const block of workOrder.work_orders_blocks) {
+          const blockIncludesElementZone = block.zones?.some(zone => zone.id === elementZone.id) || false;
+          
+          if (blockIncludesElementZone && block.block_tasks && block.block_tasks.length > 0) {
+            for (const task of block.block_tasks) {
+              const elementTypeMatches = task.element_type.id === element.element_type_id;
+              
+              let treeTypeMatches = true;
+              if (element.tree_type_id) {
+                treeTypeMatches = task.tree_type ? task.tree_type.id === element.tree_type_id : false;
+              }
+              
+              if (elementTypeMatches && treeTypeMatches) {
+                filteredTasks.push({
+                  workOrderId: workOrder.id,
+                  workOrderDate: workOrder.date,
+                  taskName: task.tasks_type?.name || 'Desconocido',
+                  taskDescription: task.tasks_type?.description || '',
+                  status: task.status !== undefined ? task.status : 0,
+                  spentTime: task.spent_time !== undefined ? task.spent_time : 0,
+                  users: workOrder.users || [],
+                  workOrderStatus: workOrder.status
+                });
+              }
+            }
           }
-          return [];
-        }) || [],
-    );
-  }, [element.point_id, getZoneElement, workOrders]);
-
-  const getBadgeClass = useCallback((status: number): string => {
-    switch (status) {
-      case WorkOrderStatus.NOT_STARTED:
-        return 'bg-yellow-500 text-white px-2 py-1 rounded';
-      case WorkOrderStatus.IN_PROGRESS:
-        return 'bg-blue-500 text-white px-2 py-1 rounded';
-      case WorkOrderStatus.COMPLETED:
-        return 'bg-green-500 text-white px-2 py-1 rounded';
-      case WorkOrderStatus.REPORT_SENT:
-        return 'bg-red-500 text-white px-2 py-1 rounded';
-      default:
-        return 'bg-gray-500 text-white px-2 py-1 rounded';
+        }
+      }
     }
-  }, []);
+    
+    return filteredTasks;
+  }, [element, getZoneElement, workOrders]);
+
+  const getStatusLabel = (status: number) => {
+    const statuses = {
+      0: 'Pendiente',
+      1: 'En progreso',
+      2: 'Completado',
+    };
+    
+    return statuses[status as keyof typeof statuses] || 'Desconocido';
+  };
+
+  const getStatusSeverity = (status: number): 'danger' | 'warning' | 'success' | 'info' => {
+    const severities: Record<number, 'danger' | 'warning' | 'success'> = {
+      0: 'danger',
+      1: 'warning',
+      2: 'success',
+    };
+    
+    return severities[status as keyof typeof severities] || 'info';
+  };
+
+  const getStatusIcon = (status: number) => {
+    const icons = {
+      0: 'mdi:clock-outline',
+      1: 'mdi:progress-clock',
+      2: 'mdi:check-circle-outline'
+    };
+    
+    return icons[status as keyof typeof icons] || 'mdi:help-circle-outline';
+  };
 
   const handleEvaCreated = useCallback((newEva: Eva) => {
     setEva(newEva);
@@ -869,67 +901,87 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
         <TabPanel
           header={t('admin.pages.inventory.elementDetailPopup.tabs.history')}>
-          <div>
-            <h1>
-              {t('admin.pages.inventory.elementDetailPopup.history.title')}
-            </h1>
+          <div className="p-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Historial de Tareas</h2>
+            </div>
+            
             {isLoading ? (
-              <div className="flex justify-center">
+              <div className="flex justify-center my-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
               </div>
             ) : tasksForElement.length > 0 ? (
-              tasksForElement.map((taskInfo, index) => (
-                <div key={index} className="border p-4 rounded-md mb-4">
-                  <h4 className="font-semibold">
-                    {t(
-                      'admin.pages.inventory.elementDetailPopup.history.notes',
+              <div className="space-y-4">
+                {tasksForElement.map((task, index) => (
+                  <Card 
+                    key={index} 
+                    className="shadow-sm border-1 border-gray-200"
+                    header={(
+                      <div className="flex items-center justify-between p-3 bg-gray-50 border-bottom-1 border-gray-200">
+                        <div className="flex items-center gap-2">
+                          <span className="iconify text-xl text-blue-600" data-icon="mdi:water"></span>
+                          <h3 className="m-0 text-lg font-semibold">Nombre: Regar</h3>
+                        </div>
+                        <Tag 
+                          value={getStatusLabel(task.status)} 
+                          severity={getStatusSeverity(task.status)}
+                          icon={getStatusIcon(task.status)}
+                          className="px-3"
+                        />
+                      </div>
                     )}
-                    : {taskInfo.notes ?? t('general.no_notes')}
-                  </h4>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.history.task',
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="iconify text-blue-500" data-icon="mdi:calendar"></span>
+                          <span className="font-medium">Fecha:</span>
+                          <span>{formatDate(task.workOrderDate)}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="iconify text-blue-500" data-icon="mdi:file-document-outline"></span>
+                          <span className="font-medium">Orden:</span>
+                          <span>{task.workOrderId}</span>
+                        </div>
+                        
+                        {task.spentTime > 0 && (
+                          <div className="flex items-center gap-2">
+                            <span className="iconify text-blue-500" data-icon="mdi:clock-time-five-outline"></span>
+                            <span className="font-medium">Horas dedicadas:</span>
+                            <span>{task.spentTime}h</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {task.users && task.users.length > 0 && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="iconify text-blue-500" data-icon="mdi:account-group"></span>
+                            <span className="font-medium">Trabajadores:</span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {task.users.map(user => (
+                              <div 
+                                key={user.id} 
+                                className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
+                              >
+                                <span className="iconify" data-icon="mdi:account"></span>
+                                {user.name} {user.surname}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       )}
-                      :
-                    </strong>{' '}
-                    {taskInfo.taskType?.name}
-                  </p>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.history.description',
-                      )}
-                      :
-                    </strong>{' '}
-                    {taskInfo.taskType?.description}
-                  </p>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.history.workOrder',
-                      )}
-                      :
-                    </strong>{' '}
-                    {taskInfo.workOrderId}
-                  </p>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.history.status',
-                      )}
-                      :
-                    </strong>{' '}
-                    <span className={getBadgeClass(taskInfo.workOrderStatus!)}>
-                      {WorkOrderStatus[taskInfo.workOrderStatus!]}
-                    </span>
-                  </p>
-                </div>
-              ))
+                    </div>
+                  </Card>
+                ))}
+              </div>
             ) : (
-              <p>
-                {t('admin.pages.inventory.elementDetailPopup.history.noTasks')}
-              </p>
+              <div className="text-center py-8 bg-gray-50 rounded-lg">
+                <span className="iconify text-gray-400 text-4xl mb-2" data-icon="mdi:calendar-blank"></span>
+                <p className="text-gray-500 font-medium">No hay historial de tareas para este elemento</p>
+              </div>
             )}
           </div>
         </TabPanel>
@@ -940,7 +992,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         </TabPanel>
       </TabView>
 
-      {/* Modals for EVA */}
       {isEvaModalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
