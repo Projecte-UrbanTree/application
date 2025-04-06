@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Button } from 'primereact/button';
+import { ColorPicker } from 'primereact/colorpicker';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -13,7 +14,7 @@ import { deleteZone } from '@/api/service/zoneService';
 import Preloader from '@/components/Preloader';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
-import { fetchZonesAsync } from '@/store/slice/zoneSlice';
+import { fetchZonesAsync, updateZoneAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
@@ -67,6 +68,8 @@ export const Zones = ({
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(null);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
+  const [editingZone, setEditingZone] = useState<Zone | null>(null);
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -260,6 +263,27 @@ export const Zones = ({
     [hiddenZones],
   );
 
+  const handleColorChange = useCallback(async (zone: Zone, newColor: string) => {
+    try {
+      await dispatch(updateZoneAsync({
+        id: zone.id!,
+        data: { ...zone, color: newColor }
+      })).unwrap();
+      
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Color actualizado correctamente'
+      });
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo actualizar el color'
+      });
+    }
+  }, [dispatch]);
+
   const renderElementTypeItem = useCallback(
     (elementType: ElementType, zone: Zone, count: number) => {
       const key = `${zone.id}-${elementType.id}`;
@@ -353,11 +377,17 @@ export const Zones = ({
                 header={
                   <div className="flex justify-between items-center w-full">
                     <div className="flex items-center gap-2">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: zone.color || 'gray' }}
-                      />
-                      <span className="text-sm font-medium">{zone.name}</span>
+                      <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                        <ColorPicker
+                          value={zone.color?.replace('#', '') || '088'}
+                          onChange={(e) => handleColorChange(zone, `#${e.value}`)}
+                          className="w-2rem h-2rem"
+                          inline={false}
+                          format="hex"
+                          appendTo={document.body}
+                        />
+                        <span className="text-sm font-medium">{zone.name}</span>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button
@@ -367,8 +397,6 @@ export const Zones = ({
                           e.stopPropagation();
                           toggleZoneVisibility(zone.id!);
                         }}
-                        tooltip="Mostrar/Ocultar zona"
-                        tooltipOptions={{ position: 'top' }}
                       />
                       <Button
                         icon={<Icon icon="mdi:map-marker" width="20" />}
@@ -377,8 +405,6 @@ export const Zones = ({
                           e.stopPropagation();
                           onSelectedZone(zone);
                         }}
-                        tooltip="Centrar en mapa"
-                        tooltipOptions={{ position: 'top' }}
                       />
                     </div>
                   </div>

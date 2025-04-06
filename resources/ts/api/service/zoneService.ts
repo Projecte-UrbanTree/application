@@ -13,14 +13,13 @@ export interface SaveZoneForm {
 }
 
 export const saveZone = async (data: Zone): Promise<Zone> => {
-  try {
-    console.log('Guardando zona:', data);
-    const response = await axiosClient.post(`/admin/zones`, data);
-    return response.data;
-  } catch (error) {
-    console.error('Error al guardar la zona', error);
-    throw error;
-  }
+  const response = await axiosClient.post(`/admin/zones`, data);
+  return response.data;
+};
+
+export const updateZone = async (id: number, data: Zone): Promise<Zone> => {
+  const response = await axiosClient.put(`/admin/zones/${id}`, data);
+  return response.data;
 };
 
 export const deleteZone = async (zoneId: number): Promise<void> => {
