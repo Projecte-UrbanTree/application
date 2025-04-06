@@ -11,7 +11,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Tag } from 'primereact/tag';
 import { Toast } from 'primereact/toast';
-import { useCallback,useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -20,11 +20,18 @@ import axiosClient from '@/api/axiosClient';
 import { RootState } from '@/store/store';
 import { WorkOrder, WorkOrderStatus } from '@/types/WorkOrders';
 
-// Task status constants
 const TASK_STATUS = {
   PENDING: 0,
   IN_PROGRESS: 1,
   COMPLETED: 2
+};
+
+type SelectedResource = {
+  resource: {
+    id: number;
+    name: string;
+  };
+  quantity: number;
 };
 
 const WorkerWorkOrders = () => {
@@ -35,13 +42,27 @@ const WorkerWorkOrders = () => {
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingTask, setUpdatingTask] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [activeIndexes, setActiveIndexes] = useState<number[]>([]);
   
   // For task completion dialog
   const [showTimeDialog, setShowTimeDialog] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [spentTime, setSpentTime] = useState<number>(0);
+  
+  // For resources dialog and reporting
+  const [showResourcesDialog, setShowResourcesDialog] = useState(false);
+  const [selectedResources, setSelectedResources] = useState<SelectedResource[]>([]);
+  const [selectedWorkOrderId, setSelectedWorkOrderId] = useState<number | null>(null);
+  
+  // For block accordions
+  const [expandedBlocks, setExpandedBlocks] = useState<Record<string, boolean>>({});
+
+  const getStoredDate = (): Date => {
+    const storedDate = localStorage.getItem('selectedWorkOrderDate');
+    return storedDate ? new Date(storedDate) : new Date();
+  };
+
+  const [selectedDate, setSelectedDate] = useState<Date>(getStoredDate());
 
   const formatDateForAPI = (date: Date): string => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -55,7 +76,6 @@ const WorkerWorkOrders = () => {
       const formattedDate = formatDateForAPI(date);
       const response = await axiosClient.get(`/worker/work-orders?date=${formattedDate}`);
       setWorkOrders(response.data);
-      // Expand all work orders by default
       setActiveIndexes(Array.from({ length: response.data.length }, (_, i) => i));
     } catch (error) {
       console.error('Error fetching work orders:', error);
@@ -72,9 +92,11 @@ const WorkerWorkOrders = () => {
     fetchWorkOrders(selectedDate);
   }, [fetchWorkOrders, selectedDate]);
 
-  const handleDateChange = (e: { value: Date | Date[] | null }) => {
-    if (e.value && !Array.isArray(e.value)) {
-      setSelectedDate(e.value);
+  const handleDateChange = (event: any) => {
+    if (event.value && !Array.isArray(event.value)) {
+      const newDate = event.value;
+      setSelectedDate(newDate);
+      localStorage.setItem('selectedWorkOrderDate', newDate.toISOString());
     }
   };
 
@@ -112,6 +134,12 @@ const WorkerWorkOrders = () => {
     );
   };
 
+  const openResourcesDialog = (workOrderId: number) => {
+    setSelectedWorkOrderId(workOrderId);
+    setSelectedResources([]);
+    setShowResourcesDialog(true);
+  };
+
   const handleCreateReport = async (workOrderId: number) => {
     if (selectedResources.length === 0) {
       toast.current?.show({
@@ -140,7 +168,7 @@ const WorkerWorkOrders = () => {
       });
   
       setShowResourcesDialog(false);
-      fetchWorkOrders(selectedDate); // Refresh work orders
+      fetchWorkOrders(selectedDate);
     } catch (error: any) {
       console.error('Error creating work report:', error);
       toast.current?.show({
@@ -152,7 +180,6 @@ const WorkerWorkOrders = () => {
   };
 
   const handleTaskAction = (task: any, action: 'start' | 'complete' | 'reopen') => {
-    // Don't allow actions if the work order is already completed or has a report
     const workOrder = workOrders.find(wo => 
       wo.work_orders_blocks?.some(block => 
         block.block_tasks?.some(t => t.id === task.id)
@@ -195,23 +222,19 @@ const WorkerWorkOrders = () => {
       
       const response = await axiosClient.put(`/worker/task/${taskId}/status`, data);
       
-      // Success message
       toast.current?.show({
         severity: 'success',
         summary: t('general.success'),
         detail: t('worker.workOrders.taskUpdated'),
       });
       
-      // Update local state
       setWorkOrders(prevWorkOrders => {
         return prevWorkOrders.map(wo => {
-          // Check if this work order contains the updated task
           const hasUpdatedTask = wo.work_orders_blocks?.some(block => 
             block.block_tasks?.some(task => task.id === taskId)
           );
           
           if (hasUpdatedTask) {
-            // Update the task status
             const updatedBlocks = wo.work_orders_blocks?.map(block => {
               const updatedTasks = block.block_tasks?.map(task => {
                 if (task.id === taskId) {
@@ -226,7 +249,6 @@ const WorkerWorkOrders = () => {
               return { ...block, block_tasks: updatedTasks };
             });
             
-            // Update work order status if it changed
             return { 
               ...wo, 
               work_orders_blocks: updatedBlocks,
@@ -256,7 +278,7 @@ const WorkerWorkOrders = () => {
             summary: t('general.success'),
             detail: t('worker.workOrders.messages.taskUpdated'),
         });
-        fetchWorkOrders(selectedDate); // Refresh work orders
+        fetchWorkOrders(selectedDate);
     } catch (error: any) {
         console.error('Error reopening task:', error);
         toast.current?.show({
@@ -265,7 +287,14 @@ const WorkerWorkOrders = () => {
             detail: error.response?.data?.message || t('worker.workOrders.errors.taskUpdateFailed'),
         });
     }
-};
+  };
+  
+  const toggleBlockAccordion = (blockId: string) => {
+    setExpandedBlocks(prev => ({
+      ...prev,
+      [blockId]: !prev[blockId]
+    }));
+  };
 
   const renderTaskList = (block: any) => {
     return (
@@ -298,9 +327,9 @@ const WorkerWorkOrders = () => {
           return (
             <div 
               key={task.id} 
-              className={`p-4 ${taskCardClass} border ${taskBorderClass} rounded-lg shadow-sm transition-all hover:shadow-md`}
+              className={`p-3 ${taskCardClass} border ${taskBorderClass} rounded-lg shadow-sm transition-all hover:shadow-md`}
             >
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
                   <div className="font-medium text-gray-800 flex items-center gap-2">
                     <Icon icon={task.element_type?.icon || "tabler:help"} className="text-indigo-600" />
@@ -313,18 +342,18 @@ const WorkerWorkOrders = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
                   <Tag 
                     value={statusLabel} 
                     icon={statusIcon} 
                     severity={statusSeverity}
-                    className="px-3 py-2 font-medium"
+                    className="px-2 py-1 font-medium flex-grow sm:flex-grow-0"
                   />
                   <div className="flex gap-1">
                     {task.status === TASK_STATUS.PENDING && (
                       <Button
                         icon="pi pi-play"
-                        className="p-button-rounded p-button-warning"
+                        className="p-button-rounded p-button-warning p-button-sm"
                         tooltip={t('worker.workOrders.startTask')}
                         tooltipOptions={{ position: 'top' }}
                         disabled={updatingTask}
@@ -334,7 +363,7 @@ const WorkerWorkOrders = () => {
                     {task.status === TASK_STATUS.IN_PROGRESS && (
                       <Button
                         icon="pi pi-check"
-                        className="p-button-rounded p-button-success"
+                        className="p-button-rounded p-button-success p-button-sm"
                         tooltip={t('worker.workOrders.completeTask')}
                         tooltipOptions={{ position: 'top' }}
                         disabled={updatingTask}
@@ -344,11 +373,11 @@ const WorkerWorkOrders = () => {
                     {task.status === TASK_STATUS.COMPLETED && (
                       <Button
                         icon="pi pi-undo"
-                        className="p-button-rounded p-button-outlined p-button-secondary"
+                        className="p-button-rounded p-button-outlined p-button-secondary p-button-sm"
                         tooltip={t('worker.workOrders.reopenTask')}
                         tooltipOptions={{ position: 'top' }}
                         disabled={updatingTask}
-                        onClick={() => handleReopenTask(task.id)}
+                        onClick={() => handleTaskAction(task, 'reopen')}
                       />
                     )}
                   </div>
@@ -382,13 +411,13 @@ const WorkerWorkOrders = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-3 sm:p-4">
       <Toast ref={toast} />
       
       <Dialog
         header={t('worker.workOrders.timeSpentDialog')}
         visible={showTimeDialog}
-        style={{ width: '450px' }}
+        style={{ width: '90%', maxWidth: '450px' }}
         modal
         footer={timeDialogFooter}
         onHide={() => setShowTimeDialog(false)}
@@ -411,14 +440,37 @@ const WorkerWorkOrders = () => {
         </div>
       </Dialog>
 
+      <Dialog
+        header={t('worker.workOrders.resources')}
+        visible={showResourcesDialog}
+        style={{ width: '90%', maxWidth: '500px' }}
+        modal
+        onHide={() => setShowResourcesDialog(false)}
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button label={t('general.cancel')} icon="pi pi-times" className="p-button-text" onClick={() => setShowResourcesDialog(false)} />
+            <Button 
+              label={t('worker.workOrders.createReport')} 
+              icon="pi pi-check" 
+              className="p-button-success"
+              onClick={() => selectedWorkOrderId && handleCreateReport(selectedWorkOrderId)} 
+            />
+          </div>
+        }
+      >
+        <div className="p-3">
+          {/* Resources selection UI would be implemented here */}
+        </div>
+      </Dialog>
+
       <Card className="mb-4 shadow-md border border-gray-200">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
             <Icon icon="tabler:clipboard-list" className="text-indigo-600" width={24} />
             {t('worker.workOrders.title')}
           </h2>
           
-          <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-md border border-gray-200">
+          <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-md border border-gray-200 w-full sm:w-auto">
             <label htmlFor="date-picker" className="font-medium text-gray-700 flex items-center gap-1">
               <Icon icon="tabler:calendar" className="text-indigo-600" />
               {t('worker.workOrders.selectDate')}:
@@ -429,7 +481,8 @@ const WorkerWorkOrders = () => {
               onChange={handleDateChange}
               showIcon
               dateFormat="dd/mm/yy"
-              className="w-auto"
+              className="w-full sm:w-auto"
+              touchUI
             />
           </div>
         </div>
@@ -459,91 +512,112 @@ const WorkerWorkOrders = () => {
               headerClassName="bg-white hover:bg-gray-50"
               contentClassName="bg-gray-50 border-t border-gray-200"
               header={
-                <div className="flex items-center justify-between w-full py-2">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full py-2 gap-2">
                   <div className="flex items-center gap-3">
-                    <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-md font-bold">
+                    <div className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-md font-bold text-sm">
                       OT-{workOrder.id}
                     </div>
                     {getStatusBadge(workOrder.status)}
                   </div>
-                  <div className="hidden md:flex items-center gap-2">
-                    {workOrder.users?.slice(0, 2).map(user => (
+                  <div className="flex flex-wrap gap-1">
+                    {workOrder.users?.map(user => (
                       <Chip 
                         key={user.id} 
                         label={`${user.name} ${user.surname}`} 
-                        className="bg-indigo-50 text-indigo-700 font-medium"
+                        className="bg-indigo-50 text-indigo-700 font-medium text-xs sm:text-sm"
                       />
                     ))}
-                    {workOrder.users && workOrder.users.length > 2 && (
-                      <Chip 
-                        label={`+${workOrder.users.length - 2}`}
-                        className="bg-gray-100 text-gray-700 font-medium"
-                      />
-                    )}
                   </div>
                 </div>
               }
             >
-              <div className="p-5 rounded-md">
-                {workOrder.work_orders_blocks?.map((block, blockIndex) => (
-                  <div key={blockIndex} className="mb-6 last:mb-0">
-                    <div className="flex items-center gap-2 mb-4 bg-white p-3 rounded-md shadow-sm border border-gray-200">
-                      <Icon icon="tabler:layout-grid" className="text-indigo-600" width={20} />
-                      <h4 className="text-lg font-medium text-gray-800">
-                        {t('worker.workOrders.block')} {blockIndex + 1}
-                      </h4>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-                      <div className="bg-white p-4 rounded-md border border-gray-200 shadow-sm">
-                        <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1">
-                          <Icon icon="tabler:map-pin" className="text-indigo-600" />
-                          {t('worker.workOrders.zones')}
-                        </h5>
-                        <div className="flex flex-wrap gap-2">
-                          {block.zones?.length > 0 ? (
-                            block.zones.map((zone: any) => (
-                              <Tag 
-                                key={zone.id} 
-                                value={zone.name} 
-                                className="bg-blue-50 text-blue-700 border border-blue-200"
-                              />
-                            ))
-                          ) : (
-                            <span className="text-gray-500 italic">{t('worker.workOrders.noZones')}</span>
-                          )}
+              <div className="p-3 sm:p-5 rounded-md">
+                {workOrder.work_orders_blocks?.map((block, blockIndex) => {
+                  const blockId = `${workOrder.id}-${blockIndex}`;
+                  const isBlockExpanded = expandedBlocks[blockId] !== false;
+                  
+                  return (
+                    <div key={blockIndex} className="mb-6 last:mb-0">
+                      <div 
+                        className="flex items-center justify-between gap-2 mb-2 bg-white p-3 rounded-md shadow-sm border border-gray-200 cursor-pointer"
+                        onClick={() => toggleBlockAccordion(blockId)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon icon="tabler:layout-grid" className="text-indigo-600" width={20} />
+                          <h4 className="text-lg font-medium text-gray-800">
+                            {t('worker.workOrders.block')} {blockIndex + 1}
+                          </h4>
                         </div>
+                        <Icon 
+                          icon={isBlockExpanded ? "tabler:chevron-up" : "tabler:chevron-down"} 
+                          className="text-gray-600" 
+                          width={20} 
+                        />
                       </div>
                       
-                      {block.notes && (
-                        <div className="bg-white p-4 rounded-md border border-gray-200 shadow-sm">
-                          <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1">
-                            <Icon icon="tabler:notes" className="text-indigo-600" />
-                            {t('worker.workOrders.notes')}
-                          </h5>
-                          <p className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-200">
-                            {block.notes}
-                          </p>
-                        </div>
+                      {isBlockExpanded && (
+                        <>
+                          <div className="grid grid-cols-1 gap-4 mb-4">
+                            <div className="bg-white p-3 rounded-md border border-gray-200 shadow-sm">
+                              <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                                <Icon icon="tabler:map-pin" className="text-indigo-600" />
+                                {t('worker.workOrders.zones')}
+                              </h5>
+                              <div className="flex flex-wrap gap-2">
+                                {block.zones?.length > 0 ? (
+                                  block.zones.map((zone: any) => (
+                                    <Tag 
+                                      key={zone.id} 
+                                      value={zone.name} 
+                                      className="bg-blue-50 text-blue-700 border border-blue-200"
+                                    />
+                                  ))
+                                ) : (
+                                  <span className="text-gray-500 italic text-sm">{t('worker.workOrders.noZones')}</span>
+                                )}
+                              </div>
+                            </div>
+                            
+                            {block.notes && (
+                              <div className="bg-white p-3 rounded-md border border-gray-200 shadow-sm">
+                                <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                                  <Icon icon="tabler:notes" className="text-indigo-600" />
+                                  {t('worker.workOrders.notes')}
+                                </h5>
+                                <p className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-200 text-sm">
+                                  {block.notes}
+                                </p>
+                              </div>
+                            )}
+                            
+                            <div className="bg-white p-3 rounded-md border border-gray-200 shadow-sm">
+                              <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                                <Icon icon="tabler:list-check" className="text-indigo-600" />
+                                {t('worker.workOrders.tasks')}
+                              </h5>
+                              {renderTaskList(block)}
+                            </div>
+                          </div>
+                        </>
                       )}
                     </div>
-                    
-                    <div className="bg-white p-4 rounded-md border border-gray-200 shadow-sm mb-4">
-                      <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1">
-                        <Icon icon="tabler:list-check" className="text-indigo-600" />
-                        {t('worker.workOrders.tasks')}
-                      </h5>
-                      {renderTaskList(block)}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
                 
-                <div className="mt-6 flex justify-end">
+                <div className="mt-4 flex justify-end gap-2">
+                  {workOrder.status === WorkOrderStatus.IN_PROGRESS && (
+                    <Button 
+                      label={t('worker.workOrders.report')}
+                      icon="pi pi-file-edit"
+                      onClick={() => openResourcesDialog(workOrder.id)}
+                      className="p-button-success p-button-sm"
+                    />
+                  )}
                   <Button 
                     label={t('worker.workOrders.viewDetails')}
                     icon="pi pi-eye"
                     onClick={() => navigate(`/work-orders/${workOrder.id}`)}
-                    className="p-button-outlined p-button-raised"
+                    className="p-button-outlined p-button-sm"
                     disabled={workOrder.status === WorkOrderStatus.NOT_STARTED}
                   />
                 </div>
