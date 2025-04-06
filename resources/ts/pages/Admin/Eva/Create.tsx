@@ -83,7 +83,7 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
 };
 
 interface CreateEvaProps {
-  preselectedElementId: number;
+  preselectedElementId: number | null;
   onClose: () => void;
   redirectPath?: string;
 }

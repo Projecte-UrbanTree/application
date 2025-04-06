@@ -7,11 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export default function CreateSensor() {
   const navigate = useNavigate();
   const toast = useRef<Toast>(null);
-  
+  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+
   const initialValues = {
     dev_eui: '',
     dev_name: '',
@@ -27,22 +30,35 @@ export default function CreateSensor() {
   });
 
   const handleSubmit = async (values: typeof initialValues, { setSubmitting }: any) => {
+    if (!currentContract?.id) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Debe seleccionar un contrato válido',
+        life: 5000,
+      });
+      setSubmitting(false);
+      return;
+    }
+
     try {
-      // Convertir a número solo si tiene valor
       const payload = {
-        dev_eui: values.dev_eui,
-        dev_name: values.dev_name,
+        eui: values.dev_eui.trim(),
+        name: values.dev_name.trim(),
         longitude: values.longitude ? parseFloat(values.longitude) : null,
         latitude: values.latitude ? parseFloat(values.latitude) : null,
+        contract_id: currentContract.id,
       };
 
+      console.log('Payload:', payload);
+
       await axiosClient.post('/admin/sensors', payload);
-      
+
       toast.current?.show({
         severity: 'success',
         summary: 'Success',
         detail: 'Sensor created successfully!',
-        life: 3000
+        life: 3000,
       });
 
       setTimeout(() => {
@@ -50,10 +66,10 @@ export default function CreateSensor() {
           state: { success: 'Sensor created successfully!' },
         });
       }, 1000);
-
     } catch (error: any) {
       console.error('Error creating sensor:', error);
-      
+      console.error('Server Response:', error.response?.data);
+
       let errorMessage = 'Failed to create sensor';
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
@@ -63,7 +79,7 @@ export default function CreateSensor() {
         severity: 'error',
         summary: 'Error',
         detail: errorMessage,
-        life: 5000
+        life: 5000,
       });
     } finally {
       setSubmitting(false);
@@ -119,7 +135,7 @@ export default function CreateSensor() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col">
-                    <label className="text-sm font-medium">Longitude (optional)</label>
+                    <label className="text-sm font-medium">Longitude</label>
                     <Field
                       name="longitude"
                       as={InputText}
@@ -128,7 +144,7 @@ export default function CreateSensor() {
                   </div>
 
                   <div className="flex flex-col">
-                    <label className="text-sm font-medium">Latitude (optional)</label>
+                    <label className="text-sm font-medium">Latitude</label>
                     <Field
                       name="latitude"
                       as={InputText}

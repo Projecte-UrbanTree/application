@@ -55,14 +55,23 @@ class SensorController extends Controller
             return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
         }
 
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'eui' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'longitude' => 'nullable|numeric',
+            'latitude' => 'nullable|numeric',
+        ]);
+
         $validated['contract_id'] = $contractId;
 
         try {
             $sensor = Sensor::create($validated);
             return response()->json($sensor, 201);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Error al crear el sensor'], 500);
+            return response()->json([
+                'message' => 'Error al crear el sensor',
+                'error' => $th->getMessage(),
+            ], 500);
         }
     }
 

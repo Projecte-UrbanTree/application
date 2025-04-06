@@ -1,4 +1,5 @@
 import axiosClient from '@/api/axiosClient';
+import { Sensor } from '@/api/sensors';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
@@ -13,8 +14,7 @@ export default function EditSensor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [initialValues, setInitialValues] = useState<Sensor>({
-    id: 0,
+  const [initialValues, setInitialValues] = useState({
     eui: '',
     name: '',
     longitude: '',
@@ -26,7 +26,12 @@ export default function EditSensor() {
     const fetchData = async () => {
       try {
         const { data } = await axiosClient.get(`/admin/sensors/${id}/edit`);
-        setInitialValues(data.sensor);
+        setInitialValues({
+          eui: data.sensor.dev_eui,
+          name: data.sensor.device_name,
+          longitude: data.sensor.longitude?.toString() || '',
+          latitude: data.sensor.latitude?.toString() || '',
+        });
       } catch (error) {
         console.error(error);
       } finally {
@@ -128,7 +133,23 @@ export default function EditSensor() {
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
-
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.latitude')}
+                  </label>
+                  <Field
+                    name="latitude"
+                    as={InputText}
+                    placeholder={t('admin.fields.latitude')}
+                    className={
+                      errors.latitude && touched.latitude ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.latitude && touched.latitude && (
+                    <small className="p-error">{errors.latitude}</small>
+                  )}
+                </div>
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
@@ -147,23 +168,7 @@ export default function EditSensor() {
                   )}
                 </div>
 
-                <div className="flex flex-col">
-                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
-                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.latitude')}
-                  </label>
-                  <Field
-                    name="latitude"
-                    as={InputText}
-                    placeholder={t('admin.fields.latitude')}
-                    className={
-                      errors.latitude && touched.latitude ? 'p-invalid' : ''
-                    }
-                  />
-                  {errors.latitude && touched.latitude && (
-                    <small className="p-error">{errors.latitude}</small>
-                  )}
-                </div>
+                
 
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <Button

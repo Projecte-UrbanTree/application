@@ -72,7 +72,7 @@ const AdminRoutes: RouteObject[] = [
             path: 'evas/create',
             element: (
               <AdminLayout titleI18n="admin.pages.evas.create.title">
-                <CreateEva />
+                <CreateEva preselectedElementId={null} onClose={() => {}} />
               </AdminLayout>
             ),
           },
