@@ -50,23 +50,29 @@ class SensorController extends Controller
      */
     public function store(Request $request)
     {
-        $contractId = $request->session()->get('selected_contract_id', null);
-        if ($contractId <= 0) {
+        $contractId = $request->input('contract_id', $request->session()->get('selected_contract_id', null));
+
+        if (empty($contractId) || $contractId <= 0) {
             return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
         }
 
-        $validated = $request->validate([
-            'eui' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'longitude' => 'nullable|numeric',
-            'latitude' => 'nullable|numeric',
-        ]);
-
-        $validated['contract_id'] = $contractId;
-
         try {
+            $validated = $request->validate([
+                'eui' => 'required|string|max:255|unique:sensors,eui',
+                'name' => 'required|string|max:255',
+                'longitude' => 'nullable|numeric',
+                'latitude' => 'nullable|numeric',
+            ]);
+
+            $validated['contract_id'] = $contractId;
+
             $sensor = Sensor::create($validated);
             return response()->json($sensor, 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors(),
+            ], 422);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Error al crear el sensor',

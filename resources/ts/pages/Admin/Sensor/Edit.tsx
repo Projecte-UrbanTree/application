@@ -1,19 +1,21 @@
 import axiosClient from '@/api/axiosClient';
-import { Sensor } from '@/api/sensors';
 import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditSensor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState({
     eui: '',
     name: '',
@@ -21,14 +23,15 @@ export default function EditSensor() {
     latitude: '',
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axiosClient.get(`/admin/sensors/${id}/edit`);
         setInitialValues({
-          eui: data.sensor.dev_eui,
-          name: data.sensor.device_name,
+          eui: data.sensor.eui || '',
+          name: data.sensor.name || '',
           longitude: data.sensor.longitude?.toString() || '',
           latitude: data.sensor.latitude?.toString() || '',
         });
@@ -43,74 +46,74 @@ export default function EditSensor() {
 
   const validationSchema = Yup.object({
     eui: Yup.string()
-      .required(t('admin.pages.sensors.form.validation.eui_required'))
-      .max(255, t('admin.pages.sensors.form.validation.eui_max')),
+      .required(t('admin.pages.sensors.form.validation.eui_required', 'EUI is required'))
+      .max(255, t('admin.pages.sensors.form.validation.eui_max', 'EUI must be less than 255 characters')),
     name: Yup.string()
-      .required(t('admin.pages.sensors.form.validation.name_required'))
-      .max(255, t('admin.pages.sensors.form.validation.name_max')),
+      .required(t('admin.pages.sensors.form.validation.name_required', 'Name is required'))
+      .max(255, t('admin.pages.sensors.form.validation.name_max', 'Name must be less than 255 characters')),
     longitude: Yup.string().nullable(),
     latitude: Yup.string().nullable(),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
+    setIsSubmitting(true);
     try {
       const data = { ...values };
       await axiosClient.put(`/admin/sensors/${id}`, data);
-      navigate('/admin/sensors', {
-        state: {
-          success: t('admin.pages.sensors.list.messages.updateSuccess'),
-        },
-      });
+      showToast(
+        'success',
+        t('admin.pages.sensors.list.messages.updateSuccess', 'Sensor updated successfully')
+      );
+      navigate('/admin/sensors');
     } catch (error) {
-      navigate('/admin/sensors', {
-        state: { error: t('admin.pages.sensors.list.messages.error') },
-      });
+      showToast('error', t('admin.pages.sensors.list.messages.error', 'Error updating sensor'));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
+      <div className="flex justify-center p-4">
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/sensors')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.sensors.form.title.edit')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/sensors')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.sensors.form.title.edit', 'Edit Sensor')}
+        </h2>
+      </div>
+
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
             enableReinitialize>
-            {({ errors, touched, isSubmitting }) => (
-              <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {({ errors, touched }) => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:device" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.eui')}
+                    {t('admin.fields.eui', 'EUI')}
                   </label>
                   <Field
                     name="eui"
                     as={InputText}
-                    placeholder={t('admin.fields.eui')}
+                    placeholder={t('admin.fields.eui', 'EUI')}
                     className={errors.eui && touched.eui ? 'p-invalid' : ''}
                   />
                   {errors.eui && touched.eui && (
@@ -121,67 +124,62 @@ export default function EditSensor() {
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:note" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.name')}
+                    {t('admin.fields.name', 'Name')}
                   </label>
                   <Field
                     name="name"
                     as={InputText}
-                    placeholder={t('admin.fields.name')}
+                    placeholder={t('admin.fields.name', 'Name')}
                     className={errors.name && touched.name ? 'p-invalid' : ''}
                   />
                   {errors.name && touched.name && (
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
+                
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.latitude')}
+                    {t('admin.fields.latitude', 'Latitude')}
                   </label>
                   <Field
                     name="latitude"
                     as={InputText}
-                    placeholder={t('admin.fields.latitude')}
-                    className={
-                      errors.latitude && touched.latitude ? 'p-invalid' : ''
-                    }
+                    placeholder={t('admin.fields.latitude', 'Latitude')}
+                    className={errors.latitude && touched.latitude ? 'p-invalid' : ''}
                   />
                   {errors.latitude && touched.latitude && (
                     <small className="p-error">{errors.latitude}</small>
                   )}
                 </div>
+                
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
-                    {t('admin.fields.longitude')}
+                    {t('admin.fields.longitude', 'Longitude')}
                   </label>
                   <Field
                     name="longitude"
                     as={InputText}
-                    placeholder={t('admin.fields.longitude')}
-                    className={
-                      errors.longitude && touched.longitude ? 'p-invalid' : ''
-                    }
+                    placeholder={t('admin.fields.longitude', 'Longitude')}
+                    className={errors.longitude && touched.longitude ? 'p-invalid' : ''}
                   />
                   {errors.longitude && touched.longitude && (
                     <small className="p-error">{errors.longitude}</small>
                   )}
                 </div>
 
-                
-
-                <div className="md:col-span-2 flex justify-end mt-4">
+                <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"
+                    severity="info"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                    }
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
-                        ? t('admin.pages.sensors.form.submittingText.edit')
-                        : t('admin.pages.sensors.form.submitButton.edit')
+                        ? t('admin.pages.sensors.form.submittingText.edit', 'Updating...')
+                        : t('admin.pages.sensors.form.submitButton.edit', 'Update Sensor')
                     }
                   />
                 </div>
@@ -190,6 +188,6 @@ export default function EditSensor() {
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 }

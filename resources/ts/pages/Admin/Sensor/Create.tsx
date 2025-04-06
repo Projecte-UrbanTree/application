@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import axiosClient from '@/api/axiosClient';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
@@ -5,14 +6,15 @@ import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { Toast } from 'primereact/toast';
-import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { useToast } from '@/hooks/useToast';
+import { useState } from 'react';
 
 export default function CreateSensor() {
   const navigate = useNavigate();
-  const toast = useRef<Toast>(null);
+  const { showToast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
   const initialValues = {
@@ -29,18 +31,13 @@ export default function CreateSensor() {
     latitude: Yup.string(),
   });
 
-  const handleSubmit = async (values: typeof initialValues, { setSubmitting }: any) => {
+  const handleSubmit = async (values: typeof initialValues) => {
     if (!currentContract?.id) {
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Debe seleccionar un contrato válido',
-        life: 5000,
-      });
-      setSubmitting(false);
+      showToast('error', 'Debe seleccionar un contrato válido');
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const payload = {
         eui: values.dev_eui.trim(),
@@ -50,70 +47,54 @@ export default function CreateSensor() {
         contract_id: currentContract.id,
       };
 
-      console.log('Payload:', payload);
-
+      await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/sensors', payload);
-
-      toast.current?.show({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Sensor created successfully!',
-        life: 3000,
-      });
-
-      setTimeout(() => {
-        navigate('/admin/sensors', {
-          state: { success: 'Sensor created successfully!' },
-        });
-      }, 1000);
+      showToast('success', 'Sensor created successfully!');
+      navigate('/admin/sensors');
     } catch (error: any) {
       console.error('Error creating sensor:', error);
-      console.error('Server Response:', error.response?.data);
-
-      let errorMessage = 'Failed to create sensor';
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
+      
+      if (error.response && error.response.data && error.response.data.message) {
+        showToast('error', error.response.data.message);
+      } else {
+        showToast('error', 'Failed to create sensor');
       }
-
-      toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: errorMessage,
-        life: 5000,
-      });
-    } finally {
-      setSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Toast ref={toast} />
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4 text-white"
-            onClick={() => navigate('/admin/sensors')}
-            icon="pi pi-arrow-left"
-            aria-label="Back"
-          />
-          <h2 className="text-white text-3xl font-bold">Create Sensor</h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/sensors')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          Create Sensor
+        </h2>
+      </div>
+
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ errors, touched, isSubmitting }) => (
-              <Form className="grid grid-cols-1 gap-4">
+            {({ errors, touched }) => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
-                  <label className="text-sm font-medium">EUI</label>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:id" className="h-5 w-5 mr-2" />
+                    EUI
+                  </label>
                   <Field
                     name="dev_eui"
                     as={InputText}
                     placeholder="Enter EUI"
-                    className={`${errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''}`}
+                    className={errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''}
                   />
                   {errors.dev_eui && touched.dev_eui && (
                     <small className="p-error">{errors.dev_eui}</small>
@@ -121,46 +102,53 @@ export default function CreateSensor() {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="text-sm font-medium">Name</label>
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:device" className="h-5 w-5 mr-2" />
+                    Name
+                  </label>
                   <Field
                     name="dev_name"
                     as={InputText}
                     placeholder="Enter Name"
-                    className={`${errors.dev_name && touched.dev_name ? 'p-invalid' : ''}`}
+                    className={errors.dev_name && touched.dev_name ? 'p-invalid' : ''}
                   />
                   {errors.dev_name && touched.dev_name && (
                     <small className="p-error">{errors.dev_name}</small>
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">Longitude</label>
-                    <Field
-                      name="longitude"
-                      as={InputText}
-                      placeholder="Enter Longitude"
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">Latitude</label>
-                    <Field
-                      name="latitude"
-                      as={InputText}
-                      placeholder="Enter Latitude"
-                    />
-                  </div>
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
+                    Longitude
+                  </label>
+                  <Field
+                    name="longitude"
+                    as={InputText}
+                    placeholder="Enter Longitude"
+                  />
                 </div>
 
-                <div className="flex justify-end mt-4">
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
+                    Latitude
+                  </label>
+                  <Field
+                    name="latitude"
+                    as={InputText}
+                    placeholder="Enter Latitude"
+                  />
+                </div>
+
+                <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"
-                    icon="pi pi-check"
-                    label="Create Sensor"
-                    className="w-full md:w-auto"
-                    loading={isSubmitting}
+                    severity="info"
                     disabled={isSubmitting}
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
+                    label={isSubmitting ? 'Creating Sensor...' : 'Create Sensor'}
                   />
                 </div>
               </Form>
@@ -168,6 +156,6 @@ export default function CreateSensor() {
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 }
