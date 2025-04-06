@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class TaskType
  *
  * Represents a type of task in the application.
- *
- * @package App\Models
  */
 class TaskType extends Model
 {

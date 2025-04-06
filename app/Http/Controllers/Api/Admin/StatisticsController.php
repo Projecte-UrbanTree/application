@@ -18,7 +18,7 @@ class StatisticsController extends Controller
     /**
      * Display statistics for tasks, reports, and resources within a date range.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the statistics data.
      */
     public function index(Request $request): JsonResponse
@@ -37,7 +37,7 @@ class StatisticsController extends Controller
                 $toDate = $defaultToDate;
             }
         } catch (\Exception $e) {
-            Log::warning('Invalid date format in statistics request: ' . $e->getMessage());
+            Log::warning('Invalid date format in statistics request: '.$e->getMessage());
             $fromDate = $defaultFromDate;
             $toDate = $defaultToDate;
         }
@@ -86,9 +86,9 @@ class StatisticsController extends Controller
     /**
      * Count tasks by day and status.
      *
-     * @param mixed $tasks The collection of tasks.
-     * @param array $days The array of days.
-     * @param int $status The status of the tasks to count.
+     * @param  mixed  $tasks  The collection of tasks.
+     * @param  array  $days  The array of days.
+     * @param  int  $status  The status of the tasks to count.
      * @return array An array of task counts by day.
      */
     private function countTasksByDay($tasks, $days, $status): array
@@ -99,8 +99,8 @@ class StatisticsController extends Controller
     /**
      * Sum hours worked by day.
      *
-     * @param mixed $tasks The collection of tasks.
-     * @param array $days The array of days.
+     * @param  mixed  $tasks  The collection of tasks.
+     * @param  array  $days  The array of days.
      * @return array An array of hours worked by day.
      */
     private function sumHoursByDay($tasks, $days): array
@@ -111,8 +111,8 @@ class StatisticsController extends Controller
     /**
      * Sum fuel consumption by day.
      *
-     * @param mixed $reports The collection of work reports.
-     * @param array $days The array of days.
+     * @param  mixed  $reports  The collection of work reports.
+     * @param  array  $days  The array of days.
      * @return array An array of fuel consumption by day.
      */
     private function sumFuelByDay($reports, $days): array
@@ -123,8 +123,8 @@ class StatisticsController extends Controller
     /**
      * Calculate resource usage by day within a date range.
      *
-     * @param string $fromDateSql The start date in SQL format.
-     * @param string $toDateSql The end date in SQL format.
+     * @param  string  $fromDateSql  The start date in SQL format.
+     * @param  string  $toDateSql  The end date in SQL format.
      * @return array An array of resource usage data by day.
      */
     private function calculateResourceUsage(string $fromDateSql, string $toDateSql): array

@@ -25,7 +25,7 @@ class UserController extends Controller
     /**
      * Store a newly created user in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created user.
      */
     public function store(Request $request): JsonResponse
@@ -49,7 +49,7 @@ class UserController extends Controller
     /**
      * Display the specified user.
      *
-     * @param int $id The ID of the user to retrieve.
+     * @param  int  $id  The ID of the user to retrieve.
      * @return JsonResponse A JSON response containing the user details.
      */
     public function show($id): JsonResponse
@@ -62,8 +62,8 @@ class UserController extends Controller
     /**
      * Update the specified user in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $id The ID of the user to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the user to update.
      * @return JsonResponse A JSON response containing the updated user.
      */
     public function update(Request $request, $id): JsonResponse
@@ -92,7 +92,7 @@ class UserController extends Controller
     /**
      * Remove the specified user from storage.
      *
-     * @param int $id The ID of the user to delete.
+     * @param  int  $id  The ID of the user to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy($id): JsonResponse

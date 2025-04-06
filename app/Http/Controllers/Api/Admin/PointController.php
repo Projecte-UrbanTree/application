@@ -24,7 +24,7 @@ class PointController extends Controller
     /**
      * Store newly created points in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created points.
      */
     public function store(Request $request): JsonResponse
@@ -44,7 +44,7 @@ class PointController extends Controller
     /**
      * Remove all points associated with a specific zone.
      *
-     * @param int $id The ID of the zone whose points should be deleted.
+     * @param  int  $id  The ID of the zone whose points should be deleted.
      * @return JsonResponse A JSON response confirming the deletion or an error message.
      */
     public function destroy($id): JsonResponse

@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class WorkOrderBlock
  *
  * Represents a block within a work order.
- *
- * @package App\Models
  */
 class WorkOrderBlock extends Model
 {
@@ -31,8 +29,6 @@ class WorkOrderBlock extends Model
 
     /**
      * Get the task types associated with the block.
-     *
-     * @return BelongsToMany
      */
     public function taskTypes(): BelongsToMany
     {

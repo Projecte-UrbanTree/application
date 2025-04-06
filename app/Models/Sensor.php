@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Sensor
  *
  * Represents a sensor in the application.
- *
- * @package App\Models
  */
 class Sensor extends Model
 {

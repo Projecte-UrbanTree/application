@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class Resource
  *
  * Represents a resource in the application.
- *
- * @package App\Models
  */
 class Resource extends Model
 {
@@ -26,8 +24,6 @@ class Resource extends Model
 
     /**
      * Get the contract associated with the resource.
-     *
-     * @return BelongsTo
      */
     public function contract(): BelongsTo
     {
@@ -36,8 +32,6 @@ class Resource extends Model
 
     /**
      * Get the resource type associated with the resource.
-     *
-     * @return BelongsTo
      */
     public function resourceType(): BelongsTo
     {
@@ -46,8 +40,6 @@ class Resource extends Model
 
     /**
      * Get the work reports associated with the resource.
-     *
-     * @return BelongsToMany
      */
     public function workReports(): BelongsToMany
     {

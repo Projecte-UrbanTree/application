@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Eva
  *
  * Represents an evaluation (Eva) of an element in the application.
- *
- * @package App\Models
  */
 class Eva extends Model
 {
