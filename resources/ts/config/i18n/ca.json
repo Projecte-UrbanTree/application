@@ -468,22 +468,22 @@
           "height": "Alçada",
           "diameter": "Diàmetre",
           "crown_width": "Amplada de la Copa",
-          "crown_projection_area": "Àrea de Projecció de la Copa",
-          "root_surface_diameter": "Diàmetre de la Superfície de l'Arrel",
-          "effective_root_area": "Àrea Efectiva de l'Arrel",
-          "height_estimation": "Estimació de l'Alçada",
-          "unbalanced_crown": "Copa Descompensada",
-          "overextended_branches": "Branques Sobreexteses",
+          "crown_projection_area": "Àrea de projecció de la copa",
+          "root_surface_diameter": "Diàmetre de la superfície de l'arrel",
+          "effective_root_area": "Àrea efectiva de l'arrel",
+          "height_estimation": "Estimació de l'alçada",
+          "unbalanced_crown": "Copa descompensada",
+          "overextended_branches": "Branques sobreexteses",
           "cracks": "Esquerdes",
-          "dead_branches": "Branques Mortes",
+          "dead_branches": "Branques mortes",
           "inclination": "Inclinació",
           "V_forks": "Bifurcacions en V",
           "cavities": "Cavitats",
-          "bark_damage": "Danys a l'Escorça",
-          "soil_lifting": "Aixecament del Sòl",
-          "cut_damaged_roots": "Arrels Tallades/Danyades",
-          "basal_rot": "Podridura Basal",
-          "exposed_surface_roots": "Arrels Superficials Exposades",
+          "bark_damage": "Danys a l'escorça",
+          "soil_lifting": "Aixecament del sòl",
+          "cut_damaged_roots": "Arrels tallades/danyades",
+          "basal_rot": "Podridura basal",
+          "exposed_surface_roots": "Arrels superficials exposades",
           "wind": "Vent",
           "drought": "Sequera",
           "validation": {
@@ -510,6 +510,7 @@
             "createSuccess": "Eva creada correctament",
             "deleteConfirm": "Estàs segur que vols eliminar aquesta Eva?",
             "deleteSuccess": "Eva eliminada correctament",
+            "deleteSuccessDetail": "Els detalls de l'EVA s'han eliminat correctament",
             "error": "Error guardant l'Eva",
             "updateSuccess": "Eva actualitzada correctament"
           }
@@ -553,15 +554,15 @@
           "extreme": "Extrema",
           "pending": "Pendent"
         },
-        "indexCalculation": "Càlcul de l'Índex",
-        "treeStatusFactor": "Factor d'Estat de l'Arbre",
-        "stabilityIndex": "Índex d'Estabilitat (H/D)",
-        "gravityHeightRatio": "Relació d'Alçada de la Gravetat (CG/H)",
-        "rootCrownRatio": "Relació de la Corona de l'Arrel (SR/SC)",
-        "windStabilityIndex": "Índex d'Estabilitat del Vent (WSI)",
-        "environmentalFactors": "Factors Ambientals",
-        "windExposure": "Exposició al Vent",
-        "droughtExposure": "Exposició a la Sequera"
+        "indexCalculation": "Càlcul de l'índex",
+        "treeStatusFactor": "Factor d'estat de l'arbre",
+        "stabilityIndex": "Índex d'estabilitat (H/D)",
+        "gravityHeightRatio": "Relació d'alçada de la gravetat (CG/H)",
+        "rootCrownRatio": "Relació de la corona de l'arrel (SR/SC)",
+        "windStabilityIndex": "Índex d'estabilitat del vent (WSI)",
+        "environmentalFactors": "Factors ambientals",
+        "windExposure": "Exposició al vent",
+        "droughtExposure": "Exposició a la sequera"
       },
       "inventory": {
         "elementDetailPopup": {
@@ -626,7 +627,14 @@
             "crownProjectionArea": "Àrea de Projecció de la Copa",
             "effectiveRootArea": "Àrea Efectiva de l'Arrel",
             "createEva": "Crear EVA",
-            "editEva": "Editar EVA"
+            "editEva": "Editar EVA",
+            "deleteEva": "Eliminar EVA",
+            "list": {
+              "messages": {
+                "deleteSuccess": "EVA eliminada correctament",
+                "deleteSuccessDetail": "Els detalls de l'EVA s'han eliminat correctament"
+              }
+            }
           },
           "history": {
             "title": "Historial de l'element (en construcció...)",

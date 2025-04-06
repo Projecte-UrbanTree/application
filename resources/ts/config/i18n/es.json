@@ -641,7 +641,8 @@
             "crownProjectionArea": "Área de proyección de copa",
             "effectiveRootArea": "Área efectiva de raíces",
             "createEva": "Crear EVA",
-            "editEva": "Editar EVA"
+            "editEva": "Editar EVA",
+            "deleteEva": "Eliminar EVA"
           },
           "history": {
             "title": "Historial del elemento (en construcción...)",

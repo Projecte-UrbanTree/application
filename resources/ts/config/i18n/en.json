@@ -394,6 +394,7 @@
             "createSuccess": "Eva created successfully",
             "deleteConfirm": "Are you sure you want to delete this Eva?",
             "deleteSuccess": "Eva deleted successfully",
+            "deleteSuccessDetail": "EVA details were deleted successfully",
             "error": "Error saving Eva",
             "updateSuccess": "Eva updated successfully"
           }
@@ -640,7 +641,14 @@
             "crownProjectionArea": "Crown Projection Area",
             "effectiveRootArea": "Effective Root Area",
             "createEva": "Create EVA",
-            "editEva": "Edit EVA"
+            "editEva": "Edit EVA",
+            "deleteEva": "Delete EVA",
+            "list": {
+              "messages": {
+                "deleteSuccess": "EVA deleted successfully",
+                "deleteSuccessDetail": "EVA details were deleted successfully"
+              }
+            }
           },
           "history": {
             "title": "Element History (under construction...)",
