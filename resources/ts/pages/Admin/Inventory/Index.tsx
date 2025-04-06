@@ -1,8 +1,13 @@
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { MapComponent } from '@/components/Map';
 import { Zones } from '@/pages/Admin/Inventory/Zones';
+import { fetchZonesAsync } from '@/store/slice/zoneSlice';
+import { fetchPointsAsync } from '@/store/slice/pointSlice';
+import { fetchElementsAsync } from '@/store/slice/elementSlice';
+import { AppDispatch, RootState } from '@/store/store';
 import { Zone } from '@/types/Zone';
 
 export default function Inventory() {
@@ -14,9 +19,37 @@ export default function Inventory() {
   const [isDrawingMode, setIsDrawingMode] = useState(false);
   const [enabledButton, setEnabledButton] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [dataInitialized, setDataInitialized] = useState(false);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+
+  useEffect(() => {
+    const loadData = async () => {
+      if (!currentContract?.id) return;
+      
+      try {
+        await Promise.all([
+          dispatch(fetchZonesAsync()),
+          dispatch(fetchPointsAsync()),
+          dispatch(fetchElementsAsync())
+        ]);
+        setDataInitialized(true);
+      } catch (error) {
+        console.error('Error loading inventory data:', error);
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error cargando datos del inventario',
+          life: 3000,
+        });
+      }
+    };
+
+    loadData();
+  }, [dispatch, currentContract]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -26,7 +59,7 @@ export default function Inventory() {
         setIsMobile(newIsMobile);
         setMapKey(Date.now());
       }
-    };
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
