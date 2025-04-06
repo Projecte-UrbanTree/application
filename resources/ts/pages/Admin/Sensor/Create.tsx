@@ -27,8 +27,8 @@ export default function CreateSensor() {
   const validationSchema = Yup.object({
     dev_eui: Yup.string().required('EUI is required'),
     dev_name: Yup.string().required('Name is required'),
-    longitude: Yup.string(),
-    latitude: Yup.string(),
+    longitude: Yup.string().required('Longitude is required'),
+    latitude: Yup.string().required('Latitude is required'),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
