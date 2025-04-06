@@ -587,6 +587,7 @@
               "longitude": "Longitud"
             },
             "deleteElement": "Eliminar Element",
+            "editElement": "Editar Element",
             "elementDeleted": "Element eliminat correctament",
             "elementDeleteFailed": "No s'ha pogut eliminar l'element"
           },

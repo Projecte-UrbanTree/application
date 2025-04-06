@@ -26,6 +26,7 @@ import IncidentForm from '../pages/Admin/Inventory/IncidentForm';
 import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
 import { eventSubject, ZoneEvent } from '../pages/Admin/Inventory/Zones';
+import EditElementForm from '@/pages/Admin/Inventory/EditElementForm';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -75,6 +76,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const [selectedElement, setSelectedElement] = useState<Element | null>(null);
   const [elementModalVisible, setElementModalVisible] = useState(false);
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
+  const [editElementModalVisible, setEditElementModalVisible] = useState(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
@@ -85,6 +87,7 @@ export const MapComponent: React.FC<MapProps> = ({
 
   const handleBackToIncidentTab = useCallback(() => {
     setIncidentModalVisible(false);
+    setEditElementModalVisible(false);
     setElementModalVisible(true);
     setActiveTabIndex(1);
   }, []);
@@ -579,6 +582,25 @@ export const MapComponent: React.FC<MapProps> = ({
         )}
       </Dialog>
       <Dialog
+        header={`Editar elemento #${selectedElement?.id}`}
+        visible={editElementModalVisible}
+        onHide={() => setEditElementModalVisible(false)}>
+          {selectedElement && (
+            <EditElementForm element={selectedElement} onClose={() => {
+              setEditElementModalVisible(false)
+              dispatch(fetchElementsAsync());
+            }} 
+            elementTypes={elementTypes.map((item) => ({
+            label: `${item.name}`,
+            value: item.id!,
+            }))}
+            treeTypes={treeTypes.map((item) => ({
+            label: `${item.family} ${item.genus} ${item.species}`,
+            value: item.id!,
+            }))}/> 
+          )}
+      </Dialog>
+      <Dialog
         header={`Detalles del Elemento #${selectedElement?.id}`}
         visible={elementModalVisible}
         onHide={() => setElementModalVisible(false)}>
@@ -590,6 +612,7 @@ export const MapComponent: React.FC<MapProps> = ({
             treeTypes={treeTypes}
             elementTypes={elementTypes}
             onOpenIncidentForm={() => setIncidentModalVisible(true)}
+            onEditIncidentForm={() => setEditElementModalVisible(true)}
             getCoordElement={(element, pts) =>
               mapServiceRef.current?.getCoordElement(element, pts)!
             }

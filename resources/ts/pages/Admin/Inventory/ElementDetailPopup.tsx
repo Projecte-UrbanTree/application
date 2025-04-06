@@ -35,7 +35,13 @@ import { ElementType } from '@/types/ElementType';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import { Point } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
-import { WorkOrder, WorkOrderStatus, WorkOrderBlock, WorkOrderBlockTask } from '@/types/WorkOrders';
+import {
+  WorkOrder,
+  WorkOrderStatus,
+  WorkOrderBlock,
+  WorkOrderBlockTask,
+} from '@/types/WorkOrders';
+import EditElementForm from './EditElementForm';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -43,6 +49,7 @@ interface ElementDetailPopupProps {
   elementTypes: ElementType[];
   onClose: () => void;
   onOpenIncidentForm: () => void;
+  onEditIncidentForm: () => void;
   getCoordElement: (
     element: Element,
     points: Point[],
@@ -59,6 +66,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   onOpenIncidentForm,
   getCoordElement,
   onDeleteElement,
+  onEditIncidentForm,
   initialTabIndex = 0,
 }) => {
   const [activeIndex, setActiveIndex] = useState(initialTabIndex);
@@ -245,6 +253,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     }, 300);
   }, [onClose, onOpenIncidentForm]);
 
+  const handleEditElement = useCallback(() => {
+    onClose();
+    setTimeout(() => {
+      onEditIncidentForm();
+    }, 300);
+  }, [onClose, onEditIncidentForm]);
+
   const handleDeleteIncident = useCallback(
     async (incidentId: number) => {
       try {
@@ -252,18 +267,26 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         setIncidences((prev) => prev.filter((inc) => inc.id !== incidentId));
         toast.current?.show({
           severity: 'success',
-          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccess'),
-          detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccessDetail'),
+          summary: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.deleteSuccess',
+          ),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.deleteSuccessDetail',
+          ),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteError'),
-          detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteErrorDetail'),
+          summary: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.deleteError',
+          ),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.deleteErrorDetail',
+          ),
         });
       }
     },
-    [dispatch, t]
+    [dispatch, t],
   );
 
   const handleDeleteElement = useCallback(
@@ -329,21 +352,32 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     if (!elementZone) return [];
 
     const filteredTasks = [];
-    
+
     for (const workOrder of workOrders) {
-      if (workOrder.work_orders_blocks && workOrder.work_orders_blocks.length > 0) {
+      if (
+        workOrder.work_orders_blocks &&
+        workOrder.work_orders_blocks.length > 0
+      ) {
         for (const block of workOrder.work_orders_blocks) {
-          const blockIncludesElementZone = block.zones?.some(zone => zone.id === elementZone.id) || false;
-          
-          if (blockIncludesElementZone && block.block_tasks && block.block_tasks.length > 0) {
+          const blockIncludesElementZone =
+            block.zones?.some((zone) => zone.id === elementZone.id) || false;
+
+          if (
+            blockIncludesElementZone &&
+            block.block_tasks &&
+            block.block_tasks.length > 0
+          ) {
             for (const task of block.block_tasks) {
-              const elementTypeMatches = task.element_type.id === element.element_type_id;
-              
+              const elementTypeMatches =
+                task.element_type.id === element.element_type_id;
+
               let treeTypeMatches = true;
               if (element.tree_type_id) {
-                treeTypeMatches = task.tree_type ? task.tree_type.id === element.tree_type_id : false;
+                treeTypeMatches = task.tree_type
+                  ? task.tree_type.id === element.tree_type_id
+                  : false;
               }
-              
+
               if (elementTypeMatches && treeTypeMatches) {
                 filteredTasks.push({
                   workOrderId: workOrder.id,
@@ -351,9 +385,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   taskName: task.tasks_type?.name || 'Desconocido',
                   taskDescription: task.tasks_type?.description || '',
                   status: task.status !== undefined ? task.status : 0,
-                  spentTime: task.spent_time !== undefined ? task.spent_time : 0,
+                  spentTime:
+                    task.spent_time !== undefined ? task.spent_time : 0,
                   users: workOrder.users || [],
-                  workOrderStatus: workOrder.status
+                  workOrderStatus: workOrder.status,
                 });
               }
             }
@@ -361,7 +396,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         }
       }
     }
-    
+
     return filteredTasks;
   }, [element, getZoneElement, workOrders]);
 
@@ -371,17 +406,19 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       1: 'En progreso',
       2: 'Completado',
     };
-    
+
     return statuses[status as keyof typeof statuses] || 'Desconocido';
   };
 
-  const getStatusSeverity = (status: number): 'danger' | 'warning' | 'success' | 'info' => {
+  const getStatusSeverity = (
+    status: number,
+  ): 'danger' | 'warning' | 'success' | 'info' => {
     const severities: Record<number, 'danger' | 'warning' | 'success'> = {
       0: 'danger',
       1: 'warning',
       2: 'success',
     };
-    
+
     return severities[status as keyof typeof severities] || 'info';
   };
 
@@ -389,9 +426,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     const icons = {
       0: 'mdi:clock-outline',
       1: 'mdi:progress-clock',
-      2: 'mdi:check-circle-outline'
+      2: 'mdi:check-circle-outline',
     };
-    
+
     return icons[status as keyof typeof icons] || 'mdi:help-circle-outline';
   };
 
@@ -646,7 +683,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               onClick={() => setIsEditEvaModalVisible(true)}
             />
             <Button
-              label={t('admin.pages.inventory.elementDetailPopup.eva.deleteEva')}
+              label={t(
+                'admin.pages.inventory.elementDetailPopup.eva.deleteEva',
+              )}
               className="p-button-sm p-button-danger ml-2"
               onClick={async () => {
                 try {
@@ -654,14 +693,22 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   setEva(null);
                   toast.current?.show({
                     severity: 'success',
-                    summary: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccess'),
-                    detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccessDetail'),
+                    summary: t(
+                      'admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccess',
+                    ),
+                    detail: t(
+                      'admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccessDetail',
+                    ),
                   });
                 } catch (error) {
                   toast.current?.show({
                     severity: 'error',
-                    summary: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteError'),
-                    detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteErrorDetail'),
+                    summary: t(
+                      'admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteError',
+                    ),
+                    detail: t(
+                      'admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteErrorDetail',
+                    ),
                   });
                 }
               }}
@@ -684,11 +731,11 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         scrollable={false}
         pt={{
           inkbar: { style: { display: 'none' } },
-          navContainer: { 
-            className: 'no-fragment-links', 
-            tabIndex: null
+          navContainer: {
+            className: 'no-fragment-links',
+            tabIndex: null,
           },
-          nav: { className: 'no-hash-links' }
+          nav: { className: 'no-hash-links' },
         }}>
         <TabPanel
           header={t(
@@ -726,7 +773,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   )}
                   :
                 </strong>{' '}
-                {element.tree_type_id && getTreeType(element.tree_type_id)?.family || 
+                {(element.tree_type_id &&
+                  getTreeType(element.tree_type_id)?.family) ||
                   t('general.not_available')}
               </p>
               <p>
@@ -800,6 +848,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   )}
                   className="p-button-danger p-button-sm"
                   onClick={() => handleDeleteElement(element.id!)}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  label={t(
+                    'admin.pages.inventory.elementDetailPopup.information.editElement',
+                  )}
+                  className="p-button-success p-button-sm"
+                  onClick={handleEditElement}
                 />
               </div>
             </div>
@@ -926,7 +983,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Historial de Tareas</h2>
             </div>
-            
+
             {isLoading ? (
               <div className="flex justify-center my-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -934,60 +991,74 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             ) : tasksForElement.length > 0 ? (
               <div className="space-y-4">
                 {tasksForElement.map((task, index) => (
-                  <Card 
-                    key={index} 
+                  <Card
+                    key={index}
                     className="shadow-sm border-1 border-gray-200"
-                    header={(
+                    header={
                       <div className="flex items-center justify-between p-3 bg-gray-50 border-bottom-1 border-gray-200">
                         <div className="flex items-center gap-2">
-                          <span className="iconify text-xl text-blue-600" data-icon="mdi:water"></span>
-                          <h3 className="m-0 text-lg font-semibold">Nombre: Regar</h3>
+                          <span
+                            className="iconify text-xl text-blue-600"
+                            data-icon="mdi:water"></span>
+                          <h3 className="m-0 text-lg font-semibold">
+                            Nombre: Regar
+                          </h3>
                         </div>
-                        <Tag 
-                          value={getStatusLabel(task.status)} 
+                        <Tag
+                          value={getStatusLabel(task.status)}
                           severity={getStatusSeverity(task.status)}
                           icon={getStatusIcon(task.status)}
                           className="px-3"
                         />
                       </div>
-                    )}
-                  >
+                    }>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="iconify text-blue-500" data-icon="mdi:calendar"></span>
+                          <span
+                            className="iconify text-blue-500"
+                            data-icon="mdi:calendar"></span>
                           <span className="font-medium">Fecha:</span>
                           <span>{formatDate(task.workOrderDate)}</span>
                         </div>
-                        
+
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="iconify text-blue-500" data-icon="mdi:file-document-outline"></span>
+                          <span
+                            className="iconify text-blue-500"
+                            data-icon="mdi:file-document-outline"></span>
                           <span className="font-medium">Orden de Trabajo:</span>
                           <span>{task.workOrderId}</span>
                         </div>
-                        
+
                         {task.spentTime > 0 && (
                           <div className="flex items-center gap-2">
-                            <span className="iconify text-blue-500" data-icon="mdi:clock-time-five-outline"></span>
-                            <span className="font-medium">Horas dedicadas:</span>
+                            <span
+                              className="iconify text-blue-500"
+                              data-icon="mdi:clock-time-five-outline"></span>
+                            <span className="font-medium">
+                              Horas dedicadas:
+                            </span>
                             <span>{task.spentTime}h</span>
                           </div>
                         )}
                       </div>
-                      
+
                       {task.users && task.users.length > 0 && (
                         <div>
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="iconify text-blue-500" data-icon="mdi:account-group"></span>
+                            <span
+                              className="iconify text-blue-500"
+                              data-icon="mdi:account-group"></span>
                             <span className="font-medium">Trabajadores:</span>
                           </div>
                           <div className="flex flex-wrap gap-2">
-                            {task.users.map(user => (
-                              <div 
-                                key={user.id} 
-                                className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
-                              >
-                                <span className="iconify" data-icon="mdi:account"></span>
+                            {task.users.map((user) => (
+                              <div
+                                key={user.id}
+                                className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
+                                <span
+                                  className="iconify"
+                                  data-icon="mdi:account"></span>
                                 {user.name} {user.surname}
                               </div>
                             ))}
@@ -1000,8 +1071,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </div>
             ) : (
               <div className="text-center py-8 bg-gray-50 rounded-lg">
-                <span className="iconify text-gray-400 text-4xl mb-2" data-icon="mdi:calendar-blank"></span>
-                <p className="text-gray-500 font-medium">No hay historial de tareas para este elemento</p>
+                <span
+                  className="iconify text-gray-400 text-4xl mb-2"
+                  data-icon="mdi:calendar-blank"></span>
+                <p className="text-gray-500 font-medium">
+                  No hay historial de tareas para este elemento
+                </p>
               </div>
             )}
           </div>
@@ -1033,25 +1108,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         </div>
       )}
 
-      {isEditEvaModalVisible && eva && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <Button
-              icon="pi pi-times"
-              className="p-button-rounded p-button-text absolute top-2 right-2"
-              onClick={() => setIsEditEvaModalVisible(false)}
-            />
-            <EditEva
-              preselectedElementId={eva.id!}
-              onClose={() => {
-                setIsEditEvaModalVisible(false);
-                refreshEvaData();
-              }}
-              redirectPath="/admin/inventory"
-            />
-          </div>
-        </div>
-      )}
       {isEditEvaModalVisible && eva && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
