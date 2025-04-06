@@ -41,6 +41,7 @@ import { Roles } from '@/types/Role';
 import Sensors from '@/pages/Admin/Sensor/Index';
 import CreateSensor from '@/pages/Admin/Sensor/Create';
 import EditSensor from '@/pages/Admin/Sensor/Edit';
+import ShowSensor from '@/pages/Admin/Sensor/Show';
 
 const AdminRoutes: RouteObject[] = [
   {
@@ -193,6 +194,14 @@ const AdminRoutes: RouteObject[] = [
             element: (
               <AdminLayout titleI18n="admin.pages.sensors.edit.title">
                 <EditSensor />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'sensors/:eui',
+            element: (
+              <AdminLayout titleI18n="admin.pages.sensors.show.title">
+                <ShowSensor />
               </AdminLayout>
             ),
           },

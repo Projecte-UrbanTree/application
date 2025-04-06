@@ -131,7 +131,9 @@ const Sensors: React.FC = () => {
                     <span className="text-blue-600 text-xl">📡</span>
                   </div>
                   <div>
-                    <h2 className="font-semibold text-gray-800">
+                    <h2
+                      className="font-semibold text-gray-800 cursor-pointer hover:underline"
+                      onClick={() => navigate(`/admin/sensors/${sensor.eui}`)}>
                       {sensor.name || `Sensor ${sensor.id}`}
                     </h2>
                     <p className="text-xs text-gray-500">ID: {sensor.id}</p>
