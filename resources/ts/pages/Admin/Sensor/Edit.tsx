@@ -50,12 +50,32 @@ export default function EditSensor() {
   const validationSchema = Yup.object({
     eui: Yup.string()
       .required(t('admin.pages.sensors.form.validation.eui_required', 'EUI is required'))
-      .max(255, t('admin.pages.sensors.form.validation.eui_max', 'EUI must be less than 255 characters')),
+      .min(8, t('admin.pages.sensors.form.validation.eui_min', 'EUI must be at least 8 characters'))
+      .max(32, t('admin.pages.sensors.form.validation.eui_max', 'EUI must be less than 32 characters'))
+      .matches(
+        /^[a-fA-F0-9]+$/, 
+        t('admin.pages.sensors.form.validation.eui_format', 'EUI must be hexadecimal format (0-9, a-f)')
+      ),
     name: Yup.string()
       .required(t('admin.pages.sensors.form.validation.name_required', 'Name is required'))
-      .max(255, t('admin.pages.sensors.form.validation.name_max', 'Name must be less than 255 characters')),
-    longitude: Yup.string().nullable(),
-    latitude: Yup.string().nullable(),
+      .min(3, t('admin.pages.sensors.form.validation.name_min', 'Name must be at least 3 characters'))
+      .max(50, t('admin.pages.sensors.form.validation.name_max', 'Name must be less than 50 characters'))
+      .matches(
+        /^[a-zA-Z0-9\s\-_]+$/, 
+        t('admin.pages.sensors.form.validation.name_format', 'Name can only contain letters, numbers, spaces, hyphens and underscores')
+      ),
+    longitude: Yup.string()
+      .test('is-longitude', t('admin.pages.sensors.form.validation.longitude_format', 'Invalid longitude (must be between -180 and 180)'), value => {
+        if (!value) return true;
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= -180 && num <= 180;
+      }),
+    latitude: Yup.string()
+      .test('is-latitude', t('admin.pages.sensors.form.validation.latitude_format', 'Invalid latitude (must be between -90 and 90)'), value => {
+        if (!value) return true;
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= -90 && num <= 90;
+      }),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -135,7 +155,7 @@ export default function EditSensor() {
                   <Field
                     name="eui"
                     as={InputText}
-                    placeholder={t('admin.fields.eui', 'EUI')}
+                    placeholder={t('admin.fields.eui', 'EUI (Hexadecimal)')}
                     className={errors.eui && touched.eui ? 'p-invalid' : ''}
                   />
                   {errors.eui && touched.eui && (
@@ -167,7 +187,7 @@ export default function EditSensor() {
                   <Field
                     name="latitude"
                     as={InputText}
-                    placeholder={t('admin.fields.latitude', 'Latitude')}
+                    placeholder={t('admin.fields.latitude', 'Latitude (-90 to 90)')}
                     className={errors.latitude && touched.latitude ? 'p-invalid' : ''}
                   />
                   {errors.latitude && touched.latitude && (
@@ -183,7 +203,7 @@ export default function EditSensor() {
                   <Field
                     name="longitude"
                     as={InputText}
-                    placeholder={t('admin.fields.longitude', 'Longitude')}
+                    placeholder={t('admin.fields.longitude', 'Longitude (-180 to 180)')}
                     className={errors.longitude && touched.longitude ? 'p-invalid' : ''}
                   />
                   {errors.longitude && touched.longitude && (

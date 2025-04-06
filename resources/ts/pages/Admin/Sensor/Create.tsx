@@ -10,10 +10,12 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useToast } from '@/hooks/useToast';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateSensor() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
@@ -25,10 +27,30 @@ export default function CreateSensor() {
   };
 
   const validationSchema = Yup.object({
-    dev_eui: Yup.string().required('EUI is required'),
-    dev_name: Yup.string().required('Name is required'),
-    longitude: Yup.string().required('Longitude is required'),
-    latitude: Yup.string().required('Latitude is required'),
+    dev_eui: Yup.string()
+      .required('EUI is required')
+      .min(8, 'EUI must be at least 8 characters')
+      .max(32, 'EUI must be less than 32 characters')
+      .matches(/^[a-fA-F0-9]+$/, 'EUI must be hexadecimal format (0-9, a-f)'),
+    dev_name: Yup.string()
+      .required('Name is required')
+      .min(3, 'Name must be at least 3 characters')
+      .max(50, 'Name must be less than 50 characters')
+      .matches(/^[a-zA-Z0-9\s\-_]+$/, 'Name can only contain letters, numbers, spaces, hyphens and underscores'),
+    longitude: Yup.string()
+      .required('Longitude is required')
+      .test('is-longitude', 'Invalid longitude (must be between -180 and 180)', value => {
+        if (!value) return true;
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= -180 && num <= 180;
+      }),
+    latitude: Yup.string()
+      .required('Latitude is required')
+      .test('is-latitude', 'Invalid latitude (must be between -90 and 90)', value => {
+        if (!value) return true;
+        const num = parseFloat(value);
+        return !isNaN(num) && num >= -90 && num <= 90;
+      }),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -53,14 +75,24 @@ export default function CreateSensor() {
       navigate('/admin/sensors');
     } catch (error: any) {
       console.error('Error creating sensor:', error);
+
+      if (error.response?.status === 422 && error.response?.data?.errors?.eui) {
+        // This is a validation error for the EUI field
+        if (error.response.data.errors.eui.includes('The eui has already been taken.')) {
+          showToast('error', `Sensor with EUI "${values.dev_eui}" already exists`);
+          return;
+        }
+      }
       
+      // Handle other errors
       if (error.response && error.response.data && error.response.data.message) {
         showToast('error', error.response.data.message);
       } else {
         showToast('error', 'Failed to create sensor');
       }
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (
@@ -93,7 +125,7 @@ export default function CreateSensor() {
                   <Field
                     name="dev_eui"
                     as={InputText}
-                    placeholder="Enter EUI"
+                    placeholder="Enter EUI (Hexadecimal)"
                     className={errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''}
                   />
                   {errors.dev_eui && touched.dev_eui && (
@@ -125,8 +157,12 @@ export default function CreateSensor() {
                   <Field
                     name="longitude"
                     as={InputText}
-                    placeholder="Enter Longitude"
+                    placeholder="Enter Longitude (-180 to 180)"
+                    className={errors.longitude && touched.longitude ? 'p-invalid' : ''}
                   />
+                  {errors.longitude && touched.longitude && (
+                    <small className="p-error">{errors.longitude}</small>
+                  )}
                 </div>
 
                 <div className="flex flex-col">
@@ -137,8 +173,12 @@ export default function CreateSensor() {
                   <Field
                     name="latitude"
                     as={InputText}
-                    placeholder="Enter Latitude"
+                    placeholder="Enter Latitude (-90 to 90)"
+                    className={errors.latitude && touched.latitude ? 'p-invalid' : ''}
                   />
+                  {errors.latitude && touched.latitude && (
+                    <small className="p-error">{errors.latitude}</small>
+                  )}
                 </div>
 
                 <div className="md:col-span-2 flex justify-end mt-6">
