@@ -1,58 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
-import { Message } from 'primereact/message';
+import axiosClient from '@/api/axiosClient';
 import { Icon } from '@iconify/react';
+import { Field, Form, Formik } from 'formik';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { InputText } from 'primereact/inputtext';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 
-const EditSensor = () => {
+export default function EditSensor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
+  const { t } = useTranslation();
+  const [initialValues, setInitialValues] = useState<Sensor>({
+    id: 0,
     eui: '',
     name: '',
     longitude: '',
     latitude: '',
   });
-
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchSensor = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/admin/sensors/${id}`);
-        setFormData(response.data.data);
-      } catch (err: any) {
-        setError(err.response?.data?.message || 'Failed to fetch sensor data');
+        const { data } = await axiosClient.get(`/admin/sensors/${id}/edit`);
+        setInitialValues(data.sensor);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
-    fetchSensor();
+    fetchData();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const validationSchema = Yup.object({
+    eui: Yup.string()
+      .required(t('admin.pages.sensors.form.validation.eui_required'))
+      .max(255, t('admin.pages.sensors.form.validation.eui_max')),
+    name: Yup.string()
+      .required(t('admin.pages.sensors.form.validation.name_required'))
+      .max(255, t('admin.pages.sensors.form.validation.name_max')),
+    longitude: Yup.string().nullable(),
+    latitude: Yup.string().nullable(),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-
+  const handleSubmit = async (values: typeof initialValues) => {
     try {
-      await axios.put(`/api/admin/sensors/${id}`, formData);
-      setSuccess('Sensor updated successfully!');
-      setTimeout(() => navigate('/admin/sensors'), 2000); // Redirect after success
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred');
+      const data = { ...values };
+      await axiosClient.put(`/admin/sensors/${id}`, data);
+      navigate('/admin/sensors', {
+        state: {
+          success: t('admin.pages.sensors.list.messages.updateSuccess'),
+        },
+      });
+    } catch (error) {
+      navigate('/admin/sensors', {
+        state: { error: t('admin.pages.sensors.list.messages.error') },
+      });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Icon
+          icon="eos-icons:loading"
+          className="h-8 w-8 animate-spin text-blue-600"
+        />
+        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
@@ -64,83 +85,106 @@ const EditSensor = () => {
             onClick={() => navigate('/admin/sensors')}>
             <Icon icon="tabler:arrow-left" className="h-6 w-6" />
           </Button>
-          <h2 className="text-white text-3xl font-bold">Edit Sensor</h2>
+          <h2 className="text-white text-3xl font-bold">
+            {t('admin.pages.sensors.form.title.edit')}
+          </h2>
         </header>
         <div className="p-6">
-          {error && (
-            <Message severity="error" text={error} className="mb-4 w-full" />
-          )}
-          {success && (
-            <Message
-              severity="success"
-              text={success}
-              className="mb-4 w-full"
-            />
-          )}
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                EUI:
-              </label>
-              <input
-                type="text"
-                name="eui"
-                value={formData.eui}
-                onChange={handleChange}
-                required
-                className="p-inputtext w-full"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Name:
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="p-inputtext w-full"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Longitude:
-              </label>
-              <input
-                type="text"
-                name="longitude"
-                value={formData.longitude}
-                onChange={handleChange}
-                className="p-inputtext w-full"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Latitude:
-              </label>
-              <input
-                type="text"
-                name="latitude"
-                value={formData.latitude}
-                onChange={handleChange}
-                className="p-inputtext w-full"
-              />
-            </div>
-            <div className="flex justify-end mt-4">
-              <Button
-                type="submit"
-                icon="pi pi-check"
-                label="Update Sensor"
-                className="w-full md:w-auto"
-              />
-            </div>
-          </form>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            enableReinitialize>
+            {({ errors, touched, isSubmitting }) => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:device" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.eui')}
+                  </label>
+                  <Field
+                    name="eui"
+                    as={InputText}
+                    placeholder={t('admin.fields.eui')}
+                    className={errors.eui && touched.eui ? 'p-invalid' : ''}
+                  />
+                  {errors.eui && touched.eui && (
+                    <small className="p-error">{errors.eui}</small>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:note" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.name')}
+                  </label>
+                  <Field
+                    name="name"
+                    as={InputText}
+                    placeholder={t('admin.fields.name')}
+                    className={errors.name && touched.name ? 'p-invalid' : ''}
+                  />
+                  {errors.name && touched.name && (
+                    <small className="p-error">{errors.name}</small>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.longitude')}
+                  </label>
+                  <Field
+                    name="longitude"
+                    as={InputText}
+                    placeholder={t('admin.fields.longitude')}
+                    className={
+                      errors.longitude && touched.longitude ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.longitude && touched.longitude && (
+                    <small className="p-error">{errors.longitude}</small>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
+                    <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
+                    {t('admin.fields.latitude')}
+                  </label>
+                  <Field
+                    name="latitude"
+                    as={InputText}
+                    placeholder={t('admin.fields.latitude')}
+                    className={
+                      errors.latitude && touched.latitude ? 'p-invalid' : ''
+                    }
+                  />
+                  {errors.latitude && touched.latitude && (
+                    <small className="p-error">{errors.latitude}</small>
+                  )}
+                </div>
+
+                <div className="md:col-span-2 flex justify-end mt-4">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full md:w-auto"
+                    icon={
+                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
+                    }
+                    label={
+                      isSubmitting
+                        ? t('admin.pages.sensors.form.submittingText.edit')
+                        : t('admin.pages.sensors.form.submitButton.edit')
+                    }
+                  />
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </Card>
     </div>
   );
-};
-
-export default EditSensor;
+}
