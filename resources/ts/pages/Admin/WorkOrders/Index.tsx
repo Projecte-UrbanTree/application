@@ -24,7 +24,7 @@ import {
 export default function WorkOrders() {
   const [isLoading, setIsLoading] = useState(true);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
-  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const [expandedRows, setExpandedRows] = useState<any>({});
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -329,10 +329,10 @@ export default function WorkOrders() {
               ? t('admin.tooltips.selectContract')
               : undefined
           }>
-          <DataTable
+            <DataTable
             value={filteredWorkOrders}
             expandedRows={expandedRows}
-            onRowToggle={(e) => setExpandedRows(e.data)}
+            onRowToggle={(e: { data: Record<string, boolean> }) => setExpandedRows(e.data)}
             rowExpansionTemplate={rowExpansionTemplate}
             dataKey="id"
             paginator
@@ -349,43 +349,43 @@ export default function WorkOrders() {
             <Column
               field="id"
               header={t('admin.pages.workOrders.list.columns.id')}
-              body={(rowData) => `OT-${rowData.id}`}
+              body={(rowData: WorkOrder) => `OT-${rowData.id}`}
             />
             {(!currentContract || currentContract.id === 0) && (
               <Column
-                field="contract.name"
-                header={t('admin.pages.workOrders.list.columns.contract')}
-                body={(rowData) => rowData.contract?.name || '-'}
+              field="contract.name"
+              header={t('admin.pages.workOrders.list.columns.contract')}
+              body={(rowData: WorkOrder) => rowData.contract?.name || '-'}
               />
             )}
             <Column
               field="date"
               header={t('admin.pages.workOrders.list.columns.date')}
-              body={(rowData) => new Date(rowData.date).toLocaleDateString()}
+              body={(rowData: WorkOrder) => new Date(rowData.date).toLocaleDateString()}
             />
             <Column
               header={t('admin.pages.workOrders.list.columns.users')}
-              body={(rowData) =>
-                rowData.users && rowData.users.length > 0
-                  ? rowData.users
-                      .map((user) => `${user.name} ${user.surname}`)
-                      .join(', ')
-                  : t('admin.pages.workOrders.details.noUsers')
+              body={(rowData: WorkOrder) =>
+              rowData.users && rowData.users.length > 0
+                ? rowData.users
+                  .map((user) => `${user.name} ${user.surname}`)
+                  .join(', ')
+                : t('admin.pages.workOrders.details.noUsers')
               }
             />
             <Column
               header={t('admin.pages.workOrders.list.columns.status')}
-              body={(rowData) => getStatusBadge(rowData.status)}
+              body={(rowData: WorkOrder) => getStatusBadge(rowData.status)}
             />
             <Column
               header={t('admin.pages.workOrders.list.columns.reportStatus')}
-              body={(rowData) => getReportStatusBadge(rowData.work_reports)}
+              body={(rowData: WorkOrder) => getReportStatusBadge(rowData.work_reports)}
             />
             <Column
               header={t('admin.pages.workOrders.list.actions.label')}
-              body={actionButtons}
+              body={(rowData: WorkOrder) => actionButtons(rowData)}
             />
-          </DataTable>
+            </DataTable>
         </CrudPanel>
       )}
     </>
