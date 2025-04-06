@@ -13,6 +13,7 @@ class Sensor extends Model
         'longitude',
         'latitude',
     ];
+
     public function contract()
     {
         return $this->belongsTo(Contract::class);

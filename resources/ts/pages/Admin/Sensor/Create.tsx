@@ -1,130 +1,157 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Card } from 'primereact/card';
+import axiosClient from '@/api/axiosClient';
+import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { InputText } from 'primereact/inputtext';
-import { Message } from 'primereact/message';
-import { Icon } from '@iconify/react';
+import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import { Toast } from 'primereact/toast';
+import { useRef } from 'react';
 
-const CreateSensor = () => {
-  const [formData, setFormData] = useState({
-    eui: '',
-    name: '',
+export default function CreateSensor() {
+  const navigate = useNavigate();
+  const toast = useRef<Toast>(null);
+  
+  const initialValues = {
+    dev_eui: '',
+    dev_name: '',
     longitude: '',
     latitude: '',
-  });
-
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
+  const validationSchema = Yup.object({
+    dev_eui: Yup.string().required('EUI is required'),
+    dev_name: Yup.string().required('Name is required'),
+    longitude: Yup.string(),
+    latitude: Yup.string(),
+  });
 
+  const handleSubmit = async (values: typeof initialValues, { setSubmitting }: any) => {
     try {
-      await axios.post('/api/admin/sensors', formData);
-      setSuccess('Sensor created successfully!');
-      setFormData({ eui: '', name: '', longitude: '', latitude: '' });
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred');
+      // Convertir a número solo si tiene valor
+      const payload = {
+        dev_eui: values.dev_eui,
+        dev_name: values.dev_name,
+        longitude: values.longitude ? parseFloat(values.longitude) : null,
+        latitude: values.latitude ? parseFloat(values.latitude) : null,
+      };
+
+      await axiosClient.post('/admin/sensors', payload);
+      
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Sensor created successfully!',
+        life: 3000
+      });
+
+      setTimeout(() => {
+        navigate('/admin/sensors', {
+          state: { success: 'Sensor created successfully!' },
+        });
+      }, 1000);
+
+    } catch (error: any) {
+      console.error('Error creating sensor:', error);
+      
+      let errorMessage = 'Failed to create sensor';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: errorMessage,
+        life: 5000
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
+      <Toast ref={toast} />
       <Card className="w-full max-w-3xl shadow-lg">
         <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
           <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => window.history.back()}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
+            className="p-button-text mr-4 text-white"
+            onClick={() => navigate('/admin/sensors')}
+            icon="pi pi-arrow-left"
+            aria-label="Back"
+          />
           <h2 className="text-white text-3xl font-bold">Create Sensor</h2>
         </header>
         <div className="p-6">
-          {error && (
-            <Message severity="error" text={error} className="mb-4 w-full" />
-          )}
-          {success && (
-            <Message
-              severity="success"
-              text={success}
-              className="mb-4 w-full"
-            />
-          )}
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                EUI:
-              </label>
-              <InputText
-                type="text"
-                name="eui"
-                value={formData.eui}
-                onChange={handleChange}
-                required
-                className="w-full"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Name:
-              </label>
-              <InputText
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Longitude:
-              </label>
-              <InputText
-                type="text"
-                name="longitude"
-                value={formData.longitude}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Latitude:
-              </label>
-              <InputText
-                type="text"
-                name="latitude"
-                value={formData.latitude}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </div>
-            <div className="flex justify-end mt-4">
-              <Button
-                type="submit"
-                icon="pi pi-check"
-                label="Create Sensor"
-                className="w-full md:w-auto"
-              />
-            </div>
-          </form>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ errors, touched, isSubmitting }) => (
+              <Form className="grid grid-cols-1 gap-4">
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium">EUI</label>
+                  <Field
+                    name="dev_eui"
+                    as={InputText}
+                    placeholder="Enter EUI"
+                    className={`${errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''}`}
+                  />
+                  {errors.dev_eui && touched.dev_eui && (
+                    <small className="p-error">{errors.dev_eui}</small>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium">Name</label>
+                  <Field
+                    name="dev_name"
+                    as={InputText}
+                    placeholder="Enter Name"
+                    className={`${errors.dev_name && touched.dev_name ? 'p-invalid' : ''}`}
+                  />
+                  {errors.dev_name && touched.dev_name && (
+                    <small className="p-error">{errors.dev_name}</small>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium">Longitude (optional)</label>
+                    <Field
+                      name="longitude"
+                      as={InputText}
+                      placeholder="Enter Longitude"
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium">Latitude (optional)</label>
+                    <Field
+                      name="latitude"
+                      as={InputText}
+                      placeholder="Enter Latitude"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end mt-4">
+                  <Button
+                    type="submit"
+                    icon="pi pi-check"
+                    label="Create Sensor"
+                    className="w-full md:w-auto"
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                  />
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </Card>
     </div>
   );
-};
-
-export default CreateSensor;
+}
