@@ -72,13 +72,13 @@ const WorkReportDetail = () => {
       label: t('general.actions.close_with_incidents'),
       icon: 'pi pi-exclamation-triangle',
       command: () => setShowObservationDialog(true),
-      disabled: workReport?.report_status !== WorkReportStatus.PENDING,
+      disabled: workReport?.report_status !== WorkReportStatus.PENDING && workReport?.report_status !== WorkReportStatus.REJECTED,
     },
     {
       label: t('general.actions.reject'),
       icon: 'pi pi-times',
       command: () => handleStatusChange(WorkReportStatus.REJECTED),
-      disabled: workReport?.report_status !== WorkReportStatus.PENDING,
+      disabled: workReport?.report_status !== WorkReportStatus.PENDING && workReport?.report_status !== WorkReportStatus.REJECTED,
     },
   ];
 
@@ -108,7 +108,7 @@ const WorkReportDetail = () => {
         },
       };
 
-      const message = statusMessages[status];
+      const message = statusMessages[status as keyof typeof statusMessages];
       if (message) {
         toast.current?.show(message);
       }
@@ -191,14 +191,17 @@ const WorkReportDetail = () => {
       [WorkReportStatus.PENDING]: {
         value: t('admin.pages.workReport.reportStatus.pending'),
         severity: 'warning',
+        className: '',
       },
       [WorkReportStatus.COMPLETED]: {
         value: t('admin.pages.workReport.reportStatus.completed'),
         severity: 'success',
+        className: '',
       },
       [WorkReportStatus.REJECTED]: {
         value: t('admin.pages.workReport.reportStatus.rejected'),
         severity: 'danger',
+        className: '',
       },
       [WorkReportStatus.CLOSED_WITH_INCIDENTS]: {
         value: t('admin.pages.workReport.reportStatus.closedWithIncidents'),
@@ -210,6 +213,7 @@ const WorkReportDetail = () => {
     const statusConfig = statuses[status as keyof typeof statuses] || {
       value: t('admin.pages.workReport.reportStatus.unknown'),
       severity: 'secondary',
+      className: '',
     };
 
     return (
@@ -520,7 +524,7 @@ const WorkReportDetail = () => {
           </div>
 
           <footer className="p-8 flex justify-end bg-gray-50 rounded-b-lg">
-            {workReport.report_status === WorkReportStatus.PENDING ? (
+            {(workReport.report_status === WorkReportStatus.PENDING || workReport.report_status === WorkReportStatus.REJECTED) ? (
               <SplitButton
                 label={t('general.actions.close_part')}
                 icon="pi pi-check"

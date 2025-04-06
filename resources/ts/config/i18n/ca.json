@@ -1239,5 +1239,72 @@
         }
       }
     }
+  },
+  "worker": {
+    "workOrders": {
+      "title": "Ordres de treball",
+      "selectDate": "Seleccionar Data",
+      "noWorkOrders": "Sense Ordres de Treball",
+      "noWorkOrdersMessage": "No hi ha ordres de treball assignades per a la data seleccionada. Intenta triar una data diferent o contacta amb el teu supervisor si creus que hauria d'haver-hi treball assignat.",
+      "block": "Bloc",
+      "zones": "Zones",
+      "noZones": "No hi ha zones assignades",
+      "tasks": "Tasques",
+      "notes": "Notes",
+      "addResources": "Afegir Recursos",
+      "saveResources": "Desar Recursos",
+      "resourceTypePlaceholder": "Selecciona un tipus de recurs...",
+      "resourceTypeLabel": "Tipus de Recurs",
+      "resourcePlaceholder": "Selecciona un recurs...",
+      "availableResources": "Recursos Disponibles",
+      "selectedResources": "Recursos Seleccionats",
+      "noResourcesSelected": "Encara no has seleccionat recursos",
+      "noResourcesInType": "No hi ha recursos disponibles per a aquest tipus",
+      "selectResourcesHelp": "Primer selecciona un tipus de recurs, després tria recursos específics per afegir",
+      "totalResources": "Total de recursos",
+      "quantity": "Quantitat",
+      "unitCost": "Cost Unitari",
+      "removeResource": "Eliminar Recurs",
+      "createReport": "Crear Informe",
+      "viewDetails": "Veure Detalls",
+      "reportAlreadySent": "Informe Ja Enviat",
+      "noContract": "No s'ha seleccionat cap contracte. Si us plau, selecciona un contracte per veure les ordres de treball.",
+      "taskStatus": {
+        "pending": "Pendent",
+        "inProgress": "En Progrés",
+        "completed": "Completada"
+      },
+      "startTask": "Iniciar Tasca",
+      "completeTask": "Completar Tasca",
+      "reopenTask": "Reobrir Tasca",
+      "timeSpent": "Temps Emprat",
+      "status": {
+        "notStarted": "No Iniciada",
+        "inProgress": "En Progrés",
+        "completed": "Completada",
+        "reportSent": "Informe Enviat",
+        "unknown": "Desconegut"
+      },
+      "timeSpentDialog": "Temps Emprat",
+      "enterTimeSpent": "Introdueix el temps emprat en aquesta tasca:",
+      "complete": "Completar",
+      "start": "Iniciar",
+      "reopen": "Reobrir",
+      "errors": {
+        "taskUpdateFailed": "Error en actualitzar l'estat de la tasca",
+        "resourcesFetchFailed": "Error en obtenir els recursos disponibles",
+        "resourcesSaveFailed": "Error en desar els recursos",
+        "workOrderCompleted": "No es pot modificar una ordre de treball completada",
+        "fetchFailed": "Error en obtenir les ordres de treball"
+      },
+      "messages": {
+        "resourcesAdded": "Recursos afegits correctament",
+        "taskUpdated": "Tasca actualitzada correctament"
+      }
+    },
+    "workReports": {
+      "title": "Informes de Treball",
+      "create": "Crear Informe de Treball"
+    }
   }
 }
