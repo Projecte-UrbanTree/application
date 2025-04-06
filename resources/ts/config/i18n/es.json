@@ -1253,5 +1253,72 @@
         }
       }
     }
+  },
+  "worker": {
+    "workOrders": {
+      "title": "Órdenes de trabajo",
+      "selectDate": "Seleccionar Fecha",
+      "noWorkOrders": "Sin Órdenes de Trabajo",
+      "noWorkOrdersMessage": "No hay órdenes de trabajo asignadas para la fecha seleccionada. Intenta elegir una fecha diferente o contacta con tu supervisor si crees que debería haber trabajo asignado.",
+      "block": "Bloque",
+      "zones": "Zonas",
+      "noZones": "No hay zonas asignadas",
+      "tasks": "Tareas",
+      "notes": "Notas",
+      "addResources": "Añadir Recursos",
+      "saveResources": "Guardar Recursos",
+      "resourceTypePlaceholder": "Selecciona un tipo de recurso...",
+      "resourceTypeLabel": "Tipo de Recurso",
+      "resourcePlaceholder": "Selecciona un recurso...",
+      "availableResources": "Recursos Disponibles",
+      "selectedResources": "Recursos Seleccionados",
+      "noResourcesSelected": "Aún no has seleccionado recursos",
+      "noResourcesInType": "No hay recursos disponibles para este tipo",
+      "selectResourcesHelp": "Primero selecciona un tipo de recurso, luego elige recursos específicos para añadir",
+      "totalResources": "Total de recursos",
+      "quantity": "Cantidad",
+      "unitCost": "Coste Unitario",
+      "removeResource": "Eliminar Recurso",
+      "createReport": "Crear Informe",
+      "viewDetails": "Ver Detalles",
+      "reportAlreadySent": "Informe Ya Enviado",
+      "noContract": "No se ha seleccionado ningún contrato. Por favor, selecciona un contrato para ver las órdenes de trabajo.",
+      "taskStatus": {
+        "pending": "Pendiente",
+        "inProgress": "En Progreso",
+        "completed": "Completada"
+      },
+      "startTask": "Iniciar Tarea",
+      "completeTask": "Completar Tarea",
+      "reopenTask": "Reabrir Tarea",
+      "timeSpent": "Tiempo Empleado",
+      "status": {
+        "notStarted": "No Iniciada",
+        "inProgress": "En Progreso",
+        "completed": "Completada",
+        "reportSent": "Informe Enviado",
+        "unknown": "Desconocido"
+      },
+      "timeSpentDialog": "Tiempo Empleado",
+      "enterTimeSpent": "Introduce el tiempo empleado en esta tarea:",
+      "complete": "Completar",
+      "start": "Iniciar",
+      "reopen": "Reabrir",
+      "errors": {
+        "taskUpdateFailed": "Error al actualizar el estado de la tarea",
+        "resourcesFetchFailed": "Error al obtener los recursos disponibles",
+        "resourcesSaveFailed": "Error al guardar los recursos",
+        "workOrderCompleted": "No se puede modificar una orden de trabajo completada",
+        "fetchFailed": "Error al obtener las órdenes de trabajo"
+      },
+      "messages": {
+        "resourcesAdded": "Recursos añadidos correctamente",
+        "taskUpdated": "Tarea actualizada correctamente"
+      }
+    },
+    "workReports": {
+      "title": "Informes de Trabajo",
+      "create": "Crear Informe de Trabajo"
+    }
   }
 }

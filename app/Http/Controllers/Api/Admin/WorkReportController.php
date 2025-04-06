@@ -241,14 +241,12 @@ class WorkReportController extends Controller
     private function updateWorkOrderStatus(int $workOrderId, int $reportStatus): void
     {
         $workOrder = WorkOrder::findOrFail($workOrderId);
-
         $statusMapping = [
             self::STATUS_PENDING => self::WORK_ORDER_REPORT_SENT,
-            self::STATUS_COMPLETED => self::WORK_ORDER_COMPLETED,
+            self::STATUS_COMPLETED => self::WORK_ORDER_REPORT_SENT,
             self::STATUS_REJECTED => self::WORK_ORDER_IN_PROGRESS,
-            self::STATUS_CLOSED_WITH_INCIDENTS => self::WORK_ORDER_COMPLETED,
+            self::STATUS_CLOSED_WITH_INCIDENTS => self::WORK_ORDER_REPORT_SENT,
         ];
-
         if (isset($statusMapping[$reportStatus])) {
             $workOrder->status = $statusMapping[$reportStatus];
             $workOrder->save();
