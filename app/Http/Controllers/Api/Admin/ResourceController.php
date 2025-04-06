@@ -41,7 +41,9 @@ class ResourceController extends Controller
             return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
         }
 
-        return response()->json(['resource_types' => ResourceType::all()]);
+        $resourceTypes = ResourceType::all();
+        
+        return response()->json(['resource_types' => $resourceTypes]);
     }
 
     /**
@@ -52,9 +54,9 @@ class ResourceController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $contractId = $request->session()->get('selected_contract_id', null);
+        $contractId = $request->input('contract_id', $request->session()->get('selected_contract_id', null));
 
-        if ($contractId <= 0) {
+        if (empty($contractId) || $contractId <= 0) {
             return response()->json(['message' => 'Debe seleccionar un contrato'], 400);
         }
 

@@ -27,6 +27,7 @@ export default function EditResource() {
     resource_type_id: 0,
     unit_cost: 0,
     unit_name: '',
+    contract_id: undefined,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
