@@ -103,11 +103,22 @@ class SensorController extends Controller
     public function update(Request $request, Sensor $sensor)
     {
         try {
-            $validated = $request->validated();
+            $validated = $request->validate([
+                'eui' => 'required|string|max:255|unique:sensors,eui,' . $sensor->id,
+                'name' => 'required|string|max:255',
+                'longitude' => 'nullable|numeric',
+                'latitude' => 'nullable|numeric',
+                'contract_id' => 'required|exists:contracts,id',
+            ]);
 
             $sensor->update($validated);
 
             return response()->json($sensor, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors(),
+            ], 422);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Error al actualizar el sensor',

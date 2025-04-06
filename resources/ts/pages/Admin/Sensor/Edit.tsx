@@ -10,12 +10,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useToast } from '@/hooks/useToast';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export default function EditSensor() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { showToast } = useToast();
+  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
   const [initialValues, setInitialValues] = useState({
     eui: '',
     name: '',
@@ -56,17 +59,36 @@ export default function EditSensor() {
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
+    if (!currentContract?.id) {
+      showToast('error', t('admin.pages.sensors.errors.no_contract', 'Debe seleccionar un contrato válido'));
+      return;
+    }
+    
     setIsSubmitting(true);
     try {
-      const data = { ...values };
+      await axiosClient.get('/sanctum/csrf-cookie');
+      
+      const data = { 
+        ...values,
+        contract_id: currentContract.id,
+        longitude: values.longitude ? parseFloat(values.longitude) : null,
+        latitude: values.latitude ? parseFloat(values.latitude) : null
+      };
+      
       await axiosClient.put(`/admin/sensors/${id}`, data);
       showToast(
         'success',
         t('admin.pages.sensors.list.messages.updateSuccess', 'Sensor updated successfully')
       );
       navigate('/admin/sensors');
-    } catch (error) {
-      showToast('error', t('admin.pages.sensors.list.messages.error', 'Error updating sensor'));
+    } catch (error: any) {
+      console.error('Error updating sensor:', error);
+      
+      if (error.response && error.response.data && error.response.data.message) {
+        showToast('error', error.response.data.message);
+      } else {
+        showToast('error', t('admin.pages.sensors.list.messages.error', 'Error updating sensor'));
+      }
     } finally {
       setIsSubmitting(false);
     }
