@@ -65,8 +65,29 @@ class EvaController extends Controller
     {
         $validated = $request->validate([
             'element_id' => ['required', 'integer', 'exists:elements,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'date_birth' => ['required', 'date'],
+            'height' => ['nullable', 'numeric'],
+            'diameter' => ['nullable', 'numeric'],
+            'crown_width' => ['nullable', 'numeric'],
+            'crown_projection_area' => ['nullable', 'numeric'],
+            'root_surface_diameter' => ['nullable', 'numeric'],
+            'effective_root_area' => ['nullable', 'numeric'],
+            'height_estimation' => ['nullable', 'numeric'],
+            'unbalanced_crown' => ['nullable', 'integer'],
+            'overextended_branches' => ['nullable', 'integer'],
+            'cracks' => ['nullable', 'integer'],
+            'dead_branches' => ['nullable', 'integer'],
+            'inclination' => ['nullable', 'integer'],
+            'V_forks' => ['nullable', 'integer'],
+            'cavities' => ['nullable', 'integer'],
+            'bark_damage' => ['nullable', 'integer'],
+            'soil_lifting' => ['nullable', 'integer'],
+            'cut_damaged_roots' => ['nullable', 'integer'],
+            'basal_rot' => ['nullable', 'integer'],
+            'exposed_surface_roots' => ['nullable', 'integer'],
+            'wind' => ['nullable', 'integer'],
+            'drought' => ['nullable', 'integer'],
+            'status' => ['nullable', 'integer'],
         ]);
 
         $eva = Eva::create($validated);
@@ -85,13 +106,19 @@ class EvaController extends Controller
      */
     public function edit(int $id): JsonResponse
     {
-        $data = [
-            'dictionaries' => Config::get('dictionaries'),
-            'eva' => Eva::with(['element.point', 'element.elementType'])->findOrFail($id),
-        ];
+        $eva = Eva::with(['element.point', 'element.elementType'])->findOrFail($id);
+        
+        if (!$eva) {
+            return response()->json(['message' => 'EVA not found'], 404);
+        }
 
-        return response()->json($data);
+        return response()->json([
+            'dictionaries' => Config::get('dictionaries'),
+            'eva' => $eva,
+            'status' => 'success'
+        ]);
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -104,14 +131,35 @@ class EvaController extends Controller
     {
         $validated = $request->validate([
             'element_id' => ['required', 'integer', 'exists:elements,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'date_birth' => ['nullable', 'date'],
+            'height' => ['nullable', 'numeric'],
+            'diameter' => ['nullable', 'numeric'],
+            'crown_width' => ['nullable', 'numeric'],
+            'crown_projection_area' => ['nullable', 'numeric'],
+            'root_surface_diameter' => ['nullable', 'numeric'],
+            'effective_root_area' => ['nullable', 'numeric'],
+            'height_estimation' => ['nullable', 'numeric'],
+            'unbalanced_crown' => ['nullable', 'integer'],
+            'overextended_branches' => ['nullable', 'integer'],
+            'cracks' => ['nullable', 'integer'],
+            'dead_branches' => ['nullable', 'integer'],
+            'inclination' => ['nullable', 'integer'],
+            'V_forks' => ['nullable', 'integer'],
+            'cavities' => ['nullable', 'integer'],
+            'bark_damage' => ['nullable', 'integer'],
+            'soil_lifting' => ['nullable', 'integer'],
+            'cut_damaged_roots' => ['nullable', 'integer'],
+            'basal_rot' => ['nullable', 'integer'],
+            'exposed_surface_roots' => ['nullable', 'integer'],
+            'wind' => ['nullable', 'integer'],
+            'drought' => ['nullable', 'integer'],
+            'status' => ['nullable', 'integer'],
         ]);
 
         $eva = Eva::findOrFail($id);
         $eva->update($validated);
 
-        return response()->json(['message' => 'Eva updated successfully']);
+        return response()->json(['message' => 'Eva updated successfully', 'eva' => $eva]);
     }
 
     /**

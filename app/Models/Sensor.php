@@ -12,7 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 class Sensor extends Model
 {
     protected $fillable = [
+        'eui',
         'contract_id',
+        'name',
+        'longitude',
+        'latitude',
     ];
 
     /**
@@ -22,6 +26,6 @@ class Sensor extends Model
      */
     public function contracts()
     {
-        return $this->belongsTo(Contract::class, 'contract_id');
+        return $this->belongsTo(Contract::class);
     }
 }

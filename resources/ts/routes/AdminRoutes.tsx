@@ -38,6 +38,10 @@ import EditWorkOrder from '@/pages/Admin/WorkOrders/Edit';
 import AdminWorkOrders from '@/pages/Admin/WorkOrders/Index';
 import WorkReport from '@/pages/Admin/WorkReport';
 import { Roles } from '@/types/Role';
+import Sensors from '@/pages/Admin/Sensor/Index';
+import CreateSensor from '@/pages/Admin/Sensor/Create';
+import EditSensor from '@/pages/Admin/Sensor/Edit';
+import ShowSensor from '@/pages/Admin/Sensor/Show';
 
 const AdminRoutes: RouteObject[] = [
   {
@@ -69,7 +73,7 @@ const AdminRoutes: RouteObject[] = [
             path: 'evas/create',
             element: (
               <AdminLayout titleI18n="admin.pages.evas.create.title">
-                <CreateEva />
+                <CreateEva preselectedElementId={null} onClose={() => {}} />
               </AdminLayout>
             ),
           },
@@ -166,6 +170,38 @@ const AdminRoutes: RouteObject[] = [
             element: (
               <AdminLayout titleI18n="admin.pages.stats.title">
                 <AdminStats />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'sensors',
+            element: (
+              <AdminLayout titleI18n="admin.pages.sensors.title">
+                <Sensors />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'sensors/create',
+            element: (
+              <AdminLayout titleI18n="admin.pages.sensors.create.title">
+                <CreateSensor />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'sensors/edit/:id',
+            element: (
+              <AdminLayout titleI18n="admin.pages.sensors.edit.title">
+                <EditSensor />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: 'sensors/:eui',
+            element: (
+              <AdminLayout titleI18n="admin.pages.sensors.show.title">
+                <ShowSensor />
               </AdminLayout>
             ),
           },

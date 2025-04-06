@@ -178,60 +178,111 @@ export default function EditEva({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEva = async () => {
-      try {
-        const response = await axiosClient.get(`/admin/evas/${elementId}`);
-        const data = response.data;
-        const today = new Date();
-        const birthDate = new Date(data.date_birth);
-        const years = differenceInYears(today, birthDate);
-        const months = differenceInMonths(today, birthDate) % 12;
-        setInitialValues({
-          ...data,
-          years,
-          months,
-        });
-      } catch (error) {
-        console.error(error);
-        setError(t('admin.pages.evas.list.messages.error'));
-        setIsLoading(false);
-      }
-    };
+  let isMounted = true; // Flag para evitar actualizaciones en componentes desmontados
 
-    const fetchDictionaries = async () => {
-      try {
-        const response = await axiosClient.get('/admin/evas/create');
-        const translatedDictionaries: Dictionaries = {
-          unbalancedCrown: [],
-          overextendedBranches: [],
-          cracks: [],
-          deadBranches: [],
-          inclination: [],
-          VForks: [],
-          cavities: [],
-          barkDamage: [],
-          soilLifting: [],
-          cutRoots: [],
-          basalRot: [],
-          exposedRoots: [],
-          wind: [],
-          drought: [],
-        };
-        for (const key in response.data.dictionaries) {
-          translatedDictionaries[key as keyof Dictionaries] =
-            response.data.dictionaries[key].map((option: DictionaryOption) => ({
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // Ejecutar ambas peticiones en paralelo
+      const [evaResponse, dictionariesResponse] = await Promise.all([
+        axiosClient.get(`/admin/evas/${elementId}`),
+        axiosClient.get('/admin/evas/create')
+      ]);
+
+      if (!isMounted) return;
+
+      // Procesar datos del EVA
+      const evaData = evaResponse.data;
+      if (!evaData) {
+        throw new Error('No se recibieron datos del EVA');
+      }
+
+      const today = new Date();
+      const birthDate = evaData.date_birth ? new Date(evaData.date_birth) : today;
+      const years = differenceInYears(today, birthDate);
+      const months = differenceInMonths(today, birthDate) % 12;
+
+      setInitialValues(prev => ({
+        ...prev,
+        ...evaData,
+        years,
+        months,
+        date_birth: evaData.date_birth || ''
+      }));
+
+      // Procesar diccionarios
+      const dictionariesData = dictionariesResponse.data;
+      if (!dictionariesData?.dictionaries) {
+        throw new Error('Formato de diccionarios inválido');
+      }
+
+      const translatedDictionaries: Dictionaries = {
+        unbalancedCrown: [],
+        overextendedBranches: [],
+        cracks: [],
+        deadBranches: [],
+        inclination: [],
+        VForks: [],
+        cavities: [],
+        barkDamage: [],
+        soilLifting: [],
+        cutRoots: [],
+        basalRot: [],
+        exposedRoots: [],
+        wind: [],
+        drought: [],
+      };
+
+      for (const key in dictionariesData.dictionaries) {
+        if (dictionariesData.dictionaries[key]) {
+          translatedDictionaries[key as keyof Dictionaries] = 
+            dictionariesData.dictionaries[key].map((option: DictionaryOption) => ({
               ...option,
-              label: t(option.label),
+              label: t(option.label) || option.label
             }));
         }
-        setDictionaries(translatedDictionaries);
-      } catch (error) {
-        console.error(error);
       }
-    };
 
-    Promise.all([fetchEva(), fetchDictionaries()]);
-  }, [elementId, t]);
+      setDictionaries(translatedDictionaries);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(
+          (error as any)?.response?.data?.message || 
+          error.message || 
+          t('admin.pages.evas.list.messages.error')
+        );
+      } else {
+        setError(t('admin.pages.evas.list.messages.error'));
+      }
+    } finally {
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  fetchData();
+
+  // Cleanup function
+  return () => {
+    isMounted = false;
+  };
+}, [elementId, t]);
+
+// Timeout de seguridad
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    if (isLoading) {
+      console.warn('Tiempo de espera excedido al cargar datos');
+      setError(t('admin.pages.evas.list.messages.timeout'));
+      setIsLoading(false);
+    }
+  }, 15000); // 15 segundos
+
+  return () => clearTimeout(timeout);
+}, [isLoading, t]);
 
   const validationSchema = Yup.object({
     element_id: Yup.number(),

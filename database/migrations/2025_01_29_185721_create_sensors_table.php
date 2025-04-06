@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('sensors', function (Blueprint $table) {
             $table->id();
+            $table->string('eui')->unique();
             $table->foreignId('contract_id')->constrained('contracts')->onDelete('cascade');
+            $table->string('name')->nullable();
+            $table->double('longitude')->nullable();
+            $table->double('latitude')->nullable();
             $table->timestamps();
         });
     }

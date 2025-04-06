@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\Admin\WorkerController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\WorkReportController;
 use App\Http\Controllers\Api\Admin\ZoneController;
+use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Controllers\Api\Worker\IndexController;
@@ -78,6 +79,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'work-reports' => WorkReportController::class,
             'zones' => ZoneController::class,
             'incidents' => IncidentsController::class,
+            'sensors' => SensorController::class,
         ]);
 
         Route::put('/work-orders/{id}/status', [WorkOrderController::class, 'updateStatus']);

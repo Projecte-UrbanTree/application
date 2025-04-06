@@ -59,6 +59,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
     '/admin/workers',
     '/admin/resources',
     '/admin/statistics',
+    '/admin/sensors',
     '/admin/work-reports',
   ].some((path) => location.pathname.startsWith(path));
 
@@ -189,6 +190,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
       to: '/admin/statistics',
       label: t('admin.submenu.manage.stats'),
       icon: 'tabler:chart-pie-4',
+    },
+    {
+      to: '/admin/sensors',
+      label: t('admin.submenu.manage.sensors'),
+      icon: 'tabler:device-analytics',
     },
   ];
 

@@ -57,7 +57,8 @@
         "stats": "Estadísticas",
         "workers": "Trabajadores",
         "eva": "EVA",
-        "workOrders": "Órdenes de trabajo"
+        "workOrders": "Órdenes de trabajo",
+        "sensors": "Sensores"
       },
       "settings": {
         "contracts": "Contratos",
@@ -640,7 +641,8 @@
             "crownProjectionArea": "Área de proyección de copa",
             "effectiveRootArea": "Área efectiva de raíces",
             "createEva": "Crear EVA",
-            "editEva": "Editar EVA"
+            "editEva": "Editar EVA",
+            "deleteEva": "Eliminar EVA"
           },
           "history": {
             "title": "Historial del elemento (en construcción...)",
@@ -1169,6 +1171,87 @@
         "updatedSuccessfully": "Trabajadores actualizados correctamente",
         "failedToLoad": "Error al cargar los trabajadores",
         "failedToUpdate": "Error al actualizar los trabajadores"
+      },
+      "sensors": {
+        "title": {
+          "title": "Sensores",
+          "create": "Crear Sensor",
+          "edit": "Editar Sensor",
+          "delete": "Eliminar Sensor"
+        },
+        "loading": "Cargando datos del sensor...",
+        "backButton": "Volver",
+        "notFound": "Sensor no encontrado",
+        "loadError": "Error al cargar los datos del sensor.",
+        "identification": "Identificación",
+        "status": "Estado",
+        "soilMeasurements": "Mediciones del suelo",
+        "fields": {
+          "id": "ID",
+          "dev_eui": "DevEUI",
+          "device_name": "Nombre del dispositivo",
+          "bat": "Batería",
+          "battery": "Batería",
+          "rssi": "RSSI",
+          "snr": "SNR",
+          "last_seen": "Última actualización",
+          "temp_soil": "Temperatura del suelo",
+          "ph1_soil": "pH del suelo",
+          "water_soil": "Humedad del suelo",
+          "conductor_soil": "Conductividad del suelo",
+          "eui": "DevEUI",
+          "name": "Nombre del dispositivo",
+          "longitude": "Longitud",
+          "latitude": "Latitud"
+        },
+        "form": {
+          "title": {
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
+          },
+          "validation": {
+            "eui_required": "El EUI es obligatorio",
+            "eui_min": "El EUI debe tener al menos 8 caracteres",
+            "eui_max": "El EUI debe tener menos de 32 caracteres",
+            "eui_format": "El EUI debe estar en formato hexadecimal (0-9, a-f)",
+            "name_required": "El nombre es obligatorio",
+            "name_min": "El nombre debe tener al menos 3 caracteres",
+            "name_max": "El nombre debe tener menos de 50 caracteres",
+            "name_format": "El nombre solo puede contener letras, números, espacios, guiones y guiones bajos",
+            "longitude_required": "La longitud es obligatoria",
+            "longitude_format": "Longitud no válida (debe estar entre -180 y 180)",
+            "latitude_required": "La latitud es obligatoria",
+            "latitude_format": "Latitud no válida (debe estar entre -90 y 90)"
+          },
+          "submitButton": {
+            "create": "Crear Sensor",
+            "edit": "Actualizar Sensor"
+          },
+          "submittingText": {
+            "create": "Creando...",
+            "edit": "Actualizando..."
+          }
+        },
+        "list": {
+          "messages": {
+            "createSuccess": "Sensor creado correctamente",
+            "updateSuccess": "Sensor actualizado correctamente",
+            "euiTaken": "El EUI ya está en uso",
+            "error": "Error al guardar el sensor",
+            "deleteConfirm": "¿Estás seguro de que deseas eliminar este sensor?",
+            "deleteError": "Error al eliminar el sensor",
+            "deletedSuccess": "Sensor eliminado correctamente"
+          },
+          "actions": {
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
+          }
+        },
+        "errors": {
+          "no_contract": "Debe seleccionar un contrato válido"
+        }
       }
     }
   },

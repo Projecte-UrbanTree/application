@@ -83,7 +83,7 @@ const FormField = ({ as: Component, name, label, ...props }: any) => {
 };
 
 interface CreateEvaProps {
-  preselectedElementId: number;
+  preselectedElementId: number | null;
   onClose: () => void;
   redirectPath?: string;
 }
@@ -228,13 +228,18 @@ const CreateEva = ({
         status,
         unbalanced_crown: values.unbalancedCrown,
         overextended_branches: values.overextendedBranches,
+        cracks: values.cracks,
         dead_branches: values.deadBranches,
+        inclination: values.inclination,
         V_forks: values.VForks,
+        cavities: values.cavities,
         bark_damage: values.barkDamage,
         soil_lifting: values.soilLifting,
-        cut_damaged_roots: values.cutRoots,
+        cut_damaged_roots: values.cutRoots,   
         basal_rot: values.basalRot,
         exposed_surface_roots: values.exposedRoots,
+        wind: values.wind,
+        drought: values.drought,
       };
 
       await axiosClient.post('/admin/evas', updatedValues);
