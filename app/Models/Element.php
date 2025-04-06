@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Element
  *
  * Represents an element in the application.
- *
- * @package App\Models
  */
 class Element extends Model
 {

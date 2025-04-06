@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class TreeType
  *
  * Represents a type of tree in the application.
- *
- * @package App\Models
  */
 class TreeType extends Model
 {

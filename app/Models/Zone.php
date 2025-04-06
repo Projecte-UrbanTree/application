@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Zone
  *
  * Represents a zone in the application.
- *
- * @package App\Models
  */
 class Zone extends Model
 {

@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class ResourceType
  *
  * Represents a type of resource in the application.
- *
- * @package App\Models
  */
 class ResourceType extends Model
 {

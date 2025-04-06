@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class WorkReport
  *
  * Represents a work report in the application.
- *
- * @package App\Models
  */
 class WorkReport extends Model
 {

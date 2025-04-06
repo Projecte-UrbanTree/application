@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Incidence
  *
  * Represents an incidence or issue in the application.
- *
- * @package App\Models
  */
 class Incidence extends Model
 {

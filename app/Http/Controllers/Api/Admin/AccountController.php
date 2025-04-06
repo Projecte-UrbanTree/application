@@ -32,7 +32,7 @@ class AccountController extends Controller
     /**
      * Update the authenticated user's account details.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response confirming the update.
      */
     public function update(Request $request): JsonResponse
@@ -42,7 +42,7 @@ class AccountController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'company' => ['nullable', 'string', 'max:255'],
             'dni' => ['nullable', 'string', 'max:50'],
         ]);
@@ -55,7 +55,7 @@ class AccountController extends Controller
     /**
      * Update the authenticated user's password.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response confirming the password update.
      */
     public function updatePassword(Request $request): JsonResponse
@@ -67,7 +67,7 @@ class AccountController extends Controller
 
         $user = Auth::user();
 
-        if (!Hash::check($validated['currentPassword'], $user->password)) {
+        if (! Hash::check($validated['currentPassword'], $user->password)) {
             return response()->json(['error' => 'La contraseña actual no es correcta'], 400);
         }
 

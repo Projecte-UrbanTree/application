@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Class Contract
  *
  * Represents a contract in the application.
- *
- * @package App\Models
  */
 class Contract extends Model
 {
@@ -25,8 +23,6 @@ class Contract extends Model
 
     /**
      * Get the sensors associated with the contract.
-     *
-     * @return HasMany
      */
     public function sensors(): HasMany
     {
@@ -35,8 +31,6 @@ class Contract extends Model
 
     /**
      * Get the zones associated with the contract.
-     *
-     * @return HasMany
      */
     public function zones(): HasMany
     {
@@ -45,8 +39,6 @@ class Contract extends Model
 
     /**
      * Get the work orders associated with the contract.
-     *
-     * @return HasMany
      */
     public function workOrders(): HasMany
     {
@@ -55,8 +47,6 @@ class Contract extends Model
 
     /**
      * Get the workers associated with the contract.
-     *
-     * @return BelongsToMany
      */
     public function workers(): BelongsToMany
     {
@@ -65,8 +55,6 @@ class Contract extends Model
 
     /**
      * Get the resources associated with the contract.
-     *
-     * @return HasMany
      */
     public function resources(): HasMany
     {

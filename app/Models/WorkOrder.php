@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class WorkOrder
  *
  * Represents a work order in the application.
- *
- * @package App\Models
  */
 class WorkOrder extends Model
 {
@@ -52,8 +50,6 @@ class WorkOrder extends Model
 
     /**
      * Get the users associated with the work order.
-     *
-     * @return BelongsToMany
      */
     public function users(): BelongsToMany
     {

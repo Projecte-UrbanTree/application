@@ -13,7 +13,7 @@ class ResourceController extends Controller
     /**
      * Display a listing of resources.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the list of resources.
      */
     public function index(Request $request): JsonResponse
@@ -30,7 +30,7 @@ class ResourceController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing resource types for creation.
      */
     public function create(Request $request): JsonResponse
@@ -42,14 +42,14 @@ class ResourceController extends Controller
         }
 
         $resourceTypes = ResourceType::all();
-        
+
         return response()->json(['resource_types' => $resourceTypes]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created resource.
      */
     public function store(Request $request): JsonResponse
@@ -79,7 +79,7 @@ class ResourceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Resource $resource The resource model instance.
+     * @param  resource  $resource  The resource model instance.
      * @return JsonResponse A JSON response containing the resource details.
      */
     public function show(Resource $resource): JsonResponse
@@ -90,7 +90,7 @@ class ResourceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Resource $resource The resource model instance.
+     * @param  resource  $resource  The resource model instance.
      * @return JsonResponse A JSON response containing the resource and resource types.
      */
     public function edit(Resource $resource): JsonResponse
@@ -101,8 +101,8 @@ class ResourceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param Resource $resource The resource model instance.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  resource  $resource  The resource model instance.
      * @return JsonResponse A JSON response containing the updated resource.
      */
     public function update(Request $request, Resource $resource): JsonResponse
@@ -124,7 +124,7 @@ class ResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Resource $resource The resource model instance.
+     * @param  resource  $resource  The resource model instance.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy(Resource $resource): JsonResponse
