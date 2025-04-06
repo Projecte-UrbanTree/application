@@ -107,7 +107,7 @@ const Sensors: React.FC = () => {
         </h1>
         <button
           onClick={() => navigate('/admin/sensors/create')}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
           {t('admin.pages.sensors.createButton')}
         </button>
       </div>
@@ -136,19 +136,18 @@ const Sensors: React.FC = () => {
                       onClick={() => navigate(`/admin/sensors/${sensor.eui}`)}>
                       {sensor.name || `Sensor ${sensor.id}`}
                     </h2>
-                    <p className="text-xs text-gray-500">ID: {sensor.id}</p>
                   </div>
                 </div>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => navigate(`/admin/sensors/edit/${sensor.id}`)}
-                    className="text-gray-400 hover:text-blue-600 transition-colors"
+                    className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
                     title={t('admin.pages.sensors.editButton')}>
                     <PencilIcon className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => handleDelete(sensor.id)}
-                    className="text-gray-400 hover:text-red-600 transition-colors"
+                    className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer"
                     title={t('admin.pages.sensors.deleteButton')}>
                     <TrashIcon className="w-5 h-5" />
                   </button>
@@ -191,35 +190,6 @@ const Sensors: React.FC = () => {
                   </p>
                 </div>
               </div>
-
-              {/* Sensor Data */}
-              {sensor.temp_soil && (
-                <div className="bg-gray-50 p-3 rounded-lg mb-3">
-                  <p className="text-xs text-gray-500 mb-1">Temperatura suelo</p>
-                  <p className="text-gray-700">{sensor.temp_soil} °C</p>
-                </div>
-              )}
-              
-              {sensor.ph1_soil && (
-                <div className="bg-gray-50 p-3 rounded-lg mb-3">
-                  <p className="text-xs text-gray-500 mb-1">pH suelo</p>
-                  <p className="text-gray-700">{sensor.ph1_soil}</p>
-                </div>
-              )}
-              
-              {sensor.water_soil && (
-                <div className="bg-gray-50 p-3 rounded-lg mb-3">
-                  <p className="text-xs text-gray-500 mb-1">Humedad suelo</p>
-                  <p className="text-gray-700">{sensor.water_soil}%</p>
-                </div>
-              )}
-              
-              {sensor.conductor_soil && (
-                <div className="bg-gray-50 p-3 rounded-lg mb-3">
-                  <p className="text-xs text-gray-500 mb-1">Conductividad suelo</p>
-                  <p className="text-gray-700">{sensor.conductor_soil} µS/cm</p>
-                </div>
-              )}
 
               {/* Location */}
               <div className="grid grid-cols-2 gap-3 mb-4">

@@ -11,6 +11,7 @@ import { RootState } from '@/store/store';
 import { useToast } from '@/hooks/useToast';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { fetchSensorByEUI } from '@/api/sensors';
 
 export default function CreateSensor() {
   const navigate = useNavigate();
@@ -61,6 +62,12 @@ export default function CreateSensor() {
 
     setIsSubmitting(true);
     try {
+      // Check if the EUI exists in the API
+      const existingSensor = await fetchSensorByEUI(values.dev_eui.trim());
+      if (!existingSensor) {
+        throw new Error(`Sensor with EUI "${values.dev_eui}" does not exist in the system`);
+      }
+      
       const payload = {
         eui: values.dev_eui.trim(),
         name: values.dev_name.trim(),
@@ -83,7 +90,7 @@ export default function CreateSensor() {
           return;
         }
       }
-      
+
       // Handle other errors
       if (error.response && error.response.data && error.response.data.message) {
         showToast('error', error.response.data.message);
