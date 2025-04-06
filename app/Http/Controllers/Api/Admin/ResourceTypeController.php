@@ -24,7 +24,7 @@ class ResourceTypeController extends Controller
     /**
      * Store a newly created resource type in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created resource type.
      */
     public function store(Request $request): JsonResponse
@@ -42,7 +42,7 @@ class ResourceTypeController extends Controller
     /**
      * Display the specified resource type.
      *
-     * @param int $id The ID of the resource type to retrieve.
+     * @param  int  $id  The ID of the resource type to retrieve.
      * @return JsonResponse A JSON response containing the resource type details.
      */
     public function show($id): JsonResponse
@@ -55,8 +55,8 @@ class ResourceTypeController extends Controller
     /**
      * Update the specified resource type in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $id The ID of the resource type to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the resource type to update.
      * @return JsonResponse A JSON response containing the updated resource type.
      */
     public function update(Request $request, $id): JsonResponse
@@ -76,7 +76,7 @@ class ResourceTypeController extends Controller
     /**
      * Remove the specified resource type from storage.
      *
-     * @param int $id The ID of the resource type to delete.
+     * @param  int  $id  The ID of the resource type to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy($id): JsonResponse

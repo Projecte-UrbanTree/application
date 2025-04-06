@@ -24,7 +24,7 @@ class ElementController extends Controller
     /**
      * Store a newly created element in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created element.
      */
     public function store(Request $request): JsonResponse
@@ -44,14 +44,14 @@ class ElementController extends Controller
     /**
      * Remove the specified element from storage.
      *
-     * @param int $id The ID of the element to delete.
+     * @param  int  $id  The ID of the element to delete.
      * @return JsonResponse A JSON response confirming the deletion or an error message.
      */
     public function destroy($id): JsonResponse
     {
         $element = Element::find($id);
 
-        if (!$element) {
+        if (! $element) {
             return response()->json(['message' => 'Element not found'], 404);
         }
 

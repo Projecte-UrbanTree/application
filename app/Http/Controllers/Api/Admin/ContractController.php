@@ -27,7 +27,7 @@ class ContractController extends Controller
     /**
      * Store a newly created contract in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created contract.
      */
     public function store(Request $request): JsonResponse
@@ -51,7 +51,7 @@ class ContractController extends Controller
     /**
      * Display the specified contract.
      *
-     * @param int $id The ID of the contract to retrieve.
+     * @param  int  $id  The ID of the contract to retrieve.
      * @return JsonResponse A JSON response containing the contract details.
      */
     public function show($id): JsonResponse
@@ -64,8 +64,8 @@ class ContractController extends Controller
     /**
      * Update the specified contract in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $id The ID of the contract to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the contract to update.
      * @return JsonResponse A JSON response containing the updated contract.
      */
     public function update(Request $request, $id): JsonResponse
@@ -95,7 +95,7 @@ class ContractController extends Controller
     /**
      * Remove the specified contract from storage.
      *
-     * @param int $id The ID of the contract to delete.
+     * @param  int  $id  The ID of the contract to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy($id): JsonResponse
@@ -109,7 +109,7 @@ class ContractController extends Controller
     /**
      * Select a contract for the session.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response confirming the contract selection.
      */
     public function selectContract(Request $request): JsonResponse
@@ -119,7 +119,7 @@ class ContractController extends Controller
                 'nullable',
                 'integer',
                 function ($attribute, $value, $fail) {
-                    if ($value !== 0 && !Contract::find($value)) {
+                    if ($value !== 0 && ! Contract::find($value)) {
                         $fail('The selected contract does not exist.');
                     }
                 },
@@ -140,7 +140,7 @@ class ContractController extends Controller
     /**
      * Retrieve the selected contract from the session.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response with the currently selected contract.
      */
     public function getSelectedContract(Request $request): JsonResponse
@@ -157,7 +157,7 @@ class ContractController extends Controller
     /**
      * Duplicate an existing contract.
      *
-     * @param int $id The ID of the contract to duplicate.
+     * @param  int  $id  The ID of the contract to duplicate.
      * @return JsonResponse A JSON response containing the duplicated contract.
      */
     public function duplicate($id): JsonResponse

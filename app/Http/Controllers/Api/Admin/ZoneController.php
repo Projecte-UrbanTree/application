@@ -12,7 +12,7 @@ class ZoneController extends Controller
     /**
      * Display a listing of zones.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the list of zones.
      */
     public function index(Request $request): JsonResponse
@@ -26,7 +26,7 @@ class ZoneController extends Controller
     /**
      * Store a newly created zone in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created zone.
      */
     public function store(Request $request): JsonResponse
@@ -44,9 +44,30 @@ class ZoneController extends Controller
     }
 
     /**
+     * Update the specified zone in storage.
+     *
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the zone to update.
+     * @return JsonResponse A JSON response containing the updated zone.
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'color' => ['required', 'string', 'max:255'],
+        ]);
+
+        $zone = Zone::findOrFail($id);
+        $zone->update($validated);
+
+        return response()->json($zone);
+    }
+
+    /**
      * Remove the specified zone from storage.
      *
-     * @param int $id The ID of the zone to delete.
+     * @param  int  $id  The ID of the zone to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy($id): JsonResponse

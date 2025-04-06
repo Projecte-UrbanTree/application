@@ -11,7 +11,7 @@ class LangController extends Controller
     /**
      * Set the application language.
      *
-     * @param string $lang The language code to set.
+     * @param  string  $lang  The language code to set.
      * @return RedirectResponse A redirect response back to the previous page.
      */
     public function setLanguage(string $lang): RedirectResponse

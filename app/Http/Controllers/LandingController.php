@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\LandingForm;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LandingController extends Controller
@@ -22,7 +22,7 @@ class LandingController extends Controller
     /**
      * Store a new landing form submission.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return RedirectResponse A redirect response to the landing page with a success message.
      */
     public function store(Request $request): RedirectResponse
@@ -34,7 +34,7 @@ class LandingController extends Controller
             'message' => 'nullable|string|min:10|max:255',
         ]);
 
-        $landingForm = new LandingForm();
+        $landingForm = new LandingForm;
         $landingForm->name = $validated['name'];
         $landingForm->email = $validated['email'];
         $landingForm->phone = $validated['phone'];

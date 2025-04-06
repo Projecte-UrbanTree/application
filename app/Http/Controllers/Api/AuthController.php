@@ -13,7 +13,7 @@ class AuthController extends Controller
     /**
      * Handle user login.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the access token and user data, or an error message.
      */
     public function login(Request $request): JsonResponse
@@ -37,7 +37,7 @@ class AuthController extends Controller
     /**
      * Handle user logout.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response confirming the logout.
      */
     public function logout(Request $request): JsonResponse

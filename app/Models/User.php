@@ -16,8 +16,6 @@ use Laravel\Sanctum\HasApiTokens;
  * Class User
  *
  * Represents a user in the application.
- *
- * @package App\Models
  */
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
@@ -66,8 +64,6 @@ class User extends Authenticatable
 
     /**
      * Get the work order users associated with the user.
-     *
-     * @return HasMany
      */
     public function workOrderUsers(): HasMany
     {
@@ -76,8 +72,6 @@ class User extends Authenticatable
 
     /**
      * Get the contracts associated with the user.
-     *
-     * @return BelongsToMany
      */
     public function contracts(): BelongsToMany
     {

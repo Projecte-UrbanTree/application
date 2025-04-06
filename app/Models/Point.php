@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class Point
  *
  * Represents a geographical point in the application.
- *
- * @package App\Models
  */
 class Point extends Model
 {

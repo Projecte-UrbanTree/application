@@ -24,7 +24,7 @@ class IncidentsController extends Controller
     /**
      * Store a newly created incidence in storage.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the created incidence.
      */
     public function store(Request $request): JsonResponse
@@ -44,8 +44,8 @@ class IncidentsController extends Controller
     /**
      * Update the specified incidence in storage.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $id The ID of the incidence to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the incidence to update.
      * @return JsonResponse A JSON response containing the updated incidence.
      */
     public function update(Request $request, $id): JsonResponse
@@ -67,7 +67,7 @@ class IncidentsController extends Controller
     /**
      * Remove the specified incidence from storage.
      *
-     * @param int $id The ID of the incidence to delete.
+     * @param  int  $id  The ID of the incidence to delete.
      * @return JsonResponse A JSON response confirming the deletion.
      */
     public function destroy($id): JsonResponse

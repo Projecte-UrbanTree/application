@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * Class WorkOrderUser
  *
  * Represents the relationship between a work order and a user.
- *
- * @package App\Models
  */
 class WorkOrderUser extends Model
 {

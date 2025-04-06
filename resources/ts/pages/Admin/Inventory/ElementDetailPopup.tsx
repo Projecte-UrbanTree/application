@@ -626,7 +626,17 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}
-        onTabChange={(e) => setActiveIndex(e.index)}>
+        onTabChange={(e) => setActiveIndex(e.index)}
+        renderActiveOnly={false}
+        scrollable={false}
+        pt={{
+          inkbar: { style: { display: 'none' } },
+          navContainer: { 
+            className: 'no-fragment-links', 
+            tabIndex: null
+          },
+          nav: { className: 'no-hash-links' }
+        }}>
         <TabPanel
           header={t(
             'admin.pages.inventory.elementDetailPopup.tabs.information',
