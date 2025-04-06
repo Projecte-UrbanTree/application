@@ -3,6 +3,7 @@ import axiosClient from '@/api/axiosClient';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
+import { fetchSensors, Sensor as ApiSensor } from '@/api/sensors';
 
 interface Sensor {
   id: number;
@@ -10,6 +11,14 @@ interface Sensor {
   name: string;
   latitude: number;
   longitude: number;
+  battery?: number;
+  rssi?: number;
+  snr?: number;
+  lastUpdated?: string;
+  temp_soil?: number;
+  ph1_soil?: number;
+  water_soil?: number | null;
+  conductor_soil?: number | null;
 }
 
 const Sensors: React.FC = () => {
@@ -22,10 +31,40 @@ const Sensors: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchSensors = async () => {
+    const fetchAndProcessSensors = async () => {
       try {
-        const response = await axiosClient.get('/admin/sensors');
-        setSensors(response.data);
+        const backendResponse = await axiosClient.get('/admin/sensors');
+        const backendSensors: Sensor[] = backendResponse.data;
+        
+        const apiSensors = await fetchSensors();
+        
+        const latestByEui: Record<string, ApiSensor> = {};
+        apiSensors.forEach((sensor: ApiSensor) => {
+          if (!latestByEui[sensor.dev_eui] || 
+              new Date(sensor.time) > new Date(latestByEui[sensor.dev_eui].time)) {
+            latestByEui[sensor.dev_eui] = sensor;
+          }
+        });
+        
+        const combinedSensors = backendSensors.map(backendSensor => {
+          const apiData = latestByEui[backendSensor.eui];
+          if (apiData) {
+            return {
+              ...backendSensor,
+              battery: apiData.bat,
+              rssi: apiData.rssi,
+              snr: apiData.snr,
+              lastUpdated: apiData.time,
+              temp_soil: apiData.temp_soil,
+              ph1_soil: apiData.ph1_soil,
+              water_soil: apiData.water_soil,
+              conductor_soil: apiData.conductor_soil
+            };
+          }
+          return backendSensor;
+        });
+        
+        setSensors(combinedSensors);
       } catch (err) {
         setError(t('admin.pages.sensors.loadError'));
         console.error(err);
@@ -33,7 +72,8 @@ const Sensors: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchSensors();
+    
+    fetchAndProcessSensors();
   }, []);
 
   useEffect(() => {
@@ -121,6 +161,12 @@ const Sensors: React.FC = () => {
                     {sensor.eui}
                   </span>
                 </div>
+                <div className="flex items-center justify-between text-sm mb-1">
+                  <span className="text-gray-500">Última actualización:</span>
+                  <span className="text-gray-700 text-xs">
+                    {sensor.lastUpdated ? new Date(sensor.lastUpdated).toLocaleString() : 'N/A'}
+                  </span>
+                </div>
               </div>
 
               {/* Status indicators */}
@@ -128,15 +174,50 @@ const Sensors: React.FC = () => {
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-xs text-gray-500 mb-1">Batería</p>
                   <div className="flex items-center">
-                    <span className="inline-block w-2 h-2 rounded-full mr-2 bg-gray-300"></span>
-                    <span className="text-gray-600">-- V</span>
+                    <span className={`inline-block w-2 h-2 rounded-full mr-2 ${
+                      sensor.battery && sensor.battery > 3.2 ? 'bg-green-500' : 
+                      sensor.battery && sensor.battery > 2.8 ? 'bg-yellow-500' : 'bg-red-500'
+                    }`}></span>
+                    <span className="text-gray-600">{sensor.battery ? `${sensor.battery.toFixed(2)} V` : '-- V'}</span>
                   </div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-xs text-gray-500 mb-1">Señal</p>
-                  <p className="text-gray-600">-- dBm</p>
+                  <p className="text-gray-600">
+                    {sensor.rssi ? `${sensor.rssi} dBm` : '-- dBm'}
+                    {sensor.snr && ` (${sensor.snr.toFixed(1)} SNR)`}
+                  </p>
                 </div>
               </div>
+
+              {/* Sensor Data */}
+              {sensor.temp_soil && (
+                <div className="bg-gray-50 p-3 rounded-lg mb-3">
+                  <p className="text-xs text-gray-500 mb-1">Temperatura suelo</p>
+                  <p className="text-gray-700">{sensor.temp_soil} °C</p>
+                </div>
+              )}
+              
+              {sensor.ph1_soil && (
+                <div className="bg-gray-50 p-3 rounded-lg mb-3">
+                  <p className="text-xs text-gray-500 mb-1">pH suelo</p>
+                  <p className="text-gray-700">{sensor.ph1_soil}</p>
+                </div>
+              )}
+              
+              {sensor.water_soil && (
+                <div className="bg-gray-50 p-3 rounded-lg mb-3">
+                  <p className="text-xs text-gray-500 mb-1">Humedad suelo</p>
+                  <p className="text-gray-700">{sensor.water_soil}%</p>
+                </div>
+              )}
+              
+              {sensor.conductor_soil && (
+                <div className="bg-gray-50 p-3 rounded-lg mb-3">
+                  <p className="text-xs text-gray-500 mb-1">Conductividad suelo</p>
+                  <p className="text-gray-700">{sensor.conductor_soil} µS/cm</p>
+                </div>
+              )}
 
               {/* Location */}
               <div className="grid grid-cols-2 gap-3 mb-4">
@@ -148,12 +229,6 @@ const Sensors: React.FC = () => {
                   <p className="text-xs text-gray-500 mb-1">Longitud</p>
                   <p className="text-gray-700">{sensor.longitude}</p>
                 </div>
-              </div>
-
-              {/* Additional Info Placeholder */}
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-xs text-gray-500 mb-1">Estado</p>
-                <p className="text-gray-700">Activo</p>
               </div>
             </div>
           </div>
