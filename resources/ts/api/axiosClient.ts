@@ -1,6 +1,7 @@
+import axios from 'axios';
+
 import store from '@/store/store';
 import { Contract } from '@/types/Contract';
-import axios, { AxiosRequestConfig } from 'axios';
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost/api',

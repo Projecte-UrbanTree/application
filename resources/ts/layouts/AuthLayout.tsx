@@ -1,6 +1,7 @@
-import React from 'react';
-import LangSelector from '@/components/LangSelector';
 import logo from '@images/logo.png';
+import React from 'react';
+
+import LangSelector from '@/components/LangSelector';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
 
   return (
     <div className="font-sans leading-normal tracking-normal flex items-center justify-center h-screen p-2 md:p-0">
-      <div className="w-full max-w-xl bg-white rounded p-8 border border-gray-200">
+      <div className="w-full max-w-xl bg-white rounded p-8 border border-gray-300">
         <div className="flex justify-end">
           <LangSelector />
         </div>

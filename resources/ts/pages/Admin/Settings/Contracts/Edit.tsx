@@ -1,21 +1,25 @@
-import { useState, useEffect } from "react";
-import { Icon } from "@iconify/react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Formik, Form, Field, FieldProps } from "formik";
-import * as Yup from "yup";
-import axiosClient from "@/api/axiosClient";
-import { useTranslation } from "react-i18next";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import { Calendar } from "primereact/calendar";
-import { InputNumber } from "primereact/inputnumber";
-import { Dropdown } from "primereact/dropdown";
-import { Card } from "primereact/card";
+import { Icon } from '@iconify/react';
+import { Field, Form, Formik } from 'formik';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Card } from 'primereact/card';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
+import { InputText } from 'primereact/inputtext';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import axiosClient from '@/api/axiosClient';
+import { useToast } from '@/hooks/useToast';
 
 export default function EditContract() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [initialValues, setInitialValues] = useState<{
     name: string;
     start_date: Date | null;
@@ -30,32 +34,33 @@ export default function EditContract() {
     status: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        const parseDateLocal = (dateString: string) => {
-            const [year, month, day] = dateString.split('-').map(Number);
-            return new Date(year, month - 1, day);
-        };
+  useEffect(() => {
+    const parseDateLocal = (dateString: string) => {
+      const [year, month, day] = dateString.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    };
 
-        const fetchContract = async () => {
-            try {
-                const response = await axiosClient.get(`/admin/contracts/${id}`);
-                const contract = response.data;
-                setInitialValues({
-                    name: contract.name,
-                    start_date: parseDateLocal(contract.start_date),
-                    end_date: parseDateLocal(contract.end_date),
-                    final_price: contract.final_price,
-                    status: contract.status
-                });
-                setIsLoading(false);
-            } catch (error) {
-                console.error(error);
-                setIsLoading(false);
-            }
-        };
-        fetchContract();
-    }, [id]);
+    const fetchContract = async () => {
+      try {
+        const response = await axiosClient.get(`/admin/contracts/${id}`);
+        const contract = response.data;
+        setInitialValues({
+          name: contract.name,
+          start_date: parseDateLocal(contract.start_date),
+          end_date: parseDateLocal(contract.end_date),
+          final_price: contract.final_price,
+          status: contract.status,
+        });
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    };
+    fetchContract();
+  }, [id]);
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -86,19 +91,29 @@ export default function EditContract() {
       .required(t('admin.pages.contracts.form.validation.status_required')),
   });
 
-    const handleSubmit = async (values: typeof initialValues) => {
-        const payload = {
-            ...values,
-            start_date: values.start_date ? values.start_date.toLocaleDateString('en-CA') : null,
-            end_date: values.end_date ? values.end_date.toLocaleDateString('en-CA') : null,
-        };
-        try {
-            await axiosClient.put(`/admin/contracts/${id}`, payload);
-            navigate("/admin/settings/contracts", { state: { success: t("admin.pages.contracts.list.messages.updateSuccess") } });
-        } catch (error) {
-            navigate("/admin/settings/contracts", { state: { error: t("admin.pages.contracts.list.messages.error") } });
-        }
-    };
+  const handleSubmit = async (values: typeof initialValues) => {
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        ...values,
+        start_date: values.start_date
+          ? values.start_date.toLocaleDateString('en-CA')
+          : null,
+        end_date: values.end_date
+          ? values.end_date.toLocaleDateString('en-CA')
+          : null,
+      };
+      await axiosClient.put(`/admin/contracts/${id}`, payload);
+      showToast(
+        'success',
+        t('admin.pages.contracts.list.messages.updateSuccess'),
+      );
+      navigate('/admin/settings/contracts');
+    } catch (error) {
+      showToast('error', t('admin.pages.contracts.list.messages.error'));
+    }
+    setIsSubmitting(false);
+  };
 
   const statusOptions = [
     { label: t('admin.status.active'), value: 0 },
@@ -108,38 +123,37 @@ export default function EditContract() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Icon
-          icon="eos-icons:loading"
-          className="h-8 w-8 animate-spin text-blue-600"
+      <div className="flex justify-center p-4">
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
         />
-        <span className="mt-2 text-blue-600">{t('general.loading')}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin/settings/contracts')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.contracts.form.title.edit')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <>
+      <div className="flex items-center mb-4">
+        <Button
+          icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+          className="p-button-text mr-3"
+          onClick={() => navigate('/admin/settings/contracts')}
+        />
+        <h2 className="text-xl font-semibold text-gray-800">
+          {t('admin.pages.contracts.form.title.edit')}
+        </h2>
+      </div>
+
+      <Card className="border border-gray-300 bg-gray-50 rounded shadow-sm">
+        <div className="p-0">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
             enableReinitialize>
-            {({ errors, touched, isSubmitting, setFieldValue, values }) => (
-              <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {({ errors, touched, setFieldValue, values }) => (
+              <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:file" className="h-5 w-5 mr-2" />
@@ -199,7 +213,9 @@ export default function EditContract() {
                   </label>
                   <InputNumber
                     value={values.final_price}
-                    onValueChange={(e) => setFieldValue('final_price', e.value || 0)}
+                    onValueChange={(e) =>
+                      setFieldValue('final_price', e.value || 0)
+                    }
                     placeholder={t('admin.fields.final_price')}
                     minFractionDigits={0}
                     maxFractionDigits={0}
@@ -236,14 +252,13 @@ export default function EditContract() {
                     <small className="p-error">{errors.status}</small>
                   )}
                 </div>
-                <div className="md:col-span-2 flex justify-end mt-4">
+                <div className="md:col-span-2 flex justify-end mt-6">
                   <Button
                     type="submit"
+                    severity="info"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto"
-                    icon={
-                      isSubmitting ? 'pi pi-spin pi-spinner' : 'pi pi-check'
-                    }
+                    className="p-button-sm"
+                    icon={isSubmitting ? 'pi pi-spin pi-spinner' : undefined}
                     label={
                       isSubmitting
                         ? t('admin.pages.contracts.form.submittingText.edit')
@@ -256,6 +271,6 @@ export default function EditContract() {
           </Formik>
         </div>
       </Card>
-    </div>
+    </>
   );
 }

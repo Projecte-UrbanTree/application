@@ -1,4 +1,5 @@
 import React from 'react';
+
 import AppRoutes from '@/AppRoutes';
 import DataInitializer from '@/components/DataInitializer';
 

@@ -4,6 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Eva
+ *
+ * Represents an evaluation (Eva) of an element in the application.
+ *
+ * @package App\Models
+ */
 class Eva extends Model
 {
     protected $table = 'eva';
@@ -35,6 +42,11 @@ class Eva extends Model
         'status',
     ];
 
+    /**
+     * Get the element associated with the evaluation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function element()
     {
         return $this->belongsTo(Element::class, 'element_id');

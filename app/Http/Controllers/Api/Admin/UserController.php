@@ -4,17 +4,31 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of users.
+     *
+     * @return JsonResponse A JSON response containing the list of users.
+     */
+    public function index(): JsonResponse
     {
-        return response()->json(User::all());
+        $users = User::all();
+
+        return response()->json($users);
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created user in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the created user.
+     */
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -27,20 +41,32 @@ class UserController extends Controller
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
-
         $user = User::create($validated);
 
         return response()->json($user, 201);
     }
 
-    public function show($id)
+    /**
+     * Display the specified user.
+     *
+     * @param int $id The ID of the user to retrieve.
+     * @return JsonResponse A JSON response containing the user details.
+     */
+    public function show($id): JsonResponse
     {
         $user = User::findOrFail($id);
 
         return response()->json($user);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified user in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @param int $id The ID of the user to update.
+     * @return JsonResponse A JSON response containing the updated user.
+     */
+    public function update(Request $request, $id): JsonResponse
     {
         $user = User::findOrFail($id);
 
@@ -54,10 +80,8 @@ class UserController extends Controller
             'password' => ['nullable', 'string', 'min:8'],
         ]);
 
-        if (isset($validated['password']) && ! empty($validated['password'])) {
+        if (isset($validated['password'])) {
             $validated['password'] = bcrypt($validated['password']);
-        } else {
-            unset($validated['password']);
         }
 
         $user->update($validated);
@@ -65,7 +89,13 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified user from storage.
+     *
+     * @param int $id The ID of the user to delete.
+     * @return JsonResponse A JSON response confirming the deletion.
+     */
+    public function destroy($id): JsonResponse
     {
         $user = User::findOrFail($id);
         $user->delete();

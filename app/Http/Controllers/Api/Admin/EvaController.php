@@ -3,30 +3,38 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EvaRequest;
 use App\Models\Element;
 use App\Models\Eva;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
 class EvaController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return JsonResponse A JSON response containing the list of EVAs.
+     */
+    public function index(): JsonResponse
     {
         $evas = Eva::with(['element.point', 'element.elementType'])->get();
 
         return response()->json($evas);
     }
 
-    public function create()
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return JsonResponse A JSON response containing data for creating an EVA.
+     */
+    public function create(): JsonResponse
     {
         $dictionaries = Config::get('dictionaries');
-
-        $elements = Element::with(['elementType'])->get()->map(function ($element) {
-            return [
-                'id' => $element->id,
-                'name' => $element->elementType->name,
-            ];
-        });
+        $elements = Element::with(['elementType'])->get()->map(fn ($element) => [
+            'id' => $element->id,
+            'name' => $element->elementType->name,
+        ]);
 
         return response()->json([
             'dictionaries' => $dictionaries,
@@ -34,19 +42,34 @@ class EvaController extends Controller
         ]);
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id The ID of the EVA to retrieve.
+     * @return JsonResponse A JSON response containing the EVA details.
+     */
+    public function show(int $id): JsonResponse
     {
-        $eva = Eva::with(['element.point', 'element.elementType'])
-            ->findOrFail($id);
+        $eva = Eva::with(['element.point', 'element.elementType'])->findOrFail($id);
 
         return response()->json($eva);
     }
 
-    public function store(EvaRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @return JsonResponse A JSON response containing the created EVA.
+     */
+    public function store(Request $request): JsonResponse
     {
-        $validatedData = $request->validated();
+        $validated = $request->validate([
+            'element_id' => ['required', 'integer', 'exists:elements,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ]);
 
-        $eva = Eva::create($validatedData);
+        $eva = Eva::create($validated);
 
         return response()->json([
             'message' => 'Eva created successfully',
@@ -54,7 +77,13 @@ class EvaController extends Controller
         ]);
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id The ID of the EVA to edit.
+     * @return JsonResponse A JSON response containing data for editing the EVA.
+     */
+    public function edit(int $id): JsonResponse
     {
         $data = [
             'dictionaries' => Config::get('dictionaries'),
@@ -64,30 +93,53 @@ class EvaController extends Controller
         return response()->json($data);
     }
 
-    public function update(EvaRequest $request, $id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request The HTTP request instance.
+     * @param int $id The ID of the EVA to update.
+     * @return JsonResponse A JSON response confirming the update.
+     */
+    public function update(Request $request, int $id): JsonResponse
     {
-        $validatedData = $request->validated();
+        $validated = $request->validate([
+            'element_id' => ['required', 'integer', 'exists:elements,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ]);
 
         $eva = Eva::findOrFail($id);
-        $eva->update($validatedData);
+        $eva->update($validated);
 
         return response()->json(['message' => 'Eva updated successfully']);
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id The ID of the EVA to delete.
+     * @return JsonResponse A JSON response confirming the deletion.
+     */
+    public function destroy(int $id): JsonResponse
     {
         Eva::findOrFail($id)->delete();
 
         return response()->json(['message' => 'Eva deleted successfully']);
     }
 
-    public function getByElementId($elementId)
+    /**
+     * Get EVA by element ID.
+     *
+     * @param int $elementId The ID of the element to retrieve the EVA for.
+     * @return JsonResponse A JSON response containing the EVA details or an error message.
+     */
+    public function getByElementId(int $elementId): JsonResponse
     {
         $eva = Eva::with(['element.point', 'element.elementType'])
             ->where('element_id', $elementId)
             ->first();
 
-        if (! $eva) {
+        if (!$eva) {
             return response()->json(['message' => 'No EVA found for this element'], 404);
         }
 

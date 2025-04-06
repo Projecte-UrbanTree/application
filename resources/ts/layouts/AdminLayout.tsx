@@ -1,17 +1,20 @@
-import { useI18n } from '@/hooks/useI18n';
-import { useAuth } from '@/hooks/useAuth';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import logo from '@images/logo.png';
 import { Avatar } from 'primereact/avatar';
 import { Button } from 'primereact/button';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
-import { Icon } from '@iconify/react';
-import LangSelector from '@/components/LangSelector';
-import { selectContract, fetchAllContracts } from '@/store/slice/contractSlice';
-import { Contract } from '@/types/Contract';
-import logo from '@images/logo.png';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+
+import LangSelector from '@/components/LangSelector';
+import { useAuth } from '@/hooks/useAuth';
+import { useI18n } from '@/hooks/useI18n';
+import { fetchAllContracts, selectContract } from '@/store/slice/contractSlice';
 import { AppDispatch, RootState } from '@/store/store';
+import { Contract } from '@/types/Contract';
+
+const SELECTED_CONTRACT_KEY = 'selectedContractId';
 
 const defaultContract: Contract = {
   id: 0,
@@ -32,6 +35,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   const location = useLocation();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
   const { allContracts, currentContract } = useSelector(
     (state: RootState) => state.contract,
@@ -83,25 +87,36 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   }, [titleI18n, t]);
 
   useEffect(() => {
-    if (
-      (isInventoryPage || isWorkersPage) &&
-      (!currentContract || currentContract.id === defaultContract.id) &&
-      activeContracts.length > 0
-    ) {
-      dispatch(selectContract(activeContracts[0]?.id ?? 0));
+    if ((isInventoryPage || isWorkersPage) && 
+        activeContracts.length > 0 && 
+        !initialized) {
+      
+      const savedContractId = localStorage.getItem(SELECTED_CONTRACT_KEY);
+      
+      if (savedContractId) {
+        const contractId = parseInt(savedContractId);
+        const contractExists = activeContracts.some(c => c.id === contractId);
+        
+        if (contractExists) {
+          dispatch(selectContract(contractId));
+          setInitialized(true);
+          return;
+        }
+      }
+      
+      if (!currentContract || !activeContracts.some(c => c.id === currentContract.id)) {
+        dispatch(selectContract(activeContracts[0]?.id ?? 0));
+      }
+      
+      setInitialized(true);
     }
-  }, [
-    isInventoryPage,
-    isWorkersPage,
-    currentContract,
-    activeContracts,
-    dispatch,
-  ]);
+  }, [isInventoryPage, isWorkersPage, activeContracts.length, initialized]);
 
   const handleContractChange = useCallback(
     (e: DropdownChangeEvent) => {
       const newContractId = e.value;
       dispatch(selectContract(newContractId));
+      localStorage.setItem(SELECTED_CONTRACT_KEY, newContractId.toString());
     },
     [dispatch],
   );
@@ -222,14 +237,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
 
   return (
     <div>
-      <header className="border-b border-gray-200 bg-white shadow-md">
+      <header className="border-b border-gray-300 bg-white shadow-md">
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
             <div className="block lg:hidden">
               <Button
                 onClick={() => setMenuOpen(!menuOpen)}
-                color="text-gray-800">
-                <Icon width="24px" icon="tabler:menu" color="#ffffff" />
+                className="text-gray-800">
+                <Icon icon="tabler:menu" className="h-5 w-5 text-white" />
               </Button>
             </div>
             <a href="/" className="flex-none">
@@ -244,8 +259,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 className={`text-gray-800 px-4 py-3 rounded flex items-center gap-2 ${
                   item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
                 }`}>
-                <Icon inline={true} width="24px" icon={item.icon} />{' '}
-                {item.label}
+                <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
               </Link>
             ))}
           </div>
@@ -327,11 +341,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                   key={item.to}
                   to={item.to}
                   className={`px-2 py-3 rounded flex items-center gap-1 ${
-                    location.pathname === item.to
+                    location.pathname.includes(item.to)
                       ? 'bg-white border border-gray-300 text-indigo-600'
                       : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
                   }`}>
-                  <Icon width="22px" icon={item.icon} /> {item.label}
+                  <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
                 </Link>
               ))}
             {isSettingsPage &&
@@ -340,11 +354,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                   key={item.to}
                   to={item.to}
                   className={`px-2 py-3 rounded flex items-center gap-1 ${
-                    location.pathname === item.to
+                    location.pathname.includes(item.to)
                       ? 'bg-white border border-gray-300 text-indigo-600'
                       : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
                   }`}>
-                  <Icon width="22px" icon={item.icon} /> {item.label}
+                  <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
                 </Link>
               ))}
           </div>

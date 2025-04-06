@@ -1,13 +1,14 @@
-import axiosClient from '@/api/axiosClient';
 import { differenceInMonths } from 'date-fns';
-import { Chart } from 'primereact/chart';
-import { Skeleton } from 'primereact/skeleton';
 import { Button } from 'primereact/button';
-import { SelectButton } from 'primereact/selectbutton';
 import { Calendar } from 'primereact/calendar';
+import { Chart } from 'primereact/chart';
+import { Dropdown } from 'primereact/dropdown';
+import { SelectButton } from 'primereact/selectbutton';
+import { Skeleton } from 'primereact/skeleton';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'primereact/dropdown';
+
+import axiosClient from '@/api/axiosClient';
 
 function formatDateSpanish(date: Date): string {
   if (!(date instanceof Date) || isNaN(date.getTime())) {
@@ -234,6 +235,7 @@ export default function Stats() {
         setSelectedResourceInfo(null);
         setSelectedResourceChartData([]);
       }
+      setIsLoading(false);
     } catch (err) {
       console.error('Error fetching statistics:', err);
       setRawDays([]);
@@ -247,7 +249,6 @@ export default function Stats() {
       setSelectedResourceId(null);
       setSelectedResourceInfo(null);
       setSelectedResourceChartData([]);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -400,17 +401,9 @@ export default function Stats() {
     value: res.id,
   }));
 
-  const maxDate = customFromDate
-    ? new Date(
-        customFromDate.getFullYear() + 1,
-        customFromDate.getMonth(),
-        customFromDate.getDate(),
-      )
-    : new Date();
-
   return (
-    <div className="flex flex-col gap-6 p-4">
-      <div className="flex flex-wrap items-end gap-4 p-4 bg-white rounded border border-gray-200 shadow-sm min-h-32">
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-end gap-4 bg-white rounded border border-gray-300 shadow-sm p-6">
         <div>
           <SelectButton
             value={rangeOption}

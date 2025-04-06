@@ -35,6 +35,5 @@ class ContractSeeder extends Seeder
                 'status' => false,
             ],
         ]);
-
     }
 }

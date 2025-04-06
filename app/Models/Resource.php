@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * Class Resource
+ *
+ * Represents a resource in the application.
+ *
+ * @package App\Models
+ */
 class Resource extends Model
 {
     protected $fillable = [
@@ -17,16 +24,31 @@ class Resource extends Model
         'unit_cost',
     ];
 
+    /**
+     * Get the contract associated with the resource.
+     *
+     * @return BelongsTo
+     */
     public function contract(): BelongsTo
     {
         return $this->belongsTo(Contract::class);
     }
 
+    /**
+     * Get the resource type associated with the resource.
+     *
+     * @return BelongsTo
+     */
     public function resourceType(): BelongsTo
     {
         return $this->belongsTo(ResourceType::class, 'resource_type_id');
     }
 
+    /**
+     * Get the work reports associated with the resource.
+     *
+     * @return BelongsToMany
+     */
     public function workReports(): BelongsToMany
     {
         return $this->belongsToMany(WorkReport::class, 'work_report_resources', 'resource_id', 'work_report_id')->withTimestamps();

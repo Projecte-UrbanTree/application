@@ -1,6 +1,7 @@
-import { Contract } from '@/types/Contract';
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import axiosClient from '@/api/axiosClient';
+import { Contract } from '@/types/Contract';
 
 interface ContractState {
   allContracts: Contract[];

@@ -1,5 +1,6 @@
-import { useAuth } from '@/hooks/useAuth';
 import { Navigate, Outlet, useLocation } from 'react-router';
+
+import { useAuth } from '@/hooks/useAuth';
 import { Roles } from '@/types/Role';
 import { getRouteByRole } from '@/utils/roleRoutes';
 

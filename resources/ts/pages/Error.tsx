@@ -1,7 +1,6 @@
-import { useTranslation } from 'react-i18next';
-
-import { Button } from 'primereact/button';
 import { Icon } from '@iconify/react';
+import { Button } from 'primereact/button';
+import { useTranslation } from 'react-i18next';
 
 interface ErrorProps {
   icon?: string;

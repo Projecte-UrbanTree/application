@@ -1,11 +1,11 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { getCookie, setCookie } from 'typescript-cookie';
+
 import ca from './i18n/ca.json';
 import en from './i18n/en.json';
 import es from './i18n/es.json';
 import tr from './i18n/tr.json';
-
-import { getCookie, setCookie } from 'typescript-cookie';
 
 const resources = {
   ca: {
