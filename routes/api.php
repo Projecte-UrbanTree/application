@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Admin\ZoneController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Controllers\Api\Worker\IndexController;
+use App\Http\Controllers\Api\Worker\ResourceController as WorkerResourceController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Contract;
 use App\Models\Element;
@@ -90,5 +91,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(RoleMiddleware::class.':worker')->prefix('worker')->group(function () {
         Route::get('work-orders', [IndexController::class, 'index']);
         Route::put('task/{taskId}/status', [IndexController::class, 'updateTaskStatus']);
+        Route::get('resource-types', [WorkerResourceController::class, 'resourceTypes']);
+        Route::get('resources', [WorkerResourceController::class, 'resources']);
+        Route::post('work-reports', [IndexController::class, 'createWorkReport']);
     });
 });

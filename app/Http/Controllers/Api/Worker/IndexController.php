@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderBlockTask;
+use App\Models\WorkReport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,16 @@ class IndexController extends Controller
     const TASK_STATUS_PENDING = 0;
     const TASK_STATUS_IN_PROGRESS = 1;
     const TASK_STATUS_COMPLETED = 2;
+
+    const WORK_ORDER_NOT_STARTED = 0;
+    const WORK_ORDER_IN_PROGRESS = 1;
+    const WORK_ORDER_COMPLETED = 2;
+    const WORK_ORDER_REPORT_SENT = 3;
+
+    const REPORT_STATUS_PENDING = 0;
+    const REPORT_STATUS_COMPLETED = 1;
+    const REPORT_STATUS_REJECTED = 2;
+    const REPORT_STATUS_CLOSED_WITH_INCIDENTS = 3;
 
     /**
      * Display a listing of work orders for the worker.
@@ -166,5 +177,81 @@ class IndexController extends Controller
         
         Log::info("Work order {$workOrder->id} status updated to {$workOrder->status}. " .
                   "Completed tasks: {$completedTasks}/{$totalTasks}");
+    }
+
+    /**
+     * Create a new work report for a completed work order.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function createWorkReport(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'work_order_id' => ['required', 'integer', 'exists:work_orders,id'],
+                'spent_fuel' => ['required', 'numeric', 'min:0'],
+                'report_incidents' => ['nullable', 'string'],
+                'report_status' => ['required', 'integer', 'in:0,1,2,3'],
+                'resources' => ['nullable', 'array'],
+                'resources.*.resource_id' => ['required', 'integer', 'exists:resources,id'],
+                'resources.*.quantity' => ['required', 'numeric', 'min:0'],
+            ]);
+
+            // Check if this worker is assigned to this work order
+            $user = $request->user();
+            $workOrder = WorkOrder::findOrFail($validated['work_order_id']);
+            
+            if (!$workOrder->users->contains($user->id)) {
+                return response()->json([
+                    'message' => 'You are not assigned to this work order',
+                ], 403);
+            }
+
+            // Check if the work order is in a state where a report can be created
+            if ($workOrder->status >= self::WORK_ORDER_REPORT_SENT) {
+                return response()->json([
+                    'message' => 'This work order already has a report sent',
+                ], 400);
+            }
+
+            DB::beginTransaction();
+
+            $workReport = WorkReport::create([
+                'work_order_id' => $validated['work_order_id'],
+                'spent_fuel' => $validated['spent_fuel'],
+                'report_incidents' => $validated['report_incidents'] ?? null,
+                'report_status' => $validated['report_status'],
+            ]);
+
+            // Update work order status to report sent
+            $workOrder->status = self::WORK_ORDER_REPORT_SENT;
+            $workOrder->save();
+
+            if (isset($validated['resources']) && is_array($validated['resources'])) {
+                foreach ($validated['resources'] as $resource) {
+                    $workReport->workReportResources()->create([
+                        'resource_id' => $resource['resource_id'],
+                        'quantity' => $resource['quantity'],
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Work report created successfully',
+                'work_report' => $workReport->load(['workOrder', 'resources']),
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating work report: ' . $e->getMessage());
+            
+            return response()->json([
+                'message' => 'An error occurred while creating the work report',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

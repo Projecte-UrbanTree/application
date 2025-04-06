@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react';
-// PrimeReact imports
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
@@ -7,7 +6,11 @@ import { Calendar } from 'primereact/calendar';
 import { Card } from 'primereact/card';
 import { Chip } from 'primereact/chip';
 import { Dialog } from 'primereact/dialog';
+import { Divider } from 'primereact/divider';
+import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Tag } from 'primereact/tag';
 import { Toast } from 'primereact/toast';
@@ -30,8 +33,24 @@ type SelectedResource = {
   resource: {
     id: number;
     name: string;
+    unit_name: string;
+    unit_cost: number;
   };
   quantity: number;
+};
+
+type ResourceType = {
+  id: number;
+  name: string;
+};
+
+type Resource = {
+  id: number;
+  name: string;
+  resource_type_id: number;
+  unit_name: string;
+  unit_cost: number;
+  contract_id: number;
 };
 
 const WorkerWorkOrders = () => {
@@ -44,18 +63,28 @@ const WorkerWorkOrders = () => {
   const [updatingTask, setUpdatingTask] = useState(false);
   const [activeIndexes, setActiveIndexes] = useState<number[]>([]);
   
-  // For task completion dialog
   const [showTimeDialog, setShowTimeDialog] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [spentTime, setSpentTime] = useState<number>(0);
   
-  // For resources dialog and reporting
   const [showResourcesDialog, setShowResourcesDialog] = useState(false);
   const [selectedResources, setSelectedResources] = useState<SelectedResource[]>([]);
   const [selectedWorkOrderId, setSelectedWorkOrderId] = useState<number | null>(null);
   
-  // For block accordions
   const [expandedBlocks, setExpandedBlocks] = useState<Record<string, boolean>>({});
+  
+  const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [selectedResourceType, setSelectedResourceType] = useState<number | null>(null);
+  const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
+  const [workReportResources, setWorkReportResources] = useState<SelectedResource[]>([{
+    resource: { id: 0, name: '', unit_name: '', unit_cost: 0 },
+    quantity: 1
+  }]);
+  const [spentFuel, setSpentFuel] = useState<number>(0);
+  const [reportIncidents, setReportIncidents] = useState<string>('');
+  const [submittingReport, setSubmittingReport] = useState(false);
+  const [loadingResources, setLoadingResources] = useState(false);
 
   const getStoredDate = (): Date => {
     const storedDate = localStorage.getItem('selectedWorkOrderDate');
@@ -88,9 +117,41 @@ const WorkerWorkOrders = () => {
     setLoading(false);
   }, [currentContract, t]);
 
+  const fetchResources = useCallback(async () => {
+    if (!currentContract) return;
+    
+    setLoadingResources(true);
+    try {
+      const resourceTypesResponse = await axiosClient.get('/worker/resource-types');
+      setResourceTypes(resourceTypesResponse.data);
+      
+      const resourcesResponse = await axiosClient.get('/worker/resources');
+      const contractResources = resourcesResponse.data.filter((resource: Resource) => 
+        resource.contract_id === currentContract.id
+      );
+      setResources(contractResources);
+    } catch (error) {
+      console.error('Error fetching resources:', error);
+    } finally {
+      setLoadingResources(false);
+    }
+  }, [currentContract]);
+
   useEffect(() => {
     fetchWorkOrders(selectedDate);
-  }, [fetchWorkOrders, selectedDate]);
+    fetchResources();
+  }, [fetchWorkOrders, fetchResources, selectedDate]);
+
+  useEffect(() => {
+    if (selectedResourceType && resources.length > 0) {
+      const filtered = resources.filter(
+        (resource) => resource.resource_type_id === selectedResourceType
+      );
+      setFilteredResources(filtered);
+    } else {
+      setFilteredResources([]);
+    }
+  }, [selectedResourceType, resources]);
 
   const handleDateChange = (event: any) => {
     if (event.value && !Array.isArray(event.value)) {
@@ -179,6 +240,63 @@ const WorkerWorkOrders = () => {
     }
   };
 
+  const handleSubmitWorkReport = async (workOrderId: number) => {
+    if (workReportResources.length === 0 || !workReportResources[0].resource.id) {
+      toast.current?.show({
+        severity: 'warn',
+        summary: t('general.warning'),
+        detail: t('worker.workOrders.errors.noResourcesSelected'),
+      });
+      return;
+    }
+    
+    setSubmittingReport(true);
+    
+    try {
+      const resourcesPayload = workReportResources
+        .filter(item => item.resource.id > 0)
+        .map((item) => ({
+          resource_id: item.resource.id,
+          quantity: 1,
+          unit_name: item.resource.unit_name,
+          unit_cost: item.resource.unit_cost,
+        }));
+      
+      await axiosClient.post('/worker/work-reports', {
+        work_order_id: workOrderId,
+        spent_fuel: spentFuel,
+        report_incidents: reportIncidents,
+        report_status: 0,
+        resources: resourcesPayload,
+      });
+      
+      toast.current?.show({
+        severity: 'success',
+        summary: t('general.success'),
+        detail: t('worker.workOrders.messages.reportCreated'),
+      });
+      
+      setWorkReportResources([{
+        resource: { id: 0, name: '', unit_name: '', unit_cost: 0 },
+        quantity: 1
+      }]);
+      setSpentFuel(0);
+      setReportIncidents('');
+      setSelectedResourceType(null);
+      
+      fetchWorkOrders(selectedDate);
+    } catch (error: any) {
+      console.error('Error submitting work report:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: t('general.error'),
+        detail: error.response?.data?.message || t('worker.workOrders.errors.reportCreationFailed'),
+      });
+    } finally {
+      setSubmittingReport(false);
+    }
+  };
+
   const handleTaskAction = (task: any, action: 'start' | 'complete' | 'reopen') => {
     const workOrder = workOrders.find(wo => 
       wo.work_orders_blocks?.some(block => 
@@ -186,7 +304,7 @@ const WorkerWorkOrders = () => {
       )
     );
 
-    if (!workOrder || workOrder.status >= WorkOrderStatus.COMPLETED) {
+    if (!workOrder || workOrder.status >= WorkOrderStatus.REPORT_SENT) {
       toast.current?.show({
         severity: 'warn',
         summary: t('general.warning'),
@@ -272,20 +390,20 @@ const WorkerWorkOrders = () => {
 
   const handleReopenTask = async (taskId: number) => {
     try {
-        await axiosClient.put(`/worker/task/${taskId}/status`, { status: TASK_STATUS.IN_PROGRESS });
-        toast.current?.show({
-            severity: 'success',
-            summary: t('general.success'),
-            detail: t('worker.workOrders.messages.taskUpdated'),
-        });
-        fetchWorkOrders(selectedDate);
+      await axiosClient.put(`/worker/task/${taskId}/status`, { status: TASK_STATUS.IN_PROGRESS });
+      toast.current?.show({
+        severity: 'success',
+        summary: t('general.success'),
+        detail: t('worker.workOrders.messages.taskUpdated'),
+      });
+      fetchWorkOrders(selectedDate);
     } catch (error: any) {
-        console.error('Error reopening task:', error);
-        toast.current?.show({
-            severity: 'error',
-            summary: t('general.error'),
-            detail: error.response?.data?.message || t('worker.workOrders.errors.taskUpdateFailed'),
-        });
+      console.error('Error reopening task:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: t('general.error'),
+        detail: error.response?.data?.message || t('worker.workOrders.errors.taskUpdateFailed'),
+      });
     }
   };
   
@@ -296,7 +414,67 @@ const WorkerWorkOrders = () => {
     }));
   };
 
-  const renderTaskList = (block: any) => {
+  const handleAddResource = () => {
+    setWorkReportResources([
+      ...workReportResources,
+      { resource: { id: 0, name: '', unit_name: '', unit_cost: 0 }, quantity: 1 }
+    ]);
+  };
+
+  const handleRemoveResource = (index: number) => {
+    if (workReportResources.length > 1) {
+      const updatedResources = [...workReportResources];
+      updatedResources.splice(index, 1);
+      setWorkReportResources(updatedResources);
+    }
+  };
+
+  const handleSelectResource = (index: number, resourceId: number) => {
+    if (!resourceId) return;
+    
+    const selectedResource = resources.find(r => r.id === resourceId);
+    
+    if (selectedResource) {
+      const updatedResources = [...workReportResources];
+      updatedResources[index] = {
+        ...updatedResources[index],
+        resource: {
+          id: selectedResource.id,
+          name: selectedResource.name,
+          unit_name: selectedResource.unit_name,
+          unit_cost: selectedResource.unit_cost
+        },
+        quantity: 1
+      };
+      setWorkReportResources(updatedResources);
+    }
+  };
+
+  const handleUnitNameChange = (index: number, value: string) => {
+    const updatedResources = [...workReportResources];
+    updatedResources[index] = {
+      ...updatedResources[index],
+      resource: {
+        ...updatedResources[index].resource,
+        unit_name: value
+      }
+    };
+    setWorkReportResources(updatedResources);
+  };
+
+  const handleUnitCostChange = (index: number, value: number) => {
+    const updatedResources = [...workReportResources];
+    updatedResources[index] = {
+      ...updatedResources[index],
+      resource: {
+        ...updatedResources[index].resource,
+        unit_cost: value || 0
+      }
+    };
+    setWorkReportResources(updatedResources);
+  };
+
+  const renderTaskList = (block: any, workOrder: WorkOrder) => {
     return (
       <div className="mt-3 space-y-3">
         {block.block_tasks && block.block_tasks.map((task: any) => {
@@ -324,6 +502,8 @@ const WorkerWorkOrders = () => {
             taskBorderClass = "border-green-200";
           }
           
+          const isWorkOrderLocked = workOrder.status === WorkOrderStatus.REPORT_SENT;
+          
           return (
             <div 
               key={task.id} 
@@ -349,43 +529,245 @@ const WorkerWorkOrders = () => {
                     severity={statusSeverity}
                     className="px-2 py-1 font-medium flex-grow sm:flex-grow-0"
                   />
-                  <div className="flex gap-1">
-                    {task.status === TASK_STATUS.PENDING && (
-                      <Button
-                        icon="pi pi-play"
-                        className="p-button-rounded p-button-warning p-button-sm"
-                        tooltip={t('worker.workOrders.startTask')}
-                        tooltipOptions={{ position: 'top' }}
-                        disabled={updatingTask}
-                        onClick={() => handleTaskAction(task, 'start')}
-                      />
-                    )}
-                    {task.status === TASK_STATUS.IN_PROGRESS && (
-                      <Button
-                        icon="pi pi-check"
-                        className="p-button-rounded p-button-success p-button-sm"
-                        tooltip={t('worker.workOrders.completeTask')}
-                        tooltipOptions={{ position: 'top' }}
-                        disabled={updatingTask}
-                        onClick={() => handleTaskAction(task, 'complete')}
-                      />
-                    )}
-                    {task.status === TASK_STATUS.COMPLETED && (
-                      <Button
-                        icon="pi pi-undo"
-                        className="p-button-rounded p-button-outlined p-button-secondary p-button-sm"
-                        tooltip={t('worker.workOrders.reopenTask')}
-                        tooltipOptions={{ position: 'top' }}
-                        disabled={updatingTask}
-                        onClick={() => handleTaskAction(task, 'reopen')}
-                      />
-                    )}
-                  </div>
+                  {!isWorkOrderLocked && (
+                    <div className="flex gap-1">
+                      {task.status === TASK_STATUS.PENDING && (
+                        <Button
+                          icon="pi pi-play"
+                          className="p-button-rounded p-button-warning p-button-sm"
+                          tooltip={t('worker.workOrders.startTask')}
+                          tooltipOptions={{ position: 'top' }}
+                          disabled={updatingTask}
+                          onClick={() => handleTaskAction(task, 'start')}
+                        />
+                      )}
+                      {task.status === TASK_STATUS.IN_PROGRESS && (
+                        <Button
+                          icon="pi pi-check"
+                          className="p-button-rounded p-button-success p-button-sm"
+                          tooltip={t('worker.workOrders.completeTask')}
+                          tooltipOptions={{ position: 'top' }}
+                          disabled={updatingTask}
+                          onClick={() => handleTaskAction(task, 'complete')}
+                        />
+                      )}
+                      {task.status === TASK_STATUS.COMPLETED && (
+                        <Button
+                          icon="pi pi-undo"
+                          className="p-button-rounded p-button-outlined p-button-secondary p-button-sm"
+                          tooltip={t('worker.workOrders.reopenTask')}
+                          tooltipOptions={{ position: 'top' }}
+                          disabled={updatingTask}
+                          onClick={() => handleTaskAction(task, 'reopen')}
+                        />
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           );
         })}
+      </div>
+    );
+  };
+
+  const renderWorkReportSection = (workOrder: WorkOrder) => {
+    if (workOrder.status !== WorkOrderStatus.IN_PROGRESS && 
+        workOrder.status !== WorkOrderStatus.COMPLETED) {
+      return null;
+    }
+
+    if (loadingResources) {
+      return (
+        <div className="mt-6 bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+          <h3 className="text-lg font-semibold text-center mb-2 flex items-center justify-center gap-2">
+            <Icon icon="tabler:report" className="text-blue-600" />
+            Crear Parte de Trabajo
+          </h3>
+          <Divider />
+          <div className="flex justify-center p-4">
+            <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="mt-6 bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+        <h3 className="text-lg font-semibold text-center mb-2 flex items-center justify-center gap-2">
+          <Icon icon="tabler:report" className="text-blue-600" />
+          Crear Parte de Trabajo
+        </h3>
+        <Divider />
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+            <Icon icon="tabler:gas-station" className="text-blue-600" />
+            Gasolina gastada (Litros)
+          </label>
+          <div className="flex items-center">
+            <InputNumber 
+              value={spentFuel}
+              onValueChange={(e) => setSpentFuel(e.value || 0)}
+              mode="decimal"
+              minFractionDigits={0}
+              maxFractionDigits={2}
+              min={0}
+              suffix=" L"
+              placeholder="0.00"
+              className="w-full"
+            />
+          </div>
+        </div>
+        
+        {resourceTypes.length > 0 && (
+          <>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+                <Icon icon="tabler:category" className="text-blue-600" />
+                Tipo de Recurso
+              </label>
+              <Dropdown
+                value={selectedResourceType}
+                options={resourceTypes}
+                onChange={(e) => setSelectedResourceType(e.value)}
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Seleccionar tipo de recurso"
+                className="w-full"
+              />
+            </div>
+            
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-1">
+                  <Icon icon="tabler:package" className="text-blue-600" />
+                  Recursos
+                </label>
+                <Button
+                  icon={<Icon icon="tabler:plus" className="h-4 w-4 mr-1" />}
+                  label="Agregar Recurso"
+                  className="p-button-sm"
+                  disabled={!selectedResourceType || filteredResources.length === 0}
+                  onClick={handleAddResource}
+                />
+              </div>
+              
+              <div className="space-y-3">
+                {workReportResources.map((item, index) => (
+                  <div key={index} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        Recurso {index + 1}
+                      </span>
+                      {workReportResources.length > 1 && (
+                        <Button
+                          icon={<Icon icon="tabler:trash" className="h-4 w-4" />}
+                          className="p-button-rounded p-button-danger p-button-sm p-button-outlined"
+                          onClick={() => handleRemoveResource(index)}
+                        />
+                      )}
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3">
+                      <div>
+                        <label className="text-xs text-gray-600 block mb-1">
+                          Nombre del Recurso
+                        </label>
+                        <Dropdown
+                          value={item.resource.id > 0 ? item.resource.id : null}
+                          options={filteredResources}
+                          onChange={(e) => handleSelectResource(index, e.value)}
+                          optionLabel="name"
+                          optionValue="id"
+                          placeholder="Seleccionar recurso"
+                          className="w-full"
+                          disabled={!selectedResourceType || filteredResources.length === 0}
+                        />
+                      </div>
+                    </div>
+                    
+                    {item.resource.id > 0 && (
+                      <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-xs text-gray-600 block mb-1">
+                            Unidad
+                          </label>
+                          <InputText
+                            value={item.resource.unit_name}
+                            onChange={(e) => handleUnitNameChange(index, e.target.value)}
+                            className="w-full"
+                            placeholder="Unidad"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-600 block mb-1">
+                            Coste unitario
+                          </label>
+                          <InputNumber
+                            value={item.resource.unit_cost}
+                            onValueChange={(e) => handleUnitCostChange(index, e.value || 0)}
+                            mode="decimal"
+                            minFractionDigits={0}
+                            maxFractionDigits={2}
+                            placeholder="0.00"
+                            className="w-full"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+              {!selectedResourceType && (
+                <div className="mt-2 bg-blue-50 text-blue-700 p-2 rounded text-sm text-center">
+                  <Icon icon="tabler:info-circle" className="inline-block mr-1" />
+                  Por favor selecciona un tipo de recurso primero
+                </div>
+              )}
+              
+              {selectedResourceType && filteredResources.length === 0 && (
+                <div className="mt-2 bg-yellow-50 text-yellow-700 p-2 rounded text-sm text-center">
+                  <Icon icon="tabler:alert-triangle" className="inline-block mr-1" />
+                  No hay recursos disponibles para este tipo
+                </div>
+              )}
+            </div>
+          </>
+        )}
+        
+        {resourceTypes.length === 0 && (
+          <div className="mb-4 bg-yellow-50 text-yellow-700 p-3 rounded text-sm text-center">
+            <Icon icon="tabler:alert-triangle" className="inline-block mr-1" />
+            No hay tipos de recursos disponibles
+          </div>
+        )}
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+            <Icon icon="tabler:message-report" className="text-blue-600" />
+            Observaciones
+          </label>
+          <InputTextarea
+            value={reportIncidents}
+            onChange={(e) => setReportIncidents(e.target.value)}
+            rows={3}
+            placeholder="Ingrese cualquier observación o incidencia aquí"
+            className="w-full"
+          />
+        </div>
+        
+        <div className="flex justify-end">
+          <Button
+            label="Enviar Parte"
+            icon={submittingReport ? "pi pi-spin pi-spinner" : <Icon icon="tabler:send" className="h-4 w-4 mr-1" />}
+            className="p-button-success"
+            onClick={() => handleSubmitWorkReport(workOrder.id)}
+            disabled={submittingReport || (resourceTypes.length > 0 && (workReportResources.length === 0 || workReportResources[0].resource.id === 0))}
+          />
+        </div>
       </div>
     );
   };
@@ -411,13 +793,13 @@ const WorkerWorkOrders = () => {
   }
 
   return (
-    <div className="p-3 sm:p-4">
+    <div className="p-2 sm:p-4">
       <Toast ref={toast} />
       
       <Dialog
         header={t('worker.workOrders.timeSpentDialog')}
         visible={showTimeDialog}
-        style={{ width: '90%', maxWidth: '450px' }}
+        style={{ width: '95%', maxWidth: '450px' }}
         modal
         footer={timeDialogFooter}
         onHide={() => setShowTimeDialog(false)}
@@ -437,29 +819,6 @@ const WorkerWorkOrders = () => {
               className="w-full"
             />
           </div>
-        </div>
-      </Dialog>
-
-      <Dialog
-        header={t('worker.workOrders.resources')}
-        visible={showResourcesDialog}
-        style={{ width: '90%', maxWidth: '500px' }}
-        modal
-        onHide={() => setShowResourcesDialog(false)}
-        footer={
-          <div className="flex justify-end gap-2">
-            <Button label={t('general.cancel')} icon="pi pi-times" className="p-button-text" onClick={() => setShowResourcesDialog(false)} />
-            <Button 
-              label={t('worker.workOrders.createReport')} 
-              icon="pi pi-check" 
-              className="p-button-success"
-              onClick={() => selectedWorkOrderId && handleCreateReport(selectedWorkOrderId)} 
-            />
-          </div>
-        }
-      >
-        <div className="p-3">
-          {/* Resources selection UI would be implemented here */}
         </div>
       </Dialog>
 
@@ -493,7 +852,7 @@ const WorkerWorkOrders = () => {
           <ProgressSpinner strokeWidth="4" style={{width: '50px', height: '50px'}} />
         </div>
       ) : workOrders.length === 0 ? (
-        <Card className="p-6 text-center bg-gray-50 shadow-md border border-gray-200">
+        <Card className="p-4 sm:p-6 text-center bg-gray-50 shadow-md border border-gray-200">
           <Icon icon="tabler:clipboard-off" width={64} height={64} className="mx-auto mb-4 text-gray-400" />
           <h3 className="text-xl font-medium mb-2 text-gray-800">{t('worker.workOrders.noWorkOrders')}</h3>
           <p className="text-gray-600 max-w-md mx-auto">{t('worker.workOrders.noWorkOrdersMessage')}</p>
@@ -531,13 +890,13 @@ const WorkerWorkOrders = () => {
                 </div>
               }
             >
-              <div className="p-3 sm:p-5 rounded-md">
+              <div className="p-2 sm:p-4 rounded-md">
                 {workOrder.work_orders_blocks?.map((block, blockIndex) => {
                   const blockId = `${workOrder.id}-${blockIndex}`;
                   const isBlockExpanded = expandedBlocks[blockId] !== false;
                   
                   return (
-                    <div key={blockIndex} className="mb-6 last:mb-0">
+                    <div key={blockIndex} className="mb-4 last:mb-0">
                       <div 
                         className="flex items-center justify-between gap-2 mb-2 bg-white p-3 rounded-md shadow-sm border border-gray-200 cursor-pointer"
                         onClick={() => toggleBlockAccordion(blockId)}
@@ -557,7 +916,7 @@ const WorkerWorkOrders = () => {
                       
                       {isBlockExpanded && (
                         <>
-                          <div className="grid grid-cols-1 gap-4 mb-4">
+                          <div className="grid grid-cols-1 gap-3 mb-3">
                             <div className="bg-white p-3 rounded-md border border-gray-200 shadow-sm">
                               <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
                                 <Icon icon="tabler:map-pin" className="text-indigo-600" />
@@ -595,7 +954,7 @@ const WorkerWorkOrders = () => {
                                 <Icon icon="tabler:list-check" className="text-indigo-600" />
                                 {t('worker.workOrders.tasks')}
                               </h5>
-                              {renderTaskList(block)}
+                              {renderTaskList(block, workOrder)}
                             </div>
                           </div>
                         </>
@@ -604,23 +963,7 @@ const WorkerWorkOrders = () => {
                   );
                 })}
                 
-                <div className="mt-4 flex justify-end gap-2">
-                  {workOrder.status === WorkOrderStatus.IN_PROGRESS && (
-                    <Button 
-                      label={t('worker.workOrders.report')}
-                      icon="pi pi-file-edit"
-                      onClick={() => openResourcesDialog(workOrder.id)}
-                      className="p-button-success p-button-sm"
-                    />
-                  )}
-                  <Button 
-                    label={t('worker.workOrders.viewDetails')}
-                    icon="pi pi-eye"
-                    onClick={() => navigate(`/work-orders/${workOrder.id}`)}
-                    className="p-button-outlined p-button-sm"
-                    disabled={workOrder.status === WorkOrderStatus.NOT_STARTED}
-                  />
-                </div>
+                {renderWorkReportSection(workOrder)}
               </div>
             </AccordionTab>
           ))}
