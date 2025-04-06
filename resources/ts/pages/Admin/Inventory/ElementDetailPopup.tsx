@@ -941,7 +941,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                         
                         <div className="flex items-center gap-2 mb-2">
                           <span className="iconify text-blue-500" data-icon="mdi:file-document-outline"></span>
-                          <span className="font-medium">Orden:</span>
+                          <span className="font-medium">Orden de Trabajo:</span>
                           <span>{task.workOrderId}</span>
                         </div>
                         
