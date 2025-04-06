@@ -77,4 +77,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Contract::class, 'contract_user');
     }
+
+    /**
+     * Get the work orders associated with the user.
+     *
+     * @return BelongsToMany
+     */
+    public function workOrders(): BelongsToMany
+    {
+        return $this->belongsToMany(WorkOrder::class, 'work_order_users', 'user_id', 'work_order_id')->withTimestamps();
+    }
 }

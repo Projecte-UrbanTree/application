@@ -1171,5 +1171,72 @@
         "failedToUpdate": "Failed to update workers"
       }
     }
+  },
+  "worker": {
+    "workOrders": {
+      "title": "Work Orders",
+      "selectDate": "Select Date",
+      "noWorkOrders": "No Work Orders",
+      "noWorkOrdersMessage": "No work orders assigned for the selected date. Try choosing a different date or contact your supervisor if you believe there should be work assigned.",
+      "block": "Block",
+      "zones": "Zones",
+      "noZones": "No zones assigned",
+      "tasks": "Tasks",
+      "notes": "Notes",
+      "addResources": "Add Resources",
+      "saveResources": "Save Resources",
+      "resourceTypePlaceholder": "Select a resource type...",
+      "resourceTypeLabel": "Resource Type",
+      "resourcePlaceholder": "Select a resource...",
+      "availableResources": "Available Resources",
+      "selectedResources": "Selected Resources",
+      "noResourcesSelected": "No resources selected yet",
+      "noResourcesInType": "No resources available for this type",
+      "selectResourcesHelp": "First select a resource type, then choose specific resources to add",
+      "totalResources": "Total resources",
+      "quantity": "Quantity",
+      "unitCost": "Unit Cost",
+      "removeResource": "Remove Resource",
+      "createReport": "Create Report",
+      "viewDetails": "View Details",
+      "reportAlreadySent": "Report Already Sent",
+      "noContract": "No contract selected. Please select a contract to view work orders.",
+      "taskStatus": {
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed"
+      },
+      "startTask": "Start Task",
+      "completeTask": "Complete Task",
+      "reopenTask": "Reopen Task",
+      "timeSpent": "Time Spent",
+      "status": {
+        "notStarted": "Not Started",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "reportSent": "Report Sent",
+        "unknown": "Unknown"
+      },
+      "timeSpentDialog": "Time Spent",
+      "enterTimeSpent": "Enter the time spent on this task:",
+      "complete": "Complete",
+      "start": "Start",
+      "reopen": "Reopen",
+      "errors": {
+        "taskUpdateFailed": "Failed to update the task status",
+        "resourcesFetchFailed": "Failed to fetch available resources",
+        "resourcesSaveFailed": "Failed to save resources",
+        "workOrderCompleted": "Cannot modify a completed work order",
+        "fetchFailed": "Failed to fetch work orders"
+      },
+      "messages": {
+        "resourcesAdded": "Resources added successfully",
+        "taskUpdated": "Task updated successfully"
+      }
+    },
+    "workReports": {
+      "title": "Work Reports",
+      "create": "Create Work Report"
+    }
   }
 }
