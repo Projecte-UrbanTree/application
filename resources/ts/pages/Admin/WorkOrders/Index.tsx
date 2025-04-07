@@ -116,7 +116,12 @@ export default function WorkOrders() {
   const getReportStatusBadge = useCallback(
     (reports: WorkOrder['work_reports']) => {
       if (!reports || reports.length === 0) {
-        return null;
+        return (
+          <Badge
+            value={t('admin.pages.workOrders.reportStatus.noReports')}
+            severity="secondary"
+          />
+        );
       }
       const latestReport = reports[reports.length - 1];
       switch (latestReport.report_status) {
