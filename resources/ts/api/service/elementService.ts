@@ -28,7 +28,3 @@ export const deleteElement = async (elementId: number): Promise<void> => {
     throw error;
   }
 };
-
-export const updateElementService = async (element: Element) => {
-  await axiosClient.put(`/admin/elements/${element.id}`, element);
-}

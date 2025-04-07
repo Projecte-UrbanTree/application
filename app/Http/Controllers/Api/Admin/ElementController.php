@@ -59,29 +59,4 @@ class ElementController extends Controller
 
         return response()->json(['message' => 'Element deleted successfully'], 200);
     }
-
-    /**
-     * Update the specified element in storage.
-     *
-     * @param  Request  $request  The HTTP request instance.
-     * @param  int  $id  The ID of the element to update.
-     * @return JsonResponse A JSON response containing the updated element or an error message.
-     */
-    public function update(Request $request, $id): JsonResponse
-    {
-        $validated = $request->validate([
-            'description' => ['nullable', 'string', 'max:255'],
-            'element_type_id' => ['required', 'integer'],
-            'tree_type_id' => ['nullable', 'integer'],
-            'point_id' => ['required', 'integer'],
-        ]);
-
-        $element = Element::find($id);
-
-        if (! $element) {
-            return response()->json(['message' => 'Element not found'], 404);
-        }
-        $element->update($validated);
-        return response()->json($element, 200);
-    }
 }
