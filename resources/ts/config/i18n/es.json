@@ -1057,13 +1057,13 @@
       },
 
       "workReport": {
-        "title": "Parte de Trabajo",
-        "not_found": "No se encontró el Parte de Trabajo",
+        "title": "Informe de Trabajo",
+        "not_found": "No se ha encontrado el Informe de Trabajo",
         "columns": {
-          "users": "Operarios",
+          "users": "Trabajadores",
           "observation": "Observación",
           "spent_fuel": "Combustible Gastado",
-          "incidents": "Incidentes",
+          "incidents": "Incidencias",
           "zones": "Zonas",
           "tasks": "Tareas",
           "notes": "Notas",
@@ -1072,11 +1072,11 @@
         },
         "messages": {
           "closing_part": "Cerrando parte...",
-          "part_closed": "Parte cerrado con éxito",
+          "part_closed": "Parte cerrada con éxito",
           "closing_block": "Cerrando bloque...",
           "close_block": "Bloque cerrado con éxito",
-          "closing_with_incidents": "Cerrando bloque con incidentes...",
-          "close_with_incidents": "Bloque cerrado con incidentes",
+          "closing_with_incidents": "Cerrando bloque con incidencias...",
+          "close_with_incidents": "Bloque cerrado con incidencias",
           "rejecting": "Rechazando bloque...",
           "reject": "Bloque rechazado",
           "closing_with_observations": "Cerrando informe con observaciones...",
@@ -1084,7 +1084,7 @@
           "error_updating_observations": "Error al actualizar observaciones",
           "observation_updated": "Observación actualizada correctamente",
           "error_updating_observation": "Error al actualizar la observación",
-          "already_processed": "Este informe de trabajo ya ha sido procesado y no puede ser modificado."
+          "already_processed": "Este informe de trabajo ya ha sido procesado y no se puede modificar."
         },
         "reportStatus": {
           "pending": "Pendiente",
@@ -1093,11 +1093,17 @@
           "closedWithIncidents": "Cerrado con incidencias",
           "unknown": "Desconocido"
         },
+        "taskStatus": {
+          "pending": "Pendiente",
+          "inProgress": "En Progreso",
+          "completed": "Completada",
+          "unknown": "Desconocido"
+        },
         "details": {
           "details": "Detalles",
           "block": "Bloque",
           "noBlocks": "No hay bloques",
-          "noBlocksAvailable": "No hay bloques disponibles para este parte de trabajo",
+          "noBlocksAvailable": "No hay bloques disponibles para este informe de trabajo",
           "noNotes": "No hay notas",
           "noTasks": "No hay tareas asignadas",
           "notes": "Notas",
@@ -1109,20 +1115,22 @@
           "resources": "Recursos",
           "observation": "Observación",
           "noObservation": "No hay observación disponible",
-          "incidents": "Incidentes",
-          "noIncidents": "No hay incidentes registrados",
+          "incidents": "Incidencias",
+          "noIncidents": "No hay incidencias registradas",
           "spentFuel": "Combustible Gastado",
           "taskStatus": "Estado de la Tarea",
           "hours": "Horas",
           "unit": "Unidad",
-          "cost": "Costo",
-          "quantity": "Cantidad"
+          "cost": "Coste",
+          "quantity": "Cantidad",
+          "liters": "Litros"
         },
         "dialogs": {
           "observationHeader": "Añadir Observaciones",
-          "observationMessage": "Por favor, proporciona tus observaciones antes de cerrar el parte.",
+          "observationMessage": "Por favor, proporciona tus observaciones antes de cerrar el informe.",
           "observationPlaceholder": "Introduce tus observaciones aquí...",
           "editObservationHeader": "Editar Observación",
+          "editObservationMessage": "Modifica la observación para este informe.",
           "editObservationMessage": "Modifica la observación para este parte.",
           "editObservationPlaceholder": "Introduce tu observación actualizada aquí..."
         }

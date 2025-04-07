@@ -1064,7 +1064,7 @@
 
       "workReport": {
         "title": "Work Report",
-        "not_found": "Work Report not found",
+        "not_found": "Work report not found",
         "columns": {
           "users": "Workers",
           "observation": "Observation",
@@ -1077,20 +1077,22 @@
           "resources": "Resources"
         },
         "messages": {
-          "closing_part": "Closing part...",
+          "closing_part": "Closing work report...",
           "part_closed": "Part successfully closed",
           "closing_block": "Closing block...",
           "close_block": "Block successfully closed",
-          "closing_with_incidents": "Closing block with incidents...",
+          "closing_with_incidents": "Closing work report with incidents...",
           "close_with_incidents": "Block closed with incidents",
-          "rejecting": "Rejecting block...",
+          "rejecting": "Rejecting work report...",
           "reject": "Block rejected",
           "closing_with_observations": "Closing report with observations...",
           "close_with_observations": "Report closed with observations",
+          "error_updating_status": "Error updating work report status",
           "error_updating_observations": "Error updating observations",
           "observation_updated": "Observation updated successfully",
           "error_updating_observation": "Error updating observation",
-          "already_processed": "This work report has already been processed and cannot be modified."
+          "already_processed": "This work report has already been processed",
+          "observations_required": "Observations are required when closing with incidents"
         },
         "reportStatus": {
           "pending": "Pending",
@@ -1099,37 +1101,41 @@
           "closedWithIncidents": "Closed with Incidents",
           "unknown": "Unknown"
         },
+        "taskStatus": {
+          "pending": "Pending",
+          "inProgress": "In Progress",
+          "completed": "Completed",
+          "unknown": "Unknown"
+        },
         "details": {
           "details": "Details",
           "block": "Block",
           "noBlocks": "No blocks",
           "noBlocksAvailable": "No blocks available for this work report",
-          "noNotes": "No notes",
-          "noTasks": "No tasks assigned",
-          "notes": "Notes",
-          "noUsers": "No users assigned",
-          "noZones": "No zones assigned",
           "tasks": "Tasks",
+          "hours": "Hours",
+          "spentFuel": "Spent Fuel",
+          "liters": "liters",
+          "noUsers": "No users assigned",
+          "noTasks": "No tasks available",
+          "noZones": "No zones assigned",
+          "notes": "Notes",
+          "noNotes": "No notes available",
+          "noResources": "No resources used",
+          "noIncidents": "No incidents recorded",
           "unknown": "Unknown",
           "zones": "Zones",
           "resources": "Resources",
           "observation": "Observation",
           "noObservation": "No observation available",
-          "incidents": "Incidents",
-          "noIncidents": "No incidents recorded",
-          "spentFuel": "Spent Fuel",
-          "taskStatus": "Task Status",
-          "hours": "Hours",
-          "unit": "Unit",
-          "cost": "Cost",
-          "quantity": "Quantity"
+          "incidents": "Incidents"
         },
         "dialogs": {
           "observationHeader": "Add Observations",
-          "observationMessage": "Please provide your observations before closing the report.",
+          "observationMessage": "Please provide observations for this work report",
           "observationPlaceholder": "Enter your observations here...",
           "editObservationHeader": "Edit Observation",
-          "editObservationMessage": "Modify the observation for this report.",
+          "editObservationMessage": "Modify the observation for this report",
           "editObservationPlaceholder": "Enter your updated observation here..."
         }
       },

@@ -423,17 +423,16 @@ const WorkReportDetail = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-10 px-6">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <Card className="border border-gray-300 bg-white rounded-lg shadow-md">
-          <header className="bg-primary-600 px-8 py-6 rounded-t-lg">
+        <Card className="border-0 shadow-none">
+          <header className="bg-white border-b border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-white">
-                  {t('admin.pages.workReport.title')} - OT-
-                  {workReport.work_order.id}
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                  {t('admin.pages.workReport.title')} - OT-{workReport.work_order.id}
                 </h2>
-                <p className="text-sm text-white">
+                <p className="text-sm text-gray-600">
                   {formatDate(workReport.work_order.date)}
                 </p>
               </div>
@@ -441,14 +440,13 @@ const WorkReportDetail = () => {
             </div>
           </header>
 
-          <div className="p-8 space-y-8">
+          <div className="bg-white p-8 space-y-8">
             <section>
-              <h3 className="text-lg font-semibold text-primary-700 mb-4">
+              <h3 className="text-lg font-semibold text-indigo-700 mb-4">
                 {t('admin.pages.workReport.columns.users')}
               </h3>
               <ul className="list-disc pl-5">
-                {workReport.work_order.users &&
-                workReport.work_order.users.length > 0 ? (
+                {workReport.work_order.users && workReport.work_order.users.length > 0 ? (
                   workReport.work_order.users.map((user) => (
                     <li key={user.id} className="text-gray-800">
                       {`${user.name} ${user.surname}`}
@@ -465,20 +463,15 @@ const WorkReportDetail = () => {
             <section>
               <Accordion multiple activeIndex={activeTabs}>
                 {workReport.work_order.work_orders_blocks?.length ? (
-                  workReport.work_order.work_orders_blocks.map(
-                    (block, index) => (
-                      <AccordionTab
-                        key={block.id}
-                        header={`${t(
-                          'admin.pages.workReport.details.block',
-                        )} ${index + 1}`}>
-                        {renderBlockDetails(block)}
-                      </AccordionTab>
-                    ),
-                  )
+                  workReport.work_order.work_orders_blocks.map((block, index) => (
+                    <AccordionTab
+                      key={block.id}
+                      header={`${t('admin.pages.workReport.details.block')} ${index + 1}`}>
+                      {renderBlockDetails(block)}
+                    </AccordionTab>
+                  ))
                 ) : (
-                  <AccordionTab
-                    header={t('admin.pages.workReport.details.noBlocks')}>
+                  <AccordionTab header={t('admin.pages.workReport.details.noBlocks')}>
                     <p className="text-gray-600">
                       {t('admin.pages.workReport.details.noBlocksAvailable')}
                     </p>
@@ -490,32 +483,31 @@ const WorkReportDetail = () => {
             <section>{renderResources()}</section>
 
             <section className="grid grid-cols-1 gap-6">
-              <div className="p-6 bg-primary-50 border border-primary-200 rounded-lg">
-                <h4 className="font-semibold flex items-center gap-2 text-primary-700">
+              <div className="p-6 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <h4 className="font-semibold flex items-center gap-2 text-indigo-700">
                   <Icon icon="tabler:gas-station" />
-                  {t('admin.pages.workReport.details.fuelSpent')}
+                  {t('admin.pages.workReport.details.spentFuel')}
                 </h4>
                 <p className="mt-3 text-gray-600">
-                  {workReport.spent_fuel}{' '}
-                  {t('admin.pages.workReport.details.liters')}
+                  {workReport.spent_fuel} {t('admin.pages.workReport.details.liters')}
                 </p>
               </div>
 
-              <div className="p-6 bg-primary-50 border border-primary-200 rounded-lg">
-                <h4 className="font-semibold flex items-center gap-2 text-primary-700">
+              <div className="p-6 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <h4 className="font-semibold flex items-center gap-2 text-indigo-700">
                   <Icon icon="tabler:alert-triangle" />
-                  {t('admin.pages.workReport.details.incidents')}
+                  {t('admin.pages.workReport.columns.incidents')}
                 </h4>
                 <p className="mt-3 text-gray-600">
-                  {workReport.report_incidents ||
-                    t('admin.pages.workReport.details.noIncidents')}
+                  {workReport.report_incidents || t('admin.pages.workReport.details.noIncidents')}
                 </p>
               </div>
+
               {workReport.observation && (
-                <div className="p-6 bg-warning-50 border border-warning-200 rounded-lg">
-                  <h4 className="font-semibold flex items-center gap-2 text-warning-700">
+                <div className="p-6 bg-amber-50 border border-amber-200 rounded-lg">
+                  <h4 className="font-semibold flex items-center gap-2 text-amber-700">
                     <Icon icon="tabler:eye" />
-                    {t('admin.pages.workReport.details.observation')}
+                    {t('admin.pages.workReport.columns.observation')}
                   </h4>
                   <p className="mt-3 text-gray-600">{workReport.observation}</p>
                 </div>
@@ -523,7 +515,7 @@ const WorkReportDetail = () => {
             </section>
           </div>
 
-          <footer className="p-8 flex justify-end bg-gray-50 rounded-b-lg">
+          <footer className="bg-gray-50 p-8 flex justify-end">
             {(workReport.report_status === WorkReportStatus.PENDING || workReport.report_status === WorkReportStatus.REJECTED) ? (
               <SplitButton
                 label={t('general.actions.close_part')}
@@ -536,7 +528,7 @@ const WorkReportDetail = () => {
               />
             ) : (
               <div className="flex items-center">
-                <i className="pi pi-info-circle text-blue-500 mr-2"></i>
+                <i className="pi pi-info-circle text-indigo-500 mr-2"></i>
                 <span className="text-gray-600">
                   {t('admin.pages.workReport.messages.already_processed')}
                 </span>
@@ -575,9 +567,7 @@ const WorkReportDetail = () => {
             onChange={(e) => setObservationNotes(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-lg mt-3"
             rows={4}
-            placeholder={t(
-              'admin.pages.workReport.dialogs.observationPlaceholder',
-            )}
+            placeholder={t('admin.pages.workReport.dialogs.observationPlaceholder')}
           />
         </div>
       </Dialog>

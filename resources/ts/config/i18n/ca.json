@@ -1080,6 +1080,12 @@
           "closedWithIncidents": "Tancat amb incidències",
           "unknown": "Desconegut"
         },
+        "taskStatus": {
+          "pending": "Pendent",
+          "inProgress": "En Progrés",
+          "completed": "Completada",
+          "unknown": "Desconegut"
+        },
         "details": {
           "details": "Detalls",
           "block": "Bloc",
@@ -1103,7 +1109,8 @@
           "hours": "Hores",
           "unit": "Unitat",
           "cost": "Cost",
-          "quantity": "Quantitat"
+          "quantity": "Quantitat",
+          "liters": "Litres"
         },
         "dialogs": {
           "observationHeader": "Afegeix Observacions",
