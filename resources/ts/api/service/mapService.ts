@@ -34,7 +34,7 @@ export class MapService {
     this.map = new mapboxgl.Map({
       container,
       style: 'mapbox://styles/mapbox/standard-satellite',
-      center: [center[0], center[1]],
+      center: center ? [center[0], center[1]] : [-3.70379, 40.41678],
       zoom: 14,
 
 
