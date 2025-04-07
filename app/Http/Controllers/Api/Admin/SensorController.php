@@ -86,13 +86,25 @@ class SensorController extends Controller
     /**
      * Display the specified sensor.
      */
-    public function show($id)
+    public function show($eui)
     {
         try {
-            $sensor = Sensor::findOrFail($id);
-            return response()->json($sensor);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Sensor not found'], 404);
+            $apiKey = env('VITE_X_API_KEY');
+            $response = Http::withHeaders([
+                'X-API-Key' => $apiKey,
+            ])->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/{$eui}/history");
+
+            if ($response->successful()) {
+                $sensorData = $response->json();
+                return response()->json($sensorData, 200);
+            }
+
+            return response()->json(['message' => 'Error fetching sensor details'], $response->status());
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error fetching sensor details',
+                'error' => $th->getMessage()
+            ], 500);
         }
     }
 
@@ -190,7 +202,7 @@ class SensorController extends Controller
             $apiKey = env('VITE_X_API_KEY');
             $response = Http::withHeaders([
                 'X-API-Key' => $apiKey,
-            ])->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/{$eui}");
+            ])->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}");
 
             if ($response->successful()) {
                 return response()->json($response->json(), 200);

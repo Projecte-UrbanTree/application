@@ -89,7 +89,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
 
         Route::get('/sensorshistory', [SensorController::class, 'fetchExternalHistorySensors']);
-        Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchExternalHistorySensorByEUI']);
+        Route::get('/sensorshistory/{eui}', [SensorController::class, 'fetchExternalHistorySensorByEUI']);
     });
 
     /* Worker protected routes */
