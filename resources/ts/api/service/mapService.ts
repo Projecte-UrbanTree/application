@@ -5,7 +5,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { Icon } from '@iconify/react';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { LngLatLike } from 'mapbox-gl';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -21,24 +21,32 @@ export class MapService {
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
   private elementMarkers: { marker: mapboxgl.Marker; elementId: number }[] = [];
-
+  private zoneCoords: ZoneCenterCoord[];
+  private geoCoords: number[];
 
   constructor(container: HTMLDivElement, token: string, zoneCoords: ZoneCenterCoord[], geoCoords: number[]) {
     console.log({zoneCoords});
-
-    const { center, zone_id }: ZoneCenterCoord = zoneCoords[0];
-    console.log({center});
-    
-    
+    this.zoneCoords = zoneCoords;
+    this.geoCoords = geoCoords;
     mapboxgl.accessToken = token;
     this.map = new mapboxgl.Map({
       container,
       style: 'mapbox://styles/mapbox/standard-satellite',
-      center: center ? [center[0], center[1]] : [-3.70379, 40.41678],
+      center: this.getCenter(),
       zoom: 14,
 
 
     });
+  }
+
+  public getCenter(): LngLatLike {
+    if (this.zoneCoords && this.zoneCoords.length > 0 && this.zoneCoords[0].center && this.zoneCoords[0].center.length === 2) {
+      return this.zoneCoords[0].center as [number, number];
+    } else if (this.geoCoords && this.geoCoords.length === 2) {
+      return this.geoCoords as [number, number];
+    } else {
+      return [-3.70379, 40.41678] as [number, number];
+    }
   }
 
   public addBasicControls(): void {

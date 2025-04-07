@@ -148,9 +148,7 @@ export const MapComponent: React.FC<MapProps> = ({
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
     }
 
-    console.log(centerCoords);
-    
-          
+            
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, [geoLat!, geoLng!]);
     service.addBasicControls();
     service.addGeocoder();
