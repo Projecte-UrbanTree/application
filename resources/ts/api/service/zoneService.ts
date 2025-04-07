@@ -1,4 +1,4 @@
-import { Zone } from '@/types/Zone';
+import { Zone, ZoneCenterCoord } from '@/types/Zone';
 
 import axiosClient from '../axiosClient';
 
@@ -25,3 +25,8 @@ export const updateZone = async (id: number, data: Zone): Promise<Zone> => {
 export const deleteZone = async (zoneId: number): Promise<void> => {
   await axiosClient.delete(`/admin/zones/${zoneId}`);
 };
+
+export const getZoneCoords = async (): Promise<ZoneCenterCoord[]> => {
+  const res = await axiosClient.get(`/admin/points/location-contract`);
+  return res.data;
+}

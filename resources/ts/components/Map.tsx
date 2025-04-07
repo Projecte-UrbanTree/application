@@ -19,13 +19,15 @@ import { ElementType } from '@/types/ElementType';
 import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { TreeTypes } from '@/types/TreeTypes';
-import { Zone } from '@/types/Zone';
+import { Zone, ZoneCenterCoord } from '@/types/Zone';
 
 import ElementDetailPopup from '../pages/Admin/Inventory/ElementDetailPopup';
 import IncidentForm from '../pages/Admin/Inventory/IncidentForm';
 import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
 import { eventSubject, ZoneEvent } from '../pages/Admin/Inventory/Zones';
+import useGeolocation from '@/hooks/useGeolocation';
+import { getZoneCoords } from '@/api/service/zoneService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -68,6 +70,8 @@ export const MapComponent: React.FC<MapProps> = ({
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
   const userValue = useSelector((state: RootState) => state.user);
 
+  const { latitude: geoLat, longitude: geoLng, error: geoError } = useGeolocation();
+
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(null);
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
@@ -83,6 +87,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [lastContractId, setLastContractId] = useState<number | null>(null);
+  const [centerCoords, setCenterCoords] = useState<ZoneCenterCoord[]>([]);
 
   const handleBackToIncidentTab = useCallback(() => {
     setIncidentModalVisible(false);
@@ -93,12 +98,16 @@ export const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [treeTypesFetch, elementTypeFetch] = await Promise.all([
+        const [treeTypesFetch, elementTypeFetch, centerCoordsData] = await Promise.all([
           fetchTreeTypes(),
-          fetchElementType()
+          fetchElementType(),
+          getZoneCoords(),
         ]);
         setTreeTypes(treeTypesFetch);
         setElementTypes(elementTypeFetch);
+        setCenterCoords(centerCoordsData);
+        
+
       } catch (error) {
         toast.current?.show({
           severity: 'error',
@@ -139,7 +148,10 @@ export const MapComponent: React.FC<MapProps> = ({
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
     }
 
-    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
+    console.log(centerCoords);
+    
+          
+    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, [geoLat!, geoLng!]);
     service.addBasicControls();
     service.addGeocoder();
     service.enableDraw(userValue.role === Roles.admin, (coords) => {

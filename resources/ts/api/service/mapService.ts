@@ -13,20 +13,31 @@ import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
+import { ZoneCenterCoord } from '@/types/Zone';
 
 export class MapService {
+
   public map!: mapboxgl.Map;
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
   private elementMarkers: { marker: mapboxgl.Marker; elementId: number }[] = [];
 
-  constructor(container: HTMLDivElement, token: string) {
+
+  constructor(container: HTMLDivElement, token: string, zoneCoords: ZoneCenterCoord[], geoCoords: number[]) {
+    console.log({zoneCoords});
+
+    const { center, zone_id }: ZoneCenterCoord = zoneCoords[0];
+    console.log({center});
+    
+    
     mapboxgl.accessToken = token;
     this.map = new mapboxgl.Map({
       container,
       style: 'mapbox://styles/mapbox/standard-satellite',
-      center: [-3.70379, 40.41678],
-      zoom: 12,
+      center: [center[0], center[1]],
+      zoom: 14,
+
+
     });
   }
 
