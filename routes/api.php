@@ -87,6 +87,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/work-orders/{id}/calculate-status', [WorkOrderController::class, 'calculateStatus']);
 
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
+
+        Route::get('/sensorshistory', [SensorController::class, 'fetchExternalHistorySensors']);
+        Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchExternalHistorySensorByEUI']);
     });
 
     /* Worker protected routes */

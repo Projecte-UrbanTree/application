@@ -8,6 +8,8 @@ use App\Http\Requests\StoreSensorRequest;
 use App\Http\Requests\UpdateSensorRequest;
 use App\Models\Sensor;
 use App\Models\Contract;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SensorController extends Controller
 {
@@ -84,17 +86,27 @@ class SensorController extends Controller
     /**
      * Display the specified sensor.
      */
-    public function show(Sensor $sensor)
+    public function show($id)
     {
-        return response()->json($sensor);
+        try {
+            $sensor = Sensor::findOrFail($id);
+            return response()->json($sensor);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Sensor not found'], 404);
+        }
     }
 
     /**
      * Show the form for editing the specified sensor.
      */
-    public function edit(Sensor $sensor)
+    public function edit($id)
     {
-        return response()->json(['sensor' => $sensor]);
+        try {
+            $sensor = Sensor::findOrFail($id);
+            return response()->json(['sensor' => $sensor]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Sensor not found'], 404);
+        }
     }
 
     /**
@@ -138,6 +150,57 @@ class SensorController extends Controller
             return response()->json(['message' => 'Sensor eliminado'], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error al eliminar el sensor'], 500);
+        }
+    }
+
+    /**
+     * Fetch all sensors from the external API.
+     */
+    public function fetchExternalHistorySensors()
+    {
+        try {
+            $apiKey = env('VITE_X_API_KEY');
+            if (empty($apiKey)) {
+                throw new \Exception('API key not configured');
+            }
+
+            $response = Http::withHeaders([
+                'X-API-Key' => $apiKey,
+            ])->get('http://api_urbantree.alumnat.iesmontsia.org/sensors');
+
+            if ($response->successful()) {
+                return response()->json($response->json());
+            }
+
+            return response()->json(['message' => 'Error from external API'], $response->status());
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error fetching external sensors',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Fetch a specific sensor by EUI from the external API.
+     */
+    public function fetchExternalHistorySensorByEUI($eui)
+    {
+        try {
+            $apiKey = env('VITE_X_API_KEY');
+            $response = Http::withHeaders([
+                'X-API-Key' => $apiKey,
+            ])->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/{$eui}");
+
+            if ($response->successful()) {
+                return response()->json($response->json(), 200);
+            }
+
+            return response()->json(['message' => 'Error fetching external sensor'], $response->status());
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Sensor not found'], 404);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Error fetching external sensor', 'error' => $th->getMessage()], 500);
         }
     }
 }

@@ -1,5 +1,4 @@
-import axios from 'axios';
-
+import axiosClient from "./axiosClient";
 interface SensorModulationLoRa {
   bandwidth: number;
   spreadingFactor: number;
@@ -35,32 +34,22 @@ export interface Sensor {
 
 export const fetchSensors = async () => {
   try {
-    const apiKey = import.meta.env.VITE_X_API_KEY;
-    const response = await axios.get(
-      'http://api_urbantree.alumnat.iesmontsia.org/sensors',
-      {
-        headers: {
-          'X-API-Key': apiKey,
-        },
-      },
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching sensors:', error);
-    throw error;
+    const response = await axiosClient.get('/admin/sensorshistory');
+    console.log('External Sensors API Response:', response.data); 
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error: any) {
+    console.error('Error details:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    return [];
   }
 };
+
 export const fetchSensorByEUI = async (eui: string) => {
   try {
-    const apiKey = import.meta.env.VITE_X_API_KEY;
-    const response = await axios.get(
-      `http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/${eui}`,
-      {
-        headers: {
-          'X-API-Key': apiKey,
-        },
-      },
-    );
+    const response = await axiosClient.get(`/admin/sensors/${eui}/history`);
     return response.data;
   } catch (error) {
     console.error('Error fetching sensor by EUI:', error);
