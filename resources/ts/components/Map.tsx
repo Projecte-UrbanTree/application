@@ -60,6 +60,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const mapServiceRef = useRef<MapService | null>(null);
   const toast = useRef<Toast>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const { points } = useSelector((state: RootState) => state.points);
   const { zones: zonesRedux } = useSelector((state: RootState) => state.zone);
@@ -110,7 +111,29 @@ export const MapComponent: React.FC<MapProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!mapContainerRef.current) return;
+    if (!currentContract?.id) return;
+
+    const loadContractData = async () => {
+      try {
+        await Promise.all([
+          dispatch(fetchPointsAsync()).unwrap(),
+          dispatch(fetchElementsAsync()).unwrap()
+        ]);
+        setIsDataLoaded(true);
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al cargar los datos del contrato',
+        });
+      }
+    };
+
+    loadContractData();
+  }, [dispatch, currentContract]);
+
+  useEffect(() => {
+    if (!mapContainerRef.current || !isDataLoaded) return;
 
     while (mapContainerRef.current.firstChild) {
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
@@ -130,36 +153,23 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     });
     mapServiceRef.current = service;
-  }, [userValue.role, onDrawingModeChange, onEnabledButtonChange]);
+
+    if (!service.isStyleLoaded()) {
+      service.onceStyleLoad(() => {
+        updateZones(service);
+        updateElements(service);
+      });
+    } else {
+      updateZones(service);
+      updateElements(service);
+    }
+  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange]);
 
   useEffect(() => {
     const handleResize = () => mapServiceRef.current?.resizeMap();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  useEffect(() => {
-    if (!currentContract || currentContract.id === lastContractId) return;
-    
-    setLastContractId(currentContract.id!);
-    
-    const loadContractData = async () => {
-      try {
-        await Promise.all([
-          dispatch(fetchPointsAsync()).unwrap(),
-          dispatch(fetchElementsAsync()).unwrap()
-        ]);
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar los datos del contrato',
-        });
-      }
-    };
-
-    loadContractData();
-  }, [dispatch, currentContract, lastContractId]);
 
   useEffect(() => {
     const service = mapServiceRef.current;
@@ -170,6 +180,28 @@ export const MapComponent: React.FC<MapProps> = ({
       service.flyTo([firstPoint.longitude, firstPoint.latitude]);
     }
   }, [selectedZone, points]);
+
+  useEffect(() => {
+    const service = mapServiceRef.current;
+    if (!service) return;
+
+    if (!service.isStyleLoaded()) {
+      service.onceStyleLoad(() => updateZones(service));
+    } else {
+      updateZones(service);
+    }
+  }, [zonesRedux, points, currentContract]);
+
+  useEffect(() => {
+    const service = mapServiceRef.current;
+    if (!service || !currentContract) return;
+
+    if (!service.isStyleLoaded()) {
+      service.onceStyleLoad(() => updateElements(service));
+    } else {
+      updateElements(service);
+    }
+  }, [elements, currentContract, points]);
 
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
@@ -328,16 +360,6 @@ export const MapComponent: React.FC<MapProps> = ({
     onElementAdd();
   }, [onCreatingElementChange, onElementAdd]);
 
-  useEffect(() => {
-    const service = mapServiceRef.current;
-    if (!service) return;
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => updateZones(service));
-    } else {
-      updateZones(service);
-    }
-  }, [zonesRedux, points, currentContract]);
-
   function updateZones(service: MapService) {
     if (!service || !currentContract?.id) return;
     
@@ -375,17 +397,6 @@ export const MapComponent: React.FC<MapProps> = ({
       console.error('Error updating zones:', error);
     }
   }
-
-  useEffect(() => {
-    const service = mapServiceRef.current;
-    if (!service || !currentContract) return;
-
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => updateElements(service));
-    } else {
-      updateElements(service);
-    }
-  }, [elements, currentContract, points]);
 
   function updateElements(service: MapService) {
     if (!currentContract) return;
@@ -441,7 +452,6 @@ export const MapComponent: React.FC<MapProps> = ({
         handleElementClick,
       );
       
-      // Apply visibility settings
       Object.entries(hiddenZones).forEach(([zoneId, isHidden]) => {
         if (isHidden) {
           const zoneIdNum = Number(zoneId);
