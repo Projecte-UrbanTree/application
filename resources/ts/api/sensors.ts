@@ -56,3 +56,15 @@ export const fetchSensorByEUI = async (eui: string) => {
     throw error;
   }
 };
+
+export const fetchSensorHistoryPaginated = async (eui: string, page = 1, perPage = 10) => {
+  try {
+    const response = await axiosClient.get(`/admin/sensors/${eui}/history/paginated`, {
+      params: { page, perPage }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching paginated sensor history:', error);
+    throw error;
+  }
+};

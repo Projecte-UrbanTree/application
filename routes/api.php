@@ -90,6 +90,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/sensorshistory', [SensorController::class, 'fetchExternalHistorySensors']);
         Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchExternalHistorySensorByEUI']);
+
+        // New route for paginated sensor history
+        Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);
     });
 
     /* Worker protected routes */
