@@ -115,7 +115,7 @@ export default function Account() {
     ),
   });
 
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async (values: typeof initialValues, { resetForm }: { resetForm: (nextState?: Partial<any>) => void }) => {
     try {
       await axiosClient.put('/admin/account', {
         name: values.name,
@@ -137,6 +137,15 @@ export default function Account() {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
+      });
+      
+      resetForm({
+        values: {
+          ...values,
+          currentPassword: '',
+          newPassword: '',
+          confirmNewPassword: '',
+        }
       });
       
       showToast(
