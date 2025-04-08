@@ -108,7 +108,7 @@ class AccountController extends Controller
         $user = Auth::user();
         $token = $user->tokens()->find($tokenId);
 
-        if (!$token) {
+        if (! $token) {
             return response()->json(['error' => 'Token not found'], 404);
         }
 
