@@ -2,8 +2,10 @@ import { Icon } from '@iconify/react';
 import { Field, Form, Formik } from 'formik';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
+import { TabPanel, TabView } from 'primereact/tabview';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +19,7 @@ export default function Account() {
   const { t } = useTranslation();
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [tokens, setTokens] = useState([]);
   const [initialValues, setInitialValues] = useState({
     name: '',
     surname: '',
@@ -42,6 +45,9 @@ export default function Account() {
           newPassword: '',
           confirmNewPassword: '',
         });
+
+        const tokenResponse = await axiosClient.get('/admin/account/tokens');
+        setTokens(tokenResponse.data);
 
         const successMessage = sessionStorage.getItem('accountUpdateSuccess');
         if (successMessage) {
@@ -96,6 +102,7 @@ export default function Account() {
         email: values.email,
         company: values.company,
       });
+      
       if (values.currentPassword && values.newPassword) {
         await axiosClient.put('/admin/account/password', {
           currentPassword: values.currentPassword,
@@ -104,11 +111,22 @@ export default function Account() {
         });
       }
 
-      sessionStorage.setItem(
-        'accountUpdateSuccess',
-        'admin.pages.account.messages.profileUpdated',
+      setInitialValues({
+        ...values,
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
+      });
+      
+      showToast(
+        'success',
+        t('general.success'),
+        t('admin.pages.account.messages.profileUpdated')
       );
-      navigate(0);
+      
+      const tokenResponse = await axiosClient.get('/admin/account/tokens');
+      setTokens(tokenResponse.data);
+      
     } catch (error: any) {
       if (
         error.response?.data?.error === 'La contraseña actual no es correcta'
@@ -128,6 +146,24 @@ export default function Account() {
     }
   };
 
+  const handleRevokeToken = async (tokenId: number) => {
+    try {
+      await axiosClient.delete(`/admin/account/tokens/${tokenId}`);
+      setTokens(tokens.filter((token) => token.id !== tokenId));
+      showToast(
+        'success',
+        t('general.success'),
+        t('admin.pages.account.messages.tokenRevoked'),
+      );
+    } catch (error) {
+      showToast(
+        'error',
+        t('general.error'),
+        t('admin.pages.account.messages.errorRevokingToken'),
+      );
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -141,20 +177,9 @@ export default function Account() {
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 p-4 md:p-6">
-      <Card className="w-full max-w-3xl shadow-lg">
-        <header className="bg-blue-700 px-6 py-4 flex items-center -mt-6 -mx-6 rounded-t-lg">
-          <Button
-            className="p-button-text mr-4"
-            style={{ color: '#fff' }}
-            onClick={() => navigate('/admin')}>
-            <Icon icon="tabler:arrow-left" className="h-6 w-6" />
-          </Button>
-          <h2 className="text-white text-3xl font-bold">
-            {t('admin.pages.account.title')}
-          </h2>
-        </header>
-        <div className="p-6">
+    <Card className="shadow-md">
+      <TabView>
+        <TabPanel header={t('admin.pages.account.tabs.profile')}>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -162,9 +187,6 @@ export default function Account() {
             enableReinitialize>
             {({ errors, touched, isSubmitting }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <h3 className="col-span-2 text-lg font-bold">
-                  {t('admin.pages.account.basicInfo')}
-                </h3>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.name')}</label>
                   <Field
@@ -198,58 +220,45 @@ export default function Account() {
                   <Field name="dni" as={InputText} disabled />
                 </div>
                 <h3 className="col-span-2 text-lg font-bold mt-4">
-                  {t('admin.pages.account.security')}
+                  {t('admin.pages.account.security.title')}
                 </h3>
+                <p className="col-span-2 text-sm text-gray-600 mb-4">
+                  {t('admin.pages.account.passwordChangeInfo')}
+                </p>
                 <div className="flex flex-col col-span-2">
-                  <label>{t('admin.fields.currentPassword')}</label>
+                  <label className="font-medium text-gray-700">{t('admin.fields.currentPassword')}</label>
                   <Field
                     name="currentPassword"
-                    as={Password}
-                    feedback={false}
-                    className={
-                      errors.currentPassword && touched.currentPassword
-                        ? 'p-invalid'
-                        : ''
-                    }
+                    as={InputText}
+                    type="password"
+                    className={`mt-1 ${errors.currentPassword && touched.currentPassword ? 'p-invalid' : ''}`}
                   />
                   {errors.currentPassword && touched.currentPassword && (
-                    <small className="p-error">{errors.currentPassword}</small>
+                    <small className="p-error mt-1">{errors.currentPassword}</small>
                   )}
                 </div>
-                <div className="flex flex-col">
-                  <label>{t('admin.fields.newPassword')}</label>
+                <div className="flex flex-col mt-4">
+                  <label className="font-medium text-gray-700">{t('admin.fields.newPassword')}</label>
                   <Field
                     name="newPassword"
-                    as={Password}
-                    toggleMask={true}
-                    feedback={false}
-                    className={
-                      errors.newPassword && touched.newPassword
-                        ? 'p-invalid'
-                        : ''
-                    }
+                    as={InputText}
+                    type="password"
+                    className={`mt-1 ${errors.newPassword && touched.newPassword ? 'p-invalid' : ''}`}
                   />
                   {errors.newPassword && touched.newPassword && (
-                    <small className="p-error">{errors.newPassword}</small>
+                    <small className="p-error mt-1">{errors.newPassword}</small>
                   )}
                 </div>
-                <div className="flex flex-col">
-                  <label>{t('admin.fields.confirmPassword')}</label>
+                <div className="flex flex-col mt-4">
+                  <label className="font-medium text-gray-700">{t('admin.fields.confirmPassword')}</label>
                   <Field
                     name="confirmNewPassword"
-                    as={Password}
-                    toggleMask={true}
-                    feedback={false}
-                    className={
-                      errors.confirmNewPassword && touched.confirmNewPassword
-                        ? 'p-invalid'
-                        : ''
-                    }
+                    as={InputText}
+                    type="password"
+                    className={`mt-1 ${errors.confirmNewPassword && touched.confirmNewPassword ? 'p-invalid' : ''}`}
                   />
                   {errors.confirmNewPassword && touched.confirmNewPassword && (
-                    <small className="p-error">
-                      {errors.confirmNewPassword}
-                    </small>
+                    <small className="p-error mt-1">{errors.confirmNewPassword}</small>
                   )}
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
@@ -270,8 +279,29 @@ export default function Account() {
               </Form>
             )}
           </Formik>
-        </div>
-      </Card>
-    </div>
+        </TabPanel>
+        <TabPanel header={t('admin.pages.account.tabs.security')}>
+          <h3 className="text-lg font-bold mb-4">
+            {t('admin.pages.account.security.tokens')}
+          </h3>
+          <DataTable value={tokens} className="p-datatable-sm">
+            <Column field="name" header={t('admin.pages.account.securityTable.name')} />
+            <Column field="last_used_at" header={t('admin.pages.account.securityTable.lastUsed')} />
+            <Column
+              body={(rowData) => (
+                <Button
+                  className="p-button-danger p-button-sm"
+                  onClick={() => handleRevokeToken(rowData.id)}
+                  tooltip={t('admin.pages.account.actions.revoke')}
+                >
+                  <Icon icon="mdi:trash" className="h-5 w-5" />
+                </Button>
+              )}
+              header={t('admin.pages.account.securityTable.actions')}
+            />
+          </DataTable>
+        </TabPanel>
+      </TabView>
+    </Card>
   );
 }
