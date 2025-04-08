@@ -29,7 +29,7 @@ class AuthController extends Controller
             return response()->json(['message' => __('auth.failed')], 401);
         }
 
-        $token = $user->createToken('accessToken')->plainTextToken;
+        $token = $user->createToken($request->userAgent())->plainTextToken;
 
         return response()->json(['success' => true, 'accessToken' => $token, 'userData' => $user]);
     }

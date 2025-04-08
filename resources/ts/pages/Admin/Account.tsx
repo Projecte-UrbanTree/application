@@ -31,13 +31,34 @@ export default function Account() {
     confirmNewPassword: '',
   });
 
+  const formatName = (name: string) => {
+    if (!name) return '';
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'Never';
+    const date = new Date(dateString);
+    
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axiosClient.get('/admin/account');
         setInitialValues({
-          name: response.data.name ?? '',
-          surname: response.data.surname ?? '',
+          name: formatName(response.data.name) ?? '',
+          surname: formatName(response.data.surname) ?? '',
           email: response.data.email ?? '',
           company: response.data.company ?? '',
           dni: response.data.dni ?? '',
@@ -164,6 +185,23 @@ export default function Account() {
     }
   };
 
+  const nameBodyTemplate = (rowData: any) => {
+    const displayName = rowData.name.length > 45
+      ? `${rowData.name.substring(0, 45)}...` 
+      : rowData.name;
+    
+    return (
+      <div className="flex items-center gap-2">
+        <Icon icon="mdi:account" className="text-blue-600" width={18} height={18} />
+        <span title={rowData.name}>{displayName}</span>
+      </div>
+    );
+  };
+
+  const lastUsedTemplate = (rowData: any) => {
+    return <span>{formatDate(rowData.last_used_at)}</span>;
+  };
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -189,35 +227,55 @@ export default function Account() {
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col">
                   <label>{t('admin.fields.name')}</label>
-                  <Field
-                    name="name"
-                    as={InputText}
-                    className={errors.name && touched.name ? 'p-invalid' : ''}
-                  />
+                  <div className="p-inputgroup">
+                    <span className="p-inputgroup-addon">
+                      <Icon icon="mdi:account" width={18} height={18} />
+                    </span>
+                    <Field
+                      name="name"
+                      as={InputText}
+                      className={errors.name && touched.name ? 'p-invalid' : ''}
+                    />
+                  </div>
                   {errors.name && touched.name && (
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.surname')}</label>
-                  <Field
-                    name="surname"
-                    as={InputText}
-                    className={
-                      errors.surname && touched.surname ? 'p-invalid' : ''
-                    }
-                  />
+                  <div className="p-inputgroup">
+                    <span className="p-inputgroup-addon">
+                      <Icon icon="mdi:account-details" width={18} height={18} />
+                    </span>
+                    <Field
+                      name="surname"
+                      as={InputText}
+                      className={
+                        errors.surname && touched.surname ? 'p-invalid' : ''
+                      }
+                    />
+                  </div>
                   {errors.surname && touched.surname && (
                     <small className="p-error">{errors.surname}</small>
                   )}
                 </div>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.email')}</label>
-                  <Field name="email" as={InputText} disabled />
+                  <div className="p-inputgroup">
+                    <span className="p-inputgroup-addon">
+                      <Icon icon="mdi:email" width={18} height={18} />
+                    </span>
+                    <Field name="email" as={InputText} disabled />
+                  </div>
                 </div>
                 <div className="flex flex-col">
                   <label>{t('admin.fields.dni')}</label>
-                  <Field name="dni" as={InputText} disabled />
+                  <div className="p-inputgroup">
+                    <span className="p-inputgroup-addon">
+                      <Icon icon="mdi:card-account-details" width={18} height={18} />
+                    </span>
+                    <Field name="dni" as={InputText} disabled />
+                  </div>
                 </div>
                 <h3 className="col-span-2 text-lg font-bold mt-4">
                   {t('admin.pages.account.security.title')}
@@ -285,8 +343,12 @@ export default function Account() {
             {t('admin.pages.account.security.tokens')}
           </h3>
           <DataTable value={tokens} className="p-datatable-sm">
-            <Column field="name" header={t('admin.pages.account.securityTable.name')} />
-            <Column field="last_used_at" header={t('admin.pages.account.securityTable.lastUsed')} />
+            <Column field="name" header={t('admin.pages.account.securityTable.name')} body={nameBodyTemplate} />
+            <Column 
+              field="last_used_at" 
+              header={t('admin.pages.account.securityTable.lastUsed')} 
+              body={lastUsedTemplate}
+            />
             <Column
               body={(rowData) => (
                 <Button
