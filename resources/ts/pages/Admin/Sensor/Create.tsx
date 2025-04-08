@@ -102,7 +102,7 @@ export default function CreateSensor() {
           onClick={() => navigate('/admin/sensors')}
         />
         <h2 className="text-xl font-semibold text-gray-800">
-          {t('admin.pages.sensors.title.create')}
+          {t('admin.pages.sensors.form.title.create')}
         </h2>
       </div>
 

@@ -176,7 +176,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'sensors',
             element: (
-              <AdminLayout titleI18n="admin.pages.sensors.title.title">
+              <AdminLayout titleI18n="admin.pages.sensors.title">
                 <Sensors />
               </AdminLayout>
             ),
@@ -184,7 +184,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'sensors/create',
             element: (
-              <AdminLayout titleI18n="admin.pages.sensors.create.title.title">
+              <AdminLayout titleI18n="admin.pages.sensors.form.title.create">
                 <CreateSensor />
               </AdminLayout>
             ),
@@ -192,7 +192,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'sensors/edit/:id',
             element: (
-              <AdminLayout titleI18n="admin.pages.sensors.edit.title.title">
+              <AdminLayout titleI18n="admin.pages.sensors.form.title.edit">
                 <EditSensor />
               </AdminLayout>
             ),
@@ -200,7 +200,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'sensors/:eui',
             element: (
-              <AdminLayout titleI18n="admin.pages.sensors.show.title.title">
+              <AdminLayout titleI18n="admin.pages.sensors.form.title.show">
                 <ShowSensor />
               </AdminLayout>
             ),

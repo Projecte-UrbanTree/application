@@ -1130,7 +1130,6 @@
           "observationMessage": "Por favor, proporciona tus observaciones antes de cerrar el informe.",
           "observationPlaceholder": "Introduce tus observaciones aquí...",
           "editObservationHeader": "Editar Observación",
-          "editObservationMessage": "Modifica la observación para este informe.",
           "editObservationMessage": "Modifica la observación para este parte.",
           "editObservationPlaceholder": "Introduce tu observación actualizada aquí..."
         }
@@ -1181,12 +1180,7 @@
         "failedToUpdate": "Error al actualizar los trabajadores"
       },
       "sensors": {
-        "title": {
-          "title": "Sensores",
-          "create": "Crear Sensor",
-          "edit": "Editar Sensor",
-          "delete": "Eliminar Sensor"
-        },
+        "title": "Sensores",
         "loading": "Cargando datos del sensor...",
         "backButton": "Volver",
         "notFound": "Sensor no encontrado",
@@ -1216,7 +1210,8 @@
           "title": {
             "create": "Crear Sensor",
             "edit": "Editar Sensor",
-            "delete": "Eliminar Sensor"
+            "delete": "Eliminar Sensor",
+            "show": "Detalles del Sensor"
           },
           "validation": {
             "eui_required": "El EUI es obligatorio",
