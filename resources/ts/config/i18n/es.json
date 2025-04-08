@@ -1254,6 +1254,23 @@
         },
         "errors": {
           "no_contract": "Debe seleccionar un contrato válido"
+        },
+        "history": {
+          "title": "Historial del sensor",
+          "back": "Volver",
+          "loadError": "Error al cargar el historial del sensor",
+          "noData": "No hay datos históricos para este sensor",
+          "of": "de",
+          "metrics": {
+            "time": "Fecha/Hora",
+            "temp_soil": "Temperatura del suelo",
+            "ph1_soil": "pH del suelo",
+            "water_soil": "Humedad del suelo",
+            "conductor_soil": "Conductividad del suelo",
+            "bat": "Batería",
+            "rssi": "Intensidad de señal",
+            "snr": "Relación señal-ruido"
+          }
         }
       }
     }
