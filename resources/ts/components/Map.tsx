@@ -83,11 +83,9 @@ export const MapComponent: React.FC<MapProps> = ({
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
-  const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
   const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [lastContractId, setLastContractId] = useState<number | null>(null);
   const [centerCoords, setCenterCoords] = useState<ZoneCenterCoord[]>([]);
 
   const handleBackToIncidentTab = useCallback(() => {
@@ -99,16 +97,12 @@ export const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [treeTypesFetch, elementTypeFetch, centerCoordsData] = await Promise.all([
+        const [treeTypesFetch, elementTypeFetch] = await Promise.all([
           fetchTreeTypes(),
           fetchElementType(),
-          getZoneCoords(),
         ]);
         setTreeTypes(treeTypesFetch);
         setElementTypes(elementTypeFetch);
-        setCenterCoords(centerCoordsData);
-        
-
       } catch (error) {
         toast.current?.show({
           severity: 'error',
@@ -182,7 +176,7 @@ export const MapComponent: React.FC<MapProps> = ({
       updateZones(service);
       updateElements(service);
     }
-  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords]);
+  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords, currentContract?.id]);
 
   useEffect(() => {
     const handleResize = () => mapServiceRef.current?.resizeMap();
@@ -221,6 +215,40 @@ export const MapComponent: React.FC<MapProps> = ({
       updateElements(service);
     }
   }, [elements, currentContract, points]);
+
+  useEffect(() => {
+    if (!currentContract?.id) return;
+    
+    setIsDataLoaded(false);
+    
+    if (mapContainerRef.current) {
+      while (mapContainerRef.current.firstChild) {
+        mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
+      }
+    }
+    
+    const loadNewContractData = async () => {
+      try {
+        const centerCoordsData = await getZoneCoords();
+        setCenterCoords(centerCoordsData);
+        
+        await Promise.all([
+          dispatch(fetchPointsAsync()).unwrap(),
+          dispatch(fetchElementsAsync()).unwrap()
+        ]);
+        
+        setIsDataLoaded(true);
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al cargar los datos del nuevo contrato',
+        });
+      }
+    };
+    
+    loadNewContractData();
+  }, [currentContract?.id, dispatch]);
 
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
