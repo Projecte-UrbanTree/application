@@ -257,9 +257,7 @@ const WorkerWorkOrders = () => {
         .filter(item => item.resource.id > 0)
         .map((item) => ({
           resource_id: item.resource.id,
-          quantity: 1,
-          unit_name: item.resource.unit_name,
-          unit_cost: item.resource.unit_cost,
+          quantity: item.quantity,
         }));
       
       await axiosClient.post('/worker/work-reports', {
@@ -450,26 +448,11 @@ const WorkerWorkOrders = () => {
     }
   };
 
-  const handleUnitNameChange = (index: number, value: string) => {
+  const handleQuantityChange = (index: number, value: number) => {
     const updatedResources = [...workReportResources];
     updatedResources[index] = {
       ...updatedResources[index],
-      resource: {
-        ...updatedResources[index].resource,
-        unit_name: value
-      }
-    };
-    setWorkReportResources(updatedResources);
-  };
-
-  const handleUnitCostChange = (index: number, value: number) => {
-    const updatedResources = [...workReportResources];
-    updatedResources[index] = {
-      ...updatedResources[index],
-      resource: {
-        ...updatedResources[index].resource,
-        unit_cost: value || 0
-      }
+      quantity: value || 0
     };
     setWorkReportResources(updatedResources);
   };
@@ -696,23 +679,25 @@ const WorkerWorkOrders = () => {
                           </label>
                           <InputText
                             value={item.resource.unit_name}
-                            onChange={(e) => handleUnitNameChange(index, e.target.value)}
-                            className="w-full"
+                            className="w-full bg-gray-100"
                             placeholder="Unidad"
+                            disabled
                           />
                         </div>
                         <div>
                           <label className="text-xs text-gray-600 block mb-1">
-                            Coste unitario
+                            Cantidad
                           </label>
                           <InputNumber
-                            value={item.resource.unit_cost}
-                            onValueChange={(e) => handleUnitCostChange(index, e.value || 0)}
+                            value={item.quantity}
+                            onValueChange={(e) => handleQuantityChange(index, e.value || 0)}
                             mode="decimal"
                             minFractionDigits={0}
                             maxFractionDigits={2}
+                            min={0}
                             placeholder="0.00"
                             className="w-full"
+                            suffix={` ${item.resource.unit_name}`}
                           />
                         </div>
                       </div>
