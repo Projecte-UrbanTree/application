@@ -124,26 +124,42 @@
     "pages": {
       "account": {
         "title": "Account Settings",
-        "basicInfo": "Basic Information",
-        "security": "Security",
         "actions": {
           "save": "Save Changes",
-          "saving": "Saving..."
+          "saving": "Saving...",
+          "revoke": "Revoke"
         },
         "validation": {
-          "name_invalid": "Name is invalid",
           "name_required": "Name is required",
-          "surname_invalid": "Surname is invalid",
+          "name_invalid": "Invalid name",
           "surname_required": "Surname is required",
+          "surname_invalid": "Invalid surname",
           "currentPasswordRequired": "Current password is required",
-          "newPasswordMinLength": "New password must be at least 8 characters",
-          "newPasswordMismatch": "New passwords do not match",
+          "newPasswordMinLength": "New password must be at least 6 characters",
+          "newPasswordMismatch": "Passwords do not match",
           "newPasswordComplexity": "New password must contain at least one uppercase letter, one lowercase letter, and one number"
         },
         "messages": {
           "profileUpdated": "Profile updated successfully",
-          "errorSaving": "Error saving profile",
-          "passwordCurrentWrong": "Current password is incorrect"
+          "errorSaving": "Error saving changes",
+          "passwordCurrentWrong": "Current password is incorrect",
+          "tokenRevoked": "Token revoked successfully",
+          "errorRevokingToken": "Error revoking token"
+        },
+        "passwordChangeInfo": "Fill in the password fields only if you want to change it. Otherwise, leave them empty.",
+        "tabs": {
+          "profile": "Profile",
+          "security": "Security",
+          "basicInfo": "Basic Information"
+        },
+        "security": {
+          "title": "Security",
+          "tokens": "Security Tokens"
+        },
+        "securityTable": {
+          "name": "Name",
+          "lastUsed": "Last Used",
+          "actions": "Actions"
         }
       },
 

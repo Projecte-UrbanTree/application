@@ -115,26 +115,42 @@
     "pages": {
       "account": {
         "title": "Configuració del Compte",
-        "basicInfo": "Informació Bàsica",
-        "security": "Seguretat",
         "actions": {
           "save": "Desar canvis",
-          "saving": "Guardant..."
+          "saving": "Guardant...",
+          "revoke": "Revocar"
         },
         "validation": {
-          "name_invalid": "El nom no pot contenir símbols.",
           "name_required": "El nom és obligatori",
-          "surname_invalid": "El cognom no pot contenir símbols.",
+          "name_invalid": "Nom no vàlid",
           "surname_required": "El cognom és obligatori",
+          "surname_invalid": "Cognom no vàlid",
           "currentPasswordRequired": "Has d'introduir la contrasenya actual",
-          "newPasswordMinLength": "La contrasenya ha de tenir almenys 6 caràcters",
+          "newPasswordMinLength": "La nova contrasenya ha de tenir almenys 6 caràcters",
           "newPasswordMismatch": "Les contrasenyes no coincideixen",
           "newPasswordComplexity": "La nova contrasenya ha de contenir almenys una lletra majúscula, una lletra minúscula i un número"
         },
         "messages": {
           "profileUpdated": "Perfil actualitzat correctament",
-          "errorSaving": "Error en desar els canvis.",
-          "passwordCurrentWrong": "La contrasenya actual no coincideix"
+          "errorSaving": "Error en desar els canvis",
+          "passwordCurrentWrong": "La contrasenya actual no coincideix",
+          "tokenRevoked": "Token revocat correctament",
+          "errorRevokingToken": "Error en revocar el token"
+        },
+        "passwordChangeInfo": "Omple els camps de contrasenya només si vols canviar-la. Si no, deixa'ls buits.",
+        "tabs": {
+          "basicInfo": "Informació Bàsica",
+          "security": "Seguretat",
+          "profile": "Perfil"
+        },
+        "security": {
+          "title": "Seguretat",
+          "tokens": "Tokens de Seguretat"
+        },
+        "securityTable": {
+          "name": "Nom",
+          "lastUsed": "Últim Ús",
+          "actions": "Accions"
         }
       },
       "contracts": {
