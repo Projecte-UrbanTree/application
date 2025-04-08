@@ -351,7 +351,7 @@ export const Zones = ({
       {filteredZones.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full text-gray-500 text-lg">
           <Icon icon="mdi:alert-circle-outline" width="32" className="mb-2" />
-          <p>No hay zonas que coincidan con la búsqueda</p>
+          <p>No hay zonas para este contrato</p>
         </div>
       ) : (
         <>
