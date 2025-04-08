@@ -16,8 +16,7 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { ZoneCenterCoord } from '@/types/Zone';
 
 export class MapService {
-
-  public map!: mapboxgl.Map;
+  private map!: mapboxgl.Map;
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
   private elementMarkers: { marker: mapboxgl.Marker; elementId: number }[] = [];
@@ -25,7 +24,6 @@ export class MapService {
   private geoCoords: number[];
 
   constructor(container: HTMLDivElement, token: string, zoneCoords: ZoneCenterCoord[], geoCoords: number[]) {
-    console.log({zoneCoords});
     this.zoneCoords = zoneCoords;
     this.geoCoords = geoCoords;
     mapboxgl.accessToken = token;
@@ -34,19 +32,17 @@ export class MapService {
       style: 'mapbox://styles/mapbox/standard-satellite',
       center: this.getCenter(),
       zoom: 14,
-
-
     });
   }
 
-  public getCenter(): LngLatLike {
-    if (this.zoneCoords && this.zoneCoords.length > 0 && this.zoneCoords[0].center && this.zoneCoords[0].center.length === 2) {
+  private getCenter(): LngLatLike {
+    if (this.zoneCoords?.length > 0 && this.zoneCoords[0].center?.length === 2) {
       return this.zoneCoords[0].center as [number, number];
-    } else if (this.geoCoords && this.geoCoords.length === 2) {
-      return this.geoCoords as [number, number];
-    } else {
-      return [-3.70379, 40.41678] as [number, number];
     }
+    if (this.geoCoords?.length === 2) {
+      return this.geoCoords as [number, number];
+    }
+    return [-3.70379, 40.41678] as [number, number];
   }
 
   public addBasicControls(): void {
@@ -140,7 +136,7 @@ export class MapService {
   }
 
   public removeLayersAndSources(prefix: string): void {
-    if (!this.map || !this.map.isStyleLoaded()) return;
+    if (!this.map?.isStyleLoaded()) return;
 
     const style = this.map.getStyle();
     if (!style?.layers) return;
@@ -303,7 +299,6 @@ export class MapService {
   public getCoordElement(element: Element, points: Point[]): { lat: number; lng: number } | null {
     const point = points.find((p) => p.id === element.point_id);
     if (!point?.latitude || !point?.longitude) return null;
-    
     return { lat: point.latitude, lng: point.longitude };
   }
 
