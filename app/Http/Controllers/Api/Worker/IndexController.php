@@ -198,7 +198,6 @@ class IndexController extends Controller
                 'resources.*.quantity' => ['required', 'numeric', 'min:0'],
             ]);
 
-            // Check if this worker is assigned to this work order
             $user = $request->user();
             $workOrder = WorkOrder::findOrFail($validated['work_order_id']);
             
@@ -209,23 +208,19 @@ class IndexController extends Controller
             }
 
             DB::beginTransaction();
-            
-            // Check if there's an existing rejected report for this work order
+
             $existingReport = WorkReport::where('work_order_id', $validated['work_order_id'])
                 ->where('report_status', self::REPORT_STATUS_REJECTED)
                 ->first();
                 
             if ($existingReport) {
-                // Update existing rejected report
                 $existingReport->spent_fuel = $validated['spent_fuel'];
                 $existingReport->report_incidents = $validated['report_incidents'] ?? null;
                 $existingReport->report_status = self::REPORT_STATUS_PENDING;
                 $existingReport->save();
-                
-                // Delete old resources
+
                 $existingReport->workReportResources()->delete();
-                
-                // Add new resources
+
                 if (isset($validated['resources']) && is_array($validated['resources'])) {
                     foreach ($validated['resources'] as $resource) {
                         $existingReport->workReportResources()->create([
@@ -237,7 +232,6 @@ class IndexController extends Controller
                 
                 $workReport = $existingReport;
             } else {
-                // Check if the work order already has a non-rejected report
                 if ($workOrder->status >= self::WORK_ORDER_REPORT_SENT && 
                     !WorkReport::where('work_order_id', $validated['work_order_id'])
                         ->where('report_status', self::REPORT_STATUS_REJECTED)
@@ -246,16 +240,14 @@ class IndexController extends Controller
                         'message' => 'This work order already has a report sent',
                     ], 400);
                 }
-                
-                // Create new report
+
                 $workReport = WorkReport::create([
                     'work_order_id' => $validated['work_order_id'],
                     'spent_fuel' => $validated['spent_fuel'],
                     'report_incidents' => $validated['report_incidents'] ?? null,
                     'report_status' => $validated['report_status'],
                 ]);
-                
-                // Add resources to new report
+
                 if (isset($validated['resources']) && is_array($validated['resources'])) {
                     foreach ($validated['resources'] as $resource) {
                         $workReport->workReportResources()->create([
@@ -265,8 +257,7 @@ class IndexController extends Controller
                     }
                 }
             }
-            
-            // Update work order status to report sent
+
             $workOrder->status = self::WORK_ORDER_REPORT_SENT;
             $workOrder->save();
             
