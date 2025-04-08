@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\WorkReportController;
 use App\Http\Controllers\Api\Admin\ZoneController;
 use App\Http\Controllers\Api\Admin\SensorController;
+use App\Http\Controllers\Api\Admin\SensorHistoryController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Controllers\Api\Worker\IndexController;
@@ -95,6 +96,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // New route for paginated sensor history
         Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);
+        Route::get('/admin/sensors/{eui}/fetch-and-store', [SensorHistoryController::class, 'fetchAndStoreSensorData']);
     });
 
     /* Worker protected routes */

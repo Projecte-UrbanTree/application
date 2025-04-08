@@ -8,7 +8,7 @@ interface SensorModulationLoRa {
 interface SensorModulation {
   lora: SensorModulationLoRa;
 }
-
+const sensorDataCache = new Map<string, Sensor[]>();
 export interface Sensor {
   id: number;
   device_name: string;
@@ -58,13 +58,34 @@ export const fetchSensorByEUI = async (eui: string) => {
 };
 
 export const fetchSensorHistoryPaginated = async (eui: string, page = 1, perPage = 10) => {
+  const cacheKey = `${eui}-${page}-${perPage}`;
+  
+  // Verificar si los datos están en caché
+  if (sensorDataCache.has(cacheKey)) {
+    return sensorDataCache.get(cacheKey);
+  }
+
   try {
     const response = await axiosClient.get(`/admin/sensors/${eui}/history/paginated`, {
       params: { page, perPage }
     });
+    
+    // Almacenar en caché
+    sensorDataCache.set(cacheKey, response.data);
+    
     return response.data;
   } catch (error) {
     console.error('Error fetching paginated sensor history:', error);
+    throw error;
+  }
+};
+
+export const fetchAndStoreSensorData = async (eui: string) => {
+  try {
+    const response = await axiosClient.get(`/admin/sensors/${eui}/fetch-and-store`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching and storing sensor data:', error);
     throw error;
   }
 };

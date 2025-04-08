@@ -116,14 +116,11 @@ const SensorHistory: React.FC = () => {
   };
 
   const renderCharts = () => {
-    // Destroy existing charts
     charts.current.forEach(chart => chart.destroy());
     charts.current = [];
 
-    // Use filteredData instead of sensorData
     const labels = filteredData.map(data => format(parseISO(data.time), 'dd/MM/yyyy HH:mm'));
 
-    // Create individual chart configs for each metric
     const chartConfigs = [
       {
         title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
@@ -494,13 +491,31 @@ const SensorHistory: React.FC = () => {
             </Card>
             
             {/* Individual charts */}
-            {filteredData.length > 0 && chartRefs.current.map((_, index) => (
-              <Card key={index} className="p-4 shadow-sm border border-gray-100">
-                <div className="h-80">
-                  <canvas ref={el => { chartRefs.current[index] = el; }} />
-                </div>
-              </Card>
-            ))}
+            {filteredData.length > 0 && (
+              <div className="flex flex-col gap-4">
+                {Array.from({ length: Math.ceil(chartRefs.current.length / 2) }).map((_, rowIndex) => (
+                  <div key={rowIndex} className="flex flex-col md:flex-row gap-4">
+                    {/* First chart in the row */}
+                    {rowIndex * 2 < chartRefs.current.length && (
+                      <Card className="p-4 shadow-sm border border-gray-100 flex-1">
+                        <div className="h-80">
+                          <canvas ref={el => { chartRefs.current[rowIndex * 2] = el; }} />
+                        </div>
+                      </Card>
+                    )}
+                    
+                    {/* Second chart in the row */}
+                    {rowIndex * 2 + 1 < chartRefs.current.length && (
+                      <Card className="p-4 shadow-sm border border-gray-100 flex-1">
+                        <div className="h-80">
+                          <canvas ref={el => { chartRefs.current[rowIndex * 2 + 1] = el; }} />
+                        </div>
+                      </Card>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="flex justify-center mt-4">
               <Button 
