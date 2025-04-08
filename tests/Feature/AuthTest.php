@@ -133,7 +133,7 @@ class AuthTest extends TestCase
         $response = $this->getJson('/api/user');
 
         $response->assertJson([
-            'error' => 'Unauthorized',
+            'error' => 'Unauthenticated',
         ]);
     }
 }
