@@ -78,20 +78,20 @@ class PointController extends Controller
             }
 
             $coords = $points->map(function ($point) {
-                return [$point->latitude, $point->longitude];
+                return [$point->longitude, $point->latitude];
             })->toArray();
 
-            $lat_sum = 0;
             $lng_sum = 0;
+            $lat_sum = 0;
             $count = count($coords);
 
-            foreach ($coords as [$lat, $lng]) {
-                $lat_sum += $lat;
+            foreach ($coords as [$lng, $lat]) {
                 $lng_sum += $lng;
+                $lat_sum += $lat;
             }
 
-            $center_lat = $lat_sum / $count;
             $center_lng = $lng_sum / $count;
+            $center_lat = $lat_sum / $count;
 
             $result[] = [
                 'zone_id' => $zone->id,

@@ -30,6 +30,7 @@ import useGeolocation from '@/hooks/useGeolocation';
 import { getZoneCoords } from '@/api/service/zoneService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const DEFAULT_MADRID_COORDS: [number, number] = [-3.7038, 40.4168];
 
 interface MapProps {
   selectedZone: Zone | null;
@@ -148,8 +149,16 @@ export const MapComponent: React.FC<MapProps> = ({
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
     }
 
+    let initialCoordinates: [number, number] = DEFAULT_MADRID_COORDS;
+    
+    if (geoLat && geoLng && !geoError) {
+      initialCoordinates = [geoLng, geoLat];
+    }
+    else if (centerCoords && centerCoords.length > 0 && centerCoords[0].center) {
+      initialCoordinates = [centerCoords[0].center[0], centerCoords[0].center[1]];
+    }
             
-    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, [geoLat!, geoLng!]);
+    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, initialCoordinates);
     service.addBasicControls();
     service.addGeocoder();
     service.enableDraw(userValue.role === Roles.admin, (coords) => {
@@ -173,7 +182,7 @@ export const MapComponent: React.FC<MapProps> = ({
       updateZones(service);
       updateElements(service);
     }
-  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange]);
+  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords]);
 
   useEffect(() => {
     const handleResize = () => mapServiceRef.current?.resizeMap();
