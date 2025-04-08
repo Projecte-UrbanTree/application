@@ -21,6 +21,7 @@ interface Sensor {
   ph1_soil?: number;
   water_soil?: number | null;
   conductor_soil?: number | null;
+  tempc_ds18b20?: number;
 }
 
 const Sensors: React.FC = () => {
@@ -60,7 +61,8 @@ const Sensors: React.FC = () => {
               temp_soil: apiData.temp_soil,
               ph1_soil: apiData.ph1_soil,
               water_soil: apiData.water_soil,
-              conductor_soil: apiData.conductor_soil
+              conductor_soil: apiData.conductor_soil,
+              tempc_ds18b20: apiData.tempc_ds18b20
             };
           }
           return backendSensor;
@@ -176,7 +178,7 @@ const Sensors: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Status indicators */}
+                {/* Status indicators - Always shown */}
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <p className="text-xs text-gray-500 mb-1">Batería</p>
@@ -192,12 +194,46 @@ const Sensors: React.FC = () => {
                     <p className="text-xs text-gray-500 mb-1">Señal</p>
                     <p className="text-gray-600">
                       {sensor.rssi ? `${sensor.rssi} dBm` : '-- dBm'}
-                      {sensor.snr && ` (${sensor.snr.toFixed(1)} SNR)`}
+                      {sensor.snr ? ` (${sensor.snr.toFixed(1)} SNR)` : ''}
                     </p>
                   </div>
                 </div>
 
-                {/* Location */}
+                {/* Soil Measurements - Flexible Layout */}
+                <div className="flex flex-wrap gap-3 mb-4">
+                  {sensor.temp_soil && (
+                    <div className="bg-gray-50 p-3 rounded-lg flex-1 min-w-[45%]">
+                      <p className="text-xs text-gray-500 mb-1">Temperatura Suelo</p>
+                      <p className="text-gray-700">{`${sensor.temp_soil.toFixed(1)} °C`}</p>
+                    </div>
+                  )}
+                  {sensor.tempc_ds18b20 !== undefined && sensor.tempc_ds18b20 !== null && (
+                    <div className="bg-gray-50 p-3 rounded-lg flex-1 min-w-[45%]">
+                      <p className="text-xs text-gray-500 mb-1">Temperatura Aire</p>
+                      <p className="text-gray-700">{`${Number(sensor.tempc_ds18b20).toFixed(1)} °C`}</p>
+                    </div>
+                  )}
+                  {sensor.ph1_soil && (
+                    <div className="bg-gray-50 p-3 rounded-lg flex-1 min-w-[45%]">
+                      <p className="text-xs text-gray-500 mb-1">pH</p>
+                      <p className="text-gray-700">{sensor.ph1_soil.toFixed(2)}</p>
+                    </div>
+                  )}
+                  {sensor.water_soil && (
+                    <div className="bg-gray-50 p-3 rounded-lg flex-1 min-w-[45%]">
+                      <p className="text-xs text-gray-500 mb-1">Humedad</p>
+                      <p className="text-gray-700">{`${sensor.water_soil.toFixed(1)}%`}</p>
+                    </div>
+                  )}
+                  {sensor.conductor_soil && (
+                    <div className="bg-gray-50 p-3 rounded-lg flex-1 min-w-[45%]">
+                      <p className="text-xs text-gray-500 mb-1">Conductividad</p>
+                      <p className="text-gray-700">{`${sensor.conductor_soil.toFixed(1)} µS/cm`}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Location - Fixed Layout */}
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <p className="text-xs text-gray-500 mb-1">Latitud</p>
