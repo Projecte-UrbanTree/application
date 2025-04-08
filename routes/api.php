@@ -56,6 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('account', [AccountController::class, 'show']);
         Route::put('account', [AccountController::class, 'update']);
         Route::put('account/password', [AccountController::class, 'updatePassword']);
+        Route::get('account/tokens', [AccountController::class, 'listTokens']);
+        Route::delete('account/tokens/{id}', [AccountController::class, 'revokeToken']);
 
         Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
         Route::get('statistics', [StatisticsController::class, 'index']);
