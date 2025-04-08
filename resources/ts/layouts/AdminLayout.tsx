@@ -291,11 +291,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 <div
                   ref={profileRef}
                   className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md ring-1 ring-black/5 z-10">
-                  <a
-                    href="/admin/account"
+                  <Link
+                    onClick={() => setProfileDropdownVisible(false)}
+                    to="/admin/account"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.accountSettings')}
-                  </a>
+                  </Link>
                   <a
                     href="/license"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
