@@ -63,7 +63,7 @@ class AuthTest extends TestCase
             'password' => 'wrong-password',
         ]);
 
-        $response->assertStatus(401)
+        $response->assertStatus(403)
             ->assertJson([
                 'message' => __('auth.failed'),
             ]);
