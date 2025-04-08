@@ -88,8 +88,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
 
-        Route::get('/sensorshistory', [SensorController::class, 'fetchExternalHistorySensors']);
-        Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchExternalHistorySensorByEUI']);
+        Route::get('/sensorshistory', [SensorController::class, 'fetchSensors']);
+        Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchSensorByEUI']);
 
         // New route for paginated sensor history
         Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);

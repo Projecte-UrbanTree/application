@@ -168,7 +168,7 @@ class SensorController extends Controller
     /**
      * Fetch all sensors from the external API.
      */
-    public function fetchExternalHistorySensors()
+    public function fetchSensors()
     {
         try {
             $apiKey = env('VITE_X_API_KEY');
@@ -196,7 +196,7 @@ class SensorController extends Controller
     /**
      * Fetch a specific sensor by EUI from the external API.
      */
-    public function fetchExternalHistorySensorByEUI($eui)
+    public function fetchSensorByEUI($eui)
     {
         try {
             $apiKey = env('VITE_X_API_KEY');
