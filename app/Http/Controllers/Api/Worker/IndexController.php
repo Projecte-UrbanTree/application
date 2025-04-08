@@ -2,36 +2,44 @@
 
 namespace App\Http\Controllers\Api\Worker;
 
+use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\WorkOrder;
 use App\Models\WorkOrderBlockTask;
 use App\Models\WorkReport;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Api\Admin\WorkOrderController;
+use Illuminate\Support\Facades\Log;
 
 class IndexController extends Controller
 {
     const TASK_STATUS_PENDING = 0;
+
     const TASK_STATUS_IN_PROGRESS = 1;
+
     const TASK_STATUS_COMPLETED = 2;
 
     const WORK_ORDER_NOT_STARTED = 0;
+
     const WORK_ORDER_IN_PROGRESS = 1;
+
     const WORK_ORDER_COMPLETED = 2;
+
     const WORK_ORDER_REPORT_SENT = 3;
 
     const REPORT_STATUS_PENDING = 0;
+
     const REPORT_STATUS_COMPLETED = 1;
+
     const REPORT_STATUS_REJECTED = 2;
+
     const REPORT_STATUS_CLOSED_WITH_INCIDENTS = 3;
 
     /**
      * Display a listing of work orders for the worker.
      *
-     * @param Request $request The HTTP request instance.
+     * @param  Request  $request  The HTTP request instance.
      * @return JsonResponse A JSON response containing the list of work orders.
      */
     public function index(Request $request): JsonResponse
@@ -51,9 +59,9 @@ class IndexController extends Controller
                 'workOrdersBlocks.blockTasks.tasksType',
                 'workReports',
             ]);
-            
+
             if ($contractId && $contractId > 0) {
-                $query->where('contract_id', (int)$contractId);
+                $query->where('contract_id', (int) $contractId);
             }
 
             if ($date) {
@@ -65,8 +73,8 @@ class IndexController extends Controller
             });
 
             $workOrders = $query->get();
-            
-            Log::info("Found {$workOrders->count()} work orders for user {$userId}" . ($date ? " on date {$date}" : ""));
+
+            Log::info("Found {$workOrders->count()} work orders for user {$userId}".($date ? " on date {$date}" : ''));
 
             return response()->json($workOrders);
         } catch (\Exception $e) {
@@ -74,15 +82,16 @@ class IndexController extends Controller
             $contractId = $request->header('X-Contract-Id') ?? 'none';
             Log::error("Error fetching work orders for worker ID: {$userId}, contract ID: {$contractId}. Error: {$e->getMessage()}");
             Log::error($e->getTraceAsString());
-            return response()->json(['message' => 'Error fetching work orders: ' . $e->getMessage()], 500);
+
+            return response()->json(['message' => 'Error fetching work orders: '.$e->getMessage()], 500);
         }
     }
 
     /**
      * Update a task's status within a work order.
      *
-     * @param Request $request The HTTP request instance.
-     * @param int $taskId The ID of the task to update.
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $taskId  The ID of the task to update.
      * @return JsonResponse A JSON response indicating the result of the update.
      */
     public function updateTaskStatus(Request $request, int $taskId): JsonResponse
@@ -100,8 +109,8 @@ class IndexController extends Controller
 
             $userId = auth()->id();
             $workOrder = $task->workOrderBlock->workOrder;
-            
-            if (!$workOrder->users()->where('user_id', $userId)->exists()) {
+
+            if (! $workOrder->users()->where('user_id', $userId)->exists()) {
                 throw new \Exception('You are not assigned to this work order');
             }
 
@@ -127,25 +136,25 @@ class IndexController extends Controller
             return response()->json([
                 'message' => 'Task status updated successfully',
                 'task' => $task->fresh(),
-                'work_order_status' => $workOrder->status
+                'work_order_status' => $workOrder->status,
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Error updating task status: {$e->getMessage()}");
-            return response()->json(['message' => 'Error updating task status: ' . $e->getMessage()], 500);
+
+            return response()->json(['message' => 'Error updating task status: '.$e->getMessage()], 500);
         }
     }
 
     /**
      * Recalculate and update work order status based on tasks.
      *
-     * @param WorkOrder $workOrder The work order to update.
-     * @return void
+     * @param  WorkOrder  $workOrder  The work order to update.
      */
     private function recalculateWorkOrderStatus(WorkOrder $workOrder): void
     {
         $workOrder->load('workOrdersBlocks.blockTasks');
-        
+
         $totalTasks = 0;
         $completedTasks = 0;
         $inProgressTasks = 0;
@@ -174,16 +183,13 @@ class IndexController extends Controller
         }
 
         $workOrder->save();
-        
-        Log::info("Work order {$workOrder->id} status updated to {$workOrder->status}. " .
+
+        Log::info("Work order {$workOrder->id} status updated to {$workOrder->status}. ".
                   "Completed tasks: {$completedTasks}/{$totalTasks}");
     }
 
     /**
      * Create a new work report for a completed work order.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function createWorkReport(Request $request): JsonResponse
     {
@@ -201,8 +207,8 @@ class IndexController extends Controller
             // Check if this worker is assigned to this work order
             $user = $request->user();
             $workOrder = WorkOrder::findOrFail($validated['work_order_id']);
-            
-            if (!$workOrder->users->contains($user->id)) {
+
+            if (! $workOrder->users->contains($user->id)) {
                 return response()->json([
                     'message' => 'You are not assigned to this work order',
                 ], 403);
@@ -246,8 +252,8 @@ class IndexController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error creating work report: ' . $e->getMessage());
-            
+            Log::error('Error creating work report: '.$e->getMessage());
+
             return response()->json([
                 'message' => 'An error occurred while creating the work report',
                 'error' => $e->getMessage(),

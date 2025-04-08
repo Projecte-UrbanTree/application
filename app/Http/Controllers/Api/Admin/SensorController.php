@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreSensorRequest;
-use App\Http\Requests\UpdateSensorRequest;
 use App\Models\Sensor;
-use App\Models\Contract;
+use Illuminate\Http\Request;
 
 class SensorController extends Controller
 {
@@ -67,6 +64,7 @@ class SensorController extends Controller
             $validated['contract_id'] = $contractId;
 
             $sensor = Sensor::create($validated);
+
             return response()->json($sensor, 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -104,7 +102,7 @@ class SensorController extends Controller
     {
         try {
             $validated = $request->validate([
-                'eui' => 'required|string|max:255|unique:sensors,eui,' . $sensor->id,
+                'eui' => 'required|string|max:255|unique:sensors,eui,'.$sensor->id,
                 'name' => 'required|string|max:255',
                 'longitude' => 'nullable|numeric',
                 'latitude' => 'nullable|numeric',
