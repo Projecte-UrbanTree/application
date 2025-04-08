@@ -192,10 +192,8 @@ export const MapComponent: React.FC<MapProps> = ({
     const service = mapServiceRef.current;
     if (!service || !selectedZone || !points.length) return;
     
-    const firstPoint = points.find((p) => p.zone_id === selectedZone.id);
-    if (firstPoint?.longitude && firstPoint?.latitude) {
-      service.flyTo([firstPoint.longitude, firstPoint.latitude]);
-    }
+    service.flyTo(selectedZone);
+    
   }, [selectedZone, points]);
 
   useEffect(() => {
