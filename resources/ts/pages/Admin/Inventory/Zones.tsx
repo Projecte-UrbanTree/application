@@ -19,6 +19,7 @@ import { AppDispatch, RootState } from '@/store/store';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
+import { ZoneEvent } from '@/types/ZoneEvent';
 
 interface ZoneProps {
   onSelectedZone: (zone: Zone) => void;
@@ -33,20 +34,6 @@ interface ZoneProps {
 interface AddElementProps {
   zone?: Zone;
   isCreatingElement: boolean;
-}
-
-export interface ZoneEvent {
-  zone?: Zone;
-  isCreatingElement: boolean;
-  hiddenElementTypes?: {
-    zoneId: number;
-    elementTypeId: number;
-    hidden: boolean;
-  };
-  hiddenZone?: {
-    zoneId: number;
-    hidden: boolean;
-  };
 }
 
 export const eventSubject = new Subject<ZoneEvent>();
@@ -70,6 +57,7 @@ export const Zones = ({
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [editingZone, setEditingZone] = useState<Zone | null>(null);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -110,14 +98,32 @@ export const Zones = ({
   useEffect(() => {
     if (!currentContract) return;
 
+    console.log(`Loading initial resources for contract ${currentContract.id}`);
+    setIsInitialized(false);
+
     const loadResources = async () => {
       try {
+        setHiddenZones({});
+        setHiddenElementTypes({});
+        
+        console.log('Fetching zones, points and elements...');
         await Promise.all([
           dispatch(fetchZonesAsync()).unwrap(),
           dispatch(fetchPointsAsync()).unwrap(),
           dispatch(fetchElementsAsync()).unwrap(),
         ]);
+        
+        console.log('Initial resources loaded for contract');
+        
+        console.log('Broadcasting zone visibility reset');
+        eventSubject.next({
+          isCreatingElement: false,
+          refreshMap: true
+        });
+        
+        setIsInitialized(true);
       } catch (error) {
+        console.error('Error loading resources:', error);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -129,14 +135,10 @@ export const Zones = ({
     loadResources();
   }, [dispatch, currentContract]);
 
-  const confirmDeleteZone = useCallback((zone: Zone) => {
-    setSelectedZoneToDelete(zone);
-    setIsConfirmDialogVisible(true);
-  }, []);
-
   useEffect(() => {
-    const loadData = async () => {
+    const loadTypeData = async () => {
       try {
+        console.log('Loading element types and tree types');
         const [elementTypesData, treeTypesData] = await Promise.all([
           fetchElementType(),
           fetchTreeTypes(),
@@ -145,6 +147,7 @@ export const Zones = ({
         setElementTypes(elementTypesData);
         setTreeTypes(treeTypesData);
       } catch (error) {
+        console.error('Error loading type data:', error);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -153,47 +156,70 @@ export const Zones = ({
       }
     };
 
-    loadData();
+    loadTypeData();
   }, []);
 
   useEffect(() => {
+    console.log('Setting up element creation event handler');
+    
     const subscription = eventSubject.subscribe({
       next: (data: AddElementProps) => {
-        setSelectedZoneToAdd(data.zone || null);
-        stopCreatingElement(data.isCreatingElement);
+        if (data.zone || data.isCreatingElement !== undefined) {
+          console.log('Received element creation event:', data);
+          setSelectedZoneToAdd(data.zone || null);
+          stopCreatingElement(data.isCreatingElement);
+        }
       },
-      error: () => {
+      error: (err) => {
+        console.error('Error in element creation event stream:', err);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error en el stream de eventos',
+          detail: 'Error en el sistema de eventos',
         });
       },
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('Cleaning up element creation event handler');
+      subscription.unsubscribe();
+    };
   }, [stopCreatingElement]);
+
+  const confirmDeleteZone = useCallback((zone: Zone) => {
+    setSelectedZoneToDelete(zone);
+    setIsConfirmDialogVisible(true);
+  }, []);
 
   const handleDeleteZone = async (zoneId: number) => {
     try {
+      console.log(`Deleting zone ${zoneId}`);
       await deleteZone(zoneId);
 
       toast.current?.show({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Zone and points deleted successfully',
+        summary: 'Éxito',
+        detail: 'Zona y puntos eliminados correctamente',
       });
 
+      console.log('Reloading data after zone deletion');
       await Promise.all([
         dispatch(fetchZonesAsync()).unwrap(),
         dispatch(fetchPointsAsync()).unwrap(),
         dispatch(fetchElementsAsync()).unwrap(),
       ]);
+      
+      console.log('Broadcasting map refresh after zone deletion');
+      eventSubject.next({
+        isCreatingElement: false,
+        refreshMap: true
+      });
     } catch (error) {
+      console.error('Error deleting zone:', error);
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
-        detail: 'Could not delete the zone',
+        detail: 'No se pudo eliminar la zona',
       });
     }
   };
@@ -265,45 +291,59 @@ export const Zones = ({
     (zoneId: number) => {
       const isHidden = hiddenZones[zoneId] || false;
       
-      console.log(`Toggling visibility for zone ${zoneId} to ${!isHidden}`);
+      console.log(`Zones component toggling visibility for zone ${zoneId} from ${isHidden ? 'hidden' : 'visible'} to ${!isHidden ? 'hidden' : 'visible'}`);
       
-      if (!isHidden) {
-        setHiddenZones((prev) => ({
+      // Primero actualizamos el estado local
+      if (!isHidden) { // Si vamos a ocultar la zona
+        console.log(`Setting zone ${zoneId} as hidden`);
+        
+        // 1. Actualizar estado local de la zona
+        setHiddenZones(prev => ({
           ...prev,
-          [zoneId]: true,
+          [zoneId]: true // Marcar como oculta
         }));
 
+        // 2. Actualizar estados de los elementos en esta zona
         const elementCounts = countElementsByTypeInZone(zoneId);
+        console.log(`Zone ${zoneId} has ${Object.keys(elementCounts).length} element types to hide`);
+        
+        // Para cada tipo de elemento en esta zona, lo ocultamos
         Object.keys(elementCounts).forEach((typeId) => {
           const key = `${zoneId}-${typeId}`;
-          setHiddenElementTypes((prev) => ({
+          setHiddenElementTypes(prev => ({
             ...prev,
-            [key]: true,
+            [key]: true, // Marcar como oculto
           }));
         });
-      } else {
-        setHiddenZones((prev) => ({
+        
+        // 3. Notificar al mapa que debe ocultar la zona y sus elementos
+        console.log(`Broadcasting hide command for zone ${zoneId}`);
+        eventSubject.next({
+          isCreatingElement: false,
+          hiddenZone: {
+            zoneId,
+            hidden: true,
+          }
+        });
+      } else { // Si vamos a mostrar la zona
+        console.log(`Setting zone ${zoneId} as visible`);
+        
+        // 1. Actualizar estado local de la zona
+        setHiddenZones(prev => ({
           ...prev,
-          [zoneId]: false,
+          [zoneId]: false // Marcar como visible
         }));
         
+        // 2. Notificar al mapa que debe mostrar la zona (los elementos mantienen su estado)
+        console.log(`Broadcasting show command for zone ${zoneId}`);
         eventSubject.next({
           isCreatingElement: false,
           hiddenZone: {
             zoneId,
             hidden: false,
-          },
+          }
         });
       }
-
-      eventSubject.next({
-        isCreatingElement: false,
-        hiddenZone: {
-          zoneId,
-          hidden: !isHidden,
-        },
-      });
-      window.history.replaceState(null, '', window.location.pathname);
     },
     [hiddenZones, countElementsByTypeInZone],
   );

@@ -9,6 +9,7 @@ import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Zone } from '@/types/Zone';
+import { useMapInitialization } from '@/hooks/useMapInitialization';
 
 export default function Inventory() {
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
@@ -21,21 +22,26 @@ export default function Inventory() {
   const [modalVisible, setModalVisible] = useState(false);
   const [dataInitialized, setDataInitialized] = useState(false);
 
+  const { isMapReady } = useMapInitialization();
+
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
   const dispatch = useDispatch<AppDispatch>();
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
   useEffect(() => {
+    console.log('Inventory component loaded, initializing data');
     const loadData = async () => {
       if (!currentContract?.id) return;
       
       try {
+        console.log(`Loading data for contract ${currentContract.id}`);
         await Promise.all([
           dispatch(fetchZonesAsync()),
           dispatch(fetchPointsAsync()),
           dispatch(fetchElementsAsync())
         ]);
+        console.log('Data initialized successfully');
         setDataInitialized(true);
       } catch (error) {
         console.error('Error loading inventory data:', error);
@@ -50,6 +56,16 @@ export default function Inventory() {
 
     loadData();
   }, [dispatch, currentContract]);
+
+  useEffect(() => {
+    if (isMapReady) {
+      console.log('Map initialization ready, refreshing map component');
+      const timer = setTimeout(() => {
+        setMapKey(Date.now());
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isMapReady]);
 
   useEffect(() => {
     const handleResize = () => {

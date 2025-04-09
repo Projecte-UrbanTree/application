@@ -25,6 +25,8 @@ export class MapService {
   private elementMarkers: Map<number, { marker: mapboxgl.Marker; elementId: number }> = new Map();
   private zoneCoords: ZoneCenterCoord[];
   private geoCoords: number[];
+  private isMapInitialized: boolean = false;
+  private initCallbacks: Array<() => void> = [];
 
   constructor(container: HTMLDivElement, token: string, zoneCoords: ZoneCenterCoord[], geoCoords: number[]) {
     this.zoneCoords = zoneCoords;
@@ -35,6 +37,15 @@ export class MapService {
       style: 'mapbox://styles/mapbox/standard-satellite',
       center: this.getCenter(),
       zoom: 16,
+    });
+
+    // Establecer evento para marcar cuando el mapa esté completamente cargado
+    this.map.on('load', () => {
+      console.log('Mapbox map fully loaded');
+      this.isMapInitialized = true;
+      // Ejecutar todos los callbacks pendientes
+      this.initCallbacks.forEach(callback => callback());
+      this.initCallbacks = []; // Limpiar después de ejecutar
     });
   }
 
@@ -338,6 +349,14 @@ export class MapService {
     }
   }
 
+  public onMapLoad(callback: () => void): () => void {
+    this.map.on('load', callback);
+    
+    // Devolvemos una función para eliminar el evento
+    return () => {
+      this.map.off('load', callback);
+    };
+  }
 
   public resizeMap(): void {
     this.map?.resize();
@@ -347,6 +366,57 @@ export class MapService {
     const markerObj = this.elementMarkers.get(elementId);
     if (markerObj) {
       markerObj.marker.getElement().style.display = visible ? '' : 'none';
+    }
+  }
+
+  public isReady(): boolean {
+    return this.isMapInitialized && this.map.isStyleLoaded();
+  }
+
+  public waitForInit(callback: () => void): void {
+    if (this.isReady()) {
+      // Si el mapa ya está inicializado, ejecutar inmediatamente
+      console.log('Map already initialized, executing callback immediately');
+      callback();
+    } else {
+      // Si no, añadir a la lista de espera
+      console.log('Map not yet initialized, queuing callback');
+      this.initCallbacks.push(callback);
+    }
+  }
+
+  public resetMap(): void {
+    // Limpieza completa del mapa
+    console.log('Resetting map state');
+    this.removeElementMarkers();
+    this.clearDraw();
+    try {
+      // Intentar remover todas las capas y fuentes
+      const style = this.map.getStyle();
+      if (style?.layers) {
+        // Eliminar capas que no sean parte del estilo base
+        const baseLayers = ['background', 'satellite'];
+        style.layers
+          .filter(layer => !baseLayers.includes(layer.id))
+          .forEach(layer => {
+            if (this.map.getLayer(layer.id)) {
+              this.map.removeLayer(layer.id);
+            }
+          });
+      }
+      
+      if (style?.sources) {
+        // Eliminar todas las fuentes excepto las del estilo base
+        Object.keys(style.sources)
+          .filter(sourceId => !sourceId.startsWith('mapbox'))
+          .forEach(sourceId => {
+            if (this.map.getSource(sourceId)) {
+              this.map.removeSource(sourceId);
+            }
+          });
+      }
+    } catch (error) {
+      console.error('Error cleaning map:', error);
     }
   }
 }
