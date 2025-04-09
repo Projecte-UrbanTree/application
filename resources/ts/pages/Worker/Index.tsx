@@ -567,7 +567,7 @@ const WorkerWorkOrders = () => {
         <div className="mt-6 bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
           <h3 className="text-lg font-semibold text-center mb-2 flex items-center justify-center gap-2">
             <Icon icon="tabler:report" className="text-blue-600" />
-            Crear Parte de Trabajo
+            {t('worker.workOrders.createWorkReport')}
           </h3>
           <Divider />
           <div className="flex justify-center p-4">
@@ -584,14 +584,14 @@ const WorkerWorkOrders = () => {
       <div className="mt-6 bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
         <h3 className="text-lg font-semibold text-center mb-2 flex items-center justify-center gap-2">
           <Icon icon="tabler:report" className="text-blue-600" />
-          Crear Parte de Trabajo
+          {t('worker.workOrders.createWorkReport')}
         </h3>
         <Divider />
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
             <Icon icon="tabler:gas-station" className="text-blue-600" />
-            Gasolina gastada (Litros)
+            {t('worker.workOrders.spentFuel')}
           </label>
           <div className="flex items-center">
             <InputNumber
@@ -613,7 +613,7 @@ const WorkerWorkOrders = () => {
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
                 <Icon icon="tabler:category" className="text-blue-600" />
-                Tipo de Recurso
+                {t('worker.workOrders.resourceType')}
               </label>
               <Dropdown
                 value={selectedResourceType}
@@ -621,7 +621,7 @@ const WorkerWorkOrders = () => {
                 onChange={(e) => setSelectedResourceType(e.value)}
                 optionLabel="name"
                 optionValue="id"
-                placeholder="Seleccionar tipo de recurso"
+                placeholder={t('worker.workOrders.resourceTypePlaceholder')}
                 className="w-full"
               />
             </div>
@@ -630,11 +630,11 @@ const WorkerWorkOrders = () => {
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700 flex items-center gap-1">
                   <Icon icon="tabler:package" className="text-blue-600" />
-                  Recursos
+                  {t('worker.workOrders.resources')}
                 </label>
                 <Button
                   icon={<Icon icon="tabler:plus" className="h-4 w-4 mr-1" />}
-                  label="Agregar Recurso"
+                  label={t('worker.workOrders.addResource')}
                   className="p-button-sm"
                   disabled={
                     !selectedResourceType || filteredResources.length === 0
@@ -650,7 +650,7 @@ const WorkerWorkOrders = () => {
                     className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-700">
-                        Recurso {index + 1}
+                        {t('worker.workOrders.resource').replace('{0}', String(index + 1))}
                       </span>
                       {workReportResources.length > 1 && (
                         <Button
@@ -666,7 +666,7 @@ const WorkerWorkOrders = () => {
                     <div className="grid grid-cols-1 gap-3">
                       <div>
                         <label className="text-xs text-gray-600 block mb-1">
-                          Nombre del Recurso
+                          {t('worker.workOrders.resourceName')}
                         </label>
                         <Dropdown
                           value={item.resource.id > 0 ? item.resource.id : null}
@@ -674,7 +674,7 @@ const WorkerWorkOrders = () => {
                           onChange={(e) => handleSelectResource(index, e.value)}
                           optionLabel="name"
                           optionValue="id"
-                          placeholder="Seleccionar recurso"
+                          placeholder={t('worker.workOrders.resourcePlaceholder')}
                           className="w-full"
                           disabled={
                             !selectedResourceType ||
@@ -688,18 +688,18 @@ const WorkerWorkOrders = () => {
                       <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <label className="text-xs text-gray-600 block mb-1">
-                            Unidad
+                            {t('worker.workOrders.unit')}
                           </label>
                           <InputText
                             value={item.resource.unit_name}
                             className="w-full bg-gray-100"
-                            placeholder="Unidad"
+                            placeholder={t('worker.workOrders.unit')}
                             disabled
                           />
                         </div>
                         <div>
                           <label className="text-xs text-gray-600 block mb-1">
-                            Cantidad
+                            {t('worker.workOrders.quantity')}
                           </label>
                           <InputNumber
                             value={item.quantity}
@@ -727,7 +727,7 @@ const WorkerWorkOrders = () => {
                     icon="tabler:info-circle"
                     className="inline-block mr-1"
                   />
-                  Por favor selecciona un tipo de recurso primero
+                  {t('worker.workOrders.selectResourceTypeFirst')}
                 </div>
               )}
 
@@ -737,7 +737,7 @@ const WorkerWorkOrders = () => {
                     icon="tabler:alert-triangle"
                     className="inline-block mr-1"
                   />
-                  No hay recursos disponibles para este tipo
+                  {t('worker.workOrders.noResourcesForType')}
                 </div>
               )}
             </div>
@@ -747,27 +747,27 @@ const WorkerWorkOrders = () => {
         {resourceTypes.length === 0 && (
           <div className="mb-4 bg-yellow-50 text-yellow-700 p-3 rounded text-sm text-center">
             <Icon icon="tabler:alert-triangle" className="inline-block mr-1" />
-            No hay tipos de recursos disponibles
+            {t('worker.workOrders.noResourceTypes')}
           </div>
         )}
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
             <Icon icon="tabler:message-report" className="text-blue-600" />
-            Observaciones
+            {t('worker.workOrders.observations')}
           </label>
           <InputTextarea
             value={reportIncidents}
             onChange={(e) => setReportIncidents(e.target.value)}
             rows={3}
-            placeholder="Ingrese cualquier observación o incidencia aquí"
+            placeholder={t('worker.workOrders.observationsPlaceholder')}
             className="w-full"
           />
         </div>
 
         <div className="flex justify-end">
           <Button
-            label="Enviar Parte"
+            label={t('worker.workOrders.submitReport')}
             icon={
               submittingReport ? (
                 'pi pi-spin pi-spinner'

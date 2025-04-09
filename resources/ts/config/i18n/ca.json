@@ -2,1412 +2,1467 @@
   "public": {
     "login": {
       "form": {
-        "btnLogin": "Inicia la sessió",
-        "labelEmail": "Correu electrònic",
-        "labelPassword": "Contrasenya",
-        "msgSuccess": "Sessió iniciada correctament",
-        "placeholderEmail": "elteuemail@exemple.com",
-        "rememberMe": "Recorda'm",
-        "titleSuccess": "Èxit"
+        "btnLogin": "Log in",
+        "labelEmail": "Email",
+        "labelPassword": "Password",
+        "msgSuccess": "Logged in successfully",
+        "placeholderEmail": "youremail@example.com",
+        "rememberMe": "Remember me",
+        "titleSuccess": "Success"
       }
     },
     "error": {
-      "btnReturn": "Tornar enrere",
+      "btnReturn": "Go back",
       "descriptions": {
-        "404": "La pàgina que cerques no existeix.",
-        "unexpected": "S'ha produït un error inesperat. Torna-ho a provar més tard."
+        "404": "The page you are looking for does not exist.",
+        "unexpected": "An unexpected error occurred. Please try again later."
       },
       "title": "Error {{errorCode}}"
     }
   },
+
   "general": {
-    "allContracts": "Tots els contractes",
-    "genericError": "S'ha produït un error inesperat. Torna-ho a provar més tard.",
-    "loading": "Carregant...",
+    "allContracts": "All contracts",
+    "genericError": "An error occurred. Please try again later.",
+    "loading": "Loading...",
     "error": "Error",
-    "success": "Èxit",
-    "not_available": "No disponible",
+    "success": "Success",
+    "not_available": "Not available",
+    "warning": "Warning",
+    "cancel": "Cancel",
     "actions": {
-      "cancel": "Cancel·lar",
-      "confirm": "Confirmar",
-      "close_part": "Tancar Part",
-      "close_with_incidents": "Tancar amb Incidències",
-      "reject": "Rebutjar",
-      "close_with_observations": "Tancar amb Observacions",
-      "edit_observation": "Edita Observació"
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "close_part": "Close Part",
+      "close_with_incidents": "Close with Incidents",
+      "reject": "Reject",
+      "close_with_observations": "Close with Observations",
+      "edit_observation": "Edit Observation"
     },
     "messages": {
-      "close_block": "Bloc tancat correctament",
-      "close_with_incidents": "Bloc tancat amb incidències",
-      "reject": "Bloc rebutjat"
+      "close_block": "Block closed successfully",
+      "close_with_incidents": "Block closed with incidents",
+      "reject": "Block rejected"
     }
   },
+
   "admin": {
     "menu": {
-      "management": "Gestió",
-      "settings": "Configuració"
+      "management": "Management",
+      "settings": "Settings"
     },
     "submenu": {
       "manage": {
-        "dashboard": "Tauler",
-        "inventory": "Inventari",
-        "resources": "Recursos",
-        "stats": "Estadístiques",
-        "workers": "Treballadors",
+        "dashboard": "Dashboard",
+        "inventory": "Inventory",
+        "resources": "Resources",
+        "stats": "Statistics",
+        "workers": "Workers",
         "eva": "EVA",
-        "workOrders": "Ordres de treball"
+        "workOrders": "Work Orders"
       },
       "settings": {
-        "contracts": "Contractes",
-        "elementTypes": "Tipus d'element",
-        "resourceTypes": "Tipus de recurs",
-        "species": "Espècies",
-        "taskTypes": "Tipus de tasca",
-        "users": "Usuaris"
+        "contracts": "Contracts",
+        "elementTypes": "Element Type",
+        "resourceTypes": "Resource Types",
+        "species": "Species",
+        "taskTypes": "Task Types",
+        "users": "Users"
       }
     },
+
     "profileDropdown": {
-      "accountSettings": "Configuració del compte",
-      "license": "Llicència",
-      "logout": "Tanca la sessió"
+      "accountSettings": "Account settings",
+      "license": "License",
+      "logout": "Log out"
     },
+
     "roles": {
-      "admin": "Administrador",
-      "customer": "Client",
-      "unknown": "Desconegut",
-      "worker": "Operari"
+      "admin": "Admin",
+      "customer": "Customer",
+      "unknown": "Unknown",
+      "worker": "Worker"
     },
+
     "status": {
-      "active": "Actiu",
-      "completed": "Completat",
-      "inactive": "Inactiu"
+      "active": "Active",
+      "completed": "Completed",
+      "inactive": "Inactive"
     },
+
     "tooltips": {
-      "selectContract": "Primer, selecciona un contracte"
+      "selectContract": "First, select a contract"
     },
+
     "buttons": {
-      "createNew": "Crea nou"
+      "createNew": "Create new"
     },
+
     "fields": {
-      "company": "Empresa",
-      "description": "Descripció",
-      "dni": "DNI",
-      "email": "Correu",
-      "end_date": "Data de fi",
-      "family": "Família",
-      "final_price": "Preu final",
-      "genus": "Gènere",
-      "name": "Nom",
-      "password": "Contrasenya",
-      "currentPassword": "Contrasenya actual",
-      "newPassword": "Nova contrasenya",
-      "confirmPassword": "Confirmar contrasenya",
-      "resource_type": "Tipus de recurs",
-      "role": "Rol",
-      "select_resource_type": "Selecciona un tipus de recurs",
-      "unit_cost": "Edita el cost unitari",
-      "unit_name": "Selecciona una unitat de recurs",
-      "species": "Espècie",
-      "start_date": "Data d'inici",
-      "status": "Estat",
-      "surname": "Cognom"
+      "company": "Company",
+      "description": "Description",
+      "dni": "ID card",
+      "email": "Email",
+      "end_date": "End Date",
+      "family": "Family",
+      "final_price": "Final Price",
+      "genus": "Genus",
+      "name": "Name",
+      "password": "Password",
+      "currentPassword": "Password (Current)",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "resource_type": "Resource Type",
+      "role": "Role",
+      "select_resource_type": "Select a resource type",
+      "unit_cost": "Edit the unit cost",
+      "unit_name": "Select a resource unit",
+      "species": "Species",
+      "start_date": "Start Date",
+      "status": "Status",
+      "surname": "Surname"
     },
+
     "pages": {
       "account": {
-        "title": "Configuració del Compte",
+        "title": "Account Settings",
         "actions": {
-          "save": "Desar canvis",
-          "saving": "Guardant...",
-          "revoke": "Revocar"
+          "save": "Save Changes",
+          "saving": "Saving...",
+          "revoke": "Revoke"
         },
         "validation": {
-          "name_required": "El nom és obligatori",
-          "name_invalid": "Nom no vàlid",
-          "surname_required": "El cognom és obligatori",
-          "surname_invalid": "Cognom no vàlid",
-          "currentPasswordRequired": "Has d'introduir la contrasenya actual",
-          "newPasswordMinLength": "La nova contrasenya ha de tenir almenys 6 caràcters",
-          "newPasswordMismatch": "Les contrasenyes no coincideixen",
-          "newPasswordComplexity": "La nova contrasenya ha de contenir almenys una lletra majúscula, una lletra minúscula i un número"
+          "name_required": "Name is required",
+          "name_invalid": "Invalid name",
+          "surname_required": "Surname is required",
+          "surname_invalid": "Invalid surname",
+          "currentPasswordRequired": "Current password is required",
+          "newPasswordMinLength": "New password must be at least 6 characters",
+          "newPasswordMismatch": "Passwords do not match",
+          "newPasswordComplexity": "New password must contain at least one uppercase letter, one lowercase letter, and one number"
         },
         "messages": {
-          "profileUpdated": "Perfil actualitzat correctament",
-          "errorSaving": "Error en desar els canvis",
-          "passwordCurrentWrong": "La contrasenya actual no coincideix",
-          "tokenRevoked": "Token revocat correctament",
-          "errorRevokingToken": "Error en revocar el token"
+          "profileUpdated": "Profile updated successfully",
+          "errorSaving": "Error saving changes",
+          "passwordCurrentWrong": "Current password is incorrect",
+          "tokenRevoked": "Token revoked successfully",
+          "errorRevokingToken": "Error revoking token"
         },
-        "passwordChangeInfo": "Omple els camps de contrasenya només si vols canviar-la. Si no, deixa'ls buits.",
+        "passwordChangeInfo": "Fill in the password fields only if you want to change it. Otherwise, leave them empty.",
         "tabs": {
-          "basicInfo": "Informació Bàsica",
-          "security": "Seguretat",
-          "profile": "Perfil"
+          "profile": "Profile",
+          "security": "Security",
+          "basicInfo": "Basic Information"
         },
         "security": {
-          "title": "Seguretat",
-          "tokens": "Tokens de Seguretat"
+          "title": "Security",
+          "tokens": "Security Tokens"
         },
         "securityTable": {
-          "name": "Nom",
-          "lastUsed": "Últim Ús",
-          "actions": "Accions"
+          "name": "Name",
+          "lastUsed": "Last Used",
+          "actions": "Actions"
         }
       },
-      "license": {
-  "title": "Llicència del Programari",
-  "description": "Aquest programari està llicenciat sota la Llicència Pública de la Unió Europea (EUPL). Vostè és lliure d'utilitzar-lo, modificar-lo i distribuir-lo, sempre que la mateixa llicència s'apliqui a qualsevol obra derivada.",
-  "moreInfo": "Pot trobar més informació sobre la llicència a",
-  "link_text": "aquest enllaç",
+  "license": {
+  "title": "Software License",
+  "description": "This software is licensed under the European Union Public License (EUPL). You are free to use, modify and distribute it, provided that the same license applies to any derivative work.",
+  "moreInfo": "You can find more information about the license at",
+  "link_text": "this link",
   "link_url": "https://interoperable-europe.ec.europa.eu/collection/eupl",
-  "below_text": "o veure el text complet a continuació:",
+  "below_text": "or see the complete text below:",
   "fullText": {
-    "title": "LLICÈNCIA PÚBLICA DE LA UNIÓ EUROPEA v. 1.2",
-    "copyright": "EUPL © Unió Europea 2007, 2016",
-    "preface": "Aquesta Llicència Pública de la Unió Europea (EUPL) s'aplica a l'obra (segons es defineix més endavant) subministrada en les condicions fixades en la present llicència. Queda prohibit qualsevol ús de l'obra diferent de l'autoritzat per la present llicència (en la mesura que aquest ús estigui protegit per un dret del titular dels drets d'autor de l'obra).\n\nL'obra se subministra en les condicions fixades en la present llicència quan el llicenciant (segons es defineix més endavant) hagi col·locat la següent advertència immediatament després de la menció als drets d'autor de l'obra:\n\n                Llicència cedida d'acord amb l'EUPL\n\no hagi expressat per qualsevol altre mitjà la seva voluntat de concedir una llicència d'acord amb l'EUPL.",
+    "title": "EUROPEAN UNION PUBLIC LICENSE v. 1.2",
+    "copyright": "EUPL © European Union 2007, 2016",
+    "preface": "This European Union Public License (EUPL) applies to the work (as defined below) provided under the terms of this license. Any use of the work, other than as authorized under this license is prohibited (to the extent such use is covered by a right of the copyright holder of the work).\n\nThe work is provided under the terms of this license when the licensor (as defined below) has placed the following notice immediately following the copyright notice for the work:\n\n                Licensed under the EUPL\n\nor has expressed by any other means his willingness to license under the EUPL.",
     "sections": {
       "definitions": {
-        "title": "1. Definicions",
-        "content": "En aquesta llicència, s'entendrà per:\n\n— «llicència»: la present llicència,\n— «obra original»: l'obra o el programa d'ordinador distribuït o comunicat pel llicenciant d'acord amb aquesta llicència en forma de codi font o, si s'escau, de codi executable,\n— «obres derivades»: les obres o programes d'ordinador que podria crear el llicenciatari sobre la base de l'obra original o de les seves modificacions. Aquesta llicència no defineix el grau de modificació o dependència de l'obra original necessari per classificar una obra com a derivada; aquest grau es determinarà d'acord amb la legislació sobre drets d'autor aplicable segons l'article 15,\n— «obra»: l'obra original o les seves obres derivades,\n— «codi font»: la forma de l'obra llegible per éssers humans que pugui ser estudiada i modificada més fàcilment,\n— «codi executable»: qualsevol codi, en general compilat, destinat a ser interpretat com a programa per un ordinador,\n— «llicenciant»: la persona física o jurídica que distribueix o comunica l'obra d'acord amb la llicència,\n— «col·laborador»: la persona física o jurídica que modifica l'obra d'acord amb la llicència o contribueix de qualsevol altra manera a crear una obra derivada,\n— «llicenciatari»: la persona física o jurídica que fa un ús qualsevol de l'obra en les condicions fixades en la llicència,\n— «distribució» o «comunicació»: qualsevol acte de venda, donació, préstec, lloguer, distribució, comunicació, transmissió o qualsevol altre acte de posada a disposició, en línia o fora de línia, de còpies de l'obra o d'accés a les seves funcionalitats essencials a una altra persona física o jurídica."
+        "title": "1. Definitions",
+        "content": "In this License, the following terms have the following meaning:\n\n— 'License': this license\n— 'Original work': the work or software distributed or communicated by the Licensor under this license in source code form or as Executable Code\n— 'Derivative works': the works or software that could be created by the Licensee, based upon the Original Work or modifications thereof. This License does not define the extent of modification or dependence on the Original Work required to classify a work as a Derivative Work; this extent is determined by copyright law applicable under Article 15\n— 'The Work': the Original Work and/or its Derivative works\n— 'The Source Code': the human-readable form of the Work which is most convenient for people to study and modify\n— 'The Executable Code': any code which has generally been compiled and which is meant to be interpreted by a computer as a program\n— 'The Licensor': the natural or legal person that distributes or communicates the Work under the License\n— 'Contributor(s)': any natural or legal person who modifies the Work under the License, or otherwise contributes to the creation of a Derivative Work\n— 'The Licensee' or 'You': any natural or legal person who makes any usage of the Work under the terms of the License\n— 'Distribution' or 'Communication': any act of selling, giving, lending, renting, distributing, communicating, transmitting, or otherwise making available, online or offline, copies of the Work or providing access to its essential functionalities at the disposal of any other natural or legal person"
       },
       "scope": {
-        "title": "2. Àmbit dels drets atorgats per la Llicència",
-        "content": "El llicenciant concedeix al llicenciatari una llicència d'àmbit mundial, a títol gratuït, no exclusiva i que el llicenciatari pot subcontractar mentre segueixin vigents els drets d'autor sobre l'obra original, i l'autoritza a:\n\n— utilitzar l'obra en qualsevol circumstància i per a qualsevol ús,\n— reproduir l'obra,\n— modificar l'obra i realitzar obres derivades de la mateixa,\n— comunicar al públic l'obra o còpies de la mateixa, posar a la seva disposició o exhibir l'obra o les còpies i, si s'escau, executar públicament l'obra,\n— distribuir l'obra o còpies de la mateixa,\n— prestar i llogar l'obra o còpies de la mateixa,\n— subcontractar els drets relatius a l'obra o a les còpies de la mateixa.\n\nAquests drets es podran exercir a través de qualsevol mitjà, suport i format, conegut en el present o que pugui inventar-se en el futur, en la mesura que així ho permeti la legislació aplicable.\n\nEn els països l'ordenament dels quals contempli els drets morals, el llicenciant renunciarà a l'exercici dels mateixos en la mesura que ho permeti la legislació, a fi de fer efectiva la llicència dels drets patrimonials anteriorment enumerats.\n\nEl llicenciant cedeix al llicenciatari, lliure de cànons, els drets d'ús no exclusius sobre qualsevol patent de què sigui titular, en la mesura necessària perquè el llicenciatari faci ús dels drets sobre l'obra atorgats per la present llicència."
+        "title": "2. Scope of the rights granted by the License",
+        "content": "The Licensor hereby grants You a worldwide, royalty-free, non-exclusive, sublicensable license to do the following for the duration of copyright vested in the Original Work:\n\n— use the Work in any circumstance and for all usage\n— reproduce the Work\n— modify the Work and make Derivative Works based upon the Work\n— communicate to the public, including the right to make available or display the Work or copies thereof to the public and perform publicly, as the case may be, the Work\n— distribute the Work or copies thereof\n— lend and rent the Work or copies thereof\n— sublicense rights in the Work or copies thereof\n\nThose rights can be exercised on any media, supports and formats, whether now known or later invented, as far as the applicable law permits so.\n\nIn the countries where moral rights apply, the Licensor waives his right to exercise his moral right to the extent allowed by law in order to make effective the license of the economic rights here above listed.\n\nThe Licensor grants to the Licensee royalty-free, non-exclusive usage rights to any patents held by the Licensor, to the extent necessary to make use of the rights granted on the Work under this License."
       },
       "source_code": {
-        "title": "3. Comunicació del Codi Font",
-        "content": "El llicenciant pot subministrar l'obra en forma de codi font o codi executable. Si la subministra en forma de codi executable, haurà de facilitar a més una còpia llegible automàticament del codi font de l'obra juntament amb cada còpia de l'obra que el llicenciant distribueixi o indiqui, en una advertència inserida a continuació de la menció als drets d'autor adjunta a l'obra, un repositori on es pugui accedir al codi font fàcilment i de manera gratuïta durant el període en què el llicenciant segueixi distribuint o comunicant l'obra."
+        "title": "3. Communication of the Source Code",
+        "content": "The Licensor may provide the Work either in its Source Code form, or as Executable Code. If the Work is provided as Executable Code, the Licensor provides in addition a machine-readable copy of the Source Code of the Work along with each copy of the Work that the Licensor distributes or indicates, in a notice following the copyright notice attached to the Work, a repository where the Source Code is easily and freely accessible for as long as the Licensor continues to distribute or communicate the Work."
       },
       "copyright": {
-        "title": "4. Limitacions sobre els drets d'autor",
-        "content": "En cap cas podrà interpretar-se la present llicència de manera que privi al llicenciatari dels beneficis dels que pogués gaudir com a conseqüència de les excepcions o limitacions als drets exclusius dels titulars dels drets de l'obra, de l'extinció d'aquests drets o de qualsevol altra limitació aplicable."
+        "title": "4. Limitations on copyright",
+        "content": "Nothing in this License is intended to deprive the Licensee of the benefits from any exception or limitation to the exclusive rights of the rights owners in the Work, of the exhaustion of those rights or of other applicable limitations thereto."
       },
       "obligations": {
-        "title": "5. Obligacions del llicenciatari",
-        "content": "La cessió dels drets en virtut de la present llicència queda supeditada a certes restriccions o obligacions que haurà de respectar el llicenciatari. Aquestes obligacions són:\n\nDret d'atribució: El llicenciatari haurà de mantenir íntegrament totes les advertències i mencions als drets d'autor, patents o marques registrades, així com les que es refereixin a la llicència i a l'exempció de responsabilitat. El llicenciatari haurà d'adjuntar còpies d'aquestes advertències i mencions i de la llicència amb cada còpia de l'obra que distribueixi o comuniqui. El llicenciatari es responsabilitzarà que qualsevol obra derivada inclogui una advertència ben destacada declarant que s'ha modificat l'obra, i la data de modificació.\n\nClàusula de «copyleft»: Si el llicenciatari distribuís o comuniqués còpies de l'obra original o d'obres derivades basades en l'obra original, aquesta distribució o comunicació s'haurà de fer en les condicions fixades en la present llicència o una versió posterior de la present llicència, llevat si l'obra original es distribueix expressament només sota la present versió de la llicència (per exemple, comunicant «EUPL v. 1.2 solament». El llicenciatari (ara en la seva qualitat de llicenciant) no podrà oferir ni imposar condicions addicionals sobre l'obra o les obres derivades que modifiquin o limitin les condicions de la llicència.\n\nClàusula de compatibilitat: Si el llicenciatari distribuís o comuniqués obres derivades o còpies d'aquestes últimes basades al seu torn en l'obra i en una altra obra llicenciada sota una llicència compatible, la distribució o comunicació es podran efectuar d'acord amb les condicions d'aquesta llicència compatible. A efectes de la present clàusula, s'entendrà per «llicència compatible» qualsevol de les llicències enumerades en l'apèndix adjunt a la present llicència. En cas que les obligacions del llicenciatari d'acord amb la llicència compatible estiguin en col·lisió amb les derivades de la present llicència, prevaldran les obligacions de la llicència compatible.\n\nSubministrament del codi font: En distribuir o comunicar còpies de l'obra, el llicenciatari proporcionarà una còpia del codi font llegible automàticament o indicarà un repositori on es pugui accedir al codi font fàcilment i de manera gratuïta durant el període en què segueixi distribuint o comunicant l'obra.\n\nProtecció jurídica: La present llicència no faculta per utilitzar els noms comercials, marques de producte o de servei o noms del llicenciant, excepte quan això, realitzat en la mesura del raonable i conforme als usos habituals, sigui necessari per indicar l'origen de l'obra i reproduir el contingut de la menció als drets d'autor."
+        "title": "5. Obligations of the Licensee",
+        "content": "The grant of the rights mentioned above is subject to some restrictions and obligations imposed on the Licensee. Those obligations are the following:\n\nAttribution right: The Licensee shall keep intact all copyright, patent or trademarks notices and all notices that refer to the License and to the disclaimer of warranties. The Licensee must include a copy of such notices and a copy of the License with every copy of the Work he/she distributes or communicates. The Licensee must cause any Derivative Work to carry prominent notices stating that the Work has been modified and the date of modification.\n\nCopyleft clause: If the Licensee distributes or communicates copies of the Original Works or Derivative Works, this Distribution or Communication will be done under the terms of this License or of a later version of this License unless the Original Work is expressly distributed only under this version of the License — for example by communicating 'EUPL v. 1.2 only'. The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the Work or Derivative Work that alter or restrict the terms of the License.\n\nCompatibility clause: If the Licensee Distributes or Communicates Derivative Works or copies thereof based upon both the Work and another work licensed under a Compatible License, this Distribution or Communication can be done under the terms of this Compatible License. For the sake of this clause, 'Compatible License' refers to the licenses listed in the appendix attached to this License. Should the Licensee's obligations under the Compatible License conflict with his/her obligations under this License, the obligations of the Compatible License shall prevail.\n\nProvision of Source Code: When distributing or communicating copies of the Work, the Licensee will provide a machine-readable copy of the Source Code or indicate a repository where this Source Code easily and freely available for as long as the Licensee continues to distribute or communicate the Work.\n\nLegal Protection: This License does not grant permission to use the trade names, trademarks, service marks, or names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the copyright notice."
       },
       "authorship": {
-        "title": "6. Cadena d'Autoria",
-        "content": "El llicenciant original garanteix ser titular originari dels drets d'autor sobre l'obra original objecte de la present llicència o haver-los adquirit mitjançant la llicència corresponent i estar facultat per atorgar llicències sobre tals drets.\n\nCada col·laborador garanteix ser titular dels drets d'autor sobre les modificacions que aporta a l'obra o haver-los adquirit mitjançant la corresponent llicència i estar facultat per atorgar llicències sobre tals drets.\n\nCada vegada que el llicenciatari accepta la llicència, el llicenciant original i els col·laboradors posteriors li atorguen una llicència sobre les seves pròpies contribucions a l'obra en les condicions fixades en la present llicència."
+        "title": "6. Chain of Authorship",
+        "content": "The original licensor warrants that he/she owns the copyright in the original work granting the rights under this License or that he/she has been granted permission to do so.\n\nEach contributor warrants that he/she owns the copyright in his/her modifications to the Work or has obtained permission to submit those modifications under this License.\n\nEach time you accept the License, the original licensor and subsequent contributors grant you a license to their contributions to the Work, under the terms of this License."
       },
       "warranty": {
-        "title": "7. Exclusió de Garantia",
-        "content": "L'obra es troba en procés d'elaboració, essent objecte de contínues millores per part de nombrosos col·laboradors. No és una obra acabada i, per tant, pot contenir defectes o errors inherents a aquest tipus de desenvolupament.\n\nPer aquest motiu, l'obra, en virtut de la llicència, se subministra «tal qual», sense garanties de cap tipus, en particular, pel que fa a la seva comercialització, adequació a un propòsit determinat, absència de defectes o errors, exactitud i absència d'infracció dels drets de propietat intel·lectual diferents dels drets d'autor segons s'afirma en l'article 6 de la present llicència.\n\nAquesta exclusió de garantia forma part essencial de la llicència i és condició per a la cessió de qualsevol dret respecte a l'obra."
+        "title": "7. Disclaimer of Warranty",
+        "content": "The Work is a work in progress, which is continuously improved by numerous contributors. It is not a finished work and may therefore contain defects or 'bugs' inherent to this type of software development.\n\nFor the above reason, the Work is provided under the License on an 'as is' basis and without warranties of any kind concerning the Work, including without limitation, merchantability, fitness for a particular purpose, absence of defects or errors, accuracy, non-infringement of intellectual property rights other than copyright as stated in Article 6 of this License.\n\nThis disclaimer of warranty is an essential part of the License and a condition for the grant of any rights to the Work."
       },
       "liability": {
-        "title": "8. Exclusió de Responsabilitat",
-        "content": "Excepte en casos de dol o de danys ocasionats directament a persones físiques, el llicenciant no serà responsable dels danys i perjudicis de qualsevol classe, directes o indirectes, materials o morals, que poguessin derivar-se de la llicència o de l'ús de l'obra, en particular, en una enumeració no exhaustiva, dels danys i perjudicis per pèrdua de bona reputació, atur tècnic, avaria o mal funcionament d'equips informàtics, pèrdua de dades o qualsevol perjudici comercial, fins i tot si el llicenciant coneixia la possibilitat d'aquests danys. No obstant això, el llicenciant serà responsable, d'acord amb les normes legals que regulin la responsabilitat pels danys causats per productes, en la mesura que aquestes normes siguin aplicables a l'obra."
+        "title": "8. Disclaimer of Liability",
+        "content": "Except in the cases of wilful misconduct or damages directly caused to natural persons, the Licensor will in no event be liable for any direct or indirect, material or moral, damages of any kind, arising out of the License or of the use of the Work, including without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data or any commercial damage, even if the Licensor has been advised of the possibility of such damage. However, the Licensor will be liable under statutory product liability laws as far such laws apply to the Work."
       },
       "additional": {
-        "title": "9. Acords Addicionals",
-        "content": "En distribuir l'obra, el llicenciatari podrà subscriure un acord addicional que defineixi obligacions o serveis compatibles amb la present llicència. No obstant això, en acceptar tals obligacions, el llicenciatari actuarà únicament en nom propi i sota la seva exclusiva responsabilitat, i mai en nom del llicenciant original ni de cap altre col·laborador, i això a condició que accedeixi a indemnitzar, defensar i emparar a tot col·laborador front a qualsevol responsabilitat en què aquest pogués incórrer i front a les reclamacions que poguessin presentar-se contra ell per haver acceptat el llicenciatari l'esmentada garantia o responsabilitat addicional."
+        "title": "9. Additional Agreements",
+        "content": "While distributing the Work, you may choose to conclude an additional agreement, defining obligations or services consistent with this License. However, if accepting obligations, you may act only on your own behalf and on your sole responsibility, not on behalf of the original Licensor or any other Contributor, and only if you agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against such Contributor by the fact you have accepted any warranty or additional liability."
       },
       "acceptance": {
-        "title": "10. Acceptació de la Llicència",
-        "content": "El disposat en la present llicència es pot acceptar fent clic a la icona «Accepto» situada a la part inferior de la finestra en què apareix el text de la present llicència o manifestant el consentiment de qualsevol altra forma similar, de conformitat amb el previst en la legislació aplicable. Fent clic en aquesta icona, s'expressa l'acceptació inequívoca i irrevocable de la present llicència i de tot el seu contingut.\n\nAixí mateix, el llicenciatari accepta irrevocablement la present llicència i totes les seves condicions pel mer fet d'exercir qualsevol dels drets que li atorga l'article 2 de la present llicència, com ara l'ús de l'obra, la creació d'una obra derivada o la distribució o comunicació de l'obra o de còpies de la mateixa."
+        "title": "10. Acceptance of the License",
+        "content": "The provisions of this License can be accepted by clicking on an icon 'I agree' placed under the bottom of a window displaying the text of this License or by affirming consent in any other similar way, in accordance with the rules of applicable law. Clicking on that icon indicates your clear and irrevocable acceptance of this License and all of its terms and conditions.\n\nSimilarly, you irrevocably accept this License and all of its terms and conditions by exercising any rights granted to You by Article 2 of this License, such as the use of the Work, the creation by You of a Derivative Work or the Distribution or Communication by You of the Work or copies thereof."
       },
       "information": {
-        "title": "11. Informació al Públic",
-        "content": "En cas que el llicenciatari procedeixi a la distribució o comunicació de l'obra per mitjans electrònics (per exemple, oferint la descàrrega de l'obra a distància), el canal o mitjà de distribució (per exemple, un lloc web) haurà de facilitar al públic, com a mínim, la informació exigida per la legislació aplicable sobre el llicenciant, la llicència i la manera en què el llicenciatari pot accedir a aquestes dades, acceptar-les, conservar-les i reproduir-les."
+        "title": "11. Information to the Public",
+        "content": "In case of any Distribution or Communication of the Work by means of electronic communication by You (for example, by offering to download the Work from a remote location) the distribution channel or media (for example, a website) must at least provide to the public the information requested by the applicable law regarding the Licensor, the License and the way it may be accessible, concluded, stored and reproduced by the Licensee."
       },
       "termination": {
-        "title": "12. Extinció de la Llicència",
-        "content": "La llicència i els drets atorgats al seu empara s'extingiran automàticament si el llicenciatari incompleix alguna de les condicions de la llicència.\n\nTal extinció no suposarà, però, la de les llicències de què gaudeixin les persones que hagin rebut l'obra del llicenciatari en virtut de la llicència, sempre que aquestes persones segueixin complint plenament les condicions de la llicència."
+        "title": "12. Termination of the License",
+        "content": "The License and the rights granted hereunder will terminate automatically upon any breach by the Licensee of the terms of the License.\n\nSuch a termination will not terminate the licenses of any person who has received the Work from the Licensee under the License, provided such persons remain in full compliance with the License."
       },
       "miscellaneous": {
-        "title": "13. Disposicions Diverses",
-        "content": "No obstant el disposat en l'article 9, la llicència representarà la totalitat de l'acord entre les parts pel que fa a l'obra.\n\nLa eventual invalidesa o ineficàcia d'alguna disposició de la present llicència d'acord amb la legislació vigent no afectarà la validesa o eficàcia general de la llicència. En aquests casos, la disposició s'interpretarà o reformularà segons procedeixi per fer-la vàlida i eficaç.\n\nLa Comissió Europea podrà publicar altres versions lingüístiques o noves versions de la present llicència o versions actualitzades de l'apèndix en la mesura que resulti necessari i raonable i sense reduir l'àmbit dels drets concedits per la llicència. Les noves versions de la llicència es publicaran amb un número de versió únic.\n\nTotes les versions lingüístiques de la present llicència aprovades per la Comissió Europea tenen idèntic valor. Les parts poden utilitzar la versió lingüística de la seva preferència."
+        "title": "13. Miscellaneous",
+        "content": "Without prejudice to Article 9 above, the License represents the complete agreement between the Parties as to the Work.\n\nIf any provision of the License is invalid or unenforceable under applicable law, this will not affect the validity or enforceability of the License as a whole. Such provision will be construed or reformed so as necessary to make it valid and enforceable.\n\nThe European Commission may publish other linguistic versions or new versions of this License or updated versions of the Appendix, so far this is required and reasonable, without reducing the scope of the rights granted by the License. New versions of the License will be published with a unique version number.\n\nAll linguistic versions of this License, approved by the European Commission, have identical value. Parties can take advantage of the linguistic version of their choice."
       },
       "jurisdiction": {
-        "title": "14. Tribunals Competents",
-        "content": "Sense perjudici del disposat en un acord específic entre les parts,\n\n— els litigis relatius a la interpretació de la present llicència que es plantegin entre les institucions, òrgans i organismes de la Unió Europea, en qualitat de llicenciant, i un llicenciatari, se sotmetran a la jurisdicció del Tribunal de Justícia de la Unió Europea, d'acord amb l'article 272 del Tractat de Funcionament de la Unió Europea;\n\n— els litigis relatius la interpretació de la present llicència que es plantegin entre altres parts se sotmetran a la jurisdicció exclusiva del tribunal que sigui competent en el lloc on resideixi o exerceixi la seva activitat principal el llicenciant."
+        "title": "14. Jurisdiction",
+        "content": "Without prejudice to specific agreement between parties,\n\n— any litigation resulting from the interpretation of this License, arising between the European Union institutions, bodies, offices or agencies, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice of the European Union, as laid down in article 272 of the Treaty on the Functioning of the European Union,\n\n— any litigation arising between other parties and resulting from the interpretation of this License, will be subject to the exclusive jurisdiction of the competent court where the Licensor resides or conducts its primary business."
       },
       "applicable_law": {
-        "title": "15. Legislació Aplicable",
-        "content": "Sense perjudici del disposat en un acord específic entre les parts,\n\n— la present llicència es regirà per la legislació de l'Estat membre de la Unió Europea on tingui la seva seu, resideixi o tingui el seu domicili social el llicenciant;\n\n— la present llicència es regirà pel Dret belga si el llicenciant no té seu, residència ni domicili social en un Estat membre de la Unió Europea."
+        "title": "15. Applicable Law",
+        "content": "Without prejudice to specific agreement between parties,\n\n— this License shall be governed by the law of the European Union Member State where the Licensor has his seat, resides or has his registered office,\n\n— this License shall be governed by Belgian law if the Licensor has no seat, residence or registered office inside a European Union Member State."
       }
     },
     "appendix": {
-      "title": "Apèndix",
-      "content": "Són «llicències compatibles» d'acord amb l'article 5 de l'EUPL:",
-      "licenses": "— GNU General Public License (GPL) v. 2, v. 3\n— GNU Affero General Public License (AGPL) v. 3\n— Open Software License (OSL) v. 2.1, v. 3.0\n— Eclipse Public License (EPL) v. 1.0\n— CeCILL v. 2.0, v. 2.1\n— Mozilla Public License (MPL) v. 2\n— GNU Lesser General Public License (LGPL) v. 2.1, v. 3\n— Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) per a obres que no siguin programes informàtics\n— European Union Public License (EUPL) v. 1.1, v. 1.2\n— Québec Free and Open-Source License — Reciprocity (LiLiQ-R) or Strong Reciprocity (LiLiQ-R+)\n\nLa Comissió Europea podrà actualitzar el present apèndix a versions posteriors de les llicències esmentades sense presentar una nova versió de l'EUPL, sempre que contemplin els drets reconeguts en l'article 2 de la present llicència i protegeixin de l'apropiació exclusiva el codi font cobert.\n\nQualsevol altra modificació o addició al present apèndix exigirà la presentació d'una nova versió de l'EUPL."
+      "title": "Appendix",
+      "content": "Compatible Licenses according to Article 5 EUPL are:",
+      "licenses": "— GNU General Public License (GPL) v. 2, v. 3\n— GNU Affero General Public License (AGPL) v. 3\n— Open Software License (OSL) v. 2.1, v. 3.0\n— Eclipse Public License (EPL) v. 1.0\n— CeCILL v. 2.0, v. 2.1\n— Mozilla Public License (MPL) v. 2\n— GNU Lesser General Public License (LGPL) v. 2.1, v. 3\n— Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) for works other than software\n— European Union Public License (EUPL) v. 1.1, v. 1.2\n— Québec Free and Open-Source License — Reciprocity (LiLiQ-R) or Strong Reciprocity (LiLiQ-R+)\n\nThe European Commission may update this Appendix to later versions of the above licenses without producing a new version of the EUPL, as long as they provide the rights granted in Article 2 of this License and protect the covered Source Code from exclusive appropriation.\n\nAll other changes or additions to this Appendix require the production of a new EUPL version."
     }
   }
 },
+
       "contracts": {
+        "title": "Contracts",
         "form": {
           "placeholders": {
-            "status": "Selecciona un estat"
+            "status": "Select a status"
           },
-          "returnButton": "Tornar a la llista de contractes",
+          "returnButton": "Return to contract list",
           "submitButton": {
-            "create": "Crear Contracte",
-            "edit": "Desa Canvis"
+            "create": "Create Contract",
+            "edit": "Save Changes"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Desant..."
+            "create": "Creating...",
+            "edit": "Saving..."
           },
           "title": {
-            "create": "Crear Contracte",
-            "edit": "Edita Contracte"
+            "create": "Create Contract",
+            "edit": "Edit Contract"
           },
           "validation": {
-            "end_date_after_start_date": "La data de fi ha de ser posterior a la data d'inici",
-            "end_date_required": "La data de fi és obligatòria",
-            "final_price_required": "El preu final és obligatori",
-            "name_invalid": "El nom no és vàlid",
-            "name_required": "El nom és obligatori",
-            "start_date_required": "La data d'inici és obligatòria",
-            "status_invalid": "Estat no vàlid",
-            "status_required": "L'estat és obligatori"
+            "end_date_after_start_date": "End date must be after start date",
+            "end_date_required": "End date is required",
+            "final_price_required": "Final price is required",
+            "name_invalid": "Name is invalid",
+            "name_required": "Name is required",
+            "start_date_required": "Start date is required",
+            "status_invalid": "Invalid status",
+            "status_required": "Status is required"
           },
-          "name": "Nom del contracte",
-          "startDate": "Data d'inici del contracte",
-          "endDate": "Data de fi del contracte"
+          "name": "Contract name",
+          "startDate": "Start Date",
+          "endDate": "End Date"
         },
         "list": {
           "actions": {
-            "delete": "Elimina contracte",
-            "edit": "Edita contracte",
-            "label": "Accions",
-            "duplicate": "Duplicar contracte",
-            "create": "Crear contracte"
+            "delete": "Delete contract",
+            "edit": "Edit contract",
+            "label": "Actions",
+            "duplicate": "Duplicate contract",
+            "create": "Create Contract"
           },
           "columns": {
-            "end_date": "Data de fi",
-            "final_price": "Preu final",
-            "name": "Contracte",
-            "start_date": "Data d'inici",
-            "status": "Estat"
+            "end_date": "End Date",
+            "final_price": "Final Price",
+            "name": "Contract",
+            "start_date": "Start Date",
+            "status": "Status"
           },
           "messages": {
-            "createSuccess": "Contracte creat amb èxit",
-            "deleteConfirm": "Estàs segur d'eliminar aquest contracte?",
-            "deleteSuccess": "Contracte eliminat amb èxit",
-            "error": "Error en desar el contracte",
-            "updateSuccess": "Contracte actualitzat amb èxit"
+            "createSuccess": "Contract created successfully",
+            "deleteConfirm": "Are you sure you want to delete this contract?",
+            "deleteSuccess": "Contract deleted successfully",
+            "error": "Error saving contract",
+            "updateSuccess": "Contract updated successfully"
           }
         },
-        "title": "Contractes",
         "duplicate": {
-          "title": "Duplicar contracte",
-          "submit": "Duplicar contracte",
-          "success": "Contracte duplicat correctament",
-          "submitting": "Duplegant..."
+          "title": "Duplicate Contract",
+          "submit": "Duplicate Contract",
+          "success": "Contract duplicated successfully",
+          "submitting": "Duplicating..."
         }
       },
+
       "dashboard": {
-        "quickActions": "Accions ràpides",
-        "createWorkOrder": "Crear ordre de treball",
-        "reviewReports": "Revisar informes",
-        "manageUsers": "Gestionar usuaris",
-        "recentActivity": "Activitat recent",
-        "workOrderCompleted": "Ordre de treball completada",
-        "ago": "enrere",
-        "reportSubmitted": "Informe enviat",
-        "workOrderAssigned": "Ordre de treball assignada",
-        "totalWorkOrders": "Total d'ordres",
-        "inProgressWorkOrders": "En progrés",
-        "completedWorkOrders": "Completades",
-        "pendingReports": "Informes pendents",
-        "noInProgressWorkOrders": "Sense ordres de treball en progrés",
+        "title": "Dashboard",
+        "welcome": {
+          "greeting": "Welcome back, {{name}} {{surname}}.",
+          "message": "We are glad to see you again. Here is a quick overview of your data."
+        },
+        "quickActions": "Quick Actions",
+        "createWorkOrder": "Create Work Order",
+        "reviewReports": "Review Reports",
+        "manageUsers": "Manage Users",
+        "recentActivity": "Recent Activity",
+        "workOrderCompleted": "Work Order Completed",
+        "ago": "ago",
+        "reportSubmitted": "Report Submitted",
+        "workOrderAssigned": "Work Order Assigned",
+        "totalWorkOrders": "Total Orders",
+        "inProgressWorkOrders": "In Progress Work Orders",
+        "noInProgressWorkOrders": "No in-progress work orders",
+        "completedWorkOrders": "Completed",
+        "pendingReports": "Pending Reports",
+        "viewAll": "View All Activities",
+        "noActivity": "No recent activity",
+        "actions": "Actions",
         "stats": {
           "widgets": {
-            "contracts": "Contractes",
+            "contracts": "Contracts",
             "elements": "Elements",
-            "users": "Usuaris",
-            "workOrders": "Ordres de treball"
+            "users": "Users",
+            "workOrders": "Work Orders"
           }
-        },
-        "title": "Tauler",
-        "welcome": {
-          "greeting": "Benvingut de nou, {{name}} {{surname}}.",
-          "message": "Tens a la teva disposició un resum ràpid de les teves dades."
-        },
-        "viewAll": "Veure totes les activitats",
-        "noActivity": "Sense activitat recent",
-        "actions": "Accions"
+        }
       },
+
       "elementTypes": {
-        "title": "Tipus d'element",
-        "loading": "Carregant...",
-        "actions": "Accions",
-        "editButton": "Editar tipus d'element",
-        "deleteButton": "Eliminar tipus d'element",
-        "deletedSuccess": "Tipus d'element eliminat correctament",
-        "deleteConfirm": "Estàs segur que vols eliminar aquest tipus d'element?",
-        "success": "Tipus d'element creat correctament",
-        "update": "Tipus d'element actualitzat correctament",
-        "error": "Error guardant el tipus d'element",
-        "true": "Sí",
+        "title": "Element Types",
+        "loading": "Loading...",
+        "actions": "Actions",
+        "editButton": "Edit element type",
+        "deleteButton": "Delete element type",
+        "deletedSuccess": "Element type deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this element type?",
+        "success": "Element type created successfully",
+        "update": "Element type updated successfully",
+        "error": "Error saving element type",
+        "true": "Yes",
         "false": "No",
         "create": {
-          "title": "Crear Tipus d'Element",
-          "submittingText": "Creant...",
-          "submitButton": "Crear Tipus d'Element",
+          "title": "Create Element Type",
+          "submittingText": "Creating...",
+          "submitButton": "Create Element Type",
           "validations": {
-            "name": "El nom és obligatori",
-            "requires_tree_type": "Requereix tipus d'arbre",
-            "icon": "La icona és obligatòria",
-            "color": "El color és obligatori",
-            "description": "La descripció és obligatòria"
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
           },
           "placeholders": {
-            "name": "Nom del tipus d'element",
-            "requires_tree_type": "Selecciona si requereix tipus d'arbre",
-            "description": "Descripció del tipus d'element",
-            "icon": "Selecciona una icona",
-            "color": "Selecciona un color"
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
           }
         },
         "edit": {
-          "title": "Editar Tipus d'Element",
-          "submittingText": "Guardant...",
-          "submitButton": "Guardar Canvis",
+          "title": "Edit Element Type",
+          "submittingText": "Saving...",
+          "submitButton": "Save Changes",
           "validations": {
-            "name": "El nom és obligatori",
-            "requires_tree_type": "Requereix tipus d'arbre",
-            "icon": "La icona és obligatòria",
-            "color": "El color és obligatori",
-            "description": "La descripció és obligatòria"
+            "name": "Name is required",
+            "requires_tree_type": "Requires tree type",
+            "icon": "Icon is required",
+            "color": "Color is required",
+            "description": "Description is required"
           },
           "placeholders": {
-            "name": "Nom del tipus d'element",
-            "requires_tree_type": "Selecciona si requereix tipus d'arbre",
-            "description": "Descripció del tipus d'element",
-            "icon": "Selecciona una icona",
-            "color": "Selecciona un color"
+            "name": "Element type name",
+            "requires_tree_type": "Select if it requires tree type",
+            "description": "Element type description",
+            "icon": "Select an icon",
+            "color": "Select a color"
           }
         },
         "columns": {
-          "name": "Tipus d'element",
-          "requires_tree_type": "Requereix tipus d'arbre",
-          "description": "Descripció",
-          "icon": "Icona",
+          "name": "Name",
+          "requires_tree_type": "Requires tree type",
+          "description": "Description",
+          "icon": "Icon",
           "color": "Color"
         },
         "icons": {
-          "tree": "Arbre",
-          "home": "Casa",
-          "post-lamp": "Fanals",
-          "park": "Parc",
-          "fountain": "Font",
-          "flower": "Flor",
-          "mountain": "Muntanya",
-          "beach": "Platja",
-          "volcano": "Volcà",
-          "tap": "Aixeta",
-          "water-drop": "Gota d'aigua",
-          "lightbulb": "Bombeta",
-          "lightning-bolt": "Raig",
-          "grass": "Gespa",
-          "cloud": "Núvol"
+          "tree": "Tree",
+          "home": "Home",
+          "post-lamp": "Post Lamp",
+          "park": "Park",
+          "fountain": "Fountain",
+          "flower": "Flower",
+          "mountain": "Mountain",
+          "beach": "Beach",
+          "volcano": "Volcano",
+          "tap": "Tap",
+          "water-drop": "Water Drop",
+          "lightbulb": "Lightbulb",
+          "lightning-bolt": "Lightning Bolt",
+          "grass": "Grass",
+          "cloud": "Cloud"
         },
         "list": {
           "actions": {
-            "delete": "Eliminar tipus d'element",
-            "edit": "Editar tipus d'element",
-            "label": "Accions",
-            "create": "Crear tipus d'element"
+            "delete": "Delete element type",
+            "edit": "Edit element type",
+            "label": "Actions",
+            "create": "Create Element Type"
           }
         }
       },
+
       "evas": {
+        "title": "Evas",
+        "age": {
+          "years": "Years",
+          "months": "Months"
+        },
+        "columns": {
+          "element_id": "Element ID",
+          "age": "Age",
+          "height": "Height",
+          "actions": "Actions",
+          "name": "Name",
+          "coordinates": "Coordinates",
+          "status": "Status"
+        },
+        "form": {
+          "name": "Name",
+          "element_id": "Element ID",
+          "years": "Years",
+          "months": "Months",
+          "height": "Height",
+          "diameter": "Diameter",
+          "crown_width": "Crown Width",
+          "crown_projection_area": "Crown Projection Area",
+          "root_surface_diameter": "Root Surface Diameter",
+          "effective_root_area": "Effective Root Area",
+          "height_estimation": "Height Estimation",
+          "unbalanced_crown": "Unbalanced Crown",
+          "overextended_branches": "Overextended Branches",
+          "cracks": "Cracks",
+          "dead_branches": "Dead Branches",
+          "inclination": "Inclination",
+          "V_forks": "V Forks",
+          "cavities": "Cavities",
+          "bark_damage": "Bark Damage",
+          "soil_lifting": "Soil Lifting",
+          "cut_damaged_roots": "Cut/Damaged Roots",
+          "basal_rot": "Basal Rot",
+          "exposed_surface_roots": "Exposed Surface Roots",
+          "wind": "Wind",
+          "drought": "Drought",
+          "validation": {
+            "element_required": "Element is required"
+          },
+          "title": {
+            "create": "Create Eva",
+            "edit": "Edit Eva"
+          },
+          "saving": "Saving...",
+          "save": "Save",
+          "age": "Age",
+          "yearsShort": "Years",
+          "monthsShort": "Months",
+          "dateBirth": "Date of Birth"
+        },
+        "list": {
+          "actions": {
+            "show": "Show Eva",
+            "delete": "Delete Eva",
+            "create": "Create EVA"
+          },
+          "messages": {
+            "createSuccess": "Eva created successfully",
+            "deleteConfirm": "Are you sure you want to delete this Eva?",
+            "deleteSuccess": "Eva deleted successfully",
+            "deleteSuccessDetail": "EVA details were deleted successfully",
+            "error": "Error saving Eva",
+            "updateSuccess": "Eva updated successfully"
+          }
+        },
+        "status": {
+          "low": "Low",
+          "moderate": "Moderate",
+          "high": "High",
+          "critical": "Critical",
+          "pending": "Pending"
+        },
+        "stability": {
+          "stable": "Stable",
+          "moderate": "Moderate",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "gravityHeight": {
+          "veryStable": "Very Stable",
+          "moderateRisk": "Moderate Risk",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "rootCrown": {
+          "veryStable": "Very Stable",
+          "stable": "Stable",
+          "moderateStability": "Moderate Stability",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "windStability": {
+          "veryStable": "Very Stable",
+          "moderateStability": "Moderate Stability",
+          "highRisk": "High Risk",
+          "pending": "Pending"
+        },
+        "severity": {
+          "low": "Low",
+          "moderate": "Moderate",
+          "high": "High",
+          "extreme": "Extreme",
+          "pending": "Pending"
+        },
         "show": {
-          "title": "Detalls de l'Eva",
-          "generalInfo": "Informació General",
-          "indexCalculation": "Càlcul de l'Índex",
-          "environmentalFactors": "Factors Ambientals",
-          "treeStructure": "Estructura de l'Arbre",
-          "treeCondition": "Condició de l'Arbre",
+          "title": "Eva Details",
+          "generalInfo": "General Information",
+          "indexCalculation": "Index Calculation",
+          "environmentalFactors": "Environmental Factors",
+          "treeStructure": "Tree Structure",
+          "treeCondition": "Tree Condition",
           "element": "Element",
-          "statusFactorInfo": "El factor d'estat de l'arbre indica la salut general de l'arbre.",
+          "statusFactorInfo": "The tree status factor indicates the overall health of the tree.",
           "formulas": {
-            "stabilityIndex": "Alçada / Diàmetre",
-            "gravityHeightRatio": "Alçada estimada / Alçada",
-            "rootCrownRatio": "Àrea efectiva de l'arrel / Àrea de projecció de la copa",
-            "windStabilityIndex": "(Alçada * Amplada de la copa) / Àrea efectiva de l'arrel"
+            "stabilityIndex": "Height / Diameter",
+            "gravityHeightRatio": "Estimated Height / Height",
+            "rootCrownRatio": "Effective Root Area / Crown Projection Area",
+            "windStabilityIndex": "(Height * Crown Width) / Effective Root Area"
           }
         },
         "dictionaries": {
           "unbalancedCrown": {
-            "0": "Sense inclinació o creixement desigual",
-            "1": "Lleugera inclinació de la capçada",
-            "2": "Capçada visiblement inclinada",
-            "3": "Capçada extremadament inclinada"
+            "0": "No inclination or uneven growth",
+            "1": "Slight crown inclination",
+            "2": "Visibly inclined crown",
+            "3": "Extremely inclined crown"
           },
           "overextendedBranches": {
-            "0": "Branques ben estructurades",
-            "1": "Algunes branques sobreexteses",
-            "2": "Diverses branques sobreexteses",
-            "3": "Branques sobreexteses i pesades"
+            "0": "Well-structured branches",
+            "1": "Few overextended branches",
+            "2": "Several overextended branches",
+            "3": "Overextended and heavy branches"
           },
           "cracks": {
-            "0": "Sense esquerdes",
-            "1": "Petites esquerdes al tronc",
-            "2": "Esquerdes visibles en diverses parts",
-            "3": "Esquerdes profundes al tronc"
+            "0": "No cracks",
+            "1": "Small cracks in the trunk",
+            "2": "Visible cracks in several parts",
+            "3": "Deep cracks in the trunk"
           },
           "deadBranches": {
-            "0": "Sense branques mortes",
-            "1": "Algunes branques mortes",
-            "2": "Múltiples branques mortes",
-            "3": "Gran quantitat de branques mortes"
+            "0": "No dead branches",
+            "1": "Some dead branches",
+            "2": "Multiple dead branches",
+            "3": "Large number of dead branches"
           },
           "inclination": {
-            "0": "Completament vertical",
-            "1": "Lleugera inclinació (<5°)",
-            "2": "Inclinació moderada (5-15°)",
-            "3": "Alta inclinació (>15°)"
+            "0": "Completely vertical",
+            "1": "Slight inclination (<5°)",
+            "2": "Moderate inclination (5-15°)",
+            "3": "High inclination (>15°)"
           },
           "VForks": {
-            "0": "Bifurcacions normals",
-            "1": "Lleugera bifurcació en V",
-            "2": "Bifurcació en V pronunciada",
-            "3": "Bifurcació en V perillosa"
+            "0": "Normal bifurcations",
+            "1": "Slight V bifurcation",
+            "2": "Pronounced V bifurcation",
+            "3": "Dangerous V bifurcation"
           },
           "cavities": {
-            "0": "Sense cavitats",
-            "1": "Petita cavitat",
-            "2": "Cavitat intermèdia",
-            "3": "Cavitat profunda i estructural"
+            "0": "No cavities",
+            "1": "Small cavity",
+            "2": "Intermediate cavity",
+            "3": "Deep and structural cavity"
           },
           "barkDamage": {
-            "0": "Escorça intacta",
-            "1": "Escorça amb petites ferides",
-            "2": "Dany significatiu a l'escorça",
-            "3": "Escorça molt danyada"
+            "0": "Intact bark",
+            "1": "Bark with slight wounds",
+            "2": "Significant bark damage",
+            "3": "Very damaged bark"
           },
           "soilLifting": {
-            "0": "Sòl sense alteracions",
-            "1": "Lleugera elevació del sòl",
-            "2": "Elevació visible del sòl",
-            "3": "Sòl severament aixecat"
+            "0": "Soil without alterations",
+            "1": "Slight soil elevation",
+            "2": "Visible soil elevation",
+            "3": "Severely lifted soil"
           },
           "cutRoots": {
-            "0": "Arrels intactes",
-            "1": "Arrels amb petits talls",
-            "2": "Arrels parcialment danyades",
-            "3": "Arrels severament tallades"
+            "0": "Intact roots",
+            "1": "Roots with slight cuts",
+            "2": "Partially damaged roots",
+            "3": "Severely cut roots"
           },
           "basalRot": {
-            "0": "Sense podridura",
-            "1": "Podridura inicial",
-            "2": "Podridura visible",
-            "3": "Podridura avançada"
+            "0": "No rot",
+            "1": "Initial rot",
+            "2": "Visible rot",
+            "3": "Advanced rot"
           },
           "exposedRoots": {
-            "0": "Arrels sota terra",
-            "1": "Algunes arrels exposades",
-            "2": "Diverses arrels exposades",
-            "3": "Arrels exposades i debilitades"
+            "0": "Roots underground",
+            "1": "Some exposed roots",
+            "2": "Several exposed roots",
+            "3": "Exposed and weakened roots"
           },
           "wind": {
-            "0": "Arbre protegit per barreres naturals o edificis, sense vent fort constant.",
-            "1": "Arbre amb vent ocasional però sense impacte significatiu en la seva estabilitat.",
-            "2": "Arbre exposat a vents forts freqüents, que poden afectar la seva estructura.",
-            "3": "Arbre en zones obertes o pendents on el vent bufa amb força extrema."
+            "0": "Tree protected by natural barriers or buildings, no strong constant wind.",
+            "1": "Tree with occasional wind but no significant impact on its stability.",
+            "2": "Tree exposed to frequent strong winds, which may affect its structure.",
+            "3": "Tree in open areas or slopes where the wind blows with extreme force."
           },
           "drought": {
-            "0": "Arbre en zona amb humitat estable i accés constant a aigua, sense estrès hídric.",
-            "1": "Arbre amb accés moderat a aigua, però amb períodes ocasionals de sequera.",
-            "2": "Arbre en zona amb sequeres recurrents, afectant el seu desenvolupament i resistència.",
-            "3": "Arbre en zona àrida o amb sequeres prolongades, alt risc de debilitament."
+            "0": "Tree in an area with stable humidity and constant access to water, no water stress.",
+            "1": "Tree with moderate access to water, but with occasional drought periods.",
+            "2": "Tree in an area with recurrent droughts, affecting its development and resistance.",
+            "3": "Tree in an arid area or with prolonged droughts, high risk of weakening."
           }
         },
         "edit": {
-          "title": "Editar Eva",
-          "identification": "Identificació",
-          "treeCondition": "Condició de l'Arbre",
+          "title": "Edit Eva",
+          "identification": "Identification",
+          "treeCondition": "Tree Condition",
           "dimensions": "Dimensions",
-          "state": "Estat",
-          "crownBranches": "Copa i Branques",
-          "trunk": "Tronc",
-          "roots": "Arrels",
-          "environmentCondition": "Condició de l'Entorn",
-          "environmentalFactors": "Factors Ambientals",
-          "windExposure": "Exposició al Vent",
-          "droughtExposure": "Exposició a la Sequera"
+          "state": "State",
+          "crownBranches": "Crown and Branches",
+          "trunk": "Trunk",
+          "roots": "Roots",
+          "environmentCondition": "Environment Condition",
+          "environmentalFactors": "Environmental Factors",
+          "windExposure": "Wind Exposure",
+          "droughtExposure": "Drought Exposure"
         },
         "create": {
-          "identification": "Identificació",
-          "treeCondition": "Condició de l'Arbre",
+          "identification": "Identification",
+          "treeCondition": "Tree Condition",
           "dimensions": "Dimensions",
-          "state": "Estat",
-          "crownBranches": "Copa i Branques",
-          "trunk": "Tronc",
-          "roots": "Arrels",
-          "environmentCondition": "Condició de l'Entorn",
-          "environmentalFactors": "Factors Ambientals",
-          "windExposure": "Exposició al Vent",
-          "droughtExposure": "Exposició a la Sequera"
+          "state": "State",
+          "crownBranches": "Crown and Branches",
+          "trunk": "Trunk",
+          "roots": "Roots",
+          "environmentCondition": "Environment Condition",
+          "environmentalFactors": "Environmental Factors",
+          "windExposure": "Wind Exposure",
+          "droughtExposure": "Drought Exposure"
         },
-        "title": "Eves",
-        "age": {
-          "years": "Anys",
-          "months": "Mesos"
-        },
-        "columns": {
-          "element_id": "ID de l'Element",
-          "age": "Edat",
-          "height": "Alçada",
-          "actions": "Accions",
-          "name": "Nom",
-          "coordinates": "Coordenades",
-          "status": "Estat"
-        },
-        "form": {
-          "name": "Nom",
-          "element_id": "ID de l'Element",
-          "years": "Anys",
-          "months": "Mesos",
-          "height": "Alçada",
-          "diameter": "Diàmetre",
-          "crown_width": "Amplada de la Copa",
-          "crown_projection_area": "Àrea de projecció de la copa",
-          "root_surface_diameter": "Diàmetre de la superfície de l'arrel",
-          "effective_root_area": "Àrea efectiva de l'arrel",
-          "height_estimation": "Estimació de l'alçada",
-          "unbalanced_crown": "Copa descompensada",
-          "overextended_branches": "Branques sobreexteses",
-          "cracks": "Esquerdes",
-          "dead_branches": "Branques mortes",
-          "inclination": "Inclinació",
-          "V_forks": "Bifurcacions en V",
-          "cavities": "Cavitats",
-          "bark_damage": "Danys a l'escorça",
-          "soil_lifting": "Aixecament del sòl",
-          "cut_damaged_roots": "Arrels tallades/danyades",
-          "basal_rot": "Podridura basal",
-          "exposed_surface_roots": "Arrels superficials exposades",
-          "wind": "Vent",
-          "drought": "Sequera",
-          "validation": {
-            "element_required": "L'element és obligatori"
-          },
-          "title": {
-            "create": "Crear Eva",
-            "edit": "Editar Eva"
-          },
-          "saving": "Guardant...",
-          "save": "Guardar",
-          "age": "Edat",
-          "yearsShort": "Anys",
-          "monthsShort": "Mesos",
-          "dateBirth": "Data de naixement"
-        },
-        "list": {
-          "actions": {
-            "show": "Mostrar Eva",
-            "delete": "Eliminar Eva",
-            "create": "Crear EVA"
-          },
-          "messages": {
-            "createSuccess": "Eva creada correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquesta Eva?",
-            "deleteSuccess": "Eva eliminada correctament",
-            "deleteSuccessDetail": "Els detalls de l'EVA s'han eliminat correctament",
-            "error": "Error guardant l'Eva",
-            "updateSuccess": "Eva actualitzada correctament"
-          }
-        },
-        "status": {
-          "low": "Baix",
-          "moderate": "Moderada",
-          "high": "Alta",
-          "critical": "Crítica",
-          "pending": "Pendent"
-        },
-        "stability": {
-          "stable": "Estable",
-          "moderate": "Moderada",
-          "highRisk": "Alt Risc",
-          "pending": "Pendent"
-        },
-        "gravityHeight": {
-          "veryStable": "Molt Estable",
-          "moderateRisk": "Risc Moderat",
-          "highRisk": "Alt Risc",
-          "pending": "Pendent"
-        },
-        "rootCrown": {
-          "veryStable": "Molt Estable",
-          "stable": "Estable",
-          "moderateStability": "Estabilitat Moderada",
-          "highRisk": "Alt Risc",
-          "pending": "Pendent"
-        },
-        "windStability": {
-          "veryStable": "Molt Estable",
-          "moderateStability": "Estabilitat Moderada",
-          "highRisk": "Alt Risc",
-          "pending": "Pendent"
-        },
-        "severity": {
-          "low": "Baix",
-          "moderate": "Moderada",
-          "high": "Alta",
-          "extreme": "Extrema",
-          "pending": "Pendent"
-        },
-        "indexCalculation": "Càlcul de l'índex",
-        "treeStatusFactor": "Factor d'estat de l'arbre",
-        "stabilityIndex": "Índex d'estabilitat (H/D)",
-        "gravityHeightRatio": "Relació d'alçada de la gravetat (CG/H)",
-        "rootCrownRatio": "Relació de la corona de l'arrel (SR/SC)",
-        "windStabilityIndex": "Índex d'estabilitat del vent (WSI)",
-        "environmentalFactors": "Factors ambientals",
-        "windExposure": "Exposició al vent",
-        "droughtExposure": "Exposició a la sequera"
+        "indexCalculation": "Index Calculation",
+        "treeStatusFactor": "Tree Status Factor",
+        "stabilityIndex": "Stability Index (H/D)",
+        "gravityHeightRatio": "Gravity Height Ratio (CG/H)",
+        "rootCrownRatio": "Root Crown Ratio (SR/SC)",
+        "windStabilityIndex": "Wind Stability Index (WSI)",
+        "environmentalFactors": "Environmental Factors",
+        "windExposure": "Wind Exposure",
+        "droughtExposure": "Drought Exposure"
       },
+
       "inventory": {
         "elementDetailPopup": {
           "tabs": {
-            "information": "Informació",
-            "incidences": "Incidències",
-            "history": "Historial",
+            "information": "Information",
+            "incidences": "Incidences",
+            "history": "History",
             "eva": "EVA"
           },
           "information": {
-            "title": "Informació de l'Arbre",
-            "description": "Descripció",
-            "elementType": "Tipus d'Element",
-            "treeFamily": "Família de l'Arbre",
-            "treeGenus": "Gènere",
-            "treeSpecies": "Espècie",
-            "creationDate": "Data de Creació",
+            "title": "Tree Information",
+            "description": "Description",
+            "elementType": "Element Type",
+            "treeFamily": "Tree Family",
+            "treeGenus": "Genus",
+            "treeSpecies": "Species",
+            "creationDate": "Creation Date",
             "location": {
-              "title": "Ubicació",
-              "zone": "Zona",
-              "latitude": "Latitud",
-              "longitude": "Longitud"
+              "title": "Location",
+              "zone": "Zone",
+              "latitude": "Latitude",
+              "longitude": "Longitude"
             },
-            "deleteElement": "Eliminar Element",
-            "elementDeleted": "Element eliminat correctament",
-            "elementDeleteFailed": "No s'ha pogut eliminar l'element"
+            "deleteElement": "Delete Element",
+            "elementDeleted": "Element deleted successfully",
+            "elementDeleteFailed": "Failed to delete the element"
           },
           "incidences": {
-            "title": "Incidència",
-            "name": "📛 Nom",
-            "creationDate": "📅 Data de Creació",
-            "status": "⚠️ Estat",
-            "description": "📝 Descripció",
-            "addIncident": "Afegir Incidència",
-            "deleteIncident": "Eliminar Incidència",
-            "noIncidences": "No hi ha incidències registrades per aquest element.",
-            "statusUpdated": "Estat actualitzat",
-            "statusUpdatedDetail": "L'estat de la incidència s'ha actualitzat correctament",
-            "statusUpdateFailed": "No s'ha pogut actualitzar l'estat de la incidència",
+            "title": "Incidence",
+            "name": "📛 Name",
+            "creationDate": "📅 Creation Date",
+            "status": "⚠️ Status",
+            "description": "📝 Description",
+            "addIncident": "Add Incident",
+            "deleteIncident": "Delete Incident",
+            "noIncidences": "No incidences registered for this element.",
+            "statusUpdated": "Status updated",
+            "statusUpdatedDetail": "The incidence status was updated successfully",
+            "statusUpdateFailed": "Failed to update the incidence status",
             "statusOptions": {
-              "open": "Obert",
-              "in_progress": "En Progrés",
-              "closed": "Tancat"
+              "open": "Open",
+              "in_progress": "In Progress",
+              "closed": "Closed"
             }
           },
           "eva": {
-            "loading": "Carregant avaluació de l'arbre...",
-            "noData": "No hi ha dades d'avaluació disponibles per aquest arbre.",
-            "evaluationIndices": "Índexs d'Avaluació",
-            "treeStatus": "Estat de l'Arbre",
-            "stabilityIndex": "Índex d'Estabilitat",
-            "gravityHeightRatio": "Relació Alçada-Gravetat",
-            "rootCrownRatio": "Relació Arrel-Copa",
-            "windStabilityIndex": "Índex d'Estabilitat al Vent",
-            "environmentalFactors": "Factors Ambientals",
-            "windExposure": "Exposició al Vent",
-            "droughtExposure": "Exposició a la Sequera",
-            "technicalData": "Dades Tècniques",
-            "height": "Alçada",
-            "diameter": "Diàmetre",
-            "crownWidth": "Amplada de la Copa",
-            "crownProjectionArea": "Àrea de Projecció de la Copa",
-            "effectiveRootArea": "Àrea Efectiva de l'Arrel",
-            "createEva": "Crear EVA",
-            "editEva": "Editar EVA",
-            "deleteEva": "Eliminar EVA",
+            "loading": "Loading tree evaluation...",
+            "noData": "No evaluation data available for this tree.",
+            "evaluationIndices": "Evaluation Indices",
+            "treeStatus": "Tree Status",
+            "stabilityIndex": "Stability Index",
+            "gravityHeightRatio": "Gravity-Height Ratio",
+            "rootCrownRatio": "Root-Crown Ratio",
+            "windStabilityIndex": "Wind Stability Index",
+            "environmentalFactors": "Environmental Factors",
+            "windExposure": "Wind Exposure",
+            "droughtExposure": "Drought Exposure",
+            "technicalData": "Technical Data",
+            "height": "Height",
+            "diameter": "Diameter",
+            "crownWidth": "Crown Width",
+            "crownProjectionArea": "Crown Projection Area",
+            "effectiveRootArea": "Effective Root Area",
+            "createEva": "Create EVA",
+            "editEva": "Edit EVA",
+            "deleteEva": "Delete EVA",
             "list": {
               "messages": {
-                "deleteSuccess": "EVA eliminada correctament",
-                "deleteSuccessDetail": "Els detalls de l'EVA s'han eliminat correctament"
+                "deleteSuccess": "EVA deleted successfully",
+                "deleteSuccessDetail": "EVA details were deleted successfully"
               }
             }
           },
           "history": {
-            "title": "Historial de l'element (en construcció...)",
+            "title": "Element History (under construction...)",
             "notes": "Notes",
-            "task": "Tasca",
-            "description": "Descripció",
-            "workOrder": "Ordre de Treball",
-            "status": "Estat",
-            "noTasks": "No hi ha tasques registrades per aquest element."
+            "task": "Task",
+            "description": "Description",
+            "workOrder": "Work Order",
+            "status": "Status",
+            "noTasks": "No tasks registered for this element."
           }
         }
       },
+
       "resources": {
+        "title": "Resources",
         "form": {
           "fields": {
-            "description": "Descripció",
-            "name": "Nom",
-            "type": "Tipus"
+            "description": "Description",
+            "name": "Name",
+            "type": "Type"
           },
           "placeholders": {
-            "description": "Introdueix la descripció",
-            "name": "Introdueix el nom",
-            "type": "Selecciona un tipus"
+            "description": "Enter description",
+            "name": "Enter name",
+            "type": "Select a type"
           },
-          "returnButton": "Torna a la llista de recursos",
+          "returnButton": "Return to resource list",
           "submitButton": {
-            "create": "Crear Recurs",
-            "edit": "Desa Canvis"
+            "create": "Create Resource",
+            "edit": "Save Changes"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Desant..."
+            "create": "Creating...",
+            "edit": "Saving..."
           },
           "title": {
-            "create": "Crear Recurs",
-            "edit": "Edita Recurs"
+            "create": "Create Resource",
+            "edit": "Edit Resource"
           },
           "validation": {
-            "description_max": "La descripció no pot excedir els 255 caràcters",
-            "name_format": "El nom només pot contenir lletres, números i espais",
-            "name_max": "El nom no pot excedir els 50 caràcters",
-            "name_min": "El nom ha de tenir almenys 3 caràcters",
-            "name_required": "El nom és obligatori",
-            "type_invalid": "Si us plau, selecciona un tipus de recurs vàlid",
-            "type_required": "El tipus és obligatori",
-            "unit_cost_min": "El cost unitari ha de ser major que 0",
-            "unit_cost_required": "El cost unitari és obligatori",
-            "unit_name_required": "El nom de la unitat és obligatori"
+            "description_max": "Description cannot exceed 255 characters",
+            "name_format": "Name can only contain letters, numbers and spaces",
+            "name_max": "Name cannot exceed 50 characters",
+            "name_min": "Name must be at least 3 characters",
+            "name_required": "Name is required",
+            "type_invalid": "Please select a valid resource type",
+            "type_required": "Type is required",
+            "unit_cost_min": "Unit cost must be greater than 0",
+            "unit_cost_required": "Unit cost is required",
+            "unit_name_required": "Unit name is required"
           }
         },
         "list": {
           "actions": {
-            "delete": "Eliminar tipus de recurs",
-            "edit": "Editar tipus de recurs",
-            "label": "Accions",
-            "create": "Crear recurs"
+            "delete": "Delete resource",
+            "edit": "Edit resource",
+            "label": "Actions",
+            "create": "Create Resource"
           },
           "columns": {
-            "description": "Descripció",
-            "name": "Nom",
-            "type": "Tipus",
-            "unit": "Unitat",
-            "unit_name": "Nom de la unitat",
-            "unit_cost": "Cost unitari"
+            "description": "Description",
+            "name": "Name",
+            "type": "Type",
+            "unit": "Unit",
+            "unit_name": "Unit Name",
+            "unit_cost": "Unit Cost"
           },
           "messages": {
-            "createSuccess": "Tipus de recurs creat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
-            "deleteSuccess": "Tipus de recurs eliminat correctament",
-            "error": "Error guardant el tipus de recurs",
-            "updateSuccess": "Tipus de recurs actualitzat correctament"
-          },
-          "title": "Recursos"
-        },
-        "title": "Tipus de recurs"
+            "createSuccess": "Resource created successfully",
+            "deleteConfirm": "Are you sure you want to delete this resource?",
+            "deleteSuccess": "Resource deleted successfully",
+            "error": "Error saving resource",
+            "updateSuccess": "Resource updated successfully"
+          }
+        }
       },
+
       "resourceTypes": {
+        "title": "Resource Types",
         "form": {
           "placeholders": {
-            "description": "Introdueix la descripció",
-            "name": "Introdueix el nom"
+            "description": "Enter description",
+            "name": "Enter name"
           },
-          "returnButton": "Torna a la llista de tipus de recurs",
+          "returnButton": "Return to resource type list",
           "submitButton": {
-            "create": "Crear Tipus de recurs",
-            "edit": "Desa Canvis"
+            "create": "Create Resource Type",
+            "edit": "Save Changes"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Desant..."
+            "create": "Creating...",
+            "edit": "Saving..."
           },
           "title": {
-            "create": "Crear Tipus de recurs",
-            "edit": "Edita Tipus de recurs"
+            "create": "Create Resource Type",
+            "edit": "Edit Resource Type"
           },
           "validation": {
-            "description_required": "La descripció és obligatòria",
-            "name_invalid": "El nom només pot contenir lletres, números i espais",
-            "name_required": "El nom és obligatori"
+            "description_required": "Description is required",
+            "name_invalid": "Name can only contain letters, numbers, and spaces",
+            "name_required": "Name is required"
           }
         },
         "list": {
           "actions": {
-            "delete": "Elimina tipus de recurs",
-            "edit": "Edita tipus de recurs",
-            "label": "Accions",
-            "create": "Crear tipus de recurs"
+            "delete": "Delete resource type",
+            "edit": "Edit resource type",
+            "label": "Actions",
+            "create": "Create Resource Type"
           },
           "columns": {
-            "description": "Descripció",
-            "name": "Nom"
+            "description": "Description",
+            "name": "Name"
           },
           "messages": {
-            "createSuccess": "Tipus de recurs creat amb èxit",
-            "deleteConfirm": "Estàs segur d'eliminar aquest tipus de recurs?",
-            "deleteSuccess": "Tipus de recurs eliminat amb èxit",
-            "error": "Error en desar el tipus de recurs",
-            "updateSuccess": "Tipus de recurs actualitzat amb èxit"
+            "createSuccess": "Resource type created successfully",
+            "deleteConfirm": "Are you sure you want to delete this resource type?",
+            "deleteSuccess": "Resource type deleted successfully",
+            "error": "Error saving the resource type",
+            "updateSuccess": "Resource type updated successfully"
           }
-        },
-        "title": "Tipus de recurs"
+        }
       },
+
       "stats": {
-        "title": "Estadístiques",
-        "week": "Aquesta Setmana",
-        "month": "Aquest Mes",
-        "custom": "Personalitzat",
-        "startDate": "Data d'inici",
-        "endDate": "Data de finalització",
-        "tasksDone": "Tasques Completades",
-        "tasksNotDone": "Tasques Pendents",
-        "hoursWorked": "Hores Treballades",
-        "fuelConsumption": "Consum de Combustible",
-        "noData": "No hi ha dades per mostrar",
-        "exportCSV": "Exportar a CSV",
+        "title": "Statistics",
+        "week": "This Week",
+        "month": "This Month",
+        "custom": "Custom",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "tasksDone": "Tasks Done",
+        "tasksNotDone": "Pending Tasks",
+        "hoursWorked": "Hours Worked",
+        "fuelConsumption": "Fuel Consumption",
+        "noData": "No data to display",
+        "exportCSV": "Export to CSV",
         "total": "Total",
-        "noDataResourcePeriod": "No hi ha dades disponibles per al tipus de recurs seleccionat i període",
-        "selectResource": "Selecciona un tipus de recurs",
-        "selectResourcePlaceholder": "Cerca el teu tipus de recurs aquí...",
-        "noResourcesAvailable": "No hi ha recursos disponibles",
-        "selectResourcePrompt": "Si us plau, selecciona un recurs per veure el seu ús"
+        "noDataResourcePeriod": "No data available for the selected resource type and period",
+        "selectResource": "Select a resource type",
+        "selectResourcePlaceholder": "Search your resource type here...",
+        "noResourcesAvailable": "No resources available",
+        "selectResourcePrompt": "Please select a resource to view its usage"
       },
+
       "taskTypes": {
+        "title": "Task Types",
         "form": {
           "fields": {
-            "description": "Descripció",
-            "name": "Nom"
+            "description": "Description",
+            "name": "Name"
           },
           "placeholders": {
-            "description": "Introdueix la descripció",
-            "name": "Introdueix el nom"
+            "description": "Enter description",
+            "name": "Enter name"
           },
-          "returnButton": "Torna a la llista de tipus de tasca",
+          "returnButton": "Return to task type list",
           "submitButton": {
-            "create": "Crear Tipus de tasca",
-            "edit": "Desa Canvis"
+            "create": "Create Task Type",
+            "edit": "Save changes"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Desant..."
+            "create": "Creating...",
+            "edit": "Saving..."
           },
           "title": {
-            "create": "Crear Tipus de tasca",
-            "edit": "Edita Tipus de tasca"
+            "create": "Create Task Type",
+            "edit": "Edit Task Type"
           },
           "validation": {
-            "error_numbers": "El nom no pot contenir números o caràcters especials",
-            "name_required": "El nom és obligatori"
+            "error_numbers": "Name cannot contain numbers or special characters",
+            "name_required": "Name is required"
           }
         },
         "list": {
           "actions": {
-            "delete": "Eliminar tipus de tasca",
-            "edit": "Editar tipus de tasca",
-            "label": "Accions",
-            "create": "Crear tipus de tasca"
+            "delete": "Delete task type",
+            "edit": "Edit task type",
+            "label": "Actions",
+            "create": "Create Task Type"
           },
           "columns": {
-            "description": "Descripció",
-            "name": "Nom"
+            "description": "Description",
+            "name": "Task Type"
           },
           "messages": {
-            "createSuccess": "Tipus de recurs creat correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest tipus de recurs?",
-            "deleteSuccess": "Tipus de recurs eliminat correctament",
-            "error": "Error guardant el tipus de recurs",
-            "updateSuccess": "Tipus de recurs actualitzat correctament"
-          },
-          "title": "Tipus de recurs"
-        },
-        "title": "Tipus de recurs"
+            "createSuccess": "Task type created successfully",
+            "deleteConfirm": "Are you sure you want to delete this task type?",
+            "deleteSuccess": "Task type deleted successfully",
+            "error": "Error saving task type",
+            "updateSuccess": "Task type updated successfully"
+          }
+        }
       },
+
       "treeTypes": {
+        "title": "Tree Types",
         "form": {
           "submitButton": {
-            "create": "Crear Tipus d'Arbre",
-            "edit": "Desa Canvis"
+            "create": "Create Tree Type",
+            "edit": "Save Changes"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Desant..."
+            "create": "Creating...",
+            "edit": "Saving..."
           },
           "title": {
-            "create": "Crear Tipus d'Arbre",
-            "edit": "Edita Tipus d'Arbre"
+            "create": "Create Tree Type",
+            "edit": "Edit Tree Type"
           },
           "validation": {
             "alphanumeric": {
-              "family": "La família ha de contenir només caràcters alfanumèrics",
-              "genus": "El gènere ha de contenir només caràcters alfanumèrics",
-              "species": "L'espècie ha de contenir només caràcters alfanumèrics"
+              "family": "Family must contain only alphanumeric characters",
+              "genus": "Genus must contain only alphanumeric characters",
+              "species": "Species must contain only alphanumeric characters"
             },
-            "family": "La família és obligatòria",
-            "genus": "El gènere és obligatori",
-            "species": "L'espècie és obligatòria"
+            "family": "Family is required",
+            "genus": "Genus is required",
+            "species": "Species is required"
           }
         },
         "list": {
           "actions": {
-            "delete": "Elimina Tipus d'Arbre",
-            "edit": "Edita Tipus d'Arbre",
-            "label": "Accions",
-            "create": "Crear tipus d'arbre"
+            "delete": "Delete Tree Type",
+            "edit": "Edit Tree Type",
+            "label": "Actions",
+            "create": "Create Tree Type"
           },
           "columns": {
-            "family": "Família",
-            "genus": "Gènere",
-            "species": "Espècie"
+            "family": "Family",
+            "genus": "Genus",
+            "species": "Species"
           },
           "messages": {
-            "createSuccess": "Tipus d'arbre creat amb èxit",
-            "deleteConfirm": "Estàs segur d'eliminar aquest tipus d'arbre?",
-            "deletedSuccess": "Tipus d'arbre eliminat amb èxit",
-            "error": "Error en desar el tipus d'arbre",
-            "updateSuccess": "Tipus d'arbre actualitzat amb èxit"
-          },
-          "title": "Tipus d'arbre"
-        },
-        "title": "Tipus d'element"
+            "createSuccess": "Tree type created successfully",
+            "deleteConfirm": "Are you sure you want to delete this tree type?",
+            "deletedSuccess": "Tree type deleted successfully",
+            "error": "Error saving tree type",
+            "updateSuccess": "Tree type updated successfully"
+          }
+        }
       },
+
       "users": {
+        "title": "Users",
         "form": {
           "placeholders": {
-            "password": "Contrasenya",
-            "passwordEdit": "Contrasenya (deixar en blanc per no canviar)",
-            "role": "Selecciona un rol"
+            "password": "Password",
+            "passwordEdit": "Password (leave blank to keep unchanged)",
+            "role": "Select a role"
           },
-          "returnButton": "Tornar a la llista d'usuaris",
+          "returnButton": "Return to user list",
           "submitButton": {
-            "create": "Crea Usuari",
-            "edit": "Desa Canvis"
+            "create": "Create User",
+            "edit": "Save Changes"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Desant..."
+            "create": "Creating...",
+            "edit": "Saving..."
           },
           "title": {
-            "create": "Crea Usuari",
-            "edit": "Edita Usuari"
+            "create": "Create User",
+            "edit": "Edit User"
           },
           "validation": {
-            "email_required": "El correu és obligatori",
-            "invalid_email": "Correu invàlid",
-            "name_required": "El nom és obligatori",
-            "password_min": "Ha de tenir almenys 8 caràcters",
-            "password_number": "Ha de contenir almenys un número",
-            "password_required": "La contrasenya és obligatòria",
-            "password_special": "Ha de contenir almenys un caràcter especial",
-            "password_uppercase": "Ha de contenir almenys una lletra majúscula",
-            "role_invalid": "Rol no vàlid",
-            "surname_required": "El cognom és obligatori"
+            "email_required": "Email is required",
+            "invalid_email": "Invalid email address",
+            "name_required": "Name is required",
+            "password_min": "Must be at least 8 characters",
+            "password_number": "Must contain at least one number",
+            "password_required": "Password is required",
+            "password_special": "Must contain at least one special character",
+            "password_uppercase": "Must contain at least one uppercase letter",
+            "role_invalid": "Invalid role",
+            "surname_required": "Surname is required"
           }
         },
         "list": {
           "actions": {
-            "delete": "Elimina usuari",
-            "edit": "Edita usuari",
-            "label": "Accions",
-            "create": "Crear usuari"
+            "delete": "Delete User",
+            "edit": "Edit User",
+            "label": "Actions",
+            "create": "Create User"
           },
           "columns": {
-            "company": "Empresa",
-            "dni": "DNI",
-            "email": "Correu electrònic",
-            "name": "Nom",
-            "role": "Rol",
-            "surname": "Cognom"
+            "company": "Company",
+            "dni": "ID card",
+            "email": "Email",
+            "name": "Name",
+            "role": "Role",
+            "surname": "Surname"
           },
           "messages": {
-            "createSuccess": "Usuari creat amb èxit",
-            "deleteConfirm": "Estàs segur d'eliminar aquest usuari?",
-            "deleteSuccess": "Usuari eliminat amb èxit",
-            "error": "Error en desar l'usuari",
-            "updateSuccess": "Usuari actualitzat amb èxit"
+            "createSuccess": "User created successfully",
+            "deleteConfirm": "Are you sure you want to delete this user?",
+            "deleteSuccess": "User deleted successfully",
+            "error": "Error saving user",
+            "updateSuccess": "User updated successfully"
           }
-        },
-        "title": "Usuaris"
+        }
       },
+
       "workOrders": {
+        "title": "Work Orders",
         "details": {
-          "block": "Bloc",
-          "noBlocks": "Cap bloc",
-          "noBlocksAvailable": "No hi ha blocs disponibles per aquesta ordre de treball",
+          "block": "Block",
+          "noBlocks": "No blocks",
+          "noBlocksAvailable": "No blocks available for this work order",
           "noNotes": "N/A",
-          "noTasks": "Cap tasca assignada",
+          "noTasks": "No tasks assigned",
           "notes": "Notes",
-          "noUsers": "Cap usuari assignat",
-          "noZones": "Cap zona assignada",
-          "tasks": "Tasques",
-          "unknown": "Desconegut",
+          "noUsers": "No users assigned",
+          "noZones": "No zones assigned",
+          "tasks": "Tasks",
+          "unknown": "Unknown",
           "zones": "Zones"
         },
         "form": {
-          "blocksTitle": "Blocs de Treball",
+          "blocksTitle": "Work Blocks",
           "buttons": {
-            "addBlock": "Afegir Bloc",
-            "addTask": "Afegir Tasca"
+            "addBlock": "Add Block",
+            "addTask": "Add Task"
           },
           "fields": {
-            "block": "Bloc",
-            "date": "Data",
-            "elementType": "Tipus d'element",
+            "block": "Block",
+            "date": "Date",
+            "elementType": "Element Type",
             "notes": "Notes",
-            "task": "Tasca",
-            "taskType": "Nom",
-            "treeType": "Espècie d'arbre",
-            "users": "Treballadors",
+            "task": "Task",
+            "taskType": "Task Type",
+            "treeType": "Tree Species",
+            "users": "Workers",
             "zones": "Zones"
           },
           "noContract": {
-            "message": "Has de seleccionar un contracte al panell superior per crear una ordre de treball.",
-            "title": "Cap contracte seleccionat"
+            "message": "You must select a contract in the top panel to create a work order.",
+            "title": "No contract selected"
           },
           "placeholders": {
-            "elementType": "Selecciona tipus d'element",
-            "notes": "Afegeix notes per aquest bloc de treball...",
-            "status": "Selecciona un estat",
-            "taskType": "Selecciona tipus de tasca",
-            "treeType": "Selecciona espècie d'arbre",
-            "users": "Selecciona treballadors",
-            "zones": "Selecciona zones per aquest bloc"
+            "elementType": "Select element type",
+            "notes": "Add notes for this work block...",
+            "status": "Select a status",
+            "taskType": "Select task type",
+            "treeType": "Select tree species",
+            "users": "Select workers",
+            "zones": "Select zones for this block"
           },
-          "removeBlock": "Eliminar bloc",
-          "removeTask": "Eliminar tasca",
-          "returnButton": "Tornar a la llista d'ordres de treball",
+          "removeBlock": "Remove block",
+          "removeTask": "Remove task",
+          "returnButton": "Return to work order list",
           "submitButton": {
-            "create": "Crear Ordre de Treball",
-            "edit": "Guardar Canvis"
+            "create": "Create Work Order",
+            "edit": "Save Changes"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Guardant..."
+            "create": "Creating...",
+            "edit": "Saving..."
           },
           "title": {
-            "create": "Crear Ordre de Treball",
-            "edit": "Editar Ordre de Treball"
+            "create": "Create Work Order",
+            "edit": "Edit Work Order"
           },
           "validation": {
-            "blocks_required": "Es requereix almenys un bloc",
-            "date_required": "La data és obligatòria",
-            "element_type_required": "El tipus d'element és obligatori",
-            "task_type_required": "El tipus de tasca és obligatori",
-            "tasks_required": "Es requereix almenys una tasca",
-            "users_required": "S'ha de seleccionar almenys un treballador",
-            "zones_required": "S'ha de seleccionar almenys una zona"
+            "blocks_required": "At least one block is required",
+            "date_required": "Date is required",
+            "element_type_required": "Element type is required",
+            "task_type_required": "Task type is required",
+            "tasks_required": "At least one task is required",
+            "users_required": "At least one worker must be selected",
+            "zones_required": "At least one zone must be selected"
           }
         },
         "list": {
           "actions": {
-            "delete": "Eliminar ordre de treball",
-            "edit": "Editar ordre de treball",
-            "label": "Accions",
-            "viewReport": "Veure informe",
-            "create": "Crear ordre de treball"
+            "delete": "Delete work order",
+            "edit": "Edit work order",
+            "label": "Actions",
+            "viewReport": "View report",
+            "create": "Create Work Order"
           },
           "columns": {
-            "contract": "Contracte",
-            "date": "Data",
+            "contract": "Contract",
+            "date": "Date",
             "id": "ID",
-            "reportStatus": "Estat de l'informe",
-            "status": "Estat",
-            "users": "Treballadors"
+            "reportStatus": "Report Status",
+            "status": "Status",
+            "users": "Workers"
           },
           "messages": {
-            "createSuccess": "Ordre de treball creada correctament",
-            "deleteConfirm": "Estàs segur que vols eliminar aquesta ordre de treball?",
-            "deleteSuccess": "Ordre de treball eliminada correctament",
-            "error": "Error guardant l'ordre de treball",
-            "noData": "No hi ha ordres de treball disponibles",
-            "updateSuccess": "Ordre de treball actualitzada correctament"
+            "createSuccess": "Work order created successfully",
+            "deleteConfirm": "Are you sure you want to delete this work order?",
+            "deleteSuccess": "Work order deleted successfully",
+            "error": "Error saving work order",
+            "noData": "No work orders available",
+            "updateSuccess": "Work order updated successfully"
           }
         },
         "reportStatus": {
-          "closedWithIncidents": "Tancat amb incidències",
-          "completed": "Completat",
-          "pending": "Pendent",
-          "rejected": "Rebutjat",
-          "unknown": "Desconegut"
+          "closedWithIncidents": "Closed with Incidents",
+          "completed": "Completed",
+          "pending": "Pending",
+          "rejected": "Rejected",
+          "unknown": "Unknown",
+          "noReports": "No Reports"
         },
         "status": {
-          "completed": "Completat",
-          "inProgress": "En progrés",
-          "notStarted": "No iniciat",
-          "reportSent": "Informe Enviat",
-          "unknown": "Desconegut"
-        },
-        "title": "Ordres de treball"
+          "completed": "Completed",
+          "inProgress": "In Progress",
+          "notStarted": "Not Started",
+          "reportSent": "Report Sent",
+          "unknown": "Unknown"
+        }
       },
+
       "workReport": {
-        "title": "Informe de Treball",
-        "not_found": "No s'ha trobat l'Informe de Treball",
+        "title": "Work Report",
+        "not_found": "Work report not found",
         "columns": {
-          "users": "Treballadors",
-          "observation": "Observació",
-          "spent_fuel": "Combustible Gastat",
-          "incidents": "Incidències",
+          "users": "Workers",
+          "observation": "Observation",
+          "spent_fuel": "Spent Fuel",
+          "incidents": "Incidents",
           "zones": "Zones",
-          "tasks": "Tasques",
+          "tasks": "Tasks",
           "notes": "Notes",
-          "block": "Bloc",
-          "resources": "Recursos"
+          "block": "Block",
+          "resources": "Resources"
         },
         "messages": {
-          "closing_part": "Tancant part...",
-          "part_closed": "Part tancat amb èxit",
-          "closing_block": "Tancant bloc...",
-          "close_block": "Bloc tancat amb èxit",
-          "closing_with_incidents": "Tancant bloc amb incidències...",
-          "close_with_incidents": "Bloc tancat amb incidències",
-          "rejecting": "Rebutjant bloc...",
-          "reject": "Bloc rebutjat",
-          "closing_with_observations": "Tancant informe amb observacions...",
-          "close_with_observations": "Informe tancat amb observacions",
-          "error_updating_observations": "Error en actualitzar observacions",
-          "observation_updated": "Observació actualitzada correctament",
-          "error_updating_observation": "Error en actualitzar l'observació",
-          "already_processed": "Aquest informe de treball ja ha estat processat i no es pot modificar."
+          "closing_part": "Closing work report...",
+          "part_closed": "Part successfully closed",
+          "closing_block": "Closing block...",
+          "close_block": "Block successfully closed",
+          "closing_with_incidents": "Closing work report with incidents...",
+          "close_with_incidents": "Block closed with incidents",
+          "rejecting": "Rejecting work report...",
+          "reject": "Block rejected",
+          "closing_with_observations": "Closing report with observations...",
+          "close_with_observations": "Report closed with observations",
+          "error_updating_status": "Error updating work report status",
+          "error_updating_observations": "Error updating observations",
+          "observation_updated": "Observation updated successfully",
+          "error_updating_observation": "Error updating observation",
+          "already_processed": "This work report has already been processed",
+          "observations_required": "Observations are required when closing with incidents"
         },
         "reportStatus": {
-          "pending": "Pendent",
-          "completed": "Completat",
-          "rejected": "Rebutjat",
-          "closedWithIncidents": "Tancat amb incidències",
-          "unknown": "Desconegut"
+          "pending": "Pending",
+          "completed": "Completed",
+          "rejected": "Rejected",
+          "closedWithIncidents": "Closed with Incidents",
+          "unknown": "Unknown"
         },
         "taskStatus": {
-          "pending": "Pendent",
-          "inProgress": "En Progrés",
-          "completed": "Completada",
-          "unknown": "Desconegut"
+          "pending": "Pending",
+          "inProgress": "In Progress",
+          "completed": "Completed",
+          "unknown": "Unknown"
         },
         "details": {
-          "details": "Detalls",
-          "block": "Bloc",
-          "noBlocks": "No hi ha blocs",
-          "noBlocksAvailable": "No hi ha blocs disponibles per aquest informe de treball",
-          "noNotes": "No hi ha notes",
-          "noTasks": "No hi ha tasques assignades",
+          "details": "Details",
+          "block": "Block",
+          "noBlocks": "No blocks",
+          "noBlocksAvailable": "No blocks available for this work report",
+          "tasks": "Tasks",
+          "hours": "Hours",
+          "spentFuel": "Spent Fuel",
+          "liters": "liters",
+          "noUsers": "No users assigned",
+          "noTasks": "No tasks available",
+          "noZones": "No zones assigned",
           "notes": "Notes",
-          "noUsers": "No hi ha usuaris assignats",
-          "noZones": "No hi ha zones assignades",
-          "tasks": "Tasques",
-          "unknown": "Desconegut",
+          "noNotes": "No notes available",
+          "noResources": "No resources used",
+          "noIncidents": "No incidents recorded",
+          "unknown": "Unknown",
           "zones": "Zones",
-          "resources": "Recursos",
-          "observation": "Observació",
-          "noObservation": "No hi ha observació disponible",
-          "incidents": "Incidències",
-          "noIncidents": "No hi ha incidències registrades",
-          "spentFuel": "Combustible Gastat",
-          "taskStatus": "Estat de la Tasca",
-          "hours": "Hores",
-          "unit": "Unitat",
-          "cost": "Cost",
-          "quantity": "Quantitat",
-          "liters": "Litres"
+          "resources": "Resources",
+          "observation": "Observation",
+          "noObservation": "No observation available",
+          "incidents": "Incidents"
         },
         "dialogs": {
-          "observationHeader": "Afegeix Observacions",
-          "observationMessage": "Si us plau, proporciona les teves observacions abans de tancar l'informe.",
-          "observationPlaceholder": "Introdueix les teves observacions aquí...",
-          "editObservationHeader": "Edita Observació",
-          "editObservationMessage": "Modifica l'observació per aquest informe.",
-          "editObservationPlaceholder": "Introdueix la teva observació actualitzada aquí..."
+          "observationHeader": "Add Observations",
+          "observationMessage": "Please provide observations for this work report",
+          "observationPlaceholder": "Enter your observations here...",
+          "editObservationHeader": "Edit Observation",
+          "editObservationMessage": "Modify the observation for this report",
+          "editObservationPlaceholder": "Enter your updated observation here..."
         }
       },
+
       "work_reports": {
-        "title": "Informe de Treball",
-        "not_found": "No s'ha trobat l'Informe de Treball",
-        "details": "Detalls",
+        "title": "Work Report",
+        "not_found": "Work Report not found",
+        "details": "Details",
         "columns": {
-          "observation": "Observació",
-          "spent_fuel": "Combustible Gastat",
-          "incidents": "Incidències",
+          "observation": "Observation",
+          "spent_fuel": "Spent Fuel",
+          "incidents": "Incidents",
           "zones": "Zones",
-          "tasks": "Tasques",
+          "tasks": "Tasks",
           "notes": "Notes",
-          "block": "Bloc"
+          "block": "Block"
         },
         "messages": {
-          "closing_part": "Tancant part...",
-          "part_closed": "Part tancat amb èxit",
-          "closing_block": "Tancant bloc...",
-          "close_block": "Bloc tancat amb èxit",
-          "closing_with_incidents": "Tancant bloc amb incidències...",
-          "close_with_incidents": "Bloc tancat amb incidències",
-          "rejecting": "Rebutjant bloc...",
-          "reject": "Bloc rebutjat"
+          "closing_part": "Closing part...",
+          "part_closed": "Part successfully closed",
+          "closing_block": "Closing block...",
+          "close_block": "Block successfully closed",
+          "closing_with_incidents": "Closing block with incidents...",
+          "close_with_incidents": "Block closed with incidents",
+          "rejecting": "Rejecting block...",
+          "reject": "Block rejected"
         }
       },
+
       "workers": {
-        "title": "Gestió de Treballadors",
-        "assignRemoveWorkers": "Assignar/Eliminar Treballadors",
-        "selectWorkers": "Seleccionar Treballadors",
-        "selected": "Seleccionat",
-        "workersForContract": "Treballadors per al contracte seleccionat",
-        "noWorkersAssigned": "No hi ha treballadors assignats a aquest contracte",
-        "useDropdownToAssign": "Utilitza el menú desplegable de dalt per assignar treballadors",
-        "selectWorkerHelp": "Selecciona o desselecciona treballadors per assignar-los a aquest contracte",
-        "noWorkersFound": "No s'han trobat treballadors",
-        "name": "Nom",
-        "email": "Correu Electrònic",
-        "company": "Empresa",
-        "dni": "DNI",
-        "pleaseSelectContract": "Si us plau, selecciona primer un contracte",
-        "updatedSuccessfully": "Treballadors actualitzats correctament",
-        "failedToLoad": "Error en carregar els treballadors",
-        "failedToUpdate": "Error en actualitzar els treballadors"
+        "title": "Workers Management",
+        "assignRemoveWorkers": "Assign/Remove Workers",
+        "selectWorkers": "Select Workers",
+        "selected": "Selected",
+        "workersForContract": "Workers for the selected contract",
+        "noWorkersAssigned": "No workers assigned to this contract",
+        "useDropdownToAssign": "Use the dropdown above to assign workers",
+        "selectWorkerHelp": "Select or unselect workers to assign them to this contract",
+        "noWorkersFound": "No workers found",
+        "name": "Name",
+        "email": "Email",
+        "company": "Company",
+        "dni": "ID Card",
+        "pleaseSelectContract": "Please select a contract first",
+        "updatedSuccessfully": "Workers updated successfully",
+        "failedToLoad": "Failed to load workers",
+        "failedToUpdate": "Failed to update workers"
       },
+
       "sensors": {
         "title": {
           "title": "Sensors",
-          "create": "Crear Sensor",
-          "edit": "Editar Sensor",
-          "delete": "Eliminar Sensor"
+          "create": "Create Sensor",
+          "edit": "Edit Sensor",
+          "delete": "Delete Sensor"
         },
-        "loading": "Carregant dades del sensor...",
-        "backButton": "Torna enrere",
-        "notFound": "Sensor no trobat",
-        "loadError": "Error en carregar les dades del sensor.",
-        "identification": "Identificació",
-        "status": "Estat",
-        "soilMeasurements": "Mesures del sòl",
+        "loading": "Loading sensor data...",
+        "backButton": "Go back",
+        "notFound": "Sensor not found",
+        "loadError": "Error loading sensor data.",
+        "identification": "Identification",
+        "status": "Status",
+        "soilMeasurements": "Soil Measurements",
         "fields": {
           "id": "ID",
           "dev_eui": "DevEUI",
-          "device_name": "Nom del dispositiu",
-          "bat": "Bateria",
-          "battery": "Bateria",
+          "device_name": "Device Name",
+          "bat": "Battery",
+          "battery": "Battery",
           "rssi": "RSSI",
           "snr": "SNR",
-          "last_seen": "Última actualització",
-          "temp_soil": "Temperatura del sòl",
-          "ph1_soil": "pH del sòl",
-          "water_soil": "Humitat del sòl",
-          "conductor_soil": "Conductivitat del sòl",
+          "last_seen": "Last Seen",
+          "temp_soil": "Soil Temperature",
+          "ph1_soil": "Soil pH",
+          "water_soil": "Soil Moisture",
+          "conductor_soil": "Soil Conductivity",
           "eui": "DevEUI",
-          "name": "Nom del dispositiu",
-          "longitude": "Longitud",
-          "latitude": "Latitud"
+          "name": "Device Name",
+          "longitude": "Longitude",
+          "latitude": "Latitude"
         },
         "form": {
           "title": {
-            "create": "Crear Sensor",
-            "edit": "Editar Sensor",
-            "delete": "Eliminar Sensor"
+            "create": "Create Sensor",
+            "edit": "Edit Sensor",
+            "delete": "Delete Sensor"
           },
           "validation": {
-            "eui_required": "El EUI és obligatori",
-            "eui_min": "El EUI ha de tenir almenys 8 caràcters",
-            "eui_max": "El EUI ha de tenir menys de 32 caràcters",
-            "eui_format": "El EUI ha d'estar en format hexadecimal (0-9, a-f)",
-            "name_required": "El nom és obligatori",
-            "name_min": "El nom ha de tenir almenys 3 caràcters",
-            "name_max": "El nom ha de tenir menys de 50 caràcters",
-            "name_format": "El nom només pot contenir lletres, números, espais, guions i guions baixos",
-            "longitude_required": "La longitud és obligatòria",
-            "longitude_format": "Longitud no vàlida (ha de ser entre -180 i 180)",
-            "latitude_required": "La latitud és obligatòria",
-            "latitude_format": "Latitud no vàlida (ha de ser entre -90 i 90)"
+            "eui_required": "EUI is required",
+            "eui_min": "EUI must be at least 8 characters",
+            "eui_max": "EUI must be less than 32 characters",
+            "eui_format": "EUI must be in hexadecimal format (0-9, a-f)",
+            "name_required": "Name is required",
+            "name_min": "Name must be at least 3 characters",
+            "name_max": "Name must be less than 50 characters",
+            "name_format": "Name can only contain letters, numbers, spaces, dashes, and underscores",
+            "longitude_required": "Longitude is required",
+            "longitude_format": "Invalid longitude (must be between -180 and 180)",
+            "latitude_required": "Latitude is required",
+            "latitude_format": "Invalid latitude (must be between -90 and 90)"
           },
           "submitButton": {
-            "create": "Crear Sensor",
-            "edit": "Actualitzar Sensor"
+            "create": "Create Sensor",
+            "edit": "Update Sensor"
           },
           "submittingText": {
-            "create": "Creant...",
-            "edit": "Actualitzant..."
+            "create": "Creating...",
+            "edit": "Updating..."
           }
         },
         "list": {
           "messages": {
-            "createSuccess": "Sensor creat correctament",
-            "updateSuccess": "Sensor actualitzat correctament",
-            "euiTaken": "El EUI ja està en ús",
-            "error": "Error en guardar el sensor",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest sensor?",
-            "deleteError": "Error en eliminar el sensor",
-            "deletedSuccess": "Sensor eliminat correctament"
+            "createSuccess": "Sensor created successfully",
+            "updateSuccess": "Sensor updated successfully",
+            "euiTaken": "EUI is already in use",
+            "error": "Error saving sensor",
+            "deleteConfirm": "Are you sure you want to delete this sensor?",
+            "deleteError": "Error deleting sensor",
+            "deletedSuccess": "Sensor deleted successfully"
           },
           "actions": {
-            "create": "Crear Sensor",
-            "edit": "Editar Sensor",
-            "delete": "Eliminar Sensor"
+            "create": "Create Sensor",
+            "edit": "Edit Sensor",
+            "delete": "Delete Sensor"
           }
         },
         "errors": {
-          "no_contract": "Has de seleccionar un contracte vàlid"
+          "no_contract": "You must select a valid contract"
         }
+      },
+      "error": {
+        "fetching_data": "Error fetching data",
+        "error": "Error"
+      },
+      "general": {
+        "returnButton": "Return"
       }
     }
   },
   "worker": {
     "workOrders": {
-      "title": "Ordres de treball",
-      "selectDate": "Seleccionar Data",
-      "noWorkOrders": "Sense Ordres de Treball",
-      "noWorkOrdersMessage": "No hi ha ordres de treball assignades per a la data seleccionada. Intenta triar una data diferent o contacta amb el teu supervisor si creus que hauria d'haver-hi treball assignat.",
-      "block": "Bloc",
+      "title": "Work Orders",
+      "selectDate": "Select Date",
+      "noWorkOrders": "No Work Orders",
+      "noWorkOrdersMessage": "No work orders assigned for the selected date. Try choosing a different date or contact your supervisor if you believe there should be work assigned.",
+      "block": "Block",
       "zones": "Zones",
-      "noZones": "No hi ha zones assignades",
-      "tasks": "Tasques",
+      "noZones": "No zones assigned",
+      "tasks": "Tasks",
       "notes": "Notes",
-      "addResources": "Afegir Recursos",
-      "saveResources": "Desar Recursos",
-      "resourceTypePlaceholder": "Selecciona un tipus de recurs...",
-      "resourceTypeLabel": "Tipus de Recurs",
-      "resourcePlaceholder": "Selecciona un recurs...",
-      "availableResources": "Recursos Disponibles",
-      "selectedResources": "Recursos Seleccionats",
-      "noResourcesSelected": "Encara no has seleccionat recursos",
-      "noResourcesInType": "No hi ha recursos disponibles per a aquest tipus",
-      "selectResourcesHelp": "Primer selecciona un tipus de recurs, després tria recursos específics per afegir",
-      "totalResources": "Total de recursos",
-      "quantity": "Quantitat",
-      "unitCost": "Cost Unitari",
-      "removeResource": "Eliminar Recurs",
-      "createReport": "Crear Informe",
-      "viewDetails": "Veure Detalls",
-      "reportAlreadySent": "Informe Ja Enviat",
-      "noContract": "No s'ha seleccionat cap contracte. Si us plau, selecciona un contracte per veure les ordres de treball.",
+      "addResources": "Add Resources",
+      "saveResources": "Save Resources",
+      "resourceTypePlaceholder": "Select a resource type...",
+      "resourceTypeLabel": "Resource Type",
+      "resourcePlaceholder": "Select a resource...",
+      "availableResources": "Available Resources",
+      "selectedResources": "Selected Resources",
+      "noResourcesSelected": "No resources selected yet",
+      "noResourcesInType": "No resources available for this type",
+      "selectResourcesHelp": "First select a resource type, then choose specific resources to add",
+      "totalResources": "Total resources",
+      "quantity": "Quantity",
+      "unitCost": "Unit Cost",
+      "removeResource": "Remove Resource",
+      "createReport": "Create Report",
+      "viewDetails": "View Details",
+      "reportAlreadySent": "Report Already Sent",
+      "noContract": "No contract selected. Please select a contract to view work orders.",
       "taskStatus": {
-        "pending": "Pendent",
-        "inProgress": "En Progrés",
-        "completed": "Completada"
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed"
       },
-      "startTask": "Iniciar Tasca",
-      "completeTask": "Completar Tasca",
-      "reopenTask": "Reobrir Tasca",
-      "timeSpent": "Temps Emprat",
+      "startTask": "Start Task",
+      "completeTask": "Complete Task",
+      "reopenTask": "Reopen Task",
+      "timeSpent": "Time Spent",
       "status": {
-        "notStarted": "No Iniciada",
-        "inProgress": "En Progrés",
-        "completed": "Completada",
-        "reportSent": "Informe Enviat",
-        "unknown": "Desconegut"
+        "notStarted": "Not Started",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "reportSent": "Report Sent",
+        "unknown": "Unknown"
       },
-      "timeSpentDialog": "Temps Emprat",
-      "enterTimeSpent": "Introdueix el temps emprat en aquesta tasca:",
-      "complete": "Completar",
-      "start": "Iniciar",
-      "reopen": "Reobrir",
+      "timeSpentDialog": "Time Spent",
+      "enterTimeSpent": "Enter the time spent on this task:",
+      "complete": "Complete",
+      "start": "Start",
+      "reopen": "Reopen",
       "errors": {
-        "taskUpdateFailed": "Error en actualitzar l'estat de la tasca",
-        "resourcesFetchFailed": "Error en obtenir els recursos disponibles",
-        "resourcesSaveFailed": "Error en desar els recursos",
-        "workOrderCompleted": "No es pot modificar una ordre de treball completada",
-        "fetchFailed": "Error en obtenir les ordres de treball"
+        "taskUpdateFailed": "Failed to update the task status",
+        "resourcesFetchFailed": "Failed to fetch available resources",
+        "resourcesSaveFailed": "Failed to save resources",
+        "workOrderCompleted": "Cannot modify a completed work order",
+        "fetchFailed": "Failed to fetch work orders"
       },
       "messages": {
-        "resourcesAdded": "Recursos afegits correctament",
-        "taskUpdated": "Tasca actualitzada correctament"
+        "resourcesAdded": "Resources added successfully",
+        "taskUpdated": "Task updated successfully"
+      },
+      "createWorkReport": "Create Work Report",
+      "spentFuel": "Spent Fuel (Liters)",
+      "resourceType": "Resource Type",
+      "resources": "Resources",
+      "addResource": "Add Resource",
+      "resource": "Resource {0}",
+      "resourceName": "Resource Name",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "selectResourceTypeFirst": "Please select a resource type first",
+      "noResourcesForType": "No resources available for this type",
+      "noResourceTypes": "No resource types available",
+      "observations": "Observations",
+      "observationsPlaceholder": "Enter any observations or incidents here",
+      "submitReport": "Submit Report",
+      "taskUpdated": "Task updated successfully",
+      "messages": {
+        "reportCreated": "Work report created successfully",
+        "resourcesAdded": "Resources added successfully"
+      },
+      "errors": {
+        "noResourcesSelected": "Please select at least one resource",
+        "reportCreationFailed": "Failed to create work report"
       }
     },
     "workReports": {
-      "title": "Informes de Treball",
-      "create": "Crear Informe de Treball"
+      "title": "Work Reports",
+      "create": "Create Work Report"
     }
   }
 }

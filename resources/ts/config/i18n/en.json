@@ -28,6 +28,8 @@
     "error": "Error",
     "success": "Success",
     "not_available": "Not available",
+    "warning": "Warning",
+    "cancel": "Cancel",
     "actions": {
       "cancel": "Cancel",
       "confirm": "Confirm",
@@ -1147,7 +1149,8 @@
           "completed": "Completed",
           "pending": "Pending",
           "rejected": "Rejected",
-          "unknown": "Unknown"
+          "unknown": "Unknown",
+          "noReports": "No Reports"
         },
         "status": {
           "completed": "Completed",
@@ -1361,6 +1364,13 @@
         "errors": {
           "no_contract": "You must select a valid contract"
         }
+      },
+      "error": {
+        "fetching_data": "Error fetching data",
+        "error": "Error"
+      },
+      "general": {
+        "returnButton": "Return"
       }
     }
   },
@@ -1424,6 +1434,30 @@
       "messages": {
         "resourcesAdded": "Resources added successfully",
         "taskUpdated": "Task updated successfully"
+      },
+      "createWorkReport": "Create Work Report",
+      "spentFuel": "Spent Fuel (Liters)",
+      "resourceType": "Resource Type",
+      "resources": "Resources",
+      "addResource": "Add Resource",
+      "resource": "Resource {0}",
+      "resourceName": "Resource Name",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "selectResourceTypeFirst": "Please select a resource type first",
+      "noResourcesForType": "No resources available for this type",
+      "noResourceTypes": "No resource types available",
+      "observations": "Observations",
+      "observationsPlaceholder": "Enter any observations or incidents here",
+      "submitReport": "Submit Report",
+      "taskUpdated": "Task updated successfully",
+      "messages": {
+        "reportCreated": "Work report created successfully",
+        "resourcesAdded": "Resources added successfully"
+      },
+      "errors": {
+        "noResourcesSelected": "Please select at least one resource",
+        "reportCreationFailed": "Failed to create work report"
       }
     },
     "workReports": {
