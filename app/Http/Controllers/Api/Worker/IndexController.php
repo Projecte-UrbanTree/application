@@ -190,7 +190,7 @@ class IndexController extends Controller
             $validated = $request->validate([
                 'work_order_id' => ['required', 'integer', 'exists:work_orders,id'],
                 'spent_fuel' => ['required', 'numeric', 'min:0'],
-                'observation' => ['nullable', 'string'],
+                'report_incidents' => ['nullable', 'string'],
                 'report_status' => ['required', 'integer', 'in:0,1,2,3'],
                 'resources' => ['nullable', 'array'],
                 'resources.*.resource_id' => ['required', 'integer', 'exists:resources,id'],
@@ -214,7 +214,7 @@ class IndexController extends Controller
 
             if ($existingReport) {
                 $existingReport->spent_fuel = $validated['spent_fuel'];
-                $existingReport->observation = $validated['observation'] ?? null;
+                $existingReport->report_incidents = $validated['report_incidents'] ?? null;
                 $existingReport->report_status = self::REPORT_STATUS_PENDING;
                 $existingReport->save();
 
@@ -245,7 +245,7 @@ class IndexController extends Controller
                 $workReport = WorkReport::create([
                     'work_order_id' => $validated['work_order_id'],
                     'spent_fuel' => $validated['spent_fuel'],
-                    'observation' => $validated['observation'] ?? null,
+                    'report_incidents' => $validated['report_incidents'] ?? null,
                     'report_status' => $validated['report_status'],
                 ]);
 

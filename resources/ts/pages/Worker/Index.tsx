@@ -5,7 +5,6 @@ import {
   WorkOrderStatus,
   type WorkOrderBlock,
   type WorkOrderBlockTask,
-  type WorkReport,
 } from '@/types/WorkOrders';
 import type { Zone } from '@/types/Zone';
 import { Icon } from '@iconify/react';
@@ -92,7 +91,7 @@ const WorkerWorkOrders = () => {
     },
   ]);
   const [spentFuel, setSpentFuel] = useState<number>(0);
-  const [observation, setObservation] = useState<WorkReport['observation']>('');
+  const [reportIncidents, setReportIncidents] = useState<string>('');
   const [submittingReport, setSubmittingReport] = useState(false);
   const [loadingResources, setLoadingResources] = useState(false);
 
@@ -247,7 +246,7 @@ const WorkerWorkOrders = () => {
       await axiosClient.post('/worker/work-reports', {
         work_order_id: workOrderId,
         spent_fuel: spentFuel,
-        observation: observation,
+        report_incidents: reportIncidents,
         report_status: 0,
         resources: resourcesPayload,
       });
@@ -265,7 +264,7 @@ const WorkerWorkOrders = () => {
         },
       ]);
       setSpentFuel(0);
-      setObservation('');
+      setReportIncidents('');
       setSelectedResourceType(null);
 
       fetchWorkOrders(selectedDate);
@@ -504,7 +503,6 @@ const WorkerWorkOrders = () => {
                           </span>
                         </div>
                       )}
-                    asdf
                   </div>
                   <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
                     <Tag
@@ -759,8 +757,8 @@ const WorkerWorkOrders = () => {
             Observaciones
           </label>
           <InputTextarea
-            value={observation}
-            onChange={(e) => setObservation(e.target.value)}
+            value={reportIncidents}
+            onChange={(e) => setReportIncidents(e.target.value)}
             rows={3}
             placeholder="Ingrese cualquier observación o incidencia aquí"
             className="w-full"
