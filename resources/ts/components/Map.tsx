@@ -133,15 +133,9 @@ export const MapComponent: React.FC<MapProps> = ({
     loadData();
   }, [dispatch, currentContract?.id]);
 
-
-  
-
   useEffect(() => {
     if (!mapContainerRef.current || !isDataLoaded) return;
 
-    console.log('Initializing map component');
-    
-    // Limpiar el contenedor del mapa
     while (mapContainerRef.current.firstChild) {
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
     }
@@ -155,15 +149,12 @@ export const MapComponent: React.FC<MapProps> = ({
       initialCoordinates = [centerCoords[0].center[0], centerCoords[0].center[1]];
     }
             
-    // Crear la instancia del servicio de mapa
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, initialCoordinates);
     mapServiceRef.current = service;
     
-    // Configurar controles básicos
     service.addBasicControls();
     service.addGeocoder();
     
-    // Habilitar el dibujo si el usuario es admin
     service.enableDraw(userValue.role !== undefined && userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
@@ -175,72 +166,57 @@ export const MapComponent: React.FC<MapProps> = ({
       }
     });
 
-    // Esperar a que el mapa esté completamente inicializado
     service.waitForInit(() => {
-      console.log('Map is ready, initializing zones and elements');
-      // Una vez que el mapa está listo, inicializamos las zonas y elementos
       updateZones(service);
       updateElements(service);
     });
 
-    // Devolver función de limpieza
     return () => {
-      console.log('Cleaning up map component');
       if (mapServiceRef.current) {
         mapServiceRef.current.resetMap();
       }
     };
   }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords, currentContract?.id]);
 
-  // Manejar cambios de tamaño de ventana
   useEffect(() => {
     const handleResize = () => mapServiceRef.current?.resizeMap();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !selectedZone || !points.length) return;
     if (isZoneJustCreated) {
-      console.log('Evitando flyTo porque la zona fue recién creada');
       setIsZoneJustCreated(false);
       return;
     }
     
-    console.log('Haciendo flyTo a la zona seleccionada', selectedZone.id);
     service.flyTo(selectedZone);
   }, [selectedZone, points, isZoneJustCreated]);
 
-  // Actualizar zonas cuando cambian
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !isDataLoaded) return;
     
-    console.log('Updating zones due to data changes');
     service.waitForInit(() => updateZones(service));
   }, [zonesRedux, points, hiddenZones, isDataLoaded]);
 
-  // Actualizar elementos cuando cambian
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !isDataLoaded) return;
     
-    console.log('Updating elements due to data changes');
     service.waitForInit(() => updateElements(service));
   }, [elements, points, hiddenZones, hiddenElementTypes, isDataLoaded]);
 
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
-      console.log(`Updating visibility for elements of type ${elementTypeId} in zone ${zoneId} to ${!hidden}`);
-      
       const pointsInZone = points.filter((p) => p.zone_id === zoneId);
       const pointIds = new Set(pointsInZone.map((p) => p.id));
 
       const elementsToUpdate = elements
         .filter((element) => element.element_type_id === elementTypeId && pointIds.has(element.point_id!));
         
-      console.log(`Found ${elementsToUpdate.length} elements to update visibility`);
-      
       elementsToUpdate.forEach((element) => {
         if (element.id) {
           service.updateMarkerVisibility(element.id, !hidden);
@@ -254,67 +230,45 @@ export const MapComponent: React.FC<MapProps> = ({
     (zoneId: number, hidden: boolean) => {
       const service = mapServiceRef.current;
       if (!service) {
-        console.error('Map service not initialized in toggleZoneVisibility');
         return;
       }
 
-      console.log(`Map component toggling zone ${zoneId} visibility to ${!hidden}`);
-
       try {
-        // Actualizar el estado local
         setHiddenZones(prev => ({
           ...prev,
           [zoneId]: hidden
         }));
 
-        // Actualizar la visibilidad de la capa en el mapa
         const zoneLayerId = `zone-${zoneId}-fill`;
         
-        // Verificar si la capa existe antes de actualizarla
         try {
           service.updateZoneVisibility(zoneLayerId, !hidden);
-          console.log(`Zone layer ${zoneLayerId} visibility updated to ${!hidden}`);
         } catch (error) {
-          console.warn(`Error updating zone layer ${zoneLayerId}:`, error);
         }
 
-        // Obtener los puntos en esta zona
         const pointsInZone = points.filter((p) => p.zone_id === zoneId);
         const pointIdsInZone = new Set(pointsInZone.map((p) => p.id));
-        
-        console.log(`Found ${pointsInZone.length} points in zone ${zoneId}`);
 
-        // Encontrar elementos en esta zona
         const elementsInZone = elements.filter((element) => 
           element.point_id && pointIdsInZone.has(element.point_id)
         );
         
-        console.log(`Found ${elementsInZone.length} elements in zone ${zoneId} to update visibility`);
-
-        // Ocultar/mostrar los elementos en esta zona
         let visibilityUpdated = 0;
         elementsInZone.forEach((element) => {
           if (!element.id) return;
           
           try {
-            // Si la zona está oculta, ocultamos todos los elementos
             if (hidden) {
               service.updateMarkerVisibility(element.id, false);
               visibilityUpdated++;
             } else {
-              // Si la zona se muestra, todos los elementos deben mostrarse por defecto
-              // para sincronizar con los cambios en Zones.tsx
               service.updateMarkerVisibility(element.id, true);
               visibilityUpdated++;
             }
           } catch (error) {
-            console.error(`Error updating visibility for element ${element.id}:`, error);
           }
         });
-        
-        console.log(`Successfully updated visibility for ${visibilityUpdated} elements`);
       } catch (error) {
-        console.error(`Error in toggleZoneVisibility for zone ${zoneId}:`, error);
       }
     },
     [elements, points, hiddenElementTypes]
@@ -372,37 +326,24 @@ export const MapComponent: React.FC<MapProps> = ({
     [points, onCreatingElementChange]
   );
 
-  // Manejar eventos del sistema de zonas
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service) return;
-
-    console.log('Setting up zone event subscription');
     
     const subscription = eventSubject.subscribe({
       next: (data: ZoneEvent) => {
-        console.log('Received zone event:', data);
-        
-        // Manejar evento showAllElements - mostrar todos los elementos
         if (data.showAllElements || data.forceShow) {
-          console.log('Showing all elements automatically' + (data.forceShow ? ' (forced)' : ''));
           try {
-            // Mostrar todas las zonas si estuvieran ocultas
             zonesRedux.forEach(zone => {
               if (zone.id && (hiddenZones[zone.id] || data.forceShow)) {
                 try {
                   toggleZoneVisibility(zone.id, false);
                 } catch (error) {
-                  console.error(`Error showing zone ${zone.id}:`, error);
                 }
               }
             });
             
             if (data.forceShow && service) {
-              console.log('Forcing element visibility directly on markers');
-              
-              console.log(`Map has ${elements.length} elements to display`);
-              
               let visibilityUpdated = 0;
               elements.forEach(element => {
                 if (element.id) {
@@ -410,12 +351,9 @@ export const MapComponent: React.FC<MapProps> = ({
                     service.updateMarkerVisibility(element.id, true);
                     visibilityUpdated++;
                   } catch (error) {
-                    console.error(`Error updating marker visibility for element ${element.id}:`, error);
                   }
                 }
               });
-              
-              console.log(`Directly updated visibility for ${visibilityUpdated} elements`);
             } else {
               zonesRedux.forEach(zone => {
                 if (!zone.id) return;
@@ -442,30 +380,21 @@ export const MapComponent: React.FC<MapProps> = ({
                     try {
                       updateElementVisibility(zoneId, typeId, false, service);
                     } catch (error) {
-                      console.error(`Error showing element type ${typeId} in zone ${zoneId}:`, error);
                     }
                   }
                 });
               });
             }
-            
-            console.log('All elements shown successfully');
           } catch (error) {
-            console.error('Error showing all elements:', error);
           }
         }
         
-        // Manejar evento de inicialización
         if (data.initializeMap) {
-          console.log('Initializing map from event');
           if (service) {
             try {
-              // Forzar una actualización completa
               updateZones(service);
               updateElements(service);
-              console.log('Map initialization complete');
             } catch (error) {
-              console.error('Error during map initialization:', error);
             }
           }
         }
@@ -486,8 +415,6 @@ export const MapComponent: React.FC<MapProps> = ({
         if (data.hiddenElementTypes) {
           const { zoneId, elementTypeId, hidden } = data.hiddenElementTypes;
           const key = `${zoneId}-${elementTypeId}`;
-
-          console.log(`Setting element type ${elementTypeId} in zone ${zoneId} visibility to ${!hidden}`);
           
           setHiddenElementTypes((prev) => ({
             ...prev,
@@ -497,37 +424,27 @@ export const MapComponent: React.FC<MapProps> = ({
           try {
             updateElementVisibility(zoneId, elementTypeId, hidden, service);
           } catch (error) {
-            console.error(`Error updating element visibility:`, error);
           }
         }
 
         if (data.hiddenZone) {
           const { zoneId, hidden } = data.hiddenZone;
           
-          console.log(`Map received event to set zone ${zoneId} visibility to ${!hidden}`);
-          
           try {
             toggleZoneVisibility(zoneId, hidden);
           } catch (error) {
-            console.error(`Error toggling zone visibility:`, error);
           }
         }
         
-        // Manejar evento de actualización completa
         if (data.refreshMap) {
-          console.log('Received refreshMap event, performing full update');
-          
           try {
-            // Reconstruir zonas y elementos
             updateZones(service);
             updateElements(service);
           } catch (error) {
-            console.error('Error during map refresh:', error);
           }
         }
       },
       error: (err) => {
-        console.error('Error in zone event stream:', err);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -537,7 +454,6 @@ export const MapComponent: React.FC<MapProps> = ({
     });
 
     return () => {
-      console.log('Cleaning up zone event subscription');
       subscription.unsubscribe();
       onCreatingElementChange(false);
       setSelectedZoneForElement(null);
@@ -558,14 +474,9 @@ export const MapComponent: React.FC<MapProps> = ({
     if (!service || !currentContract?.id) return;
     
     try {
-      console.log(`Updating ${zonesRedux.length} zones for contract ${currentContract.id}`);
-      
-      // Limpiar zonas anteriores
       service.removeLayersAndSources('zone-');
       
-      // Filtrar zonas del contrato actual
       const filteredZones = zonesRedux.filter((z) => z.contract_id === currentContract.id);
-      console.log(`Found ${filteredZones.length} zones for current contract`);
       
       filteredZones.forEach((zone: Zone) => {
         if (!zone.id) return;
@@ -581,27 +492,23 @@ export const MapComponent: React.FC<MapProps> = ({
           .filter(Boolean) as [number, number][];
             
         if (zonePoints.length > 2) {
-          zonePoints.push(zonePoints[0]); // Cerrar el polígono
+          zonePoints.push(zonePoints[0]);
           const sourceId = `zone-${zone.id}`;
           const layerId = `zone-${zone.id}-fill`;
           
           service.addZoneToMap(sourceId, layerId, zonePoints, zone.color || '#088');
 
-          // Aplicar visibilidad según el estado
           if (hiddenZones[zone.id]) {
             service.updateZoneVisibility(layerId, false);
           }
         }
       });
     } catch (error) {
-      console.error('Error updating zones:', error);
     }
   }
 
   function updateElements(service: MapService) {
     if (!service || !currentContract) return;
-
-    console.log('Updating elements:', elements.length); // Debug
 
     const handleElementDelete = async (elementId: number) => {
       try {
@@ -626,7 +533,6 @@ export const MapComponent: React.FC<MapProps> = ({
       setSelectedElementId(element.id!);
     };
 
-  
     service.removeElementMarkers();
     
     const zoneIds = new Set(
@@ -635,22 +541,17 @@ export const MapComponent: React.FC<MapProps> = ({
         .map((zone) => zone.id)
     );
     
-    
     const pointIds = new Set(
       points
         .filter((point) => point.zone_id && zoneIds.has(point.zone_id))
         .map((point) => point.id)
     );
     
- 
     const filteredElements = elements.filter(
       (element) => element.point_id && pointIds.has(element.point_id)
     );
-
-    console.log('Filtered elements:', filteredElements.length); // Debug
     
     if (filteredElements.length === 0) {
-      console.log('No elements to display');
       return;
     }
 
@@ -659,7 +560,6 @@ export const MapComponent: React.FC<MapProps> = ({
         (point) => point.zone_id && zoneIds.has(point.zone_id)
       );
       
-      // Agregamos los marcadores al mapa
       service.addElementMarkers(
         filteredElements,
         relevantPoints,
@@ -669,11 +569,9 @@ export const MapComponent: React.FC<MapProps> = ({
         handleElementClick,
       );
       
-      // Primero aplicamos la visibilidad según zonas ocultas
       Object.entries(hiddenZones).forEach(([zoneIdStr, isHidden]) => {
         if (isHidden) {
           const zoneId = Number(zoneIdStr);
-          console.log(`Zone ${zoneId} is hidden, hiding all its elements`);
           
           const pointsInZone = relevantPoints.filter(p => p.zone_id === zoneId);
           
@@ -694,7 +592,6 @@ export const MapComponent: React.FC<MapProps> = ({
           const elementTypeId = Number(elementTypeIdStr);
           
           if (!hiddenZones[zoneId]) {
-            console.log(`Element type ${elementTypeId} in zone ${zoneId} is hidden`);
             updateElementVisibility(zoneId, elementTypeId, true, service);
           }
         }
@@ -728,7 +625,6 @@ export const MapComponent: React.FC<MapProps> = ({
           newZone.color || '#088'
         );
         
-        // Marcar que acabamos de crear una zona para evitar el flyTo automático
         setIsZoneJustCreated(true);
       }
 

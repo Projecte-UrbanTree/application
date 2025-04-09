@@ -39,13 +39,10 @@ export class MapService {
       zoom: 16,
     });
 
-    // Establecer evento para marcar cuando el mapa esté completamente cargado
     this.map.on('load', () => {
-      console.log('Mapbox map fully loaded');
       this.isMapInitialized = true;
-      // Ejecutar todos los callbacks pendientes
       this.initCallbacks.forEach(callback => callback());
-      this.initCallbacks = []; // Limpiar después de ejecutar
+      this.initCallbacks = [];
     });
   }
 
@@ -276,25 +273,20 @@ export class MapService {
     const pointMap = new Map(points.map(p => [p.id, p]));
     const elementTypeMap = new Map(elementTypes.map(et => [et.id, et]));
     
-    console.log(`Adding ${elements.length} markers, with ${points.length} points and ${elementTypes.length} types`);
-    
     let markersAdded = 0;
 
     elements.forEach((element) => {
       if (!element.id || !element.point_id || !element.element_type_id) {
-        console.log(`Skipping element due to missing data:`, element);
         return;
       }
       
       const point = pointMap.get(element.point_id);
       if (!point?.latitude || !point?.longitude) {
-        console.log(`Skipping element ${element.id} due to missing point coordinates`);
         return;
       }
 
       const elementType = elementTypeMap.get(element.element_type_id);
       if (!elementType) {
-        console.log(`Skipping element ${element.id} due to missing element type`);
         return;
       }
 
@@ -314,11 +306,8 @@ export class MapService {
         this.elementMarkers.set(element.id, { marker, elementId: element.id });
         markersAdded++;
       } catch (error) {
-        console.error(`Error adding marker for element ${element.id}:`, error);
       }
     });
-    
-    console.log(`Successfully added ${markersAdded} markers to the map`);
   }
 
   public removeElementMarker(elementId: number): void {
@@ -340,7 +329,7 @@ export class MapService {
     return { lat: point.latitude, lng: point.longitude };
   }
 
-  public async  flyTo(selectedZone: Zone) {
+  public async flyTo(selectedZone: Zone) {
     if (selectedZone.id === null) return;
     const { zoom, center }: ZoneCenterCoord = await getZoneZoom(selectedZone.id!);
     
@@ -352,7 +341,6 @@ export class MapService {
   public onMapLoad(callback: () => void): () => void {
     this.map.on('load', callback);
     
-    // Devolvemos una función para eliminar el evento
     return () => {
       this.map.off('load', callback);
     };
@@ -375,26 +363,18 @@ export class MapService {
 
   public waitForInit(callback: () => void): void {
     if (this.isReady()) {
-      // Si el mapa ya está inicializado, ejecutar inmediatamente
-      console.log('Map already initialized, executing callback immediately');
       callback();
     } else {
-      // Si no, añadir a la lista de espera
-      console.log('Map not yet initialized, queuing callback');
       this.initCallbacks.push(callback);
     }
   }
 
   public resetMap(): void {
-    // Limpieza completa del mapa
-    console.log('Resetting map state');
     this.removeElementMarkers();
     this.clearDraw();
     try {
-      // Intentar remover todas las capas y fuentes
       const style = this.map.getStyle();
       if (style?.layers) {
-        // Eliminar capas que no sean parte del estilo base
         const baseLayers = ['background', 'satellite'];
         style.layers
           .filter(layer => !baseLayers.includes(layer.id))
@@ -406,7 +386,6 @@ export class MapService {
       }
       
       if (style?.sources) {
-        // Eliminar todas las fuentes excepto las del estilo base
         Object.keys(style.sources)
           .filter(sourceId => !sourceId.startsWith('mapbox'))
           .forEach(sourceId => {
@@ -416,7 +395,6 @@ export class MapService {
           });
       }
     } catch (error) {
-      console.error('Error cleaning map:', error);
     }
   }
 }

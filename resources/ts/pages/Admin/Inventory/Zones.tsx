@@ -101,7 +101,6 @@ export const Zones = ({
   useEffect(() => {
     if (!currentContract) return;
 
-    console.log(`Loading initial resources for contract ${currentContract.id}`);
     setIsInitialized(false);
 
     const loadResources = async () => {
@@ -109,16 +108,12 @@ export const Zones = ({
         setHiddenZones({});
         setHiddenElementTypes({});
         
-        console.log('Fetching zones, points and elements...');
         await Promise.all([
           dispatch(fetchZonesAsync()).unwrap(),
           dispatch(fetchPointsAsync()).unwrap(),
           dispatch(fetchElementsAsync()).unwrap(),
         ]);
         
-        console.log('Initial resources loaded for contract');
-        
-        console.log('Broadcasting zone visibility reset');
         eventSubject.next({
           isCreatingElement: false,
           refreshMap: true
@@ -126,7 +121,6 @@ export const Zones = ({
         
         setIsInitialized(true);
       } catch (error) {
-        console.error('Error loading resources:', error);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -141,7 +135,6 @@ export const Zones = ({
   useEffect(() => {
     const loadTypeData = async () => {
       try {
-        console.log('Loading element types and tree types');
         const [elementTypesData, treeTypesData] = await Promise.all([
           fetchElementType(),
           fetchTreeTypes(),
@@ -150,7 +143,6 @@ export const Zones = ({
         setElementTypes(elementTypesData);
         setTreeTypes(treeTypesData);
       } catch (error) {
-        console.error('Error loading type data:', error);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -163,18 +155,14 @@ export const Zones = ({
   }, []);
 
   useEffect(() => {
-    console.log('Setting up element creation event handler');
-    
     const subscription = eventSubject.subscribe({
       next: (data: AddElementProps) => {
         if (data.zone || data.isCreatingElement !== undefined) {
-          console.log('Received element creation event:', data);
           setSelectedZoneToAdd(data.zone || null);
           stopCreatingElement(data.isCreatingElement);
         }
       },
       error: (err) => {
-        console.error('Error in element creation event stream:', err);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -184,7 +172,6 @@ export const Zones = ({
     });
 
     return () => {
-      console.log('Cleaning up element creation event handler');
       subscription.unsubscribe();
     };
   }, [stopCreatingElement]);
@@ -196,7 +183,6 @@ export const Zones = ({
 
   const handleDeleteZone = async (zoneId: number) => {
     try {
-      console.log(`Deleting zone ${zoneId}`);
       await deleteZone(zoneId);
 
       toast.current?.show({
@@ -205,20 +191,17 @@ export const Zones = ({
         detail: 'Zona y puntos eliminados correctamente',
       });
 
-      console.log('Reloading data after zone deletion');
       await Promise.all([
         dispatch(fetchZonesAsync()).unwrap(),
         dispatch(fetchPointsAsync()).unwrap(),
         dispatch(fetchElementsAsync()).unwrap(),
       ]);
       
-      console.log('Broadcasting map refresh after zone deletion');
       eventSubject.next({
         isCreatingElement: false,
         refreshMap: true
       });
     } catch (error) {
-      console.error('Error deleting zone:', error);
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
@@ -235,8 +218,6 @@ export const Zones = ({
           .map((point) => point.id)
       );
 
-      console.log(`Zone ${zoneId} has ${pointIdsInZone.size} points`);
-
       const typeCount = elements
         .filter((element) => pointIdsInZone.has(element.point_id))
         .reduce(
@@ -248,8 +229,6 @@ export const Zones = ({
           },
           {} as Record<number, number>,
         );
-        
-      console.log(`Zone ${zoneId} has elements by type:`, typeCount);
       
       return typeCount;
     },
@@ -261,8 +240,6 @@ export const Zones = ({
       const key = `${zoneId}-${elementTypeId}`;
       const isHidden = hiddenElementTypes[key] || false;
       const zoneIsHidden = hiddenZones[zoneId] || false;
-
-      console.log(`Toggling visibility for elements of type ${elementTypeId} in zone ${zoneId} to ${!isHidden}`);
 
       if (zoneIsHidden && !isHidden) {
         toast.current?.show({
@@ -294,33 +271,22 @@ export const Zones = ({
     (zoneId: number) => {
       const isHidden = hiddenZones[zoneId] || false;
       
-      console.log(`Zones component toggling visibility for zone ${zoneId} from ${isHidden ? 'hidden' : 'visible'} to ${!isHidden ? 'hidden' : 'visible'}`);
-      
-      // Primero actualizamos el estado local
-      if (!isHidden) { // Si vamos a ocultar la zona
-        console.log(`Setting zone ${zoneId} as hidden`);
-        
-        // 1. Actualizar estado local de la zona
+      if (!isHidden) {
         setHiddenZones(prev => ({
           ...prev,
-          [zoneId]: true // Marcar como oculta
+          [zoneId]: true
         }));
 
-        // 2. Actualizar estados de los elementos en esta zona
         const elementCounts = countElementsByTypeInZone(zoneId);
-        console.log(`Zone ${zoneId} has ${Object.keys(elementCounts).length} element types to hide`);
         
-        // Para cada tipo de elemento en esta zona, lo ocultamos
         Object.keys(elementCounts).forEach((typeId) => {
           const key = `${zoneId}-${typeId}`;
           setHiddenElementTypes(prev => ({
             ...prev,
-            [key]: true, // Marcar como oculto
+            [key]: true,
           }));
         });
         
-        // 3. Notificar al mapa que debe ocultar la zona y sus elementos
-        console.log(`Broadcasting hide command for zone ${zoneId}`);
         eventSubject.next({
           isCreatingElement: false,
           hiddenZone: {
@@ -328,30 +294,22 @@ export const Zones = ({
             hidden: true,
           }
         });
-      } else { // Si vamos a mostrar la zona
-        console.log(`Setting zone ${zoneId} as visible`);
-        
-        // 1. Actualizar estado local de la zona
+      } else {
         setHiddenZones(prev => ({
           ...prev,
-          [zoneId]: false // Marcar como visible
+          [zoneId]: false
         }));
         
-        // 2. Restaurar el estado de los elementos a visibles también
-        // Esto es crucial para sincronizar los botones de ojo con el estado real
         const elementCounts = countElementsByTypeInZone(zoneId);
-        console.log(`Zone ${zoneId} has ${Object.keys(elementCounts).length} element types to restore`);
         
-        // Para cada tipo de elemento en esta zona, lo marcamos como visible
         Object.keys(elementCounts).forEach((typeId) => {
           const key = `${zoneId}-${typeId}`;
           setHiddenElementTypes(prev => ({
             ...prev,
-            [key]: false, // Marcar como visible
+            [key]: false,
           }));
         });
         
-        console.log(`Broadcasting show command for zone ${zoneId}`);
         eventSubject.next({
           isCreatingElement: false,
           hiddenZone: {
@@ -463,12 +421,8 @@ export const Zones = ({
     [hiddenElementTypes, hiddenZones, handleViewElements],
   );
 
-  // Efecto para mostrar automáticamente todos los elementos en la carga inicial
   useEffect(() => {
     if (!isInitialized && zones.length > 0) {
-      console.log('Auto-showing all elements for all zones');
-      
-      // Esperar un momento para que todo esté listo
       const timer = setTimeout(() => {
         zones.forEach(zone => {
           if (zone.id) {
@@ -477,7 +431,6 @@ export const Zones = ({
         });
         
         setIsInitialized(true);
-        console.log('All elements auto-shown for all zones');
       }, 800);
       
       return () => clearTimeout(timer);
@@ -488,7 +441,6 @@ export const Zones = ({
     <div className="h-full flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
       <Toast ref={toast} />
 
-      {/* Header con botones principales y búsqueda */}
       <div className="p-3 bg-gray-50 flex flex-col gap-2">
         {isDrawingMode && (
           <Button
@@ -525,7 +477,6 @@ export const Zones = ({
         </span>
       </div>
 
-      {/* Contenido principal */}
       <div className="flex-grow overflow-y-auto p-2">
         {filteredZones.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-500 text-lg p-4">
@@ -626,7 +577,6 @@ export const Zones = ({
                     </div>
                   }>
                   
-                  {/* Contenido del acordeón */}
                   <div className="p-3 bg-gray-50 rounded-lg mt-2">
                     <h4 className="text-sm font-bold mb-2 flex items-center gap-2">
                       <Icon icon="mdi:format-list-bulleted" width="18" />
