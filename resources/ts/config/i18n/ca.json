@@ -153,6 +153,86 @@
           "actions": "Accions"
         }
       },
+      "license": {
+  "title": "Llicència del Programari",
+  "description": "Aquest programari està llicenciat sota la Llicència Pública de la Unió Europea (EUPL). Vostè és lliure d'utilitzar-lo, modificar-lo i distribuir-lo, sempre que la mateixa llicència s'apliqui a qualsevol obra derivada.",
+  "moreInfo": "Pot trobar més informació sobre la llicència a",
+  "link_text": "aquest enllaç",
+  "link_url": "https://interoperable-europe.ec.europa.eu/collection/eupl",
+  "below_text": "o veure el text complet a continuació:",
+  "fullText": {
+    "title": "LLICÈNCIA PÚBLICA DE LA UNIÓ EUROPEA v. 1.2",
+    "copyright": "EUPL © Unió Europea 2007, 2016",
+    "preface": "Aquesta Llicència Pública de la Unió Europea (EUPL) s'aplica a l'obra (segons es defineix més endavant) subministrada en les condicions fixades en la present llicència. Queda prohibit qualsevol ús de l'obra diferent de l'autoritzat per la present llicència (en la mesura que aquest ús estigui protegit per un dret del titular dels drets d'autor de l'obra).\n\nL'obra se subministra en les condicions fixades en la present llicència quan el llicenciant (segons es defineix més endavant) hagi col·locat la següent advertència immediatament després de la menció als drets d'autor de l'obra:\n\n                Llicència cedida d'acord amb l'EUPL\n\no hagi expressat per qualsevol altre mitjà la seva voluntat de concedir una llicència d'acord amb l'EUPL.",
+    "sections": {
+      "definitions": {
+        "title": "1. Definicions",
+        "content": "En aquesta llicència, s'entendrà per:\n\n— «llicència»: la present llicència,\n— «obra original»: l'obra o el programa d'ordinador distribuït o comunicat pel llicenciant d'acord amb aquesta llicència en forma de codi font o, si s'escau, de codi executable,\n— «obres derivades»: les obres o programes d'ordinador que podria crear el llicenciatari sobre la base de l'obra original o de les seves modificacions. Aquesta llicència no defineix el grau de modificació o dependència de l'obra original necessari per classificar una obra com a derivada; aquest grau es determinarà d'acord amb la legislació sobre drets d'autor aplicable segons l'article 15,\n— «obra»: l'obra original o les seves obres derivades,\n— «codi font»: la forma de l'obra llegible per éssers humans que pugui ser estudiada i modificada més fàcilment,\n— «codi executable»: qualsevol codi, en general compilat, destinat a ser interpretat com a programa per un ordinador,\n— «llicenciant»: la persona física o jurídica que distribueix o comunica l'obra d'acord amb la llicència,\n— «col·laborador»: la persona física o jurídica que modifica l'obra d'acord amb la llicència o contribueix de qualsevol altra manera a crear una obra derivada,\n— «llicenciatari»: la persona física o jurídica que fa un ús qualsevol de l'obra en les condicions fixades en la llicència,\n— «distribució» o «comunicació»: qualsevol acte de venda, donació, préstec, lloguer, distribució, comunicació, transmissió o qualsevol altre acte de posada a disposició, en línia o fora de línia, de còpies de l'obra o d'accés a les seves funcionalitats essencials a una altra persona física o jurídica."
+      },
+      "scope": {
+        "title": "2. Àmbit dels drets atorgats per la Llicència",
+        "content": "El llicenciant concedeix al llicenciatari una llicència d'àmbit mundial, a títol gratuït, no exclusiva i que el llicenciatari pot subcontractar mentre segueixin vigents els drets d'autor sobre l'obra original, i l'autoritza a:\n\n— utilitzar l'obra en qualsevol circumstància i per a qualsevol ús,\n— reproduir l'obra,\n— modificar l'obra i realitzar obres derivades de la mateixa,\n— comunicar al públic l'obra o còpies de la mateixa, posar a la seva disposició o exhibir l'obra o les còpies i, si s'escau, executar públicament l'obra,\n— distribuir l'obra o còpies de la mateixa,\n— prestar i llogar l'obra o còpies de la mateixa,\n— subcontractar els drets relatius a l'obra o a les còpies de la mateixa.\n\nAquests drets es podran exercir a través de qualsevol mitjà, suport i format, conegut en el present o que pugui inventar-se en el futur, en la mesura que així ho permeti la legislació aplicable.\n\nEn els països l'ordenament dels quals contempli els drets morals, el llicenciant renunciarà a l'exercici dels mateixos en la mesura que ho permeti la legislació, a fi de fer efectiva la llicència dels drets patrimonials anteriorment enumerats.\n\nEl llicenciant cedeix al llicenciatari, lliure de cànons, els drets d'ús no exclusius sobre qualsevol patent de què sigui titular, en la mesura necessària perquè el llicenciatari faci ús dels drets sobre l'obra atorgats per la present llicència."
+      },
+      "source_code": {
+        "title": "3. Comunicació del Codi Font",
+        "content": "El llicenciant pot subministrar l'obra en forma de codi font o codi executable. Si la subministra en forma de codi executable, haurà de facilitar a més una còpia llegible automàticament del codi font de l'obra juntament amb cada còpia de l'obra que el llicenciant distribueixi o indiqui, en una advertència inserida a continuació de la menció als drets d'autor adjunta a l'obra, un repositori on es pugui accedir al codi font fàcilment i de manera gratuïta durant el període en què el llicenciant segueixi distribuint o comunicant l'obra."
+      },
+      "copyright": {
+        "title": "4. Limitacions sobre els drets d'autor",
+        "content": "En cap cas podrà interpretar-se la present llicència de manera que privi al llicenciatari dels beneficis dels que pogués gaudir com a conseqüència de les excepcions o limitacions als drets exclusius dels titulars dels drets de l'obra, de l'extinció d'aquests drets o de qualsevol altra limitació aplicable."
+      },
+      "obligations": {
+        "title": "5. Obligacions del llicenciatari",
+        "content": "La cessió dels drets en virtut de la present llicència queda supeditada a certes restriccions o obligacions que haurà de respectar el llicenciatari. Aquestes obligacions són:\n\nDret d'atribució: El llicenciatari haurà de mantenir íntegrament totes les advertències i mencions als drets d'autor, patents o marques registrades, així com les que es refereixin a la llicència i a l'exempció de responsabilitat. El llicenciatari haurà d'adjuntar còpies d'aquestes advertències i mencions i de la llicència amb cada còpia de l'obra que distribueixi o comuniqui. El llicenciatari es responsabilitzarà que qualsevol obra derivada inclogui una advertència ben destacada declarant que s'ha modificat l'obra, i la data de modificació.\n\nClàusula de «copyleft»: Si el llicenciatari distribuís o comuniqués còpies de l'obra original o d'obres derivades basades en l'obra original, aquesta distribució o comunicació s'haurà de fer en les condicions fixades en la present llicència o una versió posterior de la present llicència, llevat si l'obra original es distribueix expressament només sota la present versió de la llicència (per exemple, comunicant «EUPL v. 1.2 solament». El llicenciatari (ara en la seva qualitat de llicenciant) no podrà oferir ni imposar condicions addicionals sobre l'obra o les obres derivades que modifiquin o limitin les condicions de la llicència.\n\nClàusula de compatibilitat: Si el llicenciatari distribuís o comuniqués obres derivades o còpies d'aquestes últimes basades al seu torn en l'obra i en una altra obra llicenciada sota una llicència compatible, la distribució o comunicació es podran efectuar d'acord amb les condicions d'aquesta llicència compatible. A efectes de la present clàusula, s'entendrà per «llicència compatible» qualsevol de les llicències enumerades en l'apèndix adjunt a la present llicència. En cas que les obligacions del llicenciatari d'acord amb la llicència compatible estiguin en col·lisió amb les derivades de la present llicència, prevaldran les obligacions de la llicència compatible.\n\nSubministrament del codi font: En distribuir o comunicar còpies de l'obra, el llicenciatari proporcionarà una còpia del codi font llegible automàticament o indicarà un repositori on es pugui accedir al codi font fàcilment i de manera gratuïta durant el període en què segueixi distribuint o comunicant l'obra.\n\nProtecció jurídica: La present llicència no faculta per utilitzar els noms comercials, marques de producte o de servei o noms del llicenciant, excepte quan això, realitzat en la mesura del raonable i conforme als usos habituals, sigui necessari per indicar l'origen de l'obra i reproduir el contingut de la menció als drets d'autor."
+      },
+      "authorship": {
+        "title": "6. Cadena d'Autoria",
+        "content": "El llicenciant original garanteix ser titular originari dels drets d'autor sobre l'obra original objecte de la present llicència o haver-los adquirit mitjançant la llicència corresponent i estar facultat per atorgar llicències sobre tals drets.\n\nCada col·laborador garanteix ser titular dels drets d'autor sobre les modificacions que aporta a l'obra o haver-los adquirit mitjançant la corresponent llicència i estar facultat per atorgar llicències sobre tals drets.\n\nCada vegada que el llicenciatari accepta la llicència, el llicenciant original i els col·laboradors posteriors li atorguen una llicència sobre les seves pròpies contribucions a l'obra en les condicions fixades en la present llicència."
+      },
+      "warranty": {
+        "title": "7. Exclusió de Garantia",
+        "content": "L'obra es troba en procés d'elaboració, essent objecte de contínues millores per part de nombrosos col·laboradors. No és una obra acabada i, per tant, pot contenir defectes o errors inherents a aquest tipus de desenvolupament.\n\nPer aquest motiu, l'obra, en virtut de la llicència, se subministra «tal qual», sense garanties de cap tipus, en particular, pel que fa a la seva comercialització, adequació a un propòsit determinat, absència de defectes o errors, exactitud i absència d'infracció dels drets de propietat intel·lectual diferents dels drets d'autor segons s'afirma en l'article 6 de la present llicència.\n\nAquesta exclusió de garantia forma part essencial de la llicència i és condició per a la cessió de qualsevol dret respecte a l'obra."
+      },
+      "liability": {
+        "title": "8. Exclusió de Responsabilitat",
+        "content": "Excepte en casos de dol o de danys ocasionats directament a persones físiques, el llicenciant no serà responsable dels danys i perjudicis de qualsevol classe, directes o indirectes, materials o morals, que poguessin derivar-se de la llicència o de l'ús de l'obra, en particular, en una enumeració no exhaustiva, dels danys i perjudicis per pèrdua de bona reputació, atur tècnic, avaria o mal funcionament d'equips informàtics, pèrdua de dades o qualsevol perjudici comercial, fins i tot si el llicenciant coneixia la possibilitat d'aquests danys. No obstant això, el llicenciant serà responsable, d'acord amb les normes legals que regulin la responsabilitat pels danys causats per productes, en la mesura que aquestes normes siguin aplicables a l'obra."
+      },
+      "additional": {
+        "title": "9. Acords Addicionals",
+        "content": "En distribuir l'obra, el llicenciatari podrà subscriure un acord addicional que defineixi obligacions o serveis compatibles amb la present llicència. No obstant això, en acceptar tals obligacions, el llicenciatari actuarà únicament en nom propi i sota la seva exclusiva responsabilitat, i mai en nom del llicenciant original ni de cap altre col·laborador, i això a condició que accedeixi a indemnitzar, defensar i emparar a tot col·laborador front a qualsevol responsabilitat en què aquest pogués incórrer i front a les reclamacions que poguessin presentar-se contra ell per haver acceptat el llicenciatari l'esmentada garantia o responsabilitat addicional."
+      },
+      "acceptance": {
+        "title": "10. Acceptació de la Llicència",
+        "content": "El disposat en la present llicència es pot acceptar fent clic a la icona «Accepto» situada a la part inferior de la finestra en què apareix el text de la present llicència o manifestant el consentiment de qualsevol altra forma similar, de conformitat amb el previst en la legislació aplicable. Fent clic en aquesta icona, s'expressa l'acceptació inequívoca i irrevocable de la present llicència i de tot el seu contingut.\n\nAixí mateix, el llicenciatari accepta irrevocablement la present llicència i totes les seves condicions pel mer fet d'exercir qualsevol dels drets que li atorga l'article 2 de la present llicència, com ara l'ús de l'obra, la creació d'una obra derivada o la distribució o comunicació de l'obra o de còpies de la mateixa."
+      },
+      "information": {
+        "title": "11. Informació al Públic",
+        "content": "En cas que el llicenciatari procedeixi a la distribució o comunicació de l'obra per mitjans electrònics (per exemple, oferint la descàrrega de l'obra a distància), el canal o mitjà de distribució (per exemple, un lloc web) haurà de facilitar al públic, com a mínim, la informació exigida per la legislació aplicable sobre el llicenciant, la llicència i la manera en què el llicenciatari pot accedir a aquestes dades, acceptar-les, conservar-les i reproduir-les."
+      },
+      "termination": {
+        "title": "12. Extinció de la Llicència",
+        "content": "La llicència i els drets atorgats al seu empara s'extingiran automàticament si el llicenciatari incompleix alguna de les condicions de la llicència.\n\nTal extinció no suposarà, però, la de les llicències de què gaudeixin les persones que hagin rebut l'obra del llicenciatari en virtut de la llicència, sempre que aquestes persones segueixin complint plenament les condicions de la llicència."
+      },
+      "miscellaneous": {
+        "title": "13. Disposicions Diverses",
+        "content": "No obstant el disposat en l'article 9, la llicència representarà la totalitat de l'acord entre les parts pel que fa a l'obra.\n\nLa eventual invalidesa o ineficàcia d'alguna disposició de la present llicència d'acord amb la legislació vigent no afectarà la validesa o eficàcia general de la llicència. En aquests casos, la disposició s'interpretarà o reformularà segons procedeixi per fer-la vàlida i eficaç.\n\nLa Comissió Europea podrà publicar altres versions lingüístiques o noves versions de la present llicència o versions actualitzades de l'apèndix en la mesura que resulti necessari i raonable i sense reduir l'àmbit dels drets concedits per la llicència. Les noves versions de la llicència es publicaran amb un número de versió únic.\n\nTotes les versions lingüístiques de la present llicència aprovades per la Comissió Europea tenen idèntic valor. Les parts poden utilitzar la versió lingüística de la seva preferència."
+      },
+      "jurisdiction": {
+        "title": "14. Tribunals Competents",
+        "content": "Sense perjudici del disposat en un acord específic entre les parts,\n\n— els litigis relatius a la interpretació de la present llicència que es plantegin entre les institucions, òrgans i organismes de la Unió Europea, en qualitat de llicenciant, i un llicenciatari, se sotmetran a la jurisdicció del Tribunal de Justícia de la Unió Europea, d'acord amb l'article 272 del Tractat de Funcionament de la Unió Europea;\n\n— els litigis relatius la interpretació de la present llicència que es plantegin entre altres parts se sotmetran a la jurisdicció exclusiva del tribunal que sigui competent en el lloc on resideixi o exerceixi la seva activitat principal el llicenciant."
+      },
+      "applicable_law": {
+        "title": "15. Legislació Aplicable",
+        "content": "Sense perjudici del disposat en un acord específic entre les parts,\n\n— la present llicència es regirà per la legislació de l'Estat membre de la Unió Europea on tingui la seva seu, resideixi o tingui el seu domicili social el llicenciant;\n\n— la present llicència es regirà pel Dret belga si el llicenciant no té seu, residència ni domicili social en un Estat membre de la Unió Europea."
+      }
+    },
+    "appendix": {
+      "title": "Apèndix",
+      "content": "Són «llicències compatibles» d'acord amb l'article 5 de l'EUPL:",
+      "licenses": "— GNU General Public License (GPL) v. 2, v. 3\n— GNU Affero General Public License (AGPL) v. 3\n— Open Software License (OSL) v. 2.1, v. 3.0\n— Eclipse Public License (EPL) v. 1.0\n— CeCILL v. 2.0, v. 2.1\n— Mozilla Public License (MPL) v. 2\n— GNU Lesser General Public License (LGPL) v. 2.1, v. 3\n— Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) per a obres que no siguin programes informàtics\n— European Union Public License (EUPL) v. 1.1, v. 1.2\n— Québec Free and Open-Source License — Reciprocity (LiLiQ-R) or Strong Reciprocity (LiLiQ-R+)\n\nLa Comissió Europea podrà actualitzar el present apèndix a versions posteriors de les llicències esmentades sense presentar una nova versió de l'EUPL, sempre que contemplin els drets reconeguts en l'article 2 de la present llicència i protegeixin de l'apropiació exclusiva el codi font cobert.\n\nQualsevol altra modificació o addició al present apèndix exigirà la presentació d'una nova versió de l'EUPL."
+    }
+  }
+},
       "contracts": {
         "form": {
           "placeholders": {
