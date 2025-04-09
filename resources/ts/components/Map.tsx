@@ -94,49 +94,49 @@ export const MapComponent: React.FC<MapProps> = ({
     setActiveTabIndex(1);
   }, []);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [treeTypesFetch, elementTypeFetch] = await Promise.all([
-          fetchTreeTypes(),
-          fetchElementType(),
-        ]);
-        setTreeTypes(treeTypesFetch);
-        setElementTypes(elementTypeFetch);
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error loading types'
-        });
-      }
-    };
-    loadData();
+  const loadInitialData = useCallback(async () => {
+    try {
+      const [treeTypesFetch, elementTypeFetch] = await Promise.all([
+        fetchTreeTypes(),
+        fetchElementType(),
+      ]);
+      setTreeTypes(treeTypesFetch);
+      setElementTypes(elementTypeFetch);
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error loading types'
+      });
+    }
   }, []);
 
-  useEffect(() => {
+  const loadContractData = useCallback(async () => {
     if (!currentContract?.id) return;
-
-    const loadContractData = async () => {
-      try {
-        await Promise.all([
-          dispatch(fetchPointsAsync()).unwrap(),
-          dispatch(fetchElementsAsync()).unwrap()
-        ]);
-        setIsDataLoaded(true);
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar los datos del contrato',
-        });
-      }
-    };
-
-    loadContractData();
+    try {
+      await Promise.all([
+        dispatch(fetchPointsAsync()).unwrap(),
+        dispatch(fetchElementsAsync()).unwrap()
+      ]);
+      setIsDataLoaded(true);
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al cargar los datos del contrato',
+      });
+    }
   }, [dispatch, currentContract]);
 
   useEffect(() => {
+    loadInitialData();
+  }, [loadInitialData]);
+
+  useEffect(() => {
+    loadContractData();
+  }, [loadContractData]);
+
+  const initializeMap = useCallback(() => {
     if (!mapContainerRef.current || !isDataLoaded) return;
 
     while (mapContainerRef.current.firstChild) {
@@ -148,7 +148,7 @@ export const MapComponent: React.FC<MapProps> = ({
     if (geoLat && geoLng && !geoError) {
       initialCoordinates = [geoLng, geoLat];
     }
-    else if (centerCoords && centerCoords.length > 0 && centerCoords[0].center) {
+    else if (centerCoords?.length > 0 && centerCoords[0].center) {
       initialCoordinates = [centerCoords[0].center[0], centerCoords[0].center[1]];
     }
             
@@ -176,7 +176,11 @@ export const MapComponent: React.FC<MapProps> = ({
       updateZones(service);
       updateElements(service);
     }
-  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords, currentContract?.id]);
+  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords]);
+
+  useEffect(() => {
+    initializeMap();
+  }, [initializeMap]);
 
   useEffect(() => {
     const handleResize = () => mapServiceRef.current?.resizeMap();
@@ -405,7 +409,7 @@ export const MapComponent: React.FC<MapProps> = ({
     onElementAdd();
   }, [onCreatingElementChange, onElementAdd]);
 
-  function updateZones(service: MapService) {
+  const updateZones = useCallback((service: MapService) => {
     if (!service || !currentContract?.id) return;
     
     try {
@@ -441,9 +445,9 @@ export const MapComponent: React.FC<MapProps> = ({
     } catch (error) {
       console.error('Error updating zones:', error);
     }
-  }
+  }, [zonesRedux, points, currentContract, hiddenZones]);
 
-  function updateElements(service: MapService) {
+  const updateElements = useCallback((service: MapService) => {
     if (!currentContract) return;
 
     const handleElementDelete = async (elementId: number) => {
@@ -523,7 +527,7 @@ export const MapComponent: React.FC<MapProps> = ({
     } else {
       renderMarkers();
     }
-  }
+  }, [elements, points, currentContract, zonesRedux, treeTypes, elementTypes, hiddenZones, hiddenElementTypes, dispatch, updateElementVisibility]);
 
   const handleZoneSaved = useCallback(
     async (newZone: Zone, newPoints: SavePointsProps[]) => {
