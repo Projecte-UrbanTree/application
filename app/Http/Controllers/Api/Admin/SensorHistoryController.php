@@ -265,6 +265,7 @@ class SensorHistoryController extends Controller
 
                     // Create the record
                     SensorHistory::create($historyData);
+
                     $recordsCreated++;
                 }
             }
@@ -273,7 +274,7 @@ class SensorHistoryController extends Controller
                 try {
                     $updateResponse = Http::withHeaders([
                         'X-API-Key' => $apiKey,
-                    ])->post("http://api_urbantree.alumnat.iesmontsia.org/event=up", [
+                    ])->post("http://api_urbantree.alumnat.iesmontsia.org/updateSensorHistory", [
                         'ids' => $idsToUpdate  
                     ]);
                     
