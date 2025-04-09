@@ -10,6 +10,9 @@ import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Zone } from '@/types/Zone';
 import { useMapInitialization } from '@/hooks/useMapInitialization';
+import { eventSubject } from '@/pages/Admin/Inventory/Zones';
+import { ZoneEvent } from '@/types/ZoneEvent';
+import Preloader from '@/components/Preloader';
 
 export default function Inventory() {
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
@@ -21,13 +24,17 @@ export default function Inventory() {
   const [enabledButton, setEnabledButton] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [dataInitialized, setDataInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { isMapReady } = useMapInitialization();
+  const { isMapReady, isInitializing } = useMapInitialization();
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
   const dispatch = useDispatch<AppDispatch>();
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
+  const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
+  const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
 
   useEffect(() => {
     console.log('Inventory component loaded, initializing data');
@@ -35,6 +42,7 @@ export default function Inventory() {
       if (!currentContract?.id) return;
       
       try {
+        setIsLoading(true);
         console.log(`Loading data for contract ${currentContract.id}`);
         await Promise.all([
           dispatch(fetchZonesAsync()),
@@ -43,6 +51,21 @@ export default function Inventory() {
         ]);
         console.log('Data initialized successfully');
         setDataInitialized(true);
+        
+        setTimeout(() => {
+          console.log('Forcing visibility of all elements');
+          const event: ZoneEvent = {
+            isCreatingElement: false,
+            showAllElements: true,
+            forceShow: true
+          };
+          eventSubject.next(event);
+          
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 1000);
+        }, 1000);
+        
       } catch (error) {
         console.error('Error loading inventory data:', error);
         toast.current?.show({
@@ -51,6 +74,7 @@ export default function Inventory() {
           detail: 'Error cargando datos del inventario',
           life: 3000,
         });
+        setIsLoading(false);
       }
     };
 
@@ -134,6 +158,16 @@ export default function Inventory() {
   const handleModalVisibleChange = useCallback((visible: boolean) => {
     setModalVisible(visible);
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col w-full h-full relative">
+        <div className="h-[calc(100vh-64px)] flex items-center justify-center">
+          <Preloader />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col w-full h-full relative">

@@ -89,6 +89,7 @@ export const MapComponent: React.FC<MapProps> = ({
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [centerCoords, setCenterCoords] = useState<ZoneCenterCoord[]>([]);
+  const [isZoneJustCreated, setIsZoneJustCreated] = useState(false);
 
   const { isMapReady } = useMapInitialization();
 
@@ -197,14 +198,18 @@ export const MapComponent: React.FC<MapProps> = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Volar a la zona seleccionada
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !selectedZone || !points.length) return;
+    if (isZoneJustCreated) {
+      console.log('Evitando flyTo porque la zona fue recién creada');
+      setIsZoneJustCreated(false);
+      return;
+    }
     
+    console.log('Haciendo flyTo a la zona seleccionada', selectedZone.id);
     service.flyTo(selectedZone);
-  }, [selectedZone, points]);
+  }, [selectedZone, points, isZoneJustCreated]);
 
   // Actualizar zonas cuando cambian
   useEffect(() => {
@@ -297,21 +302,10 @@ export const MapComponent: React.FC<MapProps> = ({
               service.updateMarkerVisibility(element.id, false);
               visibilityUpdated++;
             } else {
-              // Si la zona se muestra, recuperamos el estado individual de cada elemento
-              const elementType = element.element_type_id;
-              if (elementType) {
-                // Verificar si este tipo de elemento está oculto
-                const key = `${zoneId}-${elementType}`;
-                const isElementTypeHidden = hiddenElementTypes[key] || false;
-                
-                // Aplicar visibilidad según el estado del tipo de elemento
-                service.updateMarkerVisibility(element.id, !isElementTypeHidden);
-                visibilityUpdated++;
-              } else {
-                // Si no tiene tipo, lo mostramos por defecto
-                service.updateMarkerVisibility(element.id, true);
-                visibilityUpdated++;
-              }
+              // Si la zona se muestra, todos los elementos deben mostrarse por defecto
+              // para sincronizar con los cambios en Zones.tsx
+              service.updateMarkerVisibility(element.id, true);
+              visibilityUpdated++;
             }
           } catch (error) {
             console.error(`Error updating visibility for element ${element.id}:`, error);
@@ -388,6 +382,78 @@ export const MapComponent: React.FC<MapProps> = ({
     const subscription = eventSubject.subscribe({
       next: (data: ZoneEvent) => {
         console.log('Received zone event:', data);
+        
+        // Manejar evento showAllElements - mostrar todos los elementos
+        if (data.showAllElements || data.forceShow) {
+          console.log('Showing all elements automatically' + (data.forceShow ? ' (forced)' : ''));
+          try {
+            // Mostrar todas las zonas si estuvieran ocultas
+            zonesRedux.forEach(zone => {
+              if (zone.id && (hiddenZones[zone.id] || data.forceShow)) {
+                try {
+                  toggleZoneVisibility(zone.id, false);
+                } catch (error) {
+                  console.error(`Error showing zone ${zone.id}:`, error);
+                }
+              }
+            });
+            
+            if (data.forceShow && service) {
+              console.log('Forcing element visibility directly on markers');
+              
+              console.log(`Map has ${elements.length} elements to display`);
+              
+              let visibilityUpdated = 0;
+              elements.forEach(element => {
+                if (element.id) {
+                  try {
+                    service.updateMarkerVisibility(element.id, true);
+                    visibilityUpdated++;
+                  } catch (error) {
+                    console.error(`Error updating marker visibility for element ${element.id}:`, error);
+                  }
+                }
+              });
+              
+              console.log(`Directly updated visibility for ${visibilityUpdated} elements`);
+            } else {
+              zonesRedux.forEach(zone => {
+                if (!zone.id) return;
+                
+                const zoneId = zone.id;
+                const pointsInZone = points.filter(p => p.zone_id === zoneId);
+                const pointIds = new Set(pointsInZone.map(p => p.id));
+                
+                const elementTypesInZone = new Set<number>();
+                elements.forEach(element => {
+                  if (element.point_id && pointIds.has(element.point_id) && element.element_type_id) {
+                    elementTypesInZone.add(element.element_type_id);
+                  }
+                });
+                
+                elementTypesInZone.forEach(typeId => {
+                  const key = `${zoneId}-${typeId}`;
+                  if (hiddenElementTypes[key]) {
+                    setHiddenElementTypes(prev => ({
+                      ...prev,
+                      [key]: false
+                    }));
+                    
+                    try {
+                      updateElementVisibility(zoneId, typeId, false, service);
+                    } catch (error) {
+                      console.error(`Error showing element type ${typeId} in zone ${zoneId}:`, error);
+                    }
+                  }
+                });
+              });
+            }
+            
+            console.log('All elements shown successfully');
+          } catch (error) {
+            console.error('Error showing all elements:', error);
+          }
+        }
         
         // Manejar evento de inicialización
         if (data.initializeMap) {
@@ -560,37 +626,35 @@ export const MapComponent: React.FC<MapProps> = ({
       setSelectedElementId(element.id!);
     };
 
-    // Limpiamos marcadores existentes
+  
     service.removeElementMarkers();
     
-    // Filtramos zonas del contrato actual
     const zoneIds = new Set(
       zonesRedux
         .filter((zone) => zone.contract_id === currentContract.id)
         .map((zone) => zone.id)
     );
     
-    // Obtenemos los puntos que pertenecen a estas zonas
+    
     const pointIds = new Set(
       points
         .filter((point) => point.zone_id && zoneIds.has(point.zone_id))
         .map((point) => point.id)
     );
     
-    // Filtramos elementos que tienen puntos en estas zonas
+ 
     const filteredElements = elements.filter(
       (element) => element.point_id && pointIds.has(element.point_id)
     );
-    
+
     console.log('Filtered elements:', filteredElements.length); // Debug
     
     if (filteredElements.length === 0) {
-      console.log('No elements to display'); // Debug
+      console.log('No elements to display');
       return;
     }
 
     const renderMarkers = () => {
-      // Filtramos los puntos relevantes solo una vez
       const relevantPoints = points.filter(
         (point) => point.zone_id && zoneIds.has(point.zone_id)
       );
@@ -623,14 +687,12 @@ export const MapComponent: React.FC<MapProps> = ({
         }
       });
 
-      // Luego aplicamos visibilidad según tipos de elementos para zonas visibles
       Object.entries(hiddenElementTypes).forEach(([key, isHidden]) => {
         if (isHidden) {
           const [zoneIdStr, elementTypeIdStr] = key.split('-');
           const zoneId = Number(zoneIdStr);
           const elementTypeId = Number(elementTypeIdStr);
           
-          // Solo aplicamos las reglas de visibilidad de elementos si la zona está visible
           if (!hiddenZones[zoneId]) {
             console.log(`Element type ${elementTypeId} in zone ${zoneId} is hidden`);
             updateElementVisibility(zoneId, elementTypeId, true, service);
@@ -639,11 +701,7 @@ export const MapComponent: React.FC<MapProps> = ({
       });
     };
 
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(renderMarkers);
-    } else {
-      renderMarkers();
-    }
+    renderMarkers();
   }
 
   const handleZoneSaved = useCallback(
@@ -669,6 +727,9 @@ export const MapComponent: React.FC<MapProps> = ({
           zonePoints,
           newZone.color || '#088'
         );
+        
+        // Marcar que acabamos de crear una zona para evitar el flyTo automático
+        setIsZoneJustCreated(true);
       }
 
       await dispatch(fetchPointsAsync());

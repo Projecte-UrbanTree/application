@@ -17,4 +17,6 @@ export interface ZoneEvent {
   };
   refreshMap?: boolean;
   initializeMap?: boolean;
+  showAllElements?: boolean;
+  forceShow?: boolean;
 } 
