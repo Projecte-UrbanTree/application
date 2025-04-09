@@ -9,6 +9,10 @@ import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Zone } from '@/types/Zone';
+import { useMapInitialization } from '@/hooks/useMapInitialization';
+import { eventSubject } from '@/pages/Admin/Inventory/Zones';
+import { ZoneEvent } from '@/types/ZoneEvent';
+import Preloader from '@/components/Preloader';
 
 export default function Inventory() {
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
@@ -20,36 +24,66 @@ export default function Inventory() {
   const [enabledButton, setEnabledButton] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [dataInitialized, setDataInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { isMapReady, isInitializing } = useMapInitialization();
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
   const dispatch = useDispatch<AppDispatch>();
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
+  const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
+  const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
 
   useEffect(() => {
     const loadData = async () => {
       if (!currentContract?.id) return;
       
       try {
+        setIsLoading(true);
         await Promise.all([
           dispatch(fetchZonesAsync()),
           dispatch(fetchPointsAsync()),
           dispatch(fetchElementsAsync())
         ]);
         setDataInitialized(true);
+        
+        setTimeout(() => {
+          const event: ZoneEvent = {
+            isCreatingElement: false,
+            showAllElements: true,
+            forceShow: true
+          };
+          eventSubject.next(event);
+          
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 1000);
+        }, 1000);
+        
       } catch (error) {
-        console.error('Error loading inventory data:', error);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
           detail: 'Error cargando datos del inventario',
           life: 3000,
         });
+        setIsLoading(false);
       }
     };
 
     loadData();
   }, [dispatch, currentContract]);
+
+  useEffect(() => {
+    if (isMapReady) {
+      const timer = setTimeout(() => {
+        setMapKey(Date.now());
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isMapReady]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -118,6 +152,16 @@ export default function Inventory() {
   const handleModalVisibleChange = useCallback((visible: boolean) => {
     setModalVisible(visible);
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col w-full h-full relative">
+        <div className="h-[calc(100vh-64px)] flex items-center justify-center">
+          <Preloader />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col w-full h-full relative">

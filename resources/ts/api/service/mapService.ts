@@ -13,7 +13,8 @@ import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
-import { ZoneCenterCoord } from '@/types/Zone';
+import { Zone, ZoneCenterCoord } from '@/types/Zone';
+import { getZoneZoom } from './zoneService';
 
 const DEFAULT_CENTER: [number, number] = [-3.70379, 40.41678];
 
@@ -24,6 +25,8 @@ export class MapService {
   private elementMarkers: Map<number, { marker: mapboxgl.Marker; elementId: number }> = new Map();
   private zoneCoords: ZoneCenterCoord[];
   private geoCoords: number[];
+  private isMapInitialized: boolean = false;
+  private initCallbacks: Array<() => void> = [];
 
   constructor(container: HTMLDivElement, token: string, zoneCoords: ZoneCenterCoord[], geoCoords: number[]) {
     this.zoneCoords = zoneCoords;
@@ -33,7 +36,13 @@ export class MapService {
       container,
       style: 'mapbox://styles/mapbox/standard-satellite',
       center: this.getCenter(),
-      zoom: 14,
+      zoom: 16,
+    });
+
+    this.map.on('load', () => {
+      this.isMapInitialized = true;
+      this.initCallbacks.forEach(callback => callback());
+      this.initCallbacks = [];
     });
   }
 
@@ -263,29 +272,41 @@ export class MapService {
     
     const pointMap = new Map(points.map(p => [p.id, p]));
     const elementTypeMap = new Map(elementTypes.map(et => [et.id, et]));
+    
+    let markersAdded = 0;
 
     elements.forEach((element) => {
-      if (!element.id || !element.point_id || !element.element_type_id) return;
+      if (!element.id || !element.point_id || !element.element_type_id) {
+        return;
+      }
       
       const point = pointMap.get(element.point_id);
-      if (!point?.latitude || !point?.longitude) return;
-
-      const elementType = elementTypeMap.get(element.element_type_id);
-      if (!elementType) return;
-
-      const markerElement = this.createCustomMarkerElement(elementType);
-      const marker = new mapboxgl.Marker({
-        element: markerElement,
-        anchor: 'center',
-      })
-        .setLngLat([point.longitude, point.latitude])
-        .addTo(this.map);
-
-      if (onElementClick) {
-        marker.getElement().addEventListener('click', () => onElementClick(element));
+      if (!point?.latitude || !point?.longitude) {
+        return;
       }
 
-      this.elementMarkers.set(element.id, { marker, elementId: element.id });
+      const elementType = elementTypeMap.get(element.element_type_id);
+      if (!elementType) {
+        return;
+      }
+
+      try {
+        const markerElement = this.createCustomMarkerElement(elementType);
+        const marker = new mapboxgl.Marker({
+          element: markerElement,
+          anchor: 'center',
+        })
+          .setLngLat([point.longitude, point.latitude])
+          .addTo(this.map);
+
+        if (onElementClick) {
+          marker.getElement().addEventListener('click', () => onElementClick(element));
+        }
+
+        this.elementMarkers.set(element.id, { marker, elementId: element.id });
+        markersAdded++;
+      } catch (error) {
+      }
     });
   }
 
@@ -308,8 +329,21 @@ export class MapService {
     return { lat: point.latitude, lng: point.longitude };
   }
 
-  public flyTo(coord: [number, number], zoom = 16): void {
-    this.map.flyTo({ center: coord, zoom, essential: true });
+  public async flyTo(selectedZone: Zone) {
+    if (selectedZone.id === null) return;
+    const { zoom, center }: ZoneCenterCoord = await getZoneZoom(selectedZone.id!);
+    
+    if (center) {
+      this.map.flyTo({ center: [center[0], center[1]], zoom, essential: true });
+    }
+  }
+
+  public onMapLoad(callback: () => void): () => void {
+    this.map.on('load', callback);
+    
+    return () => {
+      this.map.off('load', callback);
+    };
   }
 
   public resizeMap(): void {
@@ -320,6 +354,47 @@ export class MapService {
     const markerObj = this.elementMarkers.get(elementId);
     if (markerObj) {
       markerObj.marker.getElement().style.display = visible ? '' : 'none';
+    }
+  }
+
+  public isReady(): boolean {
+    return this.isMapInitialized && this.map.isStyleLoaded();
+  }
+
+  public waitForInit(callback: () => void): void {
+    if (this.isReady()) {
+      callback();
+    } else {
+      this.initCallbacks.push(callback);
+    }
+  }
+
+  public resetMap(): void {
+    this.removeElementMarkers();
+    this.clearDraw();
+    try {
+      const style = this.map.getStyle();
+      if (style?.layers) {
+        const baseLayers = ['background', 'satellite'];
+        style.layers
+          .filter(layer => !baseLayers.includes(layer.id))
+          .forEach(layer => {
+            if (this.map.getLayer(layer.id)) {
+              this.map.removeLayer(layer.id);
+            }
+          });
+      }
+      
+      if (style?.sources) {
+        Object.keys(style.sources)
+          .filter(sourceId => !sourceId.startsWith('mapbox'))
+          .forEach(sourceId => {
+            if (this.map.getSource(sourceId)) {
+              this.map.removeSource(sourceId);
+            }
+          });
+      }
+    } catch (error) {
     }
   }
 }

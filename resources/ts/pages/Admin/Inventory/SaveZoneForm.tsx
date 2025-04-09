@@ -203,7 +203,7 @@ export const SaveZoneForm = ({
   }, [onCloseProp]);
 
   return (
-    <div className="p-6 bg-white rounded-2xl shadow-lg w-96">
+    <>
       <Toast ref={toast} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
@@ -269,6 +269,6 @@ export const SaveZoneForm = ({
           </Button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
