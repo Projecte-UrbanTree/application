@@ -21,13 +21,12 @@
                 <div class="flex lg:flex-1">
                     <a href="" class="-m-1.5 p-1.5 flex items-center gap-2">
                         <span class="sr-only">{{ config('app.name') }}</span>
-                        <img class="h-8 w-auto" src="{{ asset("images/logos/nobg-isotype.png") }}"
+                        <img class="h-9 w-auto" src="{{ asset("images/logos/logo.png") }}"
                             alt="{{ config('app.name') }}">
-                        <img class="h-8" src="{{ asset("images/logos/nobg-logotype.png") }}" alt="">
                     </a>
                 </div>
                 <div class="flex lg:flex-1 lg:justify-end">
-                    <a href="/login" class="text-sm font-semibold text-indigo-600 hover:underline">
+                    <a href="/login" class="text-m font-semibold text-indigo-600 hover:underline">
                         {{ __('landing.common.login') }} →
                     </a>
                     </a>
