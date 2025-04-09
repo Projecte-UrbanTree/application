@@ -15,6 +15,5 @@ export interface Zone {
 export interface ZoneCenterCoord {
     zone_id?: number;
     center?:  number[];
-    zoom?: number;
 }
 
