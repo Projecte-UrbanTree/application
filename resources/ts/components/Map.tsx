@@ -341,11 +341,11 @@ export const MapComponent: React.FC<MapProps> = ({
 
   // Handle event subscriptions
   useEffect(() => {
-    const service = mapServiceRef.current;
-    if (!service) return;
-    
     const subscription = eventSubject.subscribe({
       next: (data: ZoneEvent) => {
+        const service = mapServiceRef.current;
+        if (!service) return;
+        
         // Handle element updates
         if (data.updateElements) {
           try {
@@ -518,7 +518,9 @@ export const MapComponent: React.FC<MapProps> = ({
       onCreatingElementChange(false);
       setSelectedZoneForElement(null);
       setNewPointCoord(null);
-      if (service) service.disableSingleClick();
+      if (mapServiceRef.current) {
+        mapServiceRef.current.disableSingleClick();
+      }
     };
   }, [points, elements, zonesRedux, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange, hiddenElementTypes, hiddenZones]);
 
