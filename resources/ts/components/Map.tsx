@@ -95,46 +95,41 @@ export const MapComponent: React.FC<MapProps> = ({
   }, []);
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [treeTypesFetch, elementTypeFetch] = await Promise.all([
-          fetchTreeTypes(),
-          fetchElementType(),
-        ]);
-        setTreeTypes(treeTypesFetch);
-        setElementTypes(elementTypeFetch);
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error loading types'
-        });
-      }
-    };
-    loadData();
-  }, []);
-
-  useEffect(() => {
+  const loadData = async () => {
     if (!currentContract?.id) return;
+    setIsDataLoaded(false);
 
-    const loadContractData = async () => {
-      try {
-        await Promise.all([
-          dispatch(fetchPointsAsync()).unwrap(),
-          dispatch(fetchElementsAsync()).unwrap()
-        ]);
-        setIsDataLoaded(true);
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar los datos del contrato',
-        });
-      }
-    };
+    try {
+      const [treeTypesRes, elementTypesRes, centerCoordsRes] = await Promise.all([
+        fetchTreeTypes(),
+        fetchElementType(),
+        getZoneCoords(),
+      ]);
 
-    loadContractData();
-  }, [dispatch, currentContract]);
+      setTreeTypes(treeTypesRes);
+      setElementTypes(elementTypesRes);
+      setCenterCoords(centerCoordsRes);
+
+      await Promise.all([
+        dispatch(fetchPointsAsync()).unwrap(),
+        dispatch(fetchElementsAsync()).unwrap(),
+      ]);
+
+      setIsDataLoaded(true);
+    } catch (err) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error cargando datos del contrato',
+      });
+    }
+  };
+
+    loadData();
+  }, [dispatch, currentContract?.id]);
+
+
+  
 
   useEffect(() => {
     if (!mapContainerRef.current || !isDataLoaded) return;
@@ -194,59 +189,10 @@ export const MapComponent: React.FC<MapProps> = ({
 
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service) return;
-
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => updateZones(service));
-    } else {
-      updateZones(service);
-    }
-  }, [zonesRedux, points, currentContract]);
-
-  useEffect(() => {
-    const service = mapServiceRef.current;
-    if (!service || !currentContract) return;
-
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => updateElements(service));
-    } else {
-      updateElements(service);
-    }
-  }, [elements, currentContract, points]);
-
-  useEffect(() => {
-    if (!currentContract?.id) return;
-    
-    setIsDataLoaded(false);
-    
-    if (mapContainerRef.current) {
-      while (mapContainerRef.current.firstChild) {
-        mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
-      }
-    }
-    
-    const loadNewContractData = async () => {
-      try {
-        const centerCoordsData = await getZoneCoords();
-        setCenterCoords(centerCoordsData);
-        
-        await Promise.all([
-          dispatch(fetchPointsAsync()).unwrap(),
-          dispatch(fetchElementsAsync()).unwrap()
-        ]);
-        
-        setIsDataLoaded(true);
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar los datos del nuevo contrato',
-        });
-      }
-    };
-    
-    loadNewContractData();
-  }, [currentContract?.id, dispatch]);
+    if (!service || !isDataLoaded) return;
+    updateZones(service);
+    updateElements(service);
+  }, [zonesRedux, elements, points, hiddenZones, hiddenElementTypes, isDataLoaded]);
 
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
