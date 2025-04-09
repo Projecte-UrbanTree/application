@@ -36,8 +36,8 @@ class IndexController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $userId = $request->user()->id;
         try {
-            $userId = auth()->id();
             $contractId = $request->header('X-Contract-Id');
             $date = $request->input('date');
 
@@ -51,9 +51,9 @@ class IndexController extends Controller
                 'workOrdersBlocks.blockTasks.tasksType',
                 'workReports',
             ]);
-            
+
             if ($contractId && $contractId > 0) {
-                $query->where('contract_id', (int)$contractId);
+                $query->where('contract_id', (int) $contractId);
             }
 
             if ($date) {
@@ -65,12 +65,11 @@ class IndexController extends Controller
             });
 
             $workOrders = $query->get();
-            
+
             Log::info("Found {$workOrders->count()} work orders for user {$userId}" . ($date ? " on date {$date}" : ""));
 
             return response()->json($workOrders);
         } catch (\Exception $e) {
-            $userId = auth()->id() ?? 'unknown';
             $contractId = $request->header('X-Contract-Id') ?? 'none';
             Log::error("Error fetching work orders for worker ID: {$userId}, contract ID: {$contractId}. Error: {$e->getMessage()}");
             Log::error($e->getTraceAsString());
@@ -87,6 +86,7 @@ class IndexController extends Controller
      */
     public function updateTaskStatus(Request $request, int $taskId): JsonResponse
     {
+        $userId = $request->user()->id;
         try {
             $validated = $request->validate([
                 'status' => 'required|integer|in:0,1,2',
@@ -98,9 +98,8 @@ class IndexController extends Controller
             $task = WorkOrderBlockTask::with(['workOrderBlock.workOrder'])
                 ->findOrFail($taskId);
 
-            $userId = auth()->id();
             $workOrder = $task->workOrderBlock->workOrder;
-            
+
             if (!$workOrder->users()->where('user_id', $userId)->exists()) {
                 throw new \Exception('You are not assigned to this work order');
             }
@@ -145,7 +144,7 @@ class IndexController extends Controller
     private function recalculateWorkOrderStatus(WorkOrder $workOrder): void
     {
         $workOrder->load('workOrdersBlocks.blockTasks');
-        
+
         $totalTasks = 0;
         $completedTasks = 0;
         $inProgressTasks = 0;
@@ -174,9 +173,9 @@ class IndexController extends Controller
         }
 
         $workOrder->save();
-        
+
         Log::info("Work order {$workOrder->id} status updated to {$workOrder->status}. " .
-                  "Completed tasks: {$completedTasks}/{$totalTasks}");
+            "Completed tasks: {$completedTasks}/{$totalTasks}");
     }
 
     /**
@@ -191,7 +190,7 @@ class IndexController extends Controller
             $validated = $request->validate([
                 'work_order_id' => ['required', 'integer', 'exists:work_orders,id'],
                 'spent_fuel' => ['required', 'numeric', 'min:0'],
-                'report_incidents' => ['nullable', 'string'],
+                'observation' => ['nullable', 'string'],
                 'report_status' => ['required', 'integer', 'in:0,1,2,3'],
                 'resources' => ['nullable', 'array'],
                 'resources.*.resource_id' => ['required', 'integer', 'exists:resources,id'],
@@ -200,7 +199,7 @@ class IndexController extends Controller
 
             $user = $request->user();
             $workOrder = WorkOrder::findOrFail($validated['work_order_id']);
-            
+
             if (!$workOrder->users->contains($user->id)) {
                 return response()->json([
                     'message' => 'You are not assigned to this work order',
@@ -212,10 +211,10 @@ class IndexController extends Controller
             $existingReport = WorkReport::where('work_order_id', $validated['work_order_id'])
                 ->where('report_status', self::REPORT_STATUS_REJECTED)
                 ->first();
-                
+
             if ($existingReport) {
                 $existingReport->spent_fuel = $validated['spent_fuel'];
-                $existingReport->report_incidents = $validated['report_incidents'] ?? null;
+                $existingReport->observation = $validated['observation'] ?? null;
                 $existingReport->report_status = self::REPORT_STATUS_PENDING;
                 $existingReport->save();
 
@@ -229,13 +228,15 @@ class IndexController extends Controller
                         ]);
                     }
                 }
-                
+
                 $workReport = $existingReport;
             } else {
-                if ($workOrder->status >= self::WORK_ORDER_REPORT_SENT && 
+                if (
+                    $workOrder->status >= self::WORK_ORDER_REPORT_SENT &&
                     !WorkReport::where('work_order_id', $validated['work_order_id'])
                         ->where('report_status', self::REPORT_STATUS_REJECTED)
-                        ->exists()) {
+                        ->exists()
+                ) {
                     return response()->json([
                         'message' => 'This work order already has a report sent',
                     ], 400);
@@ -244,7 +245,7 @@ class IndexController extends Controller
                 $workReport = WorkReport::create([
                     'work_order_id' => $validated['work_order_id'],
                     'spent_fuel' => $validated['spent_fuel'],
-                    'report_incidents' => $validated['report_incidents'] ?? null,
+                    'observation' => $validated['observation'] ?? null,
                     'report_status' => $validated['report_status'],
                 ]);
 
@@ -260,9 +261,9 @@ class IndexController extends Controller
 
             $workOrder->status = self::WORK_ORDER_REPORT_SENT;
             $workOrder->save();
-            
+
             DB::commit();
-            
+
             return response()->json([
                 'message' => 'Work report ' . ($existingReport ? 'updated' : 'created') . ' successfully',
                 'work_report' => $workReport->load(['workOrder', 'resources']),
@@ -270,7 +271,7 @@ class IndexController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error processing work report: ' . $e->getMessage());
-            
+
             return response()->json([
                 'message' => 'An error occurred while processing the work report',
                 'error' => $e->getMessage(),

@@ -1,3 +1,13 @@
+import axiosClient from '@/api/axiosClient';
+import { RootState } from '@/store/store';
+import {
+  WorkOrder,
+  WorkOrderStatus,
+  type WorkOrderBlock,
+  type WorkOrderBlockTask,
+  type WorkReport,
+} from '@/types/WorkOrders';
+import type { Zone } from '@/types/Zone';
 import { Icon } from '@iconify/react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { Badge } from 'primereact/badge';
@@ -17,16 +27,11 @@ import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-
-import axiosClient from '@/api/axiosClient';
-import { RootState } from '@/store/store';
-import { WorkOrder, WorkOrderStatus } from '@/types/WorkOrders';
 
 const TASK_STATUS = {
   PENDING: 0,
   IN_PROGRESS: 1,
-  COMPLETED: 2
+  COMPLETED: 2,
 };
 
 type SelectedResource = {
@@ -55,34 +60,39 @@ type Resource = {
 
 const WorkerWorkOrders = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const toast = useRef<Toast>(null);
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingTask, setUpdatingTask] = useState(false);
   const [activeIndexes, setActiveIndexes] = useState<number[]>([]);
-  
+
   const [showTimeDialog, setShowTimeDialog] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [spentTime, setSpentTime] = useState<number>(0);
-  
-  const [showResourcesDialog, setShowResourcesDialog] = useState(false);
-  const [selectedResources, setSelectedResources] = useState<SelectedResource[]>([]);
-  const [selectedWorkOrderId, setSelectedWorkOrderId] = useState<number | null>(null);
-  
-  const [expandedBlocks, setExpandedBlocks] = useState<Record<string, boolean>>({});
-  
+
+  const [expandedBlocks, setExpandedBlocks] = useState<Record<string, boolean>>(
+    {},
+  );
+
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
-  const [selectedResourceType, setSelectedResourceType] = useState<number | null>(null);
+  const [selectedResourceType, setSelectedResourceType] = useState<
+    number | null
+  >(null);
   const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
-  const [workReportResources, setWorkReportResources] = useState<SelectedResource[]>([{
-    resource: { id: 0, name: '', unit_name: '', unit_cost: 0 },
-    quantity: 1
-  }]);
+  const [workReportResources, setWorkReportResources] = useState<
+    SelectedResource[]
+  >([
+    {
+      resource: { id: 0, name: '', unit_name: '', unit_cost: 0 },
+      quantity: 1,
+    },
+  ]);
   const [spentFuel, setSpentFuel] = useState<number>(0);
-  const [reportIncidents, setReportIncidents] = useState<string>('');
+  const [observation, setObservation] = useState<WorkReport['observation']>('');
   const [submittingReport, setSubmittingReport] = useState(false);
   const [loadingResources, setLoadingResources] = useState(false);
 
@@ -97,37 +107,46 @@ const WorkerWorkOrders = () => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   };
 
-  const fetchWorkOrders = useCallback(async (date: Date) => {
-    if (!currentContract) return;
+  const fetchWorkOrders = useCallback(
+    async (date: Date) => {
+      if (!currentContract) return;
 
-    setLoading(true);
-    try {
-      const formattedDate = formatDateForAPI(date);
-      const response = await axiosClient.get(`/worker/work-orders?date=${formattedDate}`);
-      setWorkOrders(response.data);
-      setActiveIndexes(Array.from({ length: response.data.length }, (_, i) => i));
-    } catch (error) {
-      console.error('Error fetching work orders:', error);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
-        detail: t('worker.workOrders.errors.fetchFailed'),
-      });
-    }
-    setLoading(false);
-  }, [currentContract, t]);
+      setLoading(true);
+      try {
+        const formattedDate = formatDateForAPI(date);
+        const response = await axiosClient.get(
+          `/worker/work-orders?date=${formattedDate}`,
+        );
+        setWorkOrders(response.data);
+        setActiveIndexes(
+          Array.from({ length: response.data.length }, (_, i) => i),
+        );
+      } catch (error) {
+        console.error('Error fetching work orders:', error);
+        toast.current?.show({
+          severity: 'error',
+          summary: t('general.error'),
+          detail: t('worker.workOrders.errors.fetchFailed'),
+        });
+      }
+      setLoading(false);
+    },
+    [currentContract, t],
+  );
 
   const fetchResources = useCallback(async () => {
     if (!currentContract) return;
-    
+
     setLoadingResources(true);
     try {
-      const resourceTypesResponse = await axiosClient.get('/worker/resource-types');
+      const resourceTypesResponse = await axiosClient.get(
+        '/worker/resource-types',
+      );
       setResourceTypes(resourceTypesResponse.data);
-      
+
       const resourcesResponse = await axiosClient.get('/worker/resources');
-      const contractResources = resourcesResponse.data.filter((resource: Resource) => 
-        resource.contract_id === currentContract.id
+      const contractResources = resourcesResponse.data.filter(
+        (resource: Resource) => resource.contract_id === currentContract.id,
       );
       setResources(contractResources);
     } catch (error) {
@@ -145,7 +164,7 @@ const WorkerWorkOrders = () => {
   useEffect(() => {
     if (selectedResourceType && resources.length > 0) {
       const filtered = resources.filter(
-        (resource) => resource.resource_type_id === selectedResourceType
+        (resource) => resource.resource_type_id === selectedResourceType,
       );
       setFilteredResources(filtered);
     } else {
@@ -189,59 +208,24 @@ const WorkerWorkOrders = () => {
     return (
       <Badge
         value={statusInfo.label}
-        severity={statusInfo.severity as "success" | "info" | "warning" | "danger" | null}
+        severity={
+          statusInfo.severity as
+            | 'success'
+            | 'info'
+            | 'warning'
+            | 'danger'
+            | null
+        }
         className="font-medium"
       />
     );
   };
 
-  const openResourcesDialog = (workOrderId: number) => {
-    setSelectedWorkOrderId(workOrderId);
-    setSelectedResources([]);
-    setShowResourcesDialog(true);
-  };
-
-  const handleCreateReport = async (workOrderId: number) => {
-    if (selectedResources.length === 0) {
-      toast.current?.show({
-        severity: 'warn',
-        summary: t('general.warning'),
-        detail: t('worker.workOrders.errors.noResourcesSelected'),
-      });
-      return;
-    }
-  
-    try {
-      const resourcesPayload = selectedResources.map((resource) => ({
-        resource_id: resource.resource.id,
-        quantity: resource.quantity,
-      }));
-  
-      await axiosClient.post(`/worker/work-reports`, {
-        work_order_id: workOrderId,
-        resources: resourcesPayload,
-      });
-  
-      toast.current?.show({
-        severity: 'success',
-        summary: t('general.success'),
-        detail: t('worker.workOrders.messages.reportCreated'),
-      });
-  
-      setShowResourcesDialog(false);
-      fetchWorkOrders(selectedDate);
-    } catch (error: any) {
-      console.error('Error creating work report:', error);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
-        detail: error.response?.data?.message || t('worker.workOrders.errors.reportCreationFailed'),
-      });
-    }
-  };
-
   const handleSubmitWorkReport = async (workOrderId: number) => {
-    if (workReportResources.length === 0 || !workReportResources[0].resource.id) {
+    if (
+      workReportResources.length === 0 ||
+      !workReportResources[0].resource.id
+    ) {
       toast.current?.show({
         severity: 'warn',
         summary: t('general.warning'),
@@ -249,57 +233,64 @@ const WorkerWorkOrders = () => {
       });
       return;
     }
-    
+
     setSubmittingReport(true);
-    
+
     try {
       const resourcesPayload = workReportResources
-        .filter(item => item.resource.id > 0)
+        .filter((item) => item.resource.id > 0)
         .map((item) => ({
           resource_id: item.resource.id,
           quantity: item.quantity,
         }));
-      
+
       await axiosClient.post('/worker/work-reports', {
         work_order_id: workOrderId,
         spent_fuel: spentFuel,
-        report_incidents: reportIncidents,
+        observation: observation,
         report_status: 0,
         resources: resourcesPayload,
       });
-      
+
       toast.current?.show({
         severity: 'success',
         summary: t('general.success'),
         detail: t('worker.workOrders.messages.reportCreated'),
       });
-      
-      setWorkReportResources([{
-        resource: { id: 0, name: '', unit_name: '', unit_cost: 0 },
-        quantity: 1
-      }]);
+
+      setWorkReportResources([
+        {
+          resource: { id: 0, name: '', unit_name: '', unit_cost: 0 },
+          quantity: 1,
+        },
+      ]);
       setSpentFuel(0);
-      setReportIncidents('');
+      setObservation('');
       setSelectedResourceType(null);
-      
+
       fetchWorkOrders(selectedDate);
     } catch (error: any) {
       console.error('Error submitting work report:', error);
       toast.current?.show({
         severity: 'error',
         summary: t('general.error'),
-        detail: error.response?.data?.message || t('worker.workOrders.errors.reportCreationFailed'),
+        detail:
+          error.response?.data?.message ||
+          t('worker.workOrders.errors.reportCreationFailed'),
       });
     } finally {
       setSubmittingReport(false);
     }
   };
 
-  const handleTaskAction = (task: any, action: 'start' | 'complete' | 'reopen') => {
-    const workOrder = workOrders.find(wo => 
-      wo.work_orders_blocks?.some(block => 
-        block.block_tasks?.some(t => t.id === task.id)
-      )
+  const handleTaskAction = (
+    task: WorkOrderBlockTask,
+    action: 'start' | 'complete' | 'reopen',
+  ) => {
+    const workOrder = workOrders.find((wo) =>
+      wo.work_orders_blocks?.some((block) =>
+        block.block_tasks?.some((t) => t.id === task.id),
+      ),
     );
 
     if (!workOrder || workOrder.status >= WorkOrderStatus.REPORT_SENT) {
@@ -316,7 +307,8 @@ const WorkerWorkOrders = () => {
       setSpentTime(0);
       setShowTimeDialog(true);
     } else {
-      const newStatus = action === 'start' ? TASK_STATUS.IN_PROGRESS : TASK_STATUS.PENDING;
+      const newStatus =
+        action === 'start' ? TASK_STATUS.IN_PROGRESS : TASK_STATUS.PENDING;
       updateTaskStatus(task.id, newStatus);
     }
   };
@@ -328,47 +320,55 @@ const WorkerWorkOrders = () => {
     }
   };
 
-  const updateTaskStatus = async (taskId: number, status: number, spentTime?: number) => {
+  const updateTaskStatus = async (
+    taskId: number,
+    status: number,
+    spentTime?: number,
+  ) => {
     setUpdatingTask(true);
     try {
       const data: any = { status };
       if (spentTime !== undefined) {
         data.spent_time = spentTime;
       }
-      
-      const response = await axiosClient.put(`/worker/task/${taskId}/status`, data);
-      
+
+      const response = await axiosClient.put(
+        `/worker/task/${taskId}/status`,
+        data,
+      );
+
       toast.current?.show({
         severity: 'success',
         summary: t('general.success'),
         detail: t('worker.workOrders.taskUpdated'),
       });
-      
-      setWorkOrders(prevWorkOrders => {
-        return prevWorkOrders.map(wo => {
-          const hasUpdatedTask = wo.work_orders_blocks?.some(block => 
-            block.block_tasks?.some(task => task.id === taskId)
+
+      setWorkOrders((prevWorkOrders) => {
+        return prevWorkOrders.map((wo) => {
+          const hasUpdatedTask = wo.work_orders_blocks?.some((block) =>
+            block.block_tasks?.some((task) => task.id === taskId),
           );
-          
+
           if (hasUpdatedTask) {
-            const updatedBlocks = wo.work_orders_blocks?.map(block => {
-              const updatedTasks = block.block_tasks?.map(task => {
+            const updatedBlocks = wo.work_orders_blocks?.map((block) => {
+              const updatedTasks = block.block_tasks?.map((task) => {
                 if (task.id === taskId) {
-                  return { 
-                    ...task, 
-                    status, 
-                    spent_time: spentTime !== undefined ? spentTime : task.spent_time 
+                  return {
+                    ...task,
+                    status,
+                    spent_time:
+                      spentTime !== undefined ? spentTime : task.spent_time,
                   };
                 }
                 return task;
               });
               return { ...block, block_tasks: updatedTasks };
             });
-            
-            return { 
-              ...wo, 
+
+            return {
+              ...wo,
               work_orders_blocks: updatedBlocks,
-              status: response.data.work_order_status
+              status: response.data.work_order_status,
             };
           }
           return wo;
@@ -379,43 +379,29 @@ const WorkerWorkOrders = () => {
       toast.current?.show({
         severity: 'error',
         summary: t('general.error'),
-        detail: error.response?.data?.message || t('worker.workOrders.errors.taskUpdateFailed'),
+        detail:
+          error.response?.data?.message ||
+          t('worker.workOrders.errors.taskUpdateFailed'),
       });
     } finally {
       setUpdatingTask(false);
     }
   };
 
-  const handleReopenTask = async (taskId: number) => {
-    try {
-      await axiosClient.put(`/worker/task/${taskId}/status`, { status: TASK_STATUS.IN_PROGRESS });
-      toast.current?.show({
-        severity: 'success',
-        summary: t('general.success'),
-        detail: t('worker.workOrders.messages.taskUpdated'),
-      });
-      fetchWorkOrders(selectedDate);
-    } catch (error: any) {
-      console.error('Error reopening task:', error);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
-        detail: error.response?.data?.message || t('worker.workOrders.errors.taskUpdateFailed'),
-      });
-    }
-  };
-  
   const toggleBlockAccordion = (blockId: string) => {
-    setExpandedBlocks(prev => ({
+    setExpandedBlocks((prev) => ({
       ...prev,
-      [blockId]: !prev[blockId]
+      [blockId]: !prev[blockId],
     }));
   };
 
   const handleAddResource = () => {
     setWorkReportResources([
       ...workReportResources,
-      { resource: { id: 0, name: '', unit_name: '', unit_cost: 0 }, quantity: 1 }
+      {
+        resource: { id: 0, name: '', unit_name: '', unit_cost: 0 },
+        quantity: 1,
+      },
     ]);
   };
 
@@ -429,9 +415,9 @@ const WorkerWorkOrders = () => {
 
   const handleSelectResource = (index: number, resourceId: number) => {
     if (!resourceId) return;
-    
-    const selectedResource = resources.find(r => r.id === resourceId);
-    
+
+    const selectedResource = resources.find((r) => r.id === resourceId);
+
     if (selectedResource) {
       const updatedResources = [...workReportResources];
       updatedResources[index] = {
@@ -440,9 +426,9 @@ const WorkerWorkOrders = () => {
           id: selectedResource.id,
           name: selectedResource.name,
           unit_name: selectedResource.unit_name,
-          unit_cost: selectedResource.unit_cost
+          unit_cost: selectedResource.unit_cost,
         },
-        quantity: 1
+        quantity: 1,
       };
       setWorkReportResources(updatedResources);
     }
@@ -452,112 +438,129 @@ const WorkerWorkOrders = () => {
     const updatedResources = [...workReportResources];
     updatedResources[index] = {
       ...updatedResources[index],
-      quantity: value || 0
+      quantity: value || 0,
     };
     setWorkReportResources(updatedResources);
   };
 
-  const renderTaskList = (block: any, workOrder: WorkOrder) => {
+  const renderTaskList = (block: WorkOrderBlock, workOrder: WorkOrder) => {
     return (
       <div className="mt-3 space-y-3">
-        {block.block_tasks && block.block_tasks.map((task: any) => {
-          const taskName = task.tasks_type?.name || t('worker.workOrders.unknown');
-          const elementName = task.element_type?.name || t('worker.workOrders.unknown');
-          const speciesName = task.tree_type?.species ? `: ${task.tree_type.species}` : '';
-          
-          let statusSeverity: "success" | "warning" | "danger" = "danger";
-          let statusLabel = t('worker.workOrders.taskStatus.pending');
-          let statusIcon = "pi pi-clock";
-          let taskCardClass = "bg-white";
-          let taskBorderClass = "border-gray-200";
-          
-          if (task.status === TASK_STATUS.IN_PROGRESS) {
-            statusSeverity = "warning";
-            statusLabel = t('worker.workOrders.taskStatus.inProgress');
-            statusIcon = "pi pi-spin pi-spinner";
-            taskCardClass = "bg-yellow-50";
-            taskBorderClass = "border-yellow-200";
-          } else if (task.status === TASK_STATUS.COMPLETED) {
-            statusSeverity = "success";
-            statusLabel = t('worker.workOrders.taskStatus.completed');
-            statusIcon = "pi pi-check";
-            taskCardClass = "bg-green-50";
-            taskBorderClass = "border-green-200";
-          }
-          
-          const isWorkOrderLocked = workOrder.status === WorkOrderStatus.REPORT_SENT;
-          
-          return (
-            <div 
-              key={task.id} 
-              className={`p-3 ${taskCardClass} border ${taskBorderClass} rounded-lg shadow-sm transition-all hover:shadow-md`}
-            >
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div>
-                  <div className="font-medium text-gray-800 flex items-center gap-2">
-                    <Icon icon={task.element_type?.icon || "tabler:help"} className="text-indigo-600" />
-                    {taskName} {elementName}{speciesName}
+        {block.block_tasks &&
+          block.block_tasks.map((task: WorkOrderBlockTask) => {
+            const taskName =
+              task.tasks_type?.name || t('worker.workOrders.unknown');
+            const elementName =
+              task.element_type?.name || t('worker.workOrders.unknown');
+            const speciesName = task.tree_type?.species
+              ? `: ${task.tree_type.species}`
+              : '';
+
+            let statusSeverity: 'success' | 'warning' | 'danger' = 'danger';
+            let statusLabel = t('worker.workOrders.taskStatus.pending');
+            let statusIcon = 'pi pi-clock';
+            let taskCardClass = 'bg-white';
+            let taskBorderClass = 'border-gray-200';
+
+            if (task.status === TASK_STATUS.IN_PROGRESS) {
+              statusSeverity = 'warning';
+              statusLabel = t('worker.workOrders.taskStatus.inProgress');
+              statusIcon = 'pi pi-spin pi-spinner';
+              taskCardClass = 'bg-yellow-50';
+              taskBorderClass = 'border-yellow-200';
+            } else if (task.status === TASK_STATUS.COMPLETED) {
+              statusSeverity = 'success';
+              statusLabel = t('worker.workOrders.taskStatus.completed');
+              statusIcon = 'pi pi-check';
+              taskCardClass = 'bg-green-50';
+              taskBorderClass = 'border-green-200';
+            }
+
+            const isWorkOrderLocked =
+              workOrder.status === WorkOrderStatus.REPORT_SENT;
+
+            return (
+              <div
+                key={task.id}
+                className={`p-3 ${taskCardClass} border ${taskBorderClass} rounded-lg shadow-sm transition-all hover:shadow-md`}>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  <div>
+                    <div className="font-medium text-gray-800 flex items-center gap-2">
+                      <Icon
+                        icon={task.element_type?.icon || 'tabler:help'}
+                        className="text-indigo-600"
+                      />
+                      {taskName} {elementName}
+                      {speciesName}
+                    </div>
+                    {task.status === TASK_STATUS.COMPLETED &&
+                      task.spent_time &&
+                      task.spent_time > 0 && (
+                        <div className="text-sm text-gray-600 mt-1 flex items-center gap-1">
+                          <Icon icon="tabler:clock" />
+                          {t('worker.workOrders.timeSpent')}:{' '}
+                          <span className="font-medium">
+                            {task.spent_time}h
+                          </span>
+                        </div>
+                      )}
+                    asdf
                   </div>
-                  {task.status === TASK_STATUS.COMPLETED && task.spent_time > 0 && (
-                    <div className="text-sm text-gray-600 mt-1 flex items-center gap-1">
-                      <Icon icon="tabler:clock" />
-                      {t('worker.workOrders.timeSpent')}: <span className="font-medium">{task.spent_time}h</span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
-                  <Tag 
-                    value={statusLabel} 
-                    icon={statusIcon} 
-                    severity={statusSeverity}
-                    className="px-2 py-1 font-medium flex-grow sm:flex-grow-0"
-                  />
-                  {!isWorkOrderLocked && (
-                    <div className="flex gap-1">
-                      {task.status === TASK_STATUS.PENDING && (
-                        <Button
-                          icon="pi pi-play"
-                          className="p-button-rounded p-button-warning p-button-sm"
-                          tooltip={t('worker.workOrders.startTask')}
-                          tooltipOptions={{ position: 'top' }}
-                          disabled={updatingTask}
-                          onClick={() => handleTaskAction(task, 'start')}
-                        />
-                      )}
-                      {task.status === TASK_STATUS.IN_PROGRESS && (
-                        <Button
-                          icon="pi pi-check"
-                          className="p-button-rounded p-button-success p-button-sm"
-                          tooltip={t('worker.workOrders.completeTask')}
-                          tooltipOptions={{ position: 'top' }}
-                          disabled={updatingTask}
-                          onClick={() => handleTaskAction(task, 'complete')}
-                        />
-                      )}
-                      {task.status === TASK_STATUS.COMPLETED && (
-                        <Button
-                          icon="pi pi-undo"
-                          className="p-button-rounded p-button-outlined p-button-secondary p-button-sm"
-                          tooltip={t('worker.workOrders.reopenTask')}
-                          tooltipOptions={{ position: 'top' }}
-                          disabled={updatingTask}
-                          onClick={() => handleTaskAction(task, 'reopen')}
-                        />
-                      )}
-                    </div>
-                  )}
+                  <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
+                    <Tag
+                      value={statusLabel}
+                      icon={statusIcon}
+                      severity={statusSeverity}
+                      className="px-2 py-1 font-medium flex-grow sm:flex-grow-0"
+                    />
+                    {!isWorkOrderLocked && (
+                      <div className="flex gap-1">
+                        {task.status === TASK_STATUS.PENDING && (
+                          <Button
+                            icon="pi pi-play"
+                            className="p-button-rounded p-button-warning p-button-sm"
+                            tooltip={t('worker.workOrders.startTask')}
+                            tooltipOptions={{ position: 'top' }}
+                            disabled={updatingTask}
+                            onClick={() => handleTaskAction(task, 'start')}
+                          />
+                        )}
+                        {task.status === TASK_STATUS.IN_PROGRESS && (
+                          <Button
+                            icon="pi pi-check"
+                            className="p-button-rounded p-button-success p-button-sm"
+                            tooltip={t('worker.workOrders.completeTask')}
+                            tooltipOptions={{ position: 'top' }}
+                            disabled={updatingTask}
+                            onClick={() => handleTaskAction(task, 'complete')}
+                          />
+                        )}
+                        {task.status === TASK_STATUS.COMPLETED && (
+                          <Button
+                            icon="pi pi-undo"
+                            className="p-button-rounded p-button-outlined p-button-secondary p-button-sm"
+                            tooltip={t('worker.workOrders.reopenTask')}
+                            tooltipOptions={{ position: 'top' }}
+                            disabled={updatingTask}
+                            onClick={() => handleTaskAction(task, 'reopen')}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     );
   };
 
   const renderWorkReportSection = (workOrder: WorkOrder) => {
-    if (workOrder.status !== WorkOrderStatus.IN_PROGRESS && 
-        workOrder.status !== WorkOrderStatus.COMPLETED) {
+    if (
+      workOrder.status !== WorkOrderStatus.IN_PROGRESS &&
+      workOrder.status !== WorkOrderStatus.COMPLETED
+    ) {
       return null;
     }
 
@@ -570,7 +573,10 @@ const WorkerWorkOrders = () => {
           </h3>
           <Divider />
           <div className="flex justify-center p-4">
-            <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />
+            <ProgressSpinner
+              style={{ width: '50px', height: '50px' }}
+              strokeWidth="4"
+            />
           </div>
         </div>
       );
@@ -590,7 +596,7 @@ const WorkerWorkOrders = () => {
             Gasolina gastada (Litros)
           </label>
           <div className="flex items-center">
-            <InputNumber 
+            <InputNumber
               value={spentFuel}
               onValueChange={(e) => setSpentFuel(e.value || 0)}
               mode="decimal"
@@ -603,7 +609,7 @@ const WorkerWorkOrders = () => {
             />
           </div>
         </div>
-        
+
         {resourceTypes.length > 0 && (
           <>
             <div className="mb-4">
@@ -621,7 +627,7 @@ const WorkerWorkOrders = () => {
                 className="w-full"
               />
             </div>
-            
+
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700 flex items-center gap-1">
@@ -632,27 +638,33 @@ const WorkerWorkOrders = () => {
                   icon={<Icon icon="tabler:plus" className="h-4 w-4 mr-1" />}
                   label="Agregar Recurso"
                   className="p-button-sm"
-                  disabled={!selectedResourceType || filteredResources.length === 0}
+                  disabled={
+                    !selectedResourceType || filteredResources.length === 0
+                  }
                   onClick={handleAddResource}
                 />
               </div>
-              
+
               <div className="space-y-3">
                 {workReportResources.map((item, index) => (
-                  <div key={index} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div
+                    key={index}
+                    className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-700">
                         Recurso {index + 1}
                       </span>
                       {workReportResources.length > 1 && (
                         <Button
-                          icon={<Icon icon="tabler:trash" className="h-4 w-4" />}
+                          icon={
+                            <Icon icon="tabler:trash" className="h-4 w-4" />
+                          }
                           className="p-button-rounded p-button-danger p-button-sm p-button-outlined"
                           onClick={() => handleRemoveResource(index)}
                         />
                       )}
                     </div>
-                    
+
                     <div className="grid grid-cols-1 gap-3">
                       <div>
                         <label className="text-xs text-gray-600 block mb-1">
@@ -666,11 +678,14 @@ const WorkerWorkOrders = () => {
                           optionValue="id"
                           placeholder="Seleccionar recurso"
                           className="w-full"
-                          disabled={!selectedResourceType || filteredResources.length === 0}
+                          disabled={
+                            !selectedResourceType ||
+                            filteredResources.length === 0
+                          }
                         />
                       </div>
                     </div>
-                    
+
                     {item.resource.id > 0 && (
                       <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
@@ -690,7 +705,9 @@ const WorkerWorkOrders = () => {
                           </label>
                           <InputNumber
                             value={item.quantity}
-                            onValueChange={(e) => handleQuantityChange(index, e.value || 0)}
+                            onValueChange={(e) =>
+                              handleQuantityChange(index, e.value || 0)
+                            }
                             mode="decimal"
                             minFractionDigits={0}
                             maxFractionDigits={2}
@@ -705,24 +722,30 @@ const WorkerWorkOrders = () => {
                   </div>
                 ))}
               </div>
-              
+
               {!selectedResourceType && (
                 <div className="mt-2 bg-blue-50 text-blue-700 p-2 rounded text-sm text-center">
-                  <Icon icon="tabler:info-circle" className="inline-block mr-1" />
+                  <Icon
+                    icon="tabler:info-circle"
+                    className="inline-block mr-1"
+                  />
                   Por favor selecciona un tipo de recurso primero
                 </div>
               )}
-              
+
               {selectedResourceType && filteredResources.length === 0 && (
                 <div className="mt-2 bg-yellow-50 text-yellow-700 p-2 rounded text-sm text-center">
-                  <Icon icon="tabler:alert-triangle" className="inline-block mr-1" />
+                  <Icon
+                    icon="tabler:alert-triangle"
+                    className="inline-block mr-1"
+                  />
                   No hay recursos disponibles para este tipo
                 </div>
               )}
             </div>
           </>
         )}
-        
+
         {resourceTypes.length === 0 && (
           <div className="mb-4 bg-yellow-50 text-yellow-700 p-3 rounded text-sm text-center">
             <Icon icon="tabler:alert-triangle" className="inline-block mr-1" />
@@ -736,21 +759,32 @@ const WorkerWorkOrders = () => {
             Observaciones
           </label>
           <InputTextarea
-            value={reportIncidents}
-            onChange={(e) => setReportIncidents(e.target.value)}
+            value={observation}
+            onChange={(e) => setObservation(e.target.value)}
             rows={3}
             placeholder="Ingrese cualquier observación o incidencia aquí"
             className="w-full"
           />
         </div>
-        
+
         <div className="flex justify-end">
           <Button
             label="Enviar Parte"
-            icon={submittingReport ? "pi pi-spin pi-spinner" : <Icon icon="tabler:send" className="h-4 w-4 mr-1" />}
+            icon={
+              submittingReport ? (
+                'pi pi-spin pi-spinner'
+              ) : (
+                <Icon icon="tabler:send" className="h-4 w-4 mr-1" />
+              )
+            }
             className="p-button-success"
             onClick={() => handleSubmitWorkReport(workOrder.id)}
-            disabled={submittingReport || (resourceTypes.length > 0 && (workReportResources.length === 0 || workReportResources[0].resource.id === 0))}
+            disabled={
+              submittingReport ||
+              (resourceTypes.length > 0 &&
+                (workReportResources.length === 0 ||
+                  workReportResources[0].resource.id === 0))
+            }
           />
         </div>
       </div>
@@ -759,8 +793,18 @@ const WorkerWorkOrders = () => {
 
   const timeDialogFooter = (
     <>
-      <Button label={t('general.cancel')} icon="pi pi-times" className="p-button-text" onClick={() => setShowTimeDialog(false)} />
-      <Button label={t('worker.workOrders.complete')} icon="pi pi-check" className="p-button-success" onClick={confirmCompleteTask} />
+      <Button
+        label={t('general.cancel')}
+        icon="pi pi-times"
+        className="p-button-text"
+        onClick={() => setShowTimeDialog(false)}
+      />
+      <Button
+        label={t('worker.workOrders.complete')}
+        icon="pi pi-check"
+        className="p-button-success"
+        onClick={confirmCompleteTask}
+      />
     </>
   );
 
@@ -770,7 +814,9 @@ const WorkerWorkOrders = () => {
         <Card className="mb-4 bg-yellow-50 border border-yellow-200 shadow-md">
           <div className="flex items-center gap-2 text-yellow-800">
             <Icon icon="tabler:alert-triangle" width={24} />
-            <span className="font-medium">{t('worker.workOrders.noContract')}</span>
+            <span className="font-medium">
+              {t('worker.workOrders.noContract')}
+            </span>
           </div>
         </Card>
       </div>
@@ -780,7 +826,7 @@ const WorkerWorkOrders = () => {
   return (
     <div className="p-2 sm:p-4">
       <Toast ref={toast} />
-      
+
       <Dialog
         header={t('worker.workOrders.timeSpentDialog')}
         visible={showTimeDialog}
@@ -788,10 +834,11 @@ const WorkerWorkOrders = () => {
         modal
         footer={timeDialogFooter}
         onHide={() => setShowTimeDialog(false)}
-        className="shadow-lg"
-      >
+        className="shadow-lg">
         <div className="flex flex-column gap-3 p-3">
-          <p className="text-gray-700">{t('worker.workOrders.enterTimeSpent')}</p>
+          <p className="text-gray-700">
+            {t('worker.workOrders.enterTimeSpent')}
+          </p>
           <div className="p-inputgroup">
             <InputNumber
               value={spentTime}
@@ -810,12 +857,18 @@ const WorkerWorkOrders = () => {
       <Card className="mb-4 shadow-md border border-gray-200">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-            <Icon icon="tabler:clipboard-list" className="text-indigo-600" width={24} />
+            <Icon
+              icon="tabler:clipboard-list"
+              className="text-indigo-600"
+              width={24}
+            />
             {t('worker.workOrders.title')}
           </h2>
-          
+
           <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-md border border-gray-200 w-full sm:w-auto">
-            <label htmlFor="date-picker" className="font-medium text-gray-700 flex items-center gap-1">
+            <label
+              htmlFor="date-picker"
+              className="font-medium text-gray-700 flex items-center gap-1">
               <Icon icon="tabler:calendar" className="text-indigo-600" />
               {t('worker.workOrders.selectDate')}:
             </label>
@@ -834,23 +887,34 @@ const WorkerWorkOrders = () => {
 
       {loading ? (
         <div className="flex justify-center p-8">
-          <ProgressSpinner strokeWidth="4" style={{width: '50px', height: '50px'}} />
+          <ProgressSpinner
+            strokeWidth="4"
+            style={{ width: '50px', height: '50px' }}
+          />
         </div>
       ) : workOrders.length === 0 ? (
         <Card className="p-4 sm:p-6 text-center bg-gray-50 shadow-md border border-gray-200">
-          <Icon icon="tabler:clipboard-off" width={64} height={64} className="mx-auto mb-4 text-gray-400" />
-          <h3 className="text-xl font-medium mb-2 text-gray-800">{t('worker.workOrders.noWorkOrders')}</h3>
-          <p className="text-gray-600 max-w-md mx-auto">{t('worker.workOrders.noWorkOrdersMessage')}</p>
+          <Icon
+            icon="tabler:clipboard-off"
+            width={64}
+            height={64}
+            className="mx-auto mb-4 text-gray-400"
+          />
+          <h3 className="text-xl font-medium mb-2 text-gray-800">
+            {t('worker.workOrders.noWorkOrders')}
+          </h3>
+          <p className="text-gray-600 max-w-md mx-auto">
+            {t('worker.workOrders.noWorkOrdersMessage')}
+          </p>
         </Card>
       ) : (
-        <Accordion 
-          multiple 
-          activeIndex={activeIndexes} 
+        <Accordion
+          multiple
+          activeIndex={activeIndexes}
           onTabChange={(e) => setActiveIndexes(e.index as number[])}
-          className="shadow-md border border-gray-200 rounded-md overflow-hidden"
-        >
-          {workOrders.map((workOrder, index) => (
-            <AccordionTab 
+          className="shadow-md border border-gray-200 rounded-md overflow-hidden">
+          {workOrders.map((workOrder) => (
+            <AccordionTab
               key={workOrder.id}
               className="border-b border-gray-200 last:border-b-0"
               headerClassName="bg-white hover:bg-gray-50"
@@ -864,68 +928,82 @@ const WorkerWorkOrders = () => {
                     {getStatusBadge(workOrder.status)}
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {workOrder.users?.map(user => (
-                      <Chip 
-                        key={user.id} 
-                        label={`${user.name} ${user.surname}`} 
+                    {workOrder.users?.map((user) => (
+                      <Chip
+                        key={user.id}
+                        label={`${user.name} ${user.surname}`}
                         className="bg-indigo-50 text-indigo-700 font-medium text-xs sm:text-sm"
                       />
                     ))}
                   </div>
                 </div>
-              }
-            >
+              }>
               <div className="p-2 sm:p-4 rounded-md">
                 {workOrder.work_orders_blocks?.map((block, blockIndex) => {
                   const blockId = `${workOrder.id}-${blockIndex}`;
                   const isBlockExpanded = expandedBlocks[blockId] !== false;
-                  
+
                   return (
                     <div key={blockIndex} className="mb-4 last:mb-0">
-                      <div 
+                      <div
                         className="flex items-center justify-between gap-2 mb-2 bg-white p-3 rounded-md shadow-sm border border-gray-200 cursor-pointer"
-                        onClick={() => toggleBlockAccordion(blockId)}
-                      >
+                        onClick={() => toggleBlockAccordion(blockId)}>
                         <div className="flex items-center gap-2">
-                          <Icon icon="tabler:layout-grid" className="text-indigo-600" width={20} />
+                          <Icon
+                            icon="tabler:layout-grid"
+                            className="text-indigo-600"
+                            width={20}
+                          />
                           <h4 className="text-lg font-medium text-gray-800">
                             {t('worker.workOrders.block')} {blockIndex + 1}
                           </h4>
                         </div>
-                        <Icon 
-                          icon={isBlockExpanded ? "tabler:chevron-up" : "tabler:chevron-down"} 
-                          className="text-gray-600" 
-                          width={20} 
+                        <Icon
+                          icon={
+                            isBlockExpanded
+                              ? 'tabler:chevron-up'
+                              : 'tabler:chevron-down'
+                          }
+                          className="text-gray-600"
+                          width={20}
                         />
                       </div>
-                      
+
                       {isBlockExpanded && (
                         <>
                           <div className="grid grid-cols-1 gap-3 mb-3">
                             <div className="bg-white p-3 rounded-md border border-gray-200 shadow-sm">
                               <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
-                                <Icon icon="tabler:map-pin" className="text-indigo-600" />
+                                <Icon
+                                  icon="tabler:map-pin"
+                                  className="text-indigo-600"
+                                />
                                 {t('worker.workOrders.zones')}
                               </h5>
                               <div className="flex flex-wrap gap-2">
                                 {block.zones?.length > 0 ? (
-                                  block.zones.map((zone: any) => (
-                                    <Tag 
-                                      key={zone.id} 
-                                      value={zone.name} 
+                                  block.zones.map((zone: Zone) => (
+                                    <Tag
+                                      key={zone.id}
+                                      value={zone.name}
                                       className="bg-blue-50 text-blue-700 border border-blue-200"
                                     />
                                   ))
                                 ) : (
-                                  <span className="text-gray-500 italic text-sm">{t('worker.workOrders.noZones')}</span>
+                                  <span className="text-gray-500 italic text-sm">
+                                    {t('worker.workOrders.noZones')}
+                                  </span>
                                 )}
                               </div>
                             </div>
-                            
+
                             {block.notes && (
                               <div className="bg-white p-3 rounded-md border border-gray-200 shadow-sm">
                                 <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
-                                  <Icon icon="tabler:notes" className="text-indigo-600" />
+                                  <Icon
+                                    icon="tabler:notes"
+                                    className="text-indigo-600"
+                                  />
                                   {t('worker.workOrders.notes')}
                                 </h5>
                                 <p className="text-gray-700 bg-gray-50 p-3 rounded-md border border-gray-200 text-sm">
@@ -933,10 +1011,13 @@ const WorkerWorkOrders = () => {
                                 </p>
                               </div>
                             )}
-                            
+
                             <div className="bg-white p-3 rounded-md border border-gray-200 shadow-sm">
                               <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
-                                <Icon icon="tabler:list-check" className="text-indigo-600" />
+                                <Icon
+                                  icon="tabler:list-check"
+                                  className="text-indigo-600"
+                                />
                                 {t('worker.workOrders.tasks')}
                               </h5>
                               {renderTaskList(block, workOrder)}
@@ -947,7 +1028,7 @@ const WorkerWorkOrders = () => {
                     </div>
                   );
                 })}
-                
+
                 {renderWorkReportSection(workOrder)}
               </div>
             </AccordionTab>
