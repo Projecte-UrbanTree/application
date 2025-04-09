@@ -191,6 +191,7 @@ export const MapComponent: React.FC<MapProps> = ({
     const service = mapServiceRef.current;
     if (!service || !isDataLoaded) return;
     
+    console.log('Updating zones');
     updateZones(service);
   }, [zonesRedux, points, hiddenZones, isDataLoaded]);
 
@@ -198,21 +199,27 @@ export const MapComponent: React.FC<MapProps> = ({
     const service = mapServiceRef.current;
     if (!service || !isDataLoaded) return;
     
+    console.log('Updating elements due to visibility changes');
     updateElements(service);
   }, [elements, points, hiddenZones, hiddenElementTypes, isDataLoaded]);
 
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
+      console.log(`Updating visibility for elements of type ${elementTypeId} in zone ${zoneId} to ${!hidden}`);
+      
       const pointsInZone = points.filter((p) => p.zone_id === zoneId);
       const pointIds = new Set(pointsInZone.map((p) => p.id));
 
-      elements
-        .filter((element) => element.element_type_id === elementTypeId && pointIds.has(element.point_id!))
-        .forEach((element) => {
-          if (element.id) {
-            service.updateMarkerVisibility(element.id, !hidden);
-          }
-        });
+      const elementsToUpdate = elements
+        .filter((element) => element.element_type_id === elementTypeId && pointIds.has(element.point_id!));
+        
+      console.log(`Found ${elementsToUpdate.length} elements to update visibility`);
+      
+      elementsToUpdate.forEach((element) => {
+        if (element.id) {
+          service.updateMarkerVisibility(element.id, !hidden);
+        }
+      });
     },
     [elements, points]
   );
@@ -469,25 +476,36 @@ export const MapComponent: React.FC<MapProps> = ({
         handleElementClick,
       );
       
-      // Aplicamos visibilidad según zonas ocultas
-      Object.entries(hiddenZones).forEach(([zoneId, isHidden]) => {
+      // Primero aplicamos la visibilidad según zonas ocultas
+      Object.entries(hiddenZones).forEach(([zoneIdStr, isHidden]) => {
         if (isHidden) {
-          const zoneIdNum = Number(zoneId);
-          const pointsInZone = relevantPoints.filter(p => p.zone_id === zoneIdNum);
+          const zoneId = Number(zoneIdStr);
+          console.log(`Zone ${zoneId} is hidden, hiding all its elements`);
+          
+          const pointsInZone = relevantPoints.filter(p => p.zone_id === zoneId);
           
           pointsInZone.forEach((point) => {
             filteredElements
               .filter((element) => element.point_id === point.id && element.id)
-              .forEach((element) => service.updateMarkerVisibility(element.id!, false));
+              .forEach((element) => {
+                service.updateMarkerVisibility(element.id!, false);
+              });
           });
         }
       });
 
-      // Aplicamos visibilidad según tipos de elementos ocultos
+      // Luego aplicamos visibilidad según tipos de elementos para zonas visibles
       Object.entries(hiddenElementTypes).forEach(([key, isHidden]) => {
         if (isHidden) {
-          const [zoneId, elementTypeId] = key.split('-').map(Number);
-          updateElementVisibility(zoneId, elementTypeId, true, service);
+          const [zoneIdStr, elementTypeIdStr] = key.split('-');
+          const zoneId = Number(zoneIdStr);
+          const elementTypeId = Number(elementTypeIdStr);
+          
+          // Solo aplicamos las reglas de visibilidad de elementos si la zona está visible
+          if (!hiddenZones[zoneId]) {
+            console.log(`Element type ${elementTypeId} in zone ${zoneId} is hidden`);
+            updateElementVisibility(zoneId, elementTypeId, true, service);
+          }
         }
       });
     };

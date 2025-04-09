@@ -231,8 +231,18 @@ export const Zones = ({
     (elementTypeId: number, zoneId: number) => {
       const key = `${zoneId}-${elementTypeId}`;
       const isHidden = hiddenElementTypes[key] || false;
+      const zoneIsHidden = hiddenZones[zoneId] || false;
 
       console.log(`Toggling visibility for elements of type ${elementTypeId} in zone ${zoneId} to ${!isHidden}`);
+
+      if (zoneIsHidden && !isHidden) {
+        toast.current?.show({
+          severity: 'warn',
+          summary: 'Aviso',
+          detail: 'No se pueden mostrar elementos mientras la zona está oculta.',
+        });
+        return;
+      }
 
       setHiddenElementTypes((prev) => ({
         ...prev,
@@ -248,7 +258,7 @@ export const Zones = ({
         },
       });
     },
-    [hiddenElementTypes],
+    [hiddenElementTypes, hiddenZones],
   );
 
   const toggleZoneVisibility = useCallback(
@@ -257,10 +267,34 @@ export const Zones = ({
       
       console.log(`Toggling visibility for zone ${zoneId} to ${!isHidden}`);
       
-      setHiddenZones((prev) => ({
-        ...prev,
-        [zoneId]: !isHidden,
-      }));
+      if (!isHidden) {
+        setHiddenZones((prev) => ({
+          ...prev,
+          [zoneId]: true,
+        }));
+
+        const elementCounts = countElementsByTypeInZone(zoneId);
+        Object.keys(elementCounts).forEach((typeId) => {
+          const key = `${zoneId}-${typeId}`;
+          setHiddenElementTypes((prev) => ({
+            ...prev,
+            [key]: true,
+          }));
+        });
+      } else {
+        setHiddenZones((prev) => ({
+          ...prev,
+          [zoneId]: false,
+        }));
+        
+        eventSubject.next({
+          isCreatingElement: false,
+          hiddenZone: {
+            zoneId,
+            hidden: false,
+          },
+        });
+      }
 
       eventSubject.next({
         isCreatingElement: false,
@@ -271,8 +305,36 @@ export const Zones = ({
       });
       window.history.replaceState(null, '', window.location.pathname);
     },
-    [hiddenZones],
+    [hiddenZones, countElementsByTypeInZone],
   );
+
+  const showAllElementsInZone = useCallback((zoneId: number) => {
+    const elementCounts = countElementsByTypeInZone(zoneId);
+    
+    Object.keys(elementCounts).forEach((typeId) => {
+      const key = `${zoneId}-${typeId}`;
+      setHiddenElementTypes((prev) => ({
+        ...prev,
+        [key]: false,
+      }));
+      
+      eventSubject.next({
+        isCreatingElement: false,
+        hiddenElementTypes: {
+          zoneId,
+          elementTypeId: parseInt(typeId),
+          hidden: false,
+        },
+      });
+    });
+    
+    toast.current?.show({
+      severity: 'info',
+      summary: 'Información',
+      detail: 'Todos los elementos de la zona son ahora visibles',
+      life: 3000,
+    });
+  }, [countElementsByTypeInZone]);
 
   const handleColorChange = useCallback(async (zone: Zone, newColor: string) => {
     try {
@@ -299,36 +361,45 @@ export const Zones = ({
     (elementType: ElementType, zone: Zone, count: number) => {
       const key = `${zone.id}-${elementType.id}`;
       const isHidden = hiddenElementTypes[key] || false;
+      const zoneIsHidden = hiddenZones[zone.id!] || false;
 
       if (count === 0) return null; 
 
       return (
         <div
           key={elementType.id}
-          className="flex justify-between items-center my-2 p-2 rounded bg-gray-50">
+          className={`flex justify-between items-center my-2 p-2 rounded ${
+            isHidden || zoneIsHidden ? 'bg-gray-100' : 'bg-gray-50'
+          }`}>
           <div className="flex items-center gap-2">
             {elementType.icon && (
               <Icon
                 icon={elementType.icon.startsWith('mdi:') ? elementType.icon : `mdi:${elementType.icon}`}
                 width="20"
-                style={{ color: elementType.color || '#666' }}
+                style={{ 
+                  color: elementType.color || '#666',
+                  opacity: isHidden || zoneIsHidden ? 0.5 : 1
+                }}
               />
             )}
-            <span>
+            <span className={isHidden || zoneIsHidden ? 'text-gray-400' : ''}>
               {elementType.name} ({count} elementos)
             </span>
           </div>
           <Button
             icon={
-              <Icon icon={isHidden ? 'mdi:eye-off' : 'mdi:eye'} width="20" />
+              <Icon icon={isHidden || zoneIsHidden ? 'mdi:eye-off' : 'mdi:eye'} width="20" />
             }
-            className={`p-button-text p-2 ${isHidden ? 'text-gray-400' : ''}`}
+            className={`p-button-text p-2 ${isHidden || zoneIsHidden ? 'text-gray-400' : ''}`}
             onClick={() => handleViewElements(elementType.id!, zone.id!)}
+            disabled={zoneIsHidden}
+            tooltip={zoneIsHidden ? "La zona está oculta. Muestra la zona primero." : ""} 
+            tooltipOptions={{ position: 'top' }}
           />
         </div>
       );
     },
-    [hiddenElementTypes, handleViewElements],
+    [hiddenElementTypes, hiddenZones, handleViewElements],
   );
 
   if (zonesLoading || pointsLoading || elementsLoading) {
@@ -419,6 +490,18 @@ export const Zones = ({
                           onSelectedZone(zone);
                         }}
                       />
+                      {!hiddenZones[zone.id!] && (
+                        <Button
+                          icon={<Icon icon="mdi:eye-check" width="20" />}
+                          className="p-button-text p-2"
+                          tooltip="Mostrar todos los elementos"
+                          tooltipOptions={{ position: 'top' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            showAllElementsInZone(zone.id!);
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                 }>
