@@ -1,8 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Icon } from '@iconify/react';
 import * as turf from '@turf/turf';
 import { Button } from 'primereact/button';
 import { ColorPicker } from 'primereact/colorpicker';
 import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -205,70 +207,122 @@ export const SaveZoneForm = ({
   return (
     <>
       <Toast ref={toast} />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium">Nombre</label>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <InputText {...field} className="w-full p-inputtext" />
-            )}
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
+
+      <div className="bg-gray-50 border border-gray-300 rounded shadow-sm p-4">
+        <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 mb-4 flex items-center gap-2 text-indigo-800">
+          <Icon icon="tabler:info-circle" className="text-indigo-500 flex-shrink-0" width="20" />
+          <span className="text-sm">
+            Se creará una zona con <strong>{coordinates.length}</strong> puntos delimitadores. 
+            La zona debe tener un nombre único.
+          </span>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium">Descripción</label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <InputText {...field} className="w-full p-inputtext" />
-            )}
-          />
-          {errors.description && (
-            <p className="text-red-500 text-sm">{errors.description.message}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium">Color</label>
-          <Controller
-            name="color"
-            control={control}
-            render={({ field }) => (
-              <ColorPicker
-                {...field}
-                format="hex"
-                className="w-full"
-                onChange={(e) => setValue('color', `#${e.value}`)}
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                <Icon icon="tabler:map" width="18" />
+                Nombre de la zona
+              </label>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <InputText 
+                    {...field} 
+                    className="w-full p-inputtext" 
+                    placeholder="Ej. Parque Central"
+                    disabled={isSubmitting}
+                  />
+                )}
               />
-            )}
-          />
-          {errors.color && (
-            <p className="text-red-500 text-sm">{errors.color.message}</p>
-          )}
-        </div>
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <Icon icon="tabler:alert-circle" width="16" />
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
 
-        <div className="flex justify-end gap-2">
-          <Button
-            type="button"
-            onClick={handleCancel}
-            className="p-button-secondary"
-            disabled={isSubmitting}>
-            Cancelar
-          </Button>
-          <Button
-            type="submit"
-            className="p-button-primary"
-            disabled={isSubmitting}>
-            Guardar
-          </Button>
-        </div>
-      </form>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                <Icon icon="tabler:notes" width="18" />
+                Descripción
+              </label>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <InputTextarea 
+                    {...field} 
+                    rows={3} 
+                    className="w-full p-inputtext" 
+                    placeholder="Descripción detallada de la zona (opcional)"
+                    disabled={isSubmitting}
+                  />
+                )}
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+              )}
+            </div>
+
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                <Icon icon="tabler:palette" width="18" />
+                Color
+              </label>
+              <div className="flex items-center gap-3">
+                <Controller
+                  name="color"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <ColorPicker
+                        {...field}
+                        format="hex"
+                        className="w-10 h-10"
+                        onChange={(e) => setValue('color', `#${e.value}`)}
+                        appendTo="self"
+                        disabled={isSubmitting}
+                      />
+                      <div 
+                        className="w-10 h-10 rounded-lg border border-gray-300" 
+                        style={{ backgroundColor: control._formValues.color || '#FF5733' }}
+                      />
+                      <span className="text-sm text-gray-700 font-mono">
+                        {control._formValues.color?.toUpperCase() || '#FF5733'}
+                      </span>
+                    </>
+                  )}
+                />
+              </div>
+              {errors.color && (
+                <p className="text-red-500 text-sm mt-1">{errors.color.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
+            <Button
+              type="button"
+              onClick={handleCancel}
+              className="p-button-outlined p-button-secondary"
+              icon={<Icon icon="tabler:x" />}
+              label="Cancelar"
+              disabled={isSubmitting}
+            />
+            <Button
+              type="submit"
+              className="p-button-success"
+              icon={<Icon icon="tabler:device-floppy" />}
+              label="Guardar Zona"
+              disabled={isSubmitting}
+              loading={isSubmitting}
+            />
+          </div>
+        </form>
+      </div>
     </>
   );
 };

@@ -47,6 +47,7 @@
   "admin": {
     "menu": {
       "management": "Management",
+      "inventory": "Inventory",
       "settings": "Settings"
     },
     "submenu": {

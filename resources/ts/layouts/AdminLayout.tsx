@@ -54,7 +54,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   const isManagementActive = [
     '/admin/dashboard',
     '/admin/work-orders',
-    '/admin/inventory',
     '/admin/eva',
     '/admin/workers',
     '/admin/resources',
@@ -148,6 +147,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
       active: isManagementActive,
     },
     {
+      to: '/admin/inventory',
+      label: t('admin.menu.inventory'),
+      icon: 'tabler:chart-treemap',
+      active: isInventoryPage,
+    },
+    {
       to: '/admin/settings/contracts',
       label: t('admin.menu.settings'),
       icon: 'tabler:settings',
@@ -160,11 +165,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
       to: '/admin/dashboard',
       label: t('admin.submenu.manage.dashboard'),
       icon: 'tabler:layout-dashboard',
-    },
-    {
-      to: '/admin/inventory',
-      label: t('admin.submenu.manage.inventory'),
-      icon: 'tabler:chart-treemap',
     },
     {
       to: '/admin/evas',
@@ -232,11 +232,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   ];
 
   const padding = isInventoryPage
-    ? 'py-8 px-4'
+    ? 'p-0' // Remove all padding for inventory
     : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
   return (
-    <div>
+    <div className={isInventoryPage ? 'flex flex-col h-screen overflow-hidden' : ''}>
       <header className="border-b border-gray-300 bg-white shadow-md">
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
@@ -335,7 +335,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
       {!isAccountPage && (
         <div
           id="submenu"
-          className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-2 lg:gap-4 px-8 py-4 bg-white border border-gray-300 rounded shadow-md">
+          className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-2 lg:gap-4 px-8 py-4 bg-white border-b border-gray-300 shadow-sm">
           <div className="submenu text-center flex items-center gap-2 lg:gap-4 mx-auto max-w-7xl">
             {isManagementActive &&
               managementSubmenuItems.map((item) => (
@@ -367,7 +367,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
         </div>
       )}
 
-      <main className={padding}>{children}</main>
+      <main className={`${padding} ${isInventoryPage ? 'flex-1 overflow-hidden' : ''}`}>{children}</main>
     </div>
   );
 };

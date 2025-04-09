@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -121,67 +122,99 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
     (!requiresTreeType || selectedTreeType !== null);
 
   return (
-    <div className="p-3">
-      <div className="mb-3">
-        <label
-          htmlFor="element-type"
-          className="block text-sm font-medium mb-1">
-          Tipo de Elemento:
-        </label>
-        <Dropdown
-          id="element-type"
-          value={selectedElementType}
-          options={elementTypes}
-          onChange={handleElementTypeChange}
-          placeholder="Selecciona un tipo de elemento"
-          className="w-full mb-3"
-          appendTo="self"
-        />
+    <div className="p-4 bg-gray-50 border border-gray-300 rounded shadow-sm">
+      <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 mb-4 flex items-center gap-2 text-indigo-800">
+        <Icon icon="tabler:map-pin" className="text-indigo-500 flex-shrink-0" width="20" />
+        <div className="text-sm">
+          <p className="font-medium">Añadiendo elemento en la zona</p>
+        </div>
       </div>
 
-      {requiresTreeType && (
-        <div className="mb-3">
-          <label htmlFor="tree-type" className="block text-sm font-medium mb-1">
-            Tipo de Árbol:
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 mb-4">
+        <div className="mb-4">
+          <label
+            htmlFor="element-type"
+            className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
+            <Icon icon="tabler:category" width="18" />
+            Tipo de Elemento <span className="text-red-500">*</span>
           </label>
           <Dropdown
-            id="tree-type"
-            value={selectedTreeType}
-            options={treeTypes}
-            onChange={handleTreeTypeChange}
-            placeholder="Selecciona Tipo de Árbol"
+            id="element-type"
+            value={selectedElementType}
+            options={elementTypes}
+            onChange={handleElementTypeChange}
+            placeholder="Selecciona un tipo de elemento"
             className="w-full"
             appendTo="self"
+            emptyMessage="No hay tipos disponibles"
+            emptyFilterMessage="No se encontraron resultados"
+          />
+          {!selectedElementType && (
+            <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
+              <Icon icon="tabler:alert-circle" width="14" />
+              Este campo es obligatorio
+            </p>
+          )}
+        </div>
+
+        {requiresTreeType && (
+          <div className="mb-4">
+            <label htmlFor="tree-type" className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
+              <Icon icon="tabler:tree" width="18" />
+              Tipo de Árbol <span className="text-red-500">*</span>
+            </label>
+            <Dropdown
+              id="tree-type"
+              value={selectedTreeType}
+              options={treeTypes}
+              onChange={handleTreeTypeChange}
+              placeholder="Selecciona tipo de árbol"
+              className="w-full"
+              appendTo="self"
+              emptyMessage="No hay tipos disponibles"
+              emptyFilterMessage="No se encontraron resultados"
+              filter
+            />
+            {requiresTreeType && !selectedTreeType && (
+              <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
+                <Icon icon="tabler:alert-circle" width="14" />
+                Este campo es obligatorio para el tipo de elemento seleccionado
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="mb-2">
+          <label htmlFor="description" className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
+            <Icon icon="tabler:notes" width="18" />
+            Descripción (opcional)
+          </label>
+          <InputTextarea
+            id="description"
+            rows={3}
+            value={description || ''}
+            onChange={handleDescriptionChange}
+            placeholder="Descripción adicional del elemento (opcional)"
+            className="w-full"
           />
         </div>
-      )}
-
-      <div className="mb-3">
-        <label htmlFor="description" className="block text-sm font-medium mb-1">
-          Descripción: (opcional)
-        </label>
-        <InputTextarea
-          id="description"
-          rows={3}
-          value={description || ''}
-          onChange={handleDescriptionChange}
-          placeholder="Descripción del Elemento (opcional)"
-          className="w-full"
-        />
       </div>
 
-      <div className="flex justify-end gap-2 mt-4">
+      <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
         <Button
           label="Cancelar"
-          className="p-button-secondary"
+          className="p-button-outlined p-button-secondary"
+          icon={<Icon icon="tabler:x" />}
           onClick={onClose}
           disabled={isSubmitting}
         />
         <Button
           label="Guardar Elemento"
           className="p-button-primary"
+          icon={<Icon icon="tabler:device-floppy" />}
           onClick={handleSave}
           disabled={!formIsValid || isSubmitting}
+          loading={isSubmitting}
         />
       </div>
     </div>
