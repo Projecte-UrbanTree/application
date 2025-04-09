@@ -37,23 +37,19 @@ export default function Inventory() {
   const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
 
   useEffect(() => {
-    console.log('Inventory component loaded, initializing data');
     const loadData = async () => {
       if (!currentContract?.id) return;
       
       try {
         setIsLoading(true);
-        console.log(`Loading data for contract ${currentContract.id}`);
         await Promise.all([
           dispatch(fetchZonesAsync()),
           dispatch(fetchPointsAsync()),
           dispatch(fetchElementsAsync())
         ]);
-        console.log('Data initialized successfully');
         setDataInitialized(true);
         
         setTimeout(() => {
-          console.log('Forcing visibility of all elements');
           const event: ZoneEvent = {
             isCreatingElement: false,
             showAllElements: true,
@@ -67,7 +63,6 @@ export default function Inventory() {
         }, 1000);
         
       } catch (error) {
-        console.error('Error loading inventory data:', error);
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -83,7 +78,6 @@ export default function Inventory() {
 
   useEffect(() => {
     if (isMapReady) {
-      console.log('Map initialization ready, refreshing map component');
       const timer = setTimeout(() => {
         setMapKey(Date.now());
       }, 100);

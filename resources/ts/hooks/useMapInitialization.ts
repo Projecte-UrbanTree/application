@@ -24,7 +24,6 @@ export function useMapInitialization() {
   useEffect(() => {
     if (!currentContract) return;
     
-    console.log('Contract changed, resetting map initialization state');
     setIsMapReady(false);
     setIsInitializing(false);
   }, [currentContract?.id]);
@@ -36,18 +35,15 @@ export function useMapInitialization() {
     
     // Verificamos que tenemos datos y un contrato
     if (!currentContract || !points.length || !zones.length) {
-      console.log('Waiting for data to be loaded...');
       return;
     }
 
-    console.log('All data loaded, initializing map synchronization');
     setIsInitializing(true);
     
     // Esperamos un momento para que el mapa se renderice completamente
     const initTimer = setTimeout(() => {
       try {
         // Enviar un evento de inicialización
-        console.log('Sending map initialization event');
         eventSubject.next({
           isCreatingElement: false,
           initializeMap: true,
@@ -60,7 +56,6 @@ export function useMapInitialization() {
         // Reenviar para asegurar la sincronización
         const refreshTimer = setTimeout(() => {
           try {
-            console.log('Sending map refresh event');
             eventSubject.next({
               isCreatingElement: false,
               refreshMap: true
@@ -72,7 +67,6 @@ export function useMapInitialization() {
         
         return () => clearTimeout(refreshTimer);
       } catch (error) {
-        console.error('Error during map initialization:', error);
         setIsInitializing(false);
       }
     }, 500);
