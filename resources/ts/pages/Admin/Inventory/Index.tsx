@@ -196,7 +196,7 @@ export default function Inventory() {
   if (isLoading) {
     return (
       <div className="flex flex-col w-full h-full relative">
-        <div className="h-[calc(100vh-64px)] flex items-center justify-center">
+        <div className="h-full flex items-center justify-center">
           <Preloader />
         </div>
       </div>
@@ -204,15 +204,14 @@ export default function Inventory() {
   }
 
   return (
-    <div className="flex flex-col w-full h-full relative">
+    <div className="flex flex-col w-full h-full">
       <Toast ref={toast} position="top-center" />
 
-      <div
-        className={`flex ${isMobile ? 'flex-col' : 'flex-row'} w-full h-[calc(100vh-64px)]`}>
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row gap-4'} w-full h-full`}>
         <div
           ref={mapContainerRef}
-          className={`${isMobile ? 'h-[60%] w-full' : 'w-[70%] h-full'} relative bg-gray-100`}
-          style={{ minHeight: isMobile ? '300px' : '400px' }}
+          className={`${isMobile ? 'h-[60%] w-full mb-4' : 'w-[65%] h-full'} relative bg-gray-100 rounded-lg overflow-hidden shadow-lg border border-gray-300`}
+          style={{ minHeight: isMobile ? '300px' : '0' }}
           onClick={handleMapClick}>
           <MapComponent
             key={`${mapKey}-${lastElementUpdate}`}
@@ -231,7 +230,7 @@ export default function Inventory() {
         </div>
 
         <div
-          className={`${isMobile ? 'h-[40%] w-full' : 'w-[30%] h-full'} bg-white shadow-md overflow-auto`}>
+          className={`${isMobile ? 'h-[40%] w-full' : 'w-[35%] h-full'} bg-white rounded-lg shadow-md border border-gray-300 flex flex-col overflow-hidden`}>
           <Zones
             onSelectedZone={handleSelectedZone}
             onAddElementZone={handleAddElementZone}

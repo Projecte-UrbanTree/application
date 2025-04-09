@@ -45,6 +45,7 @@
   "admin": {
     "menu": {
       "management": "Gestió",
+      "inventory": "Inventari",
       "settings": "Configuració"
     },
     "submenu": {

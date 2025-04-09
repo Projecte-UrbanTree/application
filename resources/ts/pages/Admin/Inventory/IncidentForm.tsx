@@ -82,7 +82,7 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
   ]);
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-gray-50 border border-gray-300 rounded shadow-sm">
       <Toast ref={toast} />
       <div className="mb-4">
         <label className="block mb-1">Nombre:</label>

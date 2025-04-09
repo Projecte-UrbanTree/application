@@ -1,14 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { Icon } from '@iconify/react';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
-import { Element } from '@/types/Element';
+import React, { useEffect,useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { updateElementService } from '@/api/service/elementService';
 import { fetchElementType } from '@/api/service/elementTypeService';
-import { useDispatch } from 'react-redux';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { AppDispatch } from '@/store/store';
+import { Element } from '@/types/Element';
 
 interface EditElementFormProps {
   element: Element;
@@ -112,8 +114,14 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
     <div className="p-4">
       <Toast ref={toast} />
 
+      <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 mb-4 flex items-center gap-2 text-sm text-gray-700">
+        <Icon icon="tabler:info-circle" className="text-blue-500" width="20" />
+        <span>Editando elemento #{element.id}</span>
+      </div>
+
       <div className="mb-4">
-        <label className="block mb-1" htmlFor="description">
+        <label className="block mb-2 text-gray-700 font-medium flex items-center gap-1" htmlFor="description">
+          <Icon icon="tabler:notes" width="18" />
           Descripción:
         </label>
         <InputTextarea
@@ -129,7 +137,8 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
       </div>
 
       <div className="mb-4">
-        <label className="block mb-1" htmlFor="element_type_id">
+        <label className="block mb-2 text-gray-700 font-medium flex items-center gap-1" htmlFor="element_type_id">
+          <Icon icon="tabler:category" width="18" />
           Tipo de Elemento:
         </label>
         <Dropdown
@@ -146,7 +155,8 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
 
       {requiresTreeType && (
         <div className="mb-4">
-          <label className="block mb-1" htmlFor="tree_type_id">
+          <label className="block mb-2 text-gray-700 font-medium flex items-center gap-1" htmlFor="tree_type_id">
+            <Icon icon="tabler:tree" width="18" />
             Tipo de Árbol:
           </label>
           <Dropdown
@@ -162,23 +172,25 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
         </div>
       )}
 
-      <div className="flex justify-end gap-4">
+      <div className="flex justify-end gap-3 mt-5 pt-3 border-t border-gray-200">
         <Button
           label="Guardar"
           onClick={handleSubmit}
           className="p-button-success"
           disabled={!formIsValid || isSubmitting}
-          icon="pi pi-save"
+          loading={isSubmitting}
+          icon={<Icon icon="tabler:device-floppy" />}
         />
         <Button
           label="Cancelar"
           onClick={onClose}
-          className="p-button-secondary"
+          className="p-button-outlined p-button-secondary"
           disabled={isSubmitting}
+          icon={<Icon icon="tabler:x" />}
         />
       </div>
     </div>
   );
 };
 
-export default EditElementForm; 
+export default EditElementForm;
