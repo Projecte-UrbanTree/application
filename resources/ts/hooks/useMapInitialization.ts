@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+
 import { eventSubject } from '@/pages/Admin/Inventory/Zones';
-import { ZoneEvent } from '@/types/ZoneEvent';
+import { RootState } from '@/store/store';
 
 /**
  * Hook personalizado para manejar la inicialización del mapa.
@@ -13,6 +13,7 @@ export function useMapInitialization() {
   // Estado local para seguir la inicialización
   const [isMapReady, setIsMapReady] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   // Obtenemos el estado global necesario
   const { points } = useSelector((state: RootState) => state.points);
@@ -20,59 +21,49 @@ export function useMapInitialization() {
   const { elements } = useSelector((state: RootState) => state.element);
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
 
-  // Efecto para detectar cuando cambia el contrato (reiniciar el estado)
+  // Reset state when contract changes
   useEffect(() => {
     if (!currentContract) return;
     
     setIsMapReady(false);
     setIsInitializing(false);
+    setError(null);
   }, [currentContract?.id]);
   
-  // Efecto para detectar cuando todos los datos están cargados
+  // Initialize map when data is available
   useEffect(() => {
-    // Evitar múltiples inicializaciones
-    if (isInitializing || isMapReady) return;
-    
-    // Verificamos que tenemos datos y un contrato
-    if (!currentContract || !points.length || !zones.length) {
+    // Skip if already initializing or ready, or if we don't have required data
+    if (isInitializing || isMapReady || !currentContract || !points.length || !zones.length) {
       return;
     }
 
+    // Start initialization process
     setIsInitializing(true);
     
-    // Esperamos un momento para que el mapa se renderice completamente
-    const initTimer = setTimeout(() => {
-      try {
-        // Enviar un evento de inicialización
-        eventSubject.next({
-          isCreatingElement: false,
-          initializeMap: true,
-          showAllElements: true
-        });
-        
-        // Marcar como inicializado
-        setIsMapReady(true);
-        
-        // Reenviar para asegurar la sincronización
-        const refreshTimer = setTimeout(() => {
-          try {
-            eventSubject.next({
-              isCreatingElement: false,
-              refreshMap: true
-            });
-          } finally {
-            setIsInitializing(false);
-          }
-        }, 300);
-        
-        return () => clearTimeout(refreshTimer);
-      } catch (error) {
-        setIsInitializing(false);
-      }
-    }, 500);
-    
-    return () => clearTimeout(initTimer);
+    try {
+      // Initialize the map
+      eventSubject.next({
+        isCreatingElement: false,
+        initializeMap: true,
+        showAllElements: true
+      });
+      
+      // Mark as initialized
+      setIsMapReady(true);
+      
+      // Send refresh event to ensure synchronization
+      eventSubject.next({
+        isCreatingElement: false,
+        refreshMap: true
+      });
+      
+      // End initialization
+      setIsInitializing(false);
+    } catch (err) {
+      setError("Error initializing map");
+      setIsInitializing(false);
+    }
   }, [currentContract, points.length, zones.length, isMapReady, isInitializing]);
   
-  return { isMapReady, isInitializing };
-} 
+  return { isMapReady, isInitializing, error };
+}

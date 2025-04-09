@@ -3,65 +3,75 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { MapComponent } from '@/components/Map';
+import Preloader from '@/components/Preloader';
+import { useMapInitialization } from '@/hooks/useMapInitialization';
 import { Zones } from '@/pages/Admin/Inventory/Zones';
-import { fetchZonesAsync } from '@/store/slice/zoneSlice';
-import { fetchPointsAsync } from '@/store/slice/pointSlice';
+import { eventSubject } from '@/pages/Admin/Inventory/Zones';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
+import { fetchPointsAsync } from '@/store/slice/pointSlice';
+import { fetchZonesAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Zone } from '@/types/Zone';
-import { useMapInitialization } from '@/hooks/useMapInitialization';
-import { eventSubject } from '@/pages/Admin/Inventory/Zones';
 import { ZoneEvent } from '@/types/ZoneEvent';
-import Preloader from '@/components/Preloader';
 
 export default function Inventory() {
+  // Zone state
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
   const [zoneToAddElement, setZoneToAddElement] = useState<Zone | null>(null);
+  
+  // UI state
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [mapKey, setMapKey] = useState(Date.now());
   const [isCreatingElement, setIsCreatingElement] = useState(false);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
   const [enabledButton, setEnabledButton] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  
+  // Loading state
   const [dataInitialized, setDataInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { isMapReady, isInitializing } = useMapInitialization();
+  const { isMapReady, isInitializing, error: mapInitError } = useMapInitialization();
 
+  // Refs
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
+  
+  // Redux
   const dispatch = useDispatch<AppDispatch>();
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
   const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
   const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
   const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
 
+  // Load data when contract changes
   useEffect(() => {
     const loadData = async () => {
       if (!currentContract?.id) return;
       
       try {
         setIsLoading(true);
+        
+        // Load all data in parallel for better performance
         await Promise.all([
           dispatch(fetchZonesAsync()),
           dispatch(fetchPointsAsync()),
           dispatch(fetchElementsAsync())
         ]);
+        
+        // Mark data as initialized
         setDataInitialized(true);
         
-        setTimeout(() => {
-          const event: ZoneEvent = {
-            isCreatingElement: false,
-            showAllElements: true,
-            forceShow: true
-          };
-          eventSubject.next(event);
-          
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 1000);
-        }, 1000);
+        // Signal to the map that it should show all elements
+        const event: ZoneEvent = {
+          isCreatingElement: false,
+          showAllElements: true,
+          forceShow: true
+        };
         
+        // Dispatch event and then set loading state to false
+        eventSubject.next(event);
+        setIsLoading(false);
       } catch (error) {
         toast.current?.show({
           severity: 'error',
@@ -76,29 +86,40 @@ export default function Inventory() {
     loadData();
   }, [dispatch, currentContract]);
 
+  // Regenerate map key when map is ready to ensure proper rendering
   useEffect(() => {
-    if (isMapReady) {
-      const timer = setTimeout(() => {
-        setMapKey(Date.now());
-      }, 100);
-      return () => clearTimeout(timer);
+    if (isMapReady && !isLoading) {
+      setMapKey(Date.now());
     }
-  }, [isMapReady]);
+  }, [isMapReady, isLoading]);
 
+  // Handle map initialization error
+  useEffect(() => {
+    if (mapInitError && toast.current) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error de inicialización del mapa',
+        life: 3000
+      });
+    }
+  }, [mapInitError]);
+
+  // Handle screen resize with proper cleanup
   useEffect(() => {
     const handleResize = () => {
       const newIsMobile = window.innerWidth < 768;
-
       if (isMobile !== newIsMobile) {
         setIsMobile(newIsMobile);
         setMapKey(Date.now());
       }
-    }
+    };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobile]);
 
+  // Callbacks for zone selection and element creation
   const handleSelectedZone = useCallback((zone: Zone) => {
     setSelectedZone(zone);
   }, []);
@@ -116,6 +137,7 @@ export default function Inventory() {
     setZoneToAddElement(null);
   }, []);
 
+  // Standardized error message display
   const showErrorMessage = useCallback((message: string) => {
     toast.current?.show({
       severity: 'error',
@@ -153,6 +175,7 @@ export default function Inventory() {
     setModalVisible(visible);
   }, []);
 
+  // Show loading state while data initializes
   if (isLoading) {
     return (
       <div className="flex flex-col w-full h-full relative">
