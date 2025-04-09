@@ -8,6 +8,9 @@ import { fetchElementType } from '@/api/service/elementTypeService';
 import { MapService } from '@/api/service/mapService';
 import { SavePointsProps } from '@/api/service/pointService';
 import { fetchTreeTypes } from '@/api/service/treeTypesService';
+import { getZoneCoords } from '@/api/service/zoneService';
+import useGeolocation from '@/hooks/useGeolocation';
+import { useMapInitialization } from '@/hooks/useMapInitialization';
 import {
   deleteElementAsync,
   fetchElementsAsync,
@@ -16,18 +19,20 @@ import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
-import { Point, TypePoint } from '@/types/Point';
+import { TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { TreeTypes } from '@/types/TreeTypes';
-import { Zone } from '@/types/Zone';
+import { Zone, ZoneCenterCoord } from '@/types/Zone';
+import { ZoneEvent } from '@/types/ZoneEvent';
 
 import ElementDetailPopup from '../pages/Admin/Inventory/ElementDetailPopup';
 import IncidentForm from '../pages/Admin/Inventory/IncidentForm';
 import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
-import { eventSubject, ZoneEvent } from '../pages/Admin/Inventory/Zones';
+import { eventSubject } from '../pages/Admin/Inventory/Zones';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const DEFAULT_MADRID_COORDS: [number, number] = [-3.7038, 40.4168];
 
 interface MapProps {
   selectedZone: Zone | null;
@@ -61,12 +66,15 @@ export const MapComponent: React.FC<MapProps> = ({
   const toast = useRef<Toast>(null);
   const dispatch = useDispatch<AppDispatch>();
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { points } = useSelector((state: RootState) => state.points);
   const { zones: zonesRedux } = useSelector((state: RootState) => state.zone);
   const { elements } = useSelector((state: RootState) => state.element);
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
   const userValue = useSelector((state: RootState) => state.user);
+
+  const { latitude: geoLat, longitude: geoLng, error: geoError } = useGeolocation();
 
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(null);
@@ -78,11 +86,13 @@ export const MapComponent: React.FC<MapProps> = ({
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
-  const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
   const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [lastContractId, setLastContractId] = useState<number | null>(null);
+  const [centerCoords, setCenterCoords] = useState<ZoneCenterCoord[]>([]);
+  const [isZoneJustCreated, setIsZoneJustCreated] = useState(false);
+
+  const { isMapReady, isInitializing, error: mapInitError } = useMapInitialization();
 
   const handleBackToIncidentTab = useCallback(() => {
     setIncidentModalVisible(false);
@@ -90,59 +100,73 @@ export const MapComponent: React.FC<MapProps> = ({
     setActiveTabIndex(1);
   }, []);
 
+  // Load initial data
   useEffect(() => {
     const loadData = async () => {
+      if (!currentContract?.id) return;
+      
+      setIsLoading(true);
+      setIsDataLoaded(false);
+
       try {
-        const [treeTypesFetch, elementTypeFetch] = await Promise.all([
+        const [treeTypesRes, elementTypesRes, centerCoordsRes] = await Promise.all([
           fetchTreeTypes(),
-          fetchElementType()
+          fetchElementType(),
+          getZoneCoords(),
         ]);
-        setTreeTypes(treeTypesFetch);
-        setElementTypes(elementTypeFetch);
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error loading types'
-        });
-      }
-    };
-    loadData();
-  }, []);
 
-  useEffect(() => {
-    if (!currentContract?.id) return;
+        setTreeTypes(treeTypesRes);
+        setElementTypes(elementTypesRes);
+        setCenterCoords(centerCoordsRes);
 
-    const loadContractData = async () => {
-      try {
         await Promise.all([
           dispatch(fetchPointsAsync()).unwrap(),
-          dispatch(fetchElementsAsync()).unwrap()
+          dispatch(fetchElementsAsync()).unwrap(),
         ]);
+
         setIsDataLoaded(true);
-      } catch (error) {
+      } catch (err) {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error al cargar los datos del contrato',
+          detail: 'Error cargando datos del contrato',
         });
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    loadContractData();
-  }, [dispatch, currentContract]);
+    loadData();
+  }, [dispatch, currentContract?.id]);
 
+  // Initialize map when data is loaded
   useEffect(() => {
-    if (!mapContainerRef.current || !isDataLoaded) return;
+    if (!mapContainerRef.current || !isDataLoaded || isLoading) return;
 
+    // Clear previous map
     while (mapContainerRef.current.firstChild) {
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
     }
 
-    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
+    // Determine initial coordinates with proper fallbacks
+    let initialCoordinates: [number, number] = DEFAULT_MADRID_COORDS;
+    
+    if (geoLat && geoLng && !geoError) {
+      initialCoordinates = [geoLng, geoLat];
+    }
+    else if (centerCoords && centerCoords.length > 0 && centerCoords[0].center) {
+      initialCoordinates = [centerCoords[0].center[0], centerCoords[0].center[1]];
+    }
+            
+    // Create new map service
+    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, initialCoordinates);
+    mapServiceRef.current = service;
+    
     service.addBasicControls();
     service.addGeocoder();
-    service.enableDraw(userValue.role === Roles.admin, (coords) => {
+    
+    // Configure drawing capability based on user role
+    service.enableDraw(userValue.role !== undefined && userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
         onDrawingModeChange(true);
@@ -152,100 +176,117 @@ export const MapComponent: React.FC<MapProps> = ({
         onEnabledButtonChange(false);
       }
     });
-    mapServiceRef.current = service;
 
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => {
-        updateZones(service);
-        updateElements(service);
-      });
-    } else {
+    // Initialize zones and elements when map is ready
+    service.waitForInit(() => {
       updateZones(service);
       updateElements(service);
-    }
-  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange]);
+    });
 
+    return () => {
+      if (mapServiceRef.current) {
+        mapServiceRef.current.resetMap();
+      }
+    };
+  }, [isDataLoaded, isLoading, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords, currentContract?.id]);
+
+  // Handle window resize
   useEffect(() => {
     const handleResize = () => mapServiceRef.current?.resizeMap();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  
+  // Fly to selected zone
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !selectedZone || !points.length) return;
+    if (isZoneJustCreated) {
+      setIsZoneJustCreated(false);
+      return;
+    }
     
-    const firstPoint = points.find((p) => p.zone_id === selectedZone.id);
-    if (firstPoint?.longitude && firstPoint?.latitude) {
-      service.flyTo([firstPoint.longitude, firstPoint.latitude]);
-    }
-  }, [selectedZone, points]);
+    service.flyTo(selectedZone);
+  }, [selectedZone, points, isZoneJustCreated]);
 
+  // Update zones when zones or points change
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service) return;
+    if (!service || !isDataLoaded || isLoading) return;
+    
+    service.waitForInit(() => updateZones(service));
+  }, [zonesRedux, points, hiddenZones, isDataLoaded, isLoading]);
 
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => updateZones(service));
-    } else {
-      updateZones(service);
-    }
-  }, [zonesRedux, points, currentContract]);
-
+  // Update elements when elements or points change
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service || !currentContract) return;
+    if (!service || !isDataLoaded || isLoading) return;
+    
+    service.waitForInit(() => updateElements(service));
+  }, [elements, points, hiddenZones, hiddenElementTypes, isDataLoaded, isLoading]);
 
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(() => updateElements(service));
-    } else {
-      updateElements(service);
-    }
-  }, [elements, currentContract, points]);
-
+  // Function to update element visibility
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
       const pointsInZone = points.filter((p) => p.zone_id === zoneId);
       const pointIds = new Set(pointsInZone.map((p) => p.id));
 
-      elements
-        .filter((element) => element.element_type_id === elementTypeId && pointIds.has(element.point_id!))
-        .forEach((element) => {
-          if (element.id) {
-            service.updateMarkerVisibility(element.id, !hidden);
-          }
-        });
+      const elementsToUpdate = elements
+        .filter((element) => element.element_type_id === elementTypeId && pointIds.has(element.point_id!));
+        
+      elementsToUpdate.forEach((element) => {
+        if (element.id) {
+          service.updateMarkerVisibility(element.id, !hidden);
+        }
+      });
     },
     [elements, points]
   );
 
+  // Function to toggle zone visibility
   const toggleZoneVisibility = useCallback(
     (zoneId: number, hidden: boolean) => {
       const service = mapServiceRef.current;
       if (!service) return;
 
-      const zoneLayerId = `zone-${zoneId}-fill`;
-      service.updateZoneVisibility(zoneLayerId, !hidden);
+      try {
+        setHiddenZones(prev => ({
+          ...prev,
+          [zoneId]: hidden
+        }));
 
-      const pointIdsInZone = new Set(
-        points
-          .filter((p) => p.zone_id === zoneId)
-          .map((p) => p.id)
-      );
+        const zoneLayerId = `zone-${zoneId}-fill`;
+        
+        try {
+          service.updateZoneVisibility(zoneLayerId, !hidden);
+        } catch (error) {
+          // Silent fail for missing layers
+        }
 
-      elements
-        .filter((element) => pointIdsInZone.has(element.point_id))
-        .forEach((element) => {
-          if (element.id) {
+        const pointsInZone = points.filter((p) => p.zone_id === zoneId);
+        const pointIdsInZone = new Set(pointsInZone.map((p) => p.id));
+
+        const elementsInZone = elements.filter((element) => 
+          element.point_id && pointIdsInZone.has(element.point_id)
+        );
+        
+        elementsInZone.forEach((element) => {
+          if (!element.id) return;
+          
+          try {
             service.updateMarkerVisibility(element.id, !hidden);
+          } catch (error) {
+            // Silent fail for missing markers
           }
         });
-
-      setHiddenZones((prev) => ({ ...prev, [zoneId]: hidden }));
+      } catch (error) {
+        // Silent fail for service errors
+      }
     },
     [elements, points]
   );
 
+  // Handle element creation
   const handleElementCreation = useCallback(
     (zone: Zone) => {
       setSelectedZoneForElement(zone);
@@ -298,15 +339,126 @@ export const MapComponent: React.FC<MapProps> = ({
     [points, onCreatingElementChange]
   );
 
+  // Handle event subscriptions
   useEffect(() => {
-    const service = mapServiceRef.current;
-    if (!service) return;
-
     const subscription = eventSubject.subscribe({
       next: (data: ZoneEvent) => {
+        const service = mapServiceRef.current;
+        if (!service) return;
+        
+        // Handle element updates
+        if (data.updateElements) {
+          try {
+            updateElements(service);
+          } catch (error) {
+            // Silent fail for element updates
+          }
+          return;
+        }
+        
+        // Handle zone updates
+        if (data.updateZones) {
+          try {
+            updateZones(service);
+          } catch (error) {
+            // Silent fail for zone updates
+          }
+          return;
+        }
+        
+        // Handle show all elements events
+        if (data.showAllElements || data.forceShow) {
+          try {
+            // Process zones in a single batch to minimize rerenders
+            const zonesToUpdate: number[] = [];
+            zonesRedux.forEach(zone => {
+              if (zone.id && (hiddenZones[zone.id] || data.forceShow)) {
+                zonesToUpdate.push(zone.id);
+              }
+            });
+            
+            // Update zone visibility in batch
+            zonesToUpdate.forEach(zoneId => {
+              try {
+                toggleZoneVisibility(zoneId, false);
+              } catch (error) {
+                // Silent fail for individual zone errors
+              }
+            });
+            
+            // Handle force show for all elements
+            if (data.forceShow && service) {
+              elements.forEach(element => {
+                if (element.id) {
+                  try {
+                    service.updateMarkerVisibility(element.id, true);
+                  } catch (error) {
+                    // Silent fail for marker errors
+                  }
+                }
+              });
+            } else {
+              // Process element type visibility
+              const elementTypeUpdates: Array<{zoneId: number, typeId: number}> = [];
+              
+              // Identify element types that need updating
+              zonesRedux.forEach(zone => {
+                if (!zone.id) return;
+                
+                const zoneId = zone.id;
+                const pointsInZone = points.filter(p => p.zone_id === zoneId);
+                const pointIds = new Set(pointsInZone.map(p => p.id));
+                
+                // Find unique element types in this zone
+                const elementTypesInZone = new Set<number>();
+                elements.forEach(element => {
+                  if (element.point_id && pointIds.has(element.point_id) && element.element_type_id) {
+                    elementTypesInZone.add(element.element_type_id);
+                  }
+                });
+                
+                // Add to update list if currently hidden
+                elementTypesInZone.forEach(typeId => {
+                  const key = `${zoneId}-${typeId}`;
+                  if (hiddenElementTypes[key]) {
+                    elementTypeUpdates.push({zoneId, typeId});
+                  }
+                });
+              });
+              
+              // Apply updates in batch
+              elementTypeUpdates.forEach(({zoneId, typeId}) => {
+                const key = `${zoneId}-${typeId}`;
+                setHiddenElementTypes(prev => ({
+                  ...prev,
+                  [key]: false
+                }));
+                
+                try {
+                  updateElementVisibility(zoneId, typeId, false, service);
+                } catch (error) {
+                  // Silent fail
+                }
+              });
+            }
+          } catch (error) {
+            // Silent fail for overall operation
+          }
+        }
+        
+        // Other event handlers - these don't need modification as they're already optimal
+        if (data.initializeMap && service) {
+          try {
+            updateZones(service);
+            updateElements(service);
+          } catch (error) {
+            // Silent fail for map initialization
+          }
+        }
+        
         if (data.isCreatingElement !== undefined) {
           const { isCreatingElement, zone } = data;
-
+          
           if (isCreatingElement && zone) {
             handleElementCreation(zone);
           } else {
@@ -316,90 +468,121 @@ export const MapComponent: React.FC<MapProps> = ({
             service.disableSingleClick();
           }
         }
-
+        
         if (data.hiddenElementTypes) {
           const { zoneId, elementTypeId, hidden } = data.hiddenElementTypes;
           const key = `${zoneId}-${elementTypeId}`;
-
+          
           setHiddenElementTypes((prev) => ({
             ...prev,
             [key]: hidden,
           }));
-
-          updateElementVisibility(zoneId, elementTypeId, hidden, service);
+          
+          try {
+            updateElementVisibility(zoneId, elementTypeId, hidden, service);
+          } catch (error) {
+            // Silent fail
+          }
         }
-
+        
         if (data.hiddenZone) {
           const { zoneId, hidden } = data.hiddenZone;
-          toggleZoneVisibility(zoneId, hidden);
+          
+          try {
+            toggleZoneVisibility(zoneId, hidden);
+          } catch (error) {
+            // Silent fail
+          }
+        }
+        
+        if (data.refreshMap) {
+          try {
+            updateZones(service);
+            updateElements(service);
+          } catch (error) {
+            // Silent fail
+          }
         }
       },
-      error: () => {
+      error: (err) => {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
-          detail: 'Error en el stream de eventos',
+          detail: 'Error en el sistema de eventos',
         });
       },
     });
-
+    
     return () => {
       subscription.unsubscribe();
       onCreatingElementChange(false);
       setSelectedZoneForElement(null);
       setNewPointCoord(null);
-      service.disableSingleClick();
+      if (mapServiceRef.current) {
+        mapServiceRef.current.disableSingleClick();
+      }
     };
-  }, [points, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange]);
+  }, [points, elements, zonesRedux, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange, hiddenElementTypes, hiddenZones]);
 
+  // Handle element form close with optimization
   const handleElementFormClose = useCallback(() => {
     setModalAddPointVisible(false);
     onCreatingElementChange(false);
     setNewPointCoord(null);
     mapServiceRef.current?.disableSingleClick();
+    
+    // Refresh only elements instead of the entire map
+    setTimeout(() => {
+      if (mapServiceRef.current) {
+        updateElements(mapServiceRef.current);
+      }
+    }, 100);
+    
     onElementAdd();
   }, [onCreatingElementChange, onElementAdd]);
 
+  // Function to update zones on the map
   function updateZones(service: MapService) {
     if (!service || !currentContract?.id) return;
     
     try {
       service.removeLayersAndSources('zone-');
       
-      zonesRedux
-        .filter((z) => z.contract_id === currentContract.id)
-        .forEach((zone: Zone) => {
-          if (!zone.id) return;
-          
-          const zonePoints = points
-            .filter((p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
-            .map((p) => {
-              if (typeof p.longitude !== 'number' || typeof p.latitude !== 'number') {
-                return null;
-              }
-              return [p.longitude, p.latitude] as [number, number];
-            })
-            .filter(Boolean) as [number, number][];
-            
-          if (zonePoints.length > 2) {
-            zonePoints.push(zonePoints[0]);
-            const sourceId = `zone-${zone.id}`;
-            const layerId = `zone-${zone.id}-fill`;
-            
-            service.addZoneToMap(sourceId, layerId, zonePoints, zone.color || '#088');
-
-            if (hiddenZones[zone.id]) {
-              service.updateZoneVisibility(layerId, false);
+      const filteredZones = zonesRedux.filter((z) => z.contract_id === currentContract.id);
+      
+      filteredZones.forEach((zone: Zone) => {
+        if (!zone.id) return;
+        
+        const zonePoints = points
+          .filter((p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
+          .map((p) => {
+            if (typeof p.longitude !== 'number' || typeof p.latitude !== 'number') {
+              return null;
             }
+            return [p.longitude, p.latitude] as [number, number];
+          })
+          .filter(Boolean) as [number, number][];
+            
+        if (zonePoints.length > 2) {
+          zonePoints.push(zonePoints[0]);
+          const sourceId = `zone-${zone.id}`;
+          const layerId = `zone-${zone.id}-fill`;
+          
+          service.addZoneToMap(sourceId, layerId, zonePoints, zone.color || '#088');
+
+          if (hiddenZones[zone.id]) {
+            service.updateZoneVisibility(layerId, false);
           }
-        });
+        }
+      });
     } catch (error) {
-      console.error('Error updating zones:', error);
+      // Silent fail for zone updates
     }
   }
 
+  // Function to update elements on the map
   function updateElements(service: MapService) {
-    if (!currentContract) return;
+    if (!service || !currentContract) return;
 
     const handleElementDelete = async (elementId: number) => {
       try {
@@ -441,45 +624,60 @@ export const MapComponent: React.FC<MapProps> = ({
     const filteredElements = elements.filter(
       (element) => element.point_id && pointIds.has(element.point_id)
     );
+    
+    if (filteredElements.length === 0) {
+      return;
+    }
 
     const renderMarkers = () => {
+      const relevantPoints = points.filter(
+        (point) => point.zone_id && zoneIds.has(point.zone_id)
+      );
+      
       service.addElementMarkers(
         filteredElements,
-        points.filter((point) => point.zone_id && zoneIds.has(point.zone_id)),
+        relevantPoints,
         treeTypes,
         elementTypes,
         handleElementDelete,
         handleElementClick,
       );
       
-      Object.entries(hiddenZones).forEach(([zoneId, isHidden]) => {
+      // Apply zone visibility settings
+      Object.entries(hiddenZones).forEach(([zoneIdStr, isHidden]) => {
         if (isHidden) {
-          const zoneIdNum = Number(zoneId);
-          points
-            .filter((p) => p.zone_id === zoneIdNum)
-            .forEach((point) => {
-              filteredElements
-                .filter((element) => element.point_id === point.id && element.id)
-                .forEach((element) => service.updateMarkerVisibility(element.id!, false));
-            });
+          const zoneId = Number(zoneIdStr);
+          
+          const pointsInZone = relevantPoints.filter(p => p.zone_id === zoneId);
+          
+          pointsInZone.forEach((point) => {
+            filteredElements
+              .filter((element) => element.point_id === point.id && element.id)
+              .forEach((element) => {
+                service.updateMarkerVisibility(element.id!, false);
+              });
+          });
         }
       });
 
+      // Apply element type visibility settings
       Object.entries(hiddenElementTypes).forEach(([key, isHidden]) => {
         if (isHidden) {
-          const [zoneId, elementTypeId] = key.split('-').map(Number);
-          updateElementVisibility(zoneId, elementTypeId, true, service);
+          const [zoneIdStr, elementTypeIdStr] = key.split('-');
+          const zoneId = Number(zoneIdStr);
+          const elementTypeId = Number(elementTypeIdStr);
+          
+          if (!hiddenZones[zoneId]) {
+            updateElementVisibility(zoneId, elementTypeId, true, service);
+          }
         }
       });
     };
 
-    if (!service.isStyleLoaded()) {
-      service.onceStyleLoad(renderMarkers);
-    } else {
-      renderMarkers();
-    }
+    renderMarkers();
   }
 
+  // Handle zone save
   const handleZoneSaved = useCallback(
     async (newZone: Zone, newPoints: SavePointsProps[]) => {
       onModalVisibleChange(false);
@@ -503,6 +701,8 @@ export const MapComponent: React.FC<MapProps> = ({
           zonePoints,
           newZone.color || '#088'
         );
+        
+        setIsZoneJustCreated(true);
       }
 
       await dispatch(fetchPointsAsync());
@@ -515,6 +715,7 @@ export const MapComponent: React.FC<MapProps> = ({
     ],
   );
 
+  // Handle element delete
   const handleElementDelete = useCallback(async (elementId: number) => {
     try {
       await dispatch(deleteElementAsync(elementId));
@@ -535,6 +736,18 @@ export const MapComponent: React.FC<MapProps> = ({
       });
     }
   }, [dispatch]);
+
+  // Show error toast if map initialization failed
+  useEffect(() => {
+    if (mapInitError && toast.current) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error inicializando el mapa',
+        life: 3000
+      });
+    }
+  }, [mapInitError]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>

@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Zone;
+use App\Models\Point;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+
+use function PHPUnit\Framework\isEmpty;
 
 class ZoneController extends Controller
 {
@@ -76,5 +79,66 @@ class ZoneController extends Controller
         $zone->delete();
 
         return response()->json(['message' => 'Zona eliminada'], 200);
+    }
+
+
+
+    public function getCenterZoom(Request $request, $id): JsonResponse
+    {
+        $contractId = $request->header('X-Contract-Id');
+
+        $zone = Zone::where('contract_id', $contractId)->where('id', $id)->first();
+        if (!$zone) {
+            return response()->json([], 200);
+        }
+
+        $points = Point::where('zone_id', $id)
+            ->where('type', 'zone_delimiter')
+            ->get();
+
+        if ($points->isEmpty()) {
+            return response()->json([], 200);
+        }
+
+        $latitudes = [];
+        $longitudes = [];
+
+        foreach ($points as $point) {
+            $latitudes[] = $point->latitude;
+            $longitudes[] = $point->longitude;
+        }
+
+        $center_lat = array_sum($latitudes) / count($latitudes);
+        $center_lng = array_sum($longitudes) / count($longitudes);
+
+        $minLat = min($latitudes);
+        $maxLat = max($latitudes);
+        $minLng = min($longitudes);
+        $maxLng = max($longitudes);
+        $latDiff = abs($maxLat - $minLat);
+        $lngDiff = abs($maxLng - $minLng);
+        $maxDiff = max($latDiff, $lngDiff);
+
+        $zoom = 12;
+        if ($maxDiff < 0.001) {
+            $zoom = 18;
+        } elseif ($maxDiff < 0.005) {
+            $zoom = 17;
+        } elseif ($maxDiff < 0.01) {
+            $zoom = 16;
+        } elseif ($maxDiff < 0.05) {
+            $zoom = 15;
+        } elseif ($maxDiff < 0.1) {
+            $zoom = 14;
+        } elseif ($maxDiff < 0.5) {
+            $zoom = 13;
+        } else {
+            $zoom = 12;
+        }
+
+        return response()->json([
+            'center' => [$center_lng, $center_lat],
+            'zoom' => $zoom
+        ]);
     }
 }

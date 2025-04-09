@@ -5,7 +5,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { Icon } from '@iconify/react';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { ControlPosition, IControl, LngLatLike } from 'mapbox-gl';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -13,35 +13,66 @@ import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
+import { Zone, ZoneCenterCoord } from '@/types/Zone';
+import { getZoneZoom } from './zoneService';
+
+const DEFAULT_CENTER: [number, number] = [-3.70379, 40.41678];
 
 export class MapService {
-  public map!: mapboxgl.Map;
+  private map!: mapboxgl.Map;
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
-  private elementMarkers: { marker: mapboxgl.Marker; elementId: number }[] = [];
+  private elementMarkers: Map<number, { marker: mapboxgl.Marker; elementId: number }> = new Map();
+  private zoneCoords: ZoneCenterCoord[];
+  private geoCoords: number[];
+  private isMapInitialized: boolean = false;
+  private initCallbacks: Array<() => void> = [];
 
-  constructor(container: HTMLDivElement, token: string) {
+  constructor(container: HTMLDivElement, token: string, zoneCoords: ZoneCenterCoord[], geoCoords: number[]) {
+    this.zoneCoords = zoneCoords;
+    this.geoCoords = geoCoords;
     mapboxgl.accessToken = token;
     this.map = new mapboxgl.Map({
       container,
       style: 'mapbox://styles/mapbox/standard-satellite',
-      center: [-3.70379, 40.41678],
-      zoom: 12,
+      center: this.getCenter(),
+      zoom: 16,
+    });
+
+    this.map.on('load', () => {
+      this.isMapInitialized = true;
+      this.initCallbacks.forEach(callback => callback());
+      this.initCallbacks = [];
     });
   }
 
+  private getCenter(): LngLatLike {
+    if (this.zoneCoords?.length > 0 && this.zoneCoords[0].center?.length === 2) {
+      return this.zoneCoords[0].center as [number, number];
+    }
+    if (this.geoCoords?.length === 2) {
+      return this.geoCoords as [number, number];
+    }
+    return DEFAULT_CENTER;
+  }
+
   public addBasicControls(): void {
-    const { map } = this;
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-    map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
-    map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: { enableHighAccuracy: true },
-        trackUserLocation: true,
-      }),
-      'top-right',
-    );
+    const controls: { control: IControl; position: ControlPosition }[] = [
+      { control: new mapboxgl.NavigationControl(), position: 'top-right' },
+      { control: new mapboxgl.ScaleControl(), position: 'bottom-left' },
+      { control: new mapboxgl.FullscreenControl(), position: 'top-right' },
+      { 
+        control: new mapboxgl.GeolocateControl({
+          positionOptions: { enableHighAccuracy: true },
+          trackUserLocation: true,
+        }), 
+        position: 'top-right' 
+      }
+    ];
+
+    controls.forEach(({ control, position }) => {
+      this.map.addControl(control, position);
+    });
   }
 
   public addGeocoder(): void {
@@ -63,13 +94,12 @@ export class MapService {
       controls: { polygon: true, trash: true },
     });
     
-    const { map, draw } = this;
-    map.addControl(draw);
+    this.map.addControl(this.draw);
     
     const handleDraw = () => {
-      if (!draw) return;
+      if (!this.draw) return;
       
-      const data = draw.getAll();
+      const data = this.draw.getAll();
       if (data.features.length === 0) {
         onDrawUpdate([]);
         return;
@@ -81,7 +111,7 @@ export class MapService {
       const coords = polygon.geometry.coordinates[0] ?? [];
       if (coords.length < 3) {
         if (polygon.id) {
-          draw.delete(polygon.id as string);
+          this.draw.delete(polygon.id as string);
         }
         onDrawUpdate([]);
         return;
@@ -90,9 +120,8 @@ export class MapService {
       onDrawUpdate(coords as number[][]);
     };
     
-    map.on('draw.create', handleDraw);
-    map.on('draw.update', handleDraw);
-    map.on('draw.delete', handleDraw);
+    const events = ['draw.create', 'draw.update', 'draw.delete'];
+    events.forEach(event => this.map.on(event, handleDraw));
   }
 
   public clearDraw(): void {
@@ -121,12 +150,12 @@ export class MapService {
   }
 
   public removeLayersAndSources(prefix: string): void {
-    if (!this.map || !this.map.isStyleLoaded()) return;
+    if (!this.map?.isStyleLoaded()) return;
 
     const style = this.map.getStyle();
     if (!style?.layers) return;
 
-    for (const layer of style.layers) {
+    style.layers.forEach(layer => {
       if (layer.id.startsWith(prefix)) {
         if (this.map.getLayer(layer.id)) {
           this.map.removeLayer(layer.id);
@@ -135,21 +164,19 @@ export class MapService {
           this.map.removeSource(layer.id);
         }
       }
-    }
+    });
   }
 
   public addZoneToMap(sourceId: string, layerId: string, coordinates: [number, number][], color: string): void {
-    const { map } = this;
-    
-    if (map.getLayer(layerId)) {
-      map.removeLayer(layerId);
+    if (this.map.getLayer(layerId)) {
+      this.map.removeLayer(layerId);
     }
     
-    if (map.getSource(sourceId)) {
-      map.removeSource(sourceId);
+    if (this.map.getSource(sourceId)) {
+      this.map.removeSource(sourceId);
     }
 
-    map.addSource(sourceId, {
+    this.map.addSource(sourceId, {
       type: 'geojson',
       data: {
         type: 'Feature',
@@ -161,7 +188,7 @@ export class MapService {
       },
     });
 
-    map.addLayer({
+    this.map.addLayer({
       id: layerId,
       type: 'fill',
       source: sourceId,
@@ -190,24 +217,26 @@ export class MapService {
       ? elementType.color.startsWith('#') ? elementType.color : `#${elementType.color}`
       : '#2D4356';
 
+    const markerStyle = {
+      width: '38px',
+      height: '38px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: bgColor,
+      boxShadow: '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)',
+      cursor: 'pointer',
+      border: '2px solid #fff',
+      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    };
+
     root.render(
       React.createElement(
         'div',
         {
           className: 'element-marker',
-          style: {
-            width: '38px',
-            height: '38px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: bgColor,
-            boxShadow: '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)',
-            cursor: 'pointer',
-            border: '2px solid #fff',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-          },
+          style: markerStyle,
           onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => {
             const target = e.currentTarget;
             target.style.transform = 'scale(1.1)';
@@ -240,56 +269,81 @@ export class MapService {
     onElementClick?: (element: Element) => void,
   ): void {
     this.removeElementMarkers();
+    
     const pointMap = new Map(points.map(p => [p.id, p]));
     const elementTypeMap = new Map(elementTypes.map(et => [et.id, et]));
+    
+    let markersAdded = 0;
 
     elements.forEach((element) => {
-      if (!element.id || !element.point_id || !element.element_type_id) return;
+      if (!element.id || !element.point_id || !element.element_type_id) {
+        return;
+      }
       
       const point = pointMap.get(element.point_id);
-      if (!point?.latitude || !point?.longitude) return;
-
-      const elementType = elementTypeMap.get(element.element_type_id);
-      if (!elementType) return;
-
-      const markerElement = this.createCustomMarkerElement(elementType);
-      const marker = new mapboxgl.Marker({
-        element: markerElement,
-        anchor: 'center',
-      })
-        .setLngLat([point.longitude, point.latitude])
-        .addTo(this.map);
-
-      if (onElementClick) {
-        marker.getElement().addEventListener('click', () => onElementClick(element));
+      if (!point?.latitude || !point?.longitude) {
+        return;
       }
 
-      this.elementMarkers.push({ marker, elementId: element.id });
+      const elementType = elementTypeMap.get(element.element_type_id);
+      if (!elementType) {
+        return;
+      }
+
+      try {
+        const markerElement = this.createCustomMarkerElement(elementType);
+        const marker = new mapboxgl.Marker({
+          element: markerElement,
+          anchor: 'center',
+        })
+          .setLngLat([point.longitude, point.latitude])
+          .addTo(this.map);
+
+        if (onElementClick) {
+          marker.getElement().addEventListener('click', () => onElementClick(element));
+        }
+
+        this.elementMarkers.set(element.id, { marker, elementId: element.id });
+        markersAdded++;
+      } catch (error) {
+      }
     });
   }
 
   public removeElementMarker(elementId: number): void {
-    const markerIndex = this.elementMarkers.findIndex((m) => m.elementId === elementId);
-    if (markerIndex >= 0) {
-      this.elementMarkers[markerIndex].marker.remove();
-      this.elementMarkers.splice(markerIndex, 1);
+    const markerObj = this.elementMarkers.get(elementId);
+    if (markerObj) {
+      markerObj.marker.remove();
+      this.elementMarkers.delete(elementId);
     }
   }
 
   public removeElementMarkers(): void {
-    this.elementMarkers.forEach((markerObj) => markerObj.marker.remove());
-    this.elementMarkers = [];
+    this.elementMarkers.forEach(({ marker }) => marker.remove());
+    this.elementMarkers.clear();
   }
 
   public getCoordElement(element: Element, points: Point[]): { lat: number; lng: number } | null {
     const point = points.find((p) => p.id === element.point_id);
     if (!point?.latitude || !point?.longitude) return null;
-    
     return { lat: point.latitude, lng: point.longitude };
   }
 
-  public flyTo(coord: [number, number], zoom = 16): void {
-    this.map.flyTo({ center: coord, zoom, essential: true });
+  public async flyTo(selectedZone: Zone) {
+    if (selectedZone.id === null) return;
+    const { zoom, center }: ZoneCenterCoord = await getZoneZoom(selectedZone.id!);
+    
+    if (center) {
+      this.map.flyTo({ center: [center[0], center[1]], zoom, essential: true });
+    }
+  }
+
+  public onMapLoad(callback: () => void): () => void {
+    this.map.on('load', callback);
+    
+    return () => {
+      this.map.off('load', callback);
+    };
   }
 
   public resizeMap(): void {
@@ -297,9 +351,50 @@ export class MapService {
   }
 
   public updateMarkerVisibility(elementId: number, visible: boolean): void {
-    const markerObj = this.elementMarkers.find((m) => m.elementId === elementId);
+    const markerObj = this.elementMarkers.get(elementId);
     if (markerObj) {
       markerObj.marker.getElement().style.display = visible ? '' : 'none';
+    }
+  }
+
+  public isReady(): boolean {
+    return this.isMapInitialized && this.map.isStyleLoaded();
+  }
+
+  public waitForInit(callback: () => void): void {
+    if (this.isReady()) {
+      callback();
+    } else {
+      this.initCallbacks.push(callback);
+    }
+  }
+
+  public resetMap(): void {
+    this.removeElementMarkers();
+    this.clearDraw();
+    try {
+      const style = this.map.getStyle();
+      if (style?.layers) {
+        const baseLayers = ['background', 'satellite'];
+        style.layers
+          .filter(layer => !baseLayers.includes(layer.id))
+          .forEach(layer => {
+            if (this.map.getLayer(layer.id)) {
+              this.map.removeLayer(layer.id);
+            }
+          });
+      }
+      
+      if (style?.sources) {
+        Object.keys(style.sources)
+          .filter(sourceId => !sourceId.startsWith('mapbox'))
+          .forEach(sourceId => {
+            if (this.map.getSource(sourceId)) {
+              this.map.removeSource(sourceId);
+            }
+          });
+      }
+    } catch (error) {
     }
   }
 }
