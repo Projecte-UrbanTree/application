@@ -206,7 +206,9 @@ export const Zones = ({
           .map((point) => point.id)
       );
 
-      return elements
+      console.log(`Zone ${zoneId} has ${pointIdsInZone.size} points`);
+
+      const typeCount = elements
         .filter((element) => pointIdsInZone.has(element.point_id))
         .reduce(
           (acc, element) => {
@@ -217,6 +219,10 @@ export const Zones = ({
           },
           {} as Record<number, number>,
         );
+        
+      console.log(`Zone ${zoneId} has elements by type:`, typeCount);
+      
+      return typeCount;
     },
     [points, elements],
   );
@@ -225,6 +231,8 @@ export const Zones = ({
     (elementTypeId: number, zoneId: number) => {
       const key = `${zoneId}-${elementTypeId}`;
       const isHidden = hiddenElementTypes[key] || false;
+
+      console.log(`Toggling visibility for elements of type ${elementTypeId} in zone ${zoneId} to ${!isHidden}`);
 
       setHiddenElementTypes((prev) => ({
         ...prev,
@@ -246,6 +254,8 @@ export const Zones = ({
   const toggleZoneVisibility = useCallback(
     (zoneId: number) => {
       const isHidden = hiddenZones[zoneId] || false;
+      
+      console.log(`Toggling visibility for zone ${zoneId} to ${!isHidden}`);
       
       setHiddenZones((prev) => ({
         ...prev,
@@ -290,16 +300,18 @@ export const Zones = ({
       const key = `${zone.id}-${elementType.id}`;
       const isHidden = hiddenElementTypes[key] || false;
 
+      if (count === 0) return null; 
+
       return (
         <div
           key={elementType.id}
-          className="flex justify-between items-center my-2">
+          className="flex justify-between items-center my-2 p-2 rounded bg-gray-50">
           <div className="flex items-center gap-2">
             {elementType.icon && (
               <Icon
-                icon={`mdi:${elementType.icon}`}
+                icon={elementType.icon.startsWith('mdi:') ? elementType.icon : `mdi:${elementType.icon}`}
                 width="20"
-                className="text-gray-500"
+                style={{ color: elementType.color || '#666' }}
               />
             )}
             <span>

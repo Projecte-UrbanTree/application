@@ -36,6 +36,7 @@ import { Incidence, IncidentStatus } from '@/types/Incident';
 import { Point } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
 import { WorkOrder, WorkOrderStatus, WorkOrderBlock, WorkOrderBlockTask } from '@/types/WorkOrders';
+import EditElementForm from './EditElementForm';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -70,6 +71,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isEvaModalVisible, setIsEvaModalVisible] = useState(false);
   const [isEditEvaModalVisible, setIsEditEvaModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -285,7 +287,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         });
       }
     },
-    [dispatch, onClose, onDeleteElement],
+    [dispatch, onClose, onDeleteElement]
   );
 
   const getElementType = useCallback(
@@ -813,7 +815,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           <div className="space-y-4">
             {isLoading ? (
               <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-gray-900"></div>
               </div>
             ) : incidences.length > 0 ? (
               incidences.map((incidence) => (
@@ -1052,21 +1054,23 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </div>
       )}
-      {isEditEvaModalVisible && eva && (
+
+      {isEditModalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <Button
               icon="pi pi-times"
               className="p-button-rounded p-button-text absolute top-2 right-2"
-              onClick={() => setIsEditEvaModalVisible(false)}
+              onClick={() => setIsEditModalVisible(false)}
             />
-            <EditEva
-              preselectedElementId={eva.id!}
-              onClose={() => {
-                setIsEditEvaModalVisible(false);
-                refreshEvaData();
-              }}
-              redirectPath="/admin/inventory"
+            <EditElementForm
+              element={element}
+              onClose={() => setIsEditModalVisible(false)}
+              elementTypes={elementTypes.map(et => ({ label: et.name, value: et.id || 0 }))}
+              treeTypes={treeTypes.map(tt => ({ 
+                label: `${tt.family} ${tt.genus} ${tt.species}`, 
+                value: tt.id || 0 
+              }))}
             />
           </div>
         </div>

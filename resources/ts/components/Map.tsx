@@ -190,9 +190,16 @@ export const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !isDataLoaded) return;
+    
     updateZones(service);
+  }, [zonesRedux, points, hiddenZones, isDataLoaded]);
+
+  useEffect(() => {
+    const service = mapServiceRef.current;
+    if (!service || !isDataLoaded) return;
+    
     updateElements(service);
-  }, [zonesRedux, elements, points, hiddenZones, hiddenElementTypes, isDataLoaded]);
+  }, [elements, points, hiddenZones, hiddenElementTypes, isDataLoaded]);
 
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
@@ -390,7 +397,9 @@ export const MapComponent: React.FC<MapProps> = ({
   }
 
   function updateElements(service: MapService) {
-    if (!currentContract) return;
+    if (!service || !currentContract) return;
+
+    console.log('Updating elements:', elements.length); // Debug
 
     const handleElementDelete = async (elementId: number) => {
       try {
@@ -415,47 +424,66 @@ export const MapComponent: React.FC<MapProps> = ({
       setSelectedElementId(element.id!);
     };
 
+    // Limpiamos marcadores existentes
     service.removeElementMarkers();
     
+    // Filtramos zonas del contrato actual
     const zoneIds = new Set(
       zonesRedux
         .filter((zone) => zone.contract_id === currentContract.id)
         .map((zone) => zone.id)
     );
     
+    // Obtenemos los puntos que pertenecen a estas zonas
     const pointIds = new Set(
       points
         .filter((point) => point.zone_id && zoneIds.has(point.zone_id))
         .map((point) => point.id)
     );
     
+    // Filtramos elementos que tienen puntos en estas zonas
     const filteredElements = elements.filter(
       (element) => element.point_id && pointIds.has(element.point_id)
     );
+    
+    console.log('Filtered elements:', filteredElements.length); // Debug
+    
+    if (filteredElements.length === 0) {
+      console.log('No elements to display'); // Debug
+      return;
+    }
 
     const renderMarkers = () => {
+      // Filtramos los puntos relevantes solo una vez
+      const relevantPoints = points.filter(
+        (point) => point.zone_id && zoneIds.has(point.zone_id)
+      );
+      
+      // Agregamos los marcadores al mapa
       service.addElementMarkers(
         filteredElements,
-        points.filter((point) => point.zone_id && zoneIds.has(point.zone_id)),
+        relevantPoints,
         treeTypes,
         elementTypes,
         handleElementDelete,
         handleElementClick,
       );
       
+      // Aplicamos visibilidad según zonas ocultas
       Object.entries(hiddenZones).forEach(([zoneId, isHidden]) => {
         if (isHidden) {
           const zoneIdNum = Number(zoneId);
-          points
-            .filter((p) => p.zone_id === zoneIdNum)
-            .forEach((point) => {
-              filteredElements
-                .filter((element) => element.point_id === point.id && element.id)
-                .forEach((element) => service.updateMarkerVisibility(element.id!, false));
-            });
+          const pointsInZone = relevantPoints.filter(p => p.zone_id === zoneIdNum);
+          
+          pointsInZone.forEach((point) => {
+            filteredElements
+              .filter((element) => element.point_id === point.id && element.id)
+              .forEach((element) => service.updateMarkerVisibility(element.id!, false));
+          });
         }
       });
 
+      // Aplicamos visibilidad según tipos de elementos ocultos
       Object.entries(hiddenElementTypes).forEach(([key, isHidden]) => {
         if (isHidden) {
           const [zoneId, elementTypeId] = key.split('-').map(Number);

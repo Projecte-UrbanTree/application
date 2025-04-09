@@ -264,30 +264,50 @@ export class MapService {
     
     const pointMap = new Map(points.map(p => [p.id, p]));
     const elementTypeMap = new Map(elementTypes.map(et => [et.id, et]));
+    
+    console.log(`Adding ${elements.length} markers, with ${points.length} points and ${elementTypes.length} types`);
+    
+    let markersAdded = 0;
 
     elements.forEach((element) => {
-      if (!element.id || !element.point_id || !element.element_type_id) return;
+      if (!element.id || !element.point_id || !element.element_type_id) {
+        console.log(`Skipping element due to missing data:`, element);
+        return;
+      }
       
       const point = pointMap.get(element.point_id);
-      if (!point?.latitude || !point?.longitude) return;
-
-      const elementType = elementTypeMap.get(element.element_type_id);
-      if (!elementType) return;
-
-      const markerElement = this.createCustomMarkerElement(elementType);
-      const marker = new mapboxgl.Marker({
-        element: markerElement,
-        anchor: 'center',
-      })
-        .setLngLat([point.longitude, point.latitude])
-        .addTo(this.map);
-
-      if (onElementClick) {
-        marker.getElement().addEventListener('click', () => onElementClick(element));
+      if (!point?.latitude || !point?.longitude) {
+        console.log(`Skipping element ${element.id} due to missing point coordinates`);
+        return;
       }
 
-      this.elementMarkers.set(element.id, { marker, elementId: element.id });
+      const elementType = elementTypeMap.get(element.element_type_id);
+      if (!elementType) {
+        console.log(`Skipping element ${element.id} due to missing element type`);
+        return;
+      }
+
+      try {
+        const markerElement = this.createCustomMarkerElement(elementType);
+        const marker = new mapboxgl.Marker({
+          element: markerElement,
+          anchor: 'center',
+        })
+          .setLngLat([point.longitude, point.latitude])
+          .addTo(this.map);
+
+        if (onElementClick) {
+          marker.getElement().addEventListener('click', () => onElementClick(element));
+        }
+
+        this.elementMarkers.set(element.id, { marker, elementId: element.id });
+        markersAdded++;
+      } catch (error) {
+        console.error(`Error adding marker for element ${element.id}:`, error);
+      }
     });
+    
+    console.log(`Successfully added ${markersAdded} markers to the map`);
   }
 
   public removeElementMarker(elementId: number): void {
