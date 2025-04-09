@@ -298,7 +298,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                     {t('admin.profileDropdown.accountSettings')}
                   </Link>
                   <a
-                    href="/license"
+                    href="/admin/license"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.license')}
                   </a>
