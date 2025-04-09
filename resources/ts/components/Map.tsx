@@ -155,7 +155,7 @@ export const MapComponent: React.FC<MapProps> = ({
     const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, initialCoordinates);
     service.addBasicControls();
     service.addGeocoder();
-    service.enableDraw(userValue.role === Roles.admin, (coords) => {
+    service.enableDraw(userValue.role !== undefined && userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
         onDrawingModeChange(true);
