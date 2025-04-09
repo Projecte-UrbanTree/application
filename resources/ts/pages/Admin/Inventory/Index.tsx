@@ -31,7 +31,13 @@ export default function Inventory() {
   const [dataInitialized, setDataInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { isMapReady, isInitializing, error: mapInitError } = useMapInitialization();
+  const { 
+    isMapReady, 
+    isInitializing, 
+    error: mapInitError, 
+    updateElements, 
+    lastElementUpdate 
+  } = useMapInitialization();
 
   // Refs
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -96,7 +102,7 @@ export default function Inventory() {
   // Handle map initialization error
   useEffect(() => {
     if (mapInitError && toast.current) {
-      toast.current.show({
+      toast.current?.show({
         severity: 'error',
         summary: 'Error',
         detail: 'Error de inicialización del mapa',
@@ -133,34 +139,45 @@ export default function Inventory() {
     setIsCreatingElement(isCreating);
   }, []);
 
-  const handleElementAdded = useCallback(() => {
-    setZoneToAddElement(null);
-  }, []);
-
-  // Standardized error message display
-  const showErrorMessage = useCallback((message: string) => {
-    toast.current?.show({
-      severity: 'error',
-      summary: 'Aviso',
-      detail: message,
-      life: 3000,
-      sticky: false,
-      style: {
-        fontWeight: 'bold',
-        fontSize: '1.1em',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-        border: '1px solid #f00',
-      },
-    });
-  }, []);
+  const handleElementAdded = useCallback(async () => {
+    try {
+      // Fetch only the elements to update
+      await dispatch(fetchElementsAsync());
+      
+      // Use the optimized update method
+      updateElements();
+      
+      // Reset the zone state
+      setZoneToAddElement(null);
+    } catch (error) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error actualizando elementos',
+        life: 3000,
+      });
+    }
+  }, [dispatch, updateElements]);
 
   const handleMapClick = useCallback(
     (event: React.MouseEvent) => {
       if (isCreatingElement && !zoneToAddElement) {
-        showErrorMessage('No es pot crear un element fora de la zona');
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Aviso',
+          detail: 'No es pot crear un element fora de la zona',
+          life: 3000,
+          sticky: false,
+          style: {
+            fontWeight: 'bold',
+            fontSize: '1.1em',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+            border: '1px solid #f00',
+          },
+        });
       }
     },
-    [isCreatingElement, zoneToAddElement, showErrorMessage],
+    [isCreatingElement, zoneToAddElement],
   );
 
   const handleDrawingModeChange = useCallback((isDrawing: boolean) => {
@@ -198,7 +215,7 @@ export default function Inventory() {
           style={{ minHeight: isMobile ? '300px' : '400px' }}
           onClick={handleMapClick}>
           <MapComponent
-            key={mapKey}
+            key={`${mapKey}-${lastElementUpdate}`}
             selectedZone={selectedZone}
             zoneToAddElement={zoneToAddElement}
             onElementAdd={handleElementAdded}

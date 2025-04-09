@@ -346,6 +346,26 @@ export const MapComponent: React.FC<MapProps> = ({
     
     const subscription = eventSubject.subscribe({
       next: (data: ZoneEvent) => {
+        // Handle element updates
+        if (data.updateElements) {
+          try {
+            updateElements(service);
+          } catch (error) {
+            // Silent fail for element updates
+          }
+          return;
+        }
+        
+        // Handle zone updates
+        if (data.updateZones) {
+          try {
+            updateZones(service);
+          } catch (error) {
+            // Silent fail for zone updates
+          }
+          return;
+        }
+        
         // Handle show all elements events
         if (data.showAllElements || data.forceShow) {
           try {
@@ -502,12 +522,20 @@ export const MapComponent: React.FC<MapProps> = ({
     };
   }, [points, elements, zonesRedux, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange, hiddenElementTypes, hiddenZones]);
 
-  // Handle element form close
+  // Handle element form close with optimization
   const handleElementFormClose = useCallback(() => {
     setModalAddPointVisible(false);
     onCreatingElementChange(false);
     setNewPointCoord(null);
     mapServiceRef.current?.disableSingleClick();
+    
+    // Refresh only elements instead of the entire map
+    setTimeout(() => {
+      if (mapServiceRef.current) {
+        updateElements(mapServiceRef.current);
+      }
+    }, 100);
+    
     onElementAdd();
   }, [onCreatingElementChange, onElementAdd]);
 

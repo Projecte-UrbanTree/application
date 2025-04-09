@@ -1,11 +1,14 @@
-import { Zone } from './Zone';
 
 /**
  * Interfaz para los eventos relacionados con zonas en el mapa
  */
 export interface ZoneEvent {
-  zone?: Zone;
-  isCreatingElement: boolean;
+  zone?: any;
+  isCreatingElement?: boolean;
+  initializeMap?: boolean;
+  refreshMap?: boolean;
+  showAllElements?: boolean;
+  forceShow?: boolean;
   hiddenElementTypes?: {
     zoneId: number;
     elementTypeId: number;
@@ -15,8 +18,6 @@ export interface ZoneEvent {
     zoneId: number;
     hidden: boolean;
   };
-  refreshMap?: boolean;
-  initializeMap?: boolean;
-  showAllElements?: boolean;
-  forceShow?: boolean;
-} 
+  updateElements?: boolean;
+  updateZones?: boolean;
+}

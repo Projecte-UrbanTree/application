@@ -14,6 +14,7 @@ export function useMapInitialization() {
   const [isMapReady, setIsMapReady] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastElementUpdate, setLastElementUpdate] = useState<number>(0);
   
   // Obtenemos el estado global necesario
   const { points } = useSelector((state: RootState) => state.points);
@@ -65,5 +66,33 @@ export function useMapInitialization() {
     }
   }, [currentContract, points.length, zones.length, isMapReady, isInitializing]);
   
-  return { isMapReady, isInitializing, error };
+  // Handler to update elements without full re-rendering
+  const updateElements = () => {
+    setLastElementUpdate(Date.now());
+    if (isMapReady) {
+      eventSubject.next({
+        isCreatingElement: false,
+        updateElements: true
+      });
+    }
+  };
+
+  // Handler for zone updates
+  const updateZones = () => {
+    if (isMapReady) {
+      eventSubject.next({
+        isCreatingElement: false,
+        updateZones: true
+      });
+    }
+  };
+  
+  return { 
+    isMapReady, 
+    isInitializing, 
+    error,
+    lastElementUpdate,
+    updateElements,
+    updateZones
+  };
 }
