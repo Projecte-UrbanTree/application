@@ -297,11 +297,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.accountSettings')}
                   </Link>
-                  <a
-                    href="/admin/license"
+                    <Link
+                    onClick={() => setProfileDropdownVisible(false)}
+                    to="/admin/license"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.license')}
-                  </a>
+                    </Link>
                   <Link
                     to="/logout"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
