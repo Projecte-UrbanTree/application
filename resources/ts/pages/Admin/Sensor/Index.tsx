@@ -5,7 +5,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Toast } from 'primereact/toast';
-import { fetchSensors, Sensor as ApiSensor } from '@/api/sensors';
+import { fetchSensors, Sensor as ApiSensor, fetchAndStoreSensorData } from '@/api/sensors';
 
 interface Sensor {
   id: number;
@@ -31,6 +31,7 @@ const Sensors: React.FC = () => {
   const [sensors, setSensors] = useState<Sensor[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState<Record<string, boolean>>({});
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
@@ -39,6 +40,22 @@ const Sensors: React.FC = () => {
         const backendResponse = await axiosClient.get('/admin/sensors');
         const backendSensors: Sensor[] = backendResponse.data;
         
+        // Fetch and store data for each sensor first
+        const refreshPromises = backendSensors.map(async (sensor) => {
+          setRefreshing(prev => ({ ...prev, [sensor.eui]: true }));
+          try {
+            await fetchAndStoreSensorData(sensor.eui);
+          } catch (err) {
+            console.error(`Error refreshing data for sensor ${sensor.eui}:`, err);
+          } finally {
+            setRefreshing(prev => ({ ...prev, [sensor.eui]: false }));
+          }
+        });
+        
+        // Wait for all refresh operations to complete
+        await Promise.all(refreshPromises);
+        
+        // Then fetch all sensors data from API
         const apiSensors = await fetchSensors();
         
         const latestByEui: Record<string, ApiSensor> = {};
@@ -144,6 +161,7 @@ const Sensors: React.FC = () => {
                         onClick={() => navigate(`/admin/sensors/${sensor.eui}`)}>
                         {sensor.name || `Sensor ${sensor.id}`}
                       </h2>
+                      {refreshing[sensor.eui] && <span className="text-xs text-gray-500">Actualizando...</span>}
                     </div>
                   </div>
                   <div className="flex space-x-2">

@@ -214,8 +214,10 @@ class SensorHistoryController extends Controller
     public function fetchAndStoreSensorData($eui)
     {
         try {
+            // Find the sensor by EUI
             $sensor = Sensor::where('eui', $eui)->firstOrFail();
             
+            // Fetch data from external API
             $apiKey = env('VITE_X_API_KEY');
             if (empty($apiKey)) {
                 throw new \Exception('API key not configured');
@@ -234,32 +236,59 @@ class SensorHistoryController extends Controller
 
             $responseData = $response->json();
             $recordsCreated = 0;
+            $recordsSkipped = 0;
+            $idsToUpdate = [];
 
             $sensorDataArray = is_array($responseData) && !array_key_exists('dev_eui', $responseData) ? $responseData : [$responseData];
             
             foreach ($sensorDataArray as $dataPoint) {
-                if (isset($dataPoint['dev_eui']) && $dataPoint['dev_eui'] !== $eui) {
-                    continue; 
+                if (isset($dataPoint['check']) && $dataPoint['check'] === true) {
+                    $recordsSkipped++;
+                    continue;
                 }
-                
-                $historyData = [
-                    'sensor_id' => $sensor->id, 
-                    'temperature_soil' => $dataPoint['temp_soil'] ?? null,
-                    'temperature_air' => $dataPoint['tempc_ds18b20'] ?? null,
-                    'ph_soil' => $dataPoint['ph1_soil'] ?? null,
-                    'humidity_soil' => $dataPoint['water_soil'] ?? null,
-                    'conductivity_soil' => $dataPoint['conductor_soil'] ?? null,
-                    'batery' => $dataPoint['bat'] ?? null,
-                    'signal' => $dataPoint['rssi'] ?? null,
-                ];
+                if (!isset($dataPoint['check']) || $dataPoint['check'] === false) {
 
-                SensorHistory::create($historyData);
-                $recordsCreated++;
+                    if (isset($dataPoint['id'])) {
+                        $idsToUpdate[] = $dataPoint['id'];
+                    }
+                    
+                    $historyData = [
+                        'sensor_id' => $sensor->id, 
+                        'temperature_soil' => $dataPoint['temp_soil'] ?? null,
+                        'temperature_air' => $dataPoint['tempc_ds18b20'] ?? null,
+                        'ph_soil' => $dataPoint['ph1_soil'] ?? null,
+                        'humidity_soil' => $dataPoint['water_soil'] ?? null,
+                        'conductivity_soil' => $dataPoint['conductor_soil'] ?? null,
+                        'batery' => $dataPoint['bat'] ?? null,
+                        'signal' => $dataPoint['rssi'] ?? null,
+                    ];
+
+                    // Create the record
+                    SensorHistory::create($historyData);
+                    $recordsCreated++;
+                }
+            }
+
+            if (!empty($idsToUpdate)) {
+                try {
+                    $updateResponse = Http::withHeaders([
+                        'X-API-Key' => $apiKey,
+                    ])->post("http://api_urbantree.alumnat.iesmontsia.org/event=up", [
+                        'ids' => $idsToUpdate  
+                    ]);
+                    
+                    if (!$updateResponse->successful()) {
+                        \Log::warning("Failed to update check status for records: " . $updateResponse->body());
+                    }
+                } catch (\Exception $e) {
+                    \Log::warning("Exception when updating check status: " . $e->getMessage());
+                }
             }
 
             return response()->json([
                 'message' => "Successfully fetched and stored sensor data",
                 'records_created' => $recordsCreated,
+                'records_skipped' => $recordsSkipped,
                 'sensor_id' => $sensor->id,
                 'eui' => $eui
             ]);

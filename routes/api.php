@@ -96,7 +96,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // New route for paginated sensor history
         Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);
-        Route::get('/admin/sensors/{eui}/fetch-and-store', [SensorHistoryController::class, 'fetchAndStoreSensorData']);
+        Route::get('/sensors/{eui}/fetch-and-store', [SensorHistoryController::class, 'fetchAndStoreSensorData']);
     });
 
     /* Worker protected routes */
