@@ -44,8 +44,8 @@ class IndexController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $userId = $request->user()->id;
         try {
-            $userId = auth()->id();
             $contractId = $request->header('X-Contract-Id');
             $date = $request->input('date');
 
@@ -78,7 +78,6 @@ class IndexController extends Controller
 
             return response()->json($workOrders);
         } catch (\Exception $e) {
-            $userId = auth()->id() ?? 'unknown';
             $contractId = $request->header('X-Contract-Id') ?? 'none';
             Log::error("Error fetching work orders for worker ID: {$userId}, contract ID: {$contractId}. Error: {$e->getMessage()}");
             Log::error($e->getTraceAsString());
@@ -96,6 +95,7 @@ class IndexController extends Controller
      */
     public function updateTaskStatus(Request $request, int $taskId): JsonResponse
     {
+        $userId = $request->user()->id;
         try {
             $validated = $request->validate([
                 'status' => 'required|integer|in:0,1,2',
@@ -107,7 +107,6 @@ class IndexController extends Controller
             $task = WorkOrderBlockTask::with(['workOrderBlock.workOrder'])
                 ->findOrFail($taskId);
 
-            $userId = auth()->id();
             $workOrder = $task->workOrderBlock->workOrder;
 
             if (! $workOrder->users()->where('user_id', $userId)->exists()) {
@@ -185,7 +184,7 @@ class IndexController extends Controller
         $workOrder->save();
 
         Log::info("Work order {$workOrder->id} status updated to {$workOrder->status}. ".
-                  "Completed tasks: {$completedTasks}/{$totalTasks}");
+            "Completed tasks: {$completedTasks}/{$totalTasks}");
     }
 
     /**
@@ -204,7 +203,6 @@ class IndexController extends Controller
                 'resources.*.quantity' => ['required', 'numeric', 'min:0'],
             ]);
 
-            // Check if this worker is assigned to this work order
             $user = $request->user();
             $workOrder = WorkOrder::findOrFail($validated['work_order_id']);
 
@@ -214,48 +212,74 @@ class IndexController extends Controller
                 ], 403);
             }
 
-            // Check if the work order is in a state where a report can be created
-            if ($workOrder->status >= self::WORK_ORDER_REPORT_SENT) {
-                return response()->json([
-                    'message' => 'This work order already has a report sent',
-                ], 400);
-            }
-
             DB::beginTransaction();
 
-            $workReport = WorkReport::create([
-                'work_order_id' => $validated['work_order_id'],
-                'spent_fuel' => $validated['spent_fuel'],
-                'report_incidents' => $validated['report_incidents'] ?? null,
-                'report_status' => $validated['report_status'],
-            ]);
+            $existingReport = WorkReport::where('work_order_id', $validated['work_order_id'])
+                ->where('report_status', self::REPORT_STATUS_REJECTED)
+                ->first();
 
-            // Update work order status to report sent
-            $workOrder->status = self::WORK_ORDER_REPORT_SENT;
-            $workOrder->save();
+            if ($existingReport) {
+                $existingReport->spent_fuel = $validated['spent_fuel'];
+                $existingReport->report_incidents = $validated['report_incidents'] ?? null;
+                $existingReport->report_status = self::REPORT_STATUS_PENDING;
+                $existingReport->save();
 
-            if (isset($validated['resources']) && is_array($validated['resources'])) {
-                foreach ($validated['resources'] as $resource) {
-                    $workReport->workReportResources()->create([
-                        'resource_id' => $resource['resource_id'],
-                        'quantity' => $resource['quantity'],
-                    ]);
+                $existingReport->workReportResources()->delete();
+
+                if (isset($validated['resources']) && is_array($validated['resources'])) {
+                    foreach ($validated['resources'] as $resource) {
+                        $existingReport->workReportResources()->create([
+                            'resource_id' => $resource['resource_id'],
+                            'quantity' => $resource['quantity'],
+                        ]);
+                    }
+                }
+
+                $workReport = $existingReport;
+            } else {
+                if (
+                    $workOrder->status >= self::WORK_ORDER_REPORT_SENT &&
+                    ! WorkReport::where('work_order_id', $validated['work_order_id'])
+                        ->where('report_status', self::REPORT_STATUS_REJECTED)
+                        ->exists()
+                ) {
+                    return response()->json([
+                        'message' => 'This work order already has a report sent',
+                    ], 400);
+                }
+
+                $workReport = WorkReport::create([
+                    'work_order_id' => $validated['work_order_id'],
+                    'spent_fuel' => $validated['spent_fuel'],
+                    'report_incidents' => $validated['report_incidents'] ?? null,
+                    'report_status' => $validated['report_status'],
+                ]);
+
+                if (isset($validated['resources']) && is_array($validated['resources'])) {
+                    foreach ($validated['resources'] as $resource) {
+                        $workReport->workReportResources()->create([
+                            'resource_id' => $resource['resource_id'],
+                            'quantity' => $resource['quantity'],
+                        ]);
+                    }
                 }
             }
+
+            $workOrder->status = self::WORK_ORDER_REPORT_SENT;
+            $workOrder->save();
 
             DB::commit();
 
             return response()->json([
-                'message' => 'Work report created successfully',
+                'message' => 'Work report '.($existingReport ? 'updated' : 'created').' successfully',
                 'work_report' => $workReport->load(['workOrder', 'resources']),
             ], 201);
-
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error creating work report: '.$e->getMessage());
+            Log::error('Error processing work report: '.$e->getMessage());
 
             return response()->json([
-                'message' => 'An error occurred while creating the work report',
+                'message' => 'An error occurred while processing the work report',
                 'error' => $e->getMessage(),
             ], 500);
         }
