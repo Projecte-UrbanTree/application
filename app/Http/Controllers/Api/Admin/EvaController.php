@@ -107,18 +107,17 @@ class EvaController extends Controller
     public function edit(int $id): JsonResponse
     {
         $eva = Eva::with(['element.point', 'element.elementType'])->findOrFail($id);
-        
-        if (!$eva) {
+
+        if (! $eva) {
             return response()->json(['message' => 'EVA not found'], 404);
         }
 
         return response()->json([
             'dictionaries' => Config::get('dictionaries'),
             'eva' => $eva,
-            'status' => 'success'
+            'status' => 'success',
         ]);
     }
-    
 
     /**
      * Update the specified resource in storage.

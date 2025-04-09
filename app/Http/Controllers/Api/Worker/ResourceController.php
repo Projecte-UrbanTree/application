@@ -12,20 +12,16 @@ class ResourceController extends Controller
 {
     /**
      * Get all resource types.
-     *
-     * @return JsonResponse
      */
     public function resourceTypes(): JsonResponse
     {
         $resourceTypes = ResourceType::orderBy('name')->get();
+
         return response()->json($resourceTypes);
     }
 
     /**
      * Get all resources available for the current contract.
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function resources(Request $request): JsonResponse
     {

@@ -90,24 +90,24 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
     if ((isInventoryPage || isWorkersPage) && 
         activeContracts.length > 0 && 
         !initialized) {
-      
+
       const savedContractId = localStorage.getItem(SELECTED_CONTRACT_KEY);
-      
+
       if (savedContractId) {
         const contractId = parseInt(savedContractId);
         const contractExists = activeContracts.some(c => c.id === contractId);
-        
+
         if (contractExists) {
           dispatch(selectContract(contractId));
           setInitialized(true);
           return;
         }
       }
-      
-      if (!currentContract || !activeContracts.some(c => c.id === currentContract.id)) {
+
+      if (!currentContract && !savedContractId) {
         dispatch(selectContract(activeContracts[0]?.id ?? 0));
       }
-      
+
       setInitialized(true);
     }
   }, [isInventoryPage, isWorkersPage, activeContracts.length, initialized]);
@@ -291,11 +291,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                 <div
                   ref={profileRef}
                   className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md ring-1 ring-black/5 z-10">
-                  <a
-                    href="/admin/account"
+                  <Link
+                    onClick={() => setProfileDropdownVisible(false)}
+                    to="/admin/account"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.accountSettings')}
-                  </a>
+                  </Link>
                   <a
                     href="/license"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">

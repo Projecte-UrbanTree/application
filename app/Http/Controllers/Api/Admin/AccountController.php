@@ -76,4 +76,44 @@ class AccountController extends Controller
 
         return response()->json(['message' => 'Contraseña actualizada correctamente']);
     }
+
+    /**
+     * List all Sanctum tokens for the authenticated user.
+     *
+     * @return JsonResponse A JSON response containing the user's tokens.
+     */
+    public function listTokens(): JsonResponse
+    {
+        $user = Auth::user();
+        $tokens = $user->tokens->map(function ($token) {
+            return [
+                'id' => $token->id,
+                'name' => $token->name,
+                'last_used_at' => $token->last_used_at,
+                'created_at' => $token->created_at,
+            ];
+        });
+
+        return response()->json($tokens);
+    }
+
+    /**
+     * Revoke a specific Sanctum token for the authenticated user.
+     *
+     * @param  int  $tokenId  The ID of the token to revoke.
+     * @return JsonResponse A JSON response confirming the token revocation.
+     */
+    public function revokeToken(int $tokenId): JsonResponse
+    {
+        $user = Auth::user();
+        $token = $user->tokens()->find($tokenId);
+
+        if (! $token) {
+            return response()->json(['error' => 'Token not found'], 404);
+        }
+
+        $token->delete();
+
+        return response()->json(['message' => 'Token revoked successfully']);
+    }
 }

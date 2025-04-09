@@ -19,15 +19,18 @@ import { ElementType } from '@/types/ElementType';
 import { Point, TypePoint } from '@/types/Point';
 import { Roles } from '@/types/Role';
 import { TreeTypes } from '@/types/TreeTypes';
-import { Zone } from '@/types/Zone';
+import { Zone, ZoneCenterCoord } from '@/types/Zone';
 
 import ElementDetailPopup from '../pages/Admin/Inventory/ElementDetailPopup';
 import IncidentForm from '../pages/Admin/Inventory/IncidentForm';
 import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
 import { eventSubject, ZoneEvent } from '../pages/Admin/Inventory/Zones';
+import useGeolocation from '@/hooks/useGeolocation';
+import { getZoneCoords } from '@/api/service/zoneService';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const DEFAULT_MADRID_COORDS: [number, number] = [-3.7038, 40.4168];
 
 interface MapProps {
   selectedZone: Zone | null;
@@ -68,6 +71,8 @@ export const MapComponent: React.FC<MapProps> = ({
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
   const userValue = useSelector((state: RootState) => state.user);
 
+  const { latitude: geoLat, longitude: geoLng, error: geoError } = useGeolocation();
+
   const [coordinates, setCoordinates] = useState<number[][]>([]);
   const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(null);
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
@@ -78,11 +83,10 @@ export const MapComponent: React.FC<MapProps> = ({
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
-  const [selectedElementToDelete, setSelectedElementToDelete] = useState<Element | null>(null);
   const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [lastContractId, setLastContractId] = useState<number | null>(null);
+  const [centerCoords, setCenterCoords] = useState<ZoneCenterCoord[]>([]);
 
   const handleBackToIncidentTab = useCallback(() => {
     setIncidentModalVisible(false);
@@ -95,7 +99,7 @@ export const MapComponent: React.FC<MapProps> = ({
       try {
         const [treeTypesFetch, elementTypeFetch] = await Promise.all([
           fetchTreeTypes(),
-          fetchElementType()
+          fetchElementType(),
         ]);
         setTreeTypes(treeTypesFetch);
         setElementTypes(elementTypeFetch);
@@ -139,10 +143,19 @@ export const MapComponent: React.FC<MapProps> = ({
       mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
     }
 
-    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!);
+    let initialCoordinates: [number, number] = DEFAULT_MADRID_COORDS;
+    
+    if (geoLat && geoLng && !geoError) {
+      initialCoordinates = [geoLng, geoLat];
+    }
+    else if (centerCoords && centerCoords.length > 0 && centerCoords[0].center) {
+      initialCoordinates = [centerCoords[0].center[0], centerCoords[0].center[1]];
+    }
+            
+    const service = new MapService(mapContainerRef.current, MAPBOX_TOKEN!, centerCoords!, initialCoordinates);
     service.addBasicControls();
     service.addGeocoder();
-    service.enableDraw(userValue.role === Roles.admin, (coords) => {
+    service.enableDraw(userValue.role !== undefined && userValue.role === Roles.admin, (coords) => {
       if (coords.length > 0) {
         setCoordinates(coords);
         onDrawingModeChange(true);
@@ -163,7 +176,7 @@ export const MapComponent: React.FC<MapProps> = ({
       updateZones(service);
       updateElements(service);
     }
-  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange]);
+  }, [isDataLoaded, userValue.role, onDrawingModeChange, onEnabledButtonChange, geoLat, geoLng, geoError, centerCoords, currentContract?.id]);
 
   useEffect(() => {
     const handleResize = () => mapServiceRef.current?.resizeMap();
@@ -202,6 +215,40 @@ export const MapComponent: React.FC<MapProps> = ({
       updateElements(service);
     }
   }, [elements, currentContract, points]);
+
+  useEffect(() => {
+    if (!currentContract?.id) return;
+    
+    setIsDataLoaded(false);
+    
+    if (mapContainerRef.current) {
+      while (mapContainerRef.current.firstChild) {
+        mapContainerRef.current.removeChild(mapContainerRef.current.firstChild);
+      }
+    }
+    
+    const loadNewContractData = async () => {
+      try {
+        const centerCoordsData = await getZoneCoords();
+        setCenterCoords(centerCoordsData);
+        
+        await Promise.all([
+          dispatch(fetchPointsAsync()).unwrap(),
+          dispatch(fetchElementsAsync()).unwrap()
+        ]);
+        
+        setIsDataLoaded(true);
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al cargar los datos del nuevo contrato',
+        });
+      }
+    };
+    
+    loadNewContractData();
+  }, [currentContract?.id, dispatch]);
 
   const updateElementVisibility = useCallback(
     (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {

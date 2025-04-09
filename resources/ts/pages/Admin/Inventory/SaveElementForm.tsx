@@ -133,8 +133,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
           value={selectedElementType}
           options={elementTypes}
           onChange={handleElementTypeChange}
-          placeholder="Selecciona Tipo de Elemento"
-          className="w-full"
+          placeholder="Selecciona un tipo de elemento"
+          className="w-full mb-3"
+          appendTo="self"
         />
       </div>
 
@@ -150,6 +151,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
             onChange={handleTreeTypeChange}
             placeholder="Selecciona Tipo de Árbol"
             className="w-full"
+            appendTo="self"
           />
         </div>
       )}

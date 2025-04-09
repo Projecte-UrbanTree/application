@@ -121,33 +121,47 @@
       "status": "Estado",
       "surname": "Apellido"
     },
-
     "pages": {
       "account": {
         "title": "Configuración de la Cuenta",
-        "basicInfo": "Información Básica",
-        "security": "Seguridad",
         "actions": {
           "save": "Guardar cambios",
-          "saving": "Guardando..."
+          "saving": "Guardando...",
+          "revoke": "Revocar"
         },
         "validation": {
-          "name_invalid": "El nombre no puede contener símbolos.",
           "name_required": "El nombre es obligatorio",
-          "surname_invalid": "El apellido no puede contener símbolos.",
+          "name_invalid": "Nombre no válido",
           "surname_required": "El apellido es obligatorio",
+          "surname_invalid": "Apellido no válido",
           "currentPasswordRequired": "Debe ingresar la contraseña actual",
-          "newPasswordMinLength": "La nueva contraseña debe tener al menos 8 caracteres",
+          "newPasswordMinLength": "La nueva contraseña debe tener al menos 6 caracteres",
           "newPasswordMismatch": "Las contraseñas no coinciden",
           "newPasswordComplexity": "La nueva contraseña debe contener al menos una letra mayúscula, una minúscula y un número"
         },
         "messages": {
           "profileUpdated": "Perfil actualizado correctamente",
-          "errorSaving": "Error al guardar el perfil",
-          "passwordCurrentWrong": "La contraseña actual es incorrecta"
+          "errorSaving": "Error al guardar los cambios",
+          "passwordCurrentWrong": "La contraseña actual no coincide",
+          "tokenRevoked": "Token revocado correctamente",
+          "errorRevokingToken": "Error al revocar el token"
+        },
+        "passwordChangeInfo": "Rellena los campos de contraseña solo si deseas cambiarla. Si no, déjalos vacíos.",
+        "tabs": {
+          "profile": "Perfil",
+          "security": "Seguridad",
+          "basicInfo": "Información Básica"
+        },
+        "security": {
+          "title": "Seguridad",
+          "tokens": "Tokens de Seguridad"
+        },
+        "securityTable": {
+          "name": "Nombre",
+          "lastUsed": "Último Uso",
+          "actions": "Acciones"
         }
       },
-
       "contracts": {
         "title": "Contratos",
         "form": {

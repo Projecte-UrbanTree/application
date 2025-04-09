@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\IncidentsController;
 use App\Http\Controllers\Api\Admin\PointController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
+use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
@@ -17,7 +18,6 @@ use App\Http\Controllers\Api\Admin\WorkerController;
 use App\Http\Controllers\Api\Admin\WorkOrderController;
 use App\Http\Controllers\Api\Admin\WorkReportController;
 use App\Http\Controllers\Api\Admin\ZoneController;
-use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContractController as UserContractController;
 use App\Http\Controllers\Api\Worker\IndexController;
@@ -56,6 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('account', [AccountController::class, 'show']);
         Route::put('account', [AccountController::class, 'update']);
         Route::put('account/password', [AccountController::class, 'updatePassword']);
+        Route::get('account/tokens', [AccountController::class, 'listTokens']);
+        Route::delete('account/tokens/{id}', [AccountController::class, 'revokeToken']);
 
         Route::get('element-types/icons', [ElementTypeController::class, 'icons']);
         Route::get('statistics', [StatisticsController::class, 'index']);
@@ -87,6 +89,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/work-orders/{id}/calculate-status', [WorkOrderController::class, 'calculateStatus']);
 
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
+
+        Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
     });
 
     /* Worker protected routes */
