@@ -259,6 +259,7 @@ export const Zones = ({
           hidden: !isHidden,
         },
       });
+      window.history.replaceState(null, '', window.location.pathname);
     },
     [hiddenZones],
   );

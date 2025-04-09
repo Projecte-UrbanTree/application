@@ -90,24 +90,24 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
     if ((isInventoryPage || isWorkersPage) && 
         activeContracts.length > 0 && 
         !initialized) {
-      
+
       const savedContractId = localStorage.getItem(SELECTED_CONTRACT_KEY);
-      
+
       if (savedContractId) {
         const contractId = parseInt(savedContractId);
         const contractExists = activeContracts.some(c => c.id === contractId);
-        
+
         if (contractExists) {
           dispatch(selectContract(contractId));
           setInitialized(true);
           return;
         }
       }
-      
-      if (!currentContract || !activeContracts.some(c => c.id === currentContract.id)) {
+
+      if (!currentContract && !savedContractId) {
         dispatch(selectContract(activeContracts[0]?.id ?? 0));
       }
-      
+
       setInitialized(true);
     }
   }, [isInventoryPage, isWorkersPage, activeContracts.length, initialized]);
