@@ -91,8 +91,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
 
         Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
-
-        Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
     });
 
     /* Worker protected routes */

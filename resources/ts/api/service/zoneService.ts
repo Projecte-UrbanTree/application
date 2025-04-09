@@ -30,8 +30,3 @@ export const getZoneCoords = async (): Promise<ZoneCenterCoord[]> => {
   const res = await axiosClient.get(`/admin/points/location-contract`);
   return res.data;
 }
-
-export const getZoneZoom = async (zoneId: number): Promise<ZoneCenterCoord> => {
-  const res = await axiosClient.get(`/admin/zones/${zoneId}/center-zoom`)
-  return res.data;
-}

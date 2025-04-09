@@ -13,8 +13,7 @@ import { Element } from '@/types/Element';
 import { ElementType } from '@/types/ElementType';
 import { Point } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
-import { Zone, ZoneCenterCoord } from '@/types/Zone';
-import { getZoneZoom } from './zoneService';
+import { ZoneCenterCoord } from '@/types/Zone';
 
 const DEFAULT_CENTER: [number, number] = [-3.70379, 40.41678];
 
@@ -34,7 +33,7 @@ export class MapService {
       container,
       style: 'mapbox://styles/mapbox/standard-satellite',
       center: this.getCenter(),
-      zoom: 16,
+      zoom: 14,
     });
   }
 
@@ -309,15 +308,9 @@ export class MapService {
     return { lat: point.latitude, lng: point.longitude };
   }
 
-  public async  flyTo(selectedZone: Zone) {
-    if (selectedZone.id === null) return;
-    const { zoom, center }: ZoneCenterCoord = await getZoneZoom(selectedZone.id!);
-    
-    if (center) {
-      this.map.flyTo({ center: [center[0], center[1]], zoom, essential: true });
-    }
+  public flyTo(coord: [number, number], zoom = 16): void {
+    this.map.flyTo({ center: coord, zoom, essential: true });
   }
-
 
   public resizeMap(): void {
     this.map?.resize();
