@@ -3,6 +3,7 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import AdminLayout from '@/layouts/AdminLayout';
 import AuthenticatedRoute from '@/middlewares/AuthenticatedRoute';
 import Account from '@/pages/Admin/Account';
+import License from '@/pages/Admin/License';
 import AdminDashboard from '@/pages/Admin/Dashboard/Index';
 import CreateEva from '@/pages/Admin/Eva/Create';
 import EditEva from '@/pages/Admin/Eva/Edit';
@@ -213,6 +214,14 @@ const AdminRoutes: RouteObject[] = [
               </AdminLayout>
             ),
           },
+          {
+    path: 'license',
+    element: (
+        <AdminLayout titleI18n="admin.pages.license.title">
+            <License />
+        </AdminLayout>
+    ),
+},
           {
             path: 'settings',
             children: [

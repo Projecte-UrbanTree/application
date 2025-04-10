@@ -3,6 +3,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axiosClient from '@/api/axiosClient';
 import { Contract } from '@/types/Contract';
 
+const SELECTED_CONTRACT_KEY = 'selectedContractId';
+
 interface ContractState {
   allContracts: Contract[];
   currentContract: Contract | null;
@@ -30,7 +32,7 @@ export const contractSlice = createSlice({
     },
 
     selectContract(state, action: PayloadAction<number>) {
-      localStorage.setItem('contractId', String(action.payload));
+      localStorage.setItem(SELECTED_CONTRACT_KEY, String(action.payload));
       state.currentContract =
         state.allContracts.find((c) => c.id === action.payload) || null;
     },
@@ -42,7 +44,7 @@ export const contractSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchAllContracts.fulfilled, (state, action) => {
       state.allContracts = action.payload;
-      const persistedContractId = Number(localStorage.getItem('contractId'));
+      const persistedContractId = Number(localStorage.getItem(SELECTED_CONTRACT_KEY));
       if (persistedContractId > 0) {
         const foundContract = state.allContracts.find(
           (c) => c.id === persistedContractId,
@@ -51,7 +53,7 @@ export const contractSlice = createSlice({
           state.currentContract = foundContract;
         } else {
           state.currentContract = null;
-          localStorage.removeItem('contractId');
+          localStorage.removeItem(SELECTED_CONTRACT_KEY);
         }
       }
     });

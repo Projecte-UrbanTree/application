@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\IncidentsController;
 use App\Http\Controllers\Api\Admin\PointController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
+use App\Http\Controllers\Api\Admin\SensorController;
 use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
@@ -90,6 +91,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/work-orders/{id}/calculate-status', [WorkOrderController::class, 'calculateStatus']);
 
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
+
+        Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
+
+        Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
 
         Route::get('/sensorshistory', [SensorController::class, 'fetchSensors']);
         Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchSensorByEUI']);

@@ -5,7 +5,7 @@
         "btnLogin": "Iniciar sesión",
         "labelEmail": "Correo electrónico",
         "labelPassword": "Contraseña",
-        "msgSuccess": "Inicio de sesión correcto",
+        "msgSuccess": "Sesión iniciada con éxito",
         "placeholderEmail": "tucorreo@ejemplo.com",
         "rememberMe": "Recuérdame",
         "titleSuccess": "Éxito"
@@ -28,25 +28,42 @@
     "error": "Error",
     "success": "Éxito",
     "not_available": "No disponible",
+    "warning": "Advertencia",
+    "cancel": "Cancelar",
     "actions": {
       "cancel": "Cancelar",
       "confirm": "Confirmar",
-      "close_part": "Cerrar Parte",
-      "close_with_incidents": "Cerrar con Incidencias",
+      "close_part": "Cerrar parte",
+      "close_with_incidents": "Cerrar con incidentes",
       "reject": "Rechazar",
-      "close_with_observations": "Cerrar con Observaciones",
-      "edit_observation": "Editar Observación"
+      "close_with_observations": "Cerrar con observaciones",
+      "edit_observation": "Editar observación"
     },
     "messages": {
-      "close_block": "Bloque cerrado correctamente",
-      "close_with_incidents": "Bloque cerrado con incidencias",
-      "reject": "Bloque rechazado"
+      "close_block": "Bloque cerrado con éxito",
+      "close_with_incidents": "Bloque cerrado con incidentes",
+      "reject": "Block rejected",
+      "close_part": "Part closed successfully",
+      "closing_part": "Closing part...",
+      "part_closed": "Part successfully closed",
+      "closing_block": "Closing block...",
+      "rejecting": "Rejecting item...",
+      "success": "Operation completed successfully",
+      "error": "An error occurred. Please try again.",
+      "reportCreated": "Work report created successfully",
+      "reportResubmitted": "Work report resubmitted successfully",
+      "reportRejected": "Work report was rejected",
+      "reportApproved": "Work report was approved",
+      "closing_with_incidents": "Closing with incidents...",
+      "close_with_observations": "Report closed with observations",
+      "already_processed": "This item has already been processed"
     }
   },
 
   "admin": {
     "menu": {
       "management": "Gestión",
+      "inventory": "Inventario",
       "settings": "Configuración"
     },
     "submenu": {
@@ -57,8 +74,7 @@
         "stats": "Estadísticas",
         "workers": "Trabajadores",
         "eva": "EVA",
-        "workOrders": "Órdenes de trabajo",
-        "sensors": "Sensores"
+        "workOrders": "Órdenes de trabajo"
       },
       "settings": {
         "contracts": "Contratos",
@@ -71,7 +87,7 @@
     },
 
     "profileDropdown": {
-      "accountSettings": "Configuración de la cuenta",
+      "accountSettings": "Configuración de cuenta",
       "license": "Licencia",
       "logout": "Cerrar sesión"
     },
@@ -80,7 +96,7 @@
       "admin": "Administrador",
       "customer": "Cliente",
       "unknown": "Desconocido",
-      "worker": "Operario"
+      "worker": "Trabajador"
     },
 
     "status": {
@@ -98,7 +114,7 @@
     },
 
     "fields": {
-      "company": "Efmpresa",
+      "company": "Empresa",
       "description": "Descripción",
       "dni": "DNI",
       "email": "Correo electrónico",
@@ -113,55 +129,137 @@
       "confirmPassword": "Confirmar contraseña",
       "resource_type": "Tipo de recurso",
       "role": "Rol",
-      "select_resource_type": "Seleccionar un tipo de recurso",
-      "unit_cost": "Editar el costo unitario",
-      "unit_name": "Seleccionar una unidad de recurso",
+      "select_resource_type": "Seleccionar tipo de recurso",
+      "unit_cost": "Editar costo unitario",
+      "unit_name": "Seleccionar unidad de recurso",
       "species": "Especie",
       "start_date": "Fecha de inicio",
       "status": "Estado",
       "surname": "Apellido"
     },
+
     "pages": {
       "account": {
-        "title": "Configuración de la Cuenta",
+        "title": "Configuración de cuenta",
         "actions": {
           "save": "Guardar cambios",
           "saving": "Guardando...",
           "revoke": "Revocar"
         },
         "validation": {
-          "name_required": "El nombre es obligatorio",
-          "name_invalid": "Nombre no válido",
-          "surname_required": "El apellido es obligatorio",
-          "surname_invalid": "Apellido no válido",
-          "currentPasswordRequired": "Debe ingresar la contraseña actual",
+          "name_required": "El nombre es requerido",
+          "name_invalid": "Nombre inválido",
+          "surname_required": "El apellido es requerido",
+          "surname_invalid": "Apellido inválido",
+          "currentPasswordRequired": "La contraseña actual es requerida",
           "newPasswordMinLength": "La nueva contraseña debe tener al menos 6 caracteres",
           "newPasswordMismatch": "Las contraseñas no coinciden",
-          "newPasswordComplexity": "La nueva contraseña debe contener al menos una letra mayúscula, una minúscula y un número"
+          "newPasswordComplexity": "La nueva contraseña debe contener al menos una mayúscula, una minúscula y un número"
         },
         "messages": {
-          "profileUpdated": "Perfil actualizado correctamente",
-          "errorSaving": "Error al guardar los cambios",
-          "passwordCurrentWrong": "La contraseña actual no coincide",
-          "tokenRevoked": "Token revocado correctamente",
+          "profileUpdated": "Perfil actualizado con éxito",
+          "errorSaving": "Error al guardar cambios",
+          "passwordCurrentWrong": "La contraseña actual es incorrecta",
+          "tokenRevoked": "Token revocado con éxito",
           "errorRevokingToken": "Error al revocar el token"
         },
-        "passwordChangeInfo": "Rellena los campos de contraseña solo si deseas cambiarla. Si no, déjalos vacíos.",
+        "passwordChangeInfo": "Complete los campos de contraseña solo si desea cambiarla. De lo contrario, déjelos vacíos.",
         "tabs": {
           "profile": "Perfil",
           "security": "Seguridad",
-          "basicInfo": "Información Básica"
+          "basicInfo": "Información básica"
         },
         "security": {
           "title": "Seguridad",
-          "tokens": "Tokens de Seguridad"
+          "tokens": "Tokens de seguridad"
         },
         "securityTable": {
           "name": "Nombre",
-          "lastUsed": "Último Uso",
+          "lastUsed": "Último uso",
           "actions": "Acciones"
         }
       },
+      "license": {
+        "title": "Licencia de software",
+        "description": "Este software está licenciado bajo la Licencia Pública de la Unión Europea (EUPL). Usted es libre de usarlo, modificarlo y distribuirlo, siempre que la misma licencia se aplique a cualquier trabajo derivado.",
+        "moreInfo": "Puede encontrar más información sobre la licencia en",
+        "link_text": "este enlace",
+        "link_url": "https://interoperable-europe.ec.europa.eu/collection/eupl",
+        "below_text": "o ver el texto completo a continuación:",
+        "fullText": {
+          "title": "LICENCIA PÚBLICA DE LA UNIÓN EUROPEA v. 1.2",
+          "copyright": "EUPL © Unión Europea 2007, 2016",
+          "preface": "Esta Licencia Pública de la Unión Europea (EUPL) se aplica al trabajo (tal como se define a continuación) proporcionado bajo los términos de esta licencia. Cualquier uso del trabajo, que no esté autorizado bajo esta licencia, está prohibido (en la medida en que dicho uso esté cubierto por un derecho del titular de los derechos de autor del trabajo).\n\nEl trabajo se proporciona bajo los términos de esta licencia cuando el licenciante (tal como se define a continuación) ha colocado el siguiente aviso inmediatamente después del aviso de derechos de autor del trabajo:\n\n                Licenciado bajo la EUPL\n\no ha expresado por cualquier otro medio su voluntad de licenciar bajo la EUPL.",
+          "sections": {
+            "definitions": {
+              "title": "1. Definiciones",
+              "content": "En esta Licencia, los siguientes términos tienen el siguiente significado:\n\n— 'Licencia': esta licencia\n— 'Trabajo original': el trabajo o software distribuido o comunicado por el Licenciante bajo esta licencia en forma de código fuente o como Código Ejecutable\n— 'Trabajos derivados': los trabajos o software que podrían ser creados por el Licenciatario, basados en el Trabajo Original o modificaciones del mismo. Esta Licencia no define el alcance de la modificación o dependencia del Trabajo Original requerido para clasificar un trabajo como Trabajo Derivado; este alcance está determinado por la ley de derechos de autor aplicable bajo el Artículo 15\n— 'El Trabajo': el Trabajo Original y/o sus Trabajos derivados\n— 'El Código Fuente': la forma legible por humanos del Trabajo que es más conveniente para que las personas estudien y modifiquen\n— 'El Código Ejecutable': cualquier código que generalmente ha sido compilado y que está destinado a ser interpretado por una computadora como un programa\n— 'El Licenciante': la persona natural o jurídica que distribuye o comunica el Trabajo bajo la Licencia\n— 'Contribuidor(es)': cualquier persona natural o jurídica que modifique el Trabajo bajo la Licencia, o que de otro modo contribuya a la creación de un Trabajo Derivado\n— 'El Licenciatario' o 'Usted': cualquier persona natural o jurídica que haga cualquier uso del Trabajo bajo los términos de la Licencia\n— 'Distribución' o 'Comunicación': cualquier acto de venta, donación, préstamo, alquiler, distribución, comunicación, transmisión, o de otro modo poner a disposición, en línea o fuera de línea, copias del Trabajo o proporcionar acceso a sus funcionalidades esenciales a disposición de cualquier otra persona natural o jurídica"
+            },
+            "scope": {
+              "title": "2. Alcance de los derechos concedidos por la Licencia",
+              "content": "El Licenciante por la presente le otorga a usted una licencia mundial, libre de regalías, no exclusiva, sublicenciable para hacer lo siguiente durante la duración de los derechos de autor correspondientes al Trabajo Original:\n\n— usar el Trabajo en cualquier circunstancia y para todo uso\n— reproducir el Trabajo\n— modificar el Trabajo y hacer Trabajos Derivados basados en el Trabajo\n— comunicar al público, incluido el derecho de poner a disposición o exhibir el Trabajo o copias del mismo al público y realizar públicamente, según corresponda, el Trabajo\n— distribuir el Trabajo o copias del mismo\n— prestar y alquilar el Trabajo o copias del mismo\n— sublicenciar derechos en el Trabajo o copias del mismo\n\nEsos derechos pueden ejercerse en cualquier medio, soporte y formato, ya sea conocido ahora o inventado posteriormente, en la medida en que la ley aplicable lo permita.\n\nEn los países donde se aplican los derechos morales, el Licenciante renuncia a su derecho a ejercer su derecho moral en la medida permitida por la ley para hacer efectiva la licencia de los derechos económicos enumerados anteriormente.\n\nEl Licenciante otorga al Licenciatario derechos de uso libres de regalías, no exclusivos, sobre cualquier patente que posea el Licenciante, en la medida necesaria para hacer uso de los derechos concedidos sobre el Trabajo bajo esta Licencia."
+            },
+            "source_code": {
+              "title": "3. Comunicación del Código Fuente",
+              "content": "El Licenciante puede proporcionar el Trabajo ya sea en su forma de Código Fuente, o como Código Ejecutable. Si el Trabajo se proporciona como Código Ejecutable, el Licenciante proporciona además una copia legible por máquina del Código Fuente del Trabajo junto con cada copia del Trabajo que el Licenciante distribuye o indica, en un aviso que sigue al aviso de derechos de autor adjunto al Trabajo, un repositorio donde el Código Fuente es fácil y libremente accesible mientras el Licenciante continúe distribuyendo o comunicando el Trabajo."
+            },
+            "copyright": {
+              "title": "4. Limitaciones a los derechos de autor",
+              "content": "Nada en esta Licencia tiene la intención de privar al Licenciatario de los beneficios de cualquier excepción o limitación a los derechos exclusivos de los titulares de derechos en el Trabajo, del agotamiento de esos derechos o de otras limitaciones aplicables a los mismos."
+            },
+            "obligations": {
+              "title": "5. Obligaciones del Licenciatario",
+              "content": "La concesión de los derechos mencionados anteriormente está sujeta a algunas restricciones y obligaciones impuestas al Licenciatario. Esas obligaciones son las siguientes:\n\nDerecho de atribución: El Licenciatario mantendrá intactos todos los avisos de derechos de autor, patentes o marcas comerciales y todos los avisos que se refieran a la Licencia y a la renuncia de garantías. El Licenciatario debe incluir una copia de dichos avisos y una copia de la Licencia con cada copia del Trabajo que distribuya o comunique. El Licenciatario debe hacer que cualquier Trabajo Derivado lleve avisos prominentes que indiquen que el Trabajo ha sido modificado y la fecha de modificación.\n\nCláusula copyleft: Si el Licenciatario distribuye o comunica copias de los Trabajos Originales o Trabajos Derivados, esta Distribución o Comunicación se realizará bajo los términos de esta Licencia o de una versión posterior de esta Licencia a menos que el Trabajo Original se distribuya expresamente solo bajo esta versión de la Licencia — por ejemplo, comunicando 'EUPL v. 1.2 solamente'. El Licenciatario (convirtiéndose en Licenciante) no puede ofrecer ni imponer ningún término o condición adicional en el Trabajo o Trabajo Derivado que altere o restrinja los términos de la Licencia.\n\nCláusula de compatibilidad: Si el Licenciatario Distribuye o Comunica Trabajos Derivados o copias de los mismos basados tanto en el Trabajo como en otro trabajo licenciado bajo una Licencia Compatible, esta Distribución o Comunicación puede realizarse bajo los términos de esta Licencia Compatible. A los efectos de esta cláusula, 'Licencia Compatible' se refiere a las licencias enumeradas en el apéndice adjunto a esta Licencia. Si las obligaciones del Licenciatario bajo la Licencia Compatible entran en conflicto con sus obligaciones bajo esta Licencia, prevalecerán las obligaciones de la Licencia Compatible.\n\nProvisión de Código Fuente: Al distribuir o comunicar copias del Trabajo, el Licenciatario proporcionará una copia legible por máquina del Código Fuente o indicará un repositorio donde este Código Fuente sea fácil y libremente disponible mientras el Licenciatario continúe distribuyendo o comunicando el Trabajo.\n\nProtección legal: Esta Licencia no otorga permiso para usar los nombres comerciales, marcas comerciales, marcas de servicio o nombres del Licenciante, excepto según sea necesario para un uso razonable y habitual al describir el origen del Trabajo y reproducir el contenido del aviso de derechos de autor."
+            },
+            "authorship": {
+              "title": "6. Cadena de autoría",
+              "content": "El licenciante original garantiza que es el titular de los derechos de autor del trabajo original que concede los derechos bajo esta Licencia o que ha obtenido permiso para hacerlo.\n\nCada contribuidor garantiza que es el titular de los derechos de autor de sus modificaciones al Trabajo o ha obtenido permiso para enviar esas modificaciones bajo esta Licencia.\n\nCada vez que acepta la Licencia, el licenciante original y los contribuidores posteriores le otorgan una licencia sobre sus contribuciones al Trabajo, bajo los términos de esta Licencia."
+            },
+            "warranty": {
+              "title": "7. Renuncia de garantía",
+              "content": "El Trabajo es un trabajo en progreso, que se mejora continuamente por numerosos contribuidores. No es un trabajo terminado y, por lo tanto, puede contener defectos o 'errores' inherentes a este tipo de desarrollo de software.\n\nPor la razón anterior, el Trabajo se proporciona bajo la Licencia 'tal cual' y sin garantías de ningún tipo con respecto al Trabajo, incluyendo, sin limitación, comerciabilidad, idoneidad para un propósito particular, ausencia de defectos o errores, exactitud, no infracción de derechos de propiedad intelectual distintos de los derechos de autor como se establece en el Artículo 6 de esta Licencia.\n\nEsta renuncia de garantía es una parte esencial de la Licencia y una condición para la concesión de cualquier derecho sobre el Trabajo."
+            },
+            "liability": {
+              "title": "8. Renuncia de responsabilidad",
+              "content": "Excepto en los casos de mala fe o daños causados directamente a personas naturales, el Licenciante no será en ningún caso responsable por ningún daño directo o indirecto, material o moral, de cualquier tipo, que surja de la Licencia o del uso del Trabajo, incluyendo, sin limitación, daños por pérdida de buena voluntad, interrupción del trabajo, fallo o mal funcionamiento de la computadora, pérdida de datos o cualquier daño comercial, incluso si el Licenciante ha sido informado de la posibilidad de tales daños. Sin embargo, el Licenciante será responsable bajo las leyes de responsabilidad por productos en la medida en que dichas leyes se apliquen al Trabajo."
+            },
+            "additional": {
+              "title": "9. Acuerdos adicionales",
+              "content": "Al distribuir el Trabajo, puede optar por concluir un acuerdo adicional, definiendo obligaciones o servicios consistentes con esta Licencia. Sin embargo, al aceptar obligaciones, solo puede actuar en su propio nombre y bajo su única responsabilidad, no en nombre del Licenciante original o cualquier otro Contribuidor, y solo si acepta indemnizar, defender y mantener indemne a cada Contribuidor por cualquier responsabilidad incurrida por, o reclamos presentados contra dicho Contribuidor por el hecho de que haya aceptado cualquier garantía o responsabilidad adicional."
+            },
+            "acceptance": {
+              "title": "10. Aceptación de la Licencia",
+              "content": "Las disposiciones de esta Licencia pueden ser aceptadas haciendo clic en un icono 'Acepto' colocado debajo de la parte inferior de una ventana que muestre el texto de esta Licencia o afirmando el consentimiento de cualquier otra manera similar, de acuerdo con las reglas de la ley aplicable. Hacer clic en ese icono indica su aceptación clara e irrevocable de esta Licencia y todos sus términos y condiciones.\n\nDe manera similar, usted acepta irrevocablemente esta Licencia y todos sus términos y condiciones al ejercer cualquier derecho concedido a usted por el Artículo 2 de esta Licencia, como el uso del Trabajo, la creación por usted de un Trabajo Derivado o la Distribución o Comunicación por usted del Trabajo o copias del mismo."
+            },
+            "information": {
+              "title": "11. Información al público",
+              "content": "En caso de cualquier Distribución o Comunicación del Trabajo por medios de comunicación electrónica por usted (por ejemplo, ofreciendo descargar el Trabajo desde una ubicación remota) el canal de distribución o medio (por ejemplo, un sitio web) debe al menos proporcionar al público la información requerida por la ley aplicable con respecto al Licenciante, la Licencia y la forma en que puede ser accesible, concluida, almacenada y reproducida por el Licenciatario."
+            },
+            "termination": {
+              "title": "12. Terminación de la Licencia",
+              "content": "La Licencia y los derechos concedidos en virtud de la misma terminarán automáticamente ante cualquier incumplimiento por parte del Licenciatario de los términos de la Licencia.\n\nDicha terminación no terminará las licencias de ninguna persona que haya recibido el Trabajo del Licenciatario bajo la Licencia, siempre que dichas personas permanezcan en pleno cumplimiento de la Licencia."
+            },
+            "miscellaneous": {
+              "title": "13. Misceláneos",
+              "content": "Sin perjuicio del Artículo 9 anterior, la Licencia representa el acuerdo completo entre las Partes en cuanto al Trabajo.\n\nSi cualquier disposición de la Licencia es inválida o inaplicable bajo la ley aplicable, esto no afectará la validez o aplicabilidad de la Licencia en su conjunto. Dicha disposición se interpretará o reformará según sea necesario para hacerla válida y exigible.\n\nLa Comisión Europea puede publicar otras versiones lingüísticas o nuevas versiones de esta Licencia o versiones actualizadas del Apéndice, en la medida en que esto sea requerido y razonable, sin reducir el alcance de los derechos concedidos por la Licencia. Las nuevas versiones de la Licencia se publicarán con un número de versión único.\n\nTodas las versiones lingüísticas de esta Licencia, aprobadas por la Comisión Europea, tienen el mismo valor. Las Partes pueden aprovechar la versión lingüística de su elección."
+            },
+            "jurisdiction": {
+              "title": "14. Jurisdicción",
+              "content": "Sin perjuicio de acuerdos específicos entre partes,\n\n— cualquier litigio resultante de la interpretación de esta Licencia, que surja entre las instituciones, órganos, oficinas o agencias de la Unión Europea, como Licenciante, y cualquier Licenciatario, estará sujeto a la jurisdicción del Tribunal de Justicia de la Unión Europea, según lo establecido en el artículo 272 del Tratado de Funcionamiento de la Unión Europea,\n\n— cualquier litigio que surja entre otras partes y resulte de la interpretación de esta Licencia, estará sujeto a la jurisdicción exclusiva del tribunal competente donde el Licenciante resida o lleve a cabo su actividad principal."
+            },
+            "applicable_law": {
+              "title": "15. Ley aplicable",
+              "content": "Sin perjuicio de acuerdos específicos entre partes,\n\n— esta Licencia se regirá por la ley del Estado miembro de la Unión Europea donde el Licenciante tenga su sede, resida o tenga su oficina registrada,\n\n— esta Licencia se regirá por la ley belga si el Licenciante no tiene sede, residencia u oficina registrada dentro de un Estado miembro de la Unión Europea."
+            }
+          },
+          "appendix": {
+            "title": "Apéndice",
+            "content": "Las licencias compatibles según el Artículo 5 EUPL son:",
+            "licenses": "— Licencia Pública General GNU (GPL) v. 2, v. 3\n— Licencia Pública General Affero GNU (AGPL) v. 3\n— Licencia de Software Abierto (OSL) v. 2.1, v. 3.0\n— Licencia Pública Eclipse (EPL) v. 1.0\n— CeCILL v. 2.0, v. 2.1\n— Licencia Pública Mozilla (MPL) v. 2\n— Licencia Pública General Reducida GNU (LGPL) v. 2.1, v. 3\n— Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) para obras que no sean software\n— Licencia Pública de la Unión Europea (EUPL) v. 1.1, v. 1.2\n— Licencia Libre y de Código Abierto de Québec — Reciprocidad (LiLiQ-R) o Reciprocidad Fuerte (LiLiQ-R+)\n\nLa Comisión Europea puede actualizar este Apéndice a versiones posteriores de las licencias anteriores sin producir una nueva versión de la EUPL, siempre que proporcionen los derechos concedidos en el Artículo 2 de esta Licencia y protejan el Código Fuente cubierto de apropiación exclusiva.\n\nTodos los demás cambios o adiciones a este Apéndice requieren la producción de una nueva versión de la EUPL."
+          }
+        }
+      },
+
       "contracts": {
         "title": "Contratos",
         "form": {
@@ -183,17 +281,17 @@
           },
           "validation": {
             "end_date_after_start_date": "La fecha de finalización debe ser posterior a la fecha de inicio",
-            "end_date_required": "La fecha de finalización es obligatoria",
-            "final_price_required": "El precio final es obligatorio",
-            "name_invalid": "Nombre no válido",
-            "name_required": "El nombre es obligatorio",
-            "start_date_required": "La fecha de inicio es obligatoria",
-            "status_invalid": "Estado no válido",
-            "status_required": "El estado es obligatorio"
+            "end_date_required": "La fecha de finalización es requerida",
+            "final_price_required": "El precio final es requerido",
+            "name_invalid": "El nombre es inválido",
+            "name_required": "El nombre es requerido",
+            "start_date_required": "La fecha de inicio es requerida",
+            "status_invalid": "Estado inválido",
+            "status_required": "El estado es requerido"
           },
           "name": "Nombre del contrato",
-          "startDate": "Fecha de inicio del contrato",
-          "endDate": "Fecha de finalización del contrato"
+          "startDate": "Fecha de inicio",
+          "endDate": "Fecha de finalización"
         },
         "list": {
           "actions": {
@@ -211,26 +309,26 @@
             "status": "Estado"
           },
           "messages": {
-            "createSuccess": "Contrato creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar este contrato?",
-            "deleteSuccess": "Contrato eliminado correctamente",
+            "createSuccess": "Contrato creado con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este contrato?",
+            "deleteSuccess": "Contrato eliminado con éxito",
             "error": "Error al guardar el contrato",
-            "updateSuccess": "Contrato actualizado correctamente"
+            "updateSuccess": "Contrato actualizado con éxito"
           }
         },
         "duplicate": {
           "title": "Duplicar contrato",
           "submit": "Duplicar contrato",
-          "success": "Contrato duplicado correctamente",
+          "success": "Contrato duplicado con éxito",
           "submitting": "Duplicando..."
         }
       },
 
       "dashboard": {
-        "title": "Panel",
+        "title": "Panel de control",
         "welcome": {
           "greeting": "Bienvenido de nuevo, {{name}} {{surname}}.",
-          "message": "Tienes a tu disposición un resumen rápido de tus datos."
+          "message": "Nos alegra verte de nuevo. Aquí tienes un resumen rápido de tus datos."
         },
         "quickActions": "Acciones rápidas",
         "createWorkOrder": "Crear orden de trabajo",
@@ -238,16 +336,16 @@
         "manageUsers": "Gestionar usuarios",
         "recentActivity": "Actividad reciente",
         "workOrderCompleted": "Orden de trabajo completada",
-        "ago": "atrás",
+        "ago": "hace",
         "reportSubmitted": "Informe enviado",
         "workOrderAssigned": "Orden de trabajo asignada",
-        "totalWorkOrders": "Total de órdenes",
-        "inProgressWorkOrders": "En progreso",
+        "totalWorkOrders": "Órdenes totales",
+        "inProgressWorkOrders": "Órdenes de trabajo en progreso",
         "noInProgressWorkOrders": "No hay órdenes de trabajo en progreso",
         "completedWorkOrders": "Completadas",
         "pendingReports": "Informes pendientes",
         "viewAll": "Ver todas las actividades",
-        "noActivity": "Sin actividad reciente",
+        "noActivity": "No hay actividad reciente",
         "actions": "Acciones",
         "stats": {
           "widgets": {
@@ -260,15 +358,15 @@
       },
 
       "elementTypes": {
-        "title": "Tipos de elementos",
+        "title": "Tipos de elemento",
         "loading": "Cargando...",
         "actions": "Acciones",
         "editButton": "Editar tipo de elemento",
         "deleteButton": "Eliminar tipo de elemento",
-        "deletedSuccess": "Tipo de elemento eliminado correctamente",
-        "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de elemento?",
-        "success": "Tipo de elemento creado correctamente",
-        "update": "Tipo de elemento actualizado correctamente",
+        "deletedSuccess": "Tipo de elemento eliminado con éxito",
+        "deleteConfirm": "¿Está seguro de que desea eliminar este tipo de elemento?",
+        "success": "Tipo de elemento creado con éxito",
+        "update": "Tipo de elemento actualizado con éxito",
         "error": "Error al guardar el tipo de elemento",
         "true": "Sí",
         "false": "No",
@@ -277,18 +375,18 @@
           "submittingText": "Creando...",
           "submitButton": "Crear tipo de elemento",
           "validations": {
-            "name": "El nombre es obligatorio",
+            "name": "El nombre es requerido",
             "requires_tree_type": "Requiere tipo de árbol",
-            "icon": "El icono es obligatorio",
-            "color": "El color es obligatorio",
-            "description": "La descripción es obligatoria"
+            "icon": "El icono es requerido",
+            "color": "El color es requerido",
+            "description": "La descripción es requerida"
           },
           "placeholders": {
             "name": "Nombre del tipo de elemento",
-            "requires_tree_type": "Selecciona si requiere tipo de árbol",
+            "requires_tree_type": "Seleccionar si requiere tipo de árbol",
             "description": "Descripción del tipo de elemento",
-            "icon": "Selecciona un icono",
-            "color": "Selecciona un color"
+            "icon": "Seleccionar un icono",
+            "color": "Seleccionar un color"
           }
         },
         "edit": {
@@ -296,22 +394,22 @@
           "submittingText": "Guardando...",
           "submitButton": "Guardar cambios",
           "validations": {
-            "name": "El nombre es obligatorio",
+            "name": "El nombre es requerido",
             "requires_tree_type": "Requiere tipo de árbol",
-            "icon": "El icono es obligatorio",
-            "color": "El color es obligatorio",
-            "description": "La descripción es obligatoria"
+            "icon": "El icono es requerido",
+            "color": "El color es requerido",
+            "description": "La descripción es requerida"
           },
           "placeholders": {
             "name": "Nombre del tipo de elemento",
-            "requires_tree_type": "Selecciona si requiere tipo de árbol",
+            "requires_tree_type": "Seleccionar si requiere tipo de árbol",
             "description": "Descripción del tipo de elemento",
-            "icon": "Selecciona un icono",
-            "color": "Selecciona un color"
+            "icon": "Seleccionar un icono",
+            "color": "Seleccionar un color"
           }
         },
         "columns": {
-          "name": "Tipo de elemento",
+          "name": "Nombre",
           "requires_tree_type": "Requiere tipo de árbol",
           "description": "Descripción",
           "icon": "Icono",
@@ -345,13 +443,13 @@
       },
 
       "evas": {
-        "title": "Evas",
+        "title": "EVAs",
         "age": {
           "years": "Años",
           "months": "Meses"
         },
         "columns": {
-          "element_id": "ID del elemento",
+          "element_id": "ID de elemento",
           "age": "Edad",
           "height": "Altura",
           "actions": "Acciones",
@@ -361,36 +459,36 @@
         },
         "form": {
           "name": "Nombre",
-          "element_id": "ID del elemento",
+          "element_id": "ID de elemento",
           "years": "Años",
           "months": "Meses",
           "height": "Altura",
           "diameter": "Diámetro",
-          "crown_width": "Ancho de la copa",
-          "crown_projection_area": "Área de proyección de la copa",
-          "root_surface_diameter": "Diámetro de la superficie de la raíz",
-          "effective_root_area": "Área efectiva de la raíz",
+          "crown_width": "Ancho de copa",
+          "crown_projection_area": "Área de proyección de copa",
+          "root_surface_diameter": "Diámetro de superficie de raíz",
+          "effective_root_area": "Área efectiva de raíz",
           "height_estimation": "Estimación de altura",
           "unbalanced_crown": "Copa desequilibrada",
           "overextended_branches": "Ramas sobreextendidas",
           "cracks": "Grietas",
           "dead_branches": "Ramas muertas",
           "inclination": "Inclinación",
-          "V_forks": "Bifurcaciones en V",
+          "V_forks": "Horquillas en V",
           "cavities": "Cavidades",
-          "bark_damage": "Daño en la corteza",
-          "soil_lifting": "Levantamiento del suelo",
+          "bark_damage": "Daño en corteza",
+          "soil_lifting": "Levantamiento de suelo",
           "cut_damaged_roots": "Raíces cortadas/dañadas",
-          "basal_rot": "Podredumbre basal",
+          "basal_rot": "Pudrición basal",
           "exposed_surface_roots": "Raíces superficiales expuestas",
           "wind": "Viento",
           "drought": "Sequía",
           "validation": {
-            "element_required": "El elemento es obligatorio"
+            "element_required": "El elemento es requerido"
           },
           "title": {
-            "create": "Crear Eva",
-            "edit": "Editar Eva"
+            "create": "Crear EVA",
+            "edit": "Editar EVA"
           },
           "saving": "Guardando...",
           "save": "Guardar",
@@ -401,16 +499,17 @@
         },
         "list": {
           "actions": {
-            "show": "Mostrar Eva",
-            "delete": "Eliminar Eva",
+            "show": "Mostrar EVA",
+            "delete": "Eliminar EVA",
             "create": "Crear EVA"
           },
           "messages": {
-            "createSuccess": "Eva creada correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar esta Eva?",
-            "deleteSuccess": "Eva eliminada correctamente",
-            "error": "Error al guardar Eva",
-            "updateSuccess": "Eva actualizada correctamente"
+            "createSuccess": "EVA creado con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este EVA?",
+            "deleteSuccess": "EVA eliminado con éxito",
+            "deleteSuccessDetail": "Los detalles del EVA fueron eliminados con éxito",
+            "error": "Error al guardar el EVA",
+            "updateSuccess": "EVA actualizado con éxito"
           }
         },
         "status": {
@@ -453,25 +552,25 @@
           "pending": "Pendiente"
         },
         "show": {
-          "title": "Detalles de Eva",
-          "generalInfo": "Información General",
-          "indexCalculation": "Cálculo de Índices",
-          "environmentalFactors": "Factores Ambientales",
-          "treeStructure": "Estructura del Árbol",
-          "treeCondition": "Condición del Árbol",
+          "title": "Detalles del EVA",
+          "generalInfo": "Información general",
+          "indexCalculation": "Cálculo de índices",
+          "environmentalFactors": "Factores ambientales",
+          "treeStructure": "Estructura del árbol",
+          "treeCondition": "Condición del árbol",
           "element": "Elemento",
           "statusFactorInfo": "El factor de estado del árbol indica la salud general del árbol.",
           "formulas": {
             "stabilityIndex": "Altura / Diámetro",
             "gravityHeightRatio": "Altura estimada / Altura",
-            "rootCrownRatio": "Área efectiva de raíz / Área de proyección de la copa",
-            "windStabilityIndex": "(Altura * Ancho de la copa) / Área efectiva de raíz"
+            "rootCrownRatio": "Área efectiva de raíz / Área de proyección de copa",
+            "windStabilityIndex": "(Altura * Ancho de copa) / Área efectiva de raíz"
           }
         },
         "dictionaries": {
           "unbalancedCrown": {
             "0": "Sin inclinación o crecimiento desigual",
-            "1": "Ligera inclinación de la copa",
+            "1": "Ligera inclinación de copa",
             "2": "Copa visiblemente inclinada",
             "3": "Copa extremadamente inclinada"
           },
@@ -514,7 +613,7 @@
           "barkDamage": {
             "0": "Corteza intacta",
             "1": "Corteza con pequeñas heridas",
-            "2": "Daño significativo en la corteza",
+            "2": "Daño significativo en corteza",
             "3": "Corteza muy dañada"
           },
           "soilLifting": {
@@ -530,10 +629,10 @@
             "3": "Raíces severamente cortadas"
           },
           "basalRot": {
-            "0": "Sin podredumbre",
-            "1": "Podredumbre inicial",
-            "2": "Podredumbre visible",
-            "3": "Podredumbre avanzada"
+            "0": "Sin pudrición",
+            "1": "Pudrición inicial",
+            "2": "Pudrición visible",
+            "3": "Pudrición avanzada"
           },
           "exposedRoots": {
             "0": "Raíces bajo tierra",
@@ -548,14 +647,14 @@
             "3": "Árbol en áreas abiertas o pendientes donde el viento sopla con fuerza extrema."
           },
           "drought": {
-            "0": "Árbol en zona con humedad estable y acceso constante al agua, sin estrés hídrico.",
-            "1": "Árbol con acceso moderado al agua, pero con periodos ocasionales de sequía.",
-            "2": "Árbol en zona con sequías recurrentes, afectando su desarrollo y resistencia.",
-            "3": "Árbol en zona árida o con sequías prolongadas, alto riesgo de debilitamiento."
+            "0": "Árbol en un área con humedad estable y acceso constante al agua, sin estrés hídrico.",
+            "1": "Árbol con acceso moderado al agua, pero con períodos ocasionales de sequía.",
+            "2": "Árbol en un área con sequías recurrentes, afectando su desarrollo y resistencia.",
+            "3": "Árbol en un área árida o con sequías prolongadas, alto riesgo de debilitamiento."
           }
         },
         "edit": {
-          "title": "Editar Eva",
+          "title": "Editar EVA",
           "identification": "Identificación",
           "treeCondition": "Condición del árbol",
           "dimensions": "Dimensiones",
@@ -563,10 +662,10 @@
           "crownBranches": "Copa y ramas",
           "trunk": "Tronco",
           "roots": "Raíces",
-          "environmentCondition": "Condición del entorno",
+          "environmentCondition": "Condición ambiental",
           "environmentalFactors": "Factores ambientales",
           "windExposure": "Exposición al viento",
-          "droughtExposure": "Exposición a la sequía"
+          "droughtExposure": "Exposición a sequía"
         },
         "create": {
           "identification": "Identificación",
@@ -576,23 +675,23 @@
           "crownBranches": "Copa y ramas",
           "trunk": "Tronco",
           "roots": "Raíces",
-          "environmentCondition": "Condición del entorno",
+          "environmentCondition": "Condición ambiental",
           "environmentalFactors": "Factores ambientales",
           "windExposure": "Exposición al viento",
-          "droughtExposure": "Exposición a la sequía"
+          "droughtExposure": "Exposición a sequía"
         },
         "indexCalculation": "Cálculo de índices",
         "treeStatusFactor": "Factor de estado del árbol",
         "stabilityIndex": "Índice de estabilidad (H/D)",
-        "gravityHeightRatio": "Relación altura de gravedad (CG/H)",
+        "gravityHeightRatio": "Relación altura-gravedad (CG/H)",
         "rootCrownRatio": "Relación raíz-copa (SR/SC)",
         "windStabilityIndex": "Índice de estabilidad al viento (WSI)",
         "environmentalFactors": "Factores ambientales",
         "windExposure": "Exposición al viento",
-        "droughtExposure": "Exposición a la sequía"
+        "droughtExposure": "Exposición a sequía"
       },
-
-      "inventory": {
+            "inventory": {
+        "title": "Inventario",
         "elementDetailPopup": {
           "tabs": {
             "information": "Información",
@@ -601,75 +700,258 @@
             "eva": "EVA"
           },
           "information": {
-            "title": "Información del Árbol",
+            "title": "Información del árbol",
             "description": "Descripción",
-            "elementType": "Tipo Elemento",
-            "treeFamily": "Familia Árbol",
+            "elementType": "Tipo de elemento",
+            "treeFamily": "Familia del árbol",
             "treeGenus": "Género",
             "treeSpecies": "Especie",
-            "creationDate": "Fecha Creación",
+            "creationDate": "Fecha de creación",
             "location": {
               "title": "Ubicación",
               "zone": "Zona",
               "latitude": "Latitud",
               "longitude": "Longitud"
             },
-            "deleteElement": "Eliminar Elemento",
-            "elementDeleted": "Elemento eliminado correctamente",
-            "elementDeleteFailed": "No se pudo eliminar el elemento"
+            "deleteElement": "Eliminar elemento",
+            "elementDeleted": "Elemento eliminado con éxito",
+            "elementDeleteFailed": "Error al eliminar el elemento",
+            "editElement": "Editar Elemento"
           },
           "incidences": {
             "title": "Incidencia",
             "name": "📛 Nombre",
-            "creationDate": "📅 Fecha Creación",
+            "creationDate": "📅 Fecha de creación",
             "status": "⚠️ Estado",
             "description": "📝 Descripción",
-            "addIncident": "Añadir Incidencia",
+            "addIncident": "Añadir incidencia",
             "deleteIncident": "Eliminar incidencia",
             "noIncidences": "No hay incidencias registradas para este elemento.",
             "statusUpdated": "Estado actualizado",
-            "statusUpdatedDetail": "Se actualizó correctamente el estado de la incidencia",
-            "statusUpdateFailed": "No se pudo actualizar el estado de la incidencia",
+            "statusUpdatedDetail": "El estado de la incidencia se actualizó correctamente",
+            "statusUpdateFailed": "Error al actualizar el estado de la incidencia",
             "statusOptions": {
-              "open": "Abierto",
+              "open": "Abierta",
               "in_progress": "En progreso",
-              "closed": "Cerrado"
-            }
+              "closed": "Cerrada"
+            },
+            "loadError": "Error cargando incidencias",
+            "deleteSuccess": "Incidencia eliminada",
+            "deleteSuccessDetail": "Incidencia eliminada con éxito",
+            "deleteError": "Error al eliminar incidencia",
+            "deleteErrorDetail": "No se pudo eliminar la incidencia"
           },
           "eva": {
             "loading": "Cargando evaluación del árbol...",
             "noData": "No hay datos de evaluación disponibles para este árbol.",
-            "evaluationIndices": "Índices de Evaluación",
-            "treeStatus": "Estado del Árbol",
-            "stabilityIndex": "Índice de Estabilidad",
-            "gravityHeightRatio": "Relación Altura-Gravedad",
-            "rootCrownRatio": "Relación Raíz-Copa",
-            "windStabilityIndex": "Índice de Estabilidad al Viento",
-            "environmentalFactors": "Factores Ambientales",
-            "windExposure": "Exposición al Viento",
-            "droughtExposure": "Exposición a Sequía",
-            "technicalData": "Datos Técnicos",
+            "evaluationIndices": "Índices de evaluación",
+            "treeStatus": "Estado del árbol",
+            "stabilityIndex": "Índice de estabilidad",
+            "gravityHeightRatio": "Relación altura-gravedad",
+            "rootCrownRatio": "Relación raíz-copa",
+            "windStabilityIndex": "Índice de estabilidad al viento",
+            "environmentalFactors": "Factores ambientales",
+            "windExposure": "Exposición al viento",
+            "droughtExposure": "Exposición a sequía",
+            "technicalData": "Datos técnicos",
             "height": "Altura",
             "diameter": "Diámetro",
             "crownWidth": "Ancho de copa",
             "crownProjectionArea": "Área de proyección de copa",
-            "effectiveRootArea": "Área efectiva de raíces",
+            "effectiveRootArea": "Área efectiva de raíz",
             "createEva": "Crear EVA",
             "editEva": "Editar EVA",
-            "deleteEva": "Eliminar EVA"
+            "deleteEva": "Eliminar EVA",
+            "list": {
+              "messages": {
+                "deleteSuccess": "EVA eliminado con éxito",
+                "deleteSuccessDetail": "Los detalles del EVA fueron eliminados con éxito",
+                "deleteError": "Error al eliminar EVA",
+                "deleteErrorDetail": "No se pudieron eliminar los detalles del EVA"
+              }
+            }
           },
           "history": {
-            "title": "Historial del elemento (en construcción...)",
+            "title": "Historial del elemento",
             "notes": "Notas",
             "task": "Tarea",
             "description": "Descripción",
-            "workOrder": "Orden de Trabajo",
+            "workOrder": "Orden de trabajo",
             "status": "Estado",
-            "noTasks": "No hay tareas registradas para este elemento."
+            "noTasks": "No hay historial de tareas para este elemento.",
+            "unknownTask": "Tarea desconocida",
+            "taskStatus": {
+              "pending": "Pendiente",
+              "inProgress": "En progreso",
+              "completed": "Completado",
+              "unknown": "Desconocido"
+            },
+            "dateLabel": "Fecha:",
+            "workOrderLabel": "Orden de trabajo:",
+            "hoursLabel": "Horas dedicadas:",
+            "workersLabel": "Trabajadores:",
+            "taskHistoryTitle": "Historial de Tareas"
+          },
+          "workOrders": {
+             "loadError": "Error cargando órdenes de trabajo"
           }
-        }
+        },
+        "editElementForm": {
+          "toast": {
+            "successDetail": "Elemento actualizado con éxito",
+            "errorDetail": "Error al actualizar el elemento"
+          },
+          "editingInfo": "Editando elemento #{{id}}",
+          "labels": {
+            "description": "Descripción",
+            "elementType": "Tipo de elemento",
+            "treeType": "Tipo de árbol"
+          },
+          "placeholders": {
+            "description": "Introduzca descripción...",
+            "elementType": "Seleccione tipo de elemento",
+            "treeType": "Seleccione tipo de árbol"
+          },
+          "buttons": {
+            "save": "Guardar Cambios"
+          }
+        },
+        "elementPopup": {
+          "title": "Elemento #{{id}}",
+          "elementTypeUndefined": "Indefinido",
+          "treeFamilyLabel": "Familia:",
+          "treeGenusLabel": "Género:",
+          "treeSpeciesLabel": "Especie:",
+          "createdLabel": "Creado:",
+          "createdAtNotAvailable": "No disponible",
+          "incidentButton": "Incidencia",
+          "deleteButton": "Eliminar"
+        },
+        "incidentForm": {
+          "toast": {
+            "nameRequiredWarningTitle": "Atención",
+            "nameRequiredWarningDetail": "El nombre de la incidencia es obligatorio",
+            "successTitle": "Éxito",
+            "successDetail": "Incidencia creada correctamente",
+            "errorTitle": "Error",
+            "errorDetail": "No se pudo crear la incidencia"
+          },
+          "nameLabel": "Nombre:",
+          "namePlaceholder": "Nombre de la incidencia",
+          "descriptionLabel": "Descripción:",
+          "descriptionPlaceholder": "Descripción de la incidencia",
+          "saveButton": "Guardar",
+          "cancelButton": "Cancelar"
+        },
+        "inventoryPage": {
+          "loadError": "Error cargando datos del inventario",
+          "mapInitError": "Error de inicialización del mapa",
+          "elementUpdateError": "Error al actualizar elementos",
+          "createOutsideZoneError": "No se puede crear un elemento fuera de la zona"
+        },
+        "saveElementForm": {
+          "fetchElementTypeError": "Error al comprobar si se requiere tipo de árbol:",
+          "savePointError": "Error al guardar el punto - no se devolvió ID",
+          "infoTitle": "Añadiendo elemento en la zona",
+          "elementTypeLabel": "Tipo de elemento",
+          "elementTypePlaceholder": "Seleccione un tipo de elemento",
+          "noTypesAvailable": "No hay tipos disponibles",
+          "noResultsFound": "No se encontraron resultados",
+          "elementTypeRequiredError": "Este campo es obligatorio",
+          "treeTypeLabel": "Tipo de árbol",
+          "treeTypePlaceholder": "Seleccione tipo de árbol",
+          "treeTypeRequiredError": "Este campo es obligatorio para el tipo de elemento seleccionado",
+          "descriptionLabel": "Descripción (opcional)",
+          "descriptionPlaceholder": "Descripción adicional del elemento (opcional)",
+          "cancelButton": "Cancelar",
+          "saveButton": "Guardar Elemento"
+        },
+        "saveZoneForm": {
+          "validation": {
+            "nameRequired": "El nombre es obligatorio",
+            "colorFormat": "Debe ser un código de color válido en formato #RRGGBB",
+            "contractIdRequired": "El ID del contrato es obligatorio",
+            "coordinatesRequired": "Las coordenadas son obligatorias"
+          },
+          "overlapCheckError": "Error al analizar la intersección de polígonos:",
+          "toast": {
+            "overlapErrorTitle": "Error",
+            "overlapErrorDetail": "No se puede crear una zona encima de otra zona existente",
+            "zoneIdError": "No se pudo obtener el ID de la zona creada.",
+            "saveSuccessTitle": "Éxito",
+            "saveSuccessDetail": "Zona y puntos guardados correctamente",
+            "saveErrorTitle": "Error",
+            "saveErrorDetail": "No se pudo guardar la zona"
+          },
+          "infoText": "Se creará una zona con <strong>{{count}}</strong> puntos delimitadores. La zona debe tener un nombre único.",
+          "nameLabel": "Nombre de la zona",
+          "namePlaceholder": "Ej. Parque Central",
+          "descriptionLabel": "Descripción",
+          "descriptionPlaceholder": "Descripción detallada de la zona (opcional)",
+          "colorLabel": "Color",
+          "cancelButton": "Cancelar",
+          "saveButton": "Guardar Zona"
+        },
+        "zones": {
+          "toast": {
+             "loadError": "Error cargando recursos",
+             "loadTypesError": "Error cargando tipos de elementos",
+             "eventSystemError": "Error en el sistema de eventos",
+             "deleteSuccess": "Zona y puntos eliminados correctamente",
+             "deleteError": "No se pudo eliminar la zona",
+             "showElementsWarningZoneHidden": "No se pueden mostrar elementos mientras la zona está oculta.",
+             "colorUpdateSuccess": "Color actualizado correctamente",
+             "colorUpdateError": "No se pudo actualizar el color"
+          },
+          "title": "Zonas",
+          "saveZoneButton": "Guardar Zona",
+          "creatingElementInfo": "Creando nuevo elemento",
+          "cancelCreationTooltip": "Cancelar creación",
+          "searchPlaceholder": "Buscar zonas...",
+          "emptyState": {
+             "title": "No se encontraron zonas",
+             "messageWithSearch": "Prueba otra búsqueda o ajusta tus filtros.",
+             "messageDefault": "Crea o dibuja una zona para empezar.",
+             "clearSearchButton": "Limpiar búsqueda"
+          },
+          "tooltips": {
+             "changeColor": "Cambiar color",
+             "showZone": "Mostrar zona",
+             "hideZone": "Ocultar zona",
+             "goToZone": "Ir a zona",
+             "addElement": "Añadir elemento",
+             "deleteZone": "Eliminar zona",
+             "zoneHidden": "La zona está oculta",
+             "showElements": "Mostrar elementos",
+             "hideElements": "Ocultar elementos"
+          },
+          "noDescription": "Sin descripción",
+          "noElementsInZone": "No hay elementos en esta zona",
+          "addElementButton": "Añadir elemento",
+          "elementsHeader": "Elementos ({{count}})",
+          "deleteConfirm": {
+             "title": "Confirmar eliminación",
+             "deleteButton": "Eliminar",
+             "warningIrreversible": "Esta acción no se puede deshacer",
+             "confirmationText": "¿Estás seguro de que quieres eliminar la zona <strong> {{zoneName}}</strong>?",
+             "infoText": "Esta acción eliminará la zona y todos sus puntos y elementos asociados."
+          }
+        },
+        "loadError": "Error cargando datos del contrato",
+        "createOutsideZoneErrorTitle": "Aviso",
+        "createOutsideZoneErrorDetail": "No se puede crear un elemento fuera de la zona o área seleccionada",
+        "clickToAddElementPrompt": "Haz clic en el mapa para añadir un elemento",
+        "drawingModeActive": "Modo dibujo activado",
+        "saveZoneDialogTitle": "Guardar Zona",
+        "saveElementDialogTitle": "Guardar Elemento",
+        "addIncidentDialogTitle": "Añadir Incidencia",
+        "elementDetailsDialogTitle": "Detalles del Elemento #{{elementId}}",
+        "selectedZoneInfo": "Zona: {{zoneName}}",
+        "addingElementInZoneInfo": "Añadiendo en: {{zoneName}}",
+        "genericErrorTitle": "Error",
+        "genericSuccessTitle": "Éxito",
+        "genericWarningTitle": "Aviso"
       },
-
       "resources": {
         "title": "Recursos",
         "form": {
@@ -679,9 +961,9 @@
             "type": "Tipo"
           },
           "placeholders": {
-            "description": "Ingresa la descripción",
-            "name": "Ingresa el nombre",
-            "type": "Selecciona un tipo"
+            "description": "Ingrese descripción",
+            "name": "Ingrese nombre",
+            "type": "Seleccione un tipo"
           },
           "returnButton": "Volver a la lista de recursos",
           "submitButton": {
@@ -697,16 +979,16 @@
             "edit": "Editar recurso"
           },
           "validation": {
-            "description_max": "La descripción no puede exceder los 255 caracteres",
+            "description_max": "La descripción no puede exceder 255 caracteres",
             "name_format": "El nombre solo puede contener letras, números y espacios",
-            "name_max": "El nombre no puede exceder los 50 caracteres",
+            "name_max": "El nombre no puede exceder 50 caracteres",
             "name_min": "El nombre debe tener al menos 3 caracteres",
-            "name_required": "El nombre es obligatorio",
-            "type_invalid": "Por favor, selecciona un tipo de recurso válido",
-            "type_required": "El tipo es obligatorio",
+            "name_required": "El nombre es requerido",
+            "type_invalid": "Por favor seleccione un tipo de recurso válido",
+            "type_required": "El tipo es requerido",
             "unit_cost_min": "El costo unitario debe ser mayor que 0",
-            "unit_cost_required": "El costo unitario es obligatorio",
-            "unit_name_required": "El nombre de la unidad es obligatorio"
+            "unit_cost_required": "El costo unitario es requerido",
+            "unit_name_required": "El nombre de la unidad es requerido"
           }
         },
         "list": {
@@ -721,15 +1003,15 @@
             "name": "Nombre",
             "type": "Tipo",
             "unit": "Unidad",
-            "unit_name": "Nombre de la unidad",
+            "unit_name": "Nombre de unidad",
             "unit_cost": "Costo unitario"
           },
           "messages": {
-            "createSuccess": "Recurso creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar este recurso?",
-            "deleteSuccess": "Recurso eliminado correctamente",
+            "createSuccess": "Recurso creado con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este recurso?",
+            "deleteSuccess": "Recurso eliminado con éxito",
             "error": "Error al guardar el recurso",
-            "updateSuccess": "Recurso actualizado correctamente"
+            "updateSuccess": "Recurso actualizado con éxito"
           }
         }
       },
@@ -738,8 +1020,8 @@
         "title": "Tipos de recurso",
         "form": {
           "placeholders": {
-            "description": "Ingresa la descripción",
-            "name": "Ingresa el nombre"
+            "description": "Ingrese descripción",
+            "name": "Ingrese nombre"
           },
           "returnButton": "Volver a la lista de tipos de recurso",
           "submitButton": {
@@ -755,9 +1037,9 @@
             "edit": "Editar tipo de recurso"
           },
           "validation": {
-            "description_required": "La descripción es obligatoria",
+            "description_required": "La descripción es requerida",
             "name_invalid": "El nombre solo puede contener letras, números y espacios",
-            "name_required": "El nombre es obligatorio"
+            "name_required": "El nombre es requerido"
           }
         },
         "list": {
@@ -772,11 +1054,11 @@
             "name": "Nombre"
           },
           "messages": {
-            "createSuccess": "Tipo de recurso creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de recurso?",
-            "deleteSuccess": "Tipo de recurso eliminado correctamente",
+            "createSuccess": "Tipo de recurso creado con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este tipo de recurso?",
+            "deleteSuccess": "Tipo de recurso eliminado con éxito",
             "error": "Error al guardar el tipo de recurso",
-            "updateSuccess": "Tipo de recurso actualizado correctamente"
+            "updateSuccess": "Tipo de recurso actualizado con éxito"
           }
         }
       },
@@ -795,11 +1077,11 @@
         "noData": "No hay datos para mostrar",
         "exportCSV": "Exportar a CSV",
         "total": "Total",
-        "noDataResourcePeriod": "No hay datos disponibles para el tipo de recurso seleccionado y período",
-        "selectResource": "Selecciona un tipo de recurso",
-        "selectResourcePlaceholder": "Busca tu tipo de recurso aquí...",
+        "noDataResourcePeriod": "No hay datos disponibles para el tipo de recurso y período seleccionados",
+        "selectResource": "Seleccionar un tipo de recurso",
+        "selectResourcePlaceholder": "Busque su tipo de recurso aquí...",
         "noResourcesAvailable": "No hay recursos disponibles",
-        "selectResourcePrompt": "Por favor, selecciona un recurso para ver su uso"
+        "selectResourcePrompt": "Por favor seleccione un recurso para ver su uso"
       },
 
       "taskTypes": {
@@ -810,8 +1092,8 @@
             "name": "Nombre"
           },
           "placeholders": {
-            "description": "Ingresa la descripción",
-            "name": "Ingresa el nombre"
+            "description": "Ingrese descripción",
+            "name": "Ingrese nombre"
           },
           "returnButton": "Volver a la lista de tipos de tarea",
           "submitButton": {
@@ -827,8 +1109,8 @@
             "edit": "Editar tipo de tarea"
           },
           "validation": {
-            "error_numbers": "El nombre no puede contener números ni caracteres especiales",
-            "name_required": "El nombre es obligatorio"
+            "error_numbers": "El nombre no puede contener números o caracteres especiales",
+            "name_required": "El nombre es requerido"
           }
         },
         "list": {
@@ -843,11 +1125,11 @@
             "name": "Tipo de tarea"
           },
           "messages": {
-            "createSuccess": "Tipo de tarea creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de tarea?",
-            "deleteSuccess": "Tipo de tarea eliminado correctamente",
+            "createSuccess": "Tipo de tarea creado con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este tipo de tarea?",
+            "deleteSuccess": "Tipo de tarea eliminado con éxito",
             "error": "Error al guardar el tipo de tarea",
-            "updateSuccess": "Tipo de tarea actualizado correctamente"
+            "updateSuccess": "Tipo de tarea actualizado con éxito"
           }
         }
       },
@@ -873,9 +1155,9 @@
               "genus": "El género solo puede contener caracteres alfanuméricos",
               "species": "La especie solo puede contener caracteres alfanuméricos"
             },
-            "family": "La familia es obligatoria",
-            "genus": "El género es obligatorio",
-            "species": "La especie es obligatoria"
+            "family": "La familia es requerida",
+            "genus": "El género es requerido",
+            "species": "La especie es requerida"
           }
         },
         "list": {
@@ -891,11 +1173,11 @@
             "species": "Especie"
           },
           "messages": {
-            "createSuccess": "Tipo de árbol creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar este tipo de árbol?",
-            "deletedSuccess": "Tipo de árbol eliminado correctamente",
+            "createSuccess": "Tipo de árbol creado con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este tipo de árbol?",
+            "deletedSuccess": "Tipo de árbol eliminado con éxito",
             "error": "Error al guardar el tipo de árbol",
-            "updateSuccess": "Tipo de árbol actualizado correctamente"
+            "updateSuccess": "Tipo de árbol actualizado con éxito"
           }
         }
       },
@@ -905,8 +1187,8 @@
         "form": {
           "placeholders": {
             "password": "Contraseña",
-            "passwordEdit": "Contraseña (dejar en blanco para mantenerla sin cambios)",
-            "role": "Selecciona un rol"
+            "passwordEdit": "Contraseña (dejar en blanco para mantener sin cambios)",
+            "role": "Seleccionar un rol"
           },
           "returnButton": "Volver a la lista de usuarios",
           "submitButton": {
@@ -922,16 +1204,16 @@
             "edit": "Editar usuario"
           },
           "validation": {
-            "email_required": "El correo electrónico es obligatorio",
-            "invalid_email": "Correo electrónico no válido",
-            "name_required": "El nombre es obligatorio",
+            "email_required": "El correo electrónico es requerido",
+            "invalid_email": "Dirección de correo electrónico inválida",
+            "name_required": "El nombre es requerido",
             "password_min": "Debe tener al menos 8 caracteres",
             "password_number": "Debe contener al menos un número",
-            "password_required": "La contraseña es obligatoria",
+            "password_required": "La contraseña es requerida",
             "password_special": "Debe contener al menos un carácter especial",
             "password_uppercase": "Debe contener al menos una letra mayúscula",
-            "role_invalid": "Rol no válido",
-            "surname_required": "El apellido es obligatorio"
+            "role_invalid": "Rol inválido",
+            "surname_required": "El apellido es requerido"
           }
         },
         "list": {
@@ -950,11 +1232,11 @@
             "surname": "Apellido"
           },
           "messages": {
-            "createSuccess": "Usuario creado correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar este usuario?",
-            "deleteSuccess": "Usuario eliminado correctamente",
+            "createSuccess": "Usuario creado con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este usuario?",
+            "deleteSuccess": "Usuario eliminado con éxito",
             "error": "Error al guardar el usuario",
-            "updateSuccess": "Usuario actualizado correctamente"
+            "updateSuccess": "Usuario actualizado con éxito"
           }
         }
       },
@@ -977,8 +1259,8 @@
         "form": {
           "blocksTitle": "Bloques de trabajo",
           "buttons": {
-            "addBlock": "Agregar bloque",
-            "addTask": "Agregar tarea"
+            "addBlock": "Añadir bloque",
+            "addTask": "Añadir tarea"
           },
           "fields": {
             "block": "Bloque",
@@ -992,17 +1274,17 @@
             "zones": "Zonas"
           },
           "noContract": {
-            "message": "Debes seleccionar un contrato en el panel superior para crear una orden de trabajo.",
-            "title": "No se ha seleccionado un contrato"
+            "message": "Debe seleccionar un contrato en el panel superior para crear una orden de trabajo.",
+            "title": "Ningún contrato seleccionado"
           },
           "placeholders": {
-            "elementType": "Selecciona el tipo de elemento",
-            "notes": "Agrega notas para este bloque de trabajo...",
+            "elementType": "Seleccionar tipo de elemento",
+            "notes": "Añadir notas para este bloque de trabajo...",
             "status": "Seleccionar un estado",
-            "taskType": "Selecciona el tipo de tarea",
-            "treeType": "Selecciona la especie de árbol",
-            "users": "Selecciona trabajadores",
-            "zones": "Selecciona zonas para este bloque"
+            "taskType": "Seleccionar tipo de tarea",
+            "treeType": "Seleccionar especie de árbol",
+            "users": "Seleccionar trabajadores",
+            "zones": "Seleccionar zonas para este bloque"
           },
           "removeBlock": "Eliminar bloque",
           "removeTask": "Eliminar tarea",
@@ -1021,12 +1303,12 @@
           },
           "validation": {
             "blocks_required": "Se requiere al menos un bloque",
-            "date_required": "La fecha es obligatoria",
-            "element_type_required": "El tipo de elemento es obligatorio",
-            "task_type_required": "El tipo de tarea es obligatorio",
+            "date_required": "La fecha es requerida",
+            "element_type_required": "El tipo de elemento es requerido",
+            "task_type_required": "El tipo de tarea es requerido",
             "tasks_required": "Se requiere al menos una tarea",
-            "users_required": "Debe seleccionarse al menos un trabajador",
-            "zones_required": "Debe seleccionarse al menos una zona"
+            "users_required": "Debe seleccionar al menos un trabajador",
+            "zones_required": "Debe seleccionar al menos una zona"
           }
         },
         "list": {
@@ -1034,50 +1316,51 @@
             "delete": "Eliminar orden de trabajo",
             "edit": "Editar orden de trabajo",
             "label": "Acciones",
-            "viewReport": "Ver Parte",
+            "viewReport": "Ver informe",
             "create": "Crear orden de trabajo"
           },
           "columns": {
             "contract": "Contrato",
             "date": "Fecha",
             "id": "ID",
-            "reportStatus": "Estado del Parte",
+            "reportStatus": "Estado del informe",
             "status": "Estado",
             "users": "Trabajadores"
           },
           "messages": {
-            "createSuccess": "Orden de trabajo creada correctamente",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar esta orden de trabajo?",
-            "deleteSuccess": "Orden de trabajo eliminada correctamente",
+            "createSuccess": "Orden de trabajo creada con éxito",
+            "deleteConfirm": "¿Está seguro de que desea eliminar esta orden de trabajo?",
+            "deleteSuccess": "Orden de trabajo eliminada con éxito",
             "error": "Error al guardar la orden de trabajo",
             "noData": "No hay órdenes de trabajo disponibles",
-            "updateSuccess": "Orden de trabajo actualizada correctamente"
+            "updateSuccess": "Orden de trabajo actualizada con éxito"
           }
         },
         "reportStatus": {
-          "closedWithIncidents": "Cerrado con incidentes",
-          "completed": "Completado",
+          "closedWithIncidents": "Cerrada con incidentes",
+          "completed": "Completada",
           "pending": "Pendiente",
-          "rejected": "Rechazado",
-          "unknown": "Desconocido"
+          "rejected": "Rechazada",
+          "unknown": "Desconocido",
+          "noReports": "Sin informes"
         },
         "status": {
-          "completed": "Completado",
+          "completed": "Completada",
           "inProgress": "En progreso",
-          "notStarted": "No iniciado",
-          "reportSent": "Parte enviado",
+          "notStarted": "No iniciada",
+          "reportSent": "Informe enviado",
           "unknown": "Desconocido"
         }
       },
 
       "workReport": {
-        "title": "Informe de Trabajo",
-        "not_found": "No se ha encontrado el Informe de Trabajo",
+        "title": "Informe de trabajo",
+        "not_found": "Informe de trabajo no encontrado",
         "columns": {
           "users": "Trabajadores",
           "observation": "Observación",
-          "spent_fuel": "Combustible Gastado",
-          "incidents": "Incidencias",
+          "spent_fuel": "Combustible gastado",
+          "incidents": "Incidentes",
           "zones": "Zonas",
           "tasks": "Tareas",
           "notes": "Notas",
@@ -1085,77 +1368,76 @@
           "resources": "Recursos"
         },
         "messages": {
-          "closing_part": "Cerrando parte...",
+          "closing_part": "Cerrando informe de trabajo...",
           "part_closed": "Parte cerrada con éxito",
           "closing_block": "Cerrando bloque...",
           "close_block": "Bloque cerrado con éxito",
-          "closing_with_incidents": "Cerrando bloque con incidencias...",
-          "close_with_incidents": "Bloque cerrado con incidencias",
-          "rejecting": "Rechazando bloque...",
+          "closing_with_incidents": "Cerrando informe de trabajo con incidentes...",
+          "close_with_incidents": "Bloque cerrado con incidentes",
+          "rejecting": "Rechazando informe de trabajo...",
           "reject": "Bloque rechazado",
           "closing_with_observations": "Cerrando informe con observaciones...",
           "close_with_observations": "Informe cerrado con observaciones",
+          "error_updating_status": "Error al actualizar el estado del informe",
           "error_updating_observations": "Error al actualizar observaciones",
-          "observation_updated": "Observación actualizada correctamente",
+          "observation_updated": "Observación actualizada con éxito",
           "error_updating_observation": "Error al actualizar la observación",
-          "already_processed": "Este informe de trabajo ya ha sido procesado y no se puede modificar."
+          "already_processed": "Este informe de trabajo ya ha sido procesado",
+          "observations_required": "Se requieren observaciones al cerrar con incidentes"
         },
         "reportStatus": {
           "pending": "Pendiente",
           "completed": "Completado",
           "rejected": "Rechazado",
-          "closedWithIncidents": "Cerrado con incidencias",
+          "closedWithIncidents": "Cerrado con incidentes",
           "unknown": "Desconocido"
         },
         "taskStatus": {
           "pending": "Pendiente",
-          "inProgress": "En Progreso",
-          "completed": "Completada",
+          "inProgress": "En progreso",
+          "completed": "Completado",
           "unknown": "Desconocido"
         },
         "details": {
           "details": "Detalles",
           "block": "Bloque",
-          "noBlocks": "No hay bloques",
-          "noBlocksAvailable": "No hay bloques disponibles para este informe de trabajo",
-          "noNotes": "No hay notas",
-          "noTasks": "No hay tareas asignadas",
-          "notes": "Notas",
-          "noUsers": "No hay usuarios asignados",
-          "noZones": "No hay zonas asignadas",
+          "noBlocks": "Sin bloques",
+          "noBlocksAvailable": "No hay bloques disponibles para este informe",
           "tasks": "Tareas",
+          "hours": "Horas",
+          "spentFuel": "Combustible gastado",
+          "liters": "litros",
+          "noUsers": "No hay usuarios asignados",
+          "noTasks": "No hay tareas disponibles",
+          "noZones": "No hay zonas asignadas",
+          "notes": "Notas",
+          "noNotes": "No hay notas disponibles",
+          "noResources": "No se usaron recursos",
+          "noIncidents": "No se registraron incidentes",
           "unknown": "Desconocido",
           "zones": "Zonas",
           "resources": "Recursos",
           "observation": "Observación",
           "noObservation": "No hay observación disponible",
-          "incidents": "Incidencias",
-          "noIncidents": "No hay incidencias registradas",
-          "spentFuel": "Combustible Gastado",
-          "taskStatus": "Estado de la Tarea",
-          "hours": "Horas",
-          "unit": "Unidad",
-          "cost": "Coste",
-          "quantity": "Cantidad",
-          "liters": "Litros"
+          "incidents": "Incidentes"
         },
         "dialogs": {
-          "observationHeader": "Añadir Observaciones",
-          "observationMessage": "Por favor, proporciona tus observaciones antes de cerrar el informe.",
-          "observationPlaceholder": "Introduce tus observaciones aquí...",
-          "editObservationHeader": "Editar Observación",
-          "editObservationMessage": "Modifica la observación para este parte.",
-          "editObservationPlaceholder": "Introduce tu observación actualizada aquí..."
+          "observationHeader": "Añadir observaciones",
+          "observationMessage": "Por favor proporcione observaciones para este informe",
+          "observationPlaceholder": "Ingrese sus observaciones aquí...",
+          "editObservationHeader": "Editar observación",
+          "editObservationMessage": "Modifique la observación para este informe",
+          "editObservationPlaceholder": "Ingrese su observación actualizada aquí..."
         }
       },
 
       "work_reports": {
-        "title": "Informe de Trabajo",
-        "not_found": "Informe de Trabajo no encontrado",
+        "title": "Informe de trabajo",
+        "not_found": "Informe de trabajo no encontrado",
         "details": "Detalles",
         "columns": {
           "observation": "Observación",
-          "spent_fuel": "Combustible Gastado",
+          "spent_fuel": "Combustible gastado",
           "incidents": "Incidentes",
           "zones": "Zonas",
           "tasks": "Tareas",
@@ -1164,7 +1446,7 @@
         },
         "messages": {
           "closing_part": "Cerrando parte...",
-          "part_closed": "Parte cerrado con éxito",
+          "part_closed": "Parte cerrada con éxito",
           "closing_block": "Cerrando bloque...",
           "close_block": "Bloque cerrado con éxito",
           "closing_with_incidents": "Cerrando bloque con incidentes...",
@@ -1175,33 +1457,39 @@
       },
 
       "workers": {
-        "title": "Gestión de Trabajadores",
-        "assignRemoveWorkers": "Asignar/Eliminar Trabajadores",
-        "selectWorkers": "Seleccionar Trabajadores",
-        "selected": "Seleccionado",
-        "workersForContract": "Trabajadores para el contrato",
+        "title": "Gestión de trabajadores",
+        "assignRemoveWorkers": "Asignar/Eliminar trabajadores",
+        "selectWorkers": "Seleccionar trabajadores",
+        "selected": "Seleccionados",
+        "workersForContract": "Trabajadores para el contrato seleccionado",
         "noWorkersAssigned": "No hay trabajadores asignados a este contrato",
-        "useDropdownToAssign": "Usa el menú desplegable de arriba para asignar trabajadores",
-        "selectWorkerHelp": "Selecciona o deselecciona trabajadores para asignarlos a este contrato",
+        "useDropdownToAssign": "Use el menú desplegable para asignar trabajadores",
+        "selectWorkerHelp": "Seleccione o deseleccione trabajadores para asignarlos a este contrato",
         "noWorkersFound": "No se encontraron trabajadores",
         "name": "Nombre",
-        "email": "Correo Electrónico",
+        "email": "Correo electrónico",
         "company": "Empresa",
         "dni": "DNI",
-        "pleaseSelectContract": "Por favor, selecciona primero un contrato",
-        "updatedSuccessfully": "Trabajadores actualizados correctamente",
-        "failedToLoad": "Error al cargar los trabajadores",
-        "failedToUpdate": "Error al actualizar los trabajadores"
+        "pleaseSelectContract": "Por favor seleccione un contrato primero",
+        "updatedSuccessfully": "Trabajadores actualizados con éxito",
+        "failedToLoad": "Error al cargar trabajadores",
+        "failedToUpdate": "Error al actualizar trabajadores"
       },
+
       "sensors": {
-        "title": "Sensores",
+        "title": {
+          "title": "Sensores",
+          "create": "Crear sensor",
+          "edit": "Editar sensor",
+          "delete": "Eliminar sensor"
+        },
         "loading": "Cargando datos del sensor...",
         "backButton": "Volver",
         "notFound": "Sensor no encontrado",
-        "loadError": "Error al cargar los datos del sensor.",
+        "loadError": "Error al cargar datos del sensor.",
         "identification": "Identificación",
         "status": "Estado",
-        "soilMeasurements": "Mediciones del suelo",
+        "soilMeasurements": "Mediciones de suelo",
         "fields": {
           "id": "ID",
           "dev_eui": "DevEUI",
@@ -1210,7 +1498,7 @@
           "battery": "Batería",
           "rssi": "RSSI",
           "snr": "SNR",
-          "last_seen": "Última actualización",
+          "last_seen": "Última conexión",
           "temp_soil": "Temperatura del suelo",
           "ph1_soil": "pH del suelo",
           "water_soil": "Humedad del suelo",
@@ -1222,28 +1510,27 @@
         },
         "form": {
           "title": {
-            "create": "Crear Sensor",
-            "edit": "Editar Sensor",
-            "delete": "Eliminar Sensor",
-            "show": "Detalles del Sensor"
+            "create": "Crear sensor",
+            "edit": "Editar sensor",
+            "delete": "Eliminar sensor"
           },
           "validation": {
-            "eui_required": "El EUI es obligatorio",
+            "eui_required": "El EUI es requerido",
             "eui_min": "El EUI debe tener al menos 8 caracteres",
             "eui_max": "El EUI debe tener menos de 32 caracteres",
             "eui_format": "El EUI debe estar en formato hexadecimal (0-9, a-f)",
-            "name_required": "El nombre es obligatorio",
+            "name_required": "El nombre es requerido",
             "name_min": "El nombre debe tener al menos 3 caracteres",
             "name_max": "El nombre debe tener menos de 50 caracteres",
             "name_format": "El nombre solo puede contener letras, números, espacios, guiones y guiones bajos",
-            "longitude_required": "La longitud es obligatoria",
-            "longitude_format": "Longitud no válida (debe estar entre -180 y 180)",
-            "latitude_required": "La latitud es obligatoria",
-            "latitude_format": "Latitud no válida (debe estar entre -90 y 90)"
+            "longitude_required": "La longitud es requerida",
+            "longitude_format": "Longitud inválida (debe estar entre -180 y 180)",
+            "latitude_required": "La latitud es requerida",
+            "latitude_format": "Latitud inválida (debe estar entre -90 y 90)"
           },
           "submitButton": {
-            "create": "Crear Sensor",
-            "edit": "Actualizar Sensor"
+            "create": "Crear sensor",
+            "edit": "Actualizar sensor"
           },
           "submittingText": {
             "create": "Creando...",
@@ -1252,108 +1539,122 @@
         },
         "list": {
           "messages": {
-            "createSuccess": "Sensor creado correctamente",
-            "updateSuccess": "Sensor actualizado correctamente",
+            "createSuccess": "Sensor creado con éxito",
+            "updateSuccess": "Sensor actualizado con éxito",
             "euiTaken": "El EUI ya está en uso",
             "error": "Error al guardar el sensor",
-            "deleteConfirm": "¿Estás seguro de que deseas eliminar este sensor?",
+            "deleteConfirm": "¿Está seguro de que desea eliminar este sensor?",
             "deleteError": "Error al eliminar el sensor",
-            "deletedSuccess": "Sensor eliminado correctamente"
+            "deletedSuccess": "Sensor eliminado con éxito"
           },
           "actions": {
-            "create": "Crear Sensor",
-            "edit": "Editar Sensor",
-            "delete": "Eliminar Sensor"
+            "create": "Crear sensor",
+            "edit": "Editar sensor",
+            "delete": "Eliminar sensor"
           }
         },
         "errors": {
           "no_contract": "Debe seleccionar un contrato válido"
-        },
-        "history": {
-          "title": "Historial del sensor",
-          "back": "Volver",
-          "loadError": "Error al cargar el historial del sensor",
-          "noData": "No hay datos históricos para este sensor",
-          "of": "de",
-          "metrics": {
-            "time": "Fecha/Hora",
-            "temp_soil": "Temperatura del suelo",
-            "ph1_soil": "pH del suelo",
-            "water_soil": "Humedad del suelo",
-            "conductor_soil": "Conductividad del suelo",
-            "bat": "Batería",
-            "rssi": "Intensidad de señal",
-            "snr": "Relación señal-ruido"
-          }
         }
+      },
+      "error": {
+        "fetching_data": "Error al obtener datos",
+        "error": "Error"
+      },
+      "general": {
+        "returnButton": "Volver"
       }
     }
   },
   "worker": {
     "workOrders": {
       "title": "Órdenes de trabajo",
-      "selectDate": "Seleccionar Fecha",
-      "noWorkOrders": "Sin Órdenes de Trabajo",
-      "noWorkOrdersMessage": "No hay órdenes de trabajo asignadas para la fecha seleccionada. Intenta elegir una fecha diferente o contacta con tu supervisor si crees que debería haber trabajo asignado.",
+      "selectDate": "Seleccionar fecha",
+      "noWorkOrders": "Sin órdenes de trabajo",
+      "noWorkOrdersMessage": "No hay órdenes de trabajo asignadas para la fecha seleccionada. Intente elegir una fecha diferente o contacte a su supervisor si cree que debería haber trabajo asignado.",
       "block": "Bloque",
       "zones": "Zonas",
       "noZones": "No hay zonas asignadas",
       "tasks": "Tareas",
       "notes": "Notas",
-      "addResources": "Añadir Recursos",
-      "saveResources": "Guardar Recursos",
-      "resourceTypePlaceholder": "Selecciona un tipo de recurso...",
-      "resourceTypeLabel": "Tipo de Recurso",
-      "resourcePlaceholder": "Selecciona un recurso...",
-      "availableResources": "Recursos Disponibles",
-      "selectedResources": "Recursos Seleccionados",
-      "noResourcesSelected": "Aún no has seleccionado recursos",
+      "addResources": "Añadir recursos",
+      "saveResources": "Guardar recursos",
+      "resourceTypePlaceholder": "Seleccionar tipo de recurso...",
+      "resourceTypeLabel": "Tipo de recurso",
+      "resourcePlaceholder": "Seleccionar recurso...",
+      "availableResources": "Recursos disponibles",
+      "selectedResources": "Recursos seleccionados",
+      "noResourcesSelected": "No hay recursos seleccionados aún",
       "noResourcesInType": "No hay recursos disponibles para este tipo",
-      "selectResourcesHelp": "Primero selecciona un tipo de recurso, luego elige recursos específicos para añadir",
+      "selectResourcesHelp": "Primero seleccione un tipo de recurso, luego elija recursos específicos para añadir",
       "totalResources": "Total de recursos",
       "quantity": "Cantidad",
-      "unitCost": "Coste Unitario",
-      "removeResource": "Eliminar Recurso",
-      "createReport": "Crear Informe",
-      "viewDetails": "Ver Detalles",
-      "reportAlreadySent": "Informe Ya Enviado",
-      "noContract": "No se ha seleccionado ningún contrato. Por favor, selecciona un contrato para ver las órdenes de trabajo.",
+      "unitCost": "Costo unitario",
+      "removeResource": "Eliminar recurso",
+      "createReport": "Crear informe",
+      "viewDetails": "Ver detalles",
+      "reportAlreadySent": "Informe ya enviado",
+      "noContract": "Ningún contrato seleccionado. Por favor seleccione un contrato para ver órdenes de trabajo.",
       "taskStatus": {
         "pending": "Pendiente",
-        "inProgress": "En Progreso",
-        "completed": "Completada"
+        "inProgress": "En progreso",
+        "completed": "Completado"
       },
-      "startTask": "Iniciar Tarea",
-      "completeTask": "Completar Tarea",
-      "reopenTask": "Reabrir Tarea",
-      "timeSpent": "Tiempo Empleado",
+      "startTask": "Iniciar tarea",
+      "completeTask": "Completar tarea",
+      "reopenTask": "Reabrir tarea",
+      "timeSpent": "Tiempo empleado",
       "status": {
-        "notStarted": "No Iniciada",
-        "inProgress": "En Progreso",
+        "notStarted": "No iniciada",
+        "inProgress": "En progreso",
         "completed": "Completada",
-        "reportSent": "Informe Enviado",
+        "reportSent": "Informe enviado",
         "unknown": "Desconocido"
       },
-      "timeSpentDialog": "Tiempo Empleado",
-      "enterTimeSpent": "Introduce el tiempo empleado en esta tarea:",
+      "timeSpentDialog": "Tiempo empleado",
+      "enterTimeSpent": "Ingrese el tiempo empleado en esta tarea:",
       "complete": "Completar",
       "start": "Iniciar",
       "reopen": "Reabrir",
       "errors": {
         "taskUpdateFailed": "Error al actualizar el estado de la tarea",
-        "resourcesFetchFailed": "Error al obtener los recursos disponibles",
-        "resourcesSaveFailed": "Error al guardar los recursos",
+        "resourcesFetchFailed": "Error al obtener recursos disponibles",
+        "resourcesSaveFailed": "Error al guardar recursos",
         "workOrderCompleted": "No se puede modificar una orden de trabajo completada",
-        "fetchFailed": "Error al obtener las órdenes de trabajo"
+        "fetchFailed": "Error al obtener órdenes de trabajo"
       },
       "messages": {
-        "resourcesAdded": "Recursos añadidos correctamente",
-        "taskUpdated": "Tarea actualizada correctamente"
+        "resourcesAdded": "Recursos añadidos con éxito",
+        "taskUpdated": "Tarea actualizada con éxito"
+      },
+      "createWorkReport": "Crear informe de trabajo",
+      "spentFuel": "Combustible consumido (litros)",
+      "resourceType": "Tipo de recurso",
+      "resources": "Recursos",
+      "addResource": "Añadir recurso",
+      "resource": "Recurso {0}",
+      "resourceName": "Nombre del recurso",
+      "unit": "Unidad",
+      "quantity": "Cantidad",
+      "selectResourceTypeFirst": "Seleccione primero un tipo de recurso",
+      "noResourcesForType": "No hay recursos disponibles para este tipo",
+      "noResourceTypes": "No hay tipos de recursos disponibles",
+      "observations": "Observaciones",
+      "observationsPlaceholder": "Introduzca cualquier observación o incidente aquí",
+      "submitReport": "Enviar informe",
+      "taskUpdated": "Tarea actualizada correctamente",
+      "messages": {
+        "reportCreated": "Informe de trabajo creado correctamente",
+        "resourcesAdded": "Recursos añadidos correctamente"
+      },
+      "errors": {
+        "noResourcesSelected": "Seleccione al menos un recurso",
+        "reportCreationFailed": "No se pudo crear el informe de trabajo"
       }
     },
     "workReports": {
-      "title": "Informes de Trabajo",
-      "create": "Crear Informe de Trabajo"
+      "title": "Informes de trabajo",
+      "create": "Crear informe de trabajo"
     }
   }
 }

@@ -1,11 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Icon } from '@iconify/react';
 import * as turf from '@turf/turf';
 import { Button } from 'primereact/button';
 import { ColorPicker } from 'primereact/colorpicker';
 import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 
@@ -17,19 +20,19 @@ import { TypePoint } from '@/types/Point';
 import { Zone } from '@/types/Zone';
 
 const schema = yup.object().shape({
-  name: yup.string().required('El nombre es obligatorio'),
+  name: yup.string().required('admin.pages.inventory.saveZoneForm.validation.nameRequired'),
   description: yup.string(),
   color: yup
     .string()
     .matches(
       /^#([0-9A-F]{6})$/i,
-      'Debe ser un código de color válido en formato #RRGGBB',
+      'admin.pages.inventory.saveZoneForm.validation.colorFormat',
     ),
-  contractId: yup.number().required('El ID del contrato es obligatorio'),
+  contractId: yup.number().required('admin.pages.inventory.saveZoneForm.validation.contractIdRequired'),
   coordinates: yup
     .array()
     .of(yup.array().of(yup.number()))
-    .min(1, 'Las coordenadas son obligatorias'),
+    .min(1, 'admin.pages.inventory.saveZoneForm.validation.coordinatesRequired'),
 });
 
 export interface SaveZoneProps {
@@ -41,6 +44,7 @@ export const SaveZoneForm = ({
   coordinates,
   onClose: onCloseProp,
 }: SaveZoneProps) => {
+  const { t } = useTranslation();
   const currentContract = useSelector<RootState, Contract | null>(
     (state) => state.contract.currentContract,
   );
@@ -68,9 +72,11 @@ export const SaveZoneForm = ({
     setValue,
     formState: { isSubmitting },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: (data, context, options) => yupResolver(schema)(data, { ...context, t }, options), 
     defaultValues,
+    context: { t }
   });
+
 
   useEffect(() => {
     setValue('coordinates', coordinates);
@@ -128,16 +134,16 @@ export const SaveZoneForm = ({
               turf.booleanContains(newPolygon, existingPolygon)
             );
           } catch (err) {
-            console.error('Error al analizar intersección de polígonos:', err);
+            console.error(t('admin.pages.inventory.saveZoneForm.overlapCheckError'), err);
             return false;
           }
         });
       } catch (err) {
-        console.error('Error en checkZonesOverlap:', err);
+        console.error(t('admin.pages.inventory.saveZoneForm.overlapCheckError'), err);
         return false;
       }
     },
-    [currentContract, zones, points],
+    [currentContract, zones, points, t],
   );
 
   const onSubmit = useCallback(
@@ -147,8 +153,8 @@ export const SaveZoneForm = ({
       if (checkZonesOverlap(coordinates)) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'No se puede crear una zona encima de otra zona existente',
+          summary: t('admin.pages.inventory.saveZoneForm.toast.overlapErrorTitle'),
+          detail: t('admin.pages.inventory.saveZoneForm.toast.overlapErrorDetail'),
           sticky: true,
           life: 5000,
         });
@@ -161,7 +167,7 @@ export const SaveZoneForm = ({
         ).unwrap();
 
         if (!createdZone?.id) {
-          throw new Error('No se pudo obtener el ID de la zona creada.');
+          throw new Error(t('admin.pages.inventory.saveZoneForm.toast.zoneIdError'));
         }
 
         const pointsData: SavePointsProps[] = coordinates.map((coord) => ({
@@ -175,16 +181,16 @@ export const SaveZoneForm = ({
 
         toast.current?.show({
           severity: 'success',
-          summary: 'Éxito',
-          detail: 'Zona y puntos guardados correctamente',
+          summary: t('admin.pages.inventory.saveZoneForm.toast.saveSuccessTitle'),
+          detail: t('admin.pages.inventory.saveZoneForm.toast.saveSuccessDetail'),
         });
 
         onCloseProp(createdZone, pointsData);
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo guardar la zona',
+          summary: t('admin.pages.inventory.saveZoneForm.toast.saveErrorTitle'),
+          detail: t('admin.pages.inventory.saveZoneForm.toast.saveErrorDetail'),
         });
       }
     },
@@ -195,6 +201,7 @@ export const SaveZoneForm = ({
       isSubmitting,
       onCloseProp,
       checkZonesOverlap,
+      t,
     ],
   );
 
@@ -203,72 +210,123 @@ export const SaveZoneForm = ({
   }, [onCloseProp]);
 
   return (
-    <div className="p-6 bg-white rounded-2xl shadow-lg w-96">
+    <>
       <Toast ref={toast} />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium">Nombre</label>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <InputText {...field} className="w-full p-inputtext" />
-            )}
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
+
+      <div className="bg-gray-50 border border-gray-300 rounded shadow-sm p-4">
+        <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 mb-4 flex items-center gap-2 text-indigo-800">
+          <Icon icon="tabler:info-circle" className="text-indigo-500 flex-shrink-0" width="20" />
+          <span className="text-sm">
+            {t('admin.pages.inventory.saveZoneForm.infoText', { count: coordinates.length })}
+          </span>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium">Descripción</label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <InputText {...field} className="w-full p-inputtext" />
-            )}
-          />
-          {errors.description && (
-            <p className="text-red-500 text-sm">{errors.description.message}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium">Color</label>
-          <Controller
-            name="color"
-            control={control}
-            render={({ field }) => (
-              <ColorPicker
-                {...field}
-                format="hex"
-                className="w-full"
-                onChange={(e) => setValue('color', `#${e.value}`)}
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                <Icon icon="tabler:map" width="18" />
+                {t('admin.pages.inventory.saveZoneForm.nameLabel')}
+              </label>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <InputText
+                    {...field}
+                    className="w-full p-inputtext"
+                    placeholder={t('admin.pages.inventory.saveZoneForm.namePlaceholder')}
+                    disabled={isSubmitting}
+                  />
+                )}
               />
-            )}
-          />
-          {errors.color && (
-            <p className="text-red-500 text-sm">{errors.color.message}</p>
-          )}
-        </div>
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <Icon icon="tabler:alert-circle" width="16" />
+                  {t(errors.name.message!)}
+                </p>
+              )}
+            </div>
 
-        <div className="flex justify-end gap-2">
-          <Button
-            type="button"
-            onClick={handleCancel}
-            className="p-button-secondary"
-            disabled={isSubmitting}>
-            Cancelar
-          </Button>
-          <Button
-            type="submit"
-            className="p-button-primary"
-            disabled={isSubmitting}>
-            Guardar
-          </Button>
-        </div>
-      </form>
-    </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                <Icon icon="tabler:notes" width="18" />
+                {t('admin.pages.inventory.saveZoneForm.descriptionLabel')}
+              </label>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <InputTextarea
+                    {...field}
+                    rows={3}
+                    className="w-full p-inputtext"
+                    placeholder={t('admin.pages.inventory.saveZoneForm.descriptionPlaceholder')}
+                    disabled={isSubmitting}
+                  />
+                )}
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">{t(errors.description.message!)}</p>
+              )}
+            </div>
+
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                <Icon icon="tabler:palette" width="18" />
+                {t('admin.pages.inventory.saveZoneForm.colorLabel')}
+              </label>
+              <div className="flex items-center gap-3">
+                <Controller
+                  name="color"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <ColorPicker
+                        {...field}
+                        format="hex"
+                        className="w-10 h-10"
+                        onChange={(e) => setValue('color', `#${e.value}`)}
+                        appendTo="self"
+                        disabled={isSubmitting}
+                      />
+                      <div
+                        className="w-10 h-10 rounded-lg border border-gray-300"
+                        style={{ backgroundColor: control._formValues.color || '#FF5733' }}
+                      />
+                      <span className="text-sm text-gray-700 font-mono">
+                        {control._formValues.color?.toUpperCase() || '#FF5733'}
+                      </span>
+                    </>
+                  )}
+                />
+              </div>
+              {errors.color && (
+                <p className="text-red-500 text-sm mt-1">{t(errors.color.message!)}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
+            <Button
+              type="button"
+              onClick={handleCancel}
+              className="p-button-outlined p-button-secondary"
+              icon={<Icon icon="tabler:x" />}
+              label={t('admin.pages.inventory.saveZoneForm.cancelButton')}
+              disabled={isSubmitting}
+            />
+            <Button
+              type="submit"
+              className="p-button-success"
+              icon={<Icon icon="tabler:device-floppy" />}
+              label={t('admin.pages.inventory.saveZoneForm.saveButton')}
+              disabled={isSubmitting}
+              loading={isSubmitting}
+            />
+          </div>
+        </form>
+      </div>
+    </>
   );
 };

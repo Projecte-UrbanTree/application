@@ -80,8 +80,6 @@ class User extends Authenticatable
 
     /**
      * Get the work orders associated with the user.
-     *
-     * @return BelongsToMany
      */
     public function workOrders(): BelongsToMany
     {

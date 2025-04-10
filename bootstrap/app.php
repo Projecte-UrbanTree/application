@@ -20,6 +20,6 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (AuthenticationException $e, Request $request) {
-            return response()->json(['error' => 'Unauthenticated'], 401); 
+            return response()->json(['error' => 'Unauthenticated'], 401);
         });
     })->create();

@@ -241,16 +241,60 @@ class WorkReportController extends Controller
     private function updateWorkOrderStatus(int $workOrderId, int $reportStatus): void
     {
         $workOrder = WorkOrder::findOrFail($workOrderId);
-        $statusMapping = [
-            self::STATUS_PENDING => self::WORK_ORDER_REPORT_SENT,
-            self::STATUS_COMPLETED => self::WORK_ORDER_REPORT_SENT,
-            self::STATUS_REJECTED => self::WORK_ORDER_IN_PROGRESS,
-            self::STATUS_CLOSED_WITH_INCIDENTS => self::WORK_ORDER_REPORT_SENT,
-        ];
-        if (isset($statusMapping[$reportStatus])) {
-            $workOrder->status = $statusMapping[$reportStatus];
-            $workOrder->save();
+        
+        if ($reportStatus === self::STATUS_REJECTED) {
+            $this->recalculateTaskBasedStatus($workOrder);
+        } else {
+            $statusMapping = [
+                self::STATUS_PENDING => self::WORK_ORDER_REPORT_SENT,
+                self::STATUS_COMPLETED => self::WORK_ORDER_REPORT_SENT,
+                self::STATUS_CLOSED_WITH_INCIDENTS => self::WORK_ORDER_REPORT_SENT,
+            ];
+            if (isset($statusMapping[$reportStatus])) {
+                $workOrder->status = $statusMapping[$reportStatus];
+                $workOrder->save();
+            }
         }
+    }
+
+    /**
+     * Recalculate work order status based on the completion of tasks.
+     * 
+     * @param WorkOrder $workOrder The work order to update
+     */
+    private function recalculateTaskBasedStatus(WorkOrder $workOrder): void
+    {
+        $workOrder->load('workOrdersBlocks.blockTasks');
+        
+        $totalTasks = 0;
+        $completedTasks = 0;
+        $inProgressTasks = 0;
+        
+        foreach ($workOrder->workOrdersBlocks as $block) {
+            foreach ($block->blockTasks as $task) {
+                $totalTasks++;
+                if ($task->status == 2) { // Completed
+                    $completedTasks++;
+                } elseif ($task->status == 1) { // In progress
+                    $inProgressTasks++;
+                }
+            }
+        }
+        
+        if ($totalTasks === 0) {
+            $workOrder->status = self::WORK_ORDER_NOT_STARTED;
+        } elseif ($completedTasks === $totalTasks) {
+            $workOrder->status = self::WORK_ORDER_COMPLETED;
+        } elseif ($completedTasks > 0 || $inProgressTasks > 0) {
+            $workOrder->status = self::WORK_ORDER_IN_PROGRESS;
+        } else {
+            $workOrder->status = self::WORK_ORDER_NOT_STARTED;
+        }
+        
+        $workOrder->save();
+        
+        Log::info("Work order {$workOrder->id} status recalculated to {$workOrder->status} after report rejection. ".
+            "Completed tasks: {$completedTasks}/{$totalTasks}");
     }
 
     /**

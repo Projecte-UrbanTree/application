@@ -3,6 +3,8 @@ import axios from 'axios';
 import store from '@/store/store';
 import { Contract } from '@/types/Contract';
 
+const SELECTED_CONTRACT_KEY = 'selectedContractId';
+
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost/api',
   headers: {
@@ -32,9 +34,9 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       localStorage.removeItem('authToken');
-      localStorage.removeItem('contractId');
+      localStorage.removeItem(SELECTED_CONTRACT_KEY);
       window.location.href = '/login';
     }
 

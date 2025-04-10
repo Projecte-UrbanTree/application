@@ -116,7 +116,12 @@ export default function WorkOrders() {
   const getReportStatusBadge = useCallback(
     (reports: WorkOrder['work_reports']) => {
       if (!reports || reports.length === 0) {
-        return null;
+        return (
+          <Badge
+            value={t('admin.pages.workOrders.reportStatus.noReports')}
+            severity="secondary"
+          />
+        );
       }
       const latestReport = reports[reports.length - 1];
       switch (latestReport.report_status) {
@@ -289,7 +294,13 @@ export default function WorkOrders() {
             <Button
               icon={<Icon icon="tabler:file-text" />}
               className="p-button-outlined p-button-info p-button-sm"
-              onClick={() => navigate(`/admin/work-reports/${rowData.id}`)}
+              onClick={() => {
+                if (rowData.work_reports && rowData.work_reports.length > 0) {
+                  navigate(
+                    `/admin/work-reports/${rowData.work_reports[rowData.work_reports.length - 1].id}`,
+                  );
+                }
+              }}
               title={t('admin.pages.workOrders.list.actions.viewReport')}
             />
           )}
@@ -329,10 +340,12 @@ export default function WorkOrders() {
               ? t('admin.tooltips.selectContract')
               : undefined
           }>
-            <DataTable
+          <DataTable
             value={filteredWorkOrders}
             expandedRows={expandedRows}
-            onRowToggle={(e: { data: Record<string, boolean> }) => setExpandedRows(e.data)}
+            onRowToggle={(e: { data: Record<string, boolean> }) =>
+              setExpandedRows(e.data)
+            }
             rowExpansionTemplate={rowExpansionTemplate}
             dataKey="id"
             paginator
@@ -353,24 +366,26 @@ export default function WorkOrders() {
             />
             {(!currentContract || currentContract.id === 0) && (
               <Column
-              field="contract.name"
-              header={t('admin.pages.workOrders.list.columns.contract')}
-              body={(rowData: WorkOrder) => rowData.contract?.name || '-'}
+                field="contract.name"
+                header={t('admin.pages.workOrders.list.columns.contract')}
+                body={(rowData: WorkOrder) => rowData.contract?.name || '-'}
               />
             )}
             <Column
               field="date"
               header={t('admin.pages.workOrders.list.columns.date')}
-              body={(rowData: WorkOrder) => new Date(rowData.date).toLocaleDateString()}
+              body={(rowData: WorkOrder) =>
+                new Date(rowData.date).toLocaleDateString()
+              }
             />
             <Column
               header={t('admin.pages.workOrders.list.columns.users')}
               body={(rowData: WorkOrder) =>
-              rowData.users && rowData.users.length > 0
-                ? rowData.users
-                  .map((user) => `${user.name} ${user.surname}`)
-                  .join(', ')
-                : t('admin.pages.workOrders.details.noUsers')
+                rowData.users && rowData.users.length > 0
+                  ? rowData.users
+                      .map((user) => `${user.name} ${user.surname}`)
+                      .join(', ')
+                  : t('admin.pages.workOrders.details.noUsers')
               }
             />
             <Column
@@ -379,13 +394,15 @@ export default function WorkOrders() {
             />
             <Column
               header={t('admin.pages.workOrders.list.columns.reportStatus')}
-              body={(rowData: WorkOrder) => getReportStatusBadge(rowData.work_reports)}
+              body={(rowData: WorkOrder) =>
+                getReportStatusBadge(rowData.work_reports)
+              }
             />
             <Column
               header={t('admin.pages.workOrders.list.actions.label')}
               body={(rowData: WorkOrder) => actionButtons(rowData)}
             />
-            </DataTable>
+          </DataTable>
         </CrudPanel>
       )}
     </>

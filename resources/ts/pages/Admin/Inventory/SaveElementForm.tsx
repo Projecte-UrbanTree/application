@@ -1,7 +1,9 @@
+import { Icon } from '@iconify/react';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { fetchElementType } from '@/api/service/elementTypeService';
@@ -30,6 +32,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   elementTypes,
   treeTypes,
 }) => {
+  const { t } = useTranslation();
   const [description, setDescription] = useState<string | null>(null);
   const [selectedElementType, setSelectedElementType] = useState<number | null>(
     null,
@@ -57,7 +60,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       );
 
       if (selectedElementType) {
-        const needsTreeType = selectedElementType.requires_tree_type === true || 
+        const needsTreeType = selectedElementType.requires_tree_type === true ||
                              selectedElementType.requires_tree_type === 1;
         setRequiresTreeType(needsTreeType);
 
@@ -66,9 +69,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
         }
       }
     } catch (error) {
-      console.error('Error al verificar si requiere tipo de árbol:', error);
+      console.error(t('admin.pages.inventory.saveElementForm.fetchElementTypeError'), error);
     }
-  }, []);
+  }, [t]);
 
   const handleTreeTypeChange = useCallback((e: { value: number }) => {
     setSelectedTreeType(e.value);
@@ -94,7 +97,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       ).unwrap();
 
       if (!savedPoint.id) {
-        throw new Error('Failed to save point - no ID returned');
+        throw new Error(t('admin.pages.inventory.saveElementForm.savePointError'));
       }
 
       const elementData: Element = {
@@ -121,65 +124,99 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
     (!requiresTreeType || selectedTreeType !== null);
 
   return (
-    <div className="p-3">
-      <div className="mb-3">
-        <label
-          htmlFor="element-type"
-          className="block text-sm font-medium mb-1">
-          Tipo de Elemento:
-        </label>
-        <Dropdown
-          id="element-type"
-          value={selectedElementType}
-          options={elementTypes}
-          onChange={handleElementTypeChange}
-          placeholder="Selecciona Tipo de Elemento"
-          className="w-full"
-        />
+    <div className="p-4 bg-gray-50 border border-gray-300 rounded shadow-sm">
+      <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 mb-4 flex items-center gap-2 text-indigo-800">
+        <Icon icon="tabler:map-pin" className="text-indigo-500 flex-shrink-0" width="20" />
+        <div className="text-sm">
+          <p className="font-medium">{t('admin.pages.inventory.saveElementForm.infoTitle')}</p>
+        </div>
       </div>
 
-      {requiresTreeType && (
-        <div className="mb-3">
-          <label htmlFor="tree-type" className="block text-sm font-medium mb-1">
-            Tipo de Árbol:
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 mb-4">
+        <div className="mb-4">
+          <label
+            htmlFor="element-type"
+            className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
+            <Icon icon="tabler:category" width="18" />
+            {t('admin.pages.inventory.saveElementForm.elementTypeLabel')} <span className="text-red-500">*</span>
           </label>
           <Dropdown
-            id="tree-type"
-            value={selectedTreeType}
-            options={treeTypes}
-            onChange={handleTreeTypeChange}
-            placeholder="Selecciona Tipo de Árbol"
+            id="element-type"
+            value={selectedElementType}
+            options={elementTypes}
+            onChange={handleElementTypeChange}
+            placeholder={t('admin.pages.inventory.saveElementForm.elementTypePlaceholder')}
+            className="w-full"
+            appendTo="self"
+            emptyMessage={t('admin.pages.inventory.saveElementForm.noTypesAvailable')}
+            emptyFilterMessage={t('admin.pages.inventory.saveElementForm.noResultsFound')}
+          />
+          {!selectedElementType && (
+            <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
+              <Icon icon="tabler:alert-circle" width="14" />
+              {t('admin.pages.inventory.saveElementForm.elementTypeRequiredError')}
+            </p>
+          )}
+        </div>
+
+        {requiresTreeType && (
+          <div className="mb-4">
+            <label htmlFor="tree-type" className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
+              <Icon icon="tabler:tree" width="18" />
+              {t('admin.pages.inventory.saveElementForm.treeTypeLabel')} <span className="text-red-500">*</span>
+            </label>
+            <Dropdown
+              id="tree-type"
+              value={selectedTreeType}
+              options={treeTypes}
+              onChange={handleTreeTypeChange}
+              placeholder={t('admin.pages.inventory.saveElementForm.treeTypePlaceholder')}
+              className="w-full"
+              appendTo="self"
+              emptyMessage={t('admin.pages.inventory.saveElementForm.noTypesAvailable')}
+              emptyFilterMessage={t('admin.pages.inventory.saveElementForm.noResultsFound')}
+              filter
+            />
+            {requiresTreeType && !selectedTreeType && (
+              <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
+                <Icon icon="tabler:alert-circle" width="14" />
+                {t('admin.pages.inventory.saveElementForm.treeTypeRequiredError')}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="mb-2">
+          <label htmlFor="description" className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
+            <Icon icon="tabler:notes" width="18" />
+            {t('admin.pages.inventory.saveElementForm.descriptionLabel')}
+          </label>
+          <InputTextarea
+            id="description"
+            rows={3}
+            value={description || ''}
+            onChange={handleDescriptionChange}
+            placeholder={t('admin.pages.inventory.saveElementForm.descriptionPlaceholder')}
             className="w-full"
           />
         </div>
-      )}
-
-      <div className="mb-3">
-        <label htmlFor="description" className="block text-sm font-medium mb-1">
-          Descripción: (opcional)
-        </label>
-        <InputTextarea
-          id="description"
-          rows={3}
-          value={description || ''}
-          onChange={handleDescriptionChange}
-          placeholder="Descripción del Elemento (opcional)"
-          className="w-full"
-        />
       </div>
 
-      <div className="flex justify-end gap-2 mt-4">
+      <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
         <Button
-          label="Cancelar"
-          className="p-button-secondary"
+          label={t('admin.pages.inventory.saveElementForm.cancelButton')}
+          className="p-button-outlined p-button-secondary"
+          icon={<Icon icon="tabler:x" />}
           onClick={onClose}
           disabled={isSubmitting}
         />
         <Button
-          label="Guardar Elemento"
+          label={t('admin.pages.inventory.saveElementForm.saveButton')}
           className="p-button-primary"
+          icon={<Icon icon="tabler:device-floppy" />}
           onClick={handleSave}
           disabled={!formIsValid || isSubmitting}
+          loading={isSubmitting}
         />
       </div>
     </div>

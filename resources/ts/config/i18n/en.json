@@ -28,6 +28,8 @@
     "error": "Error",
     "success": "Success",
     "not_available": "Not available",
+    "warning": "Warning",
+    "cancel": "Cancel",
     "actions": {
       "cancel": "Cancel",
       "confirm": "Confirm",
@@ -40,13 +42,28 @@
     "messages": {
       "close_block": "Block closed successfully",
       "close_with_incidents": "Block closed with incidents",
-      "reject": "Block rejected"
+      "reject": "Block rejected",
+      "close_part": "Part closed successfully",
+      "closing_part": "Closing part...",
+      "part_closed": "Part successfully closed",
+      "closing_block": "Closing block...",
+      "rejecting": "Rejecting item...",
+      "success": "Operation completed successfully",
+      "error": "An error occurred. Please try again.",
+      "reportCreated": "Work report created successfully",
+      "reportResubmitted": "Work report resubmitted successfully",
+      "reportRejected": "Work report was rejected",
+      "reportApproved": "Work report was approved",
+      "closing_with_incidents": "Closing with incidents...",
+      "close_with_observations": "Report closed with observations",
+      "already_processed": "This item has already been processed"
     }
   },
 
   "admin": {
     "menu": {
       "management": "Management",
+      "inventory": "Inventory",
       "settings": "Settings"
     },
     "submenu": {
@@ -162,6 +179,86 @@
           "actions": "Actions"
         }
       },
+  "license": {
+  "title": "Software License",
+  "description": "This software is licensed under the European Union Public License (EUPL). You are free to use, modify and distribute it, provided that the same license applies to any derivative work.",
+  "moreInfo": "You can find more information about the license at",
+  "link_text": "this link",
+  "link_url": "https://interoperable-europe.ec.europa.eu/collection/eupl",
+  "below_text": "or see the complete text below:",
+  "fullText": {
+    "title": "EUROPEAN UNION PUBLIC LICENSE v. 1.2",
+    "copyright": "EUPL © European Union 2007, 2016",
+    "preface": "This European Union Public License (EUPL) applies to the work (as defined below) provided under the terms of this license. Any use of the work, other than as authorized under this license is prohibited (to the extent such use is covered by a right of the copyright holder of the work).\n\nThe work is provided under the terms of this license when the licensor (as defined below) has placed the following notice immediately following the copyright notice for the work:\n\n                Licensed under the EUPL\n\nor has expressed by any other means his willingness to license under the EUPL.",
+    "sections": {
+      "definitions": {
+        "title": "1. Definitions",
+        "content": "In this License, the following terms have the following meaning:\n\n— 'License': this license\n— 'Original work': the work or software distributed or communicated by the Licensor under this license in source code form or as Executable Code\n— 'Derivative works': the works or software that could be created by the Licensee, based upon the Original Work or modifications thereof. This License does not define the extent of modification or dependence on the Original Work required to classify a work as a Derivative Work; this extent is determined by copyright law applicable under Article 15\n— 'The Work': the Original Work and/or its Derivative works\n— 'The Source Code': the human-readable form of the Work which is most convenient for people to study and modify\n— 'The Executable Code': any code which has generally been compiled and which is meant to be interpreted by a computer as a program\n— 'The Licensor': the natural or legal person that distributes or communicates the Work under the License\n— 'Contributor(s)': any natural or legal person who modifies the Work under the License, or otherwise contributes to the creation of a Derivative Work\n— 'The Licensee' or 'You': any natural or legal person who makes any usage of the Work under the terms of the License\n— 'Distribution' or 'Communication': any act of selling, giving, lending, renting, distributing, communicating, transmitting, or otherwise making available, online or offline, copies of the Work or providing access to its essential functionalities at the disposal of any other natural or legal person"
+      },
+      "scope": {
+        "title": "2. Scope of the rights granted by the License",
+        "content": "The Licensor hereby grants You a worldwide, royalty-free, non-exclusive, sublicensable license to do the following for the duration of copyright vested in the Original Work:\n\n— use the Work in any circumstance and for all usage\n— reproduce the Work\n— modify the Work and make Derivative Works based upon the Work\n— communicate to the public, including the right to make available or display the Work or copies thereof to the public and perform publicly, as the case may be, the Work\n— distribute the Work or copies thereof\n— lend and rent the Work or copies thereof\n— sublicense rights in the Work or copies thereof\n\nThose rights can be exercised on any media, supports and formats, whether now known or later invented, as far as the applicable law permits so.\n\nIn the countries where moral rights apply, the Licensor waives his right to exercise his moral right to the extent allowed by law in order to make effective the license of the economic rights here above listed.\n\nThe Licensor grants to the Licensee royalty-free, non-exclusive usage rights to any patents held by the Licensor, to the extent necessary to make use of the rights granted on the Work under this License."
+      },
+      "source_code": {
+        "title": "3. Communication of the Source Code",
+        "content": "The Licensor may provide the Work either in its Source Code form, or as Executable Code. If the Work is provided as Executable Code, the Licensor provides in addition a machine-readable copy of the Source Code of the Work along with each copy of the Work that the Licensor distributes or indicates, in a notice following the copyright notice attached to the Work, a repository where the Source Code is easily and freely accessible for as long as the Licensor continues to distribute or communicate the Work."
+      },
+      "copyright": {
+        "title": "4. Limitations on copyright",
+        "content": "Nothing in this License is intended to deprive the Licensee of the benefits from any exception or limitation to the exclusive rights of the rights owners in the Work, of the exhaustion of those rights or of other applicable limitations thereto."
+      },
+      "obligations": {
+        "title": "5. Obligations of the Licensee",
+        "content": "The grant of the rights mentioned above is subject to some restrictions and obligations imposed on the Licensee. Those obligations are the following:\n\nAttribution right: The Licensee shall keep intact all copyright, patent or trademarks notices and all notices that refer to the License and to the disclaimer of warranties. The Licensee must include a copy of such notices and a copy of the License with every copy of the Work he/she distributes or communicates. The Licensee must cause any Derivative Work to carry prominent notices stating that the Work has been modified and the date of modification.\n\nCopyleft clause: If the Licensee distributes or communicates copies of the Original Works or Derivative Works, this Distribution or Communication will be done under the terms of this License or of a later version of this License unless the Original Work is expressly distributed only under this version of the License — for example by communicating 'EUPL v. 1.2 only'. The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the Work or Derivative Work that alter or restrict the terms of the License.\n\nCompatibility clause: If the Licensee Distributes or Communicates Derivative Works or copies thereof based upon both the Work and another work licensed under a Compatible License, this Distribution or Communication can be done under the terms of this Compatible License. For the sake of this clause, 'Compatible License' refers to the licenses listed in the appendix attached to this License. Should the Licensee's obligations under the Compatible License conflict with his/her obligations under this License, the obligations of the Compatible License shall prevail.\n\nProvision of Source Code: When distributing or communicating copies of the Work, the Licensee will provide a machine-readable copy of the Source Code or indicate a repository where this Source Code easily and freely available for as long as the Licensee continues to distribute or communicate the Work.\n\nLegal Protection: This License does not grant permission to use the trade names, trademarks, service marks, or names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the copyright notice."
+      },
+      "authorship": {
+        "title": "6. Chain of Authorship",
+        "content": "The original licensor warrants that he/she owns the copyright in the original work granting the rights under this License or that he/she has been granted permission to do so.\n\nEach contributor warrants that he/she owns the copyright in his/her modifications to the Work or has obtained permission to submit those modifications under this License.\n\nEach time you accept the License, the original licensor and subsequent contributors grant you a license to their contributions to the Work, under the terms of this License."
+      },
+      "warranty": {
+        "title": "7. Disclaimer of Warranty",
+        "content": "The Work is a work in progress, which is continuously improved by numerous contributors. It is not a finished work and may therefore contain defects or 'bugs' inherent to this type of software development.\n\nFor the above reason, the Work is provided under the License on an 'as is' basis and without warranties of any kind concerning the Work, including without limitation, merchantability, fitness for a particular purpose, absence of defects or errors, accuracy, non-infringement of intellectual property rights other than copyright as stated in Article 6 of this License.\n\nThis disclaimer of warranty is an essential part of the License and a condition for the grant of any rights to the Work."
+      },
+      "liability": {
+        "title": "8. Disclaimer of Liability",
+        "content": "Except in the cases of wilful misconduct or damages directly caused to natural persons, the Licensor will in no event be liable for any direct or indirect, material or moral, damages of any kind, arising out of the License or of the use of the Work, including without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data or any commercial damage, even if the Licensor has been advised of the possibility of such damage. However, the Licensor will be liable under statutory product liability laws as far such laws apply to the Work."
+      },
+      "additional": {
+        "title": "9. Additional Agreements",
+        "content": "While distributing the Work, you may choose to conclude an additional agreement, defining obligations or services consistent with this License. However, if accepting obligations, you may act only on your own behalf and on your sole responsibility, not on behalf of the original Licensor or any other Contributor, and only if you agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against such Contributor by the fact you have accepted any warranty or additional liability."
+      },
+      "acceptance": {
+        "title": "10. Acceptance of the License",
+        "content": "The provisions of this License can be accepted by clicking on an icon 'I agree' placed under the bottom of a window displaying the text of this License or by affirming consent in any other similar way, in accordance with the rules of applicable law. Clicking on that icon indicates your clear and irrevocable acceptance of this License and all of its terms and conditions.\n\nSimilarly, you irrevocably accept this License and all of its terms and conditions by exercising any rights granted to You by Article 2 of this License, such as the use of the Work, the creation by You of a Derivative Work or the Distribution or Communication by You of the Work or copies thereof."
+      },
+      "information": {
+        "title": "11. Information to the Public",
+        "content": "In case of any Distribution or Communication of the Work by means of electronic communication by You (for example, by offering to download the Work from a remote location) the distribution channel or media (for example, a website) must at least provide to the public the information requested by the applicable law regarding the Licensor, the License and the way it may be accessible, concluded, stored and reproduced by the Licensee."
+      },
+      "termination": {
+        "title": "12. Termination of the License",
+        "content": "The License and the rights granted hereunder will terminate automatically upon any breach by the Licensee of the terms of the License.\n\nSuch a termination will not terminate the licenses of any person who has received the Work from the Licensee under the License, provided such persons remain in full compliance with the License."
+      },
+      "miscellaneous": {
+        "title": "13. Miscellaneous",
+        "content": "Without prejudice to Article 9 above, the License represents the complete agreement between the Parties as to the Work.\n\nIf any provision of the License is invalid or unenforceable under applicable law, this will not affect the validity or enforceability of the License as a whole. Such provision will be construed or reformed so as necessary to make it valid and enforceable.\n\nThe European Commission may publish other linguistic versions or new versions of this License or updated versions of the Appendix, so far this is required and reasonable, without reducing the scope of the rights granted by the License. New versions of the License will be published with a unique version number.\n\nAll linguistic versions of this License, approved by the European Commission, have identical value. Parties can take advantage of the linguistic version of their choice."
+      },
+      "jurisdiction": {
+        "title": "14. Jurisdiction",
+        "content": "Without prejudice to specific agreement between parties,\n\n— any litigation resulting from the interpretation of this License, arising between the European Union institutions, bodies, offices or agencies, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice of the European Union, as laid down in article 272 of the Treaty on the Functioning of the European Union,\n\n— any litigation arising between other parties and resulting from the interpretation of this License, will be subject to the exclusive jurisdiction of the competent court where the Licensor resides or conducts its primary business."
+      },
+      "applicable_law": {
+        "title": "15. Applicable Law",
+        "content": "Without prejudice to specific agreement between parties,\n\n— this License shall be governed by the law of the European Union Member State where the Licensor has his seat, resides or has his registered office,\n\n— this License shall be governed by Belgian law if the Licensor has no seat, residence or registered office inside a European Union Member State."
+      }
+    },
+    "appendix": {
+      "title": "Appendix",
+      "content": "Compatible Licenses according to Article 5 EUPL are:",
+      "licenses": "— GNU General Public License (GPL) v. 2, v. 3\n— GNU Affero General Public License (AGPL) v. 3\n— Open Software License (OSL) v. 2.1, v. 3.0\n— Eclipse Public License (EPL) v. 1.0\n— CeCILL v. 2.0, v. 2.1\n— Mozilla Public License (MPL) v. 2\n— GNU Lesser General Public License (LGPL) v. 2.1, v. 3\n— Creative Commons Attribution-ShareAlike v. 3.0 Unported (CC BY-SA 3.0) for works other than software\n— European Union Public License (EUPL) v. 1.1, v. 1.2\n— Québec Free and Open-Source License — Reciprocity (LiLiQ-R) or Strong Reciprocity (LiLiQ-R+)\n\nThe European Commission may update this Appendix to later versions of the above licenses without producing a new version of the EUPL, as long as they provide the rights granted in Article 2 of this License and protect the covered Source Code from exclusive appropriation.\n\nAll other changes or additions to this Appendix require the production of a new EUPL version."
+    }
+  }
+},
 
       "contracts": {
         "title": "Contracts",
@@ -593,8 +690,8 @@
         "windExposure": "Wind Exposure",
         "droughtExposure": "Drought Exposure"
       },
-
       "inventory": {
+        "title": "Inventory",
         "elementDetailPopup": {
           "tabs": {
             "information": "Information",
@@ -618,7 +715,8 @@
             },
             "deleteElement": "Delete Element",
             "elementDeleted": "Element deleted successfully",
-            "elementDeleteFailed": "Failed to delete the element"
+            "elementDeleteFailed": "Failed to delete the element",
+            "editElement": "Edit Element"
           },
           "incidences": {
             "title": "Incidence",
@@ -636,7 +734,12 @@
               "open": "Open",
               "in_progress": "In Progress",
               "closed": "Closed"
-            }
+            },
+            "loadError": "Error loading incidences",
+            "deleteSuccess": "Incidence deleted",
+            "deleteSuccessDetail": "Incidence deleted successfully",
+            "deleteError": "Error deleting incidence",
+            "deleteErrorDetail": "Failed to delete the incidence"
           },
           "eva": {
             "loading": "Loading tree evaluation...",
@@ -662,22 +765,193 @@
             "list": {
               "messages": {
                 "deleteSuccess": "EVA deleted successfully",
-                "deleteSuccessDetail": "EVA details were deleted successfully"
+                "deleteSuccessDetail": "EVA details were deleted successfully",
+                "deleteError": "Error deleting EVA",
+                "deleteErrorDetail": "Could not delete EVA details"
               }
             }
           },
           "history": {
-            "title": "Element History (under construction...)",
+            "title": "Element History",
             "notes": "Notes",
             "task": "Task",
             "description": "Description",
             "workOrder": "Work Order",
             "status": "Status",
-            "noTasks": "No tasks registered for this element."
+            "noTasks": "No task history for this element.",
+            "unknownTask": "Unknown Task",
+            "taskStatus": {
+              "pending": "Pending",
+              "inProgress": "In Progress",
+              "completed": "Completed",
+              "unknown": "Unknown"
+            },
+            "dateLabel": "Date:",
+            "workOrderLabel": "Work Order:",
+            "hoursLabel": "Hours Spent:",
+            "workersLabel": "Workers:",
+            "taskHistoryTitle": "Task History"
+          },
+          "workOrders": {
+             "loadError": "Error loading work orders"
           }
-        }
+        },
+        "editElementForm": {
+          "toast": {
+            "successDetail": "Element updated successfully",
+            "errorDetail": "Failed to update element"
+          },
+          "editingInfo": "Editing element #{{id}}",
+          "labels": {
+            "description": "Description",
+            "elementType": "Element Type",
+            "treeType": "Tree Type"
+          },
+          "placeholders": {
+            "description": "Enter description...",
+            "elementType": "Select element type",
+            "treeType": "Select tree type"
+          },
+          "buttons": {
+            "save": "Save Changes"
+          }
+        },
+        "elementPopup": {
+          "title": "Element #{{id}}",
+          "elementTypeUndefined": "Undefined",
+          "treeFamilyLabel": "Family:",
+          "treeGenusLabel": "Genus:",
+          "treeSpeciesLabel": "Species:",
+          "createdLabel": "Created:",
+          "createdAtNotAvailable": "Not available",
+          "incidentButton": "Incident",
+          "deleteButton": "Delete"
+        },
+        "incidentForm": {
+          "toast": {
+            "nameRequiredWarningTitle": "Attention",
+            "nameRequiredWarningDetail": "Incident name is required",
+            "successTitle": "Success",
+            "successDetail": "Incident created successfully",
+            "errorTitle": "Error",
+            "errorDetail": "Could not create incident"
+          },
+          "nameLabel": "Name:",
+          "namePlaceholder": "Incident name",
+          "descriptionLabel": "Description:",
+          "descriptionPlaceholder": "Incident description",
+          "saveButton": "Save",
+          "cancelButton": "Cancel"
+        },
+        "inventoryPage": {
+          "loadError": "Error loading inventory data",
+          "mapInitError": "Map initialization error",
+          "elementUpdateError": "Error updating elements",
+          "createOutsideZoneError": "Cannot create an element outside the zone"
+        },
+        "saveElementForm": {
+          "fetchElementTypeError": "Error checking if tree type is required:",
+          "savePointError": "Failed to save point - no ID returned",
+          "infoTitle": "Adding element in the zone",
+          "elementTypeLabel": "Element Type",
+          "elementTypePlaceholder": "Select an element type",
+          "noTypesAvailable": "No types available",
+          "noResultsFound": "No results found",
+          "elementTypeRequiredError": "This field is required",
+          "treeTypeLabel": "Tree Type",
+          "treeTypePlaceholder": "Select tree type",
+          "treeTypeRequiredError": "This field is required for the selected element type",
+          "descriptionLabel": "Description (optional)",
+          "descriptionPlaceholder": "Additional element description (optional)",
+          "cancelButton": "Cancel",
+          "saveButton": "Save Element"
+        },
+        "saveZoneForm": {
+          "validation": {
+            "nameRequired": "Name is required",
+            "colorFormat": "Must be a valid color code in #RRGGBB format",
+            "contractIdRequired": "Contract ID is required",
+            "coordinatesRequired": "Coordinates are required"
+          },
+          "overlapCheckError": "Error analyzing polygon intersection:",
+          "toast": {
+            "overlapErrorTitle": "Error",
+            "overlapErrorDetail": "Cannot create a zone on top of an existing zone",
+            "zoneIdError": "Could not get the ID of the created zone.",
+            "saveSuccessTitle": "Success",
+            "saveSuccessDetail": "Zone and points saved successfully",
+            "saveErrorTitle": "Error",
+            "saveErrorDetail": "Could not save the zone"
+          },
+          "infoText": "A zone with <strong>{{count}}</strong> boundary points will be created. The zone must have a unique name.",
+          "nameLabel": "Zone Name",
+          "namePlaceholder": "e.g., Central Park",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "Detailed description of the zone (optional)",
+          "colorLabel": "Color",
+          "cancelButton": "Cancel",
+          "saveButton": "Save Zone"
+        },
+        "zones": {
+          "toast": {
+             "loadError": "Error loading resources",
+             "loadTypesError": "Error loading element types",
+             "eventSystemError": "Error in the event system",
+             "deleteSuccess": "Zone and points deleted successfully",
+             "deleteError": "Could not delete the zone",
+             "showElementsWarningZoneHidden": "Cannot show elements while the zone is hidden.",
+             "colorUpdateSuccess": "Color updated successfully",
+             "colorUpdateError": "Could not update the color"
+          },
+          "title": "Zones",
+          "saveZoneButton": "Save Zone",
+          "creatingElementInfo": "Creating new element",
+          "cancelCreationTooltip": "Cancel creation",
+          "searchPlaceholder": "Search zones...",
+          "emptyState": {
+             "title": "No zones found",
+             "messageWithSearch": "Try another search or adjust your filters.",
+             "messageDefault": "Create or draw a zone to get started.",
+             "clearSearchButton": "Clear search"
+          },
+          "tooltips": {
+             "changeColor": "Change color",
+             "showZone": "Show zone",
+             "hideZone": "Hide zone",
+             "goToZone": "Go to zone",
+             "addElement": "Add element",
+             "deleteZone": "Delete zone",
+             "zoneHidden": "Zone is hidden",
+             "showElements": "Show elements",
+             "hideElements": "Hide elements"
+          },
+          "noDescription": "No description",
+          "noElementsInZone": "No elements in this zone",
+          "addElementButton": "Add element",
+          "elementsHeader": "Elements ({{count}})",
+          "deleteConfirm": {
+             "title": "Confirm deletion",
+             "deleteButton": "Delete",
+             "warningIrreversible": "This action cannot be undone",
+             "confirmationText": "Are you sure you want to delete the zone <strong> {{zoneName}}</strong>?",
+             "infoText": "This action will delete the zone and all its associated points and elements."
+          }
+        },
+        "loadError": "Error loading contract data",
+        "createOutsideZoneErrorTitle": "Warning",
+        "createOutsideZoneErrorDetail": "Cannot create an element outside the selected zone or area",
+        "clickToAddElementPrompt": "Click on the map to add an element",
+        "drawingModeActive": "Drawing mode activated",
+        "saveZoneDialogTitle": "Save Zone",
+        "saveElementDialogTitle": "Save Element",
+        "addIncidentDialogTitle": "Add Incident",
+        "elementDetailsDialogTitle": "Element Details #{{elementId}}",
+        "selectedZoneInfo": "Zone: {{zoneName}}",
+        "addingElementInZoneInfo": "Adding in: {{zoneName}}",
+        "genericErrorTitle": "Error",
+        "genericSuccessTitle": "Success",
+        "genericWarningTitle": "Warning"
       },
-
       "resources": {
         "title": "Resources",
         "form": {
@@ -1067,7 +1341,8 @@
           "completed": "Completed",
           "pending": "Pending",
           "rejected": "Rejected",
-          "unknown": "Unknown"
+          "unknown": "Unknown",
+          "noReports": "No Reports"
         },
         "status": {
           "completed": "Completed",
@@ -1281,6 +1556,13 @@
         "errors": {
           "no_contract": "You must select a valid contract"
         }
+      },
+      "error": {
+        "fetching_data": "Error fetching data",
+        "error": "Error"
+      },
+      "general": {
+        "returnButton": "Return"
       }
     }
   },
@@ -1344,6 +1626,30 @@
       "messages": {
         "resourcesAdded": "Resources added successfully",
         "taskUpdated": "Task updated successfully"
+      },
+      "createWorkReport": "Create Work Report",
+      "spentFuel": "Spent Fuel (Liters)",
+      "resourceType": "Resource Type",
+      "resources": "Resources",
+      "addResource": "Add Resource",
+      "resource": "Resource {0}",
+      "resourceName": "Resource Name",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "selectResourceTypeFirst": "Please select a resource type first",
+      "noResourcesForType": "No resources available for this type",
+      "noResourceTypes": "No resource types available",
+      "observations": "Observations",
+      "observationsPlaceholder": "Enter any observations or incidents here",
+      "submitReport": "Submit Report",
+      "taskUpdated": "Task updated successfully",
+      "messages": {
+        "reportCreated": "Work report created successfully",
+        "resourcesAdded": "Resources added successfully"
+      },
+      "errors": {
+        "noResourcesSelected": "Please select at least one resource",
+        "reportCreationFailed": "Failed to create work report"
       }
     },
     "workReports": {

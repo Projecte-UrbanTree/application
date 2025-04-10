@@ -1,17 +1,19 @@
 import { Icon } from '@iconify/react';
-import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { ColorPicker } from 'primereact/colorpicker';
 import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Subject } from 'rxjs';
 
 import { fetchElementType } from '@/api/service/elementTypeService';
 import { fetchTreeTypes } from '@/api/service/treeTypesService';
 import { deleteZone } from '@/api/service/zoneService';
-import Preloader from '@/components/Preloader';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync, updateZoneAsync } from '@/store/slice/zoneSlice';
@@ -19,6 +21,7 @@ import { AppDispatch, RootState } from '@/store/store';
 import { ElementType } from '@/types/ElementType';
 import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
+import { ZoneEvent } from '@/types/ZoneEvent';
 
 interface ZoneProps {
   onSelectedZone: (zone: Zone) => void;
@@ -35,20 +38,6 @@ interface AddElementProps {
   isCreatingElement: boolean;
 }
 
-export interface ZoneEvent {
-  zone?: Zone;
-  isCreatingElement: boolean;
-  hiddenElementTypes?: {
-    zoneId: number;
-    elementTypeId: number;
-    hidden: boolean;
-  };
-  hiddenZone?: {
-    zoneId: number;
-    hidden: boolean;
-  };
-}
-
 export const eventSubject = new Subject<ZoneEvent>();
 
 export const Zones = ({
@@ -60,6 +49,7 @@ export const Zones = ({
   onSaveZone,
   enabledButton,
 }: ZoneProps) => {
+  const { t } = useTranslation();
   const [selectedZoneToAdd, setSelectedZoneToAdd] = useState<Zone | null>(null);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
@@ -70,6 +60,7 @@ export const Zones = ({
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [editingZone, setEditingZone] = useState<Zone | null>(null);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -110,32 +101,39 @@ export const Zones = ({
   useEffect(() => {
     if (!currentContract) return;
 
+    setIsInitialized(false);
+
     const loadResources = async () => {
       try {
+        setHiddenZones({});
+        setHiddenElementTypes({});
+
         await Promise.all([
           dispatch(fetchZonesAsync()).unwrap(),
           dispatch(fetchPointsAsync()).unwrap(),
           dispatch(fetchElementsAsync()).unwrap(),
         ]);
+
+        eventSubject.next({
+          isCreatingElement: false,
+          refreshMap: true
+        });
+
+        setIsInitialized(true);
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error cargando recursos',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.zones.toast.loadError'),
         });
       }
     };
 
     loadResources();
-  }, [dispatch, currentContract]);
-
-  const confirmDeleteZone = useCallback((zone: Zone) => {
-    setSelectedZoneToDelete(zone);
-    setIsConfirmDialogVisible(true);
-  }, []);
+  }, [dispatch, currentContract, t]);
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadTypeData = async () => {
       try {
         const [elementTypesData, treeTypesData] = await Promise.all([
           fetchElementType(),
@@ -147,32 +145,41 @@ export const Zones = ({
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error cargando tipos de elementos',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.zones.toast.loadTypesError'),
         });
       }
     };
 
-    loadData();
-  }, []);
+    loadTypeData();
+  }, [t]);
 
   useEffect(() => {
     const subscription = eventSubject.subscribe({
       next: (data: AddElementProps) => {
-        setSelectedZoneToAdd(data.zone || null);
-        stopCreatingElement(data.isCreatingElement);
+        if (data.zone || data.isCreatingElement !== undefined) {
+          setSelectedZoneToAdd(data.zone || null);
+          stopCreatingElement(data.isCreatingElement);
+        }
       },
-      error: () => {
+      error: (err) => {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error en el stream de eventos',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.zones.toast.eventSystemError'),
         });
       },
     });
 
-    return () => subscription.unsubscribe();
-  }, [stopCreatingElement]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [stopCreatingElement, t]);
+
+  const confirmDeleteZone = useCallback((zone: Zone) => {
+    setSelectedZoneToDelete(zone);
+    setIsConfirmDialogVisible(true);
+  }, []);
 
   const handleDeleteZone = async (zoneId: number) => {
     try {
@@ -180,8 +187,8 @@ export const Zones = ({
 
       toast.current?.show({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Zone and points deleted successfully',
+        summary: t('general.success'),
+        detail: t('admin.pages.inventory.zones.toast.deleteSuccess'),
       });
 
       await Promise.all([
@@ -189,11 +196,16 @@ export const Zones = ({
         dispatch(fetchPointsAsync()).unwrap(),
         dispatch(fetchElementsAsync()).unwrap(),
       ]);
+
+      eventSubject.next({
+        isCreatingElement: false,
+        refreshMap: true
+      });
     } catch (error) {
       toast.current?.show({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Could not delete the zone',
+        summary: t('general.error'),
+        detail: t('admin.pages.inventory.zones.toast.deleteError'),
       });
     }
   };
@@ -206,8 +218,8 @@ export const Zones = ({
           .map((point) => point.id)
       );
 
-      return elements
-        .filter((element) => pointIdsInZone.has(element.point_id))
+      const typeCount = elements
+        .filter((element) => pointIdsInZone.has(element.point_id!))
         .reduce(
           (acc, element) => {
             if (element.element_type_id) {
@@ -217,6 +229,8 @@ export const Zones = ({
           },
           {} as Record<number, number>,
         );
+
+      return typeCount;
     },
     [points, elements],
   );
@@ -225,6 +239,16 @@ export const Zones = ({
     (elementTypeId: number, zoneId: number) => {
       const key = `${zoneId}-${elementTypeId}`;
       const isHidden = hiddenElementTypes[key] || false;
+      const zoneIsHidden = hiddenZones[zoneId] || false;
+
+      if (zoneIsHidden && !isHidden) {
+        toast.current?.show({
+          severity: 'warn',
+          summary: t('general.warning'),
+          detail: t('admin.pages.inventory.zones.toast.showElementsWarningZoneHidden'),
+        });
+        return;
+      }
 
       setHiddenElementTypes((prev) => ({
         ...prev,
@@ -240,28 +264,96 @@ export const Zones = ({
         },
       });
     },
-    [hiddenElementTypes],
+    [hiddenElementTypes, hiddenZones, t],
   );
 
   const toggleZoneVisibility = useCallback(
     (zoneId: number) => {
       const isHidden = hiddenZones[zoneId] || false;
-      
-      setHiddenZones((prev) => ({
+
+      if (!isHidden) {
+        setHiddenZones(prev => ({
+          ...prev,
+          [zoneId]: true
+        }));
+
+        const elementCounts = countElementsByTypeInZone(zoneId);
+
+        Object.keys(elementCounts).forEach((typeId) => {
+          const key = `${zoneId}-${typeId}`;
+          setHiddenElementTypes(prev => ({
+            ...prev,
+            [key]: true,
+          }));
+        });
+
+        eventSubject.next({
+          isCreatingElement: false,
+          hiddenZone: {
+            zoneId,
+            hidden: true,
+          }
+        });
+      } else {
+        setHiddenZones(prev => ({
+          ...prev,
+          [zoneId]: false
+        }));
+
+        const elementCounts = countElementsByTypeInZone(zoneId);
+
+        Object.keys(elementCounts).forEach((typeId) => {
+          const key = `${zoneId}-${typeId}`;
+          setHiddenElementTypes(prev => ({
+            ...prev,
+            [key]: false,
+          }));
+        });
+
+        eventSubject.next({
+          isCreatingElement: false,
+          hiddenZone: {
+            zoneId,
+            hidden: false,
+          }
+        });
+
+        Object.keys(elementCounts).forEach((typeId) => {
+          eventSubject.next({
+            isCreatingElement: false,
+            hiddenElementTypes: {
+              zoneId,
+              elementTypeId: parseInt(typeId),
+              hidden: false,
+            },
+          });
+        });
+      }
+    },
+    [hiddenZones, countElementsByTypeInZone],
+  );
+
+  const showAllElementsInZone = useCallback((zoneId: number) => {
+    const elementCounts = countElementsByTypeInZone(zoneId);
+
+    Object.keys(elementCounts).forEach((typeId) => {
+      const key = `${zoneId}-${typeId}`;
+      setHiddenElementTypes((prev) => ({
         ...prev,
-        [zoneId]: !isHidden,
+        [key]: false,
       }));
 
       eventSubject.next({
         isCreatingElement: false,
-        hiddenZone: {
+        hiddenElementTypes: {
           zoneId,
-          hidden: !isHidden,
+          elementTypeId: parseInt(typeId),
+          hidden: false,
         },
       });
-    },
-    [hiddenZones],
-  );
+    });
+
+  }, [countElementsByTypeInZone]);
 
   const handleColorChange = useCallback(async (zone: Zone, newColor: string) => {
     try {
@@ -269,210 +361,299 @@ export const Zones = ({
         id: zone.id!,
         data: { ...zone, color: newColor }
       })).unwrap();
-      
+
       toast.current?.show({
         severity: 'success',
-        summary: 'Éxito',
-        detail: 'Color actualizado correctamente'
+        summary: t('general.success'),
+        detail: t('admin.pages.inventory.zones.toast.colorUpdateSuccess')
       });
     } catch (error) {
       toast.current?.show({
         severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo actualizar el color'
+        summary: t('general.error'),
+        detail: t('admin.pages.inventory.zones.toast.colorUpdateError')
       });
     }
-  }, [dispatch]);
+  }, [dispatch, t]);
 
-  const renderElementTypeItem = useCallback(
-    (elementType: ElementType, zone: Zone, count: number) => {
-      const key = `${zone.id}-${elementType.id}`;
-      const isHidden = hiddenElementTypes[key] || false;
+  useEffect(() => {
+    if (!isInitialized && zones.length > 0) {
+      const timer = setTimeout(() => {
+        zones.forEach(zone => {
+          if (zone.id) {
+            showAllElementsInZone(zone.id);
+          }
+        });
 
-      return (
-        <div
-          key={elementType.id}
-          className="flex justify-between items-center my-2">
-          <div className="flex items-center gap-2">
-            {elementType.icon && (
-              <Icon
-                icon={`mdi:${elementType.icon}`}
-                width="20"
-                className="text-gray-500"
-              />
-            )}
-            <span>
-              {elementType.name} ({count} elementos)
-            </span>
-          </div>
-          <Button
-            icon={
-              <Icon icon={isHidden ? 'mdi:eye-off' : 'mdi:eye'} width="20" />
-            }
-            className={`p-button-text p-2 ${isHidden ? 'text-gray-400' : ''}`}
-            onClick={() => handleViewElements(elementType.id!, zone.id!)}
-          />
-        </div>
-      );
-    },
-    [hiddenElementTypes, handleViewElements],
-  );
+        setIsInitialized(true);
+      }, 800);
 
-  if (zonesLoading || pointsLoading || elementsLoading) {
-    return <Preloader />;
-  }
+      return () => clearTimeout(timer);
+    }
+  }, [zones, isInitialized, showAllElementsInZone]);
 
   return (
-    <div className="p-4 h-full overflow-y-auto bg-transparent rounded-lg shadow-md">
+    <div className="h-full flex flex-col border border-gray-300 bg-gray-50 rounded shadow-sm overflow-hidden">
       <Toast ref={toast} />
 
-      {isDrawingMode && (
-        <div className="mb-4 sticky top-0 bg-white p-3 rounded-lg shadow-md z-10">
-          <Button
-            label="Guardar Zona"
-            icon="pi pi-save"
-            onClick={onSaveZone}
-            className="p-button-primary p-button-raised w-full"
-            disabled={!enabledButton}
-          />
-        </div>
-      )}
+      <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 shadow-sm">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <Icon icon="tabler:map-2" className="text-indigo-600" width="22" />
+            {t('admin.pages.inventory.zones.title')}
+          </h2>
 
-      <div className="mb-6">
-        <input
-          type="text"
-          placeholder="Buscar zonas por nombre o descripción"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-inputtext p-component w-full"
-        />
+          {isDrawingMode && (
+            <Button
+              label={t('admin.pages.inventory.zones.saveZoneButton')}
+              icon={<Icon icon="tabler:device-floppy" />}
+              onClick={onSaveZone}
+              className="p-button-outlined p-button-indigo p-button-sm"
+              disabled={!enabledButton}
+            />
+          )}
+        </div>
+
+        {isCreatingElement && (
+          <div className="flex items-center justify-between border border-indigo-200 bg-indigo-50 rounded p-2 mb-2">
+            <div className="flex items-center gap-2 text-indigo-800">
+              <Icon icon="tabler:pencil-plus" width="18" />
+              <span className="text-sm font-medium">{t('admin.pages.inventory.zones.creatingElementInfo')}</span>
+            </div>
+            <Button
+              icon={<Icon icon="tabler:x" />}
+              onClick={() => {
+                addElementZone({
+                  isCreatingElement: false,
+                  zone: undefined,
+                });
+              }}
+              className="p-button-outlined p-button-indigo p-button-sm"
+              tooltip={t('admin.pages.inventory.zones.cancelCreationTooltip')}
+            />
+          </div>
+        )}
+
+        <span className="p-input-icon-left w-full">
+          <i className="pi pi-search" />
+          <InputText
+            placeholder={t('admin.pages.inventory.zones.searchPlaceholder')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full"
+          />
+        </span>
       </div>
 
-      {filteredZones.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full text-gray-500 text-lg">
-          <Icon icon="mdi:alert-circle-outline" width="32" className="mb-2" />
-          <p>No hay zonas que coincidan con la búsqueda</p>
-        </div>
-      ) : (
-        <>
-          {isCreatingElement && (
-            <div className="mb-4">
-              <Button
-                label="Salir del modo creacion de elementos"
-                onClick={() => {
-                  addElementZone({
-                    isCreatingElement: false,
-                    zone: undefined,
-                  });
-                }}
-                className="p-button-text p-2"
-              />
+      <div className="flex-1 overflow-y-auto p-3">
+        {filteredZones.length === 0 ? (
+          <div className="flex flex-col items-center justify-center text-gray-500 p-4">
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 flex flex-col items-center w-full mx-auto">
+              <Icon icon="tabler:map-off" width="48" className="mb-3 text-gray-400" />
+              <h3 className="text-center font-semibold text-lg mb-1">{t('admin.pages.inventory.zones.emptyState.title')}</h3>
+              <p className="text-center text-sm mb-3 text-gray-600">
+                {searchTerm
+                  ? t('admin.pages.inventory.zones.emptyState.messageWithSearch')
+                  : t('admin.pages.inventory.zones.emptyState.messageDefault')}
+              </p>
+              {searchTerm && (
+                <Button
+                  label={t('admin.pages.inventory.zones.emptyState.clearSearchButton')}
+                  icon={<Icon icon="tabler:eraser" />}
+                  className="p-button-outlined p-button-indigo p-button-sm"
+                  onClick={() => setSearchTerm('')}
+                />
+              )}
             </div>
-          )}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filteredZones.map((zone: Zone) => {
+              const elementCountByType = countElementsByTypeInZone(zone.id!);
+              const totalElements = Object.values(elementCountByType).reduce((sum, count) => sum + count, 0);
+              const isHidden = hiddenZones[zone.id!] || false;
 
-          <Accordion multiple activeIndex={null} className="w-full">
-            {filteredZones.map((zone: Zone) => (
-              <AccordionTab
-                key={zone.id}
-                header={
-                  <div className="flex justify-between items-center w-full">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+              return (
+                <Card
+                  key={zone.id}
+                  className="border border-gray-300 shadow-sm rounded-lg bg-white overflow-hidden p-0"
+                  pt={{
+                    root: { className: 'p-0' },
+                    content: { className: 'p-0' }
+                  }}
+                >
+                  <div className="border-b border-gray-200 p-3 flex flex-col gap-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
                         <ColorPicker
-                          value={zone.color?.replace('#', '') || '088'}
+                          value={zone.color?.replace('#', '') || '6366F1'}
                           onChange={(e) => handleColorChange(zone, `#${e.value}`)}
-                          className="w-2rem h-2rem"
-                          inline={false}
-                          format="hex"
+                          className="w-9 h-9"
+                          style={{
+                            borderColor: 'transparent',
+                            backgroundColor: zone.color || '#6366F1',
+                            borderRadius: '50%'
+                          }}
+                          tooltip={t('admin.pages.inventory.zones.tooltips.changeColor')}
                           appendTo={document.body}
                         />
-                        <span className="text-sm font-medium">{zone.name}</span>
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-semibold text-gray-800 truncate">{zone.name}</span>
+                        <span className="text-xs text-gray-500 truncate">
+                          {zone.description || t('admin.pages.inventory.zones.noDescription')}
+                        </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex gap-2">
                       <Button
-                        icon={<Icon icon={hiddenZones[zone.id!] ? 'mdi:eye-off' : 'mdi:eye'} width="20" />}
-                        className={`p-button-text p-2 ${hiddenZones[zone.id!] ? 'text-gray-400' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleZoneVisibility(zone.id!);
-                        }}
+                        icon={<Icon icon={isHidden ? 'tabler:eye-off' : 'tabler:eye'} width="18" />}
+                        className="p-button-outlined p-button-indigo p-button-sm"
+                        tooltip={isHidden ? t('admin.pages.inventory.zones.tooltips.showZone') : t('admin.pages.inventory.zones.tooltips.hideZone')}
+                        tooltipOptions={{ position: 'top' }}
+                        onClick={() => toggleZoneVisibility(zone.id!)}
                       />
                       <Button
-                        icon={<Icon icon="mdi:map-marker" width="20" />}
-                        className="p-button-text p-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectedZone(zone);
-                        }}
+                        icon={<Icon icon="tabler:map-pin" width="18" />}
+                        className="p-button-outlined p-button-indigo p-button-sm"
+                        tooltip={t('admin.pages.inventory.zones.tooltips.goToZone')}
+                        tooltipOptions={{ position: 'top' }}
+                        onClick={() => onSelectedZone(zone)}
+                      />
+                      <Button
+                        icon={<Icon icon="tabler:plus" width="18" />}
+                        className="p-button-outlined p-button-indigo p-button-sm"
+                        tooltip={t('admin.pages.inventory.zones.tooltips.addElement')}
+                        tooltipOptions={{ position: 'top' }}
+                        onClick={() => addElementZone({ isCreatingElement: true, zone })}
+                      />
+                      <Button
+                        icon={<Icon icon="tabler:trash" width="18" />}
+                        className="p-button-outlined p-button-indigo p-button-sm"
+                        tooltip={t('admin.pages.inventory.zones.tooltips.deleteZone')}
+                        tooltipOptions={{ position: 'top' }}
+                        onClick={() => confirmDeleteZone(zone)}
                       />
                     </div>
                   </div>
-                }>
-                <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
-                  <p>
-                    <strong>Descripción:</strong> {zone.description}
-                  </p>
-                  <Button
-                    icon={<Icon icon="mdi:trash-can-outline" width="20" />}
-                    className="p-button-danger p-button-text p-2"
-                    onClick={() => confirmDeleteZone(zone)}
-                  />
-                </div>
 
-                <div className="p-2 text-sm text-gray-700 flex justify-between items-center">
-                  <strong>Añadir elemento</strong>
-                  <Button
-                    className="p-button p-button-text p-2"
-                    icon={<Icon icon="mdi:add" />}
-                    onClick={() =>
-                      addElementZone({ isCreatingElement: true, zone })
-                    }
-                  />
-                </div>
-
-                <div className="p-2 text-sm text-gray-700">
-                  <strong>Elementos en esta zona</strong>
                   {(() => {
-                    const elementCountByType = countElementsByTypeInZone(zone.id!);
                     const hasElements = elementTypes.some(et => (elementCountByType[et.id!] || 0) > 0);
-                    
+
                     if (!hasElements) {
                       return (
-                        <p className="text-gray-500 mt-2">
-                          No hay elementos marcados en esta zona.
-                        </p>
+                        <div className="p-3">
+                          <div className="flex flex-col items-center py-4 text-center text-gray-500">
+                            <Icon icon="tabler:tree" width="28" className="text-gray-400 mb-2" />
+                            <p className="mb-2">{t('admin.pages.inventory.zones.noElementsInZone')}</p>
+                            <Button
+                              label={t('admin.pages.inventory.zones.addElementButton')}
+                              icon={<Icon icon="tabler:plus" width="16" />}
+                              className="p-button-outlined p-button-indigo p-button-sm"
+                              onClick={() => addElementZone({ isCreatingElement: true, zone })}
+                            />
+                          </div>
+                        </div>
                       );
                     }
 
-                    return elementTypes.map((elementType) => {
-                      const count = elementCountByType[elementType.id!] || 0;
-                      return count > 0 
-                        ? renderElementTypeItem(elementType, zone, count) 
-                        : null;
-                    });
+                    return (
+                      <div className="p-3">
+                        <h4 className="text-xs font-bold uppercase text-gray-500 mb-2 flex items-center gap-1">
+                          <Icon icon="tabler:list" width="14" />
+                          {t('admin.pages.inventory.zones.elementsHeader', { count: totalElements })}
+                        </h4>
+
+                        <div className="space-y-2">
+                          {elementTypes.map((elementType) => {
+                            const count = elementCountByType[elementType.id!] || 0;
+                            if (count === 0) return null;
+
+                            const key = `${zone.id}-${elementType.id}`;
+                            const isElementHidden = hiddenElementTypes[key] || false;
+                            const zoneIsHidden = hiddenZones[zone.id!] || false;
+
+                            return (
+                              <div
+                                key={elementType.id}
+                                className={`flex justify-between items-center p-2 rounded-lg ${isElementHidden || zoneIsHidden ? 'bg-gray-100' : 'bg-white'
+                                  } border border-gray-200 transition-all duration-200`}
+                              >
+                                <div className="flex items-center gap-2 flex-1 min-w-0">
+                                  <div
+                                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                                    style={{
+                                      backgroundColor: elementType.color || '#6366F1',
+                                      opacity: isElementHidden || zoneIsHidden ? 0.5 : 1
+                                    }}
+                                  >
+                                    {elementType.icon && (
+                                      <Icon
+                                        icon={elementType.icon.startsWith('tabler:') ? elementType.icon : `tabler:${elementType.icon.replace('mdi:', '')}`}
+                                        width="16"
+                                        color="white"
+                                      />
+                                    )}
+                                  </div>
+                                  <div className="flex flex-col min-w-0">
+                                    <span className={`font-medium truncate ${isElementHidden || zoneIsHidden ? 'text-gray-400' : 'text-gray-700'}`}>
+                                      {elementType.name}
+                                    </span>
+                                  </div>
+                                  <Badge
+                                    value={count}
+                                    severity={isElementHidden || zoneIsHidden ? "secondary" : "info"}
+                                    className="ml-auto mr-2"
+                                  />
+                                </div>
+
+                                <Button
+                                  icon={<Icon icon={isElementHidden || zoneIsHidden ? 'tabler:eye-off' : 'tabler:eye'} width="16" />}
+                                  className="p-button-outlined p-button-indigo p-button-sm"
+                                  onClick={() => handleViewElements(elementType.id!, zone.id!)}
+                                  disabled={zoneIsHidden}
+                                  tooltip={zoneIsHidden ? t('admin.pages.inventory.zones.tooltips.zoneHidden') : (isElementHidden ? t('admin.pages.inventory.zones.tooltips.showElements') : t('admin.pages.inventory.zones.tooltips.hideElements'))}
+                                  tooltipOptions={{ position: 'top' }}
+                                />
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
                   })()}
-                </div>
-              </AccordionTab>
-            ))}
-          </Accordion>
-        </>
-      )}
+                </Card>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       <Dialog
-        header="Confirmar eliminación"
+        header={
+          <div className="flex items-center gap-2 text-red-600">
+            <Icon icon="tabler:alert-circle" width="24" />
+            <span className="font-semibold">{t('admin.pages.inventory.zones.deleteConfirm.title')}</span>
+          </div>
+        }
         visible={isConfirmDialogVisible}
         onHide={() => setIsConfirmDialogVisible(false)}
+        className="w-[90vw] md:w-[450px]"
+        modal
+        blockScroll
         footer={
           <div className="flex justify-end gap-2">
             <Button
-              label="Cancelar"
-              className="p-button-secondary"
+              label={t('general.cancel')}
+              icon={<Icon icon="tabler:x" />}
+              className="p-button-outlined p-button-indigo p-button-sm"
               onClick={() => setIsConfirmDialogVisible(false)}
             />
             <Button
-              label="Eliminar"
-              className="p-button-danger"
+              label={t('admin.pages.inventory.zones.deleteConfirm.deleteButton')}
+              icon={<Icon icon="tabler:trash" />}
+              className="p-button-outlined p-button-indigo p-button-sm"
+              severity="danger"
               onClick={() => {
                 if (selectedZoneToDelete?.id) {
                   handleDeleteZone(selectedZoneToDelete.id);
@@ -482,12 +663,35 @@ export const Zones = ({
             />
           </div>
         }>
-        <p>
-          ¿Estás seguro de que quieres eliminar la zona?{' '}
-          <strong>{selectedZoneToDelete?.name}</strong>?
-        </p>
-        <p>Al eliminar la zona se eliminarán todas las coordenadas.</p>
+        <div className="p-3">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+            <p className="text-red-800 font-medium flex items-center gap-2">
+              <Icon icon="tabler:alert-triangle" width="20" />
+              {t('admin.pages.inventory.zones.deleteConfirm.warningIrreversible')}
+            </p>
+          </div>
+
+          <p className="mb-3">
+            {t('admin.pages.inventory.zones.deleteConfirm.confirmationText', { zoneName: selectedZoneToDelete?.name })}
+          </p>
+          <p className="text-sm flex items-center gap-2 text-gray-600 bg-gray-50 p-2 rounded border border-gray-200">
+            <Icon icon="tabler:info-circle" width="18" />
+            {t('admin.pages.inventory.zones.deleteConfirm.infoText')}
+          </p>
+        </div>
       </Dialog>
+
+      <style jsx global>{`
+        .p-colorpicker-preview {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+
+        .p-card .p-card-content {
+          padding: 0;
+        }
+      `}</style>
     </div>
   );
 };
