@@ -66,6 +66,26 @@ class ZoneController extends Controller
     }
 
     /**
+     * Inline update for zone name or description.
+     *
+     * @param  Request  $request  The HTTP request instance.
+     * @param  int  $id  The ID of the zone to update.
+     * @return JsonResponse A JSON response containing the updated zone.
+     */
+    public function inlineUpdate(Request $request, $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'field' => ['required', 'string', 'in:name,description'],
+            'value' => ['required', 'string', 'max:255'],
+        ]);
+
+        $zone = Zone::findOrFail($id);
+        $zone->update([$validated['field'] => $validated['value']]);
+
+        return response()->json($zone);
+    }
+
+    /**
      * Remove the specified zone from storage.
      *
      * @param  int  $id  The ID of the zone to delete.

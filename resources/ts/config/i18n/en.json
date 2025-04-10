@@ -74,7 +74,8 @@
         "stats": "Statistics",
         "workers": "Workers",
         "eva": "EVA",
-        "workOrders": "Work Orders"
+        "workOrders": "Work Orders",
+        "sensors": "Sensors"
       },
       "settings": {
         "contracts": "Contracts",
@@ -883,7 +884,7 @@
             "saveErrorTitle": "Error",
             "saveErrorDetail": "Could not save the zone"
           },
-          "infoText": "A zone with <strong>{{count}}</strong> boundary points will be created. The zone must have a unique name.",
+          "infoText": "A zone with {{count}} boundary points will be created. The zone must have a unique name.",
           "nameLabel": "Zone Name",
           "namePlaceholder": "e.g., Central Park",
           "descriptionLabel": "Description",
@@ -933,7 +934,7 @@
             "title": "Confirm deletion",
             "deleteButton": "Delete",
             "warningIrreversible": "This action cannot be undone",
-            "confirmationText": "Are you sure you want to delete the zone <strong> {{zoneName}}</strong>?",
+            "confirmationText": "Are you sure you want to delete the zone {{zoneName}}?",
             "infoText": "This action will delete the zone and all its associated points and elements."
           }
         },
@@ -941,7 +942,7 @@
         "createOutsideZoneErrorTitle": "Warning",
         "createOutsideZoneErrorDetail": "Cannot create an element outside the selected zone or area",
         "clickToAddElementPrompt": "Click on the map to add an element",
-        "drawingModeActive": "Drawing mode activated",
+        "drawingModeActive": "Click save zone to finish drawing",
         "saveZoneDialogTitle": "Save Zone",
         "saveElementDialogTitle": "Save Element",
         "addIncidentDialogTitle": "Add Incident",

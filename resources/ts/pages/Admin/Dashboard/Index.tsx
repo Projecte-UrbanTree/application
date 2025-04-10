@@ -37,13 +37,13 @@ export default function Dashboard() {
                 label={t('admin.pages.dashboard.manageUsers')}
                 icon={<Icon icon="tabler:user" />}
                 className="w-full text-gray-800"
-                onClick={() => navigate('/admin/users')}
+                onClick={() => navigate('/admin/settings/users')}
               />
               <Button
                 label={t('admin.pages.dashboard.reviewReports')}
                 icon={<Icon icon="tabler:file-text" />}
                 className="w-full text-gray-800"
-                onClick={() => navigate('/admin/reports')}
+                onClick={() => navigate('/admin/work-orders')}
               />
             </div>
           </Card>

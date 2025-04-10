@@ -8,8 +8,11 @@ export default function Logout() {
   const { logout } = useAuth();
 
   useEffect(() => {
-    logout();
-    navigate('/login', { replace: true });
+    const performLogout = async () => {
+      await logout();
+      navigate('/login', { replace: true });
+    };
+    performLogout();
   }, []);
 
   return null;

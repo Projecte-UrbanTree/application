@@ -109,7 +109,7 @@ class EvaController extends Controller
         $eva = Eva::with(['element.point', 'element.elementType'])->findOrFail($id);
 
         if (! $eva) {
-            return response()->json(['message' => 'EVA not found'], 404);
+            return response()->json([]);
         }
 
         return response()->json([

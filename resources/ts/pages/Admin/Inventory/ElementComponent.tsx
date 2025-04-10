@@ -27,16 +27,9 @@ const ElementPopup: React.FC<ElementPopupProps> = React.memo(
     );
 
     return (
-      <div
-        className="bg-gray-50 p-4 shadow-sm rounded border border-gray-300"
-        style={{
-          width: '340px',
-          backgroundColor: '#ffffff',
-          borderRadius: '8px',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-        }}>
-        <div className="bg-indigo-50 p-3 border-b border-indigo-100 rounded-t-lg">
-          <h3 className="text-lg font-bold text-indigo-700 flex items-center gap-2">
+      <div className="bg-gray-50 p-4 shadow-sm rounded-lg border border-gray-300">
+        <div className="bg-indigo-50 p-3 border-b border-indigo-200 rounded-t-lg">
+          <h3 className="text-lg font-semibold text-indigo-700 flex items-center gap-2">
             <Icon icon="tabler:clipboard-data" width="22" />
             {t('admin.pages.inventory.elementPopup.title', { id: element.id })}
           </h3>
@@ -47,10 +40,10 @@ const ElementPopup: React.FC<ElementPopupProps> = React.memo(
 
         <div className="p-4">
           <div className="grid grid-cols-1 gap-3 mb-3">
-            <div className="bg-gray-50 p-3 rounded-md border border-gray-200">
+            <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
               <div className="flex items-center mb-2 gap-2">
                 <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center"
+                  className="w-8 h-8 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: elementType?.color || '#6366F1' }}>
                   {elementType?.icon && (
                     <Icon
@@ -62,11 +55,11 @@ const ElementPopup: React.FC<ElementPopupProps> = React.memo(
                     />
                   )}
                 </div>
-                <span className="font-semibold text-gray-700">{elementType?.name || t('admin.pages.inventory.elementPopup.elementTypeUndefined')}</span>
+                <span className="font-medium text-gray-700">{elementType?.name || t('admin.pages.inventory.elementPopup.elementTypeUndefined')}</span>
               </div>
 
               {treeType && (
-                <div className="bg-white rounded p-2 border border-gray-200 text-sm space-y-1 mt-2">
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200 text-sm space-y-1 mt-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600">{t('admin.pages.inventory.elementPopup.treeFamilyLabel')}</span>
                     <span className="font-medium">{treeType.family}</span>
@@ -93,16 +86,16 @@ const ElementPopup: React.FC<ElementPopupProps> = React.memo(
             </div>
           </div>
 
-          <div className="flex gap-2 justify-end pt-2">
+          <div className="flex gap-2 justify-end pt-2 border-t border-gray-200">
             <Button
               label={t('admin.pages.inventory.elementPopup.incidentButton')}
-              className="p-button-warning p-button-sm"
+              className="p-button-outlined p-button-warning p-button-sm"
               icon={<Icon icon="tabler:alert-triangle" width="16" />}
               onClick={() => onAddIncident && onAddIncident(element.id!)}
             />
             <Button
               label={t('admin.pages.inventory.elementPopup.deleteButton')}
-              className="p-button-danger p-button-sm"
+              className="p-button-outlined p-button-danger p-button-sm"
               icon={<Icon icon="tabler:trash" width="16" />}
               onClick={() => onDeleteElement && onDeleteElement(element.id!)}
             />

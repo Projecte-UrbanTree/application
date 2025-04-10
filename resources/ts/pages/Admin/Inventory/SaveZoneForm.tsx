@@ -206,8 +206,11 @@ export const SaveZoneForm = ({
   );
 
   const handleCancel = useCallback(() => {
+    setValue('name', '');
+    setValue('description', '');
+    setValue('color', '#FF5733');
     onCloseProp({} as Zone, []);
-  }, [onCloseProp]);
+  }, [onCloseProp, setValue]);
 
   return (
     <>
@@ -276,31 +279,20 @@ export const SaveZoneForm = ({
                 <Icon icon="tabler:palette" width="18" />
                 {t('admin.pages.inventory.saveZoneForm.colorLabel')}
               </label>
-              <div className="flex items-center gap-3">
-                <Controller
-                  name="color"
-                  control={control}
-                  render={({ field }) => (
-                    <>
-                      <ColorPicker
-                        {...field}
-                        format="hex"
-                        className="w-10 h-10"
-                        onChange={(e) => setValue('color', `#${e.value}`)}
-                        appendTo="self"
-                        disabled={isSubmitting}
-                      />
-                      <div
-                        className="w-10 h-10 rounded-lg border border-gray-300"
-                        style={{ backgroundColor: control._formValues.color || '#FF5733' }}
-                      />
-                      <span className="text-sm text-gray-700 font-mono">
-                        {control._formValues.color?.toUpperCase() || '#FF5733'}
-                      </span>
-                    </>
-                  )}
-                />
-              </div>
+              <Controller
+                name="color"
+                control={control}
+                render={({ field }) => (
+                  <ColorPicker
+                    {...field}
+                    format="hex"
+                    className="w-10 h-10"
+                    onChange={(e) => setValue('color', `#${e.value}`)}
+                    appendTo="self"
+                    disabled={isSubmitting}
+                  />
+                )}
+              />
               {errors.color && (
                 <p className="text-red-500 text-sm mt-1">{t(errors.color.message!)}</p>
               )}
