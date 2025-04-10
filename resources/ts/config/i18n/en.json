@@ -691,6 +691,7 @@
         "droughtExposure": "Drought Exposure"
       },
       "inventory": {
+        "title": "Inventory",
         "elementDetailPopup": {
           "tabs": {
             "information": "Information",

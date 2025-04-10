@@ -692,6 +692,7 @@
       },
 
             "inventory": {
+        "title": "Inventari",
         "elementDetailPopup": {
           "tabs": {
             "information": "Informació",
