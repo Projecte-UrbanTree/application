@@ -42,7 +42,21 @@
     "messages": {
       "close_block": "Block closed successfully",
       "close_with_incidents": "Block closed with incidents",
-      "reject": "Block rejected"
+      "reject": "Block rejected",
+      "close_part": "Part closed successfully",
+      "closing_part": "Closing part...",
+      "part_closed": "Part successfully closed",
+      "closing_block": "Closing block...",
+      "rejecting": "Rejecting item...",
+      "success": "Operation completed successfully",
+      "error": "An error occurred. Please try again.",
+      "reportCreated": "Work report created successfully",
+      "reportResubmitted": "Work report resubmitted successfully",
+      "reportRejected": "Work report was rejected",
+      "reportApproved": "Work report was approved",
+      "closing_with_incidents": "Closing with incidents...",
+      "close_with_observations": "Report closed with observations",
+      "already_processed": "This item has already been processed"
     }
   },
 
