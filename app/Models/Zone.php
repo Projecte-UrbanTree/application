@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory; // Importar el trait
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Zone extends Model
 {
+    use HasFactory; // Agregar el trait HasFactory
+
     protected $fillable = [
         'name',
         'description',
