@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Eva
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Eva extends Model
 {
+    use HasFactory;
+
     protected $table = 'eva';
 
     protected $fillable = [
