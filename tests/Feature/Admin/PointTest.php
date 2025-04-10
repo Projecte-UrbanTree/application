@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Contract;
 use App\Models\Point;
 use App\Models\User;
 use App\Models\Zone;
@@ -27,8 +28,9 @@ class PointTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->admin()->create());
 
-        // Crear una zona para asociar los puntos
-        $zone = Zone::factory()->create();
+        // Crear un contrato y una zona para asociar los puntos
+        $contract = Contract::factory()->create();
+        $zone = Zone::factory()->create(['contract_id' => $contract->id]);
 
         $pointData = [
             [
@@ -64,8 +66,9 @@ class PointTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->admin()->create());
 
-        // Crear una zona para asociar los puntos
-        $zone = Zone::factory()->create();
+        // Crear un contrato y una zona para asociar los puntos
+        $contract = Contract::factory()->create();
+        $zone = Zone::factory()->create(['contract_id' => $contract->id]);
 
         $points = Point::factory()->count(3)->create([
             'zone_id' => $zone->id,

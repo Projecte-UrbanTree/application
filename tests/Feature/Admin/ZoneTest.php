@@ -53,7 +53,9 @@ class ZoneTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->admin()->create());
 
-        $zone = Zone::factory()->create();
+        // Crear un contrato y una zona asociados
+        $contract = Contract::factory()->create();
+        $zone = Zone::factory()->create(['contract_id' => $contract->id]);
 
         $updatedData = [
             'name' => 'Updated Zone',
@@ -78,12 +80,14 @@ class ZoneTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->admin()->create());
 
-        $zone = Zone::factory()->create();
+        // Crear un contrato y una zona asociados
+        $contract = Contract::factory()->create();
+        $zone = Zone::factory()->create(['contract_id' => $contract->id]);
 
         $response = $this->deleteJson("/api/admin/zones/{$zone->id}");
 
         $response->assertStatus(200)
-            ->assertJson(['message' => 'Zona eliminada']);
+            ->assertJson(['message' => 'Zone deleted']);
 
         $this->assertDatabaseMissing('zones', ['id' => $zone->id]);
     }
