@@ -219,15 +219,31 @@ class SensorHistoryController extends Controller
             // Find the sensor by EUI
             $sensor = Sensor::where('eui', $eui)->firstOrFail();
 
+            // Get the timestamp of the last fetched record to use as last_fetch_date
+            $lastRecord = SensorHistory::where('sensor_id', $sensor->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            $lastFetchDate = null;
+            if ($lastRecord) {
+                $lastFetchDate = $lastRecord->created_at->toIso8601String();
+            }
+
             // Fetch data from external API
             $apiKey = env('VITE_X_API_KEY');
             if (empty($apiKey)) {
                 throw new \Exception('API key not configured');
             }
 
+            // Build URL with last_fetch_date if available
+            $url = "http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history";
+            if ($lastFetchDate) {
+                $url .= "?last_fetch_date={$lastFetchDate}";
+            }
+
             $response = Http::withHeaders([
                 'X-API-Key' => $apiKey,
-            ])->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
+            ])->get($url);
 
             if (! $response->successful()) {
                 return response()->json([
@@ -238,63 +254,33 @@ class SensorHistoryController extends Controller
 
             $responseData = $response->json();
             $recordsCreated = 0;
-            $recordsSkipped = 0;
-            $idsToUpdate = [];
-
+            
+            // If response is a single object, convert to array
             $sensorDataArray = is_array($responseData) && ! array_key_exists('dev_eui', $responseData) ? $responseData : [$responseData];
 
             foreach ($sensorDataArray as $dataPoint) {
-                if (isset($dataPoint['check']) && $dataPoint['check'] === true) {
-                    $recordsSkipped++;
+                $historyData = [
+                    'sensor_id' => $sensor->id,
+                    'temperature_soil' => $dataPoint['temp_soil'] ?? null,
+                    'temperature_air' => $dataPoint['tempc_ds18b20'] ?? null,
+                    'ph_soil' => $dataPoint['ph1_soil'] ?? null,
+                    'humidity_soil' => $dataPoint['water_soil'] ?? null,
+                    'conductivity_soil' => $dataPoint['conductor_soil'] ?? null,
+                    'batery' => $dataPoint['bat'] ?? null,
+                    'signal' => $dataPoint['rssi'] ?? null,
+                ];
 
-                    continue;
-                }
-                if (! isset($dataPoint['check']) || $dataPoint['check'] === false) {
-
-                    if (isset($dataPoint['id'])) {
-                        $idsToUpdate[] = $dataPoint['id'];
-                    }
-
-                    $historyData = [
-                        'sensor_id' => $sensor->id,
-                        'temperature_soil' => $dataPoint['temp_soil'] ?? null,
-                        'temperature_air' => $dataPoint['tempc_ds18b20'] ?? null,
-                        'ph_soil' => $dataPoint['ph1_soil'] ?? null,
-                        'humidity_soil' => $dataPoint['water_soil'] ?? null,
-                        'conductivity_soil' => $dataPoint['conductor_soil'] ?? null,
-                        'batery' => $dataPoint['bat'] ?? null,
-                        'signal' => $dataPoint['rssi'] ?? null,
-                    ];
-
-                    // Create the record
-                    SensorHistory::create($historyData);
-
-                    $recordsCreated++;
-                }
-            }
-
-            if (! empty($idsToUpdate)) {
-                try {
-                    $updateResponse = Http::withHeaders([
-                        'X-API-Key' => $apiKey,
-                    ])->post('http://api_urbantree.alumnat.iesmontsia.org/updateSensorHistory', [
-                        'ids' => $idsToUpdate,
-                    ]);
-
-                    if (! $updateResponse->successful()) {
-                        \Log::warning('Failed to update check status for records: '.$updateResponse->body());
-                    }
-                } catch (\Exception $e) {
-                    \Log::warning('Exception when updating check status: '.$e->getMessage());
-                }
+                // Create the record
+                SensorHistory::create($historyData);
+                $recordsCreated++;
             }
 
             return response()->json([
                 'message' => 'Successfully fetched and stored sensor data',
                 'records_created' => $recordsCreated,
-                'records_skipped' => $recordsSkipped,
                 'sensor_id' => $sensor->id,
                 'eui' => $eui,
+                'last_fetch_date' => $lastFetchDate
             ]);
 
         } catch (ModelNotFoundException $e) {
