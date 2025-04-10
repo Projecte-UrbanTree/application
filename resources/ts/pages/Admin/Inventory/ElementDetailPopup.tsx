@@ -159,15 +159,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         setIncidences([]);
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error cargando incidencias',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.loadError'),
         });
       } finally {
         setIsLoading(false);
       }
     };
     loadIncidences();
-  }, [element.id, dispatch]);
+  }, [element.id, dispatch, t]);
 
   const refreshEvaData = useCallback(async () => {
     try {
@@ -226,18 +226,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
         toast.current?.show({
           severity: 'success',
-          summary: 'Estado actualizado',
-          detail: 'Se actualizó correctamente el estado de la incidencia',
+          summary: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdated'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdatedDetail'),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo actualizar el estado de la incidencia',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdateFailed'),
         });
       }
     },
-    [dispatch],
+    [dispatch, t],
   );
 
   const handleAddIncidentClick = useCallback(() => {
@@ -254,13 +254,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         setIncidences((prev) => prev.filter((inc) => inc.id !== incidentId));
         toast.current?.show({
           severity: 'success',
-          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccess'),
+          summary: t('general.success'),
           detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccessDetail'),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteError'),
+          summary: t('general.error'),
           detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteErrorDetail'),
         });
       }
@@ -276,18 +276,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         onDeleteElement(id);
         toast.current?.show({
           severity: 'success',
-          summary: 'Éxito',
-          detail: 'Elemento eliminado correctamente',
+          summary: t('general.success'),
+          detail: t('admin.pages.inventory.elementDetailPopup.information.elementDeleted'),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo eliminar el elemento',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.elementDetailPopup.information.elementDeleteFailed'),
         });
       }
     },
-    [dispatch, onClose, onDeleteElement]
+    [dispatch, onClose, onDeleteElement, t]
   );
 
   const getElementType = useCallback(
@@ -331,26 +331,26 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     if (!elementZone) return [];
 
     const filteredTasks = [];
-    
+
     for (const workOrder of workOrders) {
       if (workOrder.work_orders_blocks && workOrder.work_orders_blocks.length > 0) {
         for (const block of workOrder.work_orders_blocks) {
           const blockIncludesElementZone = block.zones?.some(zone => zone.id === elementZone.id) || false;
-          
+
           if (blockIncludesElementZone && block.block_tasks && block.block_tasks.length > 0) {
             for (const task of block.block_tasks) {
               const elementTypeMatches = task.element_type.id === element.element_type_id;
-              
+
               let treeTypeMatches = true;
               if (element.tree_type_id) {
                 treeTypeMatches = task.tree_type ? task.tree_type.id === element.tree_type_id : false;
               }
-              
+
               if (elementTypeMatches && treeTypeMatches) {
                 filteredTasks.push({
                   workOrderId: workOrder.id,
                   workOrderDate: workOrder.date,
-                  taskName: task.tasks_type?.name || 'Desconocido',
+                  taskName: task.tasks_type?.name || t('admin.pages.inventory.elementDetailPopup.history.unknownTask'),
                   taskDescription: task.tasks_type?.description || '',
                   status: task.status !== undefined ? task.status : 0,
                   spentTime: task.spent_time !== undefined ? task.spent_time : 0,
@@ -363,18 +363,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         }
       }
     }
-    
+
     return filteredTasks;
-  }, [element, getZoneElement, workOrders]);
+  }, [element, getZoneElement, workOrders, t]);
 
   const getStatusLabel = (status: number) => {
-    const statuses = {
-      0: 'Pendiente',
-      1: 'En progreso',
-      2: 'Completado',
+    const statuses: Record<number, string> = {
+      0: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.pending'),
+      1: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.inProgress'),
+      2: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.completed'),
     };
-    
-    return statuses[status as keyof typeof statuses] || 'Desconocido';
+
+    return statuses[status] || t('admin.pages.inventory.elementDetailPopup.history.taskStatus.unknown');
   };
 
   const getStatusSeverity = (status: number): 'danger' | 'warning' | 'success' | 'info' => {
@@ -383,18 +383,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       1: 'warning',
       2: 'success',
     };
-    
-    return severities[status as keyof typeof severities] || 'info';
+
+    return severities[status] || 'info';
   };
 
   const getStatusIcon = (status: number) => {
-    const icons = {
+    const icons: Record<number, string> = {
       0: 'mdi:clock-outline',
       1: 'mdi:progress-clock',
       2: 'mdi:check-circle-outline'
     };
-    
-    return icons[status as keyof typeof icons] || 'mdi:help-circle-outline';
+
+    return icons[status] || 'mdi:help-circle-outline';
   };
 
   const handleEvaCreated = useCallback((newEva: Eva) => {
@@ -407,7 +407,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     setIsEditEvaModalVisible(false);
   }, []);
 
-  // Helper function to get icon card header with consistent style
   const renderCardHeader = (title: string, icon: string, tagValue?: string, tagSeverity?: string) => (
     <div className="flex justify-between items-center p-3 bg-gray-100 border-b border-gray-200">
       <p className="font-bold text-indigo-700 flex items-center gap-2">
@@ -420,7 +419,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </div>
   );
 
-  // Helper function for section headers with consistent styling
   const renderSectionHeader = (title: string, icon: string) => (
     <h3 className="font-bold text-base mb-3 text-indigo-700 border-b pb-2 flex items-center gap-2">
       <Icon icon={icon} width="20" />
@@ -428,7 +426,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </h3>
   );
 
-  // Helper function for loading states with consistent design
   const renderLoading = (message?: string) => (
     <div className="flex justify-center items-center py-8">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-700"></div>
@@ -436,7 +433,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </div>
   );
 
-  // Helper function for empty state with consistent design
   const renderEmptyState = (icon: string, message: string, buttonLabel?: string, onClick?: () => void) => (
     <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
       <div className="flex justify-center mb-3">
@@ -454,7 +450,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </div>
   );
 
-  // Helper function to render a tab panel content wrapper with consistent styling
   const renderTabContent = (children: React.ReactNode, title?: string, icon?: string) => (
     <div className="p-4">
       {title && icon && (
@@ -469,12 +464,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </div>
   );
 
-  // Standard styling classes
   const contentBoxClass = "bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm";
   const dataRowClass = "flex justify-between py-1";
   const labelClass = "text-gray-700 font-medium";
 
-  // Standardized rendering of info item pairs
   const renderInfoItem = (label: string, value: React.ReactNode) => (
     <p className={dataRowClass}>
       <strong className={labelClass}>{label}:</strong>
@@ -724,13 +717,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   setEva(null);
                   toast.current?.show({
                     severity: 'success',
-                    summary: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccess'),
+                    summary: t('general.success'),
                     detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccessDetail'),
                   });
                 } catch (error) {
                   toast.current?.show({
                     severity: 'error',
-                    summary: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteError'),
+                    summary: t('general.error'),
                     detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteErrorDetail'),
                   });
                 }
@@ -760,7 +753,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           },
           nav: { className: 'flex justify-center gap-4' }
         }}>
-        {/* Information Tab */}
         <TabPanel
           header={
             <div className="flex items-center justify-center gap-2">
@@ -786,7 +778,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 )}
                 {renderInfoItem(
                   t('admin.pages.inventory.elementDetailPopup.information.treeFamily'),
-                  element.tree_type_id && getTreeType(element.tree_type_id)?.family || 
+                  getTreeType(element.tree_type_id)?.family ||
                   t('general.not_available')
                 )}
                 {renderInfoItem(
@@ -840,7 +832,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           )}
         </TabPanel>
 
-        {/* Incidences Tab */}
         <TabPanel
           header={
             <div className="flex items-center justify-center gap-2">
@@ -861,13 +852,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       className="shadow-sm border border-gray-200 bg-gray-50"
                       header={
                         renderCardHeader(
-                          `${t('admin.pages.inventory.elementDetailPopup.incidences.title')} #${incidence.id}`,
+                          t('admin.pages.inventory.elementDetailPopup.incidences.title') + ` #${incidence.id}`,
                           "tabler:alert-triangle",
-                          incidence.status === IncidentStatus.open
-                            ? t('admin.pages.inventory.elementDetailPopup.incidences.statusOptions.open')
-                            : incidence.status === IncidentStatus.in_progress
-                              ? t('admin.pages.inventory.elementDetailPopup.incidences.statusOptions.in_progress')
-                              : t('admin.pages.inventory.elementDetailPopup.incidences.statusOptions.closed'),
+                          t(`admin.pages.inventory.elementDetailPopup.incidences.statusOptions.${incidence.status}`),
                           incidence.status === IncidentStatus.open
                             ? 'warning'
                             : incidence.status === IncidentStatus.in_progress
@@ -939,7 +926,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           )}
         </TabPanel>
 
-        {/* History Tab */}
         <TabPanel
           header={
             <div className="flex items-center justify-center gap-2">
@@ -955,8 +941,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               ) : tasksForElement.length > 0 ? (
                 <div className="space-y-4">
                   {tasksForElement.map((task, index) => (
-                    <Card 
-                      key={index} 
+                    <Card
+                      key={index}
                       className="shadow-sm border border-gray-200 bg-gray-50"
                       header={
                         renderCardHeader(
@@ -971,35 +957,35 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                         <div>
                           <div className="flex items-center gap-2 mb-2">
                             <Icon icon="tabler:calendar" className="text-indigo-500" width="18" />
-                            <span className="font-medium">Fecha:</span>
+                            <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.dateLabel')}</span>
                             <span>{formatDate(task.workOrderDate)}</span>
                           </div>
-                          
+
                           <div className="flex items-center gap-2 mb-2">
                             <Icon icon="tabler:file-description" className="text-indigo-500" width="18" />
-                            <span className="font-medium">Orden de Trabajo:</span>
+                            <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.workOrderLabel')}</span>
                             <span>OT-{task.workOrderId}</span>
                           </div>
-                          
+
                           {task.spentTime > 0 && (
                             <div className="flex items-center gap-2">
                               <Icon icon="tabler:clock" className="text-indigo-500" width="18" />
-                              <span className="font-medium">Horas dedicadas:</span>
+                              <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.hoursLabel')}</span>
                               <span>{task.spentTime}h</span>
                             </div>
                           )}
                         </div>
-                        
+
                         {task.users && task.users.length > 0 && (
                           <div>
                             <div className="flex items-center gap-2 mb-2">
                               <Icon icon="tabler:users" className="text-indigo-500" width="18" />
-                              <span className="font-medium">Trabajadores:</span>
+                              <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.workersLabel')}</span>
                             </div>
                             <div className="flex flex-wrap gap-2">
                               {task.users.map(user => (
-                                <div 
-                                  key={user.id} 
+                                <div
+                                  key={user.id}
                                   className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm"
                                 >
                                   <Icon icon="tabler:user" width="16" />
@@ -1016,18 +1002,17 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               ) : (
                 renderEmptyState(
                   "tabler:calendar-off",
-                  "No hay historial de tareas para este elemento",
+                  t('admin.pages.inventory.elementDetailPopup.history.noTasks'),
                   undefined,
                   undefined
                 )
               )}
             </>,
-            "Historial de Tareas",
+            t('admin.pages.inventory.elementDetailPopup.history.taskHistoryTitle'),
             "tabler:history"
           )}
         </TabPanel>
 
-        {/* Eva Tab */}
         <TabPanel
           header={
             <div className="flex items-center justify-center gap-2">
@@ -1044,7 +1029,6 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         </TabPanel>
       </TabView>
 
-      {/* Modal sections remain the same */}
       {isEvaModalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -1097,9 +1081,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               element={element}
               onClose={() => setIsEditModalVisible(false)}
               elementTypes={elementTypes.map(et => ({ label: et.name, value: et.id || 0 }))}
-              treeTypes={treeTypes.map(tt => ({ 
-                label: `${tt.family} ${tt.genus} ${tt.species}`, 
-                value: tt.id || 0 
+              treeTypes={treeTypes.map(tt => ({
+                label: `${tt.family} ${tt.genus} ${tt.species}`,
+                value: tt.id || 0
               }))}
             />
           </div>

@@ -1,5 +1,6 @@
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { MapComponent } from '@/components/Map';
@@ -15,74 +16,65 @@ import { Zone } from '@/types/Zone';
 import { ZoneEvent } from '@/types/ZoneEvent';
 
 export default function Inventory() {
-  // Zone state
+  const { t } = useTranslation();
   const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
   const [zoneToAddElement, setZoneToAddElement] = useState<Zone | null>(null);
-  
-  // UI state
+
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [mapKey, setMapKey] = useState(Date.now());
   const [isCreatingElement, setIsCreatingElement] = useState(false);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
   const [enabledButton, setEnabledButton] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  
-  // Loading state
+
   const [dataInitialized, setDataInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { 
-    isMapReady, 
-    isInitializing, 
-    error: mapInitError, 
-    updateElements, 
-    lastElementUpdate 
+  const {
+    isMapReady,
+    isInitializing,
+    error: mapInitError,
+    updateElements,
+    lastElementUpdate
   } = useMapInitialization();
 
-  // Refs
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
-  
-  // Redux
+
   const dispatch = useDispatch<AppDispatch>();
   const currentContract = useSelector((state: RootState) => state.contract.currentContract);
   const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
   const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
   const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
 
-  // Load data when contract changes
   useEffect(() => {
     const loadData = async () => {
       if (!currentContract?.id) return;
-      
+
       try {
         setIsLoading(true);
-        
-        // Load all data in parallel for better performance
+
         await Promise.all([
           dispatch(fetchZonesAsync()),
           dispatch(fetchPointsAsync()),
           dispatch(fetchElementsAsync())
         ]);
-        
-        // Mark data as initialized
+
         setDataInitialized(true);
-        
-        // Signal to the map that it should show all elements
+
         const event: ZoneEvent = {
           isCreatingElement: false,
           showAllElements: true,
           forceShow: true
         };
-        
-        // Dispatch event and then set loading state to false
+
         eventSubject.next(event);
         setIsLoading(false);
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error cargando datos del inventario',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.inventoryPage.loadError'),
           life: 3000,
         });
         setIsLoading(false);
@@ -90,28 +82,25 @@ export default function Inventory() {
     };
 
     loadData();
-  }, [dispatch, currentContract]);
+  }, [dispatch, currentContract, t]);
 
-  // Regenerate map key when map is ready to ensure proper rendering
   useEffect(() => {
     if (isMapReady && !isLoading) {
       setMapKey(Date.now());
     }
   }, [isMapReady, isLoading]);
 
-  // Handle map initialization error
   useEffect(() => {
     if (mapInitError && toast.current) {
       toast.current?.show({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error de inicialización del mapa',
+        summary: t('general.error'),
+        detail: t('admin.pages.inventory.inventoryPage.mapInitError'),
         life: 3000
       });
     }
-  }, [mapInitError]);
+  }, [mapInitError, t]);
 
-  // Handle screen resize with proper cleanup
   useEffect(() => {
     const handleResize = () => {
       const newIsMobile = window.innerWidth < 768;
@@ -125,7 +114,6 @@ export default function Inventory() {
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobile]);
 
-  // Callbacks for zone selection and element creation
   const handleSelectedZone = useCallback((zone: Zone) => {
     setSelectedZone(zone);
   }, []);
@@ -141,31 +129,26 @@ export default function Inventory() {
 
   const handleElementAdded = useCallback(async () => {
     try {
-      // Fetch only the elements to update
       await dispatch(fetchElementsAsync());
-      
-      // Use the optimized update method
       updateElements();
-      
-      // Reset the zone state
       setZoneToAddElement(null);
     } catch (error) {
       toast.current?.show({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error actualizando elementos',
+        summary: t('general.error'),
+        detail: t('admin.pages.inventory.inventoryPage.elementUpdateError'),
         life: 3000,
       });
     }
-  }, [dispatch, updateElements]);
+  }, [dispatch, updateElements, t]);
 
   const handleMapClick = useCallback(
     (event: React.MouseEvent) => {
       if (isCreatingElement && !zoneToAddElement) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Aviso',
-          detail: 'No es pot crear un element fora de la zona',
+          summary: t('general.warning'),
+          detail: t('admin.pages.inventory.inventoryPage.createOutsideZoneError'),
           life: 3000,
           sticky: false,
           style: {
@@ -177,7 +160,7 @@ export default function Inventory() {
         });
       }
     },
-    [isCreatingElement, zoneToAddElement],
+    [isCreatingElement, zoneToAddElement, t],
   );
 
   const handleDrawingModeChange = useCallback((isDrawing: boolean) => {
@@ -192,7 +175,6 @@ export default function Inventory() {
     setModalVisible(visible);
   }, []);
 
-  // Show loading state while data initializes
   if (isLoading) {
     return (
       <div className="flex flex-col w-full h-full relative">

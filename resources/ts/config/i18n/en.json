@@ -690,8 +690,8 @@
         "windExposure": "Wind Exposure",
         "droughtExposure": "Drought Exposure"
       },
-
       "inventory": {
+        "title": "Inventory",
         "elementDetailPopup": {
           "tabs": {
             "information": "Information",
@@ -715,7 +715,8 @@
             },
             "deleteElement": "Delete Element",
             "elementDeleted": "Element deleted successfully",
-            "elementDeleteFailed": "Failed to delete the element"
+            "elementDeleteFailed": "Failed to delete the element",
+            "editElement": "Edit Element"
           },
           "incidences": {
             "title": "Incidence",
@@ -733,7 +734,12 @@
               "open": "Open",
               "in_progress": "In Progress",
               "closed": "Closed"
-            }
+            },
+            "loadError": "Error loading incidences",
+            "deleteSuccess": "Incidence deleted",
+            "deleteSuccessDetail": "Incidence deleted successfully",
+            "deleteError": "Error deleting incidence",
+            "deleteErrorDetail": "Failed to delete the incidence"
           },
           "eva": {
             "loading": "Loading tree evaluation...",
@@ -759,22 +765,193 @@
             "list": {
               "messages": {
                 "deleteSuccess": "EVA deleted successfully",
-                "deleteSuccessDetail": "EVA details were deleted successfully"
+                "deleteSuccessDetail": "EVA details were deleted successfully",
+                "deleteError": "Error deleting EVA",
+                "deleteErrorDetail": "Could not delete EVA details"
               }
             }
           },
           "history": {
-            "title": "Element History (under construction...)",
+            "title": "Element History",
             "notes": "Notes",
             "task": "Task",
             "description": "Description",
             "workOrder": "Work Order",
             "status": "Status",
-            "noTasks": "No tasks registered for this element."
+            "noTasks": "No task history for this element.",
+            "unknownTask": "Unknown Task",
+            "taskStatus": {
+              "pending": "Pending",
+              "inProgress": "In Progress",
+              "completed": "Completed",
+              "unknown": "Unknown"
+            },
+            "dateLabel": "Date:",
+            "workOrderLabel": "Work Order:",
+            "hoursLabel": "Hours Spent:",
+            "workersLabel": "Workers:",
+            "taskHistoryTitle": "Task History"
+          },
+          "workOrders": {
+             "loadError": "Error loading work orders"
           }
-        }
+        },
+        "editElementForm": {
+          "toast": {
+            "successDetail": "Element updated successfully",
+            "errorDetail": "Failed to update element"
+          },
+          "editingInfo": "Editing element #{{id}}",
+          "labels": {
+            "description": "Description",
+            "elementType": "Element Type",
+            "treeType": "Tree Type"
+          },
+          "placeholders": {
+            "description": "Enter description...",
+            "elementType": "Select element type",
+            "treeType": "Select tree type"
+          },
+          "buttons": {
+            "save": "Save Changes"
+          }
+        },
+        "elementPopup": {
+          "title": "Element #{{id}}",
+          "elementTypeUndefined": "Undefined",
+          "treeFamilyLabel": "Family:",
+          "treeGenusLabel": "Genus:",
+          "treeSpeciesLabel": "Species:",
+          "createdLabel": "Created:",
+          "createdAtNotAvailable": "Not available",
+          "incidentButton": "Incident",
+          "deleteButton": "Delete"
+        },
+        "incidentForm": {
+          "toast": {
+            "nameRequiredWarningTitle": "Attention",
+            "nameRequiredWarningDetail": "Incident name is required",
+            "successTitle": "Success",
+            "successDetail": "Incident created successfully",
+            "errorTitle": "Error",
+            "errorDetail": "Could not create incident"
+          },
+          "nameLabel": "Name:",
+          "namePlaceholder": "Incident name",
+          "descriptionLabel": "Description:",
+          "descriptionPlaceholder": "Incident description",
+          "saveButton": "Save",
+          "cancelButton": "Cancel"
+        },
+        "inventoryPage": {
+          "loadError": "Error loading inventory data",
+          "mapInitError": "Map initialization error",
+          "elementUpdateError": "Error updating elements",
+          "createOutsideZoneError": "Cannot create an element outside the zone"
+        },
+        "saveElementForm": {
+          "fetchElementTypeError": "Error checking if tree type is required:",
+          "savePointError": "Failed to save point - no ID returned",
+          "infoTitle": "Adding element in the zone",
+          "elementTypeLabel": "Element Type",
+          "elementTypePlaceholder": "Select an element type",
+          "noTypesAvailable": "No types available",
+          "noResultsFound": "No results found",
+          "elementTypeRequiredError": "This field is required",
+          "treeTypeLabel": "Tree Type",
+          "treeTypePlaceholder": "Select tree type",
+          "treeTypeRequiredError": "This field is required for the selected element type",
+          "descriptionLabel": "Description (optional)",
+          "descriptionPlaceholder": "Additional element description (optional)",
+          "cancelButton": "Cancel",
+          "saveButton": "Save Element"
+        },
+        "saveZoneForm": {
+          "validation": {
+            "nameRequired": "Name is required",
+            "colorFormat": "Must be a valid color code in #RRGGBB format",
+            "contractIdRequired": "Contract ID is required",
+            "coordinatesRequired": "Coordinates are required"
+          },
+          "overlapCheckError": "Error analyzing polygon intersection:",
+          "toast": {
+            "overlapErrorTitle": "Error",
+            "overlapErrorDetail": "Cannot create a zone on top of an existing zone",
+            "zoneIdError": "Could not get the ID of the created zone.",
+            "saveSuccessTitle": "Success",
+            "saveSuccessDetail": "Zone and points saved successfully",
+            "saveErrorTitle": "Error",
+            "saveErrorDetail": "Could not save the zone"
+          },
+          "infoText": "A zone with <strong>{{count}}</strong> boundary points will be created. The zone must have a unique name.",
+          "nameLabel": "Zone Name",
+          "namePlaceholder": "e.g., Central Park",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "Detailed description of the zone (optional)",
+          "colorLabel": "Color",
+          "cancelButton": "Cancel",
+          "saveButton": "Save Zone"
+        },
+        "zones": {
+          "toast": {
+             "loadError": "Error loading resources",
+             "loadTypesError": "Error loading element types",
+             "eventSystemError": "Error in the event system",
+             "deleteSuccess": "Zone and points deleted successfully",
+             "deleteError": "Could not delete the zone",
+             "showElementsWarningZoneHidden": "Cannot show elements while the zone is hidden.",
+             "colorUpdateSuccess": "Color updated successfully",
+             "colorUpdateError": "Could not update the color"
+          },
+          "title": "Zones",
+          "saveZoneButton": "Save Zone",
+          "creatingElementInfo": "Creating new element",
+          "cancelCreationTooltip": "Cancel creation",
+          "searchPlaceholder": "Search zones...",
+          "emptyState": {
+             "title": "No zones found",
+             "messageWithSearch": "Try another search or adjust your filters.",
+             "messageDefault": "Create or draw a zone to get started.",
+             "clearSearchButton": "Clear search"
+          },
+          "tooltips": {
+             "changeColor": "Change color",
+             "showZone": "Show zone",
+             "hideZone": "Hide zone",
+             "goToZone": "Go to zone",
+             "addElement": "Add element",
+             "deleteZone": "Delete zone",
+             "zoneHidden": "Zone is hidden",
+             "showElements": "Show elements",
+             "hideElements": "Hide elements"
+          },
+          "noDescription": "No description",
+          "noElementsInZone": "No elements in this zone",
+          "addElementButton": "Add element",
+          "elementsHeader": "Elements ({{count}})",
+          "deleteConfirm": {
+             "title": "Confirm deletion",
+             "deleteButton": "Delete",
+             "warningIrreversible": "This action cannot be undone",
+             "confirmationText": "Are you sure you want to delete the zone <strong> {{zoneName}}</strong>?",
+             "infoText": "This action will delete the zone and all its associated points and elements."
+          }
+        },
+        "loadError": "Error loading contract data",
+        "createOutsideZoneErrorTitle": "Warning",
+        "createOutsideZoneErrorDetail": "Cannot create an element outside the selected zone or area",
+        "clickToAddElementPrompt": "Click on the map to add an element",
+        "drawingModeActive": "Drawing mode activated",
+        "saveZoneDialogTitle": "Save Zone",
+        "saveElementDialogTitle": "Save Element",
+        "addIncidentDialogTitle": "Add Incident",
+        "elementDetailsDialogTitle": "Element Details #{{elementId}}",
+        "selectedZoneInfo": "Zone: {{zoneName}}",
+        "addingElementInZoneInfo": "Adding in: {{zoneName}}",
+        "genericErrorTitle": "Error",
+        "genericSuccessTitle": "Success",
+        "genericWarningTitle": "Warning"
       },
-
       "resources": {
         "title": "Resources",
         "form": {
