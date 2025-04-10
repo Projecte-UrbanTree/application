@@ -1,11 +1,11 @@
+import { Icon } from '@iconify/react';
 import { format } from 'date-fns';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { Dropdown } from 'primereact/dropdown';
 import { TabPanel, TabView } from 'primereact/tabview';
 import { Tag } from 'primereact/tag';
 import { Toast } from 'primereact/toast';
-import { Card } from 'primereact/card';
-import { Divider } from 'primereact/divider';
 import React, {
   useCallback,
   useEffect,
@@ -19,12 +19,11 @@ import { useNavigate } from 'react-router-dom';
 
 import axiosClient from '@/api/axiosClient';
 import {
-  deleteIncidence,
   fetchIncidence,
   updateIncidence,
 } from '@/api/service/incidentService';
 import { fetchWorkOrders } from '@/api/service/workOrder';
-import { useTreeEvaluation, Eva } from '@/components/FunctionsEva';
+import { Eva, useTreeEvaluation } from '@/components/FunctionsEva';
 import CreateEva from '@/pages/Admin/Eva/Create';
 import EditEva from '@/pages/Admin/Eva/Edit';
 import { deleteElementAsync } from '@/store/slice/elementSlice';
@@ -35,7 +34,8 @@ import { ElementType } from '@/types/ElementType';
 import { Incidence, IncidentStatus } from '@/types/Incident';
 import { Point } from '@/types/Point';
 import { TreeTypes } from '@/types/TreeTypes';
-import { WorkOrder, WorkOrderStatus, WorkOrderBlock, WorkOrderBlockTask } from '@/types/WorkOrders';
+import { WorkOrder } from '@/types/WorkOrders';
+
 import EditElementForm from './EditElementForm';
 
 interface ElementDetailPopupProps {
@@ -159,15 +159,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         setIncidences([]);
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error cargando incidencias',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.loadError'),
         });
       } finally {
         setIsLoading(false);
       }
     };
     loadIncidences();
-  }, [element.id, dispatch]);
+  }, [element.id, dispatch, t]);
 
   const refreshEvaData = useCallback(async () => {
     try {
@@ -226,18 +226,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
         toast.current?.show({
           severity: 'success',
-          summary: 'Estado actualizado',
-          detail: 'Se actualizó correctamente el estado de la incidencia',
+          summary: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdated'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdatedDetail'),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo actualizar el estado de la incidencia',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdateFailed'),
         });
       }
     },
-    [dispatch],
+    [dispatch, t],
   );
 
   const handleAddIncidentClick = useCallback(() => {
@@ -254,13 +254,13 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         setIncidences((prev) => prev.filter((inc) => inc.id !== incidentId));
         toast.current?.show({
           severity: 'success',
-          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccess'),
+          summary: t('general.success'),
           detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccessDetail'),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: t('admin.pages.inventory.elementDetailPopup.incidences.deleteError'),
+          summary: t('general.error'),
           detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteErrorDetail'),
         });
       }
@@ -276,18 +276,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         onDeleteElement(id);
         toast.current?.show({
           severity: 'success',
-          summary: 'Éxito',
-          detail: 'Elemento eliminado correctamente',
+          summary: t('general.success'),
+          detail: t('admin.pages.inventory.elementDetailPopup.information.elementDeleted'),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo eliminar el elemento',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.elementDetailPopup.information.elementDeleteFailed'),
         });
       }
     },
-    [dispatch, onClose, onDeleteElement]
+    [dispatch, onClose, onDeleteElement, t]
   );
 
   const getElementType = useCallback(
@@ -331,26 +331,26 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     if (!elementZone) return [];
 
     const filteredTasks = [];
-    
+
     for (const workOrder of workOrders) {
       if (workOrder.work_orders_blocks && workOrder.work_orders_blocks.length > 0) {
         for (const block of workOrder.work_orders_blocks) {
           const blockIncludesElementZone = block.zones?.some(zone => zone.id === elementZone.id) || false;
-          
+
           if (blockIncludesElementZone && block.block_tasks && block.block_tasks.length > 0) {
             for (const task of block.block_tasks) {
               const elementTypeMatches = task.element_type.id === element.element_type_id;
-              
+
               let treeTypeMatches = true;
               if (element.tree_type_id) {
                 treeTypeMatches = task.tree_type ? task.tree_type.id === element.tree_type_id : false;
               }
-              
+
               if (elementTypeMatches && treeTypeMatches) {
                 filteredTasks.push({
                   workOrderId: workOrder.id,
                   workOrderDate: workOrder.date,
-                  taskName: task.tasks_type?.name || 'Desconocido',
+                  taskName: task.tasks_type?.name || t('admin.pages.inventory.elementDetailPopup.history.unknownTask'),
                   taskDescription: task.tasks_type?.description || '',
                   status: task.status !== undefined ? task.status : 0,
                   spentTime: task.spent_time !== undefined ? task.spent_time : 0,
@@ -363,18 +363,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         }
       }
     }
-    
+
     return filteredTasks;
-  }, [element, getZoneElement, workOrders]);
+  }, [element, getZoneElement, workOrders, t]);
 
   const getStatusLabel = (status: number) => {
-    const statuses = {
-      0: 'Pendiente',
-      1: 'En progreso',
-      2: 'Completado',
+    const statuses: Record<number, string> = {
+      0: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.pending'),
+      1: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.inProgress'),
+      2: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.completed'),
     };
-    
-    return statuses[status as keyof typeof statuses] || 'Desconocido';
+
+    return statuses[status] || t('admin.pages.inventory.elementDetailPopup.history.taskStatus.unknown');
   };
 
   const getStatusSeverity = (status: number): 'danger' | 'warning' | 'success' | 'info' => {
@@ -383,18 +383,18 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       1: 'warning',
       2: 'success',
     };
-    
-    return severities[status as keyof typeof severities] || 'info';
+
+    return severities[status] || 'info';
   };
 
   const getStatusIcon = (status: number) => {
-    const icons = {
+    const icons: Record<number, string> = {
       0: 'mdi:clock-outline',
       1: 'mdi:progress-clock',
       2: 'mdi:check-circle-outline'
     };
-    
-    return icons[status as keyof typeof icons] || 'mdi:help-circle-outline';
+
+    return icons[status] || 'mdi:help-circle-outline';
   };
 
   const handleEvaCreated = useCallback((newEva: Eva) => {
@@ -407,25 +407,85 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     setIsEditEvaModalVisible(false);
   }, []);
 
+  const renderCardHeader = (title: string, icon: string, tagValue?: string, tagSeverity?: string) => (
+    <div className="flex justify-between items-center p-3 bg-gray-100 border-b border-gray-200">
+      <p className="font-bold text-indigo-700 flex items-center gap-2">
+        <Icon icon={icon} width="18" />
+        {title}
+      </p>
+      {tagValue && tagSeverity && (
+        <Tag severity={tagSeverity as any} value={tagValue} />
+      )}
+    </div>
+  );
+
+  const renderSectionHeader = (title: string, icon: string) => (
+    <h3 className="font-bold text-base mb-3 text-indigo-700 border-b pb-2 flex items-center gap-2">
+      <Icon icon={icon} width="20" />
+      {title}
+    </h3>
+  );
+
+  const renderLoading = (message?: string) => (
+    <div className="flex justify-center items-center py-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-700"></div>
+      <p className="ml-3 text-gray-600">{message || t('general.loading')}</p>
+    </div>
+  );
+
+  const renderEmptyState = (icon: string, message: string, buttonLabel?: string, onClick?: () => void) => (
+    <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
+      <div className="flex justify-center mb-3">
+        <Icon icon={icon} className="text-gray-400" width="48" height="48" />
+      </div>
+      <p className="text-gray-500 mb-4">{message}</p>
+      {buttonLabel && onClick && (
+        <Button
+          label={buttonLabel}
+          className="p-button-sm p-button-outlined"
+          icon={<Icon icon="tabler:plus" />}
+          onClick={onClick}
+        />
+      )}
+    </div>
+  );
+
+  const renderTabContent = (children: React.ReactNode, title?: string, icon?: string) => (
+    <div className="p-4">
+      {title && icon && (
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold text-indigo-700 flex items-center gap-2">
+            <Icon icon={icon} width="24" />
+            {title}
+          </h2>
+        </div>
+      )}
+      {children}
+    </div>
+  );
+
+  const contentBoxClass = "bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm";
+  const dataRowClass = "flex justify-between py-1";
+  const labelClass = "text-gray-700 font-medium";
+
+  const renderInfoItem = (label: string, value: React.ReactNode) => (
+    <p className={dataRowClass}>
+      <strong className={labelClass}>{label}:</strong>
+      <span>{value}</span>
+    </p>
+  );
+
   const renderEvaPanel = () => {
     if (isLoadingEva) {
-      return (
-        <div className="flex justify-center items-center py-8">
-          <p>{t('admin.pages.inventory.elementDetailPopup.eva.loading')}</p>
-        </div>
-      );
+      return renderLoading(t('admin.pages.inventory.elementDetailPopup.eva.loading'));
     }
 
     if (!eva) {
-      return (
-        <div className="text-center py-8 space-y-4">
-          <p>{t('admin.pages.inventory.elementDetailPopup.eva.noData')}</p>
-          <Button
-            label={t('admin.pages.inventory.elementDetailPopup.eva.createEva')}
-            className="p-button-sm p-button-primary"
-            onClick={() => setIsEvaModalVisible(true)}
-          />
-        </div>
+      return renderEmptyState(
+        "tabler:leaf-off",
+        t('admin.pages.inventory.elementDetailPopup.eva.noData'),
+        t('admin.pages.inventory.elementDetailPopup.eva.createEva'),
+        () => setIsEvaModalVisible(true)
       );
     }
 
@@ -445,15 +505,14 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
       eva.effective_root_area,
     );
 
-    return (
+    return renderTabContent(
       <div className="space-y-6">
-        <div className="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
-          <h3 className="text-lg font-bold mb-3 text-indigo-700">
-            {t(
-              'admin.pages.inventory.elementDetailPopup.eva.evaluationIndices',
-            )}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className={contentBoxClass}>
+          {renderSectionHeader(
+            t('admin.pages.inventory.elementDetailPopup.eva.evaluationIndices'),
+            "tabler:chart-bar"
+          )}
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <p className="font-medium">
                 {t('admin.pages.inventory.elementDetailPopup.eva.treeStatus')}:
@@ -546,13 +605,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
-          <h3 className="text-lg font-bold mb-3 text-indigo-700">
-            {t(
-              'admin.pages.inventory.elementDetailPopup.eva.environmentalFactors',
-            )}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className={contentBoxClass}>
+          {renderSectionHeader(
+            t('admin.pages.inventory.elementDetailPopup.eva.environmentalFactors'),
+            "tabler:cloud-storm"
+          )}
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <p className="font-medium">
                 {t('admin.pages.inventory.elementDetailPopup.eva.windExposure')}
@@ -594,11 +652,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
-          <h3 className="text-lg font-bold mb-3 text-indigo-700">
-            {t('admin.pages.inventory.elementDetailPopup.eva.technicalData')}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className={contentBoxClass}>
+          {renderSectionHeader(
+            t('admin.pages.inventory.elementDetailPopup.eva.technicalData'),
+            "tabler:ruler-measure"
+          )}
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <p>
                 <strong>
@@ -641,28 +700,30 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               </p>
             </div>
           </div>
-          <div className="text-center py-4">
+          <div className="flex gap-2 pt-3 mt-3 border-t border-gray-200 justify-center">
             <Button
               label={t('admin.pages.inventory.elementDetailPopup.eva.editEva')}
               className="p-button-sm p-button-primary"
+              icon={<Icon icon="tabler:edit" />}
               onClick={() => setIsEditEvaModalVisible(true)}
             />
             <Button
               label={t('admin.pages.inventory.elementDetailPopup.eva.deleteEva')}
-              className="p-button-sm p-button-danger ml-2"
+              className="p-button-sm p-button-danger"
+              icon={<Icon icon="tabler:trash" />}
               onClick={async () => {
                 try {
                   await axiosClient.delete(`/admin/evas/${eva.id}`);
                   setEva(null);
                   toast.current?.show({
                     severity: 'success',
-                    summary: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccess'),
+                    summary: t('general.success'),
                     detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccessDetail'),
                   });
                 } catch (error) {
                   toast.current?.show({
                     severity: 'error',
-                    summary: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteError'),
+                    summary: t('general.error'),
                     detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteErrorDetail'),
                   });
                 }
@@ -675,343 +736,296 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   };
 
   return (
-    <div
-      className="bg-white rounded-lg max-w-full"
-      style={{ width: popupWidth }}>
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-full overflow-hidden">
       <Toast ref={toast} />
       <TabView
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}
         renderActiveOnly={false}
         scrollable={false}
+        className="inventory-tabs"
         pt={{
           inkbar: { style: { display: 'none' } },
-          navContainer: { 
-            className: 'no-fragment-links', 
-            tabIndex: null
+          navContainer: {
+            className: 'border-b border-gray-200 bg-white',
+            tabIndex: null,
+            style: { padding: '0.75rem 1rem 0' }
           },
-          nav: { className: 'no-hash-links' }
+          nav: { className: 'flex justify-center gap-4' }
         }}>
         <TabPanel
-          header={t(
-            'admin.pages.inventory.elementDetailPopup.tabs.information',
-          )}>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-sm space-y-2">
-              <h3 className="font-bold text-base mb-3">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.information.title',
-                )}
-              </h3>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.description',
-                  )}
-                  :
-                </strong>{' '}
-                {element.description || t('general.not_available')}
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.elementType',
-                  )}
-                  :
-                </strong>{' '}
-                {getElementType(element.element_type_id!)}
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.treeFamily',
-                  )}
-                  :
-                </strong>{' '}
-                {element.tree_type_id && getTreeType(element.tree_type_id)?.family || 
-                  t('general.not_available')}
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.treeGenus',
-                  )}
-                  :
-                </strong>{' '}
-                {getTreeType(element.tree_type_id!)?.genus ||
-                  t('general.not_available')}
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.treeSpecies',
-                  )}
-                  :
-                </strong>{' '}
-                {getTreeType(element.tree_type_id!)?.species ||
-                  t('general.not_available')}
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.creationDate',
-                  )}
-                  :
-                </strong>{' '}
-                {formatDate(element.created_at!)}
-              </p>
+          header={
+            <div className="flex items-center justify-center gap-2">
+              <Icon icon="tabler:info-circle" width="20" />
+              {t('admin.pages.inventory.elementDetailPopup.tabs.information')}
             </div>
-            <div className="text-sm space-y-2">
-              <h3 className="font-bold text-base mb-3">
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.information.location.title',
+          }
+          headerClassName="p-3">
+          {renderTabContent(
+            <div className="grid grid-cols-1 gap-6">
+              <div className={contentBoxClass}>
+                {renderSectionHeader(
+                  t('admin.pages.inventory.elementDetailPopup.information.title'),
+                  "tabler:info-circle"
                 )}
-              </h3>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.location.zone',
-                  )}
-                  :
-                </strong>{' '}
-                {getZoneElement(element.point_id!)?.name ||
-                  t('general.not_available')}
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.location.latitude',
-                  )}
-                  :
-                </strong>{' '}
-                {coords.lat || t('general.not_available')}
-              </p>
-              <p>
-                <strong>
-                  {t(
-                    'admin.pages.inventory.elementDetailPopup.information.location.longitude',
-                  )}
-                  :
-                </strong>{' '}
-                {coords.lng || t('general.not_available')}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  label={t(
-                    'admin.pages.inventory.elementDetailPopup.information.deleteElement',
-                  )}
-                  className="p-button-danger p-button-sm"
-                  onClick={() => handleDeleteElement(element.id!)}
-                />
-              </div>
-            </div>
-          </div>
-        </TabPanel>
-
-        <TabPanel
-          header={t(
-            'admin.pages.inventory.elementDetailPopup.tabs.incidences',
-          )}>
-          <div className="space-y-4">
-            {isLoading ? (
-              <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-gray-900"></div>
-              </div>
-            ) : incidences.length > 0 ? (
-              incidences.map((incidence) => (
-                <div key={incidence.id} className="border p-4 rounded-md">
-                  <p className="font-bold">
-                    {t(
-                      'admin.pages.inventory.elementDetailPopup.incidences.title',
-                    )}{' '}
-                    #{incidence.id}
-                  </p>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.name',
-                      )}
-                      :
-                    </strong>{' '}
-                    {incidence.name || t('general.not_available')}
-                  </p>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.creationDate',
-                      )}
-                      :
-                    </strong>{' '}
-                    {formatDate(incidence.created_at!)}
-                  </p>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.status',
-                      )}
-                      :
-                    </strong>{' '}
-                    <Tag
-                      severity={
-                        incidence.status === IncidentStatus.open
-                          ? 'warning'
-                          : incidence.status === IncidentStatus.in_progress
-                            ? 'info'
-                            : 'success'
-                      }
-                      value={
-                        incidence.status === IncidentStatus.open
-                          ? t(
-                              'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.open',
-                            )
-                          : incidence.status === IncidentStatus.in_progress
-                            ? t(
-                                'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.in_progress',
-                              )
-                            : t(
-                                'admin.pages.inventory.elementDetailPopup.incidences.statusOptions.closed',
-                              )
-                      }
-                      className="ml-2"
-                    />
-                  </p>
-                  <p>
-                    <strong>
-                      {t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.description',
-                      )}
-                      :
-                    </strong>{' '}
-                    {incidence.description || t('general.not_available')}
-                  </p>
-                  <div className="mt-3 flex gap-2">
-                    <Dropdown
-                      value={incidence.status}
-                      options={statusOptions}
-                      onChange={(e) =>
-                        handleStatusChange(incidence.id!, e.value)
-                      }
-                      className="w-[140px] p-inputtext-sm"
-                    />
-                    <Button
-                      label={t(
-                        'admin.pages.inventory.elementDetailPopup.incidences.deleteIncident',
-                      )}
-                      className="p-button-danger p-button-sm"
-                      onClick={() => handleDeleteIncident(incidence.id!)}
-                    />
-                  </div>
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.description'),
+                  element.description || t('general.not_available')
+                )}
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.elementType'),
+                  getElementType(element.element_type_id!)
+                )}
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.treeFamily'),
+                  getTreeType(element.tree_type_id)?.family ||
+                  t('general.not_available')
+                )}
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.treeGenus'),
+                  getTreeType(element.tree_type_id!)?.genus || t('general.not_available')
+                )}
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.treeSpecies'),
+                  getTreeType(element.tree_type_id!)?.species || t('general.not_available')
+                )}
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.creationDate'),
+                  formatDate(element.created_at!)
+                )}
+                <div className="flex gap-2 pt-3 mt-3 border-t border-gray-200 justify-end">
+                  <Button
+                    label={t('admin.pages.inventory.elementDetailPopup.information.editElement')}
+                    className="p-button-outlined p-button-sm p-button-info"
+                    icon={<Icon icon="tabler:edit" />}
+                    onClick={() => setIsEditModalVisible(true)}
+                  />
                 </div>
-              ))
-            ) : (
-              <p>
-                {t(
-                  'admin.pages.inventory.elementDetailPopup.incidences.noIncidences',
+              </div>
+              <div className={contentBoxClass}>
+                {renderSectionHeader(
+                  t('admin.pages.inventory.elementDetailPopup.information.location.title'),
+                  "tabler:map-pin"
                 )}
-              </p>
-            )}
-            <div className="flex justify-end">
-              <Button
-                label={t(
-                  'admin.pages.inventory.elementDetailPopup.incidences.addIncident',
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.location.zone'),
+                  getZoneElement(element.point_id!)?.name || t('general.not_available')
                 )}
-                className="p-button-sm"
-                onClick={handleAddIncidentClick}
-              />
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.location.latitude'),
+                  coords.lat || t('general.not_available')
+                )}
+                {renderInfoItem(
+                  t('admin.pages.inventory.elementDetailPopup.information.location.longitude'),
+                  coords.lng || t('general.not_available')
+                )}
+                <div className="flex gap-2 pt-3 mt-3 border-t border-gray-200 justify-end">
+                  <Button
+                    label={t('admin.pages.inventory.elementDetailPopup.information.deleteElement')}
+                    className="p-button-danger p-button-sm"
+                    icon={<Icon icon="tabler:trash" />}
+                    onClick={() => handleDeleteElement(element.id!)}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </TabPanel>
 
         <TabPanel
-          header={t('admin.pages.inventory.elementDetailPopup.tabs.history')}>
-          <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Historial de Tareas</h2>
+          header={
+            <div className="flex items-center justify-center gap-2">
+              <Icon icon="tabler:alert-triangle" width="20" />
+              {t('admin.pages.inventory.elementDetailPopup.tabs.incidences')}
             </div>
-            
-            {isLoading ? (
-              <div className="flex justify-center my-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-              </div>
-            ) : tasksForElement.length > 0 ? (
-              <div className="space-y-4">
-                {tasksForElement.map((task, index) => (
-                  <Card 
-                    key={index} 
-                    className="shadow-sm border-1 border-gray-200"
-                    header={(
-                      <div className="flex items-center justify-between p-3 bg-gray-50 border-bottom-1 border-gray-200">
-                        <div className="flex items-center gap-2">
-                          <span className="iconify text-xl text-blue-600" data-icon="mdi:water"></span>
-                          <h3 className="m-0 text-lg font-semibold">Nombre: Regar</h3>
+          }
+          headerClassName="p-3">
+          {renderTabContent(
+            <>
+              {isLoading ? (
+                renderLoading()
+              ) : incidences.length > 0 ? (
+                <div className="space-y-4">
+                  {incidences.map((incidence) => (
+                    <Card
+                      key={incidence.id}
+                      className="shadow-sm border border-gray-200 bg-gray-50"
+                      header={
+                        renderCardHeader(
+                          t('admin.pages.inventory.elementDetailPopup.incidences.title') + ` #${incidence.id}`,
+                          "tabler:alert-triangle",
+                          t(`admin.pages.inventory.elementDetailPopup.incidences.statusOptions.${incidence.status}`),
+                          incidence.status === IncidentStatus.open
+                            ? 'warning'
+                            : incidence.status === IncidentStatus.in_progress
+                              ? 'info'
+                              : 'success'
+                        )
+                      }
+                    >
+                      <div className="grid grid-cols-1 gap-4 mb-3 p-2">
+                        <div>
+                          {renderInfoItem(
+                            t('admin.pages.inventory.elementDetailPopup.incidences.name'),
+                            incidence.name || t('general.not_available')
+                          )}
+                          {renderInfoItem(
+                            t('admin.pages.inventory.elementDetailPopup.incidences.creationDate'),
+                            formatDate(incidence.created_at!)
+                          )}
                         </div>
-                        <Tag 
-                          value={getStatusLabel(task.status)} 
-                          severity={getStatusSeverity(task.status)}
-                          icon={getStatusIcon(task.status)}
-                          className="px-3"
+                        <div>
+                          <p>
+                            <strong className="text-gray-700">
+                              {t('admin.pages.inventory.elementDetailPopup.incidences.description')}:
+                            </strong>
+                            <span className="block mt-1 p-2 bg-white rounded border border-gray-200 text-sm">
+                              {incidence.description || t('general.not_available')}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center pt-3 mt-2 border-t border-gray-200 p-2">
+                        <Dropdown
+                          value={incidence.status}
+                          options={statusOptions}
+                          onChange={(e) => handleStatusChange(incidence.id!, e.value)}
+                          className="w-[160px] p-inputtext-sm"
+                        />
+                        <Button
+                          icon={<Icon icon="tabler:trash" />}
+                          label={t('admin.pages.inventory.elementDetailPopup.incidences.deleteIncident')}
+                          className="p-button-danger p-button-sm"
+                          onClick={() => handleDeleteIncident(incidence.id!)}
                         />
                       </div>
-                    )}
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="iconify text-blue-500" data-icon="mdi:calendar"></span>
-                          <span className="font-medium">Fecha:</span>
-                          <span>{formatDate(task.workOrderDate)}</span>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                renderEmptyState(
+                  "tabler:alert-circle",
+                  t('admin.pages.inventory.elementDetailPopup.incidences.noIncidences'),
+                  t('admin.pages.inventory.elementDetailPopup.incidences.addIncident'),
+                  handleAddIncidentClick
+                )
+              )}
+              {incidences.length > 0 && (
+                <div className="flex justify-end pt-3">
+                  <Button
+                    label={t('admin.pages.inventory.elementDetailPopup.incidences.addIncident')}
+                    className="p-button-sm"
+                    icon={<Icon icon="tabler:plus" />}
+                    onClick={handleAddIncidentClick}
+                  />
+                </div>
+              )}
+            </>,
+            t('admin.pages.inventory.elementDetailPopup.incidences.title'),
+            "tabler:alert-triangle"
+          )}
+        </TabPanel>
+
+        <TabPanel
+          header={
+            <div className="flex items-center justify-center gap-2">
+              <Icon icon="tabler:history" width="20" />
+              {t('admin.pages.inventory.elementDetailPopup.tabs.history')}
+            </div>
+          }
+          headerClassName="p-3">
+          {renderTabContent(
+            <>
+              {isLoading ? (
+                renderLoading()
+              ) : tasksForElement.length > 0 ? (
+                <div className="space-y-4">
+                  {tasksForElement.map((task, index) => (
+                    <Card
+                      key={index}
+                      className="shadow-sm border border-gray-200 bg-gray-50"
+                      header={
+                        renderCardHeader(
+                          task.taskName,
+                          "tabler:droplet",
+                          getStatusLabel(task.status),
+                          getStatusSeverity(task.status)
+                        )
+                      }
+                    >
+                      <div className="grid grid-cols-1 gap-4 p-2">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Icon icon="tabler:calendar" className="text-indigo-500" width="18" />
+                            <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.dateLabel')}</span>
+                            <span>{formatDate(task.workOrderDate)}</span>
+                          </div>
+
+                          <div className="flex items-center gap-2 mb-2">
+                            <Icon icon="tabler:file-description" className="text-indigo-500" width="18" />
+                            <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.workOrderLabel')}</span>
+                            <span>OT-{task.workOrderId}</span>
+                          </div>
+
+                          {task.spentTime > 0 && (
+                            <div className="flex items-center gap-2">
+                              <Icon icon="tabler:clock" className="text-indigo-500" width="18" />
+                              <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.hoursLabel')}</span>
+                              <span>{task.spentTime}h</span>
+                            </div>
+                          )}
                         </div>
-                        
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="iconify text-blue-500" data-icon="mdi:file-document-outline"></span>
-                          <span className="font-medium">Orden de Trabajo:</span>
-                          <span>{task.workOrderId}</span>
-                        </div>
-                        
-                        {task.spentTime > 0 && (
-                          <div className="flex items-center gap-2">
-                            <span className="iconify text-blue-500" data-icon="mdi:clock-time-five-outline"></span>
-                            <span className="font-medium">Horas dedicadas:</span>
-                            <span>{task.spentTime}h</span>
+
+                        {task.users && task.users.length > 0 && (
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Icon icon="tabler:users" className="text-indigo-500" width="18" />
+                              <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.workersLabel')}</span>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {task.users.map(user => (
+                                <div
+                                  key={user.id}
+                                  className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm"
+                                >
+                                  <Icon icon="tabler:user" width="16" />
+                                  {user.name} {user.surname}
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         )}
                       </div>
-                      
-                      {task.users && task.users.length > 0 && (
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="iconify text-blue-500" data-icon="mdi:account-group"></span>
-                            <span className="font-medium">Trabajadores:</span>
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {task.users.map(user => (
-                              <div 
-                                key={user.id} 
-                                className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
-                              >
-                                <span className="iconify" data-icon="mdi:account"></span>
-                                {user.name} {user.surname}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 bg-gray-50 rounded-lg">
-                <span className="iconify text-gray-400 text-4xl mb-2" data-icon="mdi:calendar-blank"></span>
-                <p className="text-gray-500 font-medium">No hay historial de tareas para este elemento</p>
-              </div>
-            )}
-          </div>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                renderEmptyState(
+                  "tabler:calendar-off",
+                  t('admin.pages.inventory.elementDetailPopup.history.noTasks'),
+                  undefined,
+                  undefined
+                )
+              )}
+            </>,
+            t('admin.pages.inventory.elementDetailPopup.history.taskHistoryTitle'),
+            "tabler:history"
+          )}
         </TabPanel>
 
         <TabPanel
-          header={t('admin.pages.inventory.elementDetailPopup.tabs.eva')}>
-          {renderEvaPanel()}
+          header={
+            <div className="flex items-center justify-center gap-2">
+              <Icon icon="tabler:leaf" width="20" />
+              {t('admin.pages.inventory.elementDetailPopup.tabs.eva')}
+            </div>
+          }
+          headerClassName="p-3">
+          {renderTabContent(
+            renderEvaPanel(),
+            t('admin.pages.inventory.elementDetailPopup.tabs.eva'),
+            "tabler:leaf"
+          )}
         </TabPanel>
       </TabView>
 
@@ -1067,9 +1081,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               element={element}
               onClose={() => setIsEditModalVisible(false)}
               elementTypes={elementTypes.map(et => ({ label: et.name, value: et.id || 0 }))}
-              treeTypes={treeTypes.map(tt => ({ 
-                label: `${tt.family} ${tt.genus} ${tt.species}`, 
-                value: tt.id || 0 
+              treeTypes={treeTypes.map(tt => ({
+                label: `${tt.family} ${tt.genus} ${tt.species}`,
+                value: tt.id || 0
               }))}
             />
           </div>

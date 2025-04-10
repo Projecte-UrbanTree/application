@@ -1,6 +1,10 @@
+import type { Contract } from "./Contract";
+import type { ElementType } from "./ElementType";
+import type { User } from "./User";
+
 export interface WorkOrderBlockTask {
   id: number;
-  element_type: { id?: number; name: string };
+  element_type: ElementType;
   tasks_type: { id?: number; name: string; description?: string };
   tree_type?: {
     id?: number;
@@ -50,16 +54,9 @@ export interface WorkOrder {
   id: number;
   date: string;
   status: number;
-  contract: {
-    id: number;
-    name: string;
-  };
+  contract: Contract;
   contract_id: number;
-  users: {
-    id: number;
-    name: string;
-    surname: string;
-  }[];
+  users: User[];
   work_orders_blocks: WorkOrderBlock[];
   work_reports?: WorkReport[];
 }

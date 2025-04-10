@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Zone;
 use App\Models\Point;
+use App\Models\Zone;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
-use function PHPUnit\Framework\isEmpty;
 
 class ZoneController extends Controller
 {
@@ -81,14 +79,12 @@ class ZoneController extends Controller
         return response()->json(['message' => 'Zona eliminada'], 200);
     }
 
-
-
     public function getCenterZoom(Request $request, $id): JsonResponse
     {
         $contractId = $request->header('X-Contract-Id');
 
         $zone = Zone::where('contract_id', $contractId)->where('id', $id)->first();
-        if (!$zone) {
+        if (! $zone) {
             return response()->json([], 200);
         }
 
@@ -138,7 +134,7 @@ class ZoneController extends Controller
 
         return response()->json([
             'center' => [$center_lng, $center_lat],
-            'zoom' => $zoom
+            'zoom' => $zoom,
         ]);
     }
 }
