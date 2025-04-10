@@ -690,7 +690,7 @@
         "windExposure": "Exposición al viento",
         "droughtExposure": "Exposición a sequía"
       },
-            "inventory": {
+      "inventory": {
         "title": "Inventario",
         "elementDetailPopup": {
           "tabs": {
@@ -793,7 +793,7 @@
             "taskHistoryTitle": "Historial de Tareas"
           },
           "workOrders": {
-             "loadError": "Error cargando órdenes de trabajo"
+            "loadError": "Error cargando órdenes de trabajo"
           }
         },
         "editElementForm": {
@@ -894,14 +894,14 @@
         },
         "zones": {
           "toast": {
-             "loadError": "Error cargando recursos",
-             "loadTypesError": "Error cargando tipos de elementos",
-             "eventSystemError": "Error en el sistema de eventos",
-             "deleteSuccess": "Zona y puntos eliminados correctamente",
-             "deleteError": "No se pudo eliminar la zona",
-             "showElementsWarningZoneHidden": "No se pueden mostrar elementos mientras la zona está oculta.",
-             "colorUpdateSuccess": "Color actualizado correctamente",
-             "colorUpdateError": "No se pudo actualizar el color"
+            "loadError": "Error cargando recursos",
+            "loadTypesError": "Error cargando tipos de elementos",
+            "eventSystemError": "Error en el sistema de eventos",
+            "deleteSuccess": "Zona y puntos eliminados correctamente",
+            "deleteError": "No se pudo eliminar la zona",
+            "showElementsWarningZoneHidden": "No se pueden mostrar elementos mientras la zona está oculta.",
+            "colorUpdateSuccess": "Color actualizado correctamente",
+            "colorUpdateError": "No se pudo actualizar el color"
           },
           "title": "Zonas",
           "saveZoneButton": "Guardar Zona",
@@ -909,32 +909,32 @@
           "cancelCreationTooltip": "Cancelar creación",
           "searchPlaceholder": "Buscar zonas...",
           "emptyState": {
-             "title": "No se encontraron zonas",
-             "messageWithSearch": "Prueba otra búsqueda o ajusta tus filtros.",
-             "messageDefault": "Crea o dibuja una zona para empezar.",
-             "clearSearchButton": "Limpiar búsqueda"
+            "title": "No se encontraron zonas",
+            "messageWithSearch": "Prueba otra búsqueda o ajusta tus filtros.",
+            "messageDefault": "Crea o dibuja una zona para empezar.",
+            "clearSearchButton": "Limpiar búsqueda"
           },
           "tooltips": {
-             "changeColor": "Cambiar color",
-             "showZone": "Mostrar zona",
-             "hideZone": "Ocultar zona",
-             "goToZone": "Ir a zona",
-             "addElement": "Añadir elemento",
-             "deleteZone": "Eliminar zona",
-             "zoneHidden": "La zona está oculta",
-             "showElements": "Mostrar elementos",
-             "hideElements": "Ocultar elementos"
+            "changeColor": "Cambiar color",
+            "showZone": "Mostrar zona",
+            "hideZone": "Ocultar zona",
+            "goToZone": "Ir a zona",
+            "addElement": "Añadir elemento",
+            "deleteZone": "Eliminar zona",
+            "zoneHidden": "La zona está oculta",
+            "showElements": "Mostrar elementos",
+            "hideElements": "Ocultar elementos"
           },
           "noDescription": "Sin descripción",
           "noElementsInZone": "No hay elementos en esta zona",
           "addElementButton": "Añadir elemento",
           "elementsHeader": "Elementos ({{count}})",
           "deleteConfirm": {
-             "title": "Confirmar eliminación",
-             "deleteButton": "Eliminar",
-             "warningIrreversible": "Esta acción no se puede deshacer",
-             "confirmationText": "¿Estás seguro de que quieres eliminar la zona <strong> {{zoneName}}</strong>?",
-             "infoText": "Esta acción eliminará la zona y todos sus puntos y elementos asociados."
+            "title": "Confirmar eliminación",
+            "deleteButton": "Eliminar",
+            "warningIrreversible": "Esta acción no se puede deshacer",
+            "confirmationText": "¿Estás seguro de que quieres eliminar la zona <strong> {{zoneName}}</strong>?",
+            "infoText": "Esta acción eliminará la zona y todos sus puntos y elementos asociados."
           }
         },
         "loadError": "Error cargando datos del contrato",
@@ -1551,10 +1551,53 @@
             "create": "Crear sensor",
             "edit": "Editar sensor",
             "delete": "Eliminar sensor"
-          }
+          },
+          "sensorDefaultName": "Sensor {{id}}",
+          "devEUI": "DevEUI",
+          "lastUpdate": "Última actualización",
+          "notAvailable": "N/A",
+          "battery": "Batería",
+          "noValueUnit": "-- {{unit}}",
+          "signal": "Señal",
+          "snrUnit": "SNR",
+          "latitude": "Latitud",
+          "longitude": "Longitud"
         },
         "errors": {
           "no_contract": "Debe seleccionar un contrato válido"
+        },
+        "monitoring": {
+          "title": "Monitorización en Tiempo Real",
+          "loading": "Cargando datos...",
+          "loadError": "Error al cargar los sensores",
+          "lastUpdateLabel": "Última actualización:",
+          "locationTitle": "Ubicación",
+          "latestReadingTitle": "ÚLTIMA LECTURA",
+          "history": {
+            "show": "Ver historial ({count})",
+            "hide": "Ocultar historial",
+            "title": "Historial anterior"
+          },
+          "labels": {
+            "dev_eui": "DevEUI:",
+            "dev_addr": "DevAddr:",
+            "battery": "Batería:",
+            "signal": "Señal:",
+            "temp_soil": "Temp:",
+            "ph_soil": "pH:",
+            "water_soil": "Humedad:",
+            "conductivity_soil": "Conductividad:",
+            "readingTime": "⏱"
+          },
+          "signalFormat": "RSSI: {rssi}dBm | SNR: {snr}",
+          "units": {
+            "voltage": "V",
+            "celsius": "°C",
+            "percent": "%",
+            "microsiemens_per_cm": "µS/cm",
+            "dbm": "dBm"
+          },
+          "soilDataTitle": "Datos del suelo:"
         }
       },
       "error": {

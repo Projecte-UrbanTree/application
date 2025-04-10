@@ -35,17 +35,17 @@ const Sensors: React.FC = () => {
       try {
         const backendResponse = await axiosClient.get('/admin/sensors');
         const backendSensors: Sensor[] = backendResponse.data;
-        
+
         const apiSensors = await fetchSensors();
-        
+
         const latestByEui: Record<string, ApiSensor> = {};
         apiSensors.forEach((sensor: ApiSensor) => {
-          if (!latestByEui[sensor.dev_eui] || 
+          if (!latestByEui[sensor.dev_eui] ||
               new Date(sensor.time) > new Date(latestByEui[sensor.dev_eui].time)) {
             latestByEui[sensor.dev_eui] = sensor;
           }
         });
-        
+
         const combinedSensors = backendSensors.map(backendSensor => {
           const apiData = latestByEui[backendSensor.eui];
           if (apiData) {
@@ -63,7 +63,7 @@ const Sensors: React.FC = () => {
           }
           return backendSensor;
         });
-        
+
         setSensors(combinedSensors);
       } catch (err) {
         setError(t('admin.pages.sensors.loadError'));
@@ -72,17 +72,18 @@ const Sensors: React.FC = () => {
         setLoading(false);
       }
     };
-    
+
     fetchAndProcessSensors();
-  }, []);
+  }, [t]); 
 
   useEffect(() => {
     if (location.state?.success) {
-      setSuccessMessage(location.state.success);
+     
+      setSuccessMessage(t(location.state.success));
       const timer = setTimeout(() => setSuccessMessage(null), 4000);
       return () => clearTimeout(timer);
     }
-  }, [location.state]);
+  }, [location.state, t]);
 
   const handleDelete = async (sensorId: number) => {
     if (!window.confirm(t('admin.pages.sensors.list.messages.deleteConfirm'))) return;
@@ -115,7 +116,7 @@ const Sensors: React.FC = () => {
       {successMessage && (
         <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
           {successMessage}
-        </div>
+        </div> 
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -124,7 +125,6 @@ const Sensors: React.FC = () => {
             key={sensor.id}
             className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="p-5">
-              {/* Header */}
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="bg-blue-50 p-2 rounded-lg">
@@ -134,7 +134,7 @@ const Sensors: React.FC = () => {
                     <h2
                       className="font-semibold text-gray-800 cursor-pointer hover:underline"
                       onClick={() => navigate(`/admin/sensors/${sensor.eui}`)}>
-                      {sensor.name || `Sensor ${sensor.id}`}
+                      {sensor.name || t('admin.pages.sensors.list.sensorDefaultName', { id: sensor.id })}
                     </h2>
                   </div>
                 </div>
@@ -154,51 +154,48 @@ const Sensors: React.FC = () => {
                 </div>
               </div>
 
-              {/* Device Info */}
               <div className="mb-4">
                 <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-500">DevEUI:</span>
+                  <span className="text-gray-500">{t('admin.pages.sensors.list.devEUI')}:</span>
                   <span className="text-gray-700 font-mono text-xs truncate max-w-[120px]">
                     {sensor.eui}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-500">Última actualización:</span>
+                  <span className="text-gray-500">{t('admin.pages.sensors.list.lastUpdate')}:</span>
                   <span className="text-gray-700 text-xs">
-                    {sensor.lastUpdated ? new Date(sensor.lastUpdated).toLocaleString() : 'N/A'}
+                    {sensor.lastUpdated ? new Date(sensor.lastUpdated).toLocaleString() : t('admin.pages.sensors.list.notAvailable')}
                   </span>
                 </div>
               </div>
 
-              {/* Status indicators */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Batería</p>
+                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.battery')}</p>
                   <div className="flex items-center">
                     <span className={`inline-block w-2 h-2 rounded-full mr-2 ${
-                      sensor.battery && sensor.battery > 3.2 ? 'bg-green-500' : 
+                      sensor.battery && sensor.battery > 3.2 ? 'bg-green-500' :
                       sensor.battery && sensor.battery > 2.8 ? 'bg-yellow-500' : 'bg-red-500'
                     }`}></span>
-                    <span className="text-gray-600">{sensor.battery ? `${sensor.battery.toFixed(2)} V` : '-- V'}</span>
+                    <span className="text-gray-600">{sensor.battery ? `${sensor.battery.toFixed(2)} V` : t('admin.pages.sensors.list.noValueUnit', { unit: 'V' })}</span>
                   </div>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Señal</p>
+                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.signal')}</p>
                   <p className="text-gray-600">
-                    {sensor.rssi ? `${sensor.rssi} dBm` : '-- dBm'}
-                    {sensor.snr && ` (${sensor.snr.toFixed(1)} SNR)`}
+                    {sensor.rssi ? `${sensor.rssi} dBm` : t('admin.pages.sensors.list.noValueUnit', { unit: 'dBm' })}
+                    {sensor.snr && ` (${sensor.snr.toFixed(1)} ${t('admin.pages.sensors.list.snrUnit')})`}
                   </p>
                 </div>
               </div>
 
-              {/* Location */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Latitud</p>
+                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.latitude')}</p>
                   <p className="text-gray-700">{sensor.latitude}</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Longitud</p>
+                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.longitude')}</p>
                   <p className="text-gray-700">{sensor.longitude}</p>
                 </div>
               </div>
