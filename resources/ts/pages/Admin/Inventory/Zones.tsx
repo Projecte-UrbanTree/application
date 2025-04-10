@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
 
 import { fetchElementType } from '@/api/service/elementTypeService';
 import { fetchTreeTypes } from '@/api/service/treeTypesService';
-import { deleteZone } from '@/api/service/zoneService';
+import { deleteZone, inlineUpdateZone } from '@/api/service/zoneService';
 import { fetchElementsAsync } from '@/store/slice/elementSlice';
 import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync, updateZoneAsync } from '@/store/slice/zoneSlice';
@@ -61,6 +61,8 @@ export const Zones = ({
   const [editingZone, setEditingZone] = useState<Zone | null>(null);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [editingField, setEditingField] = useState<{ zoneId: number; field: 'name' | 'description' } | null>(null);
+  const [localZoneEdits, setLocalZoneEdits] = useState<Record<number, Partial<Zone>>>({});
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -376,6 +378,46 @@ export const Zones = ({
     }
   }, [dispatch, t]);
 
+  const handleInlineEditStart = (zoneId: number, field: 'name' | 'description') => {
+    setEditingField({ zoneId, field });
+  };
+
+  const handleInlineEditChange = (zoneId: number, field: 'name' | 'description', value: string) => {
+    setLocalZoneEdits((prev) => ({
+      ...prev,
+      [zoneId]: {
+        ...prev[zoneId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleInlineEditBlur = async (zone: Zone, field: 'name' | 'description') => {
+    const updatedValue = localZoneEdits[zone.id]?.[field];
+    if (updatedValue !== undefined && updatedValue !== zone[field]) {
+      try {
+        await inlineUpdateZone(zone.id!, field, updatedValue);
+        toast.current?.show({
+          severity: 'success',
+          summary: t('general.success'),
+          detail: t('admin.pages.inventory.zones.toast.inlineEditSuccess'),
+        });
+        dispatch(fetchZonesAsync());
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.zones.toast.inlineEditError'),
+        });
+      }
+    }
+    setEditingField(null);
+    setLocalZoneEdits((prev) => {
+      const { [zone.id]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
   useEffect(() => {
     if (!isInitialized && zones.length > 0) {
       const timer = setTimeout(() => {
@@ -472,6 +514,7 @@ export const Zones = ({
               const elementCountByType = countElementsByTypeInZone(zone.id!);
               const totalElements = Object.values(elementCountByType).reduce((sum, count) => sum + count, 0);
               const isHidden = hiddenZones[zone.id!] || false;
+              const localEdits = localZoneEdits[zone.id] || {};
 
               return (
                 <Card
@@ -484,25 +527,45 @@ export const Zones = ({
                 >
                   <div className="border-b border-gray-200 p-3 flex flex-col gap-2">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
-                        <ColorPicker
-                          value={zone.color?.replace('#', '') || '6366F1'}
-                          onChange={(e) => handleColorChange(zone, `#${e.value}`)}
-                          className="w-9 h-9"
-                          style={{
-                            borderColor: 'transparent',
-                            backgroundColor: zone.color || '#6366F1',
-                            borderRadius: '50%'
-                          }}
-                          tooltip={t('admin.pages.inventory.zones.tooltips.changeColor')}
-                          appendTo={document.body}
-                        />
-                      </div>
+                      <ColorPicker
+                        value={zone.color?.replace('#', '') || '6366F1'}
+                        onChange={(e) => handleColorChange(zone, `#${e.value}`)}
+                        tooltip={t('admin.pages.inventory.zones.tooltips.changeColor')}
+                        appendTo={document.body}
+                      />
                       <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-gray-800 truncate">{zone.name}</span>
-                        <span className="text-xs text-gray-500 truncate">
-                          {zone.description || t('admin.pages.inventory.zones.noDescription')}
-                        </span>
+                        {editingField?.zoneId === zone.id && editingField.field === 'name' ? (
+                          <InputText
+                            value={localEdits.name ?? zone.name}
+                            onChange={(e) => handleInlineEditChange(zone.id!, 'name', e.target.value)}
+                            onBlur={() => handleInlineEditBlur(zone, 'name')}
+                            autoFocus
+                            className="font-semibold text-gray-800 truncate"
+                          />
+                        ) : (
+                          <span
+                            className="font-semibold text-gray-800 truncate cursor-pointer"
+                            onClick={() => handleInlineEditStart(zone.id!, 'name')}
+                          >
+                            {localEdits.name ?? zone.name}
+                          </span>
+                        )}
+                        {editingField?.zoneId === zone.id && editingField.field === 'description' ? (
+                          <InputText
+                            value={(localEdits.description ?? zone.description) || ''}
+                            onChange={(e) => handleInlineEditChange(zone.id!, 'description', e.target.value)}
+                            onBlur={() => handleInlineEditBlur(zone, 'description')}
+                            autoFocus
+                            className="text-xs text-gray-500 truncate"
+                          />
+                        ) : (
+                          <span
+                            className="text-xs text-gray-500 truncate cursor-pointer"
+                            onClick={() => handleInlineEditStart(zone.id!, 'description')}
+                          >
+                            {(localEdits.description ?? zone.description) || t('admin.pages.inventory.zones.noDescription')}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -591,7 +654,7 @@ export const Zones = ({
                                       <Icon
                                         icon={elementType.icon.startsWith('tabler:') ? elementType.icon : `tabler:${elementType.icon.replace('mdi:', '')}`}
                                         width="16"
-                                        color="white"
+                                        color={isElementHidden || zoneIsHidden ? 'gray-400' : 'gray-700'}
                                       />
                                     )}
                                   </div>
@@ -602,7 +665,10 @@ export const Zones = ({
                                   </div>
                                   <Badge
                                     value={count}
-                                    severity={isElementHidden || zoneIsHidden ? "secondary" : "info"}
+                                    style={{
+                                      backgroundColor: elementType.color || '#6366F1',
+                                      color: '#fff',
+                                    }}
                                     className="ml-auto mr-2"
                                   />
                                 </div>
@@ -680,18 +746,6 @@ export const Zones = ({
           </p>
         </div>
       </Dialog>
-
-      <style jsx global>{`
-        .p-colorpicker-preview {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-        }
-
-        .p-card .p-card-content {
-          padding: 0;
-        }
-      `}</style>
     </div>
   );
 };

@@ -74,7 +74,8 @@
         "stats": "Estadístiques",
         "workers": "Treballadors",
         "eva": "EVA",
-        "workOrders": "Ordres de treball"
+        "workOrders": "Ordres de treball",
+        "sensors": "Sensors"
       },
       "settings": {
         "contracts": "Contractes",
@@ -884,7 +885,7 @@
             "saveErrorTitle": "Error",
             "saveErrorDetail": "No s'ha pogut desar la zona"
           },
-          "infoText": "Es crearà una zona amb <strong>{{count}}</strong> punts delimitadors. La zona ha de tenir un nom únic.",
+          "infoText": "Es crearà una zona amb {{count}} punts delimitadors. La zona ha de tenir un nom únic.",
           "nameLabel": "Nom de la zona",
           "namePlaceholder": "Ex. Parc Central",
           "descriptionLabel": "Descripció",
@@ -934,7 +935,7 @@
             "title": "Confirma eliminació",
             "deleteButton": "Elimina",
             "warningIrreversible": "Aquesta acció no es pot desfer",
-            "confirmationText": "Estàs segur que vols eliminar la zona <strong> {{zoneName}}</strong>?",
+            "confirmationText": "Estàs segur que vols eliminar la zona {{zoneName}}?",
             "infoText": "Aquesta acció eliminarà la zona i tots els seus punts i elements associats."
           }
         },
@@ -942,7 +943,7 @@
         "createOutsideZoneErrorTitle": "Avís",
         "createOutsideZoneErrorDetail": "No es pot crear un element fora de la zona o àrea seleccionada",
         "clickToAddElementPrompt": "Fes clic al mapa per afegir un element",
-        "drawingModeActive": "Mode dibuix activat",
+        "drawingModeActive": "Fes click a desar la zona per finalitzar",
         "saveZoneDialogTitle": "Desa Zona",
         "saveElementDialogTitle": "Desa Element",
         "addIncidentDialogTitle": "Afegeix Incidència",

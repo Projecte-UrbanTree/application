@@ -93,6 +93,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
 
         Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
+
+        Route::put('zones/{id}/inline-update', [ZoneController::class, 'inlineUpdate']);
     });
 
     /* Worker protected routes */

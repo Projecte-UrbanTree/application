@@ -74,7 +74,8 @@
         "stats": "Estadísticas",
         "workers": "Trabajadores",
         "eva": "EVA",
-        "workOrders": "Órdenes de trabajo"
+        "workOrders": "Órdenes de trabajo",
+        "sensors": "Sensores"
       },
       "settings": {
         "contracts": "Contratos",
@@ -883,7 +884,7 @@
             "saveErrorTitle": "Error",
             "saveErrorDetail": "No se pudo guardar la zona"
           },
-          "infoText": "Se creará una zona con <strong>{{count}}</strong> puntos delimitadores. La zona debe tener un nombre único.",
+          "infoText": "Se creará una zona con {{count}} puntos delimitadores. La zona debe tener un nombre único.",
           "nameLabel": "Nombre de la zona",
           "namePlaceholder": "Ej. Parque Central",
           "descriptionLabel": "Descripción",
@@ -933,7 +934,7 @@
             "title": "Confirmar eliminación",
             "deleteButton": "Eliminar",
             "warningIrreversible": "Esta acción no se puede deshacer",
-            "confirmationText": "¿Estás seguro de que quieres eliminar la zona <strong> {{zoneName}}</strong>?",
+            "confirmationText": "¿Estás seguro de que quieres eliminar la zona  {{zoneName}}?",
             "infoText": "Esta acción eliminará la zona y todos sus puntos y elementos asociados."
           }
         },
@@ -941,7 +942,7 @@
         "createOutsideZoneErrorTitle": "Aviso",
         "createOutsideZoneErrorDetail": "No se puede crear un elemento fuera de la zona o área seleccionada",
         "clickToAddElementPrompt": "Haz clic en el mapa para añadir un elemento",
-        "drawingModeActive": "Modo dibujo activado",
+        "drawingModeActive": "Haz click en guardar zona para finalizar",
         "saveZoneDialogTitle": "Guardar Zona",
         "saveElementDialogTitle": "Guardar Elemento",
         "addIncidentDialogTitle": "Añadir Incidencia",
