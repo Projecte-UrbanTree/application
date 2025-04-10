@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ElementType extends Model
 {
+    use HasFactory; // Este trait permite usar el método factory().
+
     /**
      * The attributes that are mass assignable.
      *
