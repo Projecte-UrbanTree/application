@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Contract;
 use App\Models\Zone;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,9 +18,7 @@ class ZoneFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'description' => $this->faker->sentence,
-            'color' => $this->faker->hexColor,
-            'contract_id' => Contract::factory(),
+            'contract_id' => 1, // Ajustar según las relaciones en tu base de datos
         ];
     }
 }
