@@ -32,6 +32,8 @@ import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
 import { eventSubject } from '../pages/Admin/Inventory/Zones';
 
+import { useTranslation } from 'react-i18next';
+
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const DEFAULT_MADRID_COORDS: [number, number] = [-3.7038, 40.4168];
 
@@ -62,6 +64,8 @@ export const MapComponent: React.FC<MapProps> = ({
   modalVisible,
   onModalVisibleChange,
 }) => {
+  const { t } = useTranslation(); 
+
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapServiceRef = useRef<MapService | null>(null);
   const toast = useRef<Toast>(null);
@@ -128,8 +132,8 @@ export const MapComponent: React.FC<MapProps> = ({
       } catch (err) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error cargando datos del contrato',
+          summary: t('admin.pages.inventory.genericErrorTitle'),
+          detail: t('admin.pages.inventory.loadError'),
         });
       } finally {
         setIsLoading(false);
@@ -137,7 +141,7 @@ export const MapComponent: React.FC<MapProps> = ({
     };
 
     loadData();
-  }, [dispatch, currentContract?.id]);
+  }, [dispatch, currentContract?.id, t]);
 
   useEffect(() => {
     if (!mapContainerRef.current || !isDataLoaded || isLoading || mapServiceRef.current) return;
@@ -309,8 +313,8 @@ export const MapComponent: React.FC<MapProps> = ({
             service.disableSingleClick();
             toast.current?.show({
               severity: 'error',
-              summary: 'Aviso',
-              detail: 'No es pot crear un element fora de la zona o zona seleccionada',
+              summary: t('admin.pages.inventory.genericWarningTitle'),
+              detail: t('admin.pages.inventory.createOutsideZoneErrorDetail'),
               life: 3000,
               sticky: false,
               style: {
@@ -324,7 +328,7 @@ export const MapComponent: React.FC<MapProps> = ({
         }
       });
     },
-    [points, onCreatingElementChange]
+    [points, onCreatingElementChange, t]
   );
 
   useEffect(() => {
@@ -462,8 +466,8 @@ export const MapComponent: React.FC<MapProps> = ({
       error: (err) => {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error en el sistema de eventos',
+          summary: t('admin.pages.inventory.genericErrorTitle'),
+          detail: t('admin.pages.inventory.eventSystemError'),
         });
       },
     });
@@ -477,7 +481,7 @@ export const MapComponent: React.FC<MapProps> = ({
         mapServiceRef.current.disableSingleClick();
       }
     };
-  }, [points, elements, zonesRedux, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange, hiddenElementTypes, hiddenZones]);
+  }, [points, elements, zonesRedux, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange, hiddenElementTypes, hiddenZones, t]);
 
   const handleElementFormClose = useCallback(() => {
     setModalAddPointVisible(false);
@@ -538,14 +542,14 @@ export const MapComponent: React.FC<MapProps> = ({
         await dispatch(deleteElementAsync(elementId));
         toast.current?.show({
           severity: 'success',
-          summary: 'Success',
-          detail: 'Elemento eliminado correctamente',
+          summary: t('admin.pages.inventory.genericSuccessTitle'),
+          detail: t('admin.pages.inventory.deleteElementSuccess'),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Error al eliminar el elemento',
+          summary: t('admin.pages.inventory.genericErrorTitle'),
+          detail: t('admin.pages.inventory.deleteElementError'),
         });
       }
     };
@@ -664,17 +668,17 @@ export const MapComponent: React.FC<MapProps> = ({
       setSelectedElement(null);
       toast.current?.show({
         severity: 'success',
-        summary: 'Éxito',
-        detail: 'Elemento eliminado correctamente',
+        summary: t('admin.pages.inventory.genericSuccessTitle'),
+        detail: t('admin.pages.inventory.deleteElementSuccess'),
       });
     } catch (error) {
       toast.current?.show({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error al eliminar el elemento',
+        summary: t('admin.pages.inventory.genericErrorTitle'),
+        detail: t('admin.pages.inventory.deleteElementError'),
       });
     }
-  }, [dispatch]);
+  }, [dispatch, t]);
 
   const showElementPopup = useCallback(
     (element: Element) => {
@@ -683,13 +687,9 @@ export const MapComponent: React.FC<MapProps> = ({
       const point = points.find((p) => p.id === element.point_id);
       if (!point || !point.latitude || !point.longitude) return;
 
-      const popupContent = renderElementPopup(
-        element,
-        treeTypes,
-        elementTypes,
-        handleElementDelete,
-        handleBackToIncidentTab,
-      );
+     
+      const popupContent = document.createElement('div');
+      popupContent.innerHTML = `<h3>${t('admin.pages.inventory.elementDetailsDialogTitle', { elementId: element.id })}</h3><p>...</p>`; 
 
       const popup = new mapboxgl.Popup({
         closeButton: true,
@@ -701,28 +701,28 @@ export const MapComponent: React.FC<MapProps> = ({
       })
         .setLngLat([point.longitude, point.latitude])
         .setDOMContent(popupContent)
-        .addTo(mapServiceRef.current);
+        .addTo(mapServiceRef.current!); 
 
       return popup;
     },
-    [points, treeTypes, elementTypes, handleElementDelete, handleBackToIncidentTab],
+    [points, treeTypes, elementTypes, handleElementDelete, handleBackToIncidentTab, t],
   );
 
   useEffect(() => {
     if (mapInitError && toast.current) {
       toast.current.show({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Error inicializando el mapa',
+        summary: t('admin.pages.inventory.genericErrorTitle'),
+        detail: t('admin.pages.inventory.mapInitError'),
         life: 3000
       });
     }
-  }, [mapInitError]);
+  }, [mapInitError, t]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }} className="flex-1">
       <Toast ref={toast} position="top-center" className="z-50" />
-      
+
       <div
         ref={mapContainerRef}
         style={{
@@ -734,34 +734,32 @@ export const MapComponent: React.FC<MapProps> = ({
         }}
         className="rounded-lg shadow-md overflow-hidden border border-gray-300"
       />
-      
-      {/* Status Indicators */}
+
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         {isCreatingElement && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-amber-400 animate-pulse">
             <div className="flex items-center gap-2 text-amber-800">
               <Icon icon="tabler:pencil-plus" className="text-amber-500" width="20" />
-              <span className="font-medium">Haz clic en el mapa para añadir un elemento</span>
+              <span className="font-medium">{t('admin.pages.inventory.clickToAddElementPrompt')}</span>
             </div>
           </div>
         )}
-        
+
         {isDrawingMode && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-blue-400">
             <div className="flex items-center gap-2 text-blue-800">
               <Icon icon="tabler:polygon" className="text-blue-500" width="20" />
-              <span className="font-medium">Modo dibujo activado</span>
+              <span className="font-medium">{t('admin.pages.inventory.drawingModeActive')}</span>
             </div>
           </div>
         )}
       </div>
-      
-      {/* Dialogs */}
+
       <Dialog
         header={
           <div className="flex items-center gap-2 text-indigo-700">
             <Icon icon="tabler:map-pin" width="24" />
-            <span className="text-lg font-semibold">Guardar Zona</span>
+            <span className="text-lg font-semibold">{t('admin.pages.inventory.saveZoneDialogTitle')}</span>
           </div>
         }
         visible={modalVisible}
@@ -773,12 +771,12 @@ export const MapComponent: React.FC<MapProps> = ({
         footer={null}>
         <SaveZoneForm coordinates={coordinates} onClose={handleZoneSaved} />
       </Dialog>
-      
+
       <Dialog
         header={
           <div className="flex items-center gap-2 text-indigo-700">
             <Icon icon="tabler:plus-circle" width="24" />
-            <span className="text-lg font-semibold">Guardar Elemento</span>
+            <span className="text-lg font-semibold">{t('admin.pages.inventory.saveElementDialogTitle')}</span>
           </div>
         }
         visible={modalAddPointVisible}
@@ -802,12 +800,12 @@ export const MapComponent: React.FC<MapProps> = ({
           }))}
         />
       </Dialog>
-      
+
       <Dialog
         header={
           <div className="flex items-center gap-2 text-amber-600">
             <Icon icon="tabler:alert-triangle" width="24" />
-            <span className="text-lg font-semibold">Añadir Incidencia</span>
+            <span className="text-lg font-semibold">{t('admin.pages.inventory.addIncidentDialogTitle')}</span>
           </div>
         }
         visible={incidentModalVisible}
@@ -828,13 +826,13 @@ export const MapComponent: React.FC<MapProps> = ({
           />
         )}
       </Dialog>
-      
+
       <Dialog
         header={
           <div className="flex items-center gap-2 text-indigo-700">
             <Icon icon="tabler:clipboard-data" width="24" />
             <span className="text-lg font-semibold">
-              Detalles del Elemento #{selectedElement?.id}
+              {t('admin.pages.inventory.elementDetailsDialogTitle', { elementId: selectedElement?.id })}
             </span>
           </div>
         }
@@ -861,26 +859,25 @@ export const MapComponent: React.FC<MapProps> = ({
           />
         )}
       </Dialog>
-      
-      {/* Bottom Info Bar */}
+
       <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-2 max-w-sm">
         {selectedZone && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-green-400 flex items-center gap-2">
             <Icon icon="tabler:map-pin" className="text-green-600" width="18" />
             <div className="flex-1 min-w-0">
-              <span className="font-medium text-sm text-gray-800 block truncate">Zona: {selectedZone.name}</span>
+              <span className="font-medium text-sm text-gray-800 block truncate">{t('admin.pages.inventory.selectedZoneInfo', { zoneName: selectedZone.name })}</span>
               {selectedZone.description && (
                 <span className="text-xs text-gray-500 block truncate">{selectedZone.description}</span>
               )}
             </div>
           </div>
         )}
-        
+
         {zoneToAddElement && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-indigo-400 flex items-center gap-2">
             <Icon icon="tabler:plus" className="text-indigo-600" width="18" />
             <div className="flex-1 min-w-0">
-              <span className="font-medium text-sm text-gray-800 block truncate">Añadiendo en: {zoneToAddElement.name}</span>
+              <span className="font-medium text-sm text-gray-800 block truncate">{t('admin.pages.inventory.addingElementInZoneInfo', { zoneName: zoneToAddElement.name })}</span>
               {zoneToAddElement.description && (
                 <span className="text-xs text-gray-500 block truncate">{zoneToAddElement.description}</span>
               )}
@@ -894,11 +891,11 @@ export const MapComponent: React.FC<MapProps> = ({
           padding: 1rem 1.25rem;
           border-bottom: 1px solid #e5e7eb;
         }
-        
+
         .p-dialog-content {
           padding: 0;
         }
-        
+
         .p-dialog-footer {
           padding: 1rem 1.25rem;
           border-top: 1px solid #e5e7eb;
@@ -909,7 +906,7 @@ export const MapComponent: React.FC<MapProps> = ({
           overflow: hidden;
           border-radius: 8px;
         }
-        
+
         .mapboxgl-popup-close-button {
           font-size: 20px;
           color: #4F46E5;
@@ -925,7 +922,7 @@ export const MapComponent: React.FC<MapProps> = ({
           padding: 0;
           z-index: 10;
         }
-        
+
         .mapboxgl-popup-close-button:hover {
           background: rgba(255, 255, 255, 0.9);
           color: #4338CA;

@@ -3,6 +3,7 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { fetchElementType } from '@/api/service/elementTypeService';
@@ -31,6 +32,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
   elementTypes,
   treeTypes,
 }) => {
+  const { t } = useTranslation();
   const [description, setDescription] = useState<string | null>(null);
   const [selectedElementType, setSelectedElementType] = useState<number | null>(
     null,
@@ -58,7 +60,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       );
 
       if (selectedElementType) {
-        const needsTreeType = selectedElementType.requires_tree_type === true || 
+        const needsTreeType = selectedElementType.requires_tree_type === true ||
                              selectedElementType.requires_tree_type === 1;
         setRequiresTreeType(needsTreeType);
 
@@ -67,9 +69,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
         }
       }
     } catch (error) {
-      console.error('Error al verificar si requiere tipo de árbol:', error);
+      console.error(t('admin.pages.inventory.saveElementForm.fetchElementTypeError'), error);
     }
-  }, []);
+  }, [t]);
 
   const handleTreeTypeChange = useCallback((e: { value: number }) => {
     setSelectedTreeType(e.value);
@@ -95,7 +97,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       ).unwrap();
 
       if (!savedPoint.id) {
-        throw new Error('Failed to save point - no ID returned');
+        throw new Error(t('admin.pages.inventory.saveElementForm.savePointError'));
       }
 
       const elementData: Element = {
@@ -126,7 +128,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 mb-4 flex items-center gap-2 text-indigo-800">
         <Icon icon="tabler:map-pin" className="text-indigo-500 flex-shrink-0" width="20" />
         <div className="text-sm">
-          <p className="font-medium">Añadiendo elemento en la zona</p>
+          <p className="font-medium">{t('admin.pages.inventory.saveElementForm.infoTitle')}</p>
         </div>
       </div>
 
@@ -136,23 +138,23 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
             htmlFor="element-type"
             className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
             <Icon icon="tabler:category" width="18" />
-            Tipo de Elemento <span className="text-red-500">*</span>
+            {t('admin.pages.inventory.saveElementForm.elementTypeLabel')} <span className="text-red-500">*</span>
           </label>
           <Dropdown
             id="element-type"
             value={selectedElementType}
             options={elementTypes}
             onChange={handleElementTypeChange}
-            placeholder="Selecciona un tipo de elemento"
+            placeholder={t('admin.pages.inventory.saveElementForm.elementTypePlaceholder')}
             className="w-full"
             appendTo="self"
-            emptyMessage="No hay tipos disponibles"
-            emptyFilterMessage="No se encontraron resultados"
+            emptyMessage={t('admin.pages.inventory.saveElementForm.noTypesAvailable')}
+            emptyFilterMessage={t('admin.pages.inventory.saveElementForm.noResultsFound')}
           />
           {!selectedElementType && (
             <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
               <Icon icon="tabler:alert-circle" width="14" />
-              Este campo es obligatorio
+              {t('admin.pages.inventory.saveElementForm.elementTypeRequiredError')}
             </p>
           )}
         </div>
@@ -161,24 +163,24 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
           <div className="mb-4">
             <label htmlFor="tree-type" className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
               <Icon icon="tabler:tree" width="18" />
-              Tipo de Árbol <span className="text-red-500">*</span>
+              {t('admin.pages.inventory.saveElementForm.treeTypeLabel')} <span className="text-red-500">*</span>
             </label>
             <Dropdown
               id="tree-type"
               value={selectedTreeType}
               options={treeTypes}
               onChange={handleTreeTypeChange}
-              placeholder="Selecciona tipo de árbol"
+              placeholder={t('admin.pages.inventory.saveElementForm.treeTypePlaceholder')}
               className="w-full"
               appendTo="self"
-              emptyMessage="No hay tipos disponibles"
-              emptyFilterMessage="No se encontraron resultados"
+              emptyMessage={t('admin.pages.inventory.saveElementForm.noTypesAvailable')}
+              emptyFilterMessage={t('admin.pages.inventory.saveElementForm.noResultsFound')}
               filter
             />
             {requiresTreeType && !selectedTreeType && (
               <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
                 <Icon icon="tabler:alert-circle" width="14" />
-                Este campo es obligatorio para el tipo de elemento seleccionado
+                {t('admin.pages.inventory.saveElementForm.treeTypeRequiredError')}
               </p>
             )}
           </div>
@@ -187,14 +189,14 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
         <div className="mb-2">
           <label htmlFor="description" className="block text-sm font-medium mb-2 text-gray-700 flex items-center gap-1">
             <Icon icon="tabler:notes" width="18" />
-            Descripción (opcional)
+            {t('admin.pages.inventory.saveElementForm.descriptionLabel')}
           </label>
           <InputTextarea
             id="description"
             rows={3}
             value={description || ''}
             onChange={handleDescriptionChange}
-            placeholder="Descripción adicional del elemento (opcional)"
+            placeholder={t('admin.pages.inventory.saveElementForm.descriptionPlaceholder')}
             className="w-full"
           />
         </div>
@@ -202,14 +204,14 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
 
       <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
         <Button
-          label="Cancelar"
+          label={t('admin.pages.inventory.saveElementForm.cancelButton')}
           className="p-button-outlined p-button-secondary"
           icon={<Icon icon="tabler:x" />}
           onClick={onClose}
           disabled={isSubmitting}
         />
         <Button
-          label="Guardar Elemento"
+          label={t('admin.pages.inventory.saveElementForm.saveButton')}
           className="p-button-primary"
           icon={<Icon icon="tabler:device-floppy" />}
           onClick={handleSave}

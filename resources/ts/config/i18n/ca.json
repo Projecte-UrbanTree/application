@@ -691,7 +691,7 @@
         "droughtExposure": "Exposició a sequera"
       },
 
-      "inventory": {
+            "inventory": {
         "elementDetailPopup": {
           "tabs": {
             "information": "Informació",
@@ -715,7 +715,8 @@
             },
             "deleteElement": "Elimina element",
             "elementDeleted": "Element eliminat amb èxit",
-            "elementDeleteFailed": "Error en eliminar l'element"
+            "elementDeleteFailed": "Error en eliminar l'element",
+            "editElement": "Edita Element"
           },
           "incidences": {
             "title": "Incidència",
@@ -733,7 +734,12 @@
               "open": "Oberta",
               "in_progress": "En progrés",
               "closed": "Tancada"
-            }
+            },
+            "loadError": "Error en carregar incidències",
+            "deleteSuccess": "Incidència eliminada",
+            "deleteSuccessDetail": "Incidència eliminada amb èxit",
+            "deleteError": "Error en eliminar incidència",
+            "deleteErrorDetail": "No s'ha pogut eliminar la incidència"
           },
           "eva": {
             "loading": "Carregant avaluació de l'arbre...",
@@ -759,22 +765,193 @@
             "list": {
               "messages": {
                 "deleteSuccess": "EVA eliminat amb èxit",
-                "deleteSuccessDetail": "Els detalls de l'EVA han estat eliminats amb èxit"
+                "deleteSuccessDetail": "Els detalls de l'EVA han estat eliminats amb èxit",
+                "deleteError": "Error en eliminar EVA",
+                "deleteErrorDetail": "No s'han pogut eliminar els detalls de l'EVA"
               }
             }
           },
           "history": {
-            "title": "Historial de l'element (en construcció...)",
+            "title": "Historial de l'element",
             "notes": "Notes",
             "task": "Tasca",
             "description": "Descripció",
             "workOrder": "Ordre de treball",
             "status": "Estat",
-            "noTasks": "No hi ha tasques registrades per a aquest element."
+            "noTasks": "No hi ha historial de tasques per a aquest element.",
+            "unknownTask": "Tasca desconeguda",
+            "taskStatus": {
+              "pending": "Pendent",
+              "inProgress": "En progrés",
+              "completed": "Completat",
+              "unknown": "Desconegut"
+            },
+            "dateLabel": "Data:",
+            "workOrderLabel": "Ordre de treball:",
+            "hoursLabel": "Hores dedicades:",
+            "workersLabel": "Treballadors:",
+            "taskHistoryTitle": "Historial de Tasques"
+          },
+          "workOrders": {
+             "loadError": "Error en carregar ordres de treball"
           }
-        }
+        },
+        "editElementForm": {
+          "toast": {
+            "successDetail": "Element actualitzat amb èxit",
+            "errorDetail": "Error en actualitzar l'element"
+          },
+          "editingInfo": "Editant element #{{id}}",
+          "labels": {
+            "description": "Descripció",
+            "elementType": "Tipus d'element",
+            "treeType": "Tipus d'arbre"
+          },
+          "placeholders": {
+            "description": "Introdueix descripció...",
+            "elementType": "Selecciona tipus d'element",
+            "treeType": "Selecciona tipus d'arbre"
+          },
+          "buttons": {
+            "save": "Desa canvis"
+          }
+        },
+        "elementPopup": {
+          "title": "Element #{{id}}",
+          "elementTypeUndefined": "Indefinit",
+          "treeFamilyLabel": "Família:",
+          "treeGenusLabel": "Gènere:",
+          "treeSpeciesLabel": "Espècie:",
+          "createdLabel": "Creat:",
+          "createdAtNotAvailable": "No disponible",
+          "incidentButton": "Incidència",
+          "deleteButton": "Elimina"
+        },
+        "incidentForm": {
+          "toast": {
+            "nameRequiredWarningTitle": "Atenció",
+            "nameRequiredWarningDetail": "El nom de la incidència és obligatori",
+            "successTitle": "Èxit",
+            "successDetail": "Incidència creada correctament",
+            "errorTitle": "Error",
+            "errorDetail": "No s'ha pogut crear la incidència"
+          },
+          "nameLabel": "Nom:",
+          "namePlaceholder": "Nom de la incidència",
+          "descriptionLabel": "Descripció:",
+          "descriptionPlaceholder": "Descripció de la incidència",
+          "saveButton": "Desa",
+          "cancelButton": "Cancel·la"
+        },
+        "inventoryPage": {
+          "loadError": "Error en carregar dades de l'inventari",
+          "mapInitError": "Error d'inicialització del mapa",
+          "elementUpdateError": "Error en actualitzar elements",
+          "createOutsideZoneError": "No es pot crear un element fora de la zona"
+        },
+        "saveElementForm": {
+          "fetchElementTypeError": "Error en comprovar si es requereix tipus d'arbre:",
+          "savePointError": "Error en desar el punt - no s'ha retornat ID",
+          "infoTitle": "Afegint element a la zona",
+          "elementTypeLabel": "Tipus d'element",
+          "elementTypePlaceholder": "Selecciona un tipus d'element",
+          "noTypesAvailable": "No hi ha tipus disponibles",
+          "noResultsFound": "No s'han trobat resultats",
+          "elementTypeRequiredError": "Aquest camp és obligatori",
+          "treeTypeLabel": "Tipus d'arbre",
+          "treeTypePlaceholder": "Selecciona tipus d'arbre",
+          "treeTypeRequiredError": "Aquest camp és obligatori per al tipus d'element seleccionat",
+          "descriptionLabel": "Descripció (opcional)",
+          "descriptionPlaceholder": "Descripció addicional de l'element (opcional)",
+          "cancelButton": "Cancel·la",
+          "saveButton": "Desa Element"
+        },
+        "saveZoneForm": {
+          "validation": {
+            "nameRequired": "El nom és obligatori",
+            "colorFormat": "Ha de ser un codi de color vàlid en format #RRGGBB",
+            "contractIdRequired": "L'ID del contracte és obligatori",
+            "coordinatesRequired": "Les coordenades són obligatòries"
+          },
+          "overlapCheckError": "Error en analitzar la intersecció de polígons:",
+          "toast": {
+            "overlapErrorTitle": "Error",
+            "overlapErrorDetail": "No es pot crear una zona sobre una zona existent",
+            "zoneIdError": "No s'ha pogut obtenir l'ID de la zona creada.",
+            "saveSuccessTitle": "Èxit",
+            "saveSuccessDetail": "Zona i punts desats correctament",
+            "saveErrorTitle": "Error",
+            "saveErrorDetail": "No s'ha pogut desar la zona"
+          },
+          "infoText": "Es crearà una zona amb <strong>{{count}}</strong> punts delimitadors. La zona ha de tenir un nom únic.",
+          "nameLabel": "Nom de la zona",
+          "namePlaceholder": "Ex. Parc Central",
+          "descriptionLabel": "Descripció",
+          "descriptionPlaceholder": "Descripció detallada de la zona (opcional)",
+          "colorLabel": "Color",
+          "cancelButton": "Cancel·la",
+          "saveButton": "Desa Zona"
+        },
+        "zones": {
+          "toast": {
+             "loadError": "Error en carregar recursos",
+             "loadTypesError": "Error en carregar tipus d'elements",
+             "eventSystemError": "Error en el sistema d'esdeveniments",
+             "deleteSuccess": "Zona i punts eliminats correctament",
+             "deleteError": "No s'ha pogut eliminar la zona",
+             "showElementsWarningZoneHidden": "No es poden mostrar elements mentre la zona està oculta.",
+             "colorUpdateSuccess": "Color actualitzat correctament",
+             "colorUpdateError": "No s'ha pogut actualitzar el color"
+          },
+          "title": "Zones",
+          "saveZoneButton": "Desa Zona",
+          "creatingElementInfo": "Creant nou element",
+          "cancelCreationTooltip": "Cancel·la creació",
+          "searchPlaceholder": "Cerca zones...",
+          "emptyState": {
+             "title": "No s'han trobat zones",
+             "messageWithSearch": "Prova una altra cerca o ajusta els filtres.",
+             "messageDefault": "Crea o dibuixa una zona per començar.",
+             "clearSearchButton": "Neteja cerca"
+          },
+          "tooltips": {
+             "changeColor": "Canvia color",
+             "showZone": "Mostra zona",
+             "hideZone": "Oculta zona",
+             "goToZone": "Ves a zona",
+             "addElement": "Afegeix element",
+             "deleteZone": "Elimina zona",
+             "zoneHidden": "La zona està oculta",
+             "showElements": "Mostra elements",
+             "hideElements": "Oculta elements"
+          },
+          "noDescription": "Sense descripció",
+          "noElementsInZone": "No hi ha elements en aquesta zona",
+          "addElementButton": "Afegeix element",
+          "elementsHeader": "Elements ({{count}})",
+          "deleteConfirm": {
+             "title": "Confirma eliminació",
+             "deleteButton": "Elimina",
+             "warningIrreversible": "Aquesta acció no es pot desfer",
+             "confirmationText": "Estàs segur que vols eliminar la zona <strong> {{zoneName}}</strong>?",
+             "infoText": "Aquesta acció eliminarà la zona i tots els seus punts i elements associats."
+          }
+        },
+        "loadError": "Error en carregar dades del contracte",
+        "createOutsideZoneErrorTitle": "Avís",
+        "createOutsideZoneErrorDetail": "No es pot crear un element fora de la zona o àrea seleccionada",
+        "clickToAddElementPrompt": "Fes clic al mapa per afegir un element",
+        "drawingModeActive": "Mode dibuix activat",
+        "saveZoneDialogTitle": "Desa Zona",
+        "saveElementDialogTitle": "Desa Element",
+        "addIncidentDialogTitle": "Afegeix Incidència",
+        "elementDetailsDialogTitle": "Detalls de l'Element #{{elementId}}",
+        "selectedZoneInfo": "Zona: {{zoneName}}",
+        "addingElementInZoneInfo": "Afegint a: {{zoneName}}",
+        "genericErrorTitle": "Error",
+        "genericSuccessTitle": "Èxit",
+        "genericWarningTitle": "Avís"
       },
-
       "resources": {
         "title": "Recursos",
         "form": {
