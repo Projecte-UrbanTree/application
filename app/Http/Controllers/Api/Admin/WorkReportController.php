@@ -241,7 +241,7 @@ class WorkReportController extends Controller
     private function updateWorkOrderStatus(int $workOrderId, int $reportStatus): void
     {
         $workOrder = WorkOrder::findOrFail($workOrderId);
-        
+
         if ($reportStatus === self::STATUS_REJECTED) {
             $this->recalculateTaskBasedStatus($workOrder);
         } else {
@@ -259,17 +259,17 @@ class WorkReportController extends Controller
 
     /**
      * Recalculate work order status based on the completion of tasks.
-     * 
-     * @param WorkOrder $workOrder The work order to update
+     *
+     * @param  WorkOrder  $workOrder  The work order to update
      */
     private function recalculateTaskBasedStatus(WorkOrder $workOrder): void
     {
         $workOrder->load('workOrdersBlocks.blockTasks');
-        
+
         $totalTasks = 0;
         $completedTasks = 0;
         $inProgressTasks = 0;
-        
+
         foreach ($workOrder->workOrdersBlocks as $block) {
             foreach ($block->blockTasks as $task) {
                 $totalTasks++;
@@ -280,7 +280,7 @@ class WorkReportController extends Controller
                 }
             }
         }
-        
+
         if ($totalTasks === 0) {
             $workOrder->status = self::WORK_ORDER_NOT_STARTED;
         } elseif ($completedTasks === $totalTasks) {
@@ -290,9 +290,9 @@ class WorkReportController extends Controller
         } else {
             $workOrder->status = self::WORK_ORDER_NOT_STARTED;
         }
-        
+
         $workOrder->save();
-        
+
         Log::info("Work order {$workOrder->id} status recalculated to {$workOrder->status} after report rejection. ".
             "Completed tasks: {$completedTasks}/{$totalTasks}");
     }

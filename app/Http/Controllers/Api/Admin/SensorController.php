@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreSensorRequest;
-use App\Http\Requests\UpdateSensorRequest;
 use App\Models\Sensor;
-use App\Models\Contract;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class SensorController extends Controller
 {
@@ -69,6 +66,7 @@ class SensorController extends Controller
             $validated['contract_id'] = $contractId;
 
             $sensor = Sensor::create($validated);
+
             return response()->json($sensor, 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -96,6 +94,7 @@ class SensorController extends Controller
 
             if ($response->successful()) {
                 $sensorData = $response->json();
+
                 return response()->json($sensorData, 200);
             }
 
@@ -103,7 +102,7 @@ class SensorController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Error fetching sensor details',
-                'error' => $th->getMessage()
+                'error' => $th->getMessage(),
             ], 500);
         }
     }
@@ -115,6 +114,7 @@ class SensorController extends Controller
     {
         try {
             $sensor = Sensor::findOrFail($id);
+
             return response()->json(['sensor' => $sensor]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor not found'], 404);
@@ -128,7 +128,7 @@ class SensorController extends Controller
     {
         try {
             $validated = $request->validate([
-                'eui' => 'required|string|max:255|unique:sensors,eui,' . $sensor->id,
+                'eui' => 'required|string|max:255|unique:sensors,eui,'.$sensor->id,
                 'name' => 'required|string|max:255',
                 'longitude' => 'nullable|numeric',
                 'latitude' => 'nullable|numeric',
@@ -188,7 +188,7 @@ class SensorController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Error fetching external sensors',
-                'error' => $th->getMessage()
+                'error' => $th->getMessage(),
             ], 500);
         }
     }

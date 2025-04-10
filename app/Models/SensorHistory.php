@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-use App\Models\Sensor;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +16,7 @@ class SensorHistory extends Model
         'humidity_soil',
         'conductivity_soil',
         'batery',
-        'signal'
+        'signal',
     ];
 
     public function sensor()

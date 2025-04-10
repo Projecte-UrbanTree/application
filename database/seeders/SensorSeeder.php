@@ -26,7 +26,7 @@ class SensorSeeder extends Seeder
                 'name' => 'Sensor 2',
                 'longitude' => '23.456789',
                 'latitude' => '-87.654321',
-            ]
+            ],
         ]);
     }
 }

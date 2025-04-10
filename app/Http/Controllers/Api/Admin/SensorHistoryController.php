@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\SensorHistory;
 use App\Models\Sensor;
+use App\Models\SensorHistory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class SensorHistoryController extends Controller
@@ -18,15 +18,15 @@ class SensorHistoryController extends Controller
     {
         try {
             $sensorId = $request->input('sensor_id');
-            
+
             $query = SensorHistory::with('sensor');
-            
+
             if ($sensorId) {
                 $query->where('sensor_id', $sensorId);
             }
-            
+
             $history = $query->orderBy('created_at', 'desc')->paginate(15);
-            
+
             return response()->json($history);
         } catch (\Exception $e) {
             return response()->json([
@@ -43,6 +43,7 @@ class SensorHistoryController extends Controller
     {
         try {
             $sensors = Sensor::all(['id', 'name', 'eui']);
+
             return response()->json(['sensors' => $sensors]);
         } catch (\Exception $e) {
             return response()->json([
@@ -70,7 +71,7 @@ class SensorHistoryController extends Controller
             ]);
 
             $sensorHistory = SensorHistory::create($validated);
-            
+
             return response()->json($sensorHistory, 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -92,6 +93,7 @@ class SensorHistoryController extends Controller
     {
         try {
             $sensorHistory = SensorHistory::with('sensor')->findOrFail($id);
+
             return response()->json($sensorHistory);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor history record not found'], 404);
@@ -111,10 +113,10 @@ class SensorHistoryController extends Controller
         try {
             $sensorHistory = SensorHistory::findOrFail($id);
             $sensors = Sensor::all(['id', 'name', 'eui']);
-            
+
             return response()->json([
                 'sensorHistory' => $sensorHistory,
-                'sensors' => $sensors
+                'sensors' => $sensors,
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor history record not found'], 404);
@@ -133,7 +135,7 @@ class SensorHistoryController extends Controller
     {
         try {
             $sensorHistory = SensorHistory::findOrFail($id);
-            
+
             $validated = $request->validate([
                 'sensor_id' => 'required|exists:sensors,id',
                 'temperature_soil' => 'nullable|numeric',
@@ -146,7 +148,7 @@ class SensorHistoryController extends Controller
             ]);
 
             $sensorHistory->update($validated);
-            
+
             return response()->json($sensorHistory);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor history record not found'], 404);
@@ -171,7 +173,7 @@ class SensorHistoryController extends Controller
         try {
             $sensorHistory = SensorHistory::findOrFail($id);
             $sensorHistory->delete();
-            
+
             return response()->json(['message' => 'Sensor history record deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor history record not found'], 404);
@@ -193,10 +195,10 @@ class SensorHistoryController extends Controller
             $history = SensorHistory::where('sensor_id', $sensorId)
                 ->orderBy('created_at', 'desc')
                 ->paginate(15);
-                
+
             return response()->json([
                 'sensor' => $sensor,
-                'history' => $history
+                'history' => $history,
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor not found'], 404);
@@ -216,7 +218,7 @@ class SensorHistoryController extends Controller
         try {
             // Find the sensor by EUI
             $sensor = Sensor::where('eui', $eui)->firstOrFail();
-            
+
             // Fetch data from external API
             $apiKey = env('VITE_X_API_KEY');
             if (empty($apiKey)) {
@@ -227,10 +229,10 @@ class SensorHistoryController extends Controller
                 'X-API-Key' => $apiKey,
             ])->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 return response()->json([
                     'message' => 'Error fetching data from external API',
-                    'status' => $response->status()
+                    'status' => $response->status(),
                 ], $response->status());
             }
 
@@ -239,21 +241,22 @@ class SensorHistoryController extends Controller
             $recordsSkipped = 0;
             $idsToUpdate = [];
 
-            $sensorDataArray = is_array($responseData) && !array_key_exists('dev_eui', $responseData) ? $responseData : [$responseData];
-            
+            $sensorDataArray = is_array($responseData) && ! array_key_exists('dev_eui', $responseData) ? $responseData : [$responseData];
+
             foreach ($sensorDataArray as $dataPoint) {
                 if (isset($dataPoint['check']) && $dataPoint['check'] === true) {
                     $recordsSkipped++;
+
                     continue;
                 }
-                if (!isset($dataPoint['check']) || $dataPoint['check'] === false) {
+                if (! isset($dataPoint['check']) || $dataPoint['check'] === false) {
 
                     if (isset($dataPoint['id'])) {
                         $idsToUpdate[] = $dataPoint['id'];
                     }
-                    
+
                     $historyData = [
-                        'sensor_id' => $sensor->id, 
+                        'sensor_id' => $sensor->id,
                         'temperature_soil' => $dataPoint['temp_soil'] ?? null,
                         'temperature_air' => $dataPoint['tempc_ds18b20'] ?? null,
                         'ph_soil' => $dataPoint['ph1_soil'] ?? null,
@@ -270,30 +273,30 @@ class SensorHistoryController extends Controller
                 }
             }
 
-            if (!empty($idsToUpdate)) {
+            if (! empty($idsToUpdate)) {
                 try {
                     $updateResponse = Http::withHeaders([
                         'X-API-Key' => $apiKey,
-                    ])->post("http://api_urbantree.alumnat.iesmontsia.org/updateSensorHistory", [
-                        'ids' => $idsToUpdate  
+                    ])->post('http://api_urbantree.alumnat.iesmontsia.org/updateSensorHistory', [
+                        'ids' => $idsToUpdate,
                     ]);
-                    
-                    if (!$updateResponse->successful()) {
-                        \Log::warning("Failed to update check status for records: " . $updateResponse->body());
+
+                    if (! $updateResponse->successful()) {
+                        \Log::warning('Failed to update check status for records: '.$updateResponse->body());
                     }
                 } catch (\Exception $e) {
-                    \Log::warning("Exception when updating check status: " . $e->getMessage());
+                    \Log::warning('Exception when updating check status: '.$e->getMessage());
                 }
             }
 
             return response()->json([
-                'message' => "Successfully fetched and stored sensor data",
+                'message' => 'Successfully fetched and stored sensor data',
                 'records_created' => $recordsCreated,
                 'records_skipped' => $recordsSkipped,
                 'sensor_id' => $sensor->id,
-                'eui' => $eui
+                'eui' => $eui,
             ]);
-            
+
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor not found'], 404);
         } catch (\Exception $e) {
