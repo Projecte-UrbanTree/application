@@ -87,7 +87,7 @@ class ZoneTest extends TestCase
         $response = $this->deleteJson("/api/admin/zones/{$zone->id}");
 
         $response->assertStatus(200)
-            ->assertJson(['message' => 'Zone deleted']);
+            ->assertJson(['message' => 'Zona eliminada']);
 
         $this->assertDatabaseMissing('zones', ['id' => $zone->id]);
     }
