@@ -27,7 +27,7 @@ class ElementTest extends TestCase
         $elementData = [
             'description' => 'Test Element',
             'element_type_id' => $elementType->id,
-            'tree_type_id' => $treeType->id,
+            'tree_type_id' => null,
             'point_id' => $point->id,
         ];
 
@@ -53,7 +53,7 @@ class ElementTest extends TestCase
         $updatedData = [
             'description' => 'Updated Element',
             'element_type_id' => $elementType->id,
-            'tree_type_id' => $treeType->id,
+            'tree_type_id' => null,
             'point_id' => $point->id,
         ];
 
@@ -76,7 +76,7 @@ class ElementTest extends TestCase
 
         $element = Element::factory()->create([
             'element_type_id' => $elementType->id,
-            'tree_type_id' => $treeType->id,
+            'tree_type_id' => null,
             'point_id' => $point->id,
         ]);
 

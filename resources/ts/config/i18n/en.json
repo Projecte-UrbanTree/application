@@ -60,6 +60,11 @@
     }
   },
 
+  "common": {
+    "totalRecords": "Total Records",
+    "tryAgain": "Try Again"
+  },
+
   "admin": {
     "menu": {
       "management": "Management",
@@ -1564,54 +1569,78 @@
           "signal": "Signal",
           "snrUnit": "SNR",
           "latitude": "Latitude",
-          "longitude": "Longitude"
+          "longitude": "Longitude",
+          "temperature": "Temperature",
+          "moisture": "Moisture",
+          "noData": "No data",
+          "viewHistory": "View History",
+          "noSensors": "No sensors found"
         },
-        "errors": {
-          "no_contract": "You must select a valid contract"
-        },
-        "monitoring": {
-          "title": "Real-Time Monitoring",
-          "loading": "Loading data...",
-          "loadError": "Error loading sensors",
-          "lastUpdateLabel": "Last update:",
-          "locationTitle": "Location",
-          "latestReadingTitle": "LATEST READING",
-          "history": {
-            "show": "View History ({count})",
-            "hide": "Hide History",
-            "title": "Previous History"
-          },
-          "labels": {
-            "dev_eui": "DevEUI:",
-            "dev_addr": "DevAddr:",
-            "battery": "Battery:",
-            "signal": "Signal:",
-            "temp_soil": "Temp:",
-            "ph_soil": "pH:",
-            "water_soil": "Moisture:",
-            "conductivity_soil": "Conductivity:",
-            "readingTime": "⏱"
-          },
-          "signalFormat": "RSSI: {rssi}dBm | SNR: {snr}",
-          "units": {
-            "voltage": "V",
-            "celsius": "°C",
-            "percent": "%",
-            "microsiemens_per_cm": "µS/cm",
-            "dbm": "dBm"
-          },
-          "soilDataTitle": "Soil Data:"
+        "history": {
+          "title": "Sensor History",
+          "back": "Back to Sensors",
+          "noData": "No history data available for this sensor",
+          "noDataForMonth": "No data available for this month",
+          "view": "View Mode",
+          "tableView": "Table View",
+          "chartView": "Chart View",
+          "backToTable": "Return to Table View",
+          "of": "of",
+          "metrics": {
+            "time": "Time",
+            "temp_soil": "Soil Temperature",
+            "ph1_soil": "Soil pH",
+            "water_soil": "Soil Moisture",
+            "conductor_soil": "Soil Conductivity",
+            "bat": "Battery",
+            "rssi": "Signal Strength (RSSI)",
+            "snr": "Signal-to-Noise Ratio"
+          }
         }
-      },
-      "error": {
-        "fetching_data": "Error fetching data",
-        "error": "Error"
-      },
-      "general": {
-        "returnButton": "Back"
       }
     }
   },
+
+  "sensors": {
+    "identification": "Identification",
+    "monitoring": {
+      "title": "Sensor Monitoring",
+      "loading": "Loading sensors...",
+      "loadError": "Error loading sensor data",
+      "noSensors": "No sensors found",
+      "lastUpdateLabel": "Last update:",
+      "locationTitle": "Location",
+      "latestReadingTitle": "LATEST READING",
+      "history": {
+        "show": "View History ({{count}})",
+        "hide": "Hide History",
+        "title": "Previous Readings"
+      },
+      "labels": {
+        "dev_eui": "DevEUI",
+        "dev_addr": "DevAddr",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "battery": "Battery",
+        "signal": "Signal",
+        "temp_soil": "Temperature",
+        "ph_soil": "pH",
+        "water_soil": "Moisture",
+        "conductivity_soil": "Conductivity",
+        "readingTime": "Time"
+      },
+      "signalFormat": "RSSI: {{rssi}} dBm | SNR: {{snr}}",
+      "units": {
+        "voltage": "V",
+        "celsius": "°C",
+        "percent": "%",
+        "microsiemens_per_cm": "µS/cm",
+        "dbm": "dBm"
+      },
+      "soilDataTitle": "Soil Data"
+    }
+  },
+  
   "worker": {
     "workOrders": {
       "title": "Work Orders",

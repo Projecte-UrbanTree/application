@@ -27,13 +27,6 @@ class SensorSeeder extends Seeder
                 'longitude' => '23.456789',
                 'latitude' => '-87.654321',
             ],
-            [
-                'eui' => 'GHI567890123',
-                'contract_id' => 3,
-                'name' => 'Sensor 3',
-                'longitude' => '34.567890',
-                'latitude' => '-76.543210',
-            ],
         ]);
     }
 }

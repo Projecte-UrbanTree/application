@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Admin\PointController;
 use App\Http\Controllers\Api\Admin\ResourceController;
 use App\Http\Controllers\Api\Admin\ResourceTypeController;
 use App\Http\Controllers\Api\Admin\SensorController;
+use App\Http\Controllers\Api\Admin\SensorHistoryController;
 use App\Http\Controllers\Api\Admin\StatisticsController;
 use App\Http\Controllers\Api\Admin\TaskTypeController;
 use App\Http\Controllers\Api\Admin\TreeTypeController;
@@ -95,6 +96,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
 
         Route::put('zones/{id}/inline-update', [ZoneController::class, 'inlineUpdate']);
+
+        Route::get('/sensorshistory', [SensorController::class, 'fetchSensors']);
+        Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchSensorByEUI']);
+
+        // New route for paginated sensor history
+        Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);
+        Route::get('/sensors/{eui}/fetch-and-store', [SensorHistoryController::class, 'fetchAndStoreSensorData']);
     });
 
     /* Worker protected routes */
