@@ -17,8 +17,8 @@ class SensorController extends Controller
     {
         try {
             $contractId = $request->session()->get('selected_contract_id', 0);
-            $sensors = Sensor::when($contractId > 0, fn($query) => $query->where('contract_id', $contractId))->get();
-            
+            $sensors = Sensor::when($contractId > 0, fn ($query) => $query->where('contract_id', $contractId))->get();
+
             return response()->json($sensors);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error fetching sensors', 'debug_message' => $e->getMessage()], 500);
@@ -31,7 +31,8 @@ class SensorController extends Controller
     public function create(Request $request)
     {
         $contractId = $request->session()->get('selected_contract_id', null);
-        return $contractId <= 0 
+
+        return $contractId <= 0
             ? response()->json(['message' => 'Debe seleccionar un contrato'], 400)
             : response()->json(['message' => 'Ready to create sensor']);
     }
@@ -110,6 +111,7 @@ class SensorController extends Controller
             ]);
 
             $sensor->update($validated);
+
             return response()->json($sensor, 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['message' => 'Error de validación', 'errors' => $e->errors()], 422);
@@ -125,6 +127,7 @@ class SensorController extends Controller
     {
         try {
             $sensor->delete();
+
             return response()->json(['message' => 'Sensor eliminado'], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error al eliminar el sensor'], 500);
@@ -186,7 +189,7 @@ class SensorController extends Controller
                 $page = request()->get('page', 1);
                 $perPage = request()->get('perPage', 10);
                 $offset = ($page - 1) * $perPage;
-                
+
                 return response()->json([
                     'data' => array_slice($sensorData, $offset, $perPage),
                     'total' => count($sensorData),

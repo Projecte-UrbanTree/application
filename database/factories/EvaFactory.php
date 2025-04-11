@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Eva;
 use App\Models\Element;
+use App\Models\Eva;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EvaFactory extends Factory

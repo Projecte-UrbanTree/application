@@ -49,7 +49,7 @@ class TreeTypeTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->admin()->create());
 
-                $treeType = TreeType::factory()->create();
+        $treeType = TreeType::factory()->create();
 
         $updatedData = [
             'family' => 'Rosaceae',

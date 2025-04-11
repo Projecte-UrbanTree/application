@@ -80,7 +80,7 @@ class ElementController extends Controller
 
         // Check if the element type requires a tree type
         $elementType = ElementType::find($validated['element_type_id']);
-        if ($elementType && !$elementType->requires_tree_type) {
+        if ($elementType && ! $elementType->requires_tree_type) {
             $validated['tree_type_id'] = null; // Remove tree_type_id if not required
         }
 

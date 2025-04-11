@@ -19,8 +19,6 @@ class ElementTypeTest extends TestCase
 
     /**
      * Ensure the database is migrated before running tests.
-     *
-     * @return void
      */
     protected function setUp(): void
     {

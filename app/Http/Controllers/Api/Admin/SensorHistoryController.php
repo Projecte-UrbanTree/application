@@ -20,11 +20,11 @@ class SensorHistoryController extends Controller
         try {
             $sensorId = $request->input('sensor_id');
             $query = SensorHistory::with('sensor');
-            
+
             if ($sensorId) {
                 $query->where('sensor_id', $sensorId);
             }
-            
+
             return response()->json($query->orderBy('created_at', 'desc')->paginate(15));
         } catch (\Exception $e) {
             return response()->json([
@@ -133,6 +133,7 @@ class SensorHistoryController extends Controller
             ]);
 
             $sensorHistory->update($validated);
+
             return response()->json($sensorHistory);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor history record not found'], 404);
@@ -153,6 +154,7 @@ class SensorHistoryController extends Controller
     {
         try {
             SensorHistory::findOrFail($id)->delete();
+
             return response()->json(['message' => 'Sensor history record deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor history record not found'], 404);
@@ -194,69 +196,71 @@ class SensorHistoryController extends Controller
         try {
             // Find the sensor by EUI
             $sensor = Sensor::where('eui', $eui)->firstOrFail();
-            
+
             // Get timestamp of last fetched record
             $lastRecord = SensorHistory::where('sensor_id', $sensor->id)
                 ->orderBy('created_at', 'desc')
                 ->first();
-            
+
             $lastFetchDate = $lastRecord ? $lastRecord->created_at->toIso8601String() : null;
-            
+
             // Build API request URL
             $url = "http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history";
             if ($lastFetchDate) {
-                $url .= "?last_fetch_date=" . urlencode($lastFetchDate);
+                $url .= '?last_fetch_date='.urlencode($lastFetchDate);
             }
-            
+
             // Make API request
             $apiKey = env('VITE_X_API_KEY');
             if (empty($apiKey)) {
                 throw new \Exception('API key not configured');
             }
-            
+
             $response = Http::withHeaders(['X-API-Key' => $apiKey])->get($url);
-            
-            if (!$response->successful()) {
+
+            if (! $response->successful()) {
                 return response()->json([
                     'message' => 'Error fetching data from external API',
                     'status' => $response->status(),
                 ], $response->status());
             }
-            
+
             // Process API response
             $responseData = $response->json();
             $recordsCreated = 0;
             $skippedRecords = 0;
-            
+
             // Convert to array if response is a single object
-            $sensorDataArray = is_array($responseData) && !array_key_exists('dev_eui', $responseData) 
-                ? $responseData 
+            $sensorDataArray = is_array($responseData) && ! array_key_exists('dev_eui', $responseData)
+                ? $responseData
                 : [$responseData];
-            
+
             // Get existing timestamps to avoid duplicates
             $existingTimestamps = SensorHistory::where('sensor_id', $sensor->id)
                 ->pluck('created_at')
-                ->map(fn($timestamp) => $timestamp->toDateTimeString())
+                ->map(fn ($timestamp) => $timestamp->toDateTimeString())
                 ->toArray();
-            
+
             $processedTimestamps = [];
-            
+
             foreach ($sensorDataArray as $dataPoint) {
                 // Skip records without timestamp
                 if (empty($dataPoint['time'])) {
                     $skippedRecords++;
+
                     continue;
                 }
-                
+
                 // Format timestamp and skip if already exists
                 $dataTimestamp = Carbon::parse($dataPoint['time'])->toDateTimeString();
                 if (in_array($dataTimestamp, $existingTimestamps) || in_array($dataTimestamp, $processedTimestamps)) {
                     $skippedRecords++;
+
                     continue;
                 }
-                
+
                 $processedTimestamps[] = $dataTimestamp;
-                
+
                 // Create history record
                 SensorHistory::create([
                     'sensor_id' => $sensor->id,
@@ -271,7 +275,7 @@ class SensorHistoryController extends Controller
                 ]);
                 $recordsCreated++;
             }
-            
+
             return response()->json([
                 'message' => 'Successfully fetched and stored sensor data',
                 'records_created' => $recordsCreated,
@@ -280,7 +284,7 @@ class SensorHistoryController extends Controller
                 'eui' => $eui,
                 'last_fetch_date' => $lastFetchDate,
                 'total_records_processed' => count($sensorDataArray),
-                'api_url_used' => $url
+                'api_url_used' => $url,
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor not found'], 404);

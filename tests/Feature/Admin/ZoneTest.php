@@ -3,8 +3,8 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Contract;
-use App\Models\Zone;
 use App\Models\User;
+use App\Models\Zone;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
