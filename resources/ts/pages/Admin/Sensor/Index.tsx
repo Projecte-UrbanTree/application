@@ -155,8 +155,8 @@ const Sensors: React.FC = () => {
         <Button
           label={t('admin.pages.sensors.form.title.create')}
           icon="pi pi-plus"
-          severity="info"
           onClick={() => navigate('/admin/sensors/create')}
+          className="mt-2"
         />
       </div>
 
@@ -292,8 +292,8 @@ const Sensors: React.FC = () => {
             <Button
               label={t('admin.pages.sensors.form.title.create')}
               icon="pi pi-plus"
-              severity="info"
               onClick={() => navigate('/admin/sensors/create')}
+              className="mt-2"
             />
           </div>
         </Card>
