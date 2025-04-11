@@ -63,6 +63,7 @@ export const Zones = ({
   const [isInitialized, setIsInitialized] = useState(false);
   const [editingField, setEditingField] = useState<{ zoneId: number; field: 'name' | 'description' } | null>(null);
   const [localZoneEdits, setLocalZoneEdits] = useState<Record<number, Partial<Zone>>>({});
+  const [tempColors, setTempColors] = useState<Record<number, string>>({});
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
@@ -357,26 +358,41 @@ export const Zones = ({
 
   }, [countElementsByTypeInZone]);
 
-  const handleColorChange = useCallback(async (zone: Zone, newColor: string) => {
-    try {
-      await dispatch(updateZoneAsync({
-        id: zone.id!,
-        data: { ...zone, color: newColor }
-      })).unwrap();
+  const handleColorChange = useCallback((zoneId: number, newColor: string) => {
+    setTempColors(prev => ({
+      ...prev,
+      [zoneId]: newColor
+    }));
+  }, []);
 
-      toast.current?.show({
-        severity: 'success',
-        summary: t('general.success'),
-        detail: t('admin.pages.inventory.zones.toast.colorUpdateSuccess')
-      });
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.error'),
-        detail: t('admin.pages.inventory.zones.toast.colorUpdateError')
-      });
+  const handleColorSave = useCallback(async (zone: Zone) => {
+    const newColor = tempColors[zone.id!];
+    if (newColor && newColor !== zone.color) {
+      try {
+        await dispatch(updateZoneAsync({
+          id: zone.id!,
+          data: { ...zone, color: newColor }
+        })).unwrap();
+
+        toast.current?.show({
+          severity: 'success',
+          summary: t('general.success'),
+          detail: t('admin.pages.inventory.zones.toast.colorUpdateSuccess')
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: t('general.error'),
+          detail: t('admin.pages.inventory.zones.toast.colorUpdateError')
+        });
+
+        setTempColors(prev => {
+          const { [zone.id!]: _, ...rest } = prev;
+          return rest;
+        });
+      }
     }
-  }, [dispatch, t]);
+  }, [dispatch, t, tempColors]);
 
   const handleInlineEditStart = (zoneId: number, field: 'name' | 'description') => {
     setEditingField({ zoneId, field });
@@ -515,6 +531,7 @@ export const Zones = ({
               const totalElements = Object.values(elementCountByType).reduce((sum, count) => sum + count, 0);
               const isHidden = hiddenZones[zone.id!] || false;
               const localEdits = localZoneEdits[zone.id] || {};
+              const currentColor = tempColors[zone.id!] || zone.color || '#6366F1';
 
               return (
                 <Card
@@ -528,8 +545,9 @@ export const Zones = ({
                   <div className="border-b border-gray-200 p-3 flex flex-col gap-2">
                     <div className="flex items-center gap-3 min-w-0">
                       <ColorPicker
-                        value={zone.color?.replace('#', '') || '6366F1'}
-                        onChange={(e) => handleColorChange(zone, `#${e.value}`)}
+                        value={currentColor.replace('#', '')}
+                        onChange={(e) => handleColorChange(zone.id!, `#${e.value}`)}
+                        onHide={() => handleColorSave(zone)}
                         tooltip={t('admin.pages.inventory.zones.tooltips.changeColor')}
                         appendTo={document.body}
                       />
