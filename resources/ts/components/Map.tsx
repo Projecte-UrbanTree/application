@@ -5,6 +5,7 @@ import { Toast } from 'primereact/toast';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import mapboxgl from 'mapbox-gl';
 
 import { fetchElementType } from '@/api/service/elementTypeService';
 import { MapService } from '@/api/service/mapService';
