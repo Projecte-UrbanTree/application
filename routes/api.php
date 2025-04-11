@@ -99,8 +99,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/sensorshistory', [SensorController::class, 'fetchSensors']);
         Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchSensorByEUI']);
-
-        // New route for paginated sensor history
         Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);
         Route::get('/sensors/{eui}/fetch-and-store', [SensorHistoryController::class, 'fetchAndStoreSensorData']);
     });
