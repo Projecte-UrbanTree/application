@@ -903,7 +903,9 @@
             "deleteError": "No s'ha pogut eliminar la zona",
             "showElementsWarningZoneHidden": "No es poden mostrar elements mentre la zona està oculta.",
             "colorUpdateSuccess": "Color actualitzat correctament",
-            "colorUpdateError": "No s'ha pogut actualitzar el color"
+            "colorUpdateError": "No s'ha pogut actualitzar el color",
+            "inlineEditSuccess": "Informació de la zona actualitzada correctament",
+            "inlineEditError": "No s'ha pogut actualitzar la informació de la zona"
           },
           "title": "Zones",
           "saveZoneButton": "Desa Zona",

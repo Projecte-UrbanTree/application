@@ -902,7 +902,9 @@
             "deleteError": "No se pudo eliminar la zona",
             "showElementsWarningZoneHidden": "No se pueden mostrar elementos mientras la zona está oculta.",
             "colorUpdateSuccess": "Color actualizado correctamente",
-            "colorUpdateError": "No se pudo actualizar el color"
+            "colorUpdateError": "No se pudo actualizar el color",
+            "inlineEditSuccess": "Información de la zona actualizada correctamente",
+            "inlineEditError": "No se pudo actualizar la información de la zona"
           },
           "title": "Zonas",
           "saveZoneButton": "Guardar Zona",
