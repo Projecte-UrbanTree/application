@@ -95,7 +95,7 @@ class EvaController extends Controller
         return response()->json([
             'message' => 'Eva created successfully',
             'eva' => $eva,
-        ]);
+        ], 201);
     }
 
     /**
@@ -109,7 +109,7 @@ class EvaController extends Controller
         $eva = Eva::with(['element.point', 'element.elementType'])->findOrFail($id);
 
         if (! $eva) {
-            return response()->json(['message' => 'EVA not found'], 404);
+            return response()->json([]);
         }
 
         return response()->json([
@@ -158,7 +158,7 @@ class EvaController extends Controller
         $eva = Eva::findOrFail($id);
         $eva->update($validated);
 
-        return response()->json(['message' => 'Eva updated successfully', 'eva' => $eva]);
+        return response()->json(['message' => 'Eva updated successfully', 'eva' => $eva], 200);
     }
 
     /**

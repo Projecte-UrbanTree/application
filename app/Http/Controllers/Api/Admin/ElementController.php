@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Element;
+use App\Models\ElementType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -76,6 +77,12 @@ class ElementController extends Controller
             'tree_type_id' => ['nullable', 'integer'],
             'point_id' => ['required', 'integer'],
         ]);
+
+        // Check if the element type requires a tree type
+        $elementType = ElementType::find($validated['element_type_id']);
+        if ($elementType && !$elementType->requires_tree_type) {
+            $validated['tree_type_id'] = null; // Remove tree_type_id if not required
+        }
 
         // Buscar el elemento por ID
         $element = Element::find($id);

@@ -99,6 +99,12 @@ const InProgressWorkOrders = () => {
           </p>
         </div>
       ) : (
+        <>
+        <div className="p-4">
+          <h2 className="text-xl font-semibold mb-4">
+            {t('admin.pages.dashboard.inProgressWorkOrders')}
+          </h2>
+        </div>
         <DataTable
           value={workOrders}
           paginator
@@ -129,6 +135,7 @@ const InProgressWorkOrders = () => {
             style={{ width: '8rem' }}
           />
         </DataTable>
+            </>
       )}
     </Card>
   );

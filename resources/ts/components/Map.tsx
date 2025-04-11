@@ -3,7 +3,9 @@ import * as turf from '@turf/turf';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import mapboxgl from 'mapbox-gl';
 
 import { fetchElementType } from '@/api/service/elementTypeService';
 import { MapService } from '@/api/service/mapService';
@@ -32,8 +34,6 @@ import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
 import { eventSubject } from '../pages/Admin/Inventory/Zones';
 
-import { useTranslation } from 'react-i18next';
-
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const DEFAULT_MADRID_COORDS: [number, number] = [-3.7038, 40.4168];
 
@@ -49,6 +49,7 @@ interface MapProps {
   onEnabledButtonChange: (enabled: boolean) => void;
   modalVisible: boolean;
   onModalVisibleChange: (visible: boolean) => void;
+  onCancelSaveElement?: () => void;
 }
 
 export const MapComponent: React.FC<MapProps> = ({
@@ -63,6 +64,7 @@ export const MapComponent: React.FC<MapProps> = ({
   onEnabledButtonChange,
   modalVisible,
   onModalVisibleChange,
+  onCancelSaveElement,
 }) => {
   const { t } = useTranslation(); 
 
@@ -162,7 +164,6 @@ export const MapComponent: React.FC<MapProps> = ({
     mapServiceRef.current = service;
 
     service.addBasicControls();
-    service.addGeocoder();
 
     service.enableDraw(
       userValue.role === Roles.admin,
@@ -458,9 +459,13 @@ export const MapComponent: React.FC<MapProps> = ({
 
         if (data.refreshMap) {
           try {
-            updateZones(service);
-            updateElements(service);
-          } catch (error) {}
+            setTimeout(() => {
+              updateZones(service);
+              updateElements(service);
+            }, 100);
+          } catch (error) {
+            console.error('Error refreshing map:', error);
+          }
         }
       },
       error: (err) => {
@@ -489,14 +494,15 @@ export const MapComponent: React.FC<MapProps> = ({
     setNewPointCoord(null);
     mapServiceRef.current?.disableSingleClick();
 
-    setTimeout(() => {
-      if (mapServiceRef.current) {
-        updateElements(mapServiceRef.current);
-      }
-    }, 100);
-
-    onElementAdd();
-  }, [onCreatingElementChange, onElementAdd]);
+    eventSubject.next({
+      isCreatingElement: false,
+      refreshMap: true
+    });
+    
+    if (onCancelSaveElement) {
+      onCancelSaveElement();
+    }
+  }, [onCreatingElementChange, onCancelSaveElement]);
 
   function updateZones(service: MapService) {
     if (!service || !currentContract?.id) return;
@@ -689,7 +695,8 @@ export const MapComponent: React.FC<MapProps> = ({
 
      
       const popupContent = document.createElement('div');
-      popupContent.innerHTML = `<h3>${t('admin.pages.inventory.elementDetailsDialogTitle', { elementId: element.id })}</h3><p>...</p>`; 
+      popupContent.innerHTML = `<h3>${t('admin.pages.inventory.elementDetailsDialogTitle', { elementId: element.id })}</h3>
+	<p style="color: #374151;">...</p>`;
 
       const popup = new mapboxgl.Popup({
         closeButton: true,
@@ -735,11 +742,11 @@ export const MapComponent: React.FC<MapProps> = ({
         className="rounded-lg shadow-md overflow-hidden border border-gray-300"
       />
 
-      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+      <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
         {isCreatingElement && (
-          <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-amber-400 animate-pulse">
-            <div className="flex items-center gap-2 text-amber-800">
-              <Icon icon="tabler:pencil-plus" className="text-amber-500" width="20" />
+          <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-indigo-500 animate-pulse">
+            <div className="flex items-center gap-2 text-indigo-800">
+              <Icon icon="tabler:pencil-plus" className="text-indigo-500" width="20" />
               <span className="font-medium">{t('admin.pages.inventory.clickToAddElementPrompt')}</span>
             </div>
           </div>
@@ -859,32 +866,6 @@ export const MapComponent: React.FC<MapProps> = ({
           />
         )}
       </Dialog>
-
-      <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-2 max-w-sm">
-        {selectedZone && (
-          <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-green-400 flex items-center gap-2">
-            <Icon icon="tabler:map-pin" className="text-green-600" width="18" />
-            <div className="flex-1 min-w-0">
-              <span className="font-medium text-sm text-gray-800 block truncate">{t('admin.pages.inventory.selectedZoneInfo', { zoneName: selectedZone.name })}</span>
-              {selectedZone.description && (
-                <span className="text-xs text-gray-500 block truncate">{selectedZone.description}</span>
-              )}
-            </div>
-          </div>
-        )}
-
-        {zoneToAddElement && (
-          <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-indigo-400 flex items-center gap-2">
-            <Icon icon="tabler:plus" className="text-indigo-600" width="18" />
-            <div className="flex-1 min-w-0">
-              <span className="font-medium text-sm text-gray-800 block truncate">{t('admin.pages.inventory.addingElementInZoneInfo', { zoneName: zoneToAddElement.name })}</span>
-              {zoneToAddElement.description && (
-                <span className="text-xs text-gray-500 block truncate">{zoneToAddElement.description}</span>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
 
       <style>{`
         .p-dialog-header {

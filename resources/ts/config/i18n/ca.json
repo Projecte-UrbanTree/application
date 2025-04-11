@@ -74,7 +74,8 @@
         "stats": "Estadístiques",
         "workers": "Treballadors",
         "eva": "EVA",
-        "workOrders": "Ordres de treball"
+        "workOrders": "Ordres de treball",
+        "sensors": "Sensors"
       },
       "settings": {
         "contracts": "Contractes",
@@ -691,7 +692,7 @@
         "droughtExposure": "Exposició a sequera"
       },
 
-            "inventory": {
+      "inventory": {
         "title": "Inventari",
         "elementDetailPopup": {
           "tabs": {
@@ -794,7 +795,7 @@
             "taskHistoryTitle": "Historial de Tasques"
           },
           "workOrders": {
-             "loadError": "Error en carregar ordres de treball"
+            "loadError": "Error en carregar ordres de treball"
           }
         },
         "editElementForm": {
@@ -884,7 +885,7 @@
             "saveErrorTitle": "Error",
             "saveErrorDetail": "No s'ha pogut desar la zona"
           },
-          "infoText": "Es crearà una zona amb <strong>{{count}}</strong> punts delimitadors. La zona ha de tenir un nom únic.",
+          "infoText": "Es crearà una zona amb {{count}} punts delimitadors. La zona ha de tenir un nom únic.",
           "nameLabel": "Nom de la zona",
           "namePlaceholder": "Ex. Parc Central",
           "descriptionLabel": "Descripció",
@@ -895,14 +896,16 @@
         },
         "zones": {
           "toast": {
-             "loadError": "Error en carregar recursos",
-             "loadTypesError": "Error en carregar tipus d'elements",
-             "eventSystemError": "Error en el sistema d'esdeveniments",
-             "deleteSuccess": "Zona i punts eliminats correctament",
-             "deleteError": "No s'ha pogut eliminar la zona",
-             "showElementsWarningZoneHidden": "No es poden mostrar elements mentre la zona està oculta.",
-             "colorUpdateSuccess": "Color actualitzat correctament",
-             "colorUpdateError": "No s'ha pogut actualitzar el color"
+            "loadError": "Error en carregar recursos",
+            "loadTypesError": "Error en carregar tipus d'elements",
+            "eventSystemError": "Error en el sistema d'esdeveniments",
+            "deleteSuccess": "Zona i punts eliminats correctament",
+            "deleteError": "No s'ha pogut eliminar la zona",
+            "showElementsWarningZoneHidden": "No es poden mostrar elements mentre la zona està oculta.",
+            "colorUpdateSuccess": "Color actualitzat correctament",
+            "colorUpdateError": "No s'ha pogut actualitzar el color",
+            "inlineEditSuccess": "Informació de la zona actualitzada correctament",
+            "inlineEditError": "No s'ha pogut actualitzar la informació de la zona"
           },
           "title": "Zones",
           "saveZoneButton": "Desa Zona",
@@ -910,39 +913,39 @@
           "cancelCreationTooltip": "Cancel·la creació",
           "searchPlaceholder": "Cerca zones...",
           "emptyState": {
-             "title": "No s'han trobat zones",
-             "messageWithSearch": "Prova una altra cerca o ajusta els filtres.",
-             "messageDefault": "Crea o dibuixa una zona per començar.",
-             "clearSearchButton": "Neteja cerca"
+            "title": "No s'han trobat zones",
+            "messageWithSearch": "Prova una altra cerca o ajusta els filtres.",
+            "messageDefault": "Crea o dibuixa una zona per començar.",
+            "clearSearchButton": "Neteja cerca"
           },
           "tooltips": {
-             "changeColor": "Canvia color",
-             "showZone": "Mostra zona",
-             "hideZone": "Oculta zona",
-             "goToZone": "Ves a zona",
-             "addElement": "Afegeix element",
-             "deleteZone": "Elimina zona",
-             "zoneHidden": "La zona està oculta",
-             "showElements": "Mostra elements",
-             "hideElements": "Oculta elements"
+            "changeColor": "Canvia color",
+            "showZone": "Mostra zona",
+            "hideZone": "Oculta zona",
+            "goToZone": "Ves a zona",
+            "addElement": "Afegeix element",
+            "deleteZone": "Elimina zona",
+            "zoneHidden": "La zona està oculta",
+            "showElements": "Mostra elements",
+            "hideElements": "Oculta elements"
           },
           "noDescription": "Sense descripció",
           "noElementsInZone": "No hi ha elements en aquesta zona",
           "addElementButton": "Afegeix element",
           "elementsHeader": "Elements ({{count}})",
           "deleteConfirm": {
-             "title": "Confirma eliminació",
-             "deleteButton": "Elimina",
-             "warningIrreversible": "Aquesta acció no es pot desfer",
-             "confirmationText": "Estàs segur que vols eliminar la zona <strong> {{zoneName}}</strong>?",
-             "infoText": "Aquesta acció eliminarà la zona i tots els seus punts i elements associats."
+            "title": "Confirma eliminació",
+            "deleteButton": "Elimina",
+            "warningIrreversible": "Aquesta acció no es pot desfer",
+            "confirmationText": "Estàs segur que vols eliminar la zona {{zoneName}}?",
+            "infoText": "Aquesta acció eliminarà la zona i tots els seus punts i elements associats."
           }
         },
         "loadError": "Error en carregar dades del contracte",
         "createOutsideZoneErrorTitle": "Avís",
         "createOutsideZoneErrorDetail": "No es pot crear un element fora de la zona o àrea seleccionada",
         "clickToAddElementPrompt": "Fes clic al mapa per afegir un element",
-        "drawingModeActive": "Mode dibuix activat",
+        "drawingModeActive": "Fes click a desar la zona per finalitzar",
         "saveZoneDialogTitle": "Desa Zona",
         "saveElementDialogTitle": "Desa Element",
         "addIncidentDialogTitle": "Afegeix Incidència",
@@ -1480,14 +1483,14 @@
       "sensors": {
         "title": {
           "title": "Sensors",
-          "create": "Crea sensor",
-          "edit": "Edita sensor",
-          "delete": "Elimina sensor"
+          "create": "Crear Sensor",
+          "edit": "Editar Sensor",
+          "delete": "Eliminar Sensor"
         },
         "loading": "Carregant dades del sensor...",
-        "backButton": "Torna",
+        "backButton": "Tornar",
         "notFound": "Sensor no trobat",
-        "loadError": "Error en carregar dades del sensor.",
+        "loadError": "Error en carregar les dades del sensor.",
         "identification": "Identificació",
         "status": "Estat",
         "soilMeasurements": "Mesures del sòl",
@@ -1511,9 +1514,9 @@
         },
         "form": {
           "title": {
-            "create": "Crea sensor",
-            "edit": "Edita sensor",
-            "delete": "Elimina sensor"
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
           },
           "validation": {
             "eui_required": "L'EUI és requerit",
@@ -1530,8 +1533,8 @@
             "latitude_format": "Latitud invàlida (ha d'estar entre -90 i 90)"
           },
           "submitButton": {
-            "create": "Crea sensor",
-            "edit": "Actualitza sensor"
+            "create": "Crear Sensor",
+            "edit": "Actualitzar Sensor"
           },
           "submittingText": {
             "create": "Creant...",
@@ -1544,26 +1547,69 @@
             "updateSuccess": "Sensor actualitzat amb èxit",
             "euiTaken": "L'EUI ja està en ús",
             "error": "Error en desar el sensor",
-            "deleteConfirm": "Estàs segur que vols eliminar aquest sensor?",
+            "deleteConfirm": "Esteu segur que voleu eliminar aquest sensor?",
             "deleteError": "Error en eliminar el sensor",
             "deletedSuccess": "Sensor eliminat amb èxit"
           },
           "actions": {
-            "create": "Crea sensor",
-            "edit": "Edita sensor",
-            "delete": "Elimina sensor"
-          }
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
+          },
+          "sensorDefaultName": "Sensor {{id}}",
+          "devEUI": "DevEUI",
+          "lastUpdate": "Última actualització",
+          "notAvailable": "N/D",
+          "battery": "Bateria",
+          "noValueUnit": "-- {{unit}}",
+          "signal": "Senyal",
+          "snrUnit": "SNR",
+          "latitude": "Latitud",
+          "longitude": "Longitud"
         },
         "errors": {
-          "no_contract": "Has de seleccionar un contracte vàlid"
+          "no_contract": "Heu de seleccionar un contracte vàlid"
+        },
+        "monitoring": {
+          "title": "Monitorització en Temps Real",
+          "loading": "Carregant dades...",
+          "loadError": "Error en carregar els sensors",
+          "lastUpdateLabel": "Última actualització:",
+          "locationTitle": "Ubicació",
+          "latestReadingTitle": "ÚLTIMA LECTURA",
+          "history": {
+            "show": "Veure historial ({count})",
+            "hide": "Amagar historial",
+            "title": "Historial anterior"
+          },
+          "labels": {
+            "dev_eui": "DevEUI:",
+            "dev_addr": "DevAddr:",
+            "battery": "Bateria:",
+            "signal": "Senyal:",
+            "temp_soil": "Temp:",
+            "ph_soil": "pH:",
+            "water_soil": "Humitat:",
+            "conductivity_soil": "Conductivitat:",
+            "readingTime": "⏱"
+          },
+          "signalFormat": "RSSI: {rssi}dBm | SNR: {snr}",
+          "units": {
+            "voltage": "V",
+            "celsius": "°C",
+            "percent": "%",
+            "microsiemens_per_cm": "µS/cm",
+            "dbm": "dBm"
+          },
+          "soilDataTitle": "Dades del sòl:"
         }
       },
       "error": {
-        "fetching_data": "Error en obtenir dades",
+        "fetching_data": "Error en obtenir les dades",
         "error": "Error"
       },
       "general": {
-        "returnButton": "Torna"
+        "returnButton": "Tornar"
       }
     }
   },

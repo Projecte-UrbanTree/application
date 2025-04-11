@@ -332,7 +332,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
         </div>
       </header>
 
-      {!isAccountPage && (
+      {!isAccountPage && (isManagementActive || isSettingsPage) && (
         <div
           id="submenu"
           className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-2 lg:gap-4 px-8 py-4 bg-white border-b border-gray-300 shadow-sm">
@@ -367,7 +367,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
         </div>
       )}
 
-      <main className={`${padding} ${isInventoryPage ? 'flex-1 overflow-hidden' : ''}`}>{children}</main>
+      <main className={`${padding} ${isInventoryPage || isAccountPage ? 'flex-1 overflow-hidden' : ''}`}>{children}</main>
     </div>
   );
 };

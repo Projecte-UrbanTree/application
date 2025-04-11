@@ -54,7 +54,7 @@ class ResourceController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $contractId = $request->input('contract_id', $request->session()->get('selected_contract_id', null));
+        $contractId = $request->input('contract_id') ?? $request->session()->get('selected_contract_id', null);
 
         if (empty($contractId) || $contractId <= 0) {
             return response()->json(['message' => 'Debe seleccionar un contrato'], 400);

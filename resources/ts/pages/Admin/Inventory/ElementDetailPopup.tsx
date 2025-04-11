@@ -736,38 +736,37 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-full overflow-hidden">
+    <div className="h-full flex flex-col border border-gray-300 bg-gray-50 rounded shadow-sm overflow-hidden">
       <Toast ref={toast} />
-      <TabView
-        activeIndex={activeIndex}
-        onTabChange={(e) => setActiveIndex(e.index)}
-        renderActiveOnly={false}
-        scrollable={false}
-        className="inventory-tabs"
-        pt={{
-          inkbar: { style: { display: 'none' } },
-          navContainer: {
-            className: 'border-b border-gray-200 bg-white',
-            tabIndex: null,
-            style: { padding: '0.75rem 1rem 0' }
-          },
-          nav: { className: 'flex justify-center gap-4' }
-        }}>
-        <TabPanel
-          header={
-            <div className="flex items-center justify-center gap-2">
-              <Icon icon="tabler:info-circle" width="20" />
-              {t('admin.pages.inventory.elementDetailPopup.tabs.information')}
-            </div>
-          }
-          headerClassName="p-3">
-          {renderTabContent(
-            <div className="grid grid-cols-1 gap-6">
-              <div className={contentBoxClass}>
-                {renderSectionHeader(
-                  t('admin.pages.inventory.elementDetailPopup.information.title'),
-                  "tabler:info-circle"
-                )}
+      <div className="flex-1 overflow-y-auto p-3">
+        <TabView
+          activeIndex={activeIndex}
+          onTabChange={(e) => setActiveIndex(e.index)}
+          renderActiveOnly={false}
+          scrollable={false}
+          className="inventory-tabs"
+          pt={{
+            inkbar: { style: { display: 'none' } },
+            navContainer: {
+              className: 'border-b border-gray-200 bg-white',
+              tabIndex: null,
+              style: { padding: '0.75rem 1rem 0' }
+            },
+            nav: { className: 'flex justify-center gap-4' }
+          }}>
+          <TabPanel
+            header={
+              <div className="flex items-center justify-center gap-2">
+                <Icon icon="tabler:info-circle" width="20" />
+                {t('admin.pages.inventory.elementDetailPopup.tabs.information')}
+              </div>
+            }
+            headerClassName="p-3">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                {t('admin.pages.inventory.elementDetailPopup.information.title')}
+              </h3>
+              <div className="space-y-3">
                 {renderInfoItem(
                   t('admin.pages.inventory.elementDetailPopup.information.description'),
                   element.description || t('general.not_available')
@@ -778,8 +777,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 )}
                 {renderInfoItem(
                   t('admin.pages.inventory.elementDetailPopup.information.treeFamily'),
-                  getTreeType(element.tree_type_id)?.family ||
-                  t('general.not_available')
+                  getTreeType(element.tree_type_id)?.family || t('general.not_available')
                 )}
                 {renderInfoItem(
                   t('admin.pages.inventory.elementDetailPopup.information.treeGenus'),
@@ -793,99 +791,63 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   t('admin.pages.inventory.elementDetailPopup.information.creationDate'),
                   formatDate(element.created_at!)
                 )}
-                <div className="flex gap-2 pt-3 mt-3 border-t border-gray-200 justify-end">
-                  <Button
-                    label={t('admin.pages.inventory.elementDetailPopup.information.editElement')}
-                    className="p-button-outlined p-button-sm p-button-info"
-                    icon={<Icon icon="tabler:edit" />}
-                    onClick={() => setIsEditModalVisible(true)}
-                  />
-                </div>
               </div>
-              <div className={contentBoxClass}>
-                {renderSectionHeader(
-                  t('admin.pages.inventory.elementDetailPopup.information.location.title'),
-                  "tabler:map-pin"
-                )}
-                {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.location.zone'),
-                  getZoneElement(element.point_id!)?.name || t('general.not_available')
-                )}
-                {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.location.latitude'),
-                  coords.lat || t('general.not_available')
-                )}
-                {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.location.longitude'),
-                  coords.lng || t('general.not_available')
-                )}
-                <div className="flex gap-2 pt-3 mt-3 border-t border-gray-200 justify-end">
-                  <Button
-                    label={t('admin.pages.inventory.elementDetailPopup.information.deleteElement')}
-                    className="p-button-danger p-button-sm"
-                    icon={<Icon icon="tabler:trash" />}
-                    onClick={() => handleDeleteElement(element.id!)}
-                  />
-                </div>
+              <div className="flex justify-end gap-3 pt-3 border-t border-gray-200 mt-4">
+                <Button
+                  label={t('admin.pages.inventory.elementDetailPopup.information.editElement')}
+                  className="p-button-outlined p-button-indigo p-button-sm"
+                  icon={<Icon icon="tabler:edit" />}
+                  onClick={() => setIsEditModalVisible(true)}
+                />
+                <Button
+                  label={t('admin.pages.inventory.elementDetailPopup.information.deleteElement')}
+                  className="p-button-outlined p-button-danger p-button-sm"
+                  icon={<Icon icon="tabler:trash" />}
+                  onClick={() => handleDeleteElement(element.id!)}
+                />
               </div>
             </div>
-          )}
-        </TabPanel>
+          </TabPanel>
 
-        <TabPanel
-          header={
-            <div className="flex items-center justify-center gap-2">
-              <Icon icon="tabler:alert-triangle" width="20" />
-              {t('admin.pages.inventory.elementDetailPopup.tabs.incidences')}
-            </div>
-          }
-          headerClassName="p-3">
-          {renderTabContent(
-            <>
+          <TabPanel
+            header={
+              <div className="flex items-center justify-center gap-2">
+                <Icon icon="tabler:alert-triangle" width="20" />
+                {t('admin.pages.inventory.elementDetailPopup.tabs.incidences')}
+              </div>
+            }
+            headerClassName="p-3">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                {t('admin.pages.inventory.elementDetailPopup.incidences.title')}
+              </h3>
               {isLoading ? (
                 renderLoading()
               ) : incidences.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {incidences.map((incidence) => (
                     <Card
                       key={incidence.id}
-                      className="shadow-sm border border-gray-200 bg-gray-50"
-                      header={
-                        renderCardHeader(
-                          t('admin.pages.inventory.elementDetailPopup.incidences.title') + ` #${incidence.id}`,
-                          "tabler:alert-triangle",
-                          t(`admin.pages.inventory.elementDetailPopup.incidences.statusOptions.${incidence.status}`),
-                          incidence.status === IncidentStatus.open
-                            ? 'warning'
-                            : incidence.status === IncidentStatus.in_progress
-                              ? 'info'
-                              : 'success'
-                        )
-                      }
-                    >
-                      <div className="grid grid-cols-1 gap-4 mb-3 p-2">
-                        <div>
-                          {renderInfoItem(
-                            t('admin.pages.inventory.elementDetailPopup.incidences.name'),
-                            incidence.name || t('general.not_available')
-                          )}
-                          {renderInfoItem(
-                            t('admin.pages.inventory.elementDetailPopup.incidences.creationDate'),
-                            formatDate(incidence.created_at!)
-                          )}
-                        </div>
-                        <div>
-                          <p>
-                            <strong className="text-gray-700">
-                              {t('admin.pages.inventory.elementDetailPopup.incidences.description')}:
-                            </strong>
-                            <span className="block mt-1 p-2 bg-white rounded border border-gray-200 text-sm">
-                              {incidence.description || t('general.not_available')}
-                            </span>
-                          </p>
-                        </div>
+                      className="border border-gray-300 shadow-sm rounded-lg bg-white overflow-hidden p-0"
+                      pt={{
+                        root: { className: 'p-0' },
+                        content: { className: 'p-0' }
+                      }}>
+                      <div className="p-3">
+                        {renderInfoItem(
+                          t('admin.pages.inventory.elementDetailPopup.incidences.name'),
+                          incidence.name || t('general.not_available')
+                        )}
+                        {renderInfoItem(
+                          t('admin.pages.inventory.elementDetailPopup.incidences.creationDate'),
+                          formatDate(incidence.created_at!)
+                        )}
+                        <p className="text-sm text-gray-600 mt-2">
+                          <strong>{t('admin.pages.inventory.elementDetailPopup.incidences.description')}:</strong>{' '}
+                          {incidence.description || t('general.not_available')}
+                        </p>
                       </div>
-                      <div className="flex justify-between items-center pt-3 mt-2 border-t border-gray-200 p-2">
+                      <div className="flex justify-between items-center p-3 border-t border-gray-200">
                         <Dropdown
                           value={incidence.status}
                           options={statusOptions}
@@ -895,7 +857,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                         <Button
                           icon={<Icon icon="tabler:trash" />}
                           label={t('admin.pages.inventory.elementDetailPopup.incidences.deleteIncident')}
-                          className="p-button-danger p-button-sm"
+                          className="p-button-outlined p-button-danger p-button-sm"
                           onClick={() => handleDeleteIncident(incidence.id!)}
                         />
                       </div>
@@ -910,80 +872,54 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   handleAddIncidentClick
                 )
               )}
-              {incidences.length > 0 && (
-                <div className="flex justify-end pt-3">
-                  <Button
-                    label={t('admin.pages.inventory.elementDetailPopup.incidences.addIncident')}
-                    className="p-button-sm"
-                    icon={<Icon icon="tabler:plus" />}
-                    onClick={handleAddIncidentClick}
-                  />
-                </div>
-              )}
-            </>,
-            t('admin.pages.inventory.elementDetailPopup.incidences.title'),
-            "tabler:alert-triangle"
-          )}
-        </TabPanel>
-
-        <TabPanel
-          header={
-            <div className="flex items-center justify-center gap-2">
-              <Icon icon="tabler:history" width="20" />
-              {t('admin.pages.inventory.elementDetailPopup.tabs.history')}
             </div>
-          }
-          headerClassName="p-3">
-          {renderTabContent(
-            <>
+          </TabPanel>
+
+          <TabPanel
+            header={
+              <div className="flex items-center justify-center gap-2">
+                <Icon icon="tabler:history" width="20" />
+                {t('admin.pages.inventory.elementDetailPopup.tabs.history')}
+              </div>
+            }
+            headerClassName="p-3">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                {t('admin.pages.inventory.elementDetailPopup.history.taskHistoryTitle')}
+              </h3>
               {isLoading ? (
                 renderLoading()
               ) : tasksForElement.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {tasksForElement.map((task, index) => (
                     <Card
                       key={index}
-                      className="shadow-sm border border-gray-200 bg-gray-50"
-                      header={
-                        renderCardHeader(
-                          task.taskName,
-                          "tabler:droplet",
-                          getStatusLabel(task.status),
-                          getStatusSeverity(task.status)
-                        )
-                      }
-                    >
-                      <div className="grid grid-cols-1 gap-4 p-2">
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <Icon icon="tabler:calendar" className="text-indigo-500" width="18" />
-                            <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.dateLabel')}</span>
-                            <span>{formatDate(task.workOrderDate)}</span>
-                          </div>
-
-                          <div className="flex items-center gap-2 mb-2">
-                            <Icon icon="tabler:file-description" className="text-indigo-500" width="18" />
-                            <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.workOrderLabel')}</span>
-                            <span>OT-{task.workOrderId}</span>
-                          </div>
-
-                          {task.spentTime > 0 && (
-                            <div className="flex items-center gap-2">
-                              <Icon icon="tabler:clock" className="text-indigo-500" width="18" />
-                              <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.hoursLabel')}</span>
-                              <span>{task.spentTime}h</span>
-                            </div>
+                      className="border border-gray-300 shadow-sm rounded-lg bg-white overflow-hidden p-0"
+                      pt={{
+                        root: { className: 'p-0' },
+                        content: { className: 'p-0' }
+                      }}>
+                      <div className="p-3">
+                        {renderInfoItem(
+                          t('admin.pages.inventory.elementDetailPopup.history.dateLabel'),
+                          formatDate(task.workOrderDate)
+                        )}
+                        {renderInfoItem(
+                          t('admin.pages.inventory.elementDetailPopup.history.workOrderLabel'),
+                          `OT-${task.workOrderId}`
+                        )}
+                        {task.spentTime > 0 &&
+                          renderInfoItem(
+                            t('admin.pages.inventory.elementDetailPopup.history.hoursLabel'),
+                            `${task.spentTime}h`
                           )}
-                        </div>
-
                         {task.users && task.users.length > 0 && (
-                          <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <Icon icon="tabler:users" className="text-indigo-500" width="18" />
-                              <span className="font-medium">{t('admin.pages.inventory.elementDetailPopup.history.workersLabel')}</span>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              {task.users.map(user => (
+                          <div className="mt-2">
+                            <strong className="text-gray-700">
+                              {t('admin.pages.inventory.elementDetailPopup.history.workersLabel')}:
+                            </strong>
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {task.users.map((user) => (
                                 <div
                                   key={user.id}
                                   className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm"
@@ -1007,27 +943,23 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   undefined
                 )
               )}
-            </>,
-            t('admin.pages.inventory.elementDetailPopup.history.taskHistoryTitle'),
-            "tabler:history"
-          )}
-        </TabPanel>
-
-        <TabPanel
-          header={
-            <div className="flex items-center justify-center gap-2">
-              <Icon icon="tabler:leaf" width="20" />
-              {t('admin.pages.inventory.elementDetailPopup.tabs.eva')}
             </div>
-          }
-          headerClassName="p-3">
-          {renderTabContent(
-            renderEvaPanel(),
-            t('admin.pages.inventory.elementDetailPopup.tabs.eva'),
-            "tabler:leaf"
-          )}
-        </TabPanel>
-      </TabView>
+          </TabPanel>
+
+          <TabPanel
+            header={
+              <div className="flex items-center justify-center gap-2">
+                <Icon icon="tabler:leaf" width="20" />
+                {t('admin.pages.inventory.elementDetailPopup.tabs.eva')}
+              </div>
+            }
+            headerClassName="p-3">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+              {renderEvaPanel()}
+            </div>
+          </TabPanel>
+        </TabView>
+      </div>
 
       {isEvaModalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -1079,7 +1011,15 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             />
             <EditElementForm
               element={element}
-              onClose={() => setIsEditModalVisible(false)}
+              onClose={() => {
+                setIsEditModalVisible(false);
+                toast.current?.show({
+                  severity: 'success',
+                  summary: t('general.success'),
+                  detail: t('admin.pages.inventory.elementDetailPopup.information.elementUpdated'),
+                });
+                onClose();
+              }}
               elementTypes={elementTypes.map(et => ({ label: et.name, value: et.id || 0 }))}
               treeTypes={treeTypes.map(tt => ({
                 label: `${tt.family} ${tt.genus} ${tt.species}`,

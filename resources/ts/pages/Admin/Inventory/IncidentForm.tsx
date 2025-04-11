@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import React, { useCallback, useRef, useState } from 'react';
@@ -84,46 +85,65 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
     t,
   ]);
 
+  const handleCancel = useCallback(() => {
+    setName('');
+    setDescription('');
+    onClose();
+  }, [onClose]);
+
   return (
     <div className="p-4 bg-gray-50 border border-gray-300 rounded shadow-sm">
       <Toast ref={toast} />
-      <div className="mb-4">
-        <label className="block mb-1">{t('admin.pages.inventory.incidentForm.nameLabel')}</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="p-inputtext p-component w-full"
-          placeholder={t('admin.pages.inventory.incidentForm.namePlaceholder')}
-          disabled={isSubmitting}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-1">{t('admin.pages.inventory.incidentForm.descriptionLabel')}</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="p-inputtext p-component w-full"
-          placeholder={t('admin.pages.inventory.incidentForm.descriptionPlaceholder')}
-          disabled={isSubmitting}
-          rows={4}
-        />
-      </div>
-      <div className="flex justify-end gap-4">
-        <Button
-          label={t('admin.pages.inventory.incidentForm.saveButton')}
-          onClick={handleSubmit}
-          className="p-button-success"
-          disabled={isSubmitting}
-          icon="pi pi-save"
-        />
-        <Button
-          label={t('admin.pages.inventory.incidentForm.cancelButton')}
-          onClick={onBackToIncidents || onClose}
-          className="p-button-secondary"
-          disabled={isSubmitting}
-        />
-      </div>
+
+      <form className="space-y-4">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+              <Icon icon="tabler:notes" width="18" />
+              {t('admin.pages.inventory.incidentForm.nameLabel')}
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full p-inputtext"
+              placeholder={t('admin.pages.inventory.incidentForm.namePlaceholder')}
+              disabled={isSubmitting}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+              <Icon icon="tabler:notes" width="18" />
+              {t('admin.pages.inventory.incidentForm.descriptionLabel')}
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full p-inputtext"
+              placeholder={t('admin.pages.inventory.incidentForm.descriptionPlaceholder')}
+              disabled={isSubmitting}
+              rows={4}
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
+          <Button
+            label={t('admin.pages.inventory.incidentForm.cancelButton')}
+            className="p-button-outlined p-button-secondary"
+            icon={<Icon icon="tabler:x" />}
+            onClick={handleCancel}
+            disabled={isSubmitting}
+          />
+          <Button
+            label={t('admin.pages.inventory.incidentForm.saveButton')}
+            className="p-button-primary"
+            icon={<Icon icon="tabler:device-floppy" />}
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          />
+        </div>
+      </form>
     </div>
   );
 };

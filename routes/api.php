@@ -95,6 +95,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
 
+        Route::put('zones/{id}/inline-update', [ZoneController::class, 'inlineUpdate']);
+
         Route::get('/sensorshistory', [SensorController::class, 'fetchSensors']);
         Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchSensorByEUI']);
 

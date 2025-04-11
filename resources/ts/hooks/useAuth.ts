@@ -32,7 +32,10 @@ export function useAuth() {
     dispatch(setAuthenticated(true));
   }
 
-  function logout() {
+  async function logout() {
+    await axiosClient.post('/logout').catch((error) => {
+      console.error('Failed to logout:', error);
+    });
     localStorage.removeItem('authToken');
     localStorage.removeItem('contractId');
     dispatch(clearUserData());

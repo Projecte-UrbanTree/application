@@ -1,10 +1,10 @@
+import { ProgressSpinner } from 'primereact/progressspinner';
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { MapComponent } from '@/components/Map';
-import Preloader from '@/components/Preloader';
 import { useMapInitialization } from '@/hooks/useMapInitialization';
 import { Zones } from '@/pages/Admin/Inventory/Zones';
 import { eventSubject } from '@/pages/Admin/Inventory/Zones';
@@ -120,7 +120,7 @@ export default function Inventory() {
 
   const handleAddElementZone = useCallback((zone: Zone) => {
     setZoneToAddElement(zone);
-    setSelectedZone(null);
+    setSelectedZone(zone);
   }, []);
 
   const handleCreatingElementChange = useCallback((isCreating: boolean) => {
@@ -132,6 +132,15 @@ export default function Inventory() {
       await dispatch(fetchElementsAsync());
       updateElements();
       setZoneToAddElement(null);
+
+      eventSubject.next({ refreshMap: true });
+
+      toast.current?.show({
+        severity: 'success',
+        summary: t('general.success'),
+        detail: t('admin.pages.inventory.inventoryPage.elementCreateSuccess'),
+        life: 3000,
+      });
     } catch (error) {
       toast.current?.show({
         severity: 'error',
@@ -141,6 +150,11 @@ export default function Inventory() {
       });
     }
   }, [dispatch, updateElements, t]);
+
+  const handleCancelSaveElement = useCallback(() => {
+    setZoneToAddElement(null);
+    eventSubject.next({ refreshMap: true });
+  }, []);
 
   const handleMapClick = useCallback(
     (event: React.MouseEvent) => {
@@ -177,22 +191,23 @@ export default function Inventory() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col w-full h-full relative">
-        <div className="h-full flex items-center justify-center">
-          <Preloader />
-        </div>
+      <div className="flex justify-center p-4">
+        <ProgressSpinner
+          style={{ width: '50px', height: '50px' }}
+          strokeWidth="4"
+        />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full bg-gray-50">
       <Toast ref={toast} position="top-center" />
 
-      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row gap-4'} w-full h-full`}>
+      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row gap-6'} w-full h-full p-4`}>
         <div
           ref={mapContainerRef}
-          className={`${isMobile ? 'h-[60%] w-full mb-4' : 'w-[65%] h-full'} relative bg-gray-100 rounded-lg overflow-hidden shadow-lg border border-gray-300`}
+          className={`${isMobile ? 'h-[60%] w-full mb-4' : 'w-[70%] h-full'} relative bg-white rounded-lg shadow-lg border border-gray-300`}
           style={{ minHeight: isMobile ? '300px' : '0' }}
           onClick={handleMapClick}>
           <MapComponent
@@ -200,6 +215,7 @@ export default function Inventory() {
             selectedZone={selectedZone}
             zoneToAddElement={zoneToAddElement}
             onElementAdd={handleElementAdded}
+            onCancelSaveElement={handleCancelSaveElement}
             isCreatingElement={isCreatingElement}
             onCreatingElementChange={handleCreatingElementChange}
             isDrawingMode={isDrawingMode}
@@ -212,7 +228,7 @@ export default function Inventory() {
         </div>
 
         <div
-          className={`${isMobile ? 'h-[40%] w-full' : 'w-[35%] h-full'} bg-white rounded-lg shadow-md border border-gray-300 flex flex-col overflow-hidden`}>
+          className={`${isMobile ? 'h-[40%] w-full' : 'w-[30%] h-full'} bg-white rounded-lg shadow-md border border-gray-300 flex flex-col overflow-hidden`}>
           <Zones
             onSelectedZone={handleSelectedZone}
             onAddElementZone={handleAddElementZone}
