@@ -50,29 +50,36 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
     [],
   );
 
-  const handleElementTypeChange = useCallback(async (e: { value: number }) => {
-    const elementTypeId = e.value;
-    setSelectedElementType(elementTypeId);
+  const handleElementTypeChange = useCallback(
+    async (e: { value: number }) => {
+      const elementTypeId = e.value;
+      setSelectedElementType(elementTypeId);
 
-    try {
-      const allElementTypes = await fetchElementType();
-      const selectedElementType = allElementTypes.find(
-        (et) => et.id === elementTypeId,
-      );
+      try {
+        const allElementTypes = await fetchElementType();
+        const selectedElementType = allElementTypes.find(
+          (et) => et.id === elementTypeId,
+        );
 
-      if (selectedElementType) {
-        const needsTreeType = selectedElementType.requires_tree_type === true ||
-                             selectedElementType.requires_tree_type === 1;
-        setRequiresTreeType(needsTreeType);
+        if (selectedElementType) {
+          const needsTreeType =
+            selectedElementType.requires_tree_type === true ||
+            selectedElementType.requires_tree_type === 1;
+          setRequiresTreeType(needsTreeType);
 
-        if (!needsTreeType) {
-          setSelectedTreeType(null);
+          if (!needsTreeType) {
+            setSelectedTreeType(null);
+          }
         }
+      } catch (error) {
+        console.error(
+          t('admin.pages.inventory.saveElementForm.fetchElementTypeError'),
+          error,
+        );
       }
-    } catch (error) {
-      console.error(t('admin.pages.inventory.saveElementForm.fetchElementTypeError'), error);
-    }
-  }, [t]);
+    },
+    [t],
+  );
 
   const handleTreeTypeChange = useCallback((e: { value: number }) => {
     setSelectedTreeType(e.value);
@@ -98,13 +105,16 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
       ).unwrap();
 
       if (!savedPoint.id) {
-        throw new Error(t('admin.pages.inventory.saveElementForm.savePointError'));
+        throw new Error(
+          t('admin.pages.inventory.saveElementForm.savePointError'),
+        );
       }
 
       const elementData: Element = {
         description,
         element_type_id: selectedElementType,
-        tree_type_id: requiresTreeType && selectedTreeType ? selectedTreeType : undefined,
+        tree_type_id:
+          requiresTreeType && selectedTreeType ? selectedTreeType : undefined,
         point_id: savedPoint.id,
       };
 
@@ -125,7 +135,7 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
     setDescription(null);
     setSelectedElementType(null);
     setSelectedTreeType(null);
-    
+
     eventSubject.next({ refreshMap: true });
     onClose();
   }, [onClose]);
@@ -136,7 +146,6 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
 
   return (
     <div className="p-4 bg-gray-50 border border-gray-300 rounded shadow-sm">
-
       <form className="space-y-4">
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
           <div className="mb-4">
@@ -148,7 +157,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
               value={selectedElementType}
               options={elementTypes}
               onChange={handleElementTypeChange}
-              placeholder={t('admin.pages.inventory.saveElementForm.elementTypePlaceholder')}
+              placeholder={t(
+                'admin.pages.inventory.saveElementForm.elementTypePlaceholder',
+              )}
               className="w-full"
               appendTo="self"
             />
@@ -163,7 +174,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
                 value={selectedTreeType}
                 options={treeTypes}
                 onChange={handleTreeTypeChange}
-                placeholder={t('admin.pages.inventory.saveElementForm.treeTypePlaceholder')}
+                placeholder={t(
+                  'admin.pages.inventory.saveElementForm.treeTypePlaceholder',
+                )}
                 className="w-full"
                 appendTo="self"
               />
@@ -177,7 +190,9 @@ export const SaveElementForm: React.FC<SaveElementFormProps> = ({
             <InputTextarea
               value={description || ''}
               onChange={handleDescriptionChange}
-              placeholder={t('admin.pages.inventory.saveElementForm.descriptionPlaceholder')}
+              placeholder={t(
+                'admin.pages.inventory.saveElementForm.descriptionPlaceholder',
+              )}
               className="w-full"
             />
           </div>

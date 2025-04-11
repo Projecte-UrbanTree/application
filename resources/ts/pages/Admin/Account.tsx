@@ -35,20 +35,20 @@ export default function Account() {
     if (!name) return '';
     return name
       .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   };
 
   const formatDate = (dateString: string) => {
     if (!dateString) return 'Never';
     const date = new Date(dateString);
-    
+
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    
+
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
@@ -115,7 +115,10 @@ export default function Account() {
     ),
   });
 
-  const handleSubmit = async (values: typeof initialValues, { resetForm }: { resetForm: (nextState?: Partial<any>) => void }) => {
+  const handleSubmit = async (
+    values: typeof initialValues,
+    { resetForm }: { resetForm: (nextState?: Partial<any>) => void },
+  ) => {
     try {
       await axiosClient.put('/admin/account', {
         name: values.name,
@@ -123,7 +126,7 @@ export default function Account() {
         email: values.email,
         company: values.company,
       });
-      
+
       if (values.currentPassword && values.newPassword) {
         await axiosClient.put('/admin/account/password', {
           currentPassword: values.currentPassword,
@@ -138,25 +141,24 @@ export default function Account() {
         newPassword: '',
         confirmNewPassword: '',
       });
-      
+
       resetForm({
         values: {
           ...values,
           currentPassword: '',
           newPassword: '',
           confirmNewPassword: '',
-        }
+        },
       });
-      
+
       showToast(
         'success',
         t('general.success'),
-        t('admin.pages.account.messages.profileUpdated')
+        t('admin.pages.account.messages.profileUpdated'),
       );
-      
+
       const tokenResponse = await axiosClient.get('/admin/account/tokens');
       setTokens(tokenResponse.data);
-      
     } catch (error: any) {
       if (
         error.response?.data?.error === 'La contraseña actual no es correcta'
@@ -195,13 +197,19 @@ export default function Account() {
   };
 
   const nameBodyTemplate = (rowData: any) => {
-    const displayName = rowData.name.length > 45
-      ? `${rowData.name.substring(0, 45)}...` 
-      : rowData.name;
-    
+    const displayName =
+      rowData.name.length > 45
+        ? `${rowData.name.substring(0, 45)}...`
+        : rowData.name;
+
     return (
       <div className="flex items-center gap-2">
-        <Icon icon="mdi:account" className="text-blue-600" width={18} height={18} />
+        <Icon
+          icon="mdi:account"
+          className="text-blue-600"
+          width={18}
+          height={18}
+        />
         <span title={rowData.name}>{displayName}</span>
       </div>
     );
@@ -281,7 +289,11 @@ export default function Account() {
                   <label>{t('admin.fields.dni')}</label>
                   <div className="p-inputgroup">
                     <span className="p-inputgroup-addon">
-                      <Icon icon="mdi:card-account-details" width={18} height={18} />
+                      <Icon
+                        icon="mdi:card-account-details"
+                        width={18}
+                        height={18}
+                      />
                     </span>
                     <Field name="dni" as={InputText} disabled />
                   </div>
@@ -293,7 +305,9 @@ export default function Account() {
                   {t('admin.pages.account.passwordChangeInfo')}
                 </p>
                 <div className="flex flex-col col-span-2">
-                  <label className="font-medium text-gray-700">{t('admin.fields.currentPassword')}</label>
+                  <label className="font-medium text-gray-700">
+                    {t('admin.fields.currentPassword')}
+                  </label>
                   <Field
                     name="currentPassword"
                     as={InputText}
@@ -301,11 +315,15 @@ export default function Account() {
                     className={`mt-1 ${errors.currentPassword && touched.currentPassword ? 'p-invalid' : ''}`}
                   />
                   {errors.currentPassword && touched.currentPassword && (
-                    <small className="p-error mt-1">{errors.currentPassword}</small>
+                    <small className="p-error mt-1">
+                      {errors.currentPassword}
+                    </small>
                   )}
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="font-medium text-gray-700">{t('admin.fields.newPassword')}</label>
+                  <label className="font-medium text-gray-700">
+                    {t('admin.fields.newPassword')}
+                  </label>
                   <Field
                     name="newPassword"
                     as={InputText}
@@ -317,7 +335,9 @@ export default function Account() {
                   )}
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="font-medium text-gray-700">{t('admin.fields.confirmPassword')}</label>
+                  <label className="font-medium text-gray-700">
+                    {t('admin.fields.confirmPassword')}
+                  </label>
                   <Field
                     name="confirmNewPassword"
                     as={InputText}
@@ -325,7 +345,9 @@ export default function Account() {
                     className={`mt-1 ${errors.confirmNewPassword && touched.confirmNewPassword ? 'p-invalid' : ''}`}
                   />
                   {errors.confirmNewPassword && touched.confirmNewPassword && (
-                    <small className="p-error mt-1">{errors.confirmNewPassword}</small>
+                    <small className="p-error mt-1">
+                      {errors.confirmNewPassword}
+                    </small>
                   )}
                 </div>
                 <div className="md:col-span-2 flex justify-end mt-4">
@@ -352,10 +374,14 @@ export default function Account() {
             {t('admin.pages.account.security.tokens')}
           </h3>
           <DataTable value={tokens} className="p-datatable-sm">
-            <Column field="name" header={t('admin.pages.account.securityTable.name')} body={nameBodyTemplate} />
-            <Column 
-              field="last_used_at" 
-              header={t('admin.pages.account.securityTable.lastUsed')} 
+            <Column
+              field="name"
+              header={t('admin.pages.account.securityTable.name')}
+              body={nameBodyTemplate}
+            />
+            <Column
+              field="last_used_at"
+              header={t('admin.pages.account.securityTable.lastUsed')}
               body={lastUsedTemplate}
             />
             <Column
@@ -363,8 +389,7 @@ export default function Account() {
                 <Button
                   className="p-button-danger p-button-sm"
                   onClick={() => handleRevokeToken(rowData.id)}
-                  tooltip={t('admin.pages.account.actions.revoke')}
-                >
+                  tooltip={t('admin.pages.account.actions.revoke')}>
                   <Icon icon="mdi:trash" className="h-5 w-5" />
                 </Button>
               )}

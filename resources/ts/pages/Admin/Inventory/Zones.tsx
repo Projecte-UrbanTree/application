@@ -54,24 +54,41 @@ export const Zones = ({
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<
+    Record<string, boolean>
+  >({});
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
-  const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(null);
+  const [selectedZoneToDelete, setSelectedZoneToDelete] = useState<Zone | null>(
+    null,
+  );
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [editingZone, setEditingZone] = useState<Zone | null>(null);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [editingField, setEditingField] = useState<{ zoneId: number; field: 'name' | 'description' } | null>(null);
-  const [localZoneEdits, setLocalZoneEdits] = useState<Record<number, Partial<Zone>>>({});
+  const [editingField, setEditingField] = useState<{
+    zoneId: number;
+    field: 'name' | 'description';
+  } | null>(null);
+  const [localZoneEdits, setLocalZoneEdits] = useState<
+    Record<number, Partial<Zone>>
+  >({});
   const [tempColors, setTempColors] = useState<Record<number, string>>({});
 
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
 
-  const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
-  const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
-  const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
+  const { zones, loading: zonesLoading } = useSelector(
+    (state: RootState) => state.zone,
+  );
+  const { points, loading: pointsLoading } = useSelector(
+    (state: RootState) => state.points,
+  );
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
+  const { elements, loading: elementsLoading } = useSelector(
+    (state: RootState) => state.element,
+  );
 
   const uniqueZones = useMemo(
     () => Array.from(new Map(zones.map((z) => [z.id, z])).values()),
@@ -119,7 +136,7 @@ export const Zones = ({
 
         eventSubject.next({
           isCreatingElement: false,
-          refreshMap: true
+          refreshMap: true,
         });
 
         setIsInitialized(true);
@@ -202,7 +219,7 @@ export const Zones = ({
 
       eventSubject.next({
         isCreatingElement: false,
-        refreshMap: true
+        refreshMap: true,
       });
     } catch (error) {
       toast.current?.show({
@@ -218,7 +235,7 @@ export const Zones = ({
       const pointIdsInZone = new Set(
         points
           .filter((point) => point.zone_id === zoneId)
-          .map((point) => point.id)
+          .map((point) => point.id),
       );
 
       const typeCount = elements
@@ -226,7 +243,8 @@ export const Zones = ({
         .reduce(
           (acc, element) => {
             if (element.element_type_id) {
-              acc[element.element_type_id] = (acc[element.element_type_id] || 0) + 1;
+              acc[element.element_type_id] =
+                (acc[element.element_type_id] || 0) + 1;
             }
             return acc;
           },
@@ -248,7 +266,9 @@ export const Zones = ({
         toast.current?.show({
           severity: 'warn',
           summary: t('general.warning'),
-          detail: t('admin.pages.inventory.zones.toast.showElementsWarningZoneHidden'),
+          detail: t(
+            'admin.pages.inventory.zones.toast.showElementsWarningZoneHidden',
+          ),
         });
         return;
       }
@@ -275,16 +295,16 @@ export const Zones = ({
       const isHidden = hiddenZones[zoneId] || false;
 
       if (!isHidden) {
-        setHiddenZones(prev => ({
+        setHiddenZones((prev) => ({
           ...prev,
-          [zoneId]: true
+          [zoneId]: true,
         }));
 
         const elementCounts = countElementsByTypeInZone(zoneId);
 
         Object.keys(elementCounts).forEach((typeId) => {
           const key = `${zoneId}-${typeId}`;
-          setHiddenElementTypes(prev => ({
+          setHiddenElementTypes((prev) => ({
             ...prev,
             [key]: true,
           }));
@@ -295,19 +315,19 @@ export const Zones = ({
           hiddenZone: {
             zoneId,
             hidden: true,
-          }
+          },
         });
       } else {
-        setHiddenZones(prev => ({
+        setHiddenZones((prev) => ({
           ...prev,
-          [zoneId]: false
+          [zoneId]: false,
         }));
 
         const elementCounts = countElementsByTypeInZone(zoneId);
 
         Object.keys(elementCounts).forEach((typeId) => {
           const key = `${zoneId}-${typeId}`;
-          setHiddenElementTypes(prev => ({
+          setHiddenElementTypes((prev) => ({
             ...prev,
             [key]: false,
           }));
@@ -318,7 +338,7 @@ export const Zones = ({
           hiddenZone: {
             zoneId,
             hidden: false,
-          }
+          },
         });
 
         Object.keys(elementCounts).forEach((typeId) => {
@@ -336,69 +356,83 @@ export const Zones = ({
     [hiddenZones, countElementsByTypeInZone],
   );
 
-  const showAllElementsInZone = useCallback((zoneId: number) => {
-    const elementCounts = countElementsByTypeInZone(zoneId);
+  const showAllElementsInZone = useCallback(
+    (zoneId: number) => {
+      const elementCounts = countElementsByTypeInZone(zoneId);
 
-    Object.keys(elementCounts).forEach((typeId) => {
-      const key = `${zoneId}-${typeId}`;
-      setHiddenElementTypes((prev) => ({
-        ...prev,
-        [key]: false,
-      }));
+      Object.keys(elementCounts).forEach((typeId) => {
+        const key = `${zoneId}-${typeId}`;
+        setHiddenElementTypes((prev) => ({
+          ...prev,
+          [key]: false,
+        }));
 
-      eventSubject.next({
-        isCreatingElement: false,
-        hiddenElementTypes: {
-          zoneId,
-          elementTypeId: parseInt(typeId),
-          hidden: false,
-        },
+        eventSubject.next({
+          isCreatingElement: false,
+          hiddenElementTypes: {
+            zoneId,
+            elementTypeId: parseInt(typeId),
+            hidden: false,
+          },
+        });
       });
-    });
-
-  }, [countElementsByTypeInZone]);
+    },
+    [countElementsByTypeInZone],
+  );
 
   const handleColorChange = useCallback((zoneId: number, newColor: string) => {
-    setTempColors(prev => ({
+    setTempColors((prev) => ({
       ...prev,
-      [zoneId]: newColor
+      [zoneId]: newColor,
     }));
   }, []);
 
-  const handleColorSave = useCallback(async (zone: Zone) => {
-    const newColor = tempColors[zone.id!];
-    if (newColor && newColor !== zone.color) {
-      try {
-        await dispatch(updateZoneAsync({
-          id: zone.id!,
-          data: { ...zone, color: newColor }
-        })).unwrap();
+  const handleColorSave = useCallback(
+    async (zone: Zone) => {
+      const newColor = tempColors[zone.id!];
+      if (newColor && newColor !== zone.color) {
+        try {
+          await dispatch(
+            updateZoneAsync({
+              id: zone.id!,
+              data: { ...zone, color: newColor },
+            }),
+          ).unwrap();
 
-        toast.current?.show({
-          severity: 'success',
-          summary: t('general.success'),
-          detail: t('admin.pages.inventory.zones.toast.colorUpdateSuccess')
-        });
-      } catch (error) {
-        toast.current?.show({
-          severity: 'error',
-          summary: t('general.error'),
-          detail: t('admin.pages.inventory.zones.toast.colorUpdateError')
-        });
+          toast.current?.show({
+            severity: 'success',
+            summary: t('general.success'),
+            detail: t('admin.pages.inventory.zones.toast.colorUpdateSuccess'),
+          });
+        } catch (error) {
+          toast.current?.show({
+            severity: 'error',
+            summary: t('general.error'),
+            detail: t('admin.pages.inventory.zones.toast.colorUpdateError'),
+          });
 
-        setTempColors(prev => {
-          const { [zone.id!]: _, ...rest } = prev;
-          return rest;
-        });
+          setTempColors((prev) => {
+            const { [zone.id!]: _, ...rest } = prev;
+            return rest;
+          });
+        }
       }
-    }
-  }, [dispatch, t, tempColors]);
+    },
+    [dispatch, t, tempColors],
+  );
 
-  const handleInlineEditStart = (zoneId: number, field: 'name' | 'description') => {
+  const handleInlineEditStart = (
+    zoneId: number,
+    field: 'name' | 'description',
+  ) => {
     setEditingField({ zoneId, field });
   };
 
-  const handleInlineEditChange = (zoneId: number, field: 'name' | 'description', value: string) => {
+  const handleInlineEditChange = (
+    zoneId: number,
+    field: 'name' | 'description',
+    value: string,
+  ) => {
     setLocalZoneEdits((prev) => ({
       ...prev,
       [zoneId]: {
@@ -408,7 +442,10 @@ export const Zones = ({
     }));
   };
 
-  const handleInlineEditBlur = async (zone: Zone, field: 'name' | 'description') => {
+  const handleInlineEditBlur = async (
+    zone: Zone,
+    field: 'name' | 'description',
+  ) => {
     const updatedValue = localZoneEdits[zone.id]?.[field];
     if (updatedValue !== undefined && updatedValue !== zone[field]) {
       try {
@@ -437,7 +474,7 @@ export const Zones = ({
   useEffect(() => {
     if (!isInitialized && zones.length > 0) {
       const timer = setTimeout(() => {
-        zones.forEach(zone => {
+        zones.forEach((zone) => {
           if (zone.id) {
             showAllElementsInZone(zone.id);
           }
@@ -476,7 +513,9 @@ export const Zones = ({
           <div className="flex items-center justify-between border border-indigo-200 bg-indigo-50 rounded p-2 mb-2">
             <div className="flex items-center gap-2 text-indigo-800">
               <Icon icon="tabler:pencil-plus" width="18" />
-              <span className="text-sm font-medium">{t('admin.pages.inventory.zones.creatingElementInfo')}</span>
+              <span className="text-sm font-medium">
+                {t('admin.pages.inventory.zones.creatingElementInfo')}
+              </span>
             </div>
             <Button
               icon={<Icon icon="tabler:x" />}
@@ -507,16 +546,26 @@ export const Zones = ({
         {filteredZones.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-gray-500 p-4">
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 flex flex-col items-center w-full mx-auto">
-              <Icon icon="tabler:map-off" width="48" className="mb-3 text-gray-400" />
-              <h3 className="text-center font-semibold text-lg mb-1">{t('admin.pages.inventory.zones.emptyState.title')}</h3>
+              <Icon
+                icon="tabler:map-off"
+                width="48"
+                className="mb-3 text-gray-400"
+              />
+              <h3 className="text-center font-semibold text-lg mb-1">
+                {t('admin.pages.inventory.zones.emptyState.title')}
+              </h3>
               <p className="text-center text-sm mb-3 text-gray-600">
                 {searchTerm
-                  ? t('admin.pages.inventory.zones.emptyState.messageWithSearch')
+                  ? t(
+                      'admin.pages.inventory.zones.emptyState.messageWithSearch',
+                    )
                   : t('admin.pages.inventory.zones.emptyState.messageDefault')}
               </p>
               {searchTerm && (
                 <Button
-                  label={t('admin.pages.inventory.zones.emptyState.clearSearchButton')}
+                  label={t(
+                    'admin.pages.inventory.zones.emptyState.clearSearchButton',
+                  )}
                   icon={<Icon icon="tabler:eraser" />}
                   className="p-button-outlined p-button-indigo p-button-sm"
                   onClick={() => setSearchTerm('')}
@@ -528,10 +577,14 @@ export const Zones = ({
           <div className="space-y-3">
             {filteredZones.map((zone: Zone) => {
               const elementCountByType = countElementsByTypeInZone(zone.id!);
-              const totalElements = Object.values(elementCountByType).reduce((sum, count) => sum + count, 0);
+              const totalElements = Object.values(elementCountByType).reduce(
+                (sum, count) => sum + count,
+                0,
+              );
               const isHidden = hiddenZones[zone.id!] || false;
               const localEdits = localZoneEdits[zone.id] || {};
-              const currentColor = tempColors[zone.id!] || zone.color || '#6366F1';
+              const currentColor =
+                tempColors[zone.id!] || zone.color || '#6366F1';
 
               return (
                 <Card
@@ -539,23 +592,33 @@ export const Zones = ({
                   className="border border-gray-300 shadow-sm rounded-lg bg-white overflow-hidden p-0"
                   pt={{
                     root: { className: 'p-0' },
-                    content: { className: 'p-0' }
-                  }}
-                >
+                    content: { className: 'p-0' },
+                  }}>
                   <div className="border-b border-gray-200 p-3 flex flex-col gap-2">
                     <div className="flex items-center gap-3 min-w-0">
                       <ColorPicker
                         value={currentColor.replace('#', '')}
-                        onChange={(e) => handleColorChange(zone.id!, `#${e.value}`)}
+                        onChange={(e) =>
+                          handleColorChange(zone.id!, `#${e.value}`)
+                        }
                         onHide={() => handleColorSave(zone)}
-                        tooltip={t('admin.pages.inventory.zones.tooltips.changeColor')}
+                        tooltip={t(
+                          'admin.pages.inventory.zones.tooltips.changeColor',
+                        )}
                         appendTo={document.body}
                       />
                       <div className="flex flex-col min-w-0">
-                        {editingField?.zoneId === zone.id && editingField.field === 'name' ? (
+                        {editingField?.zoneId === zone.id &&
+                        editingField.field === 'name' ? (
                           <InputText
                             value={localEdits.name ?? zone.name}
-                            onChange={(e) => handleInlineEditChange(zone.id!, 'name', e.target.value)}
+                            onChange={(e) =>
+                              handleInlineEditChange(
+                                zone.id!,
+                                'name',
+                                e.target.value,
+                              )
+                            }
                             onBlur={() => handleInlineEditBlur(zone, 'name')}
                             autoFocus
                             className="font-semibold text-gray-800 truncate"
@@ -563,55 +626,86 @@ export const Zones = ({
                         ) : (
                           <span
                             className="font-semibold text-gray-800 truncate cursor-pointer"
-                            onClick={() => handleInlineEditStart(zone.id!, 'name')}
-                          >
+                            onClick={() =>
+                              handleInlineEditStart(zone.id!, 'name')
+                            }>
                             {localEdits.name ?? zone.name}
                           </span>
                         )}
-                        {editingField?.zoneId === zone.id && editingField.field === 'description' ? (
+                        {editingField?.zoneId === zone.id &&
+                        editingField.field === 'description' ? (
                           <InputText
-                            value={(localEdits.description ?? zone.description) || ''}
-                            onChange={(e) => handleInlineEditChange(zone.id!, 'description', e.target.value)}
-                            onBlur={() => handleInlineEditBlur(zone, 'description')}
+                            value={
+                              (localEdits.description ?? zone.description) || ''
+                            }
+                            onChange={(e) =>
+                              handleInlineEditChange(
+                                zone.id!,
+                                'description',
+                                e.target.value,
+                              )
+                            }
+                            onBlur={() =>
+                              handleInlineEditBlur(zone, 'description')
+                            }
                             autoFocus
                             className="text-xs text-gray-500 truncate"
                           />
                         ) : (
                           <span
                             className="text-xs text-gray-500 truncate cursor-pointer"
-                            onClick={() => handleInlineEditStart(zone.id!, 'description')}
-                          >
-                            {(localEdits.description ?? zone.description) || t('admin.pages.inventory.zones.noDescription')}
+                            onClick={() =>
+                              handleInlineEditStart(zone.id!, 'description')
+                            }>
+                            {(localEdits.description ?? zone.description) ||
+                              t('admin.pages.inventory.zones.noDescription')}
                           </span>
                         )}
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <Button
-                        icon={<Icon icon={isHidden ? 'tabler:eye-off' : 'tabler:eye'} width="18" />}
+                        icon={
+                          <Icon
+                            icon={isHidden ? 'tabler:eye-off' : 'tabler:eye'}
+                            width="18"
+                          />
+                        }
                         className="p-button-outlined p-button-indigo p-button-sm"
-                        tooltip={isHidden ? t('admin.pages.inventory.zones.tooltips.showZone') : t('admin.pages.inventory.zones.tooltips.hideZone')}
+                        tooltip={
+                          isHidden
+                            ? t('admin.pages.inventory.zones.tooltips.showZone')
+                            : t('admin.pages.inventory.zones.tooltips.hideZone')
+                        }
                         tooltipOptions={{ position: 'top' }}
                         onClick={() => toggleZoneVisibility(zone.id!)}
                       />
                       <Button
                         icon={<Icon icon="tabler:map-pin" width="18" />}
                         className="p-button-outlined p-button-indigo p-button-sm"
-                        tooltip={t('admin.pages.inventory.zones.tooltips.goToZone')}
+                        tooltip={t(
+                          'admin.pages.inventory.zones.tooltips.goToZone',
+                        )}
                         tooltipOptions={{ position: 'top' }}
                         onClick={() => onSelectedZone(zone)}
                       />
                       <Button
                         icon={<Icon icon="tabler:plus" width="18" />}
                         className="p-button-outlined p-button-indigo p-button-sm"
-                        tooltip={t('admin.pages.inventory.zones.tooltips.addElement')}
+                        tooltip={t(
+                          'admin.pages.inventory.zones.tooltips.addElement',
+                        )}
                         tooltipOptions={{ position: 'top' }}
-                        onClick={() => addElementZone({ isCreatingElement: true, zone })}
+                        onClick={() =>
+                          addElementZone({ isCreatingElement: true, zone })
+                        }
                       />
                       <Button
                         icon={<Icon icon="tabler:trash" width="18" />}
                         className="p-button-outlined p-button-indigo p-button-sm"
-                        tooltip={t('admin.pages.inventory.zones.tooltips.deleteZone')}
+                        tooltip={t(
+                          'admin.pages.inventory.zones.tooltips.deleteZone',
+                        )}
                         tooltipOptions={{ position: 'top' }}
                         onClick={() => confirmDeleteZone(zone)}
                       />
@@ -619,19 +713,36 @@ export const Zones = ({
                   </div>
 
                   {(() => {
-                    const hasElements = elementTypes.some(et => (elementCountByType[et.id!] || 0) > 0);
+                    const hasElements = elementTypes.some(
+                      (et) => (elementCountByType[et.id!] || 0) > 0,
+                    );
 
                     if (!hasElements) {
                       return (
                         <div className="p-3">
                           <div className="flex flex-col items-center py-4 text-center text-gray-500">
-                            <Icon icon="tabler:tree" width="28" className="text-gray-400 mb-2" />
-                            <p className="mb-2">{t('admin.pages.inventory.zones.noElementsInZone')}</p>
+                            <Icon
+                              icon="tabler:tree"
+                              width="28"
+                              className="text-gray-400 mb-2"
+                            />
+                            <p className="mb-2">
+                              {t(
+                                'admin.pages.inventory.zones.noElementsInZone',
+                              )}
+                            </p>
                             <Button
-                              label={t('admin.pages.inventory.zones.addElementButton')}
+                              label={t(
+                                'admin.pages.inventory.zones.addElementButton',
+                              )}
                               icon={<Icon icon="tabler:plus" width="16" />}
                               className="p-button-outlined p-button-indigo p-button-sm"
-                              onClick={() => addElementZone({ isCreatingElement: true, zone })}
+                              onClick={() =>
+                                addElementZone({
+                                  isCreatingElement: true,
+                                  zone,
+                                })
+                              }
                             />
                           </div>
                         </div>
@@ -642,49 +753,68 @@ export const Zones = ({
                       <div className="p-3">
                         <h4 className="text-xs font-bold uppercase text-gray-500 mb-2 flex items-center gap-1">
                           <Icon icon="tabler:list" width="14" />
-                          {t('admin.pages.inventory.zones.elementsHeader', { count: totalElements })}
+                          {t('admin.pages.inventory.zones.elementsHeader', {
+                            count: totalElements,
+                          })}
                         </h4>
 
                         <div className="space-y-2">
                           {elementTypes.map((elementType) => {
-                            const count = elementCountByType[elementType.id!] || 0;
+                            const count =
+                              elementCountByType[elementType.id!] || 0;
                             if (count === 0) return null;
 
                             const key = `${zone.id}-${elementType.id}`;
-                            const isElementHidden = hiddenElementTypes[key] || false;
+                            const isElementHidden =
+                              hiddenElementTypes[key] || false;
                             const zoneIsHidden = hiddenZones[zone.id!] || false;
 
                             return (
                               <div
                                 key={elementType.id}
-                                className={`flex justify-between items-center p-2 rounded-lg ${isElementHidden || zoneIsHidden ? 'bg-gray-100' : 'bg-white'
-                                  } border border-gray-200 transition-all duration-200`}
-                              >
+                                className={`flex justify-between items-center p-2 rounded-lg ${
+                                  isElementHidden || zoneIsHidden
+                                    ? 'bg-gray-100'
+                                    : 'bg-white'
+                                } border border-gray-200 transition-all duration-200`}>
                                 <div className="flex items-center gap-2 flex-1 min-w-0">
                                   <div
                                     className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                                     style={{
-                                      backgroundColor: elementType.color || '#6366F1',
-                                      opacity: isElementHidden || zoneIsHidden ? 0.5 : 1
-                                    }}
-                                  >
+                                      backgroundColor:
+                                        elementType.color || '#6366F1',
+                                      opacity:
+                                        isElementHidden || zoneIsHidden
+                                          ? 0.5
+                                          : 1,
+                                    }}>
                                     {elementType.icon && (
                                       <Icon
-                                        icon={elementType.icon.startsWith('tabler:') ? elementType.icon : `tabler:${elementType.icon.replace('mdi:', '')}`}
+                                        icon={
+                                          elementType.icon.startsWith('tabler:')
+                                            ? elementType.icon
+                                            : `tabler:${elementType.icon.replace('mdi:', '')}`
+                                        }
                                         width="16"
-                                        color={isElementHidden || zoneIsHidden ? 'gray-400' : 'gray-700'}
+                                        color={
+                                          isElementHidden || zoneIsHidden
+                                            ? 'gray-400'
+                                            : 'gray-700'
+                                        }
                                       />
                                     )}
                                   </div>
                                   <div className="flex flex-col min-w-0">
-                                    <span className={`font-medium truncate ${isElementHidden || zoneIsHidden ? 'text-gray-400' : 'text-gray-700'}`}>
+                                    <span
+                                      className={`font-medium truncate ${isElementHidden || zoneIsHidden ? 'text-gray-400' : 'text-gray-700'}`}>
                                       {elementType.name}
                                     </span>
                                   </div>
                                   <Badge
                                     value={count}
                                     style={{
-                                      backgroundColor: elementType.color || '#6366F1',
+                                      backgroundColor:
+                                        elementType.color || '#6366F1',
                                       color: '#fff',
                                     }}
                                     className="ml-auto mr-2"
@@ -692,11 +822,37 @@ export const Zones = ({
                                 </div>
 
                                 <Button
-                                  icon={<Icon icon={isElementHidden || zoneIsHidden ? 'tabler:eye-off' : 'tabler:eye'} width="16" />}
+                                  icon={
+                                    <Icon
+                                      icon={
+                                        isElementHidden || zoneIsHidden
+                                          ? 'tabler:eye-off'
+                                          : 'tabler:eye'
+                                      }
+                                      width="16"
+                                    />
+                                  }
                                   className="p-button-outlined p-button-indigo p-button-sm"
-                                  onClick={() => handleViewElements(elementType.id!, zone.id!)}
+                                  onClick={() =>
+                                    handleViewElements(
+                                      elementType.id!,
+                                      zone.id!,
+                                    )
+                                  }
                                   disabled={zoneIsHidden}
-                                  tooltip={zoneIsHidden ? t('admin.pages.inventory.zones.tooltips.zoneHidden') : (isElementHidden ? t('admin.pages.inventory.zones.tooltips.showElements') : t('admin.pages.inventory.zones.tooltips.hideElements'))}
+                                  tooltip={
+                                    zoneIsHidden
+                                      ? t(
+                                          'admin.pages.inventory.zones.tooltips.zoneHidden',
+                                        )
+                                      : isElementHidden
+                                        ? t(
+                                            'admin.pages.inventory.zones.tooltips.showElements',
+                                          )
+                                        : t(
+                                            'admin.pages.inventory.zones.tooltips.hideElements',
+                                          )
+                                  }
                                   tooltipOptions={{ position: 'top' }}
                                 />
                               </div>
@@ -717,7 +873,9 @@ export const Zones = ({
         header={
           <div className="flex items-center gap-2 text-red-600">
             <Icon icon="tabler:alert-circle" width="24" />
-            <span className="font-semibold">{t('admin.pages.inventory.zones.deleteConfirm.title')}</span>
+            <span className="font-semibold">
+              {t('admin.pages.inventory.zones.deleteConfirm.title')}
+            </span>
           </div>
         }
         visible={isConfirmDialogVisible}
@@ -734,7 +892,9 @@ export const Zones = ({
               onClick={() => setIsConfirmDialogVisible(false)}
             />
             <Button
-              label={t('admin.pages.inventory.zones.deleteConfirm.deleteButton')}
+              label={t(
+                'admin.pages.inventory.zones.deleteConfirm.deleteButton',
+              )}
               icon={<Icon icon="tabler:trash" />}
               className="p-button-outlined p-button-indigo p-button-sm"
               severity="danger"
@@ -751,12 +911,16 @@ export const Zones = ({
           <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
             <p className="text-red-800 font-medium flex items-center gap-2">
               <Icon icon="tabler:alert-triangle" width="20" />
-              {t('admin.pages.inventory.zones.deleteConfirm.warningIrreversible')}
+              {t(
+                'admin.pages.inventory.zones.deleteConfirm.warningIrreversible',
+              )}
             </p>
           </div>
 
           <p className="mb-3">
-            {t('admin.pages.inventory.zones.deleteConfirm.confirmationText', { zoneName: selectedZoneToDelete?.name })}
+            {t('admin.pages.inventory.zones.deleteConfirm.confirmationText', {
+              zoneName: selectedZoneToDelete?.name,
+            })}
           </p>
           <p className="text-sm flex items-center gap-2 text-gray-600 bg-gray-50 p-2 rounded border border-gray-200">
             <Icon icon="tabler:info-circle" width="18" />

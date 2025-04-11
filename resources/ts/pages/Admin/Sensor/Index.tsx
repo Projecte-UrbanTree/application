@@ -80,11 +80,11 @@ const Sensors: React.FC = () => {
     };
 
     fetchAndProcessSensors();
-  }, [t]); 
+  }, [t]);
 
   useEffect(() => {
     if (location.state?.success) {
-     
+
       setSuccessMessage(t(location.state.success));
       const timer = setTimeout(() => setSuccessMessage(null), 4000);
       return () => clearTimeout(timer);
@@ -164,7 +164,7 @@ const Sensors: React.FC = () => {
         <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg border border-green-200 shadow-sm flex items-center">
           <Icon icon="tabler:circle-check" className="mr-2 text-xl" />
           <span>{successMessage}</span>
-        </div> 
+        </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -214,8 +214,8 @@ const Sensors: React.FC = () => {
                     <Icon icon="tabler:id" className="text-gray-400" />
                     {t('admin.pages.sensors.list.devEUI')}:
                   </span>
-                  <Tag 
-                    value={sensor.eui} 
+                  <Tag
+                    value={sensor.eui}
                     className="font-mono text-xs bg-gray-100 text-gray-700"
                   />
                 </div>
@@ -271,8 +271,8 @@ const Sensors: React.FC = () => {
               </div>
 
               <div className="mt-4 pt-3 border-t border-gray-200 flex justify-end">
-                <Button 
-                  label={t('admin.pages.sensors.list.viewHistory')} 
+                <Button
+                  label={t('admin.pages.sensors.list.viewHistory')}
                   icon="pi pi-chart-line"
                   severity="secondary"
                   text

@@ -13,7 +13,10 @@ export function useContracts() {
   const user = useSelector((state: RootState) => state.user);
 
   const fetchContracts = async (forceRefresh = false) => {
-    if (!forceRefresh && contracts && contracts.length > 0 || !user.isAuthenticated ) {
+    if (
+      (!forceRefresh && contracts && contracts.length > 0) ||
+      !user.isAuthenticated
+    ) {
       return;
     }
 

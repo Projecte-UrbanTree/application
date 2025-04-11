@@ -7,7 +7,7 @@ export const fetchIncidentsAsync = createAsyncThunk(
   async () => {
     const response = await axiosClient.get<Incidence[]>('/admin/incidents');
     return response.data;
-  }
+  },
 );
 
 export const deleteIncidentAsync = createAsyncThunk(
@@ -15,7 +15,7 @@ export const deleteIncidentAsync = createAsyncThunk(
   async (incidentId: number) => {
     await axiosClient.delete(`/admin/incidents/${incidentId}`);
     return incidentId;
-  }
+  },
 );
 
 interface IncidentState {
@@ -50,10 +50,10 @@ const incidentSlice = createSlice({
       })
       .addCase(deleteIncidentAsync.fulfilled, (state, action) => {
         state.incidents = state.incidents.filter(
-          (incident) => incident.id !== action.payload
+          (incident) => incident.id !== action.payload,
         );
       });
   },
 });
 
-export default incidentSlice.reducer; 
+export default incidentSlice.reducer;

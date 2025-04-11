@@ -1490,8 +1490,7 @@
           "title": "Sensors",
           "create": "Crear Sensor",
           "edit": "Editar Sensor",
-          "delete": "Eliminar Sensor",
-          "show": "Mostrar Sensor"
+          "delete": "Eliminar Sensor"
         },
         "loading": "Carregant dades del sensor...",
         "backButton": "Tornar",
@@ -1645,7 +1644,7 @@
       "soilDataTitle": "Dades del sòl"
     }
   },
-  
+
   "worker": {
     "workOrders": {
       "title": "Ordres de treball",

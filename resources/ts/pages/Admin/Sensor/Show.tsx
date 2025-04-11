@@ -21,7 +21,7 @@ const SensorHistory: React.FC = () => {
   const { t } = useTranslation();
   const { eui } = useParams<{ eui: string }>();
   const navigate = useNavigate();
-  
+
   const [sensorData, setSensorData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,7 +30,7 @@ const SensorHistory: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
   const chartRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const charts = useRef<Chart[]>([]);
-  
+
   // Pagination state
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(10);
@@ -43,10 +43,10 @@ const SensorHistory: React.FC = () => {
         if (!eui) {
           throw new Error('Sensor EUI is missing');
         }
-        
+
         setLoading(true);
         const response = await fetchSensorHistoryPaginated(eui, page, perPage);
-        
+
         if (response && response.data) {
           setSensorData(response.data);
           setTotalRecords(response.total);
@@ -253,7 +253,7 @@ const SensorHistory: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[300px]">
-        <ProgressSpinner 
+        <ProgressSpinner
           style={{ width: '50px', height: '50px' }}
           strokeWidth="4"
           animationDuration=".5s"
@@ -269,7 +269,7 @@ const SensorHistory: React.FC = () => {
           <Icon icon="tabler:alert-circle" className="text-red-500 text-4xl" />
           <h3 className="text-red-600 font-semibold text-lg">{error}</h3>
           <Button
-            severity="info" 
+            severity="info"
             onClick={() => window.location.reload()}
             className="flex items-center gap-2"
             icon={<Icon icon="tabler:reload" />}
@@ -306,15 +306,15 @@ const SensorHistory: React.FC = () => {
             onClick={() => navigate('/admin/sensors')}
             label={t('admin.pages.sensors.history.back')}
           />
-          
+
           <div className="flex items-center gap-3">
             <Icon icon="tabler:device-analytics" className="text-2xl text-indigo-600" />
             <h1 className="text-2xl font-bold text-gray-800">
               {t('admin.pages.sensors.history.title')}
             </h1>
-            <Tag 
-              value={eui} 
-              className="font-mono bg-gray-100 text-gray-800 border border-gray-300" 
+            <Tag
+              value={eui}
+              className="font-mono bg-gray-100 text-gray-800 border border-gray-300"
             />
           </div>
 
@@ -335,8 +335,8 @@ const SensorHistory: React.FC = () => {
         {viewMode === 'table' ? (
           /* Table View */
           <Card className="shadow-sm border border-gray-300 bg-gray-50">
-            <DataTable 
-              value={sensorData} 
+            <DataTable
+              value={sensorData}
               paginator={false}
               stripedRows
               showGridlines
@@ -346,9 +346,9 @@ const SensorHistory: React.FC = () => {
               scrollable
               scrollHeight="flex"
             >
-              <Column 
-                field="time" 
-                header={t('admin.pages.sensors.history.metrics.time')} 
+              <Column
+                field="time"
+                header={t('admin.pages.sensors.history.metrics.time')}
                 body={(rowData) => (
                   <div className="flex items-center gap-2">
                     <Icon icon="tabler:clock" className="text-gray-500" />
@@ -357,9 +357,9 @@ const SensorHistory: React.FC = () => {
                 )}
                 headerClassName="font-semibold"
               />
-              
-              <Column 
-                field="temp_soil" 
+
+              <Column
+                field="temp_soil"
                 header={t('admin.pages.sensors.history.metrics.temp_soil')}
                 body={(rowData) => (
                   <div className="flex items-center gap-2">
@@ -369,9 +369,9 @@ const SensorHistory: React.FC = () => {
                 )}
                 headerClassName="font-semibold"
               />
-              
-              <Column 
-                field="ph1_soil" 
+
+              <Column
+                field="ph1_soil"
                 header={t('admin.pages.sensors.history.metrics.ph1_soil')}
                 body={(rowData) => (
                   <div className="flex items-center gap-2">
@@ -381,12 +381,12 @@ const SensorHistory: React.FC = () => {
                 )}
                 headerClassName="font-semibold"
               />
-              
-              <Column 
-                field="water_soil" 
+
+              <Column
+                field="water_soil"
                 header={t('admin.pages.sensors.history.metrics.water_soil')}
                 body={(rowData) => rowData.water_soil ? (
-                  <Tag 
+                  <Tag
                     value={`${rowData.water_soil}%`}
                     severity={getMoistureSeverity(rowData.water_soil)}
                     className="font-medium"
@@ -396,9 +396,9 @@ const SensorHistory: React.FC = () => {
                 )}
                 headerClassName="font-semibold"
               />
-              
-              <Column 
-                field="conductor_soil" 
+
+              <Column
+                field="conductor_soil"
                 header={t('admin.pages.sensors.history.metrics.conductor_soil')}
                 body={(rowData) => rowData.conductor_soil ? (
                   <div className="flex items-center gap-2">
@@ -408,12 +408,12 @@ const SensorHistory: React.FC = () => {
                 ) : 'N/A'}
                 headerClassName="font-semibold"
               />
-              
-              <Column 
-                field="bat" 
+
+              <Column
+                field="bat"
                 header={t('admin.pages.sensors.history.metrics.bat')}
                 body={(rowData) => (
-                  <Tag 
+                  <Tag
                     value={`${rowData.bat.toFixed(2)} V`}
                     severity={getBatterySeverity(rowData.bat)}
                     className="font-medium"
@@ -421,12 +421,12 @@ const SensorHistory: React.FC = () => {
                 )}
                 headerClassName="font-semibold"
               />
-              
-              <Column 
-                field="rssi" 
+
+              <Column
+                field="rssi"
                 header={t('admin.pages.sensors.history.metrics.rssi')}
                 body={(rowData) => (
-                  <Tag 
+                  <Tag
                     value={`${rowData.rssi} dBm`}
                     severity={getSignalSeverity(rowData.rssi)}
                     className="font-medium"
@@ -434,9 +434,9 @@ const SensorHistory: React.FC = () => {
                 )}
                 headerClassName="font-semibold"
               />
-              
-              <Column 
-                field="snr" 
+
+              <Column
+                field="snr"
                 header={t('admin.pages.sensors.history.metrics.snr')}
                 body={(rowData) => `${rowData.snr} dB`}
                 headerClassName="font-semibold"
@@ -445,12 +445,12 @@ const SensorHistory: React.FC = () => {
 
             {/* Paginator */}
             <div className="mt-4 border-t border-gray-100 pt-4">
-              <Paginator 
-                first={first} 
-                rows={perPage} 
-                totalRecords={totalRecords} 
-                rowsPerPageOptions={[5, 10, 20, 50]} 
-                onPageChange={onPageChange} 
+              <Paginator
+                first={first}
+                rows={perPage}
+                totalRecords={totalRecords}
+                rowsPerPageOptions={[5, 10, 20, 50]}
+                onPageChange={onPageChange}
                 className="border-0"
                 template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
                 currentPageReportTemplate={`{first} - {last} ${t('admin.pages.sensors.history.of')} {totalRecords}`}
@@ -468,24 +468,24 @@ const SensorHistory: React.FC = () => {
             {/* Month selector */}
             <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50">
               <div className="flex justify-between items-center">
-                <Button 
+                <Button
                   icon={<Icon icon="tabler:chevron-left" className="h-5 w-5" />}
                   onClick={previousMonth}
                   className="p-button-outlined p-button-sm"
                 />
-                
+
                 <h2 className="text-xl font-semibold text-gray-700">
                   {format(selectedMonth, 'MMMM yyyy')}
                 </h2>
-                
-                <Button 
+
+                <Button
                   icon={<Icon icon="tabler:chevron-right" className="h-5 w-5" />}
                   onClick={nextMonth}
                   className="p-button-outlined p-button-sm"
                   disabled={isSameMonth(selectedMonth, new Date())}
                 />
               </div>
-              
+
               {filteredData.length === 0 && (
                 <div className="text-center mt-4 p-4 bg-blue-50 text-blue-600 rounded-lg">
                   <Icon icon="tabler:info-circle" className="inline mr-2" />
@@ -493,7 +493,7 @@ const SensorHistory: React.FC = () => {
                 </div>
               )}
             </Card>
-            
+
             {/* Individual charts */}
             {filteredData.length > 0 && (
               <div className="flex flex-col gap-6">
@@ -507,7 +507,7 @@ const SensorHistory: React.FC = () => {
                         </div>
                       </Card>
                     )}
-                    
+
                     {/* Second chart in the row */}
                     {rowIndex * 2 + 1 < chartRefs.current.length && (
                       <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
@@ -522,7 +522,7 @@ const SensorHistory: React.FC = () => {
             )}
 
             <div className="flex justify-center mt-4">
-              <Button 
+              <Button
                 icon={<Icon icon="tabler:table" className="h-5 w-5 mr-2" />}
                 label={t('admin.pages.sensors.history.backToTable')}
                 onClick={() => setViewMode('table')}

@@ -29,13 +29,18 @@ export const deleteElement = async (elementId: number): Promise<void> => {
   }
 };
 
-export const updateElementService = async (element: Element): Promise<Element> => {
+export const updateElementService = async (
+  element: Element,
+): Promise<Element> => {
   try {
     if (!element.id) {
       throw new Error('Element ID is required for update');
     }
-    
-    const response = await axiosClient.put(`/admin/elements/${element.id}`, element);
+
+    const response = await axiosClient.put(
+      `/admin/elements/${element.id}`,
+      element,
+    );
     return response.data;
   } catch (error) {
     console.error('Error updating element', error);

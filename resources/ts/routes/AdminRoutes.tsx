@@ -215,13 +215,13 @@ const AdminRoutes: RouteObject[] = [
             ),
           },
           {
-    path: 'license',
-    element: (
-        <AdminLayout titleI18n="admin.pages.license.title">
-            <License />
-        </AdminLayout>
-    ),
-},
+            path: 'license',
+            element: (
+              <AdminLayout titleI18n="admin.pages.license.title">
+                <License />
+              </AdminLayout>
+            ),
+          },
           {
             path: 'settings',
             children: [

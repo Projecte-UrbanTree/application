@@ -51,13 +51,11 @@ const WorkerLayout: React.FC<WorkerLayoutProps> = ({ children, titleI18n }) => {
       ? activeContracts
       : [defaultContract, ...activeContracts];
 
-
   const isAccountPage = location.pathname.includes('/admin/account');
 
-  const hideContractSelector =
-    isAccountPage;
+  const hideContractSelector = isAccountPage;
 
-    useEffect(() => {
+  useEffect(() => {
     dispatch(fetchAllContracts());
   }, [dispatch]);
 
@@ -66,15 +64,16 @@ const WorkerLayout: React.FC<WorkerLayoutProps> = ({ children, titleI18n }) => {
   }, [titleI18n, t]);
 
   useEffect(() => {
-    if ((isInventoryPage || isWorkOrdersPage) &&
+    if (
+      (isInventoryPage || isWorkOrdersPage) &&
       activeContracts.length > 0 &&
-      !initialized) {
-
+      !initialized
+    ) {
       const savedContractId = localStorage.getItem(SELECTED_CONTRACT_KEY);
 
       if (savedContractId) {
         const contractId = parseInt(savedContractId);
-        const contractExists = activeContracts.some(c => c.id === contractId);
+        const contractExists = activeContracts.some((c) => c.id === contractId);
 
         if (contractExists) {
           dispatch(selectContract(contractId));
@@ -83,7 +82,10 @@ const WorkerLayout: React.FC<WorkerLayoutProps> = ({ children, titleI18n }) => {
         }
       }
 
-      if (!currentContract || !activeContracts.some(c => c.id === currentContract.id)) {
+      if (
+        !currentContract ||
+        !activeContracts.some((c) => c.id === currentContract.id)
+      ) {
         dispatch(selectContract(activeContracts[0]?.id ?? 0));
       }
 
@@ -159,8 +161,9 @@ const WorkerLayout: React.FC<WorkerLayoutProps> = ({ children, titleI18n }) => {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`text-gray-800 px-4 py-3 rounded flex items-center gap-2 ${item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
-                  }`}>
+                className={`text-gray-800 px-4 py-3 rounded flex items-center gap-2 ${
+                  item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
+                }`}>
                 <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
               </Link>
             ))}

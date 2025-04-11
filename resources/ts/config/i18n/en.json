@@ -1489,8 +1489,7 @@
           "title": "Sensors",
           "create": "Create Sensor",
           "edit": "Edit Sensor",
-          "delete": "Delete Sensor",
-          "show": "Show Sensor"
+          "delete": "Delete Sensor"
         },
         "loading": "Loading sensor data...",
         "backButton": "Back",
@@ -1641,7 +1640,7 @@
       "soilDataTitle": "Soil Data"
     }
   },
-  
+
   "worker": {
     "workOrders": {
       "title": "Work Orders",

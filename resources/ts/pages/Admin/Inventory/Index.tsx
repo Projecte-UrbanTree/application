@@ -35,17 +35,25 @@ export default function Inventory() {
     isInitializing,
     error: mapInitError,
     updateElements,
-    lastElementUpdate
+    lastElementUpdate,
   } = useMapInitialization();
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const toast = useRef<Toast>(null);
 
   const dispatch = useDispatch<AppDispatch>();
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
-  const { zones, loading: zonesLoading } = useSelector((state: RootState) => state.zone);
-  const { points, loading: pointsLoading } = useSelector((state: RootState) => state.points);
-  const { elements, loading: elementsLoading } = useSelector((state: RootState) => state.element);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
+  const { zones, loading: zonesLoading } = useSelector(
+    (state: RootState) => state.zone,
+  );
+  const { points, loading: pointsLoading } = useSelector(
+    (state: RootState) => state.points,
+  );
+  const { elements, loading: elementsLoading } = useSelector(
+    (state: RootState) => state.element,
+  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -57,7 +65,7 @@ export default function Inventory() {
         await Promise.all([
           dispatch(fetchZonesAsync()),
           dispatch(fetchPointsAsync()),
-          dispatch(fetchElementsAsync())
+          dispatch(fetchElementsAsync()),
         ]);
 
         setDataInitialized(true);
@@ -65,7 +73,7 @@ export default function Inventory() {
         const event: ZoneEvent = {
           isCreatingElement: false,
           showAllElements: true,
-          forceShow: true
+          forceShow: true,
         };
 
         eventSubject.next(event);
@@ -96,7 +104,7 @@ export default function Inventory() {
         severity: 'error',
         summary: t('general.error'),
         detail: t('admin.pages.inventory.inventoryPage.mapInitError'),
-        life: 3000
+        life: 3000,
       });
     }
   }, [mapInitError, t]);
@@ -162,7 +170,9 @@ export default function Inventory() {
         toast.current?.show({
           severity: 'error',
           summary: t('general.warning'),
-          detail: t('admin.pages.inventory.inventoryPage.createOutsideZoneError'),
+          detail: t(
+            'admin.pages.inventory.inventoryPage.createOutsideZoneError',
+          ),
           life: 3000,
           sticky: false,
           style: {
@@ -204,7 +214,8 @@ export default function Inventory() {
     <div className="flex flex-col w-full h-full bg-gray-50">
       <Toast ref={toast} position="top-center" />
 
-      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row gap-6'} w-full h-full p-4`}>
+      <div
+        className={`flex ${isMobile ? 'flex-col' : 'flex-row gap-6'} w-full h-full p-4`}>
         <div
           ref={mapContainerRef}
           className={`${isMobile ? 'h-[60%] w-full mb-4' : 'w-[70%] h-full'} relative bg-white rounded-lg shadow-lg border border-gray-300`}

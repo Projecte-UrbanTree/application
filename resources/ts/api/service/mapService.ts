@@ -23,14 +23,22 @@ export class MapService {
   private map!: mapboxgl.Map;
   private draw?: MapboxDraw;
   private singleClickListener?: (e: mapboxgl.MapMouseEvent) => void;
-  private elementMarkers: Map<number, { marker: mapboxgl.Marker; elementId: number }> = new Map();
+  private elementMarkers: Map<
+    number,
+    { marker: mapboxgl.Marker; elementId: number }
+  > = new Map();
   private zoneCoords: ZoneCenterCoord[];
   private geoCoords: number[];
   private isMapInitialized: boolean = false;
   private initCallbacks: Array<() => void> = [];
   private drawControlAdded: boolean = false;
 
-  constructor(container: HTMLDivElement, token: string, zoneCoords: ZoneCenterCoord[], geoCoords: number[]) {
+  constructor(
+    container: HTMLDivElement,
+    token: string,
+    zoneCoords: ZoneCenterCoord[],
+    geoCoords: number[],
+  ) {
     this.zoneCoords = zoneCoords;
     this.geoCoords = geoCoords;
     mapboxgl.accessToken = token;
@@ -43,13 +51,16 @@ export class MapService {
 
     this.map.on('load', () => {
       this.isMapInitialized = true;
-      this.initCallbacks.forEach(callback => callback());
+      this.initCallbacks.forEach((callback) => callback());
       this.initCallbacks = [];
     });
   }
 
   private getCenter(): LngLatLike {
-    if (this.zoneCoords?.length > 0 && this.zoneCoords[0].center?.length === 2) {
+    if (
+      this.zoneCoords?.length > 0 &&
+      this.zoneCoords[0].center?.length === 2
+    ) {
       return this.zoneCoords[0].center as [number, number];
     }
     if (this.geoCoords?.length === 2) {
@@ -63,13 +74,13 @@ export class MapService {
       { control: new mapboxgl.NavigationControl(), position: 'top-right' },
       { control: new mapboxgl.ScaleControl(), position: 'bottom-left' },
       { control: new mapboxgl.FullscreenControl(), position: 'top-right' },
-      { 
+      {
         control: new mapboxgl.GeolocateControl({
           positionOptions: { enableHighAccuracy: true },
           trackUserLocation: true,
-        }), 
-        position: 'top-right' 
-      }
+        }),
+        position: 'top-right',
+      },
     ];
 
     controls.forEach(({ control, position }) => {
@@ -95,18 +106,18 @@ export class MapService {
       this.map.removeControl(this.draw);
       this.drawControlAdded = false;
       this.draw = undefined;
-      
+
       const drawSources = [
         'mapbox-gl-draw-cold',
         'mapbox-gl-draw-hot',
-        'mapbox-gl-draw-warm'
+        'mapbox-gl-draw-warm',
       ];
-      
-      drawSources.forEach(source => {
+
+      drawSources.forEach((source) => {
         if (this.map.getSource(source)) {
           try {
             const layers = this.map.getStyle().layers || [];
-            layers.forEach(layer => {
+            layers.forEach((layer) => {
               if (layer.source === source && this.map.getLayer(layer.id)) {
                 this.map.removeLayer(layer.id);
               }
@@ -118,31 +129,34 @@ export class MapService {
     } catch (e) {}
   }
 
-  public enableDraw(isAdmin: boolean, onDrawUpdate: (coords: number[][]) => void): void {
+  public enableDraw(
+    isAdmin: boolean,
+    onDrawUpdate: (coords: number[][]) => void,
+  ): void {
     if (!isAdmin) return;
-    
+
     this.removeDraw();
-    
+
     this.draw = new MapboxDraw({
       displayControlsDefault: false,
       controls: { polygon: true, trash: true },
     });
-    
+
     this.map.addControl(this.draw);
     this.drawControlAdded = true;
-    
+
     const handleDraw = () => {
       if (!this.draw) return;
-      
+
       const data = this.draw.getAll();
       if (data.features.length === 0) {
         onDrawUpdate([]);
         return;
       }
-      
+
       const polygon = data.features[0];
       if (!polygon || polygon.geometry.type !== 'Polygon') return;
-      
+
       const coords = polygon.geometry.coordinates[0] ?? [];
       if (coords.length < 3) {
         if (polygon.id) {
@@ -151,12 +165,12 @@ export class MapService {
         onDrawUpdate([]);
         return;
       }
-      
+
       onDrawUpdate(coords as number[][]);
     };
-    
+
     const events = ['draw.create', 'draw.update', 'draw.delete'];
-    events.forEach(event => this.map.on(event, handleDraw));
+    events.forEach((event) => this.map.on(event, handleDraw));
   }
 
   public clearDraw(): void {
@@ -167,7 +181,9 @@ export class MapService {
     }
   }
 
-  public enableSingleClick(callback: (lngLat: { lng: number; lat: number }) => void): void {
+  public enableSingleClick(
+    callback: (lngLat: { lng: number; lat: number }) => void,
+  ): void {
     this.disableSingleClick();
     this.singleClickListener = (e) => callback(e.lngLat);
     this.map.on('click', this.singleClickListener);
@@ -200,10 +216,10 @@ export class MapService {
       if (!style?.layers) return;
 
       const layersToRemove = style.layers
-        .filter(layer => layer.id.startsWith(prefix))
-        .map(layer => layer.id);
+        .filter((layer) => layer.id.startsWith(prefix))
+        .map((layer) => layer.id);
 
-      layersToRemove.forEach(id => {
+      layersToRemove.forEach((id) => {
         if (this.map.getLayer(id)) {
           try {
             this.map.removeLayer(id);
@@ -211,7 +227,7 @@ export class MapService {
         }
       });
 
-      layersToRemove.forEach(id => {
+      layersToRemove.forEach((id) => {
         if (this.map.getSource(id)) {
           try {
             this.map.removeSource(id);
@@ -221,12 +237,17 @@ export class MapService {
     } catch (e) {}
   }
 
-  public addZoneToMap(sourceId: string, layerId: string, coordinates: [number, number][], color: string): void {
+  public addZoneToMap(
+    sourceId: string,
+    layerId: string,
+    coordinates: [number, number][],
+    color: string,
+  ): void {
     try {
       if (this.map.getLayer(layerId)) {
         this.map.removeLayer(layerId);
       }
-      
+
       if (this.map.getSource(sourceId)) {
         this.map.removeSource(sourceId);
       }
@@ -249,7 +270,7 @@ export class MapService {
         source: sourceId,
         paint: {
           'fill-color': color,
-          'fill-opacity': 0.5
+          'fill-opacity': 0.5,
         },
       });
     } catch (e) {}
@@ -257,7 +278,11 @@ export class MapService {
 
   public updateZoneVisibility(layerId: string, visible: boolean): void {
     if (this.map.getLayer(layerId)) {
-      this.map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
+      this.map.setLayoutProperty(
+        layerId,
+        'visibility',
+        visible ? 'visible' : 'none',
+      );
     }
   }
 
@@ -266,11 +291,15 @@ export class MapService {
     const root = ReactDOM.createRoot(container);
 
     const iconName = elementType.icon?.trim()
-      ? elementType.icon.includes(':') ? elementType.icon : `mdi:${elementType.icon}`
+      ? elementType.icon.includes(':')
+        ? elementType.icon
+        : `mdi:${elementType.icon}`
       : 'mdi:map-marker';
 
     const bgColor = elementType.color
-      ? elementType.color.startsWith('#') ? elementType.color : `#${elementType.color}`
+      ? elementType.color.startsWith('#')
+        ? elementType.color
+        : `#${elementType.color}`
       : '#2D4356';
 
     const markerStyle = {
@@ -296,12 +325,14 @@ export class MapService {
           onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => {
             const target = e.currentTarget;
             target.style.transform = 'scale(1.1)';
-            target.style.boxShadow = '0 5px 10px rgba(0,0,0,0.25), 0 3px 6px rgba(0,0,0,0.22)';
+            target.style.boxShadow =
+              '0 5px 10px rgba(0,0,0,0.25), 0 3px 6px rgba(0,0,0,0.22)';
           },
           onMouseLeave: (e: React.MouseEvent<HTMLDivElement>) => {
             const target = e.currentTarget;
             target.style.transform = 'scale(1)';
-            target.style.boxShadow = '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)';
+            target.style.boxShadow =
+              '0 3px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22)';
           },
         },
         React.createElement(Icon, {
@@ -325,13 +356,13 @@ export class MapService {
     onElementClick?: (element: Element) => void,
   ): void {
     this.removeElementMarkers();
-    
-    const pointMap = new Map(points.map(p => [p.id, p]));
-    const elementTypeMap = new Map(elementTypes.map(et => [et.id, et]));
+
+    const pointMap = new Map(points.map((p) => [p.id, p]));
+    const elementTypeMap = new Map(elementTypes.map((et) => [et.id, et]));
 
     elements.forEach((element) => {
       if (!element.id || !element.point_id || !element.element_type_id) return;
-      
+
       const point = pointMap.get(element.point_id);
       if (!point?.latitude || !point?.longitude) return;
 
@@ -348,7 +379,9 @@ export class MapService {
           .addTo(this.map);
 
         if (onElementClick) {
-          marker.getElement().addEventListener('click', () => onElementClick(element));
+          marker
+            .getElement()
+            .addEventListener('click', () => onElementClick(element));
         }
 
         this.elementMarkers.set(element.id, { marker, elementId: element.id });
@@ -369,7 +402,10 @@ export class MapService {
     this.elementMarkers.clear();
   }
 
-  public getCoordElement(element: Element, points: Point[]): { lat: number; lng: number } | null {
+  public getCoordElement(
+    element: Element,
+    points: Point[],
+  ): { lat: number; lng: number } | null {
     const point = points.find((p) => p.id === element.point_id);
     if (!point?.latitude || !point?.longitude) return null;
     return { lat: point.latitude, lng: point.longitude };
@@ -377,12 +413,18 @@ export class MapService {
 
   public async flyTo(selectedZone: Zone) {
     if (selectedZone.id === null) return;
-    
+
     try {
-      const { zoom, center }: ZoneCenterCoord = await getZoneZoom(selectedZone.id!);
-      
+      const { zoom, center }: ZoneCenterCoord = await getZoneZoom(
+        selectedZone.id!,
+      );
+
       if (center) {
-        this.map.flyTo({ center: [center[0], center[1]], zoom, essential: true });
+        this.map.flyTo({
+          center: [center[0], center[1]],
+          zoom,
+          essential: true,
+        });
       }
     } catch (e) {}
   }
@@ -419,28 +461,29 @@ export class MapService {
     this.removeElementMarkers();
     this.clearDraw();
     this.removeDraw();
-    
+
     try {
       const style = this.map.getStyle();
       if (!style?.layers) return;
-      
+
       const baseLayers = ['background', 'satellite'];
       const layers = style.layers
-        .filter(layer => !baseLayers.includes(layer.id))
-        .map(layer => layer.id);
-      
-      layers.forEach(id => {
+        .filter((layer) => !baseLayers.includes(layer.id))
+        .map((layer) => layer.id);
+
+      layers.forEach((id) => {
         if (this.map.getLayer(id)) {
           try {
             this.map.removeLayer(id);
           } catch (e) {}
         }
       });
-      
-      const sources = Object.keys(style.sources || {})
-        .filter(id => !id.startsWith('mapbox'));
-      
-      sources.forEach(id => {
+
+      const sources = Object.keys(style.sources || {}).filter(
+        (id) => !id.startsWith('mapbox'),
+      );
+
+      sources.forEach((id) => {
         if (this.map.getSource(id)) {
           try {
             this.map.removeSource(id);

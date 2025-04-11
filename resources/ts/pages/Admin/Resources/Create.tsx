@@ -23,7 +23,9 @@ export default function CreateResource() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [resourceTypes, setResourceTypes] = useState<ResourceType[]>([]);
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
 
   useEffect(() => {
     const fetchResourceTypes = async () => {
@@ -73,16 +75,19 @@ export default function CreateResource() {
 
   const handleSubmit = async (values: typeof initialValues) => {
     if (!currentContract || currentContract.id === 0) {
-      showToast('error', 'Por favor seleccione un contrato antes de crear un recurso');
+      showToast(
+        'error',
+        'Por favor seleccione un contrato antes de crear un recurso',
+      );
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
       await axiosClient.post('/admin/resources', {
         ...values,
-        contract_id: currentContract.id
+        contract_id: currentContract.id,
       });
       showToast(
         'success',
@@ -92,7 +97,11 @@ export default function CreateResource() {
     } catch (error: any) {
       console.error(error);
 
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         showToast('error', error.response.data.message);
       } else {
         showToast('error', t('admin.pages.resources.list.messages.error'));

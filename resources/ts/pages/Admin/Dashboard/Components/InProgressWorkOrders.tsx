@@ -100,42 +100,42 @@ const InProgressWorkOrders = () => {
         </div>
       ) : (
         <>
-        <div className="p-4">
-          <h2 className="text-xl font-semibold mb-4">
-            {t('admin.pages.dashboard.inProgressWorkOrders')}
-          </h2>
-        </div>
-        <DataTable
-          value={workOrders}
-          paginator
-          rows={5}
-          stripedRows
-          emptyMessage={t('admin.pages.dashboard.noInProgressWorkOrders')}>
-          <Column
-            field="id"
-            header={t('admin.pages.workOrders.list.columns.id')}
-            body={(rowData) => `OT-${rowData.id}`}
-          />
-          <Column
-            field="date"
-            header={t('admin.pages.workOrders.list.columns.date')}
-            body={(rowData) => new Date(rowData.date).toLocaleDateString()}
-          />
-          <Column
-            field="contract.name"
-            header={t('admin.pages.workOrders.list.columns.contract')}
-          />
-          <Column
-            header={t('admin.pages.workOrders.list.columns.users')}
-            body={userTemplate}
-          />
-          <Column
-            header={t('admin.pages.dashboard.actions')}
-            body={actionTemplate}
-            style={{ width: '8rem' }}
-          />
-        </DataTable>
-            </>
+          <div className="p-4">
+            <h2 className="text-xl font-semibold mb-4">
+              {t('admin.pages.dashboard.inProgressWorkOrders')}
+            </h2>
+          </div>
+          <DataTable
+            value={workOrders}
+            paginator
+            rows={5}
+            stripedRows
+            emptyMessage={t('admin.pages.dashboard.noInProgressWorkOrders')}>
+            <Column
+              field="id"
+              header={t('admin.pages.workOrders.list.columns.id')}
+              body={(rowData) => `OT-${rowData.id}`}
+            />
+            <Column
+              field="date"
+              header={t('admin.pages.workOrders.list.columns.date')}
+              body={(rowData) => new Date(rowData.date).toLocaleDateString()}
+            />
+            <Column
+              field="contract.name"
+              header={t('admin.pages.workOrders.list.columns.contract')}
+            />
+            <Column
+              header={t('admin.pages.workOrders.list.columns.users')}
+              body={userTemplate}
+            />
+            <Column
+              header={t('admin.pages.dashboard.actions')}
+              body={actionTemplate}
+              style={{ width: '8rem' }}
+            />
+          </DataTable>
+        </>
       )}
     </Card>
   );

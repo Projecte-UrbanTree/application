@@ -22,8 +22,15 @@ export const updateZone = async (id: number, data: Zone): Promise<Zone> => {
   return response.data;
 };
 
-export const inlineUpdateZone = async (id: number, field: string, value: string): Promise<Zone> => {
-  const response = await axiosClient.put(`/admin/zones/${id}/inline-update`, { field, value });
+export const inlineUpdateZone = async (
+  id: number,
+  field: string,
+  value: string,
+): Promise<Zone> => {
+  const response = await axiosClient.put(`/admin/zones/${id}/inline-update`, {
+    field,
+    value,
+  });
   return response.data;
 };
 
@@ -34,9 +41,9 @@ export const deleteZone = async (zoneId: number): Promise<void> => {
 export const getZoneCoords = async (): Promise<ZoneCenterCoord[]> => {
   const res = await axiosClient.get(`/admin/points/location-contract`);
   return res.data;
-}
+};
 
 export const getZoneZoom = async (zoneId: number): Promise<ZoneCenterCoord> => {
-  const res = await axiosClient.get(`/admin/zones/${zoneId}/center-zoom`)
+  const res = await axiosClient.get(`/admin/zones/${zoneId}/center-zoom`);
   return res.data;
-}
+};

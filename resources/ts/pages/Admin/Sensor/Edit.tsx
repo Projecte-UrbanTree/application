@@ -19,7 +19,9 @@ export default function EditSensor() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { showToast } = useToast();
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
   const [initialValues, setInitialValues] = useState({
     eui: '',
     name: '',
@@ -53,24 +55,36 @@ export default function EditSensor() {
       .required(t('admin.pages.sensors.form.validation.eui_required'))
       .min(8, t('admin.pages.sensors.form.validation.eui_min'))
       .max(32, t('admin.pages.sensors.form.validation.eui_max'))
-      .matches(/^[a-zA-Z0-9]+$/, t('admin.pages.sensors.form.validation.eui_format')),
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        t('admin.pages.sensors.form.validation.eui_format'),
+      ),
     name: Yup.string()
       .required(t('admin.pages.sensors.form.validation.name_required'))
       .min(3, t('admin.pages.sensors.form.validation.name_min'))
       .max(50, t('admin.pages.sensors.form.validation.name_max'))
-      .matches(/^[a-zA-Z0-9\s\-_]+$/, t('admin.pages.sensors.form.validation.name_format')),
-    longitude: Yup.string()
-      .test('is-longitude', t('admin.pages.sensors.form.validation.longitude_format'), value => {
+      .matches(
+        /^[a-zA-Z0-9\s\-_]+$/,
+        t('admin.pages.sensors.form.validation.name_format'),
+      ),
+    longitude: Yup.string().test(
+      'is-longitude',
+      t('admin.pages.sensors.form.validation.longitude_format'),
+      (value) => {
         if (!value) return true;
         const num = parseFloat(value);
         return !isNaN(num) && num >= -180 && num <= 180;
-      }),
-    latitude: Yup.string()
-      .test('is-latitude', t('admin.pages.sensors.form.validation.latitude_format'), value => {
+      },
+    ),
+    latitude: Yup.string().test(
+      'is-latitude',
+      t('admin.pages.sensors.form.validation.latitude_format'),
+      (value) => {
         if (!value) return true;
         const num = parseFloat(value);
         return !isNaN(num) && num >= -90 && num <= 90;
-      }),
+      },
+    ),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -78,28 +92,32 @@ export default function EditSensor() {
       showToast('error', t('admin.pages.sensors.errors.no_contract'));
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
       await axiosClient.get('/sanctum/csrf-cookie');
-      
-      const data = { 
+
+      const data = {
         ...values,
         contract_id: currentContract.id,
         longitude: values.longitude ? parseFloat(values.longitude) : null,
-        latitude: values.latitude ? parseFloat(values.latitude) : null
+        latitude: values.latitude ? parseFloat(values.latitude) : null,
       };
-      
+
       await axiosClient.put(`/admin/sensors/${id}`, data);
       showToast(
         'success',
-        t('admin.pages.sensors.list.messages.updateSuccess')
+        t('admin.pages.sensors.list.messages.updateSuccess'),
       );
       navigate('/admin/sensors');
     } catch (error: any) {
       console.error('Error updating sensor:', error);
-      
-      if (error.response && error.response.data && error.response.data.message) {
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         showToast('error', error.response.data.message);
       } else {
         showToast('error', t('admin.pages.sensors.list.messages.error'));
@@ -173,7 +191,7 @@ export default function EditSensor() {
                     <small className="p-error">{errors.name}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
@@ -183,13 +201,15 @@ export default function EditSensor() {
                     name="latitude"
                     as={InputText}
                     placeholder={t('admin.pages.sensors.fields.latitude')}
-                    className={errors.latitude && touched.latitude ? 'p-invalid' : ''}
+                    className={
+                      errors.latitude && touched.latitude ? 'p-invalid' : ''
+                    }
                   />
                   {errors.latitude && touched.latitude && (
                     <small className="p-error">{errors.latitude}</small>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col">
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
                     <Icon icon="tabler:map-pin" className="h-5 w-5 mr-2" />
@@ -199,7 +219,9 @@ export default function EditSensor() {
                     name="longitude"
                     as={InputText}
                     placeholder={t('admin.pages.sensors.fields.longitude')}
-                    className={errors.longitude && touched.longitude ? 'p-invalid' : ''}
+                    className={
+                      errors.longitude && touched.longitude ? 'p-invalid' : ''
+                    }
                   />
                   {errors.longitude && touched.longitude && (
                     <small className="p-error">{errors.longitude}</small>

@@ -18,7 +18,9 @@ export default function CreateSensor() {
   const { showToast } = useToast();
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
 
   const initialValues = {
     dev_eui: '',
@@ -32,26 +34,40 @@ export default function CreateSensor() {
       .required(t('admin.pages.sensors.form.validation.eui_required'))
       .min(8, t('admin.pages.sensors.form.validation.eui_min'))
       .max(32, t('admin.pages.sensors.form.validation.eui_max'))
-      .matches(/^[a-zA-Z0-9]+$/, t('admin.pages.sensors.form.validation.eui_format')),
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        t('admin.pages.sensors.form.validation.eui_format'),
+      ),
     dev_name: Yup.string()
       .required(t('admin.pages.sensors.form.validation.name_required'))
       .min(3, t('admin.pages.sensors.form.validation.name_min'))
       .max(50, t('admin.pages.sensors.form.validation.name_max'))
-      .matches(/^[a-zA-Z0-9\s\-_]+$/, t('admin.pages.sensors.form.validation.name_format')),
+      .matches(
+        /^[a-zA-Z0-9\s\-_]+$/,
+        t('admin.pages.sensors.form.validation.name_format'),
+      ),
     longitude: Yup.string()
       .required(t('admin.pages.sensors.form.validation.longitude_required'))
-      .test('is-longitude', t('admin.pages.sensors.form.validation.longitude_format'), value => {
-        if (!value) return true;
-        const num = parseFloat(value);
-        return !isNaN(num) && num >= -180 && num <= 180;
-      }),
+      .test(
+        'is-longitude',
+        t('admin.pages.sensors.form.validation.longitude_format'),
+        (value) => {
+          if (!value) return true;
+          const num = parseFloat(value);
+          return !isNaN(num) && num >= -180 && num <= 180;
+        },
+      ),
     latitude: Yup.string()
       .required(t('admin.pages.sensors.form.validation.latitude_required'))
-      .test('is-latitude', t('admin.pages.sensors.form.validation.latitude_format'), value => {
-        if (!value) return true;
-        const num = parseFloat(value);
-        return !isNaN(num) && num >= -90 && num <= 90;
-      }),
+      .test(
+        'is-latitude',
+        t('admin.pages.sensors.form.validation.latitude_format'),
+        (value) => {
+          if (!value) return true;
+          const num = parseFloat(value);
+          return !isNaN(num) && num >= -90 && num <= 90;
+        },
+      ),
   });
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -71,19 +87,30 @@ export default function CreateSensor() {
       };
 
       await axiosClient.post('/admin/sensors', payload);
-      showToast('success', t('admin.pages.sensors.list.messages.createSuccess'));
+      showToast(
+        'success',
+        t('admin.pages.sensors.list.messages.createSuccess'),
+      );
       navigate('/admin/sensors');
     } catch (error: any) {
       console.error('Error creating sensor:', error);
 
       if (error.response?.status === 422 && error.response?.data?.errors?.eui) {
-        if (error.response.data.errors.eui.includes('The eui has already been taken.')) {
+        if (
+          error.response.data.errors.eui.includes(
+            'The eui has already been taken.',
+          )
+        ) {
           showToast('error', t('admin.pages.sensors.list.messages.euiTaken'));
           return;
         }
       }
 
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         showToast('error', error.response.data.message);
       } else {
         showToast('error', t('admin.pages.sensors.list.messages.error'));
@@ -111,8 +138,7 @@ export default function CreateSensor() {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
+            onSubmit={handleSubmit}>
             {({ errors, touched }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
@@ -124,7 +150,9 @@ export default function CreateSensor() {
                     name="dev_eui"
                     as={InputText}
                     placeholder={t('admin.pages.sensors.fields.eui')}
-                    className={errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''}
+                    className={
+                      errors.dev_eui && touched.dev_eui ? 'p-invalid' : ''
+                    }
                   />
                   {errors.dev_eui && touched.dev_eui && (
                     <small className="p-error">{errors.dev_eui}</small>
@@ -140,7 +168,9 @@ export default function CreateSensor() {
                     name="dev_name"
                     as={InputText}
                     placeholder={t('admin.pages.sensors.fields.name')}
-                    className={errors.dev_name && touched.dev_name ? 'p-invalid' : ''}
+                    className={
+                      errors.dev_name && touched.dev_name ? 'p-invalid' : ''
+                    }
                   />
                   {errors.dev_name && touched.dev_name && (
                     <small className="p-error">{errors.dev_name}</small>
@@ -156,7 +186,9 @@ export default function CreateSensor() {
                     name="longitude"
                     as={InputText}
                     placeholder={t('admin.pages.sensors.fields.longitude')}
-                    className={errors.longitude && touched.longitude ? 'p-invalid' : ''}
+                    className={
+                      errors.longitude && touched.longitude ? 'p-invalid' : ''
+                    }
                   />
                   {errors.longitude && touched.longitude && (
                     <small className="p-error">{errors.longitude}</small>
@@ -172,7 +204,9 @@ export default function CreateSensor() {
                     name="latitude"
                     as={InputText}
                     placeholder={t('admin.pages.sensors.fields.latitude')}
-                    className={errors.latitude && touched.latitude ? 'p-invalid' : ''}
+                    className={
+                      errors.latitude && touched.latitude ? 'p-invalid' : ''
+                    }
                   />
                   {errors.latitude && touched.latitude && (
                     <small className="p-error">{errors.latitude}</small>

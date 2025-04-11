@@ -178,111 +178,115 @@ export default function EditEva({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-  let isMounted = true; // Flag para evitar actualizaciones en componentes desmontados
+    let isMounted = true; // Flag para evitar actualizaciones en componentes desmontados
 
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      
-      // Ejecutar ambas peticiones en paralelo
-      const [evaResponse, dictionariesResponse] = await Promise.all([
-        axiosClient.get(`/admin/evas/${elementId}`),
-        axiosClient.get('/admin/evas/create')
-      ]);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-      if (!isMounted) return;
+        // Ejecutar ambas peticiones en paralelo
+        const [evaResponse, dictionariesResponse] = await Promise.all([
+          axiosClient.get(`/admin/evas/${elementId}`),
+          axiosClient.get('/admin/evas/create'),
+        ]);
 
-      // Procesar datos del EVA
-      const evaData = evaResponse.data;
-      if (!evaData) {
-        throw new Error('No se recibieron datos del EVA');
-      }
+        if (!isMounted) return;
 
-      const today = new Date();
-      const birthDate = evaData.date_birth ? new Date(evaData.date_birth) : today;
-      const years = differenceInYears(today, birthDate);
-      const months = differenceInMonths(today, birthDate) % 12;
+        // Procesar datos del EVA
+        const evaData = evaResponse.data;
+        if (!evaData) {
+          throw new Error('No se recibieron datos del EVA');
+        }
 
-      setInitialValues(prev => ({
-        ...prev,
-        ...evaData,
-        years,
-        months,
-        date_birth: evaData.date_birth || ''
-      }));
+        const today = new Date();
+        const birthDate = evaData.date_birth
+          ? new Date(evaData.date_birth)
+          : today;
+        const years = differenceInYears(today, birthDate);
+        const months = differenceInMonths(today, birthDate) % 12;
 
-      // Procesar diccionarios
-      const dictionariesData = dictionariesResponse.data;
-      if (!dictionariesData?.dictionaries) {
-        throw new Error('Formato de diccionarios inválido');
-      }
+        setInitialValues((prev) => ({
+          ...prev,
+          ...evaData,
+          years,
+          months,
+          date_birth: evaData.date_birth || '',
+        }));
 
-      const translatedDictionaries: Dictionaries = {
-        unbalancedCrown: [],
-        overextendedBranches: [],
-        cracks: [],
-        deadBranches: [],
-        inclination: [],
-        VForks: [],
-        cavities: [],
-        barkDamage: [],
-        soilLifting: [],
-        cutRoots: [],
-        basalRot: [],
-        exposedRoots: [],
-        wind: [],
-        drought: [],
-      };
+        // Procesar diccionarios
+        const dictionariesData = dictionariesResponse.data;
+        if (!dictionariesData?.dictionaries) {
+          throw new Error('Formato de diccionarios inválido');
+        }
 
-      for (const key in dictionariesData.dictionaries) {
-        if (dictionariesData.dictionaries[key]) {
-          translatedDictionaries[key as keyof Dictionaries] = 
-            dictionariesData.dictionaries[key].map((option: DictionaryOption) => ({
-              ...option,
-              label: t(option.label) || option.label
-            }));
+        const translatedDictionaries: Dictionaries = {
+          unbalancedCrown: [],
+          overextendedBranches: [],
+          cracks: [],
+          deadBranches: [],
+          inclination: [],
+          VForks: [],
+          cavities: [],
+          barkDamage: [],
+          soilLifting: [],
+          cutRoots: [],
+          basalRot: [],
+          exposedRoots: [],
+          wind: [],
+          drought: [],
+        };
+
+        for (const key in dictionariesData.dictionaries) {
+          if (dictionariesData.dictionaries[key]) {
+            translatedDictionaries[key as keyof Dictionaries] =
+              dictionariesData.dictionaries[key].map(
+                (option: DictionaryOption) => ({
+                  ...option,
+                  label: t(option.label) || option.label,
+                }),
+              );
+          }
+        }
+
+        setDictionaries(translatedDictionaries);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(
+            (error as any)?.response?.data?.message ||
+              error.message ||
+              t('admin.pages.evas.list.messages.error'),
+          );
+        } else {
+          setError(t('admin.pages.evas.list.messages.error'));
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
         }
       }
+    };
 
-      setDictionaries(translatedDictionaries);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(
-          (error as any)?.response?.data?.message || 
-          error.message || 
-          t('admin.pages.evas.list.messages.error')
-        );
-      } else {
-        setError(t('admin.pages.evas.list.messages.error'));
-      }
-    } finally {
-      if (isMounted) {
+    fetchData();
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
+  }, [elementId, t]);
+
+  // Timeout de seguridad
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        console.warn('Tiempo de espera excedido al cargar datos');
+        setError(t('admin.pages.evas.list.messages.timeout'));
         setIsLoading(false);
       }
-    }
-  };
+    }, 15000); // 15 segundos
 
-  fetchData();
-
-  // Cleanup function
-  return () => {
-    isMounted = false;
-  };
-}, [elementId, t]);
-
-// Timeout de seguridad
-useEffect(() => {
-  const timeout = setTimeout(() => {
-    if (isLoading) {
-      console.warn('Tiempo de espera excedido al cargar datos');
-      setError(t('admin.pages.evas.list.messages.timeout'));
-      setIsLoading(false);
-    }
-  }, 15000); // 15 segundos
-
-  return () => clearTimeout(timeout);
-}, [isLoading, t]);
+    return () => clearTimeout(timeout);
+  }, [isLoading, t]);
 
   const validationSchema = Yup.object({
     element_id: Yup.number(),

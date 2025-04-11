@@ -235,7 +235,7 @@ const CreateEva = ({
         cavities: values.cavities,
         bark_damage: values.barkDamage,
         soil_lifting: values.soilLifting,
-        cut_damaged_roots: values.cutRoots,   
+        cut_damaged_roots: values.cutRoots,
         basal_rot: values.basalRot,
         exposed_surface_roots: values.exposedRoots,
         wind: values.wind,

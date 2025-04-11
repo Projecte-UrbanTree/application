@@ -18,10 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import axiosClient from '@/api/axiosClient';
-import {
-  fetchIncidence,
-  updateIncidence,
-} from '@/api/service/incidentService';
+import { fetchIncidence, updateIncidence } from '@/api/service/incidentService';
 import { fetchWorkOrders } from '@/api/service/workOrder';
 import { Eva, useTreeEvaluation } from '@/components/FunctionsEva';
 import CreateEva from '@/pages/Admin/Eva/Create';
@@ -160,7 +157,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         toast.current?.show({
           severity: 'error',
           summary: t('general.error'),
-          detail: t('admin.pages.inventory.elementDetailPopup.incidences.loadError'),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.loadError',
+          ),
         });
       } finally {
         setIsLoading(false);
@@ -226,14 +225,20 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
         toast.current?.show({
           severity: 'success',
-          summary: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdated'),
-          detail: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdatedDetail'),
+          summary: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.statusUpdated',
+          ),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.statusUpdatedDetail',
+          ),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
           summary: t('general.error'),
-          detail: t('admin.pages.inventory.elementDetailPopup.incidences.statusUpdateFailed'),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.statusUpdateFailed',
+          ),
         });
       }
     },
@@ -255,17 +260,21 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         toast.current?.show({
           severity: 'success',
           summary: t('general.success'),
-          detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteSuccessDetail'),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.deleteSuccessDetail',
+          ),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
           summary: t('general.error'),
-          detail: t('admin.pages.inventory.elementDetailPopup.incidences.deleteErrorDetail'),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.incidences.deleteErrorDetail',
+          ),
         });
       }
     },
-    [dispatch, t]
+    [dispatch, t],
   );
 
   const handleDeleteElement = useCallback(
@@ -277,17 +286,21 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         toast.current?.show({
           severity: 'success',
           summary: t('general.success'),
-          detail: t('admin.pages.inventory.elementDetailPopup.information.elementDeleted'),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.information.elementDeleted',
+          ),
         });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
           summary: t('general.error'),
-          detail: t('admin.pages.inventory.elementDetailPopup.information.elementDeleteFailed'),
+          detail: t(
+            'admin.pages.inventory.elementDetailPopup.information.elementDeleteFailed',
+          ),
         });
       }
     },
-    [dispatch, onClose, onDeleteElement, t]
+    [dispatch, onClose, onDeleteElement, t],
   );
 
   const getElementType = useCallback(
@@ -333,29 +346,45 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     const filteredTasks = [];
 
     for (const workOrder of workOrders) {
-      if (workOrder.work_orders_blocks && workOrder.work_orders_blocks.length > 0) {
+      if (
+        workOrder.work_orders_blocks &&
+        workOrder.work_orders_blocks.length > 0
+      ) {
         for (const block of workOrder.work_orders_blocks) {
-          const blockIncludesElementZone = block.zones?.some(zone => zone.id === elementZone.id) || false;
+          const blockIncludesElementZone =
+            block.zones?.some((zone) => zone.id === elementZone.id) || false;
 
-          if (blockIncludesElementZone && block.block_tasks && block.block_tasks.length > 0) {
+          if (
+            blockIncludesElementZone &&
+            block.block_tasks &&
+            block.block_tasks.length > 0
+          ) {
             for (const task of block.block_tasks) {
-              const elementTypeMatches = task.element_type.id === element.element_type_id;
+              const elementTypeMatches =
+                task.element_type.id === element.element_type_id;
 
               let treeTypeMatches = true;
               if (element.tree_type_id) {
-                treeTypeMatches = task.tree_type ? task.tree_type.id === element.tree_type_id : false;
+                treeTypeMatches = task.tree_type
+                  ? task.tree_type.id === element.tree_type_id
+                  : false;
               }
 
               if (elementTypeMatches && treeTypeMatches) {
                 filteredTasks.push({
                   workOrderId: workOrder.id,
                   workOrderDate: workOrder.date,
-                  taskName: task.tasks_type?.name || t('admin.pages.inventory.elementDetailPopup.history.unknownTask'),
+                  taskName:
+                    task.tasks_type?.name ||
+                    t(
+                      'admin.pages.inventory.elementDetailPopup.history.unknownTask',
+                    ),
                   taskDescription: task.tasks_type?.description || '',
                   status: task.status !== undefined ? task.status : 0,
-                  spentTime: task.spent_time !== undefined ? task.spent_time : 0,
+                  spentTime:
+                    task.spent_time !== undefined ? task.spent_time : 0,
                   users: workOrder.users || [],
-                  workOrderStatus: workOrder.status
+                  workOrderStatus: workOrder.status,
                 });
               }
             }
@@ -369,15 +398,26 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
   const getStatusLabel = (status: number) => {
     const statuses: Record<number, string> = {
-      0: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.pending'),
-      1: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.inProgress'),
-      2: t('admin.pages.inventory.elementDetailPopup.history.taskStatus.completed'),
+      0: t(
+        'admin.pages.inventory.elementDetailPopup.history.taskStatus.pending',
+      ),
+      1: t(
+        'admin.pages.inventory.elementDetailPopup.history.taskStatus.inProgress',
+      ),
+      2: t(
+        'admin.pages.inventory.elementDetailPopup.history.taskStatus.completed',
+      ),
     };
 
-    return statuses[status] || t('admin.pages.inventory.elementDetailPopup.history.taskStatus.unknown');
+    return (
+      statuses[status] ||
+      t('admin.pages.inventory.elementDetailPopup.history.taskStatus.unknown')
+    );
   };
 
-  const getStatusSeverity = (status: number): 'danger' | 'warning' | 'success' | 'info' => {
+  const getStatusSeverity = (
+    status: number,
+  ): 'danger' | 'warning' | 'success' | 'info' => {
     const severities: Record<number, 'danger' | 'warning' | 'success'> = {
       0: 'danger',
       1: 'warning',
@@ -391,7 +431,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     const icons: Record<number, string> = {
       0: 'mdi:clock-outline',
       1: 'mdi:progress-clock',
-      2: 'mdi:check-circle-outline'
+      2: 'mdi:check-circle-outline',
     };
 
     return icons[status] || 'mdi:help-circle-outline';
@@ -407,7 +447,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     setIsEditEvaModalVisible(false);
   }, []);
 
-  const renderCardHeader = (title: string, icon: string, tagValue?: string, tagSeverity?: string) => (
+  const renderCardHeader = (
+    title: string,
+    icon: string,
+    tagValue?: string,
+    tagSeverity?: string,
+  ) => (
     <div className="flex justify-between items-center p-3 bg-gray-100 border-b border-gray-200">
       <p className="font-bold text-indigo-700 flex items-center gap-2">
         <Icon icon={icon} width="18" />
@@ -433,7 +478,12 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </div>
   );
 
-  const renderEmptyState = (icon: string, message: string, buttonLabel?: string, onClick?: () => void) => (
+  const renderEmptyState = (
+    icon: string,
+    message: string,
+    buttonLabel?: string,
+    onClick?: () => void,
+  ) => (
     <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
       <div className="flex justify-center mb-3">
         <Icon icon={icon} className="text-gray-400" width="48" height="48" />
@@ -450,7 +500,11 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </div>
   );
 
-  const renderTabContent = (children: React.ReactNode, title?: string, icon?: string) => (
+  const renderTabContent = (
+    children: React.ReactNode,
+    title?: string,
+    icon?: string,
+  ) => (
     <div className="p-4">
       {title && icon && (
         <div className="flex justify-between items-center mb-4">
@@ -464,9 +518,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     </div>
   );
 
-  const contentBoxClass = "bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm";
-  const dataRowClass = "flex justify-between py-1";
-  const labelClass = "text-gray-700 font-medium";
+  const contentBoxClass =
+    'bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm';
+  const dataRowClass = 'flex justify-between py-1';
+  const labelClass = 'text-gray-700 font-medium';
 
   const renderInfoItem = (label: string, value: React.ReactNode) => (
     <p className={dataRowClass}>
@@ -477,15 +532,17 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
   const renderEvaPanel = () => {
     if (isLoadingEva) {
-      return renderLoading(t('admin.pages.inventory.elementDetailPopup.eva.loading'));
+      return renderLoading(
+        t('admin.pages.inventory.elementDetailPopup.eva.loading'),
+      );
     }
 
     if (!eva) {
       return renderEmptyState(
-        "tabler:leaf-off",
+        'tabler:leaf-off',
         t('admin.pages.inventory.elementDetailPopup.eva.noData'),
         t('admin.pages.inventory.elementDetailPopup.eva.createEva'),
-        () => setIsEvaModalVisible(true)
+        () => setIsEvaModalVisible(true),
       );
     }
 
@@ -510,7 +567,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         <div className={contentBoxClass}>
           {renderSectionHeader(
             t('admin.pages.inventory.elementDetailPopup.eva.evaluationIndices'),
-            "tabler:chart-bar"
+            'tabler:chart-bar',
           )}
           <div className="grid grid-cols-1 gap-4">
             <div>
@@ -607,8 +664,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
         <div className={contentBoxClass}>
           {renderSectionHeader(
-            t('admin.pages.inventory.elementDetailPopup.eva.environmentalFactors'),
-            "tabler:cloud-storm"
+            t(
+              'admin.pages.inventory.elementDetailPopup.eva.environmentalFactors',
+            ),
+            'tabler:cloud-storm',
           )}
           <div className="grid grid-cols-1 gap-4">
             <div>
@@ -655,7 +714,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         <div className={contentBoxClass}>
           {renderSectionHeader(
             t('admin.pages.inventory.elementDetailPopup.eva.technicalData'),
-            "tabler:ruler-measure"
+            'tabler:ruler-measure',
           )}
           <div className="grid grid-cols-1 gap-4">
             <div>
@@ -708,7 +767,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
               onClick={() => setIsEditEvaModalVisible(true)}
             />
             <Button
-              label={t('admin.pages.inventory.elementDetailPopup.eva.deleteEva')}
+              label={t(
+                'admin.pages.inventory.elementDetailPopup.eva.deleteEva',
+              )}
               className="p-button-sm p-button-danger"
               icon={<Icon icon="tabler:trash" />}
               onClick={async () => {
@@ -718,20 +779,24 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   toast.current?.show({
                     severity: 'success',
                     summary: t('general.success'),
-                    detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccessDetail'),
+                    detail: t(
+                      'admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteSuccessDetail',
+                    ),
                   });
                 } catch (error) {
                   toast.current?.show({
                     severity: 'error',
                     summary: t('general.error'),
-                    detail: t('admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteErrorDetail'),
+                    detail: t(
+                      'admin.pages.inventory.elementDetailPopup.eva.list.messages.deleteErrorDetail',
+                    ),
                   });
                 }
               }}
             />
           </div>
         </div>
-      </div>
+      </div>,
     );
   };
 
@@ -750,9 +815,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             navContainer: {
               className: 'border-b border-gray-200 bg-white',
               tabIndex: null,
-              style: { padding: '0.75rem 1rem 0' }
+              style: { padding: '0.75rem 1rem 0' },
             },
-            nav: { className: 'flex justify-center gap-4' }
+            nav: { className: 'flex justify-center gap-4' },
           }}>
           <TabPanel
             header={
@@ -764,43 +829,64 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             headerClassName="p-3">
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                {t('admin.pages.inventory.elementDetailPopup.information.title')}
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.information.title',
+                )}
               </h3>
               <div className="space-y-3">
                 {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.description'),
-                  element.description || t('general.not_available')
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.information.description',
+                  ),
+                  element.description || t('general.not_available'),
                 )}
                 {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.elementType'),
-                  getElementType(element.element_type_id!)
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.information.elementType',
+                  ),
+                  getElementType(element.element_type_id!),
                 )}
                 {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.treeFamily'),
-                  getTreeType(element.tree_type_id)?.family || t('general.not_available')
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.information.treeFamily',
+                  ),
+                  getTreeType(element.tree_type_id)?.family ||
+                    t('general.not_available'),
                 )}
                 {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.treeGenus'),
-                  getTreeType(element.tree_type_id!)?.genus || t('general.not_available')
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.information.treeGenus',
+                  ),
+                  getTreeType(element.tree_type_id!)?.genus ||
+                    t('general.not_available'),
                 )}
                 {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.treeSpecies'),
-                  getTreeType(element.tree_type_id!)?.species || t('general.not_available')
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.information.treeSpecies',
+                  ),
+                  getTreeType(element.tree_type_id!)?.species ||
+                    t('general.not_available'),
                 )}
                 {renderInfoItem(
-                  t('admin.pages.inventory.elementDetailPopup.information.creationDate'),
-                  formatDate(element.created_at!)
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.information.creationDate',
+                  ),
+                  formatDate(element.created_at!),
                 )}
               </div>
               <div className="flex justify-end gap-3 pt-3 border-t border-gray-200 mt-4">
                 <Button
-                  label={t('admin.pages.inventory.elementDetailPopup.information.editElement')}
+                  label={t(
+                    'admin.pages.inventory.elementDetailPopup.information.editElement',
+                  )}
                   className="p-button-outlined p-button-indigo p-button-sm"
                   icon={<Icon icon="tabler:edit" />}
                   onClick={() => setIsEditModalVisible(true)}
                 />
                 <Button
-                  label={t('admin.pages.inventory.elementDetailPopup.information.deleteElement')}
+                  label={t(
+                    'admin.pages.inventory.elementDetailPopup.information.deleteElement',
+                  )}
                   className="p-button-outlined p-button-danger p-button-sm"
                   icon={<Icon icon="tabler:trash" />}
                   onClick={() => handleDeleteElement(element.id!)}
@@ -831,19 +917,28 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       className="border border-gray-300 shadow-sm rounded-lg bg-white overflow-hidden p-0"
                       pt={{
                         root: { className: 'p-0' },
-                        content: { className: 'p-0' }
+                        content: { className: 'p-0' },
                       }}>
                       <div className="p-3">
                         {renderInfoItem(
-                          t('admin.pages.inventory.elementDetailPopup.incidences.name'),
-                          incidence.name || t('general.not_available')
+                          t(
+                            'admin.pages.inventory.elementDetailPopup.incidences.name',
+                          ),
+                          incidence.name || t('general.not_available'),
                         )}
                         {renderInfoItem(
-                          t('admin.pages.inventory.elementDetailPopup.incidences.creationDate'),
-                          formatDate(incidence.created_at!)
+                          t(
+                            'admin.pages.inventory.elementDetailPopup.incidences.creationDate',
+                          ),
+                          formatDate(incidence.created_at!),
                         )}
                         <p className="text-sm text-gray-600 mt-2">
-                          <strong>{t('admin.pages.inventory.elementDetailPopup.incidences.description')}:</strong>{' '}
+                          <strong>
+                            {t(
+                              'admin.pages.inventory.elementDetailPopup.incidences.description',
+                            )}
+                            :
+                          </strong>{' '}
                           {incidence.description || t('general.not_available')}
                         </p>
                       </div>
@@ -851,12 +946,16 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                         <Dropdown
                           value={incidence.status}
                           options={statusOptions}
-                          onChange={(e) => handleStatusChange(incidence.id!, e.value)}
+                          onChange={(e) =>
+                            handleStatusChange(incidence.id!, e.value)
+                          }
                           className="w-[160px] p-inputtext-sm"
                         />
                         <Button
                           icon={<Icon icon="tabler:trash" />}
-                          label={t('admin.pages.inventory.elementDetailPopup.incidences.deleteIncident')}
+                          label={t(
+                            'admin.pages.inventory.elementDetailPopup.incidences.deleteIncident',
+                          )}
                           className="p-button-outlined p-button-danger p-button-sm"
                           onClick={() => handleDeleteIncident(incidence.id!)}
                         />
@@ -866,10 +965,14 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 </div>
               ) : (
                 renderEmptyState(
-                  "tabler:alert-circle",
-                  t('admin.pages.inventory.elementDetailPopup.incidences.noIncidences'),
-                  t('admin.pages.inventory.elementDetailPopup.incidences.addIncident'),
-                  handleAddIncidentClick
+                  'tabler:alert-circle',
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.incidences.noIncidences',
+                  ),
+                  t(
+                    'admin.pages.inventory.elementDetailPopup.incidences.addIncident',
+                  ),
+                  handleAddIncidentClick,
                 )
               )}
             </div>
@@ -885,7 +988,9 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
             headerClassName="p-3">
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                {t('admin.pages.inventory.elementDetailPopup.history.taskHistoryTitle')}
+                {t(
+                  'admin.pages.inventory.elementDetailPopup.history.taskHistoryTitle',
+                )}
               </h3>
               {isLoading ? (
                 renderLoading()
@@ -897,33 +1002,41 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                       className="border border-gray-300 shadow-sm rounded-lg bg-white overflow-hidden p-0"
                       pt={{
                         root: { className: 'p-0' },
-                        content: { className: 'p-0' }
+                        content: { className: 'p-0' },
                       }}>
                       <div className="p-3">
                         {renderInfoItem(
-                          t('admin.pages.inventory.elementDetailPopup.history.dateLabel'),
-                          formatDate(task.workOrderDate)
+                          t(
+                            'admin.pages.inventory.elementDetailPopup.history.dateLabel',
+                          ),
+                          formatDate(task.workOrderDate),
                         )}
                         {renderInfoItem(
-                          t('admin.pages.inventory.elementDetailPopup.history.workOrderLabel'),
-                          `OT-${task.workOrderId}`
+                          t(
+                            'admin.pages.inventory.elementDetailPopup.history.workOrderLabel',
+                          ),
+                          `OT-${task.workOrderId}`,
                         )}
                         {task.spentTime > 0 &&
                           renderInfoItem(
-                            t('admin.pages.inventory.elementDetailPopup.history.hoursLabel'),
-                            `${task.spentTime}h`
+                            t(
+                              'admin.pages.inventory.elementDetailPopup.history.hoursLabel',
+                            ),
+                            `${task.spentTime}h`,
                           )}
                         {task.users && task.users.length > 0 && (
                           <div className="mt-2">
                             <strong className="text-gray-700">
-                              {t('admin.pages.inventory.elementDetailPopup.history.workersLabel')}:
+                              {t(
+                                'admin.pages.inventory.elementDetailPopup.history.workersLabel',
+                              )}
+                              :
                             </strong>
                             <div className="flex flex-wrap gap-2 mt-1">
                               {task.users.map((user) => (
                                 <div
                                   key={user.id}
-                                  className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm"
-                                >
+                                  className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm">
                                   <Icon icon="tabler:user" width="16" />
                                   {user.name} {user.surname}
                                 </div>
@@ -937,10 +1050,10 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 </div>
               ) : (
                 renderEmptyState(
-                  "tabler:calendar-off",
+                  'tabler:calendar-off',
                   t('admin.pages.inventory.elementDetailPopup.history.noTasks'),
                   undefined,
-                  undefined
+                  undefined,
                 )
               )}
             </div>
@@ -1016,14 +1129,19 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                 toast.current?.show({
                   severity: 'success',
                   summary: t('general.success'),
-                  detail: t('admin.pages.inventory.elementDetailPopup.information.elementUpdated'),
+                  detail: t(
+                    'admin.pages.inventory.elementDetailPopup.information.elementUpdated',
+                  ),
                 });
                 onClose();
               }}
-              elementTypes={elementTypes.map(et => ({ label: et.name, value: et.id || 0 }))}
-              treeTypes={treeTypes.map(tt => ({
+              elementTypes={elementTypes.map((et) => ({
+                label: et.name,
+                value: et.id || 0,
+              }))}
+              treeTypes={treeTypes.map((tt) => ({
                 label: `${tt.family} ${tt.genus} ${tt.species}`,
-                value: tt.id || 0
+                value: tt.id || 0,
               }))}
             />
           </div>

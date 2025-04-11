@@ -1,4 +1,3 @@
-
 /**
  * Interfaz para los eventos relacionados con zonas en el mapa
  */

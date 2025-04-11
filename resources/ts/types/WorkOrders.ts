@@ -1,6 +1,6 @@
-import type { Contract } from "./Contract";
-import type { ElementType } from "./ElementType";
-import type { User } from "./User";
+import type { Contract } from './Contract';
+import type { ElementType } from './ElementType';
+import type { User } from './User';
 
 export interface WorkOrderBlockTask {
   id: number;

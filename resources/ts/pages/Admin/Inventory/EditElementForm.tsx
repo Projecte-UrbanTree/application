@@ -24,7 +24,7 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
   element,
   onClose,
   elementTypes,
-  treeTypes
+  treeTypes,
 }) => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<Element>({
@@ -48,11 +48,12 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
           );
 
           if (selectedElementType) {
-            const needsTreeType = selectedElementType.requires_tree_type === true ||
-                                selectedElementType.requires_tree_type === 1;
+            const needsTreeType =
+              selectedElementType.requires_tree_type === true ||
+              selectedElementType.requires_tree_type === 1;
             setRequiresTreeType(needsTreeType);
             if (!needsTreeType) {
-              setFormData(prev => ({ ...prev, tree_type_id: undefined }));
+              setFormData((prev) => ({ ...prev, tree_type_id: undefined }));
             }
           }
         } catch (error) {
@@ -60,16 +61,14 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
         }
       } else {
         setRequiresTreeType(false);
-        setFormData(prev => ({ ...prev, tree_type_id: undefined }));
+        setFormData((prev) => ({ ...prev, tree_type_id: undefined }));
       }
     };
 
     checkElementTypeRequirements();
   }, [formData.element_type_id]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -110,15 +109,26 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
 
   const formIsValid =
     formData.element_type_id !== 0 &&
-    (!requiresTreeType || (formData.tree_type_id !== undefined && formData.tree_type_id !== null && formData.tree_type_id !== 0));
+    (!requiresTreeType ||
+      (formData.tree_type_id !== undefined &&
+        formData.tree_type_id !== null &&
+        formData.tree_type_id !== 0));
 
   return (
     <div className="p-4 bg-gray-50 border border-gray-300 rounded shadow-sm">
       <Toast ref={toast} />
 
       <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 mb-4 flex items-center gap-2 text-indigo-800">
-        <Icon icon="tabler:info-circle" className="text-indigo-500 flex-shrink-0" width="20" />
-        <span className="text-sm font-medium">{t('admin.pages.inventory.editElementForm.editingInfo', { id: element.id })}</span>
+        <Icon
+          icon="tabler:info-circle"
+          className="text-indigo-500 flex-shrink-0"
+          width="20"
+        />
+        <span className="text-sm font-medium">
+          {t('admin.pages.inventory.editElementForm.editingInfo', {
+            id: element.id,
+          })}
+        </span>
       </div>
 
       <form className="space-y-4">
@@ -133,7 +143,9 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
               value={formData.element_type_id}
               options={elementTypes}
               onChange={handleElementTypeChange}
-              placeholder={t('admin.pages.inventory.editElementForm.placeholders.elementType')}
+              placeholder={t(
+                'admin.pages.inventory.editElementForm.placeholders.elementType',
+              )}
               className="w-full"
               disabled={isSubmitting}
               appendTo="self"
@@ -151,7 +163,9 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
                 value={formData.tree_type_id}
                 options={treeTypes}
                 onChange={handleTreeTypeChange}
-                placeholder={t('admin.pages.inventory.editElementForm.placeholders.treeType')}
+                placeholder={t(
+                  'admin.pages.inventory.editElementForm.placeholders.treeType',
+                )}
                 className="w-full"
                 disabled={isSubmitting || !formData.element_type_id}
                 appendTo="self"
@@ -170,7 +184,9 @@ const EditElementForm: React.FC<EditElementFormProps> = ({
               value={formData.description ?? ''}
               onChange={handleInputChange}
               className="w-full p-inputtext"
-              placeholder={t('admin.pages.inventory.editElementForm.placeholders.description')}
+              placeholder={t(
+                'admin.pages.inventory.editElementForm.placeholders.description',
+              )}
               disabled={isSubmitting}
               rows={3}
             />

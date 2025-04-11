@@ -20,7 +20,9 @@ import { TypePoint } from '@/types/Point';
 import { Zone } from '@/types/Zone';
 
 const schema = yup.object().shape({
-  name: yup.string().required('admin.pages.inventory.saveZoneForm.validation.nameRequired'),
+  name: yup
+    .string()
+    .required('admin.pages.inventory.saveZoneForm.validation.nameRequired'),
   description: yup.string(),
   color: yup
     .string()
@@ -28,11 +30,18 @@ const schema = yup.object().shape({
       /^#([0-9A-F]{6})$/i,
       'admin.pages.inventory.saveZoneForm.validation.colorFormat',
     ),
-  contractId: yup.number().required('admin.pages.inventory.saveZoneForm.validation.contractIdRequired'),
+  contractId: yup
+    .number()
+    .required(
+      'admin.pages.inventory.saveZoneForm.validation.contractIdRequired',
+    ),
   coordinates: yup
     .array()
     .of(yup.array().of(yup.number()))
-    .min(1, 'admin.pages.inventory.saveZoneForm.validation.coordinatesRequired'),
+    .min(
+      1,
+      'admin.pages.inventory.saveZoneForm.validation.coordinatesRequired',
+    ),
 });
 
 export interface SaveZoneProps {
@@ -72,11 +81,11 @@ export const SaveZoneForm = ({
     setValue,
     formState: { isSubmitting },
   } = useForm({
-    resolver: (data, context, options) => yupResolver(schema)(data, { ...context, t }, options), 
+    resolver: (data, context, options) =>
+      yupResolver(schema)(data, { ...context, t }, options),
     defaultValues,
-    context: { t }
+    context: { t },
   });
-
 
   useEffect(() => {
     setValue('coordinates', coordinates);
@@ -134,12 +143,18 @@ export const SaveZoneForm = ({
               turf.booleanContains(newPolygon, existingPolygon)
             );
           } catch (err) {
-            console.error(t('admin.pages.inventory.saveZoneForm.overlapCheckError'), err);
+            console.error(
+              t('admin.pages.inventory.saveZoneForm.overlapCheckError'),
+              err,
+            );
             return false;
           }
         });
       } catch (err) {
-        console.error(t('admin.pages.inventory.saveZoneForm.overlapCheckError'), err);
+        console.error(
+          t('admin.pages.inventory.saveZoneForm.overlapCheckError'),
+          err,
+        );
         return false;
       }
     },
@@ -153,8 +168,12 @@ export const SaveZoneForm = ({
       if (checkZonesOverlap(coordinates)) {
         toast.current?.show({
           severity: 'error',
-          summary: t('admin.pages.inventory.saveZoneForm.toast.overlapErrorTitle'),
-          detail: t('admin.pages.inventory.saveZoneForm.toast.overlapErrorDetail'),
+          summary: t(
+            'admin.pages.inventory.saveZoneForm.toast.overlapErrorTitle',
+          ),
+          detail: t(
+            'admin.pages.inventory.saveZoneForm.toast.overlapErrorDetail',
+          ),
           sticky: true,
           life: 5000,
         });
@@ -167,7 +186,9 @@ export const SaveZoneForm = ({
         ).unwrap();
 
         if (!createdZone?.id) {
-          throw new Error(t('admin.pages.inventory.saveZoneForm.toast.zoneIdError'));
+          throw new Error(
+            t('admin.pages.inventory.saveZoneForm.toast.zoneIdError'),
+          );
         }
 
         const pointsData: SavePointsProps[] = coordinates.map((coord) => ({
@@ -181,8 +202,12 @@ export const SaveZoneForm = ({
 
         toast.current?.show({
           severity: 'success',
-          summary: t('admin.pages.inventory.saveZoneForm.toast.saveSuccessTitle'),
-          detail: t('admin.pages.inventory.saveZoneForm.toast.saveSuccessDetail'),
+          summary: t(
+            'admin.pages.inventory.saveZoneForm.toast.saveSuccessTitle',
+          ),
+          detail: t(
+            'admin.pages.inventory.saveZoneForm.toast.saveSuccessDetail',
+          ),
         });
 
         onCloseProp(createdZone, pointsData);
@@ -218,9 +243,15 @@ export const SaveZoneForm = ({
 
       <div className="bg-gray-50 border border-gray-300 rounded shadow-sm p-4">
         <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-200 mb-4 flex items-center gap-2 text-indigo-800">
-          <Icon icon="tabler:info-circle" className="text-indigo-500 flex-shrink-0" width="20" />
+          <Icon
+            icon="tabler:info-circle"
+            className="text-indigo-500 flex-shrink-0"
+            width="20"
+          />
           <span className="text-sm">
-            {t('admin.pages.inventory.saveZoneForm.infoText', { count: coordinates.length })}
+            {t('admin.pages.inventory.saveZoneForm.infoText', {
+              count: coordinates.length,
+            })}
           </span>
         </div>
 
@@ -238,7 +269,9 @@ export const SaveZoneForm = ({
                   <InputText
                     {...field}
                     className="w-full p-inputtext"
-                    placeholder={t('admin.pages.inventory.saveZoneForm.namePlaceholder')}
+                    placeholder={t(
+                      'admin.pages.inventory.saveZoneForm.namePlaceholder',
+                    )}
                     disabled={isSubmitting}
                   />
                 )}
@@ -264,13 +297,17 @@ export const SaveZoneForm = ({
                     {...field}
                     rows={3}
                     className="w-full p-inputtext"
-                    placeholder={t('admin.pages.inventory.saveZoneForm.descriptionPlaceholder')}
+                    placeholder={t(
+                      'admin.pages.inventory.saveZoneForm.descriptionPlaceholder',
+                    )}
                     disabled={isSubmitting}
                   />
                 )}
               />
               {errors.description && (
-                <p className="text-red-500 text-sm mt-1">{t(errors.description.message!)}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {t(errors.description.message!)}
+                </p>
               )}
             </div>
 
@@ -294,7 +331,9 @@ export const SaveZoneForm = ({
                 )}
               />
               {errors.color && (
-                <p className="text-red-500 text-sm mt-1">{t(errors.color.message!)}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {t(errors.color.message!)}
+                </p>
               )}
             </div>
           </div>

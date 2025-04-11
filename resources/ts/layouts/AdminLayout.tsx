@@ -86,15 +86,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   }, [titleI18n, t]);
 
   useEffect(() => {
-    if ((isInventoryPage || isWorkersPage) && 
-        activeContracts.length > 0 && 
-        !initialized) {
-
+    if (
+      (isInventoryPage || isWorkersPage) &&
+      activeContracts.length > 0 &&
+      !initialized
+    ) {
       const savedContractId = localStorage.getItem(SELECTED_CONTRACT_KEY);
 
       if (savedContractId) {
         const contractId = parseInt(savedContractId);
-        const contractExists = activeContracts.some(c => c.id === contractId);
+        const contractExists = activeContracts.some((c) => c.id === contractId);
 
         if (contractExists) {
           dispatch(selectContract(contractId));
@@ -236,7 +237,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
     : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
   return (
-    <div className={isInventoryPage ? 'flex flex-col h-screen overflow-hidden' : ''}>
+    <div
+      className={
+        isInventoryPage ? 'flex flex-col h-screen overflow-hidden' : ''
+      }>
       <header className="border-b border-gray-300 bg-white shadow-md">
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
@@ -297,12 +301,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.accountSettings')}
                   </Link>
-                    <Link
+                  <Link
                     onClick={() => setProfileDropdownVisible(false)}
                     to="/admin/license"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     {t('admin.profileDropdown.license')}
-                    </Link>
+                  </Link>
                   <Link
                     to="/logout"
                     className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
@@ -367,7 +371,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
         </div>
       )}
 
-      <main className={`${padding} ${isInventoryPage || isAccountPage ? 'flex-1 overflow-hidden' : ''}`}>{children}</main>
+      <main
+        className={`${padding} ${isInventoryPage || isAccountPage ? 'flex-1 overflow-hidden' : ''}`}>
+        {children}
+      </main>
     </div>
   );
 };

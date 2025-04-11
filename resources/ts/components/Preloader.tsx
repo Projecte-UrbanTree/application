@@ -9,10 +9,10 @@ export default function Preloader() {
         alt="Logo"
         className="block w-48 md:w-64 fade-animation"
       />
-                <ProgressSpinner
-                  style={{ width: '50px', height: '50px' }}
-                  strokeWidth="4"
-                />
+      <ProgressSpinner
+        style={{ width: '50px', height: '50px' }}
+        strokeWidth="4"
+      />
     </div>
   );
 }

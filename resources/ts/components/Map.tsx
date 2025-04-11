@@ -66,7 +66,7 @@ export const MapComponent: React.FC<MapProps> = ({
   onModalVisibleChange,
   onCancelSaveElement,
 }) => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapServiceRef = useRef<MapService | null>(null);
@@ -78,28 +78,45 @@ export const MapComponent: React.FC<MapProps> = ({
   const { points } = useSelector((state: RootState) => state.points);
   const { zones: zonesRedux } = useSelector((state: RootState) => state.zone);
   const { elements } = useSelector((state: RootState) => state.element);
-  const currentContract = useSelector((state: RootState) => state.contract.currentContract);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
   const userValue = useSelector((state: RootState) => state.user);
 
-  const { latitude: geoLat, longitude: geoLng, error: geoError } = useGeolocation();
+  const {
+    latitude: geoLat,
+    longitude: geoLng,
+    error: geoError,
+  } = useGeolocation();
 
   const [coordinates, setCoordinates] = useState<number[][]>([]);
-  const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(null);
+  const [newPointCoord, setNewPointCoord] = useState<[number, number] | null>(
+    null,
+  );
   const [modalAddPointVisible, setModalAddPointVisible] = useState(false);
-  const [selectedZoneForElement, setSelectedZoneForElement] = useState<Zone | null>(null);
-  const [selectedElementId, setSelectedElementId] = useState<number | null>(null);
+  const [selectedZoneForElement, setSelectedZoneForElement] =
+    useState<Zone | null>(null);
+  const [selectedElementId, setSelectedElementId] = useState<number | null>(
+    null,
+  );
   const [selectedElement, setSelectedElement] = useState<Element | null>(null);
   const [elementModalVisible, setElementModalVisible] = useState(false);
   const [incidentModalVisible, setIncidentModalVisible] = useState(false);
   const [elementTypes, setElementTypes] = useState<ElementType[]>([]);
   const [treeTypes, setTreeTypes] = useState<TreeTypes[]>([]);
-  const [hiddenElementTypes, setHiddenElementTypes] = useState<Record<string, boolean>>({});
+  const [hiddenElementTypes, setHiddenElementTypes] = useState<
+    Record<string, boolean>
+  >({});
   const [hiddenZones, setHiddenZones] = useState<Record<number, boolean>>({});
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [centerCoords, setCenterCoords] = useState<ZoneCenterCoord[]>([]);
   const [isZoneJustCreated, setIsZoneJustCreated] = useState(false);
 
-  const { isMapReady, isInitializing, error: mapInitError } = useMapInitialization();
+  const {
+    isMapReady,
+    isInitializing,
+    error: mapInitError,
+  } = useMapInitialization();
 
   const handleBackToIncidentTab = useCallback(() => {
     setIncidentModalVisible(false);
@@ -115,11 +132,12 @@ export const MapComponent: React.FC<MapProps> = ({
       setIsDataLoaded(false);
 
       try {
-        const [treeTypesRes, elementTypesRes, centerCoordsRes] = await Promise.all([
-          fetchTreeTypes(),
-          fetchElementType(),
-          getZoneCoords(),
-        ]);
+        const [treeTypesRes, elementTypesRes, centerCoordsRes] =
+          await Promise.all([
+            fetchTreeTypes(),
+            fetchElementType(),
+            getZoneCoords(),
+          ]);
 
         setTreeTypes(treeTypesRes);
         setElementTypes(elementTypesRes);
@@ -146,38 +164,44 @@ export const MapComponent: React.FC<MapProps> = ({
   }, [dispatch, currentContract?.id, t]);
 
   useEffect(() => {
-    if (!mapContainerRef.current || !isDataLoaded || isLoading || mapServiceRef.current) return;
+    if (
+      !mapContainerRef.current ||
+      !isDataLoaded ||
+      isLoading ||
+      mapServiceRef.current
+    )
+      return;
 
     let initialCoordinates: [number, number] = DEFAULT_MADRID_COORDS;
     if (geoLat && geoLng && !geoError) {
       initialCoordinates = [geoLng, geoLat];
     } else if (centerCoords?.length > 0 && centerCoords[0].center) {
-      initialCoordinates = [centerCoords[0].center[0], centerCoords[0].center[1]];
+      initialCoordinates = [
+        centerCoords[0].center[0],
+        centerCoords[0].center[1],
+      ];
     }
 
     const service = new MapService(
       mapContainerRef.current,
       MAPBOX_TOKEN!,
       centerCoords!,
-      initialCoordinates
+      initialCoordinates,
     );
     mapServiceRef.current = service;
 
     service.addBasicControls();
 
-    service.enableDraw(
-      userValue.role === Roles.admin,
-      (coords) => {
-        if (coords.length > 0) {
-          setCoordinates(coords);
-          onDrawingModeChange(true);
-          onEnabledButtonChange(true);
-        } else {
-          onDrawingModeChange(false);
-          onEnabledButtonChange(false);
-        }
+    service.enableDraw(userValue.role === Roles.admin, (coords) => {
+      if (coords.length > 0) {
+        setCoordinates(coords);
+        onDrawingModeChange(true);
+        onEnabledButtonChange(true);
+      } else {
+        onDrawingModeChange(false);
+        onEnabledButtonChange(false);
       }
-    );
+    });
 
     service.waitForInit(() => {
       updateZones(service);
@@ -193,7 +217,7 @@ export const MapComponent: React.FC<MapProps> = ({
     geoLng,
     geoError,
     centerCoords,
-    currentContract?.id
+    currentContract?.id,
   ]);
 
   useEffect(() => {
@@ -225,15 +249,30 @@ export const MapComponent: React.FC<MapProps> = ({
     if (!service || !isDataLoaded || isLoading) return;
 
     service.waitForInit(() => updateElements(service));
-  }, [elements, points, hiddenZones, hiddenElementTypes, isDataLoaded, isLoading]);
+  }, [
+    elements,
+    points,
+    hiddenZones,
+    hiddenElementTypes,
+    isDataLoaded,
+    isLoading,
+  ]);
 
   const updateElementVisibility = useCallback(
-    (zoneId: number, elementTypeId: number, hidden: boolean, service: MapService) => {
+    (
+      zoneId: number,
+      elementTypeId: number,
+      hidden: boolean,
+      service: MapService,
+    ) => {
       const pointsInZone = points.filter((p) => p.zone_id === zoneId);
       const pointIds = new Set(pointsInZone.map((p) => p.id));
 
-      const elementsToUpdate = elements
-        .filter((element) => element.element_type_id === elementTypeId && pointIds.has(element.point_id!));
+      const elementsToUpdate = elements.filter(
+        (element) =>
+          element.element_type_id === elementTypeId &&
+          pointIds.has(element.point_id!),
+      );
 
       elementsToUpdate.forEach((element) => {
         if (element.id) {
@@ -241,7 +280,7 @@ export const MapComponent: React.FC<MapProps> = ({
         }
       });
     },
-    [elements, points]
+    [elements, points],
   );
 
   const toggleZoneVisibility = useCallback(
@@ -250,9 +289,9 @@ export const MapComponent: React.FC<MapProps> = ({
       if (!service) return;
 
       try {
-        setHiddenZones(prev => ({
+        setHiddenZones((prev) => ({
           ...prev,
-          [zoneId]: hidden
+          [zoneId]: hidden,
         }));
 
         const zoneLayerId = `zone-${zoneId}-fill`;
@@ -264,8 +303,8 @@ export const MapComponent: React.FC<MapProps> = ({
         const pointsInZone = points.filter((p) => p.zone_id === zoneId);
         const pointIdsInZone = new Set(pointsInZone.map((p) => p.id));
 
-        const elementsInZone = elements.filter((element) =>
-          element.point_id && pointIdsInZone.has(element.point_id)
+        const elementsInZone = elements.filter(
+          (element) => element.point_id && pointIdsInZone.has(element.point_id),
         );
 
         elementsInZone.forEach((element) => {
@@ -277,7 +316,7 @@ export const MapComponent: React.FC<MapProps> = ({
         });
       } catch (error) {}
     },
-    [elements, points]
+    [elements, points],
   );
 
   const handleElementCreation = useCallback(
@@ -329,7 +368,7 @@ export const MapComponent: React.FC<MapProps> = ({
         }
       });
     },
-    [points, onCreatingElementChange, t]
+    [points, onCreatingElementChange, t],
   );
 
   useEffect(() => {
@@ -355,20 +394,20 @@ export const MapComponent: React.FC<MapProps> = ({
         if (data.showAllElements || data.forceShow) {
           try {
             const zonesToUpdate: number[] = [];
-            zonesRedux.forEach(zone => {
+            zonesRedux.forEach((zone) => {
               if (zone.id && (hiddenZones[zone.id] || data.forceShow)) {
                 zonesToUpdate.push(zone.id);
               }
             });
 
-            zonesToUpdate.forEach(zoneId => {
+            zonesToUpdate.forEach((zoneId) => {
               try {
                 toggleZoneVisibility(zoneId, false);
               } catch (error) {}
             });
 
             if (data.forceShow && service) {
-              elements.forEach(element => {
+              elements.forEach((element) => {
                 if (element.id) {
                   try {
                     service.updateMarkerVisibility(element.id, true);
@@ -376,35 +415,42 @@ export const MapComponent: React.FC<MapProps> = ({
                 }
               });
             } else {
-              const elementTypeUpdates: Array<{zoneId: number, typeId: number}> = [];
+              const elementTypeUpdates: Array<{
+                zoneId: number;
+                typeId: number;
+              }> = [];
 
-              zonesRedux.forEach(zone => {
+              zonesRedux.forEach((zone) => {
                 if (!zone.id) return;
 
                 const zoneId = zone.id;
-                const pointsInZone = points.filter(p => p.zone_id === zoneId);
-                const pointIds = new Set(pointsInZone.map(p => p.id));
+                const pointsInZone = points.filter((p) => p.zone_id === zoneId);
+                const pointIds = new Set(pointsInZone.map((p) => p.id));
 
                 const elementTypesInZone = new Set<number>();
-                elements.forEach(element => {
-                  if (element.point_id && pointIds.has(element.point_id) && element.element_type_id) {
+                elements.forEach((element) => {
+                  if (
+                    element.point_id &&
+                    pointIds.has(element.point_id) &&
+                    element.element_type_id
+                  ) {
                     elementTypesInZone.add(element.element_type_id);
                   }
                 });
 
-                elementTypesInZone.forEach(typeId => {
+                elementTypesInZone.forEach((typeId) => {
                   const key = `${zoneId}-${typeId}`;
                   if (hiddenElementTypes[key]) {
-                    elementTypeUpdates.push({zoneId, typeId});
+                    elementTypeUpdates.push({ zoneId, typeId });
                   }
                 });
               });
 
-              elementTypeUpdates.forEach(({zoneId, typeId}) => {
+              elementTypeUpdates.forEach(({ zoneId, typeId }) => {
                 const key = `${zoneId}-${typeId}`;
-                setHiddenElementTypes(prev => ({
+                setHiddenElementTypes((prev) => ({
                   ...prev,
-                  [key]: false
+                  [key]: false,
                 }));
 
                 try {
@@ -486,7 +532,18 @@ export const MapComponent: React.FC<MapProps> = ({
         mapServiceRef.current.disableSingleClick();
       }
     };
-  }, [points, elements, zonesRedux, handleElementCreation, toggleZoneVisibility, updateElementVisibility, onCreatingElementChange, hiddenElementTypes, hiddenZones, t]);
+  }, [
+    points,
+    elements,
+    zonesRedux,
+    handleElementCreation,
+    toggleZoneVisibility,
+    updateElementVisibility,
+    onCreatingElementChange,
+    hiddenElementTypes,
+    hiddenZones,
+    t,
+  ]);
 
   const handleElementFormClose = useCallback(() => {
     setModalAddPointVisible(false);
@@ -496,9 +553,9 @@ export const MapComponent: React.FC<MapProps> = ({
 
     eventSubject.next({
       isCreatingElement: false,
-      refreshMap: true
+      refreshMap: true,
     });
-    
+
     if (onCancelSaveElement) {
       onCancelSaveElement();
     }
@@ -510,15 +567,22 @@ export const MapComponent: React.FC<MapProps> = ({
     try {
       service.removeLayersAndSources('zone-');
 
-      const filteredZones = zonesRedux.filter((z) => z.contract_id === currentContract.id);
+      const filteredZones = zonesRedux.filter(
+        (z) => z.contract_id === currentContract.id,
+      );
 
       filteredZones.forEach((zone: Zone) => {
         if (!zone.id) return;
 
         const zonePoints = points
-          .filter((p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter)
+          .filter(
+            (p) => p.zone_id === zone.id && p.type === TypePoint.zone_delimiter,
+          )
           .map((p) => {
-            if (typeof p.longitude !== 'number' || typeof p.latitude !== 'number') {
+            if (
+              typeof p.longitude !== 'number' ||
+              typeof p.latitude !== 'number'
+            ) {
               return null;
             }
             return [p.longitude, p.latitude] as [number, number];
@@ -530,7 +594,12 @@ export const MapComponent: React.FC<MapProps> = ({
           const sourceId = `zone-${zone.id}`;
           const layerId = `zone-${zone.id}-fill`;
 
-          service.addZoneToMap(sourceId, layerId, zonePoints, zone.color || '#088');
+          service.addZoneToMap(
+            sourceId,
+            layerId,
+            zonePoints,
+            zone.color || '#088',
+          );
 
           if (hiddenZones[zone.id]) {
             service.updateZoneVisibility(layerId, false);
@@ -571,23 +640,23 @@ export const MapComponent: React.FC<MapProps> = ({
     const zoneIds = new Set(
       zonesRedux
         .filter((zone) => zone.contract_id === currentContract.id)
-        .map((zone) => zone.id)
+        .map((zone) => zone.id),
     );
 
     const pointIds = new Set(
       points
         .filter((point) => point.zone_id && zoneIds.has(point.zone_id))
-        .map((point) => point.id)
+        .map((point) => point.id),
     );
 
     const filteredElements = elements.filter(
-      (element) => element.point_id && pointIds.has(element.point_id)
+      (element) => element.point_id && pointIds.has(element.point_id),
     );
 
     if (filteredElements.length === 0) return;
 
     const relevantPoints = points.filter(
-      (point) => point.zone_id && zoneIds.has(point.zone_id)
+      (point) => point.zone_id && zoneIds.has(point.zone_id),
     );
 
     service.addElementMarkers(
@@ -603,7 +672,7 @@ export const MapComponent: React.FC<MapProps> = ({
       if (isHidden) {
         const zoneId = Number(zoneIdStr);
 
-        const pointsInZone = relevantPoints.filter(p => p.zone_id === zoneId);
+        const pointsInZone = relevantPoints.filter((p) => p.zone_id === zoneId);
 
         pointsInZone.forEach((point) => {
           filteredElements
@@ -649,7 +718,7 @@ export const MapComponent: React.FC<MapProps> = ({
           `zone-${newZone.id}`,
           `zone-${newZone.id}-fill`,
           zonePoints,
-          newZone.color || '#088'
+          newZone.color || '#088',
         );
 
         setIsZoneJustCreated(true);
@@ -665,26 +734,29 @@ export const MapComponent: React.FC<MapProps> = ({
     ],
   );
 
-  const handleElementDelete = useCallback(async (elementId: number) => {
-    try {
-      await dispatch(deleteElementAsync(elementId));
-      await dispatch(fetchElementsAsync());
-      mapServiceRef.current?.removeElementMarker(elementId);
-      setElementModalVisible(false);
-      setSelectedElement(null);
-      toast.current?.show({
-        severity: 'success',
-        summary: t('admin.pages.inventory.genericSuccessTitle'),
-        detail: t('admin.pages.inventory.deleteElementSuccess'),
-      });
-    } catch (error) {
-      toast.current?.show({
-        severity: 'error',
-        summary: t('admin.pages.inventory.genericErrorTitle'),
-        detail: t('admin.pages.inventory.deleteElementError'),
-      });
-    }
-  }, [dispatch, t]);
+  const handleElementDelete = useCallback(
+    async (elementId: number) => {
+      try {
+        await dispatch(deleteElementAsync(elementId));
+        await dispatch(fetchElementsAsync());
+        mapServiceRef.current?.removeElementMarker(elementId);
+        setElementModalVisible(false);
+        setSelectedElement(null);
+        toast.current?.show({
+          severity: 'success',
+          summary: t('admin.pages.inventory.genericSuccessTitle'),
+          detail: t('admin.pages.inventory.deleteElementSuccess'),
+        });
+      } catch (error) {
+        toast.current?.show({
+          severity: 'error',
+          summary: t('admin.pages.inventory.genericErrorTitle'),
+          detail: t('admin.pages.inventory.deleteElementError'),
+        });
+      }
+    },
+    [dispatch, t],
+  );
 
   const showElementPopup = useCallback(
     (element: Element) => {
@@ -693,7 +765,6 @@ export const MapComponent: React.FC<MapProps> = ({
       const point = points.find((p) => p.id === element.point_id);
       if (!point || !point.latitude || !point.longitude) return;
 
-     
       const popupContent = document.createElement('div');
       popupContent.innerHTML = `<h3>${t('admin.pages.inventory.elementDetailsDialogTitle', { elementId: element.id })}</h3>
 	<p style="color: #374151;">...</p>`;
@@ -708,11 +779,18 @@ export const MapComponent: React.FC<MapProps> = ({
       })
         .setLngLat([point.longitude, point.latitude])
         .setDOMContent(popupContent)
-        .addTo(mapServiceRef.current!); 
+        .addTo(mapServiceRef.current!);
 
       return popup;
     },
-    [points, treeTypes, elementTypes, handleElementDelete, handleBackToIncidentTab, t],
+    [
+      points,
+      treeTypes,
+      elementTypes,
+      handleElementDelete,
+      handleBackToIncidentTab,
+      t,
+    ],
   );
 
   useEffect(() => {
@@ -721,13 +799,15 @@ export const MapComponent: React.FC<MapProps> = ({
         severity: 'error',
         summary: t('admin.pages.inventory.genericErrorTitle'),
         detail: t('admin.pages.inventory.mapInitError'),
-        life: 3000
+        life: 3000,
       });
     }
   }, [mapInitError, t]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }} className="flex-1">
+    <div
+      style={{ position: 'relative', width: '100%', height: '100%' }}
+      className="flex-1">
       <Toast ref={toast} position="top-center" className="z-50" />
 
       <div
@@ -746,8 +826,14 @@ export const MapComponent: React.FC<MapProps> = ({
         {isCreatingElement && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-indigo-500 animate-pulse">
             <div className="flex items-center gap-2 text-indigo-800">
-              <Icon icon="tabler:pencil-plus" className="text-indigo-500" width="20" />
-              <span className="font-medium">{t('admin.pages.inventory.clickToAddElementPrompt')}</span>
+              <Icon
+                icon="tabler:pencil-plus"
+                className="text-indigo-500"
+                width="20"
+              />
+              <span className="font-medium">
+                {t('admin.pages.inventory.clickToAddElementPrompt')}
+              </span>
             </div>
           </div>
         )}
@@ -755,8 +841,14 @@ export const MapComponent: React.FC<MapProps> = ({
         {isDrawingMode && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-blue-400">
             <div className="flex items-center gap-2 text-blue-800">
-              <Icon icon="tabler:polygon" className="text-blue-500" width="20" />
-              <span className="font-medium">{t('admin.pages.inventory.drawingModeActive')}</span>
+              <Icon
+                icon="tabler:polygon"
+                className="text-blue-500"
+                width="20"
+              />
+              <span className="font-medium">
+                {t('admin.pages.inventory.drawingModeActive')}
+              </span>
             </div>
           </div>
         )}
@@ -766,7 +858,9 @@ export const MapComponent: React.FC<MapProps> = ({
         header={
           <div className="flex items-center gap-2 text-indigo-700">
             <Icon icon="tabler:map-pin" width="24" />
-            <span className="text-lg font-semibold">{t('admin.pages.inventory.saveZoneDialogTitle')}</span>
+            <span className="text-lg font-semibold">
+              {t('admin.pages.inventory.saveZoneDialogTitle')}
+            </span>
           </div>
         }
         visible={modalVisible}
@@ -783,7 +877,9 @@ export const MapComponent: React.FC<MapProps> = ({
         header={
           <div className="flex items-center gap-2 text-indigo-700">
             <Icon icon="tabler:plus-circle" width="24" />
-            <span className="text-lg font-semibold">{t('admin.pages.inventory.saveElementDialogTitle')}</span>
+            <span className="text-lg font-semibold">
+              {t('admin.pages.inventory.saveElementDialogTitle')}
+            </span>
           </div>
         }
         visible={modalAddPointVisible}
@@ -812,7 +908,9 @@ export const MapComponent: React.FC<MapProps> = ({
         header={
           <div className="flex items-center gap-2 text-amber-600">
             <Icon icon="tabler:alert-triangle" width="24" />
-            <span className="text-lg font-semibold">{t('admin.pages.inventory.addIncidentDialogTitle')}</span>
+            <span className="text-lg font-semibold">
+              {t('admin.pages.inventory.addIncidentDialogTitle')}
+            </span>
           </div>
         }
         visible={incidentModalVisible}
@@ -839,7 +937,9 @@ export const MapComponent: React.FC<MapProps> = ({
           <div className="flex items-center gap-2 text-indigo-700">
             <Icon icon="tabler:clipboard-data" width="24" />
             <span className="text-lg font-semibold">
-              {t('admin.pages.inventory.elementDetailsDialogTitle', { elementId: selectedElement?.id })}
+              {t('admin.pages.inventory.elementDetailsDialogTitle', {
+                elementId: selectedElement?.id,
+              })}
             </span>
           </div>
         }

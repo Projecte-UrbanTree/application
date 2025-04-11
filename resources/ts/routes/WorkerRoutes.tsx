@@ -8,12 +8,17 @@ import { Roles } from '@/types/Role';
 const WorkerRoutes: RouteObject[] = [
   {
     element: <AuthenticatedRoute allowedRoles={[Roles.worker]} />,
-   children: [
+    children: [
       {
         path: '/worker',
         children: [
-          { 
-            index: true, element: <WorkerLayout titleI18n="Dashboard"><Index /></WorkerLayout>
+          {
+            index: true,
+            element: (
+              <WorkerLayout titleI18n="Dashboard">
+                <Index />
+              </WorkerLayout>
+            ),
           },
         ],
       },

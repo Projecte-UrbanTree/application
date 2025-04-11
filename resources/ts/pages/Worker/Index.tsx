@@ -650,7 +650,10 @@ const WorkerWorkOrders = () => {
                     className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-700">
-                        {t('worker.workOrders.resource').replace('{0}', String(index + 1))}
+                        {t('worker.workOrders.resource').replace(
+                          '{0}',
+                          String(index + 1),
+                        )}
                       </span>
                       {workReportResources.length > 1 && (
                         <Button
@@ -674,7 +677,9 @@ const WorkerWorkOrders = () => {
                           onChange={(e) => handleSelectResource(index, e.value)}
                           optionLabel="name"
                           optionValue="id"
-                          placeholder={t('worker.workOrders.resourcePlaceholder')}
+                          placeholder={t(
+                            'worker.workOrders.resourcePlaceholder',
+                          )}
                           className="w-full"
                           disabled={
                             !selectedResourceType ||

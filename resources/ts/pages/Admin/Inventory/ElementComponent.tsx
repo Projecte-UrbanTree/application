@@ -34,7 +34,9 @@ const ElementPopup: React.FC<ElementPopupProps> = React.memo(
             {t('admin.pages.inventory.elementPopup.title', { id: element.id })}
           </h3>
           {element.description && (
-            <p className="text-sm text-indigo-600 mt-1 truncate">{element.description}</p>
+            <p className="text-sm text-indigo-600 mt-1 truncate">
+              {element.description}
+            </p>
           )}
         </div>
 
@@ -47,40 +49,57 @@ const ElementPopup: React.FC<ElementPopupProps> = React.memo(
                   style={{ backgroundColor: elementType?.color || '#6366F1' }}>
                   {elementType?.icon && (
                     <Icon
-                      icon={elementType.icon.startsWith('tabler:')
-                        ? elementType.icon
-                        : `tabler:${elementType.icon.replace('mdi:', '')}`}
+                      icon={
+                        elementType.icon.startsWith('tabler:')
+                          ? elementType.icon
+                          : `tabler:${elementType.icon.replace('mdi:', '')}`
+                      }
                       width="16"
                       color="white"
                     />
                   )}
                 </div>
-                <span className="font-medium text-gray-700">{elementType?.name || t('admin.pages.inventory.elementPopup.elementTypeUndefined')}</span>
+                <span className="font-medium text-gray-700">
+                  {elementType?.name ||
+                    t(
+                      'admin.pages.inventory.elementPopup.elementTypeUndefined',
+                    )}
+                </span>
               </div>
 
               {treeType && (
                 <div className="bg-gray-50 rounded-lg p-3 border border-gray-200 text-sm space-y-1 mt-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{t('admin.pages.inventory.elementPopup.treeFamilyLabel')}</span>
+                    <span className="text-gray-600">
+                      {t('admin.pages.inventory.elementPopup.treeFamilyLabel')}
+                    </span>
                     <span className="font-medium">{treeType.family}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{t('admin.pages.inventory.elementPopup.treeGenusLabel')}</span>
+                    <span className="text-gray-600">
+                      {t('admin.pages.inventory.elementPopup.treeGenusLabel')}
+                    </span>
                     <span className="font-medium">{treeType.genus}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{t('admin.pages.inventory.elementPopup.treeSpeciesLabel')}</span>
+                    <span className="text-gray-600">
+                      {t('admin.pages.inventory.elementPopup.treeSpeciesLabel')}
+                    </span>
                     <span className="font-medium">{treeType.species}</span>
                   </div>
                 </div>
               )}
 
               <div className="flex justify-between mt-2 text-sm">
-                <span className="text-gray-600">{t('admin.pages.inventory.elementPopup.createdLabel')}</span>
+                <span className="text-gray-600">
+                  {t('admin.pages.inventory.elementPopup.createdLabel')}
+                </span>
                 <span className="font-medium">
                   {element.created_at
                     ? new Date(element.created_at).toLocaleDateString()
-                    : t('admin.pages.inventory.elementPopup.createdAtNotAvailable')}
+                    : t(
+                        'admin.pages.inventory.elementPopup.createdAtNotAvailable',
+                      )}
                 </span>
               </div>
             </div>

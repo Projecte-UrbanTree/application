@@ -9,17 +9,16 @@ const License: React.FC = () => {
       <h1 className="text-3xl font-bold mb-4 text-gray-700">
         {t('admin.pages.license.title')}
       </h1>
-      
+
       <p className="text-lg text-gray-600">
         {t('admin.pages.license.description')}
         <br />
         {t('admin.pages.license.moreInfo')}{' '}
-        <a 
+        <a
           className="underline hover:text-gray-900"
-          href={t('admin.pages.license.link_url')} 
+          href={t('admin.pages.license.link_url')}
           target="_blank"
-          rel="noreferrer"
-        >
+          rel="noreferrer">
           {t('admin.pages.license.link_text')}
         </a>
         , {t('admin.pages.license.below_text')}
@@ -38,9 +37,23 @@ const License: React.FC = () => {
         </section>
 
         {/* Sections */}
-        {['definitions', 'scope', 'source_code', 'copyright', 'obligations', 'authorship', 'warranty', 
-          'liability', 'additional', 'acceptance', 'information', 'termination', 'miscellaneous', 
-          'jurisdiction', 'applicable_law'].map((section) => (
+        {[
+          'definitions',
+          'scope',
+          'source_code',
+          'copyright',
+          'obligations',
+          'authorship',
+          'warranty',
+          'liability',
+          'additional',
+          'acceptance',
+          'information',
+          'termination',
+          'miscellaneous',
+          'jurisdiction',
+          'applicable_law',
+        ].map((section) => (
           <section key={section} className="mb-6">
             <h3 className="font-semibold mb-2">
               {t(`admin.pages.license.fullText.sections.${section}.title`)}

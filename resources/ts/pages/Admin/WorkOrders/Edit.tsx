@@ -37,7 +37,7 @@ const EditWorkOrder = () => {
   const [error, setError] = useState<string | null>(null);
   const [initialValues, setInitialValues] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState<number[]>([]);
-  
+
   const userTemplate = useCallback(
     (option: any) => (
       <div className="flex items-center">
@@ -149,7 +149,9 @@ const EditWorkOrder = () => {
       const userIds = values.selectedUsers.map((user: any) => user.id);
       const formattedBlocks = values.blocks.map((block: any) => ({
         notes: block.notes,
-        zones: block.zones.map((zone: any) => (typeof zone === 'object' ? zone.id : zone)),
+        zones: block.zones.map((zone: any) =>
+          typeof zone === 'object' ? zone.id : zone,
+        ),
         tasks: block.tasks.map((task: any) => ({
           task_type_id: task.task_type_id,
           element_type_id: task.element_type_id,

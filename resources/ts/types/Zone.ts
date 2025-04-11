@@ -1,5 +1,3 @@
-
-
 export interface Zone {
   id?: number;
   name?: string;
@@ -13,8 +11,7 @@ export interface Zone {
 }
 
 export interface ZoneCenterCoord {
-    zone_id?: number;
-    center?:  number[];
-    zoom?: number;
+  zone_id?: number;
+  center?: number[];
+  zoom?: number;
 }
-

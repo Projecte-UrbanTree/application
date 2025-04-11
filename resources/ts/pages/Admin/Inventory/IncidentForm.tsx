@@ -33,8 +33,12 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
     if (!name.trim()) {
       toast.current?.show({
         severity: 'warn',
-        summary: t('admin.pages.inventory.incidentForm.toast.nameRequiredWarningTitle'),
-        detail: t('admin.pages.inventory.incidentForm.toast.nameRequiredWarningDetail'),
+        summary: t(
+          'admin.pages.inventory.incidentForm.toast.nameRequiredWarningTitle',
+        ),
+        detail: t(
+          'admin.pages.inventory.incidentForm.toast.nameRequiredWarningDetail',
+        ),
       });
       return;
     }
@@ -107,7 +111,9 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full p-inputtext"
-              placeholder={t('admin.pages.inventory.incidentForm.namePlaceholder')}
+              placeholder={t(
+                'admin.pages.inventory.incidentForm.namePlaceholder',
+              )}
               disabled={isSubmitting}
             />
           </div>
@@ -120,7 +126,9 @@ const IncidentForm: React.FC<IncidentFormProps> = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-inputtext"
-              placeholder={t('admin.pages.inventory.incidentForm.descriptionPlaceholder')}
+              placeholder={t(
+                'admin.pages.inventory.incidentForm.descriptionPlaceholder',
+              )}
               disabled={isSubmitting}
               rows={4}
             />

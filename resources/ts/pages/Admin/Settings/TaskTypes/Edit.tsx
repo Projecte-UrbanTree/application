@@ -33,8 +33,7 @@ export default function EditTaskType() {
           name: data.name || '',
           description: data.description || '',
         });
-      } catch {
-      }
+      } catch {}
       setIsLoading(false);
     };
     fetchTaskType();

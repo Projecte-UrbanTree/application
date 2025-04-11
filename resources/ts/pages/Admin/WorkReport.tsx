@@ -72,13 +72,17 @@ const WorkReportDetail = () => {
       label: t('general.actions.close_with_incidents'),
       icon: 'pi pi-exclamation-triangle',
       command: () => setShowObservationDialog(true),
-      disabled: workReport?.report_status !== WorkReportStatus.PENDING && workReport?.report_status !== WorkReportStatus.REJECTED,
+      disabled:
+        workReport?.report_status !== WorkReportStatus.PENDING &&
+        workReport?.report_status !== WorkReportStatus.REJECTED,
     },
     {
       label: t('general.actions.reject'),
       icon: 'pi pi-times',
       command: () => handleStatusChange(WorkReportStatus.REJECTED),
-      disabled: workReport?.report_status !== WorkReportStatus.PENDING && workReport?.report_status !== WorkReportStatus.REJECTED,
+      disabled:
+        workReport?.report_status !== WorkReportStatus.PENDING &&
+        workReport?.report_status !== WorkReportStatus.REJECTED,
     },
   ];
 
@@ -219,7 +223,14 @@ const WorkReportDetail = () => {
     return (
       <Badge
         value={statusConfig.value}
-        severity={statusConfig.severity as "success" | "info" | "warning" | "danger" | undefined}
+        severity={
+          statusConfig.severity as
+            | 'success'
+            | 'info'
+            | 'warning'
+            | 'danger'
+            | undefined
+        }
         className={statusConfig.className}
       />
     );
@@ -430,7 +441,8 @@ const WorkReportDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                  {t('admin.pages.workReport.title')} - OT-{workReport.work_order.id}
+                  {t('admin.pages.workReport.title')} - OT-
+                  {workReport.work_order.id}
                 </h2>
                 <p className="text-sm text-gray-600">
                   {formatDate(workReport.work_order.date)}
@@ -446,7 +458,8 @@ const WorkReportDetail = () => {
                 {t('admin.pages.workReport.columns.users')}
               </h3>
               <ul className="list-disc pl-5">
-                {workReport.work_order.users && workReport.work_order.users.length > 0 ? (
+                {workReport.work_order.users &&
+                workReport.work_order.users.length > 0 ? (
                   workReport.work_order.users.map((user) => (
                     <li key={user.id} className="text-gray-800">
                       {`${user.name} ${user.surname}`}
@@ -463,15 +476,18 @@ const WorkReportDetail = () => {
             <section>
               <Accordion multiple activeIndex={activeTabs}>
                 {workReport.work_order.work_orders_blocks?.length ? (
-                  workReport.work_order.work_orders_blocks.map((block, index) => (
-                    <AccordionTab
-                      key={block.id}
-                      header={`${t('admin.pages.workReport.details.block')} ${index + 1}`}>
-                      {renderBlockDetails(block)}
-                    </AccordionTab>
-                  ))
+                  workReport.work_order.work_orders_blocks.map(
+                    (block, index) => (
+                      <AccordionTab
+                        key={block.id}
+                        header={`${t('admin.pages.workReport.details.block')} ${index + 1}`}>
+                        {renderBlockDetails(block)}
+                      </AccordionTab>
+                    ),
+                  )
                 ) : (
-                  <AccordionTab header={t('admin.pages.workReport.details.noBlocks')}>
+                  <AccordionTab
+                    header={t('admin.pages.workReport.details.noBlocks')}>
                     <p className="text-gray-600">
                       {t('admin.pages.workReport.details.noBlocksAvailable')}
                     </p>
@@ -489,7 +505,8 @@ const WorkReportDetail = () => {
                   {t('admin.pages.workReport.details.spentFuel')}
                 </h4>
                 <p className="mt-3 text-gray-600">
-                  {workReport.spent_fuel} {t('admin.pages.workReport.details.liters')}
+                  {workReport.spent_fuel}{' '}
+                  {t('admin.pages.workReport.details.liters')}
                 </p>
               </div>
 
@@ -499,7 +516,8 @@ const WorkReportDetail = () => {
                   {t('admin.pages.workReport.columns.incidents')}
                 </h4>
                 <p className="mt-3 text-gray-600">
-                  {workReport.report_incidents || t('admin.pages.workReport.details.noIncidents')}
+                  {workReport.report_incidents ||
+                    t('admin.pages.workReport.details.noIncidents')}
                 </p>
               </div>
 
@@ -516,7 +534,8 @@ const WorkReportDetail = () => {
           </div>
 
           <footer className="bg-gray-50 p-8 flex justify-end">
-            {(workReport.report_status === WorkReportStatus.PENDING || workReport.report_status === WorkReportStatus.REJECTED) ? (
+            {workReport.report_status === WorkReportStatus.PENDING ||
+            workReport.report_status === WorkReportStatus.REJECTED ? (
               <SplitButton
                 label={t('general.actions.close_part')}
                 icon="pi pi-check"
@@ -567,7 +586,9 @@ const WorkReportDetail = () => {
             onChange={(e) => setObservationNotes(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-lg mt-3"
             rows={4}
-            placeholder={t('admin.pages.workReport.dialogs.observationPlaceholder')}
+            placeholder={t(
+              'admin.pages.workReport.dialogs.observationPlaceholder',
+            )}
           />
         </div>
       </Dialog>

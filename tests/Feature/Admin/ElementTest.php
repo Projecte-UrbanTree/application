@@ -3,10 +3,10 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Element;
+use App\Models\User;
 use App\Models\ElementType;
 use App\Models\Point;
 use App\Models\TreeType;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;

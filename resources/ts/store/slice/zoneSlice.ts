@@ -27,12 +27,12 @@ export const saveZoneAsync = createAsyncThunk<
   return await saveZone({ ...data, contract_id: contractId });
 });
 
-export const updateZoneAsync = createAsyncThunk<Zone, { id: number; data: Zone }>(
-  'zones/updateZone',
-  async ({ id, data }) => {
-    return await updateZone(id, data);
-  }
-);
+export const updateZoneAsync = createAsyncThunk<
+  Zone,
+  { id: number; data: Zone }
+>('zones/updateZone', async ({ id, data }) => {
+  return await updateZone(id, data);
+});
 
 const zoneSlice = createSlice({
   name: 'zone',
@@ -45,11 +45,11 @@ const zoneSlice = createSlice({
       state.zones.push(action.payload);
     },
     updateZoneInState: (state, action: PayloadAction<Zone>) => {
-      const index = state.zones.findIndex(z => z.id === action.payload.id);
+      const index = state.zones.findIndex((z) => z.id === action.payload.id);
       if (index !== -1) {
         state.zones[index] = action.payload;
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -77,7 +77,7 @@ const zoneSlice = createSlice({
         state.loading = true;
       })
       .addCase(updateZoneAsync.fulfilled, (state, action) => {
-        const index = state.zones.findIndex(z => z.id === action.payload.id);
+        const index = state.zones.findIndex((z) => z.id === action.payload.id);
         if (index !== -1) {
           state.zones[index] = action.payload;
         }

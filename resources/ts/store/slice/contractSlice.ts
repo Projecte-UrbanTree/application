@@ -44,7 +44,9 @@ export const contractSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchAllContracts.fulfilled, (state, action) => {
       state.allContracts = action.payload;
-      const persistedContractId = Number(localStorage.getItem(SELECTED_CONTRACT_KEY));
+      const persistedContractId = Number(
+        localStorage.getItem(SELECTED_CONTRACT_KEY),
+      );
       if (persistedContractId > 0) {
         const foundContract = state.allContracts.find(
           (c) => c.id === persistedContractId,
