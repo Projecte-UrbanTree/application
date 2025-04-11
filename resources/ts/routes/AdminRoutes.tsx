@@ -201,7 +201,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'sensors/:eui',
             element: (
-              <AdminLayout titleI18n="admin.pages.sensors.form.title.show">
+              <AdminLayout titleI18n="admin.pages.sensors.title.show">
                 <ShowSensor />
               </AdminLayout>
             ),
