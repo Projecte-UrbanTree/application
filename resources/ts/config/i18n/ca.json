@@ -60,6 +60,11 @@
     }
   },
 
+  "common": {
+    "totalRecords": "Total de registres",
+    "tryAgain": "Torna-ho a provar"
+  },
+
   "admin": {
     "menu": {
       "management": "Gestió",
@@ -1515,21 +1520,21 @@
         "form": {
           "title": {
             "create": "Crear Sensor",
-            "edit": "Editar Sensor",
+            "edit": "Actualitzar Sensor",
             "delete": "Eliminar Sensor"
           },
           "validation": {
-            "eui_required": "L'EUI és requerit",
-            "eui_min": "L'EUI ha de tenir almenys 8 caràcters",
-            "eui_max": "L'EUI ha de tenir menys de 32 caràcters",
-            "eui_format": "L'EUI ha d'estar en format hexadecimal (0-9, a-f)",
-            "name_required": "El nom és requerit",
+            "eui_required": "EUI és obligatori",
+            "eui_min": "EUI ha de tenir almenys 8 caràcters",
+            "eui_max": "EUI ha de tenir menys de 32 caràcters",
+            "eui_format": "EUI ha d'estar en format hexadecimal (0-9, a-f)",
+            "name_required": "El nom és obligatori",
             "name_min": "El nom ha de tenir almenys 3 caràcters",
             "name_max": "El nom ha de tenir menys de 50 caràcters",
             "name_format": "El nom només pot contenir lletres, números, espais, guions i guions baixos",
-            "longitude_required": "La longitud és requerida",
+            "longitude_required": "La longitud és obligatòria",
             "longitude_format": "Longitud invàlida (ha d'estar entre -180 i 180)",
-            "latitude_required": "La latitud és requerida",
+            "latitude_required": "La latitud és obligatòria",
             "latitude_format": "Latitud invàlida (ha d'estar entre -90 i 90)"
           },
           "submitButton": {
@@ -1545,9 +1550,9 @@
           "messages": {
             "createSuccess": "Sensor creat amb èxit",
             "updateSuccess": "Sensor actualitzat amb èxit",
-            "euiTaken": "L'EUI ja està en ús",
+            "euiTaken": "EUI ja està en ús",
             "error": "Error en desar el sensor",
-            "deleteConfirm": "Esteu segur que voleu eliminar aquest sensor?",
+            "deleteConfirm": "Estàs segur que vols eliminar aquest sensor?",
             "deleteError": "Error en eliminar el sensor",
             "deletedSuccess": "Sensor eliminat amb èxit"
           },
@@ -1565,54 +1570,81 @@
           "signal": "Senyal",
           "snrUnit": "SNR",
           "latitude": "Latitud",
-          "longitude": "Longitud"
+          "longitude": "Longitud",
+          "temperature": "Temperatura",
+          "moisture": "Humitat",
+          "noData": "Sense dades",
+          "viewHistory": "Veure historial",
+          "noSensors": "No s'han trobat sensors"
+        },
+        "history": {
+          "title": "Historial del sensor",
+          "back": "Tornar a Sensors",
+          "noData": "No hi ha dades històriques disponibles per aquest sensor",
+          "noDataForMonth": "No hi ha dades disponibles per aquest mes",
+          "view": "Mode de visualització",
+          "tableView": "Vista de taula",
+          "chartView": "Vista de gràfics",
+          "backToTable": "Tornar a la taula",
+          "of": "de",
+          "metrics": {
+            "time": "Temps",
+            "temp_soil": "Temperatura del sòl",
+            "ph1_soil": "pH del sòl",
+            "water_soil": "Humitat del sòl",
+            "conductor_soil": "Conductivitat del sòl",
+            "bat": "Bateria",
+            "rssi": "Força del senyal (RSSI)",
+            "snr": "Relació senyal-soroll"
+          }
         },
         "errors": {
           "no_contract": "Heu de seleccionar un contracte vàlid"
-        },
-        "monitoring": {
-          "title": "Monitorització en Temps Real",
-          "loading": "Carregant dades...",
-          "loadError": "Error en carregar els sensors",
-          "lastUpdateLabel": "Última actualització:",
-          "locationTitle": "Ubicació",
-          "latestReadingTitle": "ÚLTIMA LECTURA",
-          "history": {
-            "show": "Veure historial ({count})",
-            "hide": "Amagar historial",
-            "title": "Historial anterior"
-          },
-          "labels": {
-            "dev_eui": "DevEUI:",
-            "dev_addr": "DevAddr:",
-            "battery": "Bateria:",
-            "signal": "Senyal:",
-            "temp_soil": "Temp:",
-            "ph_soil": "pH:",
-            "water_soil": "Humitat:",
-            "conductivity_soil": "Conductivitat:",
-            "readingTime": "⏱"
-          },
-          "signalFormat": "RSSI: {rssi}dBm | SNR: {snr}",
-          "units": {
-            "voltage": "V",
-            "celsius": "°C",
-            "percent": "%",
-            "microsiemens_per_cm": "µS/cm",
-            "dbm": "dBm"
-          },
-          "soilDataTitle": "Dades del sòl:"
         }
-      },
-      "error": {
-        "fetching_data": "Error en obtenir les dades",
-        "error": "Error"
-      },
-      "general": {
-        "returnButton": "Tornar"
       }
     }
   },
+
+  "sensors": {
+    "identification": "Identificació",
+    "monitoring": {
+      "title": "Monitoratge de Sensors",
+      "loading": "Carregant sensors...",
+      "loadError": "Error en carregar dades dels sensors",
+      "noSensors": "No s'han trobat sensors",
+      "lastUpdateLabel": "Última actualització:",
+      "locationTitle": "Ubicació",
+      "latestReadingTitle": "ÚLTIMA LECTURA",
+      "history": {
+        "show": "Veure historial ({{count}})",
+        "hide": "Amagar historial",
+        "title": "Lectures anteriors"
+      },
+      "labels": {
+        "dev_eui": "DevEUI",
+        "dev_addr": "DevAddr",
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "battery": "Bateria",
+        "signal": "Senyal",
+        "temp_soil": "Temperatura",
+        "ph_soil": "pH",
+        "water_soil": "Humitat",
+        "conductivity_soil": "Conductivitat",
+        "readingTime": "Temps"
+      },
+      "signalFormat": "RSSI: {{rssi}} dBm | SNR: {{snr}}",
+      "units": {
+        "voltage": "V",
+        "celsius": "°C",
+        "percent": "%",
+        "microsiemens_per_cm": "µS/cm",
+        "dbm": "dBm"
+      },
+      "soilDataTitle": "Dades del sòl"
+    }
+  },
+  
   "worker": {
     "workOrders": {
       "title": "Ordres de treball",

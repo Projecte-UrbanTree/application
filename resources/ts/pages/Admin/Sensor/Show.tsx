@@ -74,8 +74,13 @@ const SensorHistory: React.FC = () => {
   }, [sensorData]);
 
   useEffect(() => {
+    // This will ensure charts render whenever view mode or data changes
     if (viewMode === 'chart' && filteredData.length > 0) {
-      renderCharts();
+      // Small delay to ensure the DOM is ready
+      const timer = setTimeout(() => {
+        renderCharts();
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [viewMode, filteredData]);
 
@@ -118,6 +123,10 @@ const SensorHistory: React.FC = () => {
   const renderCharts = () => {
     charts.current.forEach(chart => chart.destroy());
     charts.current = [];
+
+    while (chartRefs.current.length < 7) { // We have 7 chart configs
+      chartRefs.current.push(null);
+    }
 
     const labels = filteredData.map(data => format(parseISO(data.time), 'dd/MM/yyyy HH:mm'));
 
@@ -255,16 +264,17 @@ const SensorHistory: React.FC = () => {
 
   if (error) return (
     <div className="flex justify-center items-center min-h-[300px]">
-      <Card className="border-red-200 bg-red-50 w-full max-w-2xl">
+      <Card className="border-red-200 bg-red-50 w-full max-w-2xl shadow-sm">
         <div className="flex flex-col items-center gap-4">
           <Icon icon="tabler:alert-circle" className="text-red-500 text-4xl" />
           <h3 className="text-red-600 font-semibold text-lg">{error}</h3>
-          <button 
+          <Button
+            severity="info" 
             onClick={() => window.location.reload()}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
-          >
-            <Icon icon="tabler:reload" /> {t('common.tryAgain')}
-          </button>
+            className="flex items-center gap-2"
+            icon={<Icon icon="tabler:reload" />}
+            label={t('common.tryAgain')}
+          />
         </div>
       </Card>
     </div>
@@ -272,7 +282,7 @@ const SensorHistory: React.FC = () => {
 
   if (!sensorData.length) return (
     <div className="flex justify-center items-center min-h-[300px]">
-      <Card className="border-blue-200 bg-blue-50 w-full max-w-2xl">
+      <Card className="border-blue-200 bg-blue-50 w-full max-w-2xl shadow-sm">
         <div className="flex flex-col items-center gap-4">
           <Icon icon="tabler:database-off" className="text-blue-500 text-4xl" />
           <h3 className="text-blue-600 font-semibold text-lg">
@@ -288,13 +298,14 @@ const SensorHistory: React.FC = () => {
       <div className="flex flex-col gap-6">
         {/* Header with back button, title and view toggle */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <button 
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            <Icon icon="tabler:arrow-left" className="text-lg" />
-            <span>{t('admin.pages.sensors.history.back')}</span>
-          </button>
+          <Button
+            icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
+            severity="secondary"
+            outlined
+            className="p-button-sm"
+            onClick={() => navigate('/admin/sensors')}
+            label={t('admin.pages.sensors.history.back')}
+          />
           
           <div className="flex items-center gap-3">
             <Icon icon="tabler:device-analytics" className="text-2xl text-indigo-600" />
@@ -323,11 +334,12 @@ const SensorHistory: React.FC = () => {
 
         {viewMode === 'table' ? (
           /* Table View */
-          <Card className="shadow-sm border border-gray-100 overflow-hidden">
+          <Card className="shadow-sm border border-gray-300 bg-gray-50">
             <DataTable 
               value={sensorData} 
               paginator={false}
               stripedRows
+              showGridlines
               size="small"
               className="p-datatable-sm"
               emptyMessage={t('admin.pages.sensors.history.noData')}
@@ -344,7 +356,6 @@ const SensorHistory: React.FC = () => {
                   </div>
                 )}
                 headerClassName="font-semibold"
-                sortable
               />
               
               <Column 
@@ -357,7 +368,6 @@ const SensorHistory: React.FC = () => {
                   </div>
                 )}
                 headerClassName="font-semibold"
-                sortable
               />
               
               <Column 
@@ -370,7 +380,6 @@ const SensorHistory: React.FC = () => {
                   </div>
                 )}
                 headerClassName="font-semibold"
-                sortable
               />
               
               <Column 
@@ -386,7 +395,6 @@ const SensorHistory: React.FC = () => {
                   <Tag value="N/A" severity="info" />
                 )}
                 headerClassName="font-semibold"
-                sortable
               />
               
               <Column 
@@ -399,7 +407,6 @@ const SensorHistory: React.FC = () => {
                   </div>
                 ) : 'N/A'}
                 headerClassName="font-semibold"
-                sortable
               />
               
               <Column 
@@ -413,7 +420,6 @@ const SensorHistory: React.FC = () => {
                   />
                 )}
                 headerClassName="font-semibold"
-                sortable
               />
               
               <Column 
@@ -427,7 +433,6 @@ const SensorHistory: React.FC = () => {
                   />
                 )}
                 headerClassName="font-semibold"
-                sortable
               />
               
               <Column 
@@ -435,7 +440,6 @@ const SensorHistory: React.FC = () => {
                 header={t('admin.pages.sensors.history.metrics.snr')}
                 body={(rowData) => `${rowData.snr} dB`}
                 headerClassName="font-semibold"
-                sortable
               />
             </DataTable>
 
@@ -462,10 +466,10 @@ const SensorHistory: React.FC = () => {
           /* Chart View */
           <div className="flex flex-col gap-8">
             {/* Month selector */}
-            <Card className="p-4 shadow-sm border border-gray-100">
+            <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50">
               <div className="flex justify-between items-center">
                 <Button 
-                  icon="pi pi-chevron-left"
+                  icon={<Icon icon="tabler:chevron-left" className="h-5 w-5" />}
                   onClick={previousMonth}
                   className="p-button-outlined p-button-sm"
                 />
@@ -475,7 +479,7 @@ const SensorHistory: React.FC = () => {
                 </h2>
                 
                 <Button 
-                  icon="pi pi-chevron-right"
+                  icon={<Icon icon="tabler:chevron-right" className="h-5 w-5" />}
                   onClick={nextMonth}
                   className="p-button-outlined p-button-sm"
                   disabled={isSameMonth(selectedMonth, new Date())}
@@ -492,12 +496,12 @@ const SensorHistory: React.FC = () => {
             
             {/* Individual charts */}
             {filteredData.length > 0 && (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-6">
                 {Array.from({ length: Math.ceil(chartRefs.current.length / 2) }).map((_, rowIndex) => (
-                  <div key={rowIndex} className="flex flex-col md:flex-row gap-4">
+                  <div key={rowIndex} className="flex flex-col md:flex-row gap-6">
                     {/* First chart in the row */}
                     {rowIndex * 2 < chartRefs.current.length && (
-                      <Card className="p-4 shadow-sm border border-gray-100 flex-1">
+                      <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
                         <div className="h-80">
                           <canvas ref={el => { chartRefs.current[rowIndex * 2] = el; }} />
                         </div>
@@ -506,7 +510,7 @@ const SensorHistory: React.FC = () => {
                     
                     {/* Second chart in the row */}
                     {rowIndex * 2 + 1 < chartRefs.current.length && (
-                      <Card className="p-4 shadow-sm border border-gray-100 flex-1">
+                      <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
                         <div className="h-80">
                           <canvas ref={el => { chartRefs.current[rowIndex * 2 + 1] = el; }} />
                         </div>
@@ -519,7 +523,7 @@ const SensorHistory: React.FC = () => {
 
             <div className="flex justify-center mt-4">
               <Button 
-                icon="pi pi-table"
+                icon={<Icon icon="tabler:table" className="h-5 w-5 mr-2" />}
                 label={t('admin.pages.sensors.history.backToTable')}
                 onClick={() => setViewMode('table')}
                 className="p-button-text"

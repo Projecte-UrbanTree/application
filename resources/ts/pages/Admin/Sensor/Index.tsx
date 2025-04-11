@@ -4,6 +4,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 import { fetchSensors, Sensor as ApiSensor } from '@/api/sensors';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
+import { Badge } from 'primereact/badge';
+import { Icon } from '@iconify/react';
+import { Tag } from 'primereact/tag';
 
 interface Sensor {
   id: number;
@@ -97,72 +103,127 @@ const Sensors: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-8">{t('admin.pages.sensors.loading')}</div>;
-  if (error) return <div className="text-red-500 text-center py-8">{error}</div>;
+  const getBatterySeverity = (voltage?: number) => {
+    if (!voltage) return 'warning';
+    if (voltage >= 3.6) return 'success';
+    if (voltage >= 3.3) return 'warning';
+    return 'danger';
+  };
+
+  const getSignalSeverity = (rssi?: number) => {
+    if (!rssi) return 'warning';
+    if (rssi >= -70) return 'success';
+    if (rssi >= -85) return 'warning';
+    return 'danger';
+  };
+
+  if (loading) return (
+    <div className="flex justify-center p-4">
+      <ProgressSpinner
+        style={{ width: '50px', height: '50px' }}
+        strokeWidth="4"
+      />
+    </div>
+  );
+
+  if (error) return (
+    <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 shadow-sm">
+      <div className="flex items-center">
+        <Icon icon="tabler:alert-circle" className="mr-2 text-xl" />
+        <span>{error}</span>
+      </div>
+      <Button
+        label={t('common.tryAgain')}
+        icon="pi pi-refresh"
+        severity="secondary"
+        outlined
+        onClick={() => window.location.reload()}
+        className="mt-3"
+      />
+    </div>
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          {t('admin.pages.sensors.title.title')}
-        </h1>
-        <button
+        <div className="flex items-center gap-3">
+          <Icon icon="tabler:device-analytics" className="text-2xl text-indigo-600" />
+          <h1 className="text-2xl font-bold text-gray-800">
+            {t('admin.pages.sensors.title.title')}
+          </h1>
+        </div>
+        <Button
+          label={t('admin.pages.sensors.form.title.create')}
+          icon="pi pi-plus"
+          severity="info"
           onClick={() => navigate('/admin/sensors/create')}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
-          {t('admin.pages.sensors.form.title.create')}
-        </button>
+        />
       </div>
 
       {successMessage && (
-        <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg">
-          {successMessage}
+        <div className="mb-6 p-4 bg-green-100 text-green-700 rounded-lg border border-green-200 shadow-sm flex items-center">
+          <Icon icon="tabler:circle-check" className="mr-2 text-xl" />
+          <span>{successMessage}</span>
         </div> 
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {sensors.map((sensor) => (
-          <div
+          <Card
             key={sensor.id}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            className="border border-gray-300 bg-gray-50 shadow-sm hover:shadow-md transition-shadow"
+            pt={{ root: { className: 'p-0' } }}
+          >
             <div className="p-5">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="bg-blue-50 p-2 rounded-lg">
-                    <span className="text-blue-600 text-xl">📡</span>
+                  <div className="bg-indigo-100 p-2 rounded-lg">
+                    <Icon icon="tabler:device-analytics" className="text-indigo-600 text-xl" />
                   </div>
                   <div>
                     <h2
-                      className="font-semibold text-gray-800 cursor-pointer hover:underline"
+                      className="font-semibold text-gray-800 cursor-pointer hover:text-indigo-600"
                       onClick={() => navigate(`/admin/sensors/${sensor.eui}`)}>
                       {sensor.name || t('admin.pages.sensors.list.sensorDefaultName', { id: sensor.id })}
                     </h2>
                   </div>
                 </div>
                 <div className="flex space-x-2">
-                  <button
+                  <Button
+                    icon={<Icon icon="tabler:edit" className="h-5 w-5" />}
+                    severity="info"
+                    text
+                    tooltip={t('admin.pages.sensors.form.title.edit')}
+                    tooltipOptions={{ position: 'left' }}
                     onClick={() => navigate(`/admin/sensors/edit/${sensor.id}`)}
-                    className="text-gray-400 hover:text-blue-600 transition-colors cursor-pointer"
-                    title={t('admin.pages.sensors.form.title.edit')}>
-                    <PencilIcon className="w-5 h-5" />
-                  </button>
-                  <button
+                  />
+                  <Button
+                    icon={<Icon icon="tabler:trash" className="h-5 w-5" />}
+                    severity="danger"
+                    text
+                    tooltip={t('admin.pages.sensors.form.title.delete')}
+                    tooltipOptions={{ position: 'left' }}
                     onClick={() => handleDelete(sensor.id)}
-                    className="text-gray-400 hover:text-red-600 transition-colors cursor-pointer"
-                    title={t('admin.pages.sensors.form.title.delete')}>
-                    <TrashIcon className="w-5 h-5" />
-                  </button>
+                  />
                 </div>
               </div>
 
               <div className="mb-4">
                 <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-500">{t('admin.pages.sensors.list.devEUI')}:</span>
-                  <span className="text-gray-700 font-mono text-xs truncate max-w-[120px]">
-                    {sensor.eui}
+                  <span className="text-gray-500 flex items-center gap-1">
+                    <Icon icon="tabler:id" className="text-gray-400" />
+                    {t('admin.pages.sensors.list.devEUI')}:
                   </span>
+                  <Tag 
+                    value={sensor.eui} 
+                    className="font-mono text-xs bg-gray-100 text-gray-700"
+                  />
                 </div>
                 <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-500">{t('admin.pages.sensors.list.lastUpdate')}:</span>
+                  <span className="text-gray-500 flex items-center gap-1">
+                    <Icon icon="tabler:clock" className="text-gray-400" />
+                    {t('admin.pages.sensors.list.lastUpdate')}:
+                  </span>
                   <span className="text-gray-700 text-xs">
                     {sensor.lastUpdated ? new Date(sensor.lastUpdated).toLocaleString() : t('admin.pages.sensors.list.notAvailable')}
                   </span>
@@ -170,39 +231,73 @@ const Sensors: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
                   <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.battery')}</p>
                   <div className="flex items-center">
-                    <span className={`inline-block w-2 h-2 rounded-full mr-2 ${
-                      sensor.battery && sensor.battery > 3.2 ? 'bg-green-500' :
-                      sensor.battery && sensor.battery > 2.8 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`}></span>
-                    <span className="text-gray-600">{sensor.battery ? `${sensor.battery.toFixed(2)} V` : t('admin.pages.sensors.list.noValueUnit', { unit: 'V' })}</span>
+                    <Tag
+                      severity={getBatterySeverity(sensor.battery)}
+                      icon="pi pi-bolt"
+                      value={sensor.battery ? `${sensor.battery.toFixed(2)} V` : t('admin.pages.sensors.list.noValueUnit', { unit: 'V' })}
+                      className="text-sm"
+                    />
                   </div>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
                   <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.signal')}</p>
-                  <p className="text-gray-600">
-                    {sensor.rssi ? `${sensor.rssi} dBm` : t('admin.pages.sensors.list.noValueUnit', { unit: 'dBm' })}
-                    {sensor.snr && ` (${sensor.snr.toFixed(1)} ${t('admin.pages.sensors.list.snrUnit')})`}
-                  </p>
+                  <Tag
+                    severity={getSignalSeverity(sensor.rssi)}
+                    icon="pi pi-wifi"
+                    value={sensor.rssi ? `${sensor.rssi} dBm` : t('admin.pages.sensors.list.noValueUnit', { unit: 'dBm' })}
+                    className="text-sm"
+                  />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.latitude')}</p>
-                  <p className="text-gray-700">{sensor.latitude}</p>
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.temperature')}</p>
+                  <div className="flex items-center">
+                    <Icon icon="tabler:temperature" className="text-red-500 mr-1" />
+                    <span className="text-gray-700">{sensor.temp_soil ? `${sensor.temp_soil} °C` : t('admin.pages.sensors.list.noData')}</span>
+                  </div>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.longitude')}</p>
-                  <p className="text-gray-700">{sensor.longitude}</p>
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <p className="text-xs text-gray-500 mb-1">{t('admin.pages.sensors.list.moisture')}</p>
+                  <div className="flex items-center">
+                    <Icon icon="tabler:droplet" className="text-blue-500 mr-1" />
+                    <span className="text-gray-700">{sensor.water_soil ? `${sensor.water_soil}%` : t('admin.pages.sensors.list.noData')}</span>
+                  </div>
                 </div>
               </div>
+
+              <div className="mt-4 pt-3 border-t border-gray-200 flex justify-end">
+                <Button 
+                  label={t('admin.pages.sensors.list.viewHistory')} 
+                  icon="pi pi-chart-line"
+                  severity="secondary"
+                  text
+                  onClick={() => navigate(`/admin/sensors/${sensor.eui}`)}
+                />
+              </div>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
+
+      {sensors.length === 0 && !loading && !error && (
+        <Card className="border border-blue-300 bg-blue-50">
+          <div className="flex flex-col items-center gap-3 py-8">
+            <Icon icon="tabler:device-desktop-off" className="text-blue-500 text-4xl" />
+            <h3 className="text-center text-blue-700 font-medium">{t('admin.pages.sensors.list.noSensors')}</h3>
+            <Button
+              label={t('admin.pages.sensors.form.title.create')}
+              icon="pi pi-plus"
+              severity="info"
+              onClick={() => navigate('/admin/sensors/create')}
+            />
+          </div>
+        </Card>
+      )}
     </div>
   );
 };

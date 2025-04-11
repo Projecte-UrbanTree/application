@@ -60,6 +60,11 @@
     }
   },
 
+  "common": {
+    "totalRecords": "Total de registros",
+    "tryAgain": "Intentar de nuevo"
+  },
+
   "admin": {
     "menu": {
       "management": "Gestión",
@@ -1482,17 +1487,17 @@
       "sensors": {
         "title": {
           "title": "Sensores",
-          "create": "Crear sensor",
-          "edit": "Editar sensor",
-          "delete": "Eliminar sensor"
+          "create": "Crear Sensor",
+          "edit": "Editar Sensor",
+          "delete": "Eliminar Sensor"
         },
         "loading": "Cargando datos del sensor...",
         "backButton": "Volver",
         "notFound": "Sensor no encontrado",
-        "loadError": "Error al cargar datos del sensor.",
+        "loadError": "Error al cargar los datos del sensor.",
         "identification": "Identificación",
         "status": "Estado",
-        "soilMeasurements": "Mediciones de suelo",
+        "soilMeasurements": "Medidas del suelo",
         "fields": {
           "id": "ID",
           "dev_eui": "DevEUI",
@@ -1513,27 +1518,27 @@
         },
         "form": {
           "title": {
-            "create": "Crear sensor",
-            "edit": "Editar sensor",
-            "delete": "Eliminar sensor"
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
           },
           "validation": {
-            "eui_required": "El EUI es requerido",
-            "eui_min": "El EUI debe tener al menos 8 caracteres",
-            "eui_max": "El EUI debe tener menos de 32 caracteres",
-            "eui_format": "El EUI debe estar en formato hexadecimal (0-9, a-f)",
-            "name_required": "El nombre es requerido",
+            "eui_required": "EUI es obligatorio",
+            "eui_min": "EUI debe tener al menos 8 caracteres",
+            "eui_max": "EUI debe tener menos de 32 caracteres",
+            "eui_format": "EUI debe estar en formato hexadecimal (0-9, a-f)",
+            "name_required": "El nombre es obligatorio",
             "name_min": "El nombre debe tener al menos 3 caracteres",
             "name_max": "El nombre debe tener menos de 50 caracteres",
             "name_format": "El nombre solo puede contener letras, números, espacios, guiones y guiones bajos",
-            "longitude_required": "La longitud es requerida",
+            "longitude_required": "La longitud es obligatoria",
             "longitude_format": "Longitud inválida (debe estar entre -180 y 180)",
-            "latitude_required": "La latitud es requerida",
+            "latitude_required": "La latitud es obligatoria",
             "latitude_format": "Latitud inválida (debe estar entre -90 y 90)"
           },
           "submitButton": {
-            "create": "Crear sensor",
-            "edit": "Actualizar sensor"
+            "create": "Crear Sensor",
+            "edit": "Actualizar Sensor"
           },
           "submittingText": {
             "create": "Creando...",
@@ -1544,74 +1549,101 @@
           "messages": {
             "createSuccess": "Sensor creado con éxito",
             "updateSuccess": "Sensor actualizado con éxito",
-            "euiTaken": "El EUI ya está en uso",
+            "euiTaken": "EUI ya está en uso",
             "error": "Error al guardar el sensor",
-            "deleteConfirm": "¿Está seguro de que desea eliminar este sensor?",
+            "deleteConfirm": "¿Estás seguro de que quieres eliminar este sensor?",
             "deleteError": "Error al eliminar el sensor",
             "deletedSuccess": "Sensor eliminado con éxito"
           },
           "actions": {
-            "create": "Crear sensor",
-            "edit": "Editar sensor",
-            "delete": "Eliminar sensor"
+            "create": "Crear Sensor",
+            "edit": "Editar Sensor",
+            "delete": "Eliminar Sensor"
           },
           "sensorDefaultName": "Sensor {{id}}",
           "devEUI": "DevEUI",
           "lastUpdate": "Última actualización",
-          "notAvailable": "N/A",
+          "notAvailable": "N/D",
           "battery": "Batería",
           "noValueUnit": "-- {{unit}}",
           "signal": "Señal",
           "snrUnit": "SNR",
           "latitude": "Latitud",
-          "longitude": "Longitud"
+          "longitude": "Longitud",
+          "temperature": "Temperatura",
+          "moisture": "Humedad",
+          "noData": "Sin datos",
+          "viewHistory": "Ver historial",
+          "noSensors": "No se encontraron sensores"
+        },
+        "history": {
+          "title": "Historial del sensor",
+          "back": "Volver a Sensores",
+          "noData": "No hay datos históricos disponibles para este sensor",
+          "noDataForMonth": "No hay datos disponibles para este mes",
+          "view": "Modo de visualización",
+          "tableView": "Vista de tabla",
+          "chartView": "Vista de gráficos",
+          "backToTable": "Volver a la tabla",
+          "of": "de",
+          "metrics": {
+            "time": "Tiempo",
+            "temp_soil": "Temperatura del suelo",
+            "ph1_soil": "pH del suelo",
+            "water_soil": "Humedad del suelo",
+            "conductor_soil": "Conductividad del suelo",
+            "bat": "Batería",
+            "rssi": "Fuerza de la señal (RSSI)",
+            "snr": "Relación señal-ruido"
+          }
         },
         "errors": {
-          "no_contract": "Debe seleccionar un contrato válido"
-        },
-        "monitoring": {
-          "title": "Monitorización en Tiempo Real",
-          "loading": "Cargando datos...",
-          "loadError": "Error al cargar los sensores",
-          "lastUpdateLabel": "Última actualización:",
-          "locationTitle": "Ubicación",
-          "latestReadingTitle": "ÚLTIMA LECTURA",
-          "history": {
-            "show": "Ver historial ({count})",
-            "hide": "Ocultar historial",
-            "title": "Historial anterior"
-          },
-          "labels": {
-            "dev_eui": "DevEUI:",
-            "dev_addr": "DevAddr:",
-            "battery": "Batería:",
-            "signal": "Señal:",
-            "temp_soil": "Temp:",
-            "ph_soil": "pH:",
-            "water_soil": "Humedad:",
-            "conductivity_soil": "Conductividad:",
-            "readingTime": "⏱"
-          },
-          "signalFormat": "RSSI: {rssi}dBm | SNR: {snr}",
-          "units": {
-            "voltage": "V",
-            "celsius": "°C",
-            "percent": "%",
-            "microsiemens_per_cm": "µS/cm",
-            "dbm": "dBm"
-          },
-          "soilDataTitle": "Datos del suelo:"
+          "no_contract": "Debes seleccionar un contrato válido"
         }
-      },
-      "error": {
-        "fetching_data": "Error al obtener datos",
-        "error": "Error"
-      },
-      "general": {
-        "returnButton": "Volver"
       }
     }
   },
+
+  "sensors": {
+    "identification": "Identificación",
+    "monitoring": {
+      "title": "Monitorización de Sensores",
+      "loading": "Cargando sensores...",
+      "loadError": "Error al cargar datos de los sensores",
+      "noSensors": "No se encontraron sensores",
+      "lastUpdateLabel": "Última actualización:",
+      "locationTitle": "Ubicación",
+      "latestReadingTitle": "ÚLTIMA LECTURA",
+      "history": {
+        "show": "Ver historial ({{count}})",
+        "hide": "Ocultar historial",
+        "title": "Lecturas anteriores"
+      },
+      "labels": {
+        "dev_eui": "DevEUI",
+        "dev_addr": "DevAddr",
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "battery": "Batería",
+        "signal": "Señal",
+        "temp_soil": "Temperatura",
+        "ph_soil": "pH",
+        "water_soil": "Humedad",
+        "conductivity_soil": "Conductividad",
+        "readingTime": "Tiempo"
+      },
+      "signalFormat": "RSSI: {{rssi}} dBm | SNR: {{snr}}",
+      "units": {
+        "voltage": "V",
+        "celsius": "°C",
+        "percent": "%",
+        "microsiemens_per_cm": "µS/cm",
+        "dbm": "dBm"
+      },
+      "soilDataTitle": "Datos del suelo"
+    }
+  },
+  
   "worker": {
     "workOrders": {
       "title": "Órdenes de trabajo",
