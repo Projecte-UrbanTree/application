@@ -1489,7 +1489,9 @@
           "title": "Sensores",
           "create": "Crear Sensor",
           "edit": "Editar Sensor",
-          "delete": "Eliminar Sensor"
+          "delete": "Eliminar Sensor",
+          "show": "Ver Sensor"
+
         },
         "loading": "Cargando datos del sensor...",
         "backButton": "Volver",
