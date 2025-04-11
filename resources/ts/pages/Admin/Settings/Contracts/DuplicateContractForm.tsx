@@ -115,8 +115,7 @@ export default function DuplicateContractForm() {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
-            enableReinitialize
-          >
+            enableReinitialize>
             {({ errors, touched }) => (
               <Form className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="flex flex-col">
@@ -145,9 +144,15 @@ export default function DuplicateContractForm() {
                       <Calendar
                         id="start_date"
                         value={field.value}
-                        onChange={(e) => form.setFieldValue('start_date', e.value)}
+                        onChange={(e) =>
+                          form.setFieldValue('start_date', e.value)
+                        }
                         showIcon
-                        className={errors.start_date && touched.start_date ? 'p-invalid' : ''}
+                        className={
+                          errors.start_date && touched.start_date
+                            ? 'p-invalid'
+                            : ''
+                        }
                         placeholder={t('admin.fields.start_date')}
                       />
                     )}
@@ -167,9 +172,13 @@ export default function DuplicateContractForm() {
                       <Calendar
                         id="end_date"
                         value={field.value}
-                        onChange={(e) => form.setFieldValue('end_date', e.value)}
+                        onChange={(e) =>
+                          form.setFieldValue('end_date', e.value)
+                        }
                         showIcon
-                        className={errors.end_date && touched.end_date ? 'p-invalid' : ''}
+                        className={
+                          errors.end_date && touched.end_date ? 'p-invalid' : ''
+                        }
                         placeholder={t('admin.fields.end_date')}
                       />
                     )}

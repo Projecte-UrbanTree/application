@@ -2,7 +2,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchSensorHistoryPaginated } from '@/api/sensors';
 import { useTranslation } from 'react-i18next';
-import { format, parseISO, startOfMonth, endOfMonth, isSameMonth, subMonths, addMonths } from 'date-fns';
+import {
+  format,
+  parseISO,
+  startOfMonth,
+  endOfMonth,
+  isSameMonth,
+  subMonths,
+  addMonths,
+} from 'date-fns';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Paginator } from 'primereact/paginator';
@@ -68,7 +76,7 @@ const SensorHistory: React.FC = () => {
   useEffect(() => {
     // Destroy charts when component unmounts or data changes
     return () => {
-      charts.current.forEach(chart => chart.destroy());
+      charts.current.forEach((chart) => chart.destroy());
       charts.current = [];
     };
   }, [sensorData]);
@@ -86,7 +94,7 @@ const SensorHistory: React.FC = () => {
 
   useEffect(() => {
     if (sensorData.length > 0) {
-      const filtered = sensorData.filter(data => {
+      const filtered = sensorData.filter((data) => {
         const dataDate = parseISO(data.time);
         return isSameMonth(dataDate, selectedMonth);
       });
@@ -121,61 +129,70 @@ const SensorHistory: React.FC = () => {
   };
 
   const renderCharts = () => {
-    charts.current.forEach(chart => chart.destroy());
+    charts.current.forEach((chart) => chart.destroy());
     charts.current = [];
 
-    while (chartRefs.current.length < 7) { // We have 7 chart configs
+    while (chartRefs.current.length < 7) {
+      // We have 7 chart configs
       chartRefs.current.push(null);
     }
 
-    const labels = filteredData.map(data => format(parseISO(data.time), 'dd/MM/yyyy HH:mm'));
+    const labels = filteredData.map((data) =>
+      format(parseISO(data.time), 'dd/MM/yyyy HH:mm'),
+    );
 
     const chartConfigs = [
       {
-        title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
-        data: filteredData.map(data => data.temp_soil),
+        title:
+          t('admin.pages.sensors.history.metrics.temp_soil') ||
+          'Soil Temperature',
+        data: filteredData.map((data) => data.temp_soil),
         borderColor: '#ef4444',
         backgroundColor: '#fca5a5',
         yAxisTitle: '°C',
       },
       {
         title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
-        data: filteredData.map(data => data.ph1_soil),
+        data: filteredData.map((data) => data.ph1_soil),
         borderColor: '#8b5cf6',
         backgroundColor: '#c4b5fd',
         yAxisTitle: 'pH',
       },
       {
-        title: t('admin.pages.sensors.history.metrics.water_soil') || 'Soil Moisture',
-        data: filteredData.map(data => data.water_soil || null),
+        title:
+          t('admin.pages.sensors.history.metrics.water_soil') ||
+          'Soil Moisture',
+        data: filteredData.map((data) => data.water_soil || null),
         borderColor: '#059669',
         backgroundColor: '#6ee7b7',
         yAxisTitle: '%',
       },
       {
-        title: t('admin.pages.sensors.history.metrics.conductor_soil') || 'Soil Conductivity',
-        data: filteredData.map(data => data.conductor_soil || null),
+        title:
+          t('admin.pages.sensors.history.metrics.conductor_soil') ||
+          'Soil Conductivity',
+        data: filteredData.map((data) => data.conductor_soil || null),
         borderColor: '#d97706',
         backgroundColor: '#fcd34d',
         yAxisTitle: 'µS/cm',
       },
       {
         title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
-        data: filteredData.map(data => data.bat),
+        data: filteredData.map((data) => data.bat),
         borderColor: '#2563eb',
         backgroundColor: '#93c5fd',
         yAxisTitle: 'V',
       },
       {
         title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
-        data: filteredData.map(data => data.rssi),
+        data: filteredData.map((data) => data.rssi),
         borderColor: '#7c3aed',
         backgroundColor: '#c4b5fd',
         yAxisTitle: 'dBm',
       },
       {
         title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
-        data: filteredData.map(data => data.snr),
+        data: filteredData.map((data) => data.snr),
         borderColor: '#db2777',
         backgroundColor: '#f9a8d4',
         yAxisTitle: 'dB',
@@ -196,14 +213,16 @@ const SensorHistory: React.FC = () => {
         type: 'line',
         data: {
           labels,
-          datasets: [{
-            label: config.title,
-            data: config.data,
-            borderColor: config.borderColor,
-            backgroundColor: config.backgroundColor,
-            fill: false,
-            tension: 0.1
-          }]
+          datasets: [
+            {
+              label: config.title,
+              data: config.data,
+              borderColor: config.borderColor,
+              backgroundColor: config.backgroundColor,
+              fill: false,
+              tension: 0.1,
+            },
+          ],
         },
         options: {
           responsive: true,
@@ -211,7 +230,7 @@ const SensorHistory: React.FC = () => {
             title: {
               display: true,
               text: config.title,
-              font: { size: 16 }
+              font: { size: 16 },
             },
             legend: {
               display: false, // No legend needed for single dataset
@@ -219,23 +238,23 @@ const SensorHistory: React.FC = () => {
             tooltip: {
               mode: 'index',
               intersect: false,
-            }
+            },
           },
           scales: {
             y: {
               title: {
                 display: true,
-                text: config.yAxisTitle
-              }
+                text: config.yAxisTitle,
+              },
             },
             x: {
               title: {
                 display: true,
-                text: t('admin.pages.sensors.history.metrics.time') || 'Time'
-              }
-            }
-          }
-        }
+                text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+              },
+            },
+          },
+        },
       });
 
       charts.current.push(chart);
@@ -243,11 +262,11 @@ const SensorHistory: React.FC = () => {
   };
 
   const previousMonth = () => {
-    setSelectedMonth(prevMonth => subMonths(prevMonth, 1));
+    setSelectedMonth((prevMonth) => subMonths(prevMonth, 1));
   };
 
   const nextMonth = () => {
-    setSelectedMonth(prevMonth => addMonths(prevMonth, 1));
+    setSelectedMonth((prevMonth) => addMonths(prevMonth, 1));
   };
 
   if (loading) {
@@ -262,36 +281,44 @@ const SensorHistory: React.FC = () => {
     );
   }
 
-  if (error) return (
-    <div className="flex justify-center items-center min-h-[300px]">
-      <Card className="border-red-200 bg-red-50 w-full max-w-2xl shadow-sm">
-        <div className="flex flex-col items-center gap-4">
-          <Icon icon="tabler:alert-circle" className="text-red-500 text-4xl" />
-          <h3 className="text-red-600 font-semibold text-lg">{error}</h3>
-          <Button
-            severity="info"
-            onClick={() => window.location.reload()}
-            className="flex items-center gap-2"
-            icon={<Icon icon="tabler:reload" />}
-            label={t('common.tryAgain')}
-          />
-        </div>
-      </Card>
-    </div>
-  );
+  if (error)
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <Card className="border-red-200 bg-red-50 w-full max-w-2xl shadow-sm">
+          <div className="flex flex-col items-center gap-4">
+            <Icon
+              icon="tabler:alert-circle"
+              className="text-red-500 text-4xl"
+            />
+            <h3 className="text-red-600 font-semibold text-lg">{error}</h3>
+            <Button
+              severity="info"
+              onClick={() => window.location.reload()}
+              className="flex items-center gap-2"
+              icon={<Icon icon="tabler:reload" />}
+              label={t('common.tryAgain')}
+            />
+          </div>
+        </Card>
+      </div>
+    );
 
-  if (!sensorData.length) return (
-    <div className="flex justify-center items-center min-h-[300px]">
-      <Card className="border-blue-200 bg-blue-50 w-full max-w-2xl shadow-sm">
-        <div className="flex flex-col items-center gap-4">
-          <Icon icon="tabler:database-off" className="text-blue-500 text-4xl" />
-          <h3 className="text-blue-600 font-semibold text-lg">
-            {t('admin.pages.sensors.history.noData')}
-          </h3>
-        </div>
-      </Card>
-    </div>
-  );
+  if (!sensorData.length)
+    return (
+      <div className="flex justify-center items-center min-h-[300px]">
+        <Card className="border-blue-200 bg-blue-50 w-full max-w-2xl shadow-sm">
+          <div className="flex flex-col items-center gap-4">
+            <Icon
+              icon="tabler:database-off"
+              className="text-blue-500 text-4xl"
+            />
+            <h3 className="text-blue-600 font-semibold text-lg">
+              {t('admin.pages.sensors.history.noData')}
+            </h3>
+          </div>
+        </Card>
+      </div>
+    );
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -308,7 +335,10 @@ const SensorHistory: React.FC = () => {
           />
 
           <div className="flex items-center gap-3">
-            <Icon icon="tabler:device-analytics" className="text-2xl text-indigo-600" />
+            <Icon
+              icon="tabler:device-analytics"
+              className="text-2xl text-indigo-600"
+            />
             <h1 className="text-2xl font-bold text-gray-800">
               {t('admin.pages.sensors.history.title')}
             </h1>
@@ -319,7 +349,9 @@ const SensorHistory: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">{t('admin.pages.sensors.history.view')}:</span>
+            <span className="text-sm text-gray-600">
+              {t('admin.pages.sensors.history.view')}:
+            </span>
             <ToggleButton
               checked={viewMode === 'chart'}
               onChange={(e) => setViewMode(e.value ? 'chart' : 'table')}
@@ -344,8 +376,7 @@ const SensorHistory: React.FC = () => {
               className="p-datatable-sm"
               emptyMessage={t('admin.pages.sensors.history.noData')}
               scrollable
-              scrollHeight="flex"
-            >
+              scrollHeight="flex">
               <Column
                 field="time"
                 header={t('admin.pages.sensors.history.metrics.time')}
@@ -385,27 +416,36 @@ const SensorHistory: React.FC = () => {
               <Column
                 field="water_soil"
                 header={t('admin.pages.sensors.history.metrics.water_soil')}
-                body={(rowData) => rowData.water_soil ? (
-                  <Tag
-                    value={`${rowData.water_soil}%`}
-                    severity={getMoistureSeverity(rowData.water_soil)}
-                    className="font-medium"
-                  />
-                ) : (
-                  <Tag value="N/A" severity="info" />
-                )}
+                body={(rowData) =>
+                  rowData.water_soil ? (
+                    <Tag
+                      value={`${rowData.water_soil}%`}
+                      severity={getMoistureSeverity(rowData.water_soil)}
+                      className="font-medium"
+                    />
+                  ) : (
+                    <Tag value="N/A" severity="info" />
+                  )
+                }
                 headerClassName="font-semibold"
               />
 
               <Column
                 field="conductor_soil"
                 header={t('admin.pages.sensors.history.metrics.conductor_soil')}
-                body={(rowData) => rowData.conductor_soil ? (
-                  <div className="flex items-center gap-2">
-                    <Icon icon="tabler:lightning-bolt" className="text-yellow-500" />
-                    <span>{rowData.conductor_soil} µS/cm</span>
-                  </div>
-                ) : 'N/A'}
+                body={(rowData) =>
+                  rowData.conductor_soil ? (
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        icon="tabler:lightning-bolt"
+                        className="text-yellow-500"
+                      />
+                      <span>{rowData.conductor_soil} µS/cm</span>
+                    </div>
+                  ) : (
+                    'N/A'
+                  )
+                }
                 headerClassName="font-semibold"
               />
 
@@ -479,7 +519,9 @@ const SensorHistory: React.FC = () => {
                 </h2>
 
                 <Button
-                  icon={<Icon icon="tabler:chevron-right" className="h-5 w-5" />}
+                  icon={
+                    <Icon icon="tabler:chevron-right" className="h-5 w-5" />
+                  }
                   onClick={nextMonth}
                   className="p-button-outlined p-button-sm"
                   disabled={isSameMonth(selectedMonth, new Date())}
@@ -489,7 +531,8 @@ const SensorHistory: React.FC = () => {
               {filteredData.length === 0 && (
                 <div className="text-center mt-4 p-4 bg-blue-50 text-blue-600 rounded-lg">
                   <Icon icon="tabler:info-circle" className="inline mr-2" />
-                  {t('admin.pages.sensors.history.noDataForMonth') || 'No data available for this month'}
+                  {t('admin.pages.sensors.history.noDataForMonth') ||
+                    'No data available for this month'}
                 </div>
               )}
             </Card>
@@ -497,13 +540,21 @@ const SensorHistory: React.FC = () => {
             {/* Individual charts */}
             {filteredData.length > 0 && (
               <div className="flex flex-col gap-6">
-                {Array.from({ length: Math.ceil(chartRefs.current.length / 2) }).map((_, rowIndex) => (
-                  <div key={rowIndex} className="flex flex-col md:flex-row gap-6">
+                {Array.from({
+                  length: Math.ceil(chartRefs.current.length / 2),
+                }).map((_, rowIndex) => (
+                  <div
+                    key={rowIndex}
+                    className="flex flex-col md:flex-row gap-6">
                     {/* First chart in the row */}
                     {rowIndex * 2 < chartRefs.current.length && (
                       <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
                         <div className="h-80">
-                          <canvas ref={el => { chartRefs.current[rowIndex * 2] = el; }} />
+                          <canvas
+                            ref={(el) => {
+                              chartRefs.current[rowIndex * 2] = el;
+                            }}
+                          />
                         </div>
                       </Card>
                     )}
@@ -512,7 +563,11 @@ const SensorHistory: React.FC = () => {
                     {rowIndex * 2 + 1 < chartRefs.current.length && (
                       <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
                         <div className="h-80">
-                          <canvas ref={el => { chartRefs.current[rowIndex * 2 + 1] = el; }} />
+                          <canvas
+                            ref={(el) => {
+                              chartRefs.current[rowIndex * 2 + 1] = el;
+                            }}
+                          />
                         </div>
                       </Card>
                     )}
