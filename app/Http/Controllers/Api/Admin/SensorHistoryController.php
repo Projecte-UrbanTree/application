@@ -194,23 +194,19 @@ class SensorHistoryController extends Controller
     public function fetchAndStoreSensorData($eui)
     {
         try {
-            // Find the sensor by EUI
             $sensor = Sensor::where('eui', $eui)->firstOrFail();
 
-            // Get timestamp of last fetched record
             $lastRecord = SensorHistory::where('sensor_id', $sensor->id)
                 ->orderBy('created_at', 'desc')
                 ->first();
 
             $lastFetchDate = $lastRecord ? $lastRecord->created_at->toIso8601String() : null;
 
-            // Build API request URL
             $url = "http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history";
             if ($lastFetchDate) {
                 $url .= '?last_fetch_date='.urlencode($lastFetchDate);
             }
 
-            // Make API request
             $apiKey = env('VITE_X_API_KEY');
             if (empty($apiKey)) {
                 throw new \Exception('API key not configured');
@@ -225,7 +221,6 @@ class SensorHistoryController extends Controller
                 ], $response->status());
             }
 
-            // Process API response
             $responseData = $response->json();
             $recordsCreated = 0;
             $skippedRecords = 0;
