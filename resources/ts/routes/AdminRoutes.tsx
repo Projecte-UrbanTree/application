@@ -177,7 +177,7 @@ const AdminRoutes: RouteObject[] = [
           {
             path: 'sensors',
             element: (
-              <AdminLayout titleI18n="admin.pages.sensors.title">
+              <AdminLayout titleI18n="admin.pages.sensors.title.title">
                 <Sensors />
               </AdminLayout>
             ),
