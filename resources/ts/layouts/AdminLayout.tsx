@@ -14,6 +14,10 @@ import { fetchAllContracts, selectContract } from '@/store/slice/contractSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { Contract } from '@/types/Contract';
 
+import Shepherd from 'shepherd.js';
+import 'shepherd.js/dist/css/shepherd.css';
+import startTour from '@/components/Tour';
+
 const SELECTED_CONTRACT_KEY = 'selectedContractId';
 
 const defaultContract: Contract = {
@@ -237,144 +241,154 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
     : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
   return (
-    <div
-      className={
+    <div>
+      <div
+        className={
         isInventoryPage ? 'flex flex-col h-screen overflow-hidden' : ''
-      }>
-      <header className="border-b border-gray-300 bg-white shadow-md">
+        }>
+        <header className="border-b border-gray-300 bg-white shadow-md">
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
-            <div className="block lg:hidden">
-              <Button
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="text-gray-800">
-                <Icon icon="tabler:menu" className="h-5 w-5 text-white" />
-              </Button>
-            </div>
-            <a href="/" className="flex-none">
-              <img className="w-48" src={logo} alt="Logo" />
-            </a>
+          <div className="block lg:hidden">
+            <Button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-gray-800">
+            <Icon icon="tabler:menu" className="h-5 w-5 text-white" />
+            </Button>
+          </div>
+          <a href="/" className="flex-none">
+            <img className="w-48" src={logo} alt="Logo" />
+          </a>
           </div>
           <div className="hidden lg:flex flex-1 items-center space-x-6 mx-4">
-            {mobileNavItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`text-gray-800 px-4 py-3 rounded flex items-center gap-2 ${
-                  item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
-                }`}>
-                <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
-              </Link>
-            ))}
+          {mobileNavItems.map((item) => (
+            <Link
+            key={item.to}
+            to={item.to}
+            className={`text-gray-800 px-4 py-3 rounded flex items-center gap-2 ${
+              item.active ? 'bg-indigo-600 text-white' : 'hover:bg-gray-100'
+            }`}>
+            <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
+            </Link>
+          ))}
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden lg:flex gap-4">
-              {!hideContractSelector && (
-                <Dropdown
-                  id="contractBtn"
-                  className="w-40"
-                  value={currentContract?.id ?? 0}
-                  options={contracts}
-                  onChange={handleContractChange}
-                  optionLabel="name"
-                  optionValue="id"
-                />
-              )}
-              <LangSelector />
+          <div className="hidden lg:flex gap-4">
+            {!hideContractSelector && (
+            <Dropdown
+              id="contractBtn"
+              className="w-40"
+              value={currentContract?.id ?? 0}
+              options={contracts}
+              onChange={handleContractChange}
+              optionLabel="name"
+              optionValue="id"
+            />
+            )}
+            <LangSelector className="lang-selector" />
+          </div>
+          <div className="relative">
+            <Avatar
+            onClick={handleProfileClick}
+            label={`${user?.name?.[0] ?? ''}${user?.surname?.[0] ?? ''}`}
+            size="large"
+            shape="circle"
+            className="cursor-pointer"
+            style={{ color: '#fff', backgroundColor: '#4f46e5' }}
+            />
+            {profileDropdownVisible && (
+            <div
+              ref={profileRef}
+              className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md ring-1 ring-black/5 z-10">
+              <Link
+              onClick={() => setProfileDropdownVisible(false)}
+              to="/admin/account"
+              className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
+              {t('admin.profileDropdown.accountSettings')}
+              </Link>
+              <Link
+              onClick={() => setProfileDropdownVisible(false)}
+              to="/admin/license"
+              className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
+              {t('admin.profileDropdown.license')}
+              </Link>
+              <Link
+              to="/logout"
+              className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
+              {t('admin.profileDropdown.logout')}
+              </Link>
             </div>
-            <div className="relative">
-              <Avatar
-                onClick={handleProfileClick}
-                label={`${user?.name?.[0] ?? ''}${user?.surname?.[0] ?? ''}`}
-                size="large"
-                shape="circle"
-                className="cursor-pointer"
-                style={{ color: '#fff', backgroundColor: '#4f46e5' }}
-              />
-              {profileDropdownVisible && (
-                <div
-                  ref={profileRef}
-                  className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md ring-1 ring-black/5 z-10">
-                  <Link
-                    onClick={() => setProfileDropdownVisible(false)}
-                    to="/admin/account"
-                    className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    {t('admin.profileDropdown.accountSettings')}
-                  </Link>
-                  <Link
-                    onClick={() => setProfileDropdownVisible(false)}
-                    to="/admin/license"
-                    className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    {t('admin.profileDropdown.license')}
-                  </Link>
-                  <Link
-                    to="/logout"
-                    className="block px-4 py-4 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    {t('admin.profileDropdown.logout')}
-                  </Link>
-                </div>
-              )}
-            </div>
+            )}
+          </div>
           </div>
         </nav>
         <div
           className={`${menuOpen ? '' : 'hidden'} lg:hidden px-8 py-6 bg-gray-100`}>
           <div className="mt-4 flex flex-col gap-4">
-            {!hideContractSelector && (
-              <Dropdown
-                id="contractBtn"
-                className="w-40"
-                value={currentContract?.id ?? 0}
-                options={contracts}
-                onChange={handleContractChange}
-                optionLabel="name"
-                optionValue="id"
-              />
-            )}
-            <LangSelector className="w-full" />
+          {!hideContractSelector && (
+            <Dropdown
+            id="contractBtn"
+            className="w-40"
+            value={currentContract?.id ?? 0}
+            options={contracts}
+            onChange={handleContractChange}
+            optionLabel="name"
+            optionValue="id"
+            />
+          )}
+          <LangSelector className="w-full" />
           </div>
         </div>
-      </header>
+        </header>
 
-      {!isAccountPage && (isManagementActive || isSettingsPage) && (
+        {!isAccountPage && (isManagementActive || isSettingsPage) && (
         <div
           id="submenu"
           className="lg:flex overflow-x-auto flex-nowrap whitespace-nowrap items-center gap-2 lg:gap-4 px-8 py-4 bg-white border-b border-gray-300 shadow-sm">
           <div className="submenu text-center flex items-center gap-2 lg:gap-4 mx-auto max-w-7xl">
-            {isManagementActive &&
-              managementSubmenuItems.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`px-2 py-3 rounded flex items-center gap-1 ${
-                    location.pathname.includes(item.to)
-                      ? 'bg-white border border-gray-300 text-indigo-600'
-                      : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
-                  }`}>
-                  <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
-                </Link>
-              ))}
-            {isSettingsPage &&
-              settingsSubmenuItems.map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`px-2 py-3 rounded flex items-center gap-1 ${
-                    location.pathname.includes(item.to)
-                      ? 'bg-white border border-gray-300 text-indigo-600'
-                      : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
-                  }`}>
-                  <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
-                </Link>
-              ))}
+          {isManagementActive &&
+            managementSubmenuItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`px-2 py-3 rounded flex items-center gap-1 ${
+              location.pathname.includes(item.to)
+                ? 'bg-white border border-gray-300 text-indigo-600'
+                : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
+              }`}>
+              <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
+            </Link>
+            ))}
+          {isSettingsPage &&
+            settingsSubmenuItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`px-2 py-3 rounded flex items-center gap-1 ${
+              location.pathname.includes(item.to)
+                ? 'bg-white border border-gray-300 text-indigo-600'
+                : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
+              }`}>
+              <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
+            </Link>
+            ))}
           </div>
         </div>
-      )}
+        )}
 
-      <main
+        <main
         className={`${padding} ${isInventoryPage || isAccountPage ? 'flex-1 overflow-hidden' : ''}`}>
         {children}
-      </main>
+        </main>
+      </div>
+      <div className="fixed bottom-4 right-4 z-50">
+        <Button
+          onClick={startTour}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg"
+        >
+          Help
+        </Button>
+      </div>
     </div>
   );
 };
