@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import LangSelector from '@/components/LangSelector';
 import { useAuth } from '@/hooks/useAuth';
@@ -37,6 +37,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   const dispatch = useDispatch<AppDispatch>();
   const profileRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [initialized, setInitialized] = useState(false);
@@ -383,7 +384,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
       </div>
       <div className="fixed bottom-4 right-4 z-50">
         <Button
-          onClick={startTour}
+          onClick={() => startTour((path: string) => navigate(path))}
           className="bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg"
         >
           Help
