@@ -20,8 +20,12 @@ const startTour = (navigate: (path: string) => void) => {
     tour.addStep({
         id: 'menu-settings',
         title: 'Configuración <div class="shepherd-progress"></div>',
-        text: 'Accede a las configuraciones generales de la aplicacion para crear i gestionar los contratos más fácil.',
+        text: 'Accede a las configuraciones generales de la aplicacion para crear i gestionar los contratos de una forma sencilla.',
         attachTo: { element: 'a[href="/admin/settings/contracts"]', on: 'bottom' },
+        beforeShowPromise: () => {
+            navigate('/admin/settings/contracts');
+            return new Promise((resolve) => setTimeout(resolve, 500));
+        },
         buttons: [
             {
                 text: 'Anterior',
@@ -42,14 +46,21 @@ const startTour = (navigate: (path: string) => void) => {
     tour.addStep({
         id: 'submenu-element-types',
         title: 'Submenú: Tipos de Elementos',
-        text: 'Administra los tipos de elementos disponibles.',
+        text: 'Administra los tipos de elementos que se quieren usar (Combustible, vehiculo...).',
         attachTo: { element: 'a[href="/admin/settings/element-types"]', on: 'bottom' },
         beforeShowPromise: () => {
             navigate('/admin/settings/element-types');
             return new Promise((resolve) => setTimeout(resolve, 500));
         },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            {
+                text: 'Anterior',
+                action: () => {
+                    navigate('/admin/settings/contracts');
+                    tour.back();
+                },
+                classes: 'border border-gray-300 text-gray-700',
+            },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -64,7 +75,14 @@ const startTour = (navigate: (path: string) => void) => {
             return new Promise((resolve) => setTimeout(resolve, 500));
         },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            {
+                text: 'Anterior',
+                action: () => {
+                    navigate('/admin/settings/element-types');
+                    tour.back();
+                },
+                classes: 'border border-gray-300 text-gray-700',
+            },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -79,7 +97,14 @@ const startTour = (navigate: (path: string) => void) => {
             return new Promise((resolve) => setTimeout(resolve, 500));
         },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            {
+                text: 'Anterior',
+                action: () => {
+                    navigate('/admin/settings/tree-types');
+                    tour.back();
+                },
+                classes: 'border border-gray-300 text-gray-700',
+            },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -94,7 +119,14 @@ const startTour = (navigate: (path: string) => void) => {
             return new Promise((resolve) => setTimeout(resolve, 500));
         },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            {
+                text: 'Anterior',
+                action: () => {
+                    navigate('/admin/settings/task-types');
+                    tour.back();
+                },
+                classes: 'border border-gray-300 text-gray-700',
+            },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -109,7 +141,14 @@ const startTour = (navigate: (path: string) => void) => {
             return new Promise((resolve) => setTimeout(resolve, 500));
         },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            {
+                text: 'Anterior',
+                action: () => {
+                    navigate('/admin/settings/resource-types');
+                    tour.back();
+                },
+                classes: 'border border-gray-300 text-gray-700',
+            },
             { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white' },
         ],
     });
@@ -120,10 +159,12 @@ const startTour = (navigate: (path: string) => void) => {
         text: 'Panel donde podrás gestionar la informacion del contrato el qual estes.',
         attachTo: { element: 'a[href="/admin/dashboard"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-
             {
-                
+                text: 'Anterior',
+                action: tour.back,
+                classes: 'border border-gray-300 text-gray-700',
+            },
+            {
                 text: 'Siguiente',
                 action: () => {
                     navigate('/admin/dashboard');
@@ -248,6 +289,10 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Inventario <div class="shepherd-progress"></div>',
         text: 'Consulta y gestiona los recursos disponibles en el inventario con la ayuda de un mapa.',
         attachTo: { element: 'a[href="/admin/inventory"]', on: 'bottom' },
+        beforeShowPromise: () => {
+            navigate('/admin/inventory');
+            return new Promise((resolve) => setTimeout(resolve, 500));
+        },
         buttons: [
             {
                 text: 'Anterior',
@@ -268,7 +313,7 @@ const startTour = (navigate: (path: string) => void) => {
     tour.addStep({
         id: 'contract-dropdown',
         title: 'Selector de Contratos <div class="shepherd-progress"></div>',
-        text: 'Selecciona un contrato para filtrar los datos mostrados en la aplicación.',
+        text: 'Selecciona un contrato para filtrar los datos mostrados en gestión e inventario de la aplicación.',
         attachTo: { element: '#contractBtn', on: 'bottom' },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
