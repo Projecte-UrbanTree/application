@@ -20,7 +20,7 @@ const startTour = (navigate: (path: string) => void) => {
     tour.addStep({
         id: 'menu-settings',
         title: 'Configuración <div class="shepherd-progress"></div>',
-        text: 'Accede a las configuraciones generales de la aplicacion para crear i gestionar los contratos de una forma sencilla.',
+        text: 'Accede a las configuraciones generales de la aplicacion para crear i gestionar los contratos más fácil.',
         attachTo: { element: 'a[href="/admin/settings/contracts"]', on: 'bottom' },
         beforeShowPromise: () => {
             navigate('/admin/settings/contracts');
@@ -46,21 +46,10 @@ const startTour = (navigate: (path: string) => void) => {
     tour.addStep({
         id: 'submenu-element-types',
         title: 'Submenú: Tipos de Elementos',
-        text: 'Administra los tipos de elementos que se quieren usar (Combustible, vehiculo...).',
+        text: 'Administra los tipos de elementos disponibles.',
         attachTo: { element: 'a[href="/admin/settings/element-types"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/settings/element-types');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
-            {
-                text: 'Anterior',
-                action: () => {
-                    navigate('/admin/settings/contracts');
-                    tour.back();
-                },
-                classes: 'border border-gray-300 text-gray-700',
-            },
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -70,19 +59,8 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Especies',
         text: 'Gestiona las especies de árboles disponibles.',
         attachTo: { element: 'a[href="/admin/settings/tree-types"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/settings/tree-types');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
-            {
-                text: 'Anterior',
-                action: () => {
-                    navigate('/admin/settings/element-types');
-                    tour.back();
-                },
-                classes: 'border border-gray-300 text-gray-700',
-            },
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -92,19 +70,8 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Tipos de Tareas',
         text: 'Administra los tipos de tareas configurables.',
         attachTo: { element: 'a[href="/admin/settings/task-types"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/settings/task-types');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
-            {
-                text: 'Anterior',
-                action: () => {
-                    navigate('/admin/settings/tree-types');
-                    tour.back();
-                },
-                classes: 'border border-gray-300 text-gray-700',
-            },
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -114,19 +81,8 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Tipos de Recursos',
         text: 'Gestiona los tipos de recursos disponibles.',
         attachTo: { element: 'a[href="/admin/settings/resource-types"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/settings/resource-types');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
-            {
-                text: 'Anterior',
-                action: () => {
-                    navigate('/admin/settings/task-types');
-                    tour.back();
-                },
-                classes: 'border border-gray-300 text-gray-700',
-            },
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -136,19 +92,8 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Usuarios',
         text: 'Administra los usuarios registrados en la plataforma.',
         attachTo: { element: 'a[href="/admin/settings/users"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/settings/users');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
-            {
-                text: 'Anterior',
-                action: () => {
-                    navigate('/admin/settings/resource-types');
-                    tour.back();
-                },
-                classes: 'border border-gray-300 text-gray-700',
-            },
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white' },
         ],
     });
@@ -158,13 +103,17 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Gestión <div class="shepherd-progress"></div>',
         text: 'Panel donde podrás gestionar la informacion del contrato el qual estes.',
         attachTo: { element: 'a[href="/admin/dashboard"]', on: 'bottom' },
+        beforeShowPromise: () => {
+            navigate('/admin/dashboard');
+            return new Promise((resolve) => setTimeout(resolve, 500));
+        },
         buttons: [
-            {
-                text: 'Anterior',
-                action: tour.back,
-                classes: 'border border-gray-300 text-gray-700',
-            },
-            {
+            { text: 'Anterior', action: () => {
+                navigate('/admin/settings/contracts');
+                tour.back();
+                }, 
+                classes: 'border border-gray-300 text-gray-700' },
+            {     
                 text: 'Siguiente',
                 action: () => {
                     navigate('/admin/dashboard');
@@ -180,10 +129,6 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: EVA <div class="shepherd-progress"></div>',
         text: 'Consulta y analiza los datos del EVA de cada arból en formato listado.',
         attachTo: { element: 'a[href="/admin/evas"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/evas');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
@@ -195,10 +140,6 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Órdenes de trabajo <div class="shepherd-progress"></div>',
         text: 'Lugar donde se crearan las ordenes de trabajo del dia.',
         attachTo: { element: 'a[href="/admin/work-orders"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/work-orders');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
@@ -210,16 +151,11 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Trabajadores <div class="shepherd-progress"></div>',
         text: 'Lugar donde assignaremos a los usuarios en que contrato queremos que trabajen.',
         attachTo: { element: 'a[href="/admin/workers"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/workers');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             {
                 text: 'Siguiente',
                 action: () => {
-                    navigate('/admin/workers');
                     tour.next();
                 },
                 classes: 'bg-blue-500 text-white',
@@ -232,10 +168,6 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Recursos <div class="shepherd-progress"></div>',
         text: 'Gestiona los recursos disponibles en el contrato.',
         attachTo: { element: 'a[href="/admin/resources"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/resources');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             {
@@ -251,10 +183,6 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Estadísticas <div class="shepherd-progress"></div>',
         text: 'Consulta las estadísticas y gráficos.',
         attachTo: { element: 'a[href="/admin/statistics"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/statistics');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             {
@@ -270,10 +198,6 @@ const startTour = (navigate: (path: string) => void) => {
         title: 'Submenú: Sensores <div class="shepherd-progress"></div>',
         text: 'Consulta los registros de actividad de los sensores.',
         attachTo: { element: 'a[href="/admin/sensors"]', on: 'bottom' },
-        beforeShowPromise: () => {
-            navigate('/admin/sensors');
-            return new Promise((resolve) => setTimeout(resolve, 500));
-        },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
             {
@@ -296,7 +220,10 @@ const startTour = (navigate: (path: string) => void) => {
         buttons: [
             {
                 text: 'Anterior',
-                action: tour.back,
+                action: ()=>{
+                    navigate('/admin/dashboard');
+                    tour.back();
+                },
                 classes: 'border border-gray-300 text-gray-700',
             },
             {
@@ -313,7 +240,7 @@ const startTour = (navigate: (path: string) => void) => {
     tour.addStep({
         id: 'contract-dropdown',
         title: 'Selector de Contratos <div class="shepherd-progress"></div>',
-        text: 'Selecciona un contrato para filtrar los datos mostrados en gestión e inventario de la aplicación.',
+        text: 'Selecciona un contrato para filtrar los datos mostrados en la aplicación.',
         attachTo: { element: '#contractBtn', on: 'bottom' },
         buttons: [
             { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },

@@ -16,7 +16,8 @@ import { Contract } from '@/types/Contract';
 
 import Shepherd from 'shepherd.js';
 import 'shepherd.js/dist/css/shepherd.css';
-import startTour from '@/components/Tour';
+import  startTour  from '@/components/Tour';
+import { start } from 'repl';
 
 const SELECTED_CONTRACT_KEY = 'selectedContractId';
 
