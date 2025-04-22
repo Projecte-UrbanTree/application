@@ -1,6 +1,7 @@
 import Shepherd from 'shepherd.js';
+import { useTranslation } from 'react-i18next';
 
-const startTour = (navigate: (path: string) => void) => {
+const startTour = (navigate: (path: string) => void, t: (key: string) => string) => {
     const tour = new Shepherd.Tour({
         defaultStepOptions: {
             cancelIcon: { enabled: true, label: '×' },
@@ -19,8 +20,8 @@ const startTour = (navigate: (path: string) => void) => {
 
     tour.addStep({
         id: 'menu-dashboard',
-        title: 'Gestión <div class="shepherd-progress"></div>',
-        text: 'Panel donde podrás gestionar la informacion del contrato el qual estes.',
+        title: `${t('admin.tour.menuDashboard.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.menuDashboard.text'),
         attachTo: { element: 'a[href="/admin/dashboard"]', on: 'bottom' },
         beforeShowPromise: () => {
             navigate('/admin/dashboard');
@@ -31,91 +32,63 @@ const startTour = (navigate: (path: string) => void) => {
             });
         },
         buttons: [
-            { text: 'Anterior', action: () => {
-                tour.back();
-                }, 
-                classes: 'border border-gray-300 text-gray-700' },
-            {     
-                text: 'Siguiente',
-                action: () => {
-                    tour.next();
-                },
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
+
     tour.addStep({
         id: 'menu-inventory',
-        title: 'Inventario <div class="shepherd-progress"></div>',
-        text: 'Consulta y gestiona los recursos disponibles en el inventario con la ayuda de un mapa.',
+        title: `${t('admin.tour.menuInventory.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.menuInventory.text'),
         attachTo: { element: 'a[href="/admin/inventory"]', on: 'bottom' },
         buttons: [
-            {
-                text: 'Anterior',
-                action: ()=>{
-                    tour.back();
-                },
-                classes: 'border border-gray-300 text-gray-700',
-            },
-            {
-                text: 'Siguiente',
-                action: () => {
-                    tour.next();
-                },
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
+
     tour.addStep({
         id: 'menu-settings',
-        title: 'Configuración <div class="shepherd-progress"></div>',
-        text: 'Accede a las configuraciones generales de la aplicacion para crear i gestionar los contratos más fácil.',
+        title: `${t('admin.tour.menuSettings.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.menuSettings.text'),
         attachTo: { element: 'a[href="/admin/settings/contracts"]', on: 'bottom' },
         buttons: [
-            {
-                text: 'Anterior',
-                action: tour.back,
-                classes: 'border border-gray-300 text-gray-700',
-            },
-            {
-                text: 'Siguiente',
-                action: () => {
-                    tour.next();
-                },
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('general.success'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
+
     tour.addStep({
         id: 'contract-dropdown',
-        title: 'Selector de Contratos <div class="shepherd-progress"></div>',
-        text: 'Selecciona un contrato para filtrar los datos mostrados en la aplicación.',
+        title: `${t('admin.tour.contractDropdown.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.contractDropdown.text'),
         attachTo: { element: '#contractBtn', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('general.success'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'language-selector',
-        title: 'Selector de Idioma <div class="shepherd-progress"></div>',
-        text: 'Cambia el idioma de la aplicación según tus preferencias.',
+        title: `${t('admin.tour.languageSelector.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.languageSelector.text'),
         attachTo: { element: '.lang-selector', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white' },
+            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('general.success'), action: () => tour.next(), classes: 'bg-green-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'avatar',
-        title: 'Avatar de Usuario <div class="shepherd-progress"></div>',
-        text: 'Haz clic en tu avatar para acceder a las opciones de tu cuenta.',
+        title: `${t('admin.tour.avatar.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.avatar.text'),
         attachTo: { element: '.p-avatar', on: 'left' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('general.success'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
     tour.addStep({
@@ -332,12 +305,93 @@ const startTour = (navigate: (path: string) => void) => {
                 classes: 'border border-gray-300 text-gray-700',
             },
             {
-                text: 'Finalizar',
+                text: 'Siguiente',
                 action: () => {
-                    tour.complete();
+                    tour.next();
                 },
                 classes: 'bg-blue-500 text-white',
             },
+        ],
+    });
+
+    // Map-related steps from startMapTour
+    tour.addStep({
+        id: 'scale-control',
+        title: 'Control de Escala <div class="shepherd-progress"></div>',
+        text: 'Este control muestra la escala del mapa.',
+        attachTo: { element: '.map-control-scale', on: 'top' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'fullscreen-control',
+        title: 'Control de Pantalla Completa <div class="shepherd-progress"></div>',
+        text: 'Haz clic aquí para alternar el modo de pantalla completa.',
+        attachTo: { element: '.map-control-fullscreen', on: 'left' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'geolocate-control',
+        title: 'Control de Geolocalización <div class="shepherd-progress"></div>',
+        text: 'Haz clic aquí para centrar el mapa en tu ubicación actual.',
+        attachTo: { element: '.map-control-geolocate', on: 'left' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'add-points-button',
+        title: 'Agregar Puntos para las Zonas <div class="shepherd-progress"></div>',
+        text: 'Haz clic en este botón para comenzar a agregar puntos para una nueva zona.',
+        attachTo: { element: '.mapbox-gl-draw_polygon', on: 'bottom' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'cancel-creation-button',
+        title: 'Cancelar Creación <div class="shepherd-progress"></div>',
+        text: 'Haz clic en este botón para cancelar la creación de puntos para la zona.',
+        attachTo: { element: '.mapbox-gl-draw_trash', on: 'bottom' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white rounded px-4 py-2' },
+        ],
+    });
+
+    // Custom buttons
+    for (let i = 1; i <= 4; i++) {
+        tour.addStep({
+            id: `custom-button-${i}`,
+            title: `Botón Personalizado ${i} <div class="shepherd-progress"></div>`,
+            text: `Este es el botón personalizado número ${i}.`,
+            attachTo: { element: `.p-button-outlined.p-button-indigo.p-button-sm.p-button-icon-only:nth-of-type(${i})`, on: 'bottom' },
+            buttons: [
+                { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+                { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            ],
+        });
+    }
+
+    tour.addStep({
+        id: 'add-element-button',
+        title: 'Botón: Afegeix Element <div class="shepherd-progress"></div>',
+        text: 'Haz clic en este botón para añadir un nuevo elemento.',
+        attachTo: { element: '.p-button-outlined.p-button-indigo.p-button-sm.p-button.p-component[aria-label="Afegeix element"]', on: 'bottom' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            { text: 'Finalizar', action: tour.complete, classes: 'bg-blue-500 text-white' },
         ],
     });
 

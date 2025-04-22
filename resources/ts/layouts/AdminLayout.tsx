@@ -18,6 +18,7 @@ import Shepherd from 'shepherd.js';
 import 'shepherd.js/dist/css/shepherd.css';
 import  startTour  from '@/components/Tour';
 import { start } from 'repl';
+import { useTranslation } from 'react-i18next';
 
 const SELECTED_CONTRACT_KEY = 'selectedContractId';
 
@@ -33,7 +34,7 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
-  const { t } = useI18n();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   const profileRef = useRef<HTMLDivElement>(null);
@@ -387,10 +388,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
       </div>
       <div className="fixed bottom-4 right-4 z-50">
         <Button
-          onClick={() => startTour((path: string) => navigate(path))}
+          onClick={() => startTour((path: string) => navigate(path), t)}
           className="bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg"
         >
-          Help
+          {t('admin.tour.startTourButton')}
         </Button>
       </div>
     </div>

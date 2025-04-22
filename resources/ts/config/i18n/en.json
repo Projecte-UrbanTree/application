@@ -1598,6 +1598,89 @@
             "snr": "Signal-to-Noise Ratio"
           }
         }
+      },
+      "tour": {
+        "startTourButton": "Tour",
+        "previousButton": "Previous",
+        "nextButton": "Next",
+        "menuDashboard": {
+          "title": "Management",
+          "text": "Panel where you can manage the information of the selected contract."
+        },
+        "menuInventory": {
+          "title": "Inventory",
+          "text": "View and manage the resources available in the inventory with the help of a map."
+        },
+        "menuSettings": {
+          "title": "Settings",
+          "text": "Access the general application settings to create and manage contracts more easily."
+        },
+        "contractDropdown": {
+          "title": "Contract Selector",
+          "text": "Select a contract to filter the data displayed in the application."
+        },
+        "languageSelector": {
+          "title": "Language Selector",
+          "text": "Change the application language according to your preferences."
+        },
+        "avatar": {
+          "title": "User Avatar",
+          "text": "Click on your avatar to access your account options."
+        },
+        "submenuElementTypes": {
+          "title": "Submenu: Element Types",
+          "text": "Manage the available element types."
+        },
+        "submenuTreeTypes": {
+          "title": "Submenu: Species",
+          "text": "Manage the available tree species."
+        },
+        "submenuTaskTypes": {
+          "title": "Submenu: Task Types",
+          "text": "Manage the configurable task types."
+        },
+        "submenuResourceTypes": {
+          "title": "Submenu: Resource Types",
+          "text": "Manage the available resource types."
+        },
+        "submenuUsers": {
+          "title": "Submenu: Users",
+          "text": "Manage the users registered on the platform."
+        },
+        "submenuEva": {
+          "title": "Submenu: EVA",
+          "text": "View and analyze the EVA data of each tree in a list format."
+        },
+        "submenuWorkOrders": {
+          "text": "Place where the day's work orders will be created."
+        },
+        "submenuWorkers": {
+          "text": "Place where we assign users to the contract we want them to work on."
+        },
+        "submenuResources": {
+          "text": "Manage the resources available in the contract."
+        },
+        "submenuStats": {
+          "text": "View statistics and charts."
+        },
+        "submenuSensors": {
+          "text": "View the activity logs of the sensors."
+        },
+        "mapScaleControl": {
+          "text": "This control shows the map scale."
+        },
+        "mapFullscreenControl": {
+          "text": "Click here to toggle fullscreen mode."
+        },
+        "mapGeolocateControl": {
+          "text": "Click here to center the map on your current location."
+        },
+        "mapAddPointsButton": {
+          "text": "Click this button to start adding points for a new zone."
+        },
+        "mapCancelCreationButton": {
+          "text": "Click this button to cancel the creation of points for the zone."
+        }
       }
     }
   },
@@ -1664,7 +1747,6 @@
       "noResourcesInType": "No resources available for this type",
       "selectResourcesHelp": "First select a resource type, then choose specific resources to add",
       "totalResources": "Total resources",
-      "quantity": "Quantity",
       "unitCost": "Unit Cost",
       "removeResource": "Remove Resource",
       "createReport": "Create Report",
@@ -1701,7 +1783,10 @@
       },
       "messages": {
         "resourcesAdded": "Resources added successfully",
-        "taskUpdated": "Task updated successfully"
+        "taskUpdated": "Task updated successfully",
+        "reportCreated": "Work report created successfully",
+        "noResourcesSelected": "Please select at least one resource",
+        "reportCreationFailed": "Failed to create work report"
       },
       "createWorkReport": "Create Work Report",
       "spentFuel": "Spent Fuel (Liters)",
@@ -1718,15 +1803,7 @@
       "observations": "Observations",
       "observationsPlaceholder": "Enter any observations or incidents here",
       "submitReport": "Submit Report",
-      "taskUpdated": "Task updated successfully",
-      "messages": {
-        "reportCreated": "Work report created successfully",
-        "resourcesAdded": "Resources added successfully"
-      },
-      "errors": {
-        "noResourcesSelected": "Please select at least one resource",
-        "reportCreationFailed": "Failed to create work report"
-      }
+      "taskUpdated": "Task updated successfully"
     },
     "workReports": {
       "title": "Work Reports",
