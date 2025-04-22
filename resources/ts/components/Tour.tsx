@@ -18,6 +18,39 @@ const startTour = (navigate: (path: string) => void) => {
     });
 
     tour.addStep({
+        id: 'contract-dropdown',
+        title: 'Selector de Contratos <div class="shepherd-progress"></div>',
+        text: 'Selecciona un contrato para filtrar los datos mostrados en la aplicación.',
+        attachTo: { element: '#contractBtn', on: 'bottom' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'language-selector',
+        title: 'Selector de Idioma <div class="shepherd-progress"></div>',
+        text: 'Cambia el idioma de la aplicación según tus preferencias.',
+        attachTo: { element: '.lang-selector', on: 'bottom' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'avatar',
+        title: 'Avatar de Usuario <div class="shepherd-progress"></div>',
+        text: 'Haz clic en tu avatar para acceder a las opciones de tu cuenta.',
+        attachTo: { element: '.p-avatar', on: 'left' },
+        buttons: [
+            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
+            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+        ],
+    });
+    
+    tour.addStep({
         id: 'menu-settings',
         title: 'Configuración <div class="shepherd-progress"></div>',
         text: 'Accede a las configuraciones generales de la aplicacion para crear i gestionar los contratos más fácil.',
@@ -234,39 +267,6 @@ const startTour = (navigate: (path: string) => void) => {
                 },
                 classes: 'bg-blue-500 text-white',
             },
-        ],
-    });
-
-    tour.addStep({
-        id: 'contract-dropdown',
-        title: 'Selector de Contratos <div class="shepherd-progress"></div>',
-        text: 'Selecciona un contrato para filtrar los datos mostrados en la aplicación.',
-        attachTo: { element: '#contractBtn', on: 'bottom' },
-        buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
-        ],
-    });
-
-    tour.addStep({
-        id: 'language-selector',
-        title: 'Selector de Idioma <div class="shepherd-progress"></div>',
-        text: 'Cambia el idioma de la aplicación según tus preferencias.',
-        attachTo: { element: '.lang-selector', on: 'bottom' },
-        buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white' },
-        ],
-    });
-
-    tour.addStep({
-        id: 'avatar',
-        title: 'Avatar de Usuario <div class="shepherd-progress"></div>',
-        text: 'Haz clic en tu avatar para acceder a las opciones de tu cuenta.',
-        attachTo: { element: '.p-avatar', on: 'left' },
-        buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Finalizar', action: tour.next, classes: 'bg-blue-500 text-white' },
         ],
     });
 
