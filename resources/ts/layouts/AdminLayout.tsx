@@ -357,7 +357,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
               location.pathname.includes(item.to)
                 ? 'bg-white border border-gray-300 text-indigo-600'
                 : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
-              }`}>
+              } ${item.to === '/admin/dashboard' ? 'submenu-dashboard' : ''}`} // Add class for dashboard submenu
+            >
               <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
             </Link>
             ))}
@@ -370,7 +371,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
               location.pathname.includes(item.to)
                 ? 'bg-white border border-gray-300 text-indigo-600'
                 : 'text-gray-600 hover:bg-white hover:border hover:border-gray-300'
-              }`}>
+              } ${item.to === '/admin/settings/contracts' ? 'submenu-contracts' : ''}`} // Add class for contracts submenu
+            >
               <Icon icon={item.icon} className="h-5 w-5" /> {item.label}
             </Link>
             ))}

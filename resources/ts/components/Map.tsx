@@ -33,6 +33,7 @@ import IncidentForm from '../pages/Admin/Inventory/IncidentForm';
 import { SaveElementForm } from '../pages/Admin/Inventory/SaveElementForm';
 import { SaveZoneForm } from '../pages/Admin/Inventory/SaveZoneForm';
 import { eventSubject } from '../pages/Admin/Inventory/Zones';
+import startMapTour from '@/components/MapTour';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const DEFAULT_MADRID_COORDS: [number, number] = [-3.7038, 40.4168];
@@ -823,6 +824,11 @@ export const MapComponent: React.FC<MapProps> = ({
       />
 
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+        <button
+          onClick={startMapTour}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+          Iniciar Tour del Mapa
+        </button>
         {isCreatingElement && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-indigo-500 animate-pulse">
             <div className="flex items-center gap-2 text-indigo-800">
