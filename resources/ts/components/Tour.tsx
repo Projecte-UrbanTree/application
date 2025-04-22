@@ -332,9 +332,9 @@ const startTour = (navigate: (path: string) => void) => {
                 classes: 'border border-gray-300 text-gray-700',
             },
             {
-                text: 'Siguiente',
+                text: 'Finalizar',
                 action: () => {
-                    tour.next();
+                    tour.complete();
                 },
                 classes: 'bg-blue-500 text-white',
             },

@@ -827,7 +827,7 @@ export const MapComponent: React.FC<MapProps> = ({
         <button
           onClick={startMapTour}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
-          Iniciar Tour del Mapa
+          Tour del mapa
         </button>
         {isCreatingElement && (
           <div className="bg-white px-4 py-3 rounded-lg shadow-lg border-l-4 border-indigo-500 animate-pulse">
