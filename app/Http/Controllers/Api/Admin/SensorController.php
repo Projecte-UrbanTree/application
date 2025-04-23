@@ -74,7 +74,7 @@ class SensorController extends Controller
     {
         try {
             $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
-                ->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/{$eui}/history");
+                ->get("http://api-urbantree.alumnat.iesmontsia.org/sensors/{$eui}/history");
 
             return $response->successful()
                 ? response()->json($response->json(), 200)
@@ -146,7 +146,7 @@ class SensorController extends Controller
             }
 
             $response = Http::withHeaders(['X-API-Key' => $apiKey])
-                ->get('http://api_urbantree.alumnat.iesmontsia.org/sensors');
+                ->get('http://api-urbantree.alumnat.iesmontsia.org/sensors');
 
             return $response->successful()
                 ? response()->json($response->json())
@@ -163,7 +163,7 @@ class SensorController extends Controller
     {
         try {
             $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
-                ->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}");
+                ->get("http://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}");
 
             return $response->successful()
                 ? response()->json($response->json(), 200)
@@ -182,7 +182,7 @@ class SensorController extends Controller
     {
         try {
             $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
-                ->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
+                ->get("http://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
 
             if ($response->successful()) {
                 $sensorData = $response->json();
