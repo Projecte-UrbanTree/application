@@ -74,7 +74,7 @@ class SensorController extends Controller
     {
         try {
             $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
-                ->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/{$eui}/history");
+                ->get("https://api-urbantree.alumnat.iesmontsia.org/sensors/{$eui}/history");
 
             return $response->successful()
                 ? response()->json($response->json(), 200)
@@ -145,8 +145,9 @@ class SensorController extends Controller
                 throw new \Exception('API key not configured');
             }
 
-            $response = Http::withHeaders(['X-API-Key' => $apiKey])
-                ->get('http://api_urbantree.alumnat.iesmontsia.org/sensors');
+            $response = Http::withoutVerifying()
+                ->withHeaders(['X-API-Key' => $apiKey])
+                ->get('https://api-urbantree.alumnat.iesmontsia.org/sensors');
 
             return $response->successful()
                 ? response()->json($response->json())
@@ -162,8 +163,9 @@ class SensorController extends Controller
     public function fetchSensorByEUI($eui)
     {
         try {
-            $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
-                ->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}");
+            $response = Http::withoutVerifying()
+                ->withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
+                ->get("https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}");
 
             return $response->successful()
                 ? response()->json($response->json(), 200)
@@ -181,8 +183,9 @@ class SensorController extends Controller
     public function fetchAllHistorySensorbyEUI($eui)
     {
         try {
-            $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
-                ->get("http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
+            $response = Http::withoutVerifying()
+                ->withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
+                ->get("https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
 
             if ($response->successful()) {
                 $sensorData = $response->json();
