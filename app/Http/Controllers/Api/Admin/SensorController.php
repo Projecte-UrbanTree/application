@@ -145,7 +145,8 @@ class SensorController extends Controller
                 throw new \Exception('API key not configured');
             }
 
-            $response = Http::withHeaders(['X-API-Key' => $apiKey])
+            $response = Http::withoutVerifying()
+                ->withHeaders(['X-API-Key' => $apiKey])
                 ->get('https://api-urbantree.alumnat.iesmontsia.org/sensors');
 
             return $response->successful()
@@ -162,7 +163,8 @@ class SensorController extends Controller
     public function fetchSensorByEUI($eui)
     {
         try {
-            $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
+            $response = Http::withoutVerifying()
+                ->withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
                 ->get("https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}");
 
             return $response->successful()
@@ -181,7 +183,8 @@ class SensorController extends Controller
     public function fetchAllHistorySensorbyEUI($eui)
     {
         try {
-            $response = Http::withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
+            $response = Http::withoutVerifying()
+                ->withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
                 ->get("https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
 
             if ($response->successful()) {
