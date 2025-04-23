@@ -1610,11 +1610,11 @@
       "nextButton": "Siguiente",
       "menuDashboard": {
         "title": "Gestión",
-        "text": "Panel donde podrás gestionar la información del contrato en el que estés."
+        "text": "Panel donde podrás gestionar la información del contrato en el que hayas selecionado."
       },
       "menuInventory": {
         "title": "Inventario",
-        "text": "Consulta y gestiona los recursos disponibles en el inventario con la ayuda de un mapa."
+        "text": "Consulta y gestiona los elementos y zonas disponibles en el inventario con la ayuda de un mapa."
       },
       "menuSettings": {
         "title": "Configuración",
@@ -1622,7 +1622,7 @@
       },
       "contractDropdown": {
         "title": "Selector de Contratos",
-        "text": "Selecciona un contrato para filtrar los datos mostrados en la aplicación."
+        "text": "Selecciona un contrato para filtrar los datos mostrados en la gestión y en el inventario."
       },
       "languageSelector": {
         "title": "Selector de Idioma",
@@ -1634,7 +1634,7 @@
       },
       "submenuElementTypes": {
         "title": "Submenú: Tipos de Elementos",
-        "text": "Administra los tipos de elementos disponibles."
+        "text": "Administra los tipos de elementos disponibles para poder crear los elementos."
       },
       "submenuTreeTypes": {
         "title": "Submenú: Especies",
@@ -1646,15 +1646,15 @@
       },
       "submenuResourceTypes": {
         "title": "Submenú: Tipos de Recursos",
-        "text": "Gestiona los tipos de recursos disponibles."
+        "text": "Gestiona los tipos de recursos disponibles para crear los recursos."
       },
       "submenuUsers": {
         "title": "Submenú: Usuarios",
-        "text": "Administra los usuarios registrados en la plataforma."
+        "text": "Administra los usuarios registrados en la aplicación."
       },
       "submenuEva": {
         "title": "Submenú: EVA",
-        "text": "Consulta y analiza los datos del EVA de cada árbol en formato listado."
+        "text": "Consulta y analiza los datos del EVA de cada árbol."
       },
       "submenuWorkOrders": {
         "title": "Submenú: Órdenes de Trabajo",
