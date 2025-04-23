@@ -4,6 +4,7 @@ import WorkerLayout from '@/layouts/WorkerLayout';
 import AuthenticatedRoute from '@/middlewares/AuthenticatedRoute';
 import Index from '@/pages/Worker/Index';
 import { Roles } from '@/types/Role';
+import { InventoryWorker } from '@/pages/Worker/InventoryWorker';
 
 const WorkerRoutes: RouteObject[] = [
   {
@@ -22,6 +23,19 @@ const WorkerRoutes: RouteObject[] = [
           },
         ],
       },
+      {
+        path: '/worker/inventory',
+        children: [
+          {
+            index: true,
+            element: (
+              <WorkerLayout titleI18n='Inventory'>
+                <InventoryWorker />
+              </WorkerLayout>
+            )
+          }
+        ]
+      }
     ],
   },
 ];
