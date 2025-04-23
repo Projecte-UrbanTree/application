@@ -1596,7 +1596,8 @@
             "bat": "Batería",
             "rssi": "Fuerza de la señal (RSSI)",
             "snr": "Relación señal-ruido"
-          }
+          },
+          "loadError": "Error al cargar el historial del sensor."
         },
         "errors": {
           "no_contract": "Debes seleccionar un contrato válido"

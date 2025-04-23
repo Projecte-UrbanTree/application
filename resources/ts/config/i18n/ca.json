@@ -1597,7 +1597,8 @@
             "bat": "Bateria",
             "rssi": "Força del senyal (RSSI)",
             "snr": "Relació senyal-soroll"
-          }
+          },
+          "loadError": "Error en carregar l'historial del sensor."
         },
         "errors": {
           "no_contract": "Heu de seleccionar un contracte vàlid"

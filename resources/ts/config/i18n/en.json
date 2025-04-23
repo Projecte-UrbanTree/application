@@ -1596,7 +1596,8 @@
             "bat": "Battery",
             "rssi": "Signal Strength (RSSI)",
             "snr": "Signal-to-Noise Ratio"
-          }
+          },
+          "loadError": "Error loading the sensor history."
         }
       }
     },
