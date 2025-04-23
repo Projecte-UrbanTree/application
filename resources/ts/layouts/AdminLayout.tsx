@@ -61,7 +61,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
   const isManagementActive = [
     '/admin/dashboard',
     '/admin/work-orders',
-    '/admin/eva',
+    '/admin/evas',
     '/admin/workers',
     '/admin/resources',
     '/admin/statistics',
