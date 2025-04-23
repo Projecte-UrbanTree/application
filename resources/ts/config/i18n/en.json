@@ -1598,89 +1598,140 @@
             "snr": "Signal-to-Noise Ratio"
           }
         }
+      }
+    },
+    "tour": {
+      "startTourButton": "Tour",
+      "previousButton": "Previous",
+      "nextButton": "Next",
+      "menuDashboard": {
+        "title": "Management",
+        "text": "Panel where you can manage the information of the selected contract."
       },
-      "tour": {
-        "startTourButton": "Tour",
-        "previousButton": "Previous",
-        "nextButton": "Next",
-        "menuDashboard": {
-          "title": "Management",
-          "text": "Panel where you can manage the information of the selected contract."
-        },
-        "menuInventory": {
-          "title": "Inventory",
-          "text": "View and manage the resources available in the inventory with the help of a map."
-        },
-        "menuSettings": {
-          "title": "Settings",
-          "text": "Access the general application settings to create and manage contracts more easily."
-        },
-        "contractDropdown": {
-          "title": "Contract Selector",
-          "text": "Select a contract to filter the data displayed in the application."
-        },
-        "languageSelector": {
-          "title": "Language Selector",
-          "text": "Change the application language according to your preferences."
-        },
-        "avatar": {
-          "title": "User Avatar",
-          "text": "Click on your avatar to access your account options."
-        },
-        "submenuElementTypes": {
-          "title": "Submenu: Element Types",
-          "text": "Manage the available element types."
-        },
-        "submenuTreeTypes": {
-          "title": "Submenu: Species",
-          "text": "Manage the available tree species."
-        },
-        "submenuTaskTypes": {
-          "title": "Submenu: Task Types",
-          "text": "Manage the configurable task types."
-        },
-        "submenuResourceTypes": {
-          "title": "Submenu: Resource Types",
-          "text": "Manage the available resource types."
-        },
-        "submenuUsers": {
-          "title": "Submenu: Users",
-          "text": "Manage the users registered on the platform."
-        },
-        "submenuEva": {
-          "title": "Submenu: EVA",
-          "text": "View and analyze the EVA data of each tree in a list format."
-        },
-        "submenuWorkOrders": {
-          "text": "Place where the day's work orders will be created."
-        },
-        "submenuWorkers": {
-          "text": "Place where we assign users to the contract we want them to work on."
-        },
-        "submenuResources": {
-          "text": "Manage the resources available in the contract."
-        },
-        "submenuStats": {
-          "text": "View statistics and charts."
-        },
-        "submenuSensors": {
-          "text": "View the activity logs of the sensors."
-        },
-        "mapScaleControl": {
-          "text": "This control shows the map scale."
-        },
-        "mapFullscreenControl": {
-          "text": "Click here to toggle fullscreen mode."
-        },
-        "mapGeolocateControl": {
-          "text": "Click here to center the map on your current location."
-        },
-        "mapAddPointsButton": {
-          "text": "Click this button to start adding points for a new zone."
-        },
-        "mapCancelCreationButton": {
-          "text": "Click this button to cancel the creation of points for the zone."
-        }
+      "menuInventory": {
+        "title": "Inventory",
+        "text": "View and manage the resources available in the inventory with the help of a map."
+      },
+      "menuSettings": {
+        "title": "Settings",
+        "text": "Access the general application settings to create and manage contracts more easily."
+      },
+      "contractDropdown": {
+        "title": "Contract Selector",
+        "text": "Select a contract to filter the data displayed in the application."
+      },
+      "languageSelector": {
+        "title": "Language Selector",
+        "text": "Change the application language according to your preferences."
+      },
+      "avatar": {
+        "title": "User Avatar",
+        "text": "Click on your avatar to access your account options."
+      },
+      "submenuElementTypes": {
+        "title": "Submenu: Element Types",
+        "text": "Manage the available element types."
+      },
+      "submenuTreeTypes": {
+        "title": "Submenu: Species",
+        "text": "Manage the available tree species."
+      },
+      "submenuTaskTypes": {
+        "title": "Submenu: Task Types",
+        "text": "Manage the configurable task types."
+      },
+      "submenuResourceTypes": {
+        "title": "Submenu: Resource Types",
+        "text": "Manage the available resource types."
+      },
+      "submenuUsers": {
+        "title": "Submenu: Users",
+        "text": "Manage the users registered on the platform."
+      },
+      "submenuEva": {
+        "title": "Submenu: EVA",
+        "text": "View and analyze the EVA data of each tree in a list format."
+      },
+      "submenuWorkOrders": {
+        "title": "Submenu: Work Orders",
+        "text": "Place where the day's work orders will be created."
+      },
+      "submenuWorkers": {
+        "title": "Submenu: Workers",
+        "text": "Place where we assign users to the contract we want them to work on."
+      },
+      "submenuResources": {
+        "title": "Submenu: Resources",
+        "text": "Manage the resources available in the contract."
+      },
+      "submenuStats": {
+        "title": "Submenu: Statistics",
+        "text": "View statistics and charts."
+      },
+      "submenuSensors": {
+        "title": "Submenu: Sensors",
+        "text": "View the activity logs of the sensors."
+      },
+      "mapScaleControl": {
+        "title": "Map Scale Control",
+        "text": "This control shows the map scale."
+      },
+      "mapFullscreenControl": {
+        "title": "Map Fullscreen Control",
+        "text": "Click here to toggle fullscreen mode."
+      },
+      "mapGeolocateControl": {
+        "title": "Map Geolocation Control",
+        "text": "Click here to center the map on your current location."
+      },
+      "mapAddPointsButton": {
+        "title": "Map Add Points Button",
+        "text": "Click this button to start adding points for a new zone."
+      },
+      "mapCancelCreationButton": {
+        "title": "Map Cancel Creation Button",
+        "text": "Click this button to cancel the creation of points for the zone."
+      },
+      "finishButton": "Finish",
+      "scaleControl": {
+        "title": "Scale Control",
+        "text": "This control shows the map scale."
+      },
+      "fullscreenControl": {
+        "title": "Fullscreen Control",
+        "text": "Click here to toggle fullscreen mode."
+      },
+      "geolocateControl": {
+        "title": "Geolocation Control",
+        "text": "Click here to center the map on your current location."
+      },
+      "addPointsButton": {
+        "title": "Add Points for Zones",
+        "text": "Click this button to start adding points for a new zone."
+      },
+      "cancelCreationButton": {
+        "title": "Cancel Creation",
+        "text": "Click this button to cancel the creation of points for the zone."
+      },
+      "customButton1": {
+        "title": "Custom Button 1",
+        "text": "This is custom button number 1."
+      },
+      "customButton2": {
+        "title": "Custom Button 2",
+        "text": "This is custom button number 2."
+      },
+      "customButton3": {
+        "title": "Custom Button 3",
+        "text": "This is custom button number 3."
+      },
+      "customButton4": {
+        "title": "Custom Button 4",
+        "text": "This is custom button number 4."
+      },
+      "addElementButton": {
+        "title": "Button: Add Element",
+        "text": "Click this button to add a new element."
       }
     }
   },

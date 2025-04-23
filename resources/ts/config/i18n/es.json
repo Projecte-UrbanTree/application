@@ -1698,7 +1698,8 @@
       "addElementButton": {
         "title": "Botón: Añadir Elemento",
         "text": "Haz clic en este botón para añadir un nuevo elemento."
-      }
+      },
+      "finishButton": "Finalizar"
     }
   },
 

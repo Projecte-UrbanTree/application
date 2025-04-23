@@ -32,7 +32,6 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
             });
         },
         buttons: [
-            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
             { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
@@ -54,8 +53,8 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
         text: t('admin.tour.menuSettings.text'),
         attachTo: { element: 'a[href="/admin/settings/contracts"]', on: 'bottom' },
         buttons: [
-            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
-            { text: t('general.success'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
@@ -65,8 +64,8 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
         text: t('admin.tour.contractDropdown.text'),
         attachTo: { element: '#contractBtn', on: 'bottom' },
         buttons: [
-            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
-            { text: t('general.success'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
@@ -76,8 +75,8 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
         text: t('admin.tour.languageSelector.text'),
         attachTo: { element: '.lang-selector', on: 'bottom' },
         buttons: [
-            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
-            { text: t('general.success'), action: () => tour.next(), classes: 'bg-green-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
@@ -87,14 +86,14 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
         text: t('admin.tour.avatar.text'),
         attachTo: { element: '.p-avatar', on: 'left' },
         buttons: [
-            { text: t('general.cancel'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
-            { text: t('general.success'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
     tour.addStep({
         id: 'menu-settings',
-        title: 'Configuración <div class="shepherd-progress"></div>',
-        text: 'Accede a las configuraciones generales de la aplicación para crear y gestionar los contratos más fácilmente.',
+        title: `${t('admin.tour.menuSettings.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.menuSettings.text'),
         attachTo: { element: '.submenu-contracts', on: 'bottom' },
         beforeShowPromise: () => {
             navigate('/admin/settings/contracts');
@@ -105,78 +104,70 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
             });
         },
         buttons: [
-            {
-                text: 'Anterior',
-                action: tour.back,
-                classes: 'border border-gray-300 text-gray-700',
-            },
-            {
-                text: 'Siguiente',
-                action: () => {
-                    tour.next();
-                },
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+
         ],
     });
     tour.addStep({
         id: 'submenu-element-types',
-        title: 'Submenú: Tipos de Elementos <div class="shepherd-progress"></div>',
-        text: 'Administra los tipos de elementos disponibles.',
+        title: `${t('admin.tour.submenuElementTypes.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuElementTypes.text'),
         attachTo: { element: 'a[href="/admin/settings/element-types"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-tree-types',
-        title: 'Submenú: Especies <div class="shepherd-progress"></div>',
-        text: 'Gestiona las especies de árboles disponibles.',
+        title: `${t('admin.tour.submenuTreeTypes.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuTreeTypes.text'),
         attachTo: { element: 'a[href="/admin/settings/tree-types"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-task-types',
-        title: 'Submenú: Tipos de Tareas <div class="shepherd-progress"></div>',
-        text: 'Administra los tipos de tareas configurables.',
+        title: `${t('admin.tour.submenuTaskTypes.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuTaskTypes.text'),
         attachTo: { element: 'a[href="/admin/settings/task-types"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-resource-types',
-        title: 'Submenú: Tipos de Recursos <div class="shepherd-progress"></div>',
-        text: 'Gestiona los tipos de recursos disponibles.',
+        title: `${t('admin.tour.submenuResourceTypes.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuResourceTypes.text'),
         attachTo: { element: 'a[href="/admin/settings/resource-types"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-users',
-        title: 'Submenú: Usuarios <div class="shepherd-progress"></div>',
-        text: 'Administra los usuarios registrados en la plataforma.',
+        title: `${t('admin.tour.submenuUsers.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuUsers.text'),
         attachTo: { element: 'a[href="/admin/settings/users"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
-        tour.addStep({
+
+    tour.addStep({
         id: 'menu-dashboard',
-        title: 'Gestión <div class="shepherd-progress"></div>',
-        text: 'Panel donde podrás gestionar la información del contrato en el que estés.',
+        title: `${t('admin.tour.menuDashboard.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.menuDashboard.text'),
         attachTo: { element: '.submenu-dashboard', on: 'bottom' },
         beforeShowPromise: () => {
             navigate('/admin/dashboard');
@@ -187,106 +178,80 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
             });
         },
         buttons: [
-            { text: 'Anterior', action: () => {
-                tour.back();
-                }, 
-                classes: 'border border-gray-300 text-gray-700' },
-            {     
-                text: 'Siguiente',
-                action: () => {
-                    tour.next();
-                },
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
+
     tour.addStep({
         id: 'submenu-eva',
-        title: 'Submenú: EVA <div class="shepherd-progress"></div>',
-        text: 'Consulta y analiza los datos del EVA de cada arból en formato listado.',
+        title: `${t('admin.tour.submenuEva.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuEva.text'),
         attachTo: { element: 'a[href="/admin/evas"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-work-orders',
-        title: 'Submenú: Órdenes de trabajo <div class="shepherd-progress"></div>',
-        text: 'Lugar donde se crearan las ordenes de trabajo del dia.',
+        title: `${t('admin.tour.submenuWorkOrders.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuWorkOrders.text'),
         attachTo: { element: 'a[href="/admin/work-orders"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-workers',
-        title: 'Submenú: Trabajadores <div class="shepherd-progress"></div>',
-        text: 'Lugar donde assignaremos a los usuarios en que contrato queremos que trabajen.',
+        title: `${t('admin.tour.submenuWorkers.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuWorkers.text'),
         attachTo: { element: 'a[href="/admin/workers"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            {
-                text: 'Siguiente',
-                action: () => {
-                    tour.next();
-                },
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-resources',
-        title: 'Submenú: Recursos <div class="shepherd-progress"></div>',
-        text: 'Gestiona los recursos disponibles en el contrato.',
+        title: `${t('admin.tour.submenuResources.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuResources.text'),
         attachTo: { element: 'a[href="/admin/resources"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            {
-                text: 'Siguiente',
-                action: tour.next,
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'submenu-stats',
-        title: 'Submenú: Estadísticas <div class="shepherd-progress"></div>',
-        text: 'Consulta las estadísticas y gráficos.',
+        title: `${t('admin.tour.submenuStats.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuStats.text'),
         attachTo: { element: 'a[href="/admin/statistics"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            {
-                text: 'Siguiente',
-                action: tour.next,
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
     
     tour.addStep({
         id: 'submenu-sensors',
-        title: 'Submenú: Sensores <div class="shepherd-progress"></div>',
-        text: 'Consulta los registros de actividad de los sensores.',
+        title: `${t('admin.tour.submenuSensors.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.submenuSensors.text'),
         attachTo: { element: 'a[href="/admin/sensors"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            {
-                text: 'Siguiente',
-                action: tour.next,
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
     tour.addStep({
         id: 'menu-inventory',
-        title: 'Inventario <div class="shepherd-progress"></div>',
-        text: 'Consulta y gestiona los recursos disponibles en el inventario con la ayuda de un mapa.',
+        title: `${t('admin.tour.menuInventory.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.menuInventory.text'),
         attachTo: { element: 'a[href="/admin/inventory"]', on: 'bottom' },
         beforeShowPromise: () => {
             navigate('/admin/inventory');
@@ -297,101 +262,120 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
             });
         },
         buttons: [
-            {
-                text: 'Anterior',
-                action: ()=>{
-                    tour.back();
-                },
-                classes: 'border border-gray-300 text-gray-700',
-            },
-            {
-                text: 'Siguiente',
-                action: () => {
-                    tour.next();
-                },
-                classes: 'bg-blue-500 text-white',
-            },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     // Map-related steps from startMapTour
     tour.addStep({
         id: 'scale-control',
-        title: 'Control de Escala <div class="shepherd-progress"></div>',
-        text: 'Este control muestra la escala del mapa.',
+        title: `${t('admin.tour.scaleControl.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.scaleControl.text'),
         attachTo: { element: '.map-control-scale', on: 'top' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'fullscreen-control',
-        title: 'Control de Pantalla Completa <div class="shepherd-progress"></div>',
-        text: 'Haz clic aquí para alternar el modo de pantalla completa.',
+        title: `${t('admin.tour.fullscreenControl.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.fullscreenControl.text'),
         attachTo: { element: '.map-control-fullscreen', on: 'left' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'geolocate-control',
-        title: 'Control de Geolocalización <div class="shepherd-progress"></div>',
-        text: 'Haz clic aquí para centrar el mapa en tu ubicación actual.',
+        title: `${t('admin.tour.geolocateControl.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.geolocateControl.text'),
         attachTo: { element: '.map-control-geolocate', on: 'left' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'add-points-button',
-        title: 'Agregar Puntos para las Zonas <div class="shepherd-progress"></div>',
-        text: 'Haz clic en este botón para comenzar a agregar puntos para una nueva zona.',
+        title: `${t('admin.tour.addPointsButton.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.addPointsButton.text'),
         attachTo: { element: '.mapbox-gl-draw_polygon', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white rounded px-4 py-2' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     tour.addStep({
         id: 'cancel-creation-button',
-        title: 'Cancelar Creación <div class="shepherd-progress"></div>',
-        text: 'Haz clic en este botón para cancelar la creación de puntos para la zona.',
+        title: `${t('admin.tour.cancelCreationButton.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.cancelCreationButton.text'),
         attachTo: { element: '.mapbox-gl-draw_trash', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'bg-gray-200 text-gray-700 rounded px-4 py-2' },
-            { text: 'Siguiente', action: tour.next, classes: 'bg-green-500 text-white rounded px-4 py-2' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
     // Custom buttons
-    for (let i = 1; i <= 4; i++) {
-        tour.addStep({
-            id: `custom-button-${i}`,
-            title: `Botón Personalizado ${i} <div class="shepherd-progress"></div>`,
-            text: `Este es el botón personalizado número ${i}.`,
-            attachTo: { element: `.p-button-outlined.p-button-indigo.p-button-sm.p-button-icon-only:nth-of-type(${i})`, on: 'bottom' },
-            buttons: [
-                { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-                { text: 'Siguiente', action: tour.next, classes: 'bg-blue-500 text-white' },
-            ],
-        });
-    }
+    tour.addStep({
+        id: 'custom-button-1',
+        title: `${t('admin.tour.customButton1.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.customButton1.text'),
+        attachTo: { element: '.p-button-outlined.p-button-indigo.p-button-sm.p-button-icon-only:nth-of-type(1)', on: 'bottom' },
+        buttons: [
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'custom-button-2',
+        title: `${t('admin.tour.customButton2.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.customButton2.text'),
+        attachTo: { element: '.p-button-outlined.p-button-indigo.p-button-sm.p-button-icon-only:nth-of-type(2)', on: 'bottom' },
+        buttons: [
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'custom-button-3',
+        title: `${t('admin.tour.customButton3.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.customButton3.text'),
+        attachTo: { element: '.p-button-outlined.p-button-indigo.p-button-sm.p-button-icon-only:nth-of-type(3)', on: 'bottom' },
+        buttons: [
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+        ],
+    });
+
+    tour.addStep({
+        id: 'custom-button-4',
+        title: `${t('admin.tour.customButton4.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.customButton4.text'),
+        attachTo: { element: '.p-button-outlined.p-button-indigo.p-button-sm.p-button-icon-only:nth-of-type(4)', on: 'bottom' },
+        buttons: [
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.nextButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
+        ],
+    });
 
     tour.addStep({
         id: 'add-element-button',
-        title: 'Botón: Afegeix Element <div class="shepherd-progress"></div>',
-        text: 'Haz clic en este botón para añadir un nuevo elemento.',
+        title: `${t('admin.tour.addElementButton.title')} <div class="shepherd-progress"></div>`,
+        text: t('admin.tour.addElementButton.text'),
         attachTo: { element: '.p-button-outlined.p-button-indigo.p-button-sm.p-button.p-component[aria-label="Afegeix element"]', on: 'bottom' },
         buttons: [
-            { text: 'Anterior', action: tour.back, classes: 'border border-gray-300 text-gray-700' },
-            { text: 'Finalizar', action: tour.complete, classes: 'bg-blue-500 text-white' },
+            { text: t('admin.tour.previousButton'), action: () => tour.back(), classes: 'border border-gray-300 text-gray-700' },
+            { text: t('admin.tour.finishButton'), action: () => tour.next(), classes: 'bg-blue-500 text-white' },
         ],
     });
 
@@ -437,13 +421,13 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
         .shepherd-theme-minimal .shepherd-title {
             font-size: 1rem;
             font-weight: 600;
-            color: #333;
+            color: #4f46e5; /* Match layout's primary color */
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: center.
         }
         .shepherd-theme-minimal .shepherd-text {
-            color: #666;
+            color: #374151; /* Neutral gray for readability */
             font-size: 0.9rem;
             padding: 1rem;
         }
@@ -461,7 +445,7 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
         .shepherd-progress {
             width: 60px;
             height: 20px;
-            background: #e9ecef;
+            background: #e5e7eb; /* Light gray background */
             border-radius: 10px;
             overflow: hidden;
             position: relative;
@@ -470,7 +454,7 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
         }
         .shepherd-progress-bar {
             height: 100%;
-            background: #008037;
+            background: #059669; /* Match layout's primary color */
             transition: width 0.3s ease;
         }
         .shepherd-progress-text {
@@ -482,6 +466,30 @@ const startTour = (navigate: (path: string) => void, t: (key: string) => string)
             color: #fff;
             font-weight: bold;
             text-shadow: 0 0 1px rgba(0,0,0,0.5);
+        }
+        .shepherd-button {
+            border-radius: 9999px; /* Fully rounded buttons */
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .shepherd-button:hover {
+            opacity: 0.9;
+        }
+        .shepherd-button.bg-blue-500 {
+            background-color: #4f46e5; /* Match layout's primary color */
+            color: #fff;
+        }
+        .shepherd-button.bg-blue-500:hover {
+            background-color: #4338ca; /* Darker shade for hover */
+        }
+        .shepherd-button.border-gray-300 {
+            background-color: #4f46e5; /* Match layout's primary color */
+            color: #fff;
+            border: none;
+        }
+        .shepherd-button.border-gray-300:hover {
+            background-color: #4338ca; /* Darker shade for hover */
         }
     `;
     document.head.appendChild(style);
