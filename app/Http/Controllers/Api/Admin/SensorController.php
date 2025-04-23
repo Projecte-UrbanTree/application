@@ -16,7 +16,7 @@ class SensorController extends Controller
     public function index(Request $request)
     {
         try {
-            $contractId = $request->session()->get('selected_contract_id', 0);
+            $contractId = $request->input('contract_id', 0); // Use query parameter for contract_id
             $sensors = Sensor::when($contractId > 0, fn ($query) => $query->where('contract_id', $contractId))->get();
 
             return response()->json($sensors);

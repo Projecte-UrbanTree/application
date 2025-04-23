@@ -24,8 +24,8 @@ class Sensor extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function contracts()
+    public function contract()
     {
-        return $this->belongsTo(Contract::class);
+        return $this->belongsTo(Contract::class, 'contract_id');
     }
 }

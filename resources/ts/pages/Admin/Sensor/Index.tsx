@@ -10,6 +10,8 @@ import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
 import { Icon } from '@iconify/react';
 import { Tag } from 'primereact/tag';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 interface Sensor {
   id: number;
@@ -35,11 +37,16 @@ const Sensors: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
 
   useEffect(() => {
     const fetchAndProcessSensors = async () => {
       try {
-        const backendResponse = await axiosClient.get('/admin/sensors');
+        const backendResponse = await axiosClient.get('/admin/sensors', {
+          params: { contract_id: currentContract?.id || 0 }, // Filtrar por contrato
+        });
         const backendSensors: Sensor[] = backendResponse.data;
 
         const apiSensors = await fetchSensors();
@@ -82,7 +89,7 @@ const Sensors: React.FC = () => {
     };
 
     fetchAndProcessSensors();
-  }, [t]);
+  }, [t, currentContract]);
 
   useEffect(() => {
     if (location.state?.success) {
