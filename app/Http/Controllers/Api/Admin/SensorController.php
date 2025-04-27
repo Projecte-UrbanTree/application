@@ -206,4 +206,24 @@ class SensorController extends Controller
             return response()->json(['message' => 'Error fetching external sensor', 'error' => $th->getMessage()], 500);
         }
     }
+
+    /**
+     * Fetch all sensor history without pagination.
+     */
+    public function fetchAllSensorHistory($eui)
+    {
+        try {
+            $response = Http::withoutVerifying()
+                ->withHeaders(['X-API-Key' => env('VITE_X_API_KEY')])
+                ->get("https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history");
+
+            if ($response->successful()) {
+                return response()->json($response->json(), 200);
+            }
+
+            return response()->json(['message' => 'Error fetching external sensor history'], $response->status());
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Error fetching external sensor history', 'error' => $th->getMessage()], 500);
+        }
+    }
 }

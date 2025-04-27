@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchSensorHistoryPaginated } from '@/api/sensors';
+import { fetchAllSensorHistory } from '@/api/sensors';
 import { useTranslation } from 'react-i18next';
 import {
   format,
@@ -21,6 +21,7 @@ import { Button } from 'primereact/button';
 import { ToggleButton } from 'primereact/togglebutton';
 import { Icon } from '@iconify/react';
 import { Chart, registerables } from 'chart.js';
+import CrudPanel  from '@/components/CrudPanel';
 
 // Register Chart.js core components
 Chart.register(...registerables);
@@ -53,16 +54,14 @@ const SensorHistory: React.FC = () => {
         }
 
         setLoading(true);
-        const response = await fetchSensorHistoryPaginated(eui, page, perPage);
+        const response = await fetchAllSensorHistory(eui);
 
-        if (response && response.data) {
-          setSensorData(response.data);
-          setTotalRecords(response.total);
+        if (response) {
+          setSensorData(response);
         } else {
           setSensorData([]);
-          setTotalRecords(0);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error loading sensor history:', err);
         setError(t('admin.pages.sensors.history.loadError'));
       } finally {
@@ -71,7 +70,7 @@ const SensorHistory: React.FC = () => {
     };
 
     loadSensorHistory();
-  }, [eui, page, perPage, t]);
+  }, [eui, t]);
 
   useEffect(() => {
     // Destroy charts when component unmounts or data changes
@@ -269,61 +268,10 @@ const SensorHistory: React.FC = () => {
     setSelectedMonth((prevMonth) => addMonths(prevMonth, 1));
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-          animationDuration=".5s"
-        />
-      </div>
-    );
-  }
-
-  if (error)
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <Card className="border-red-200 bg-red-50 w-full max-w-2xl shadow-sm">
-          <div className="flex flex-col items-center gap-4">
-            <Icon
-              icon="tabler:alert-circle"
-              className="text-red-500 text-4xl"
-            />
-            <h3 className="text-red-600 font-semibold text-lg">{error}</h3>
-            <Button
-              severity="info"
-              onClick={() => window.location.reload()}
-              className="flex items-center gap-2"
-              icon={<Icon icon="tabler:reload" />}
-              label={t('common.tryAgain')}
-            />
-          </div>
-        </Card>
-      </div>
-    );
-
-  if (!sensorData.length)
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <Card className="border-blue-200 bg-blue-50 w-full max-w-2xl shadow-sm">
-          <div className="flex flex-col items-center gap-4">
-            <Icon
-              icon="tabler:database-off"
-              className="text-blue-500 text-4xl"
-            />
-            <h3 className="text-blue-600 font-semibold text-lg">
-              {t('admin.pages.sensors.history.noData')}
-            </h3>
-          </div>
-        </Card>
-      </div>
-    );
-
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex flex-col gap-6">
-        {/* Header with back button, title and view toggle */}
+        {/* Header with back button, title, and view toggle */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <Button
             icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
@@ -366,17 +314,18 @@ const SensorHistory: React.FC = () => {
 
         {viewMode === 'table' ? (
           /* Table View */
-          <Card className="shadow-sm border border-gray-300 bg-gray-50">
+          <CrudPanel
+            title="admin.pages.sensors.history.title"
+            onCreate={undefined} // No create action for sensor history
+            createDisabled={true}>
             <DataTable
               value={sensorData}
-              paginator={false}
+              paginator
+              rows={perPage}
+              rowsPerPageOptions={[5, 10, 20, 50]}
               stripedRows
               showGridlines
-              size="small"
-              className="p-datatable-sm"
-              emptyMessage={t('admin.pages.sensors.history.noData')}
-              scrollable
-              scrollHeight="flex">
+              className="p-datatable-sm">
               <Column
                 field="time"
                 header={t('admin.pages.sensors.history.metrics.time')}
@@ -386,9 +335,7 @@ const SensorHistory: React.FC = () => {
                     <span>{format(parseISO(rowData.time), 'PPpp')}</span>
                   </div>
                 )}
-                headerClassName="font-semibold"
               />
-
               <Column
                 field="temp_soil"
                 header={t('admin.pages.sensors.history.metrics.temp_soil')}
@@ -398,9 +345,7 @@ const SensorHistory: React.FC = () => {
                     <span>{rowData.temp_soil} °C</span>
                   </div>
                 )}
-                headerClassName="font-semibold"
               />
-
               <Column
                 field="ph1_soil"
                 header={t('admin.pages.sensors.history.metrics.ph1_soil')}
@@ -410,9 +355,7 @@ const SensorHistory: React.FC = () => {
                     <span>{rowData.ph1_soil} pH</span>
                   </div>
                 )}
-                headerClassName="font-semibold"
               />
-
               <Column
                 field="water_soil"
                 header={t('admin.pages.sensors.history.metrics.water_soil')}
@@ -427,9 +370,7 @@ const SensorHistory: React.FC = () => {
                     <Tag value="N/A" severity="info" />
                   )
                 }
-                headerClassName="font-semibold"
               />
-
               <Column
                 field="conductor_soil"
                 header={t('admin.pages.sensors.history.metrics.conductor_soil')}
@@ -446,9 +387,7 @@ const SensorHistory: React.FC = () => {
                     'N/A'
                   )
                 }
-                headerClassName="font-semibold"
               />
-
               <Column
                 field="bat"
                 header={t('admin.pages.sensors.history.metrics.bat')}
@@ -459,9 +398,7 @@ const SensorHistory: React.FC = () => {
                     className="font-medium"
                   />
                 )}
-                headerClassName="font-semibold"
               />
-
               <Column
                 field="rssi"
                 header={t('admin.pages.sensors.history.metrics.rssi')}
@@ -472,36 +409,14 @@ const SensorHistory: React.FC = () => {
                     className="font-medium"
                   />
                 )}
-                headerClassName="font-semibold"
               />
-
               <Column
                 field="snr"
                 header={t('admin.pages.sensors.history.metrics.snr')}
                 body={(rowData) => `${rowData.snr} dB`}
-                headerClassName="font-semibold"
               />
             </DataTable>
-
-            {/* Paginator */}
-            <div className="mt-4 border-t border-gray-100 pt-4">
-              <Paginator
-                first={first}
-                rows={perPage}
-                totalRecords={totalRecords}
-                rowsPerPageOptions={[5, 10, 20, 50]}
-                onPageChange={onPageChange}
-                className="border-0"
-                template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
-                currentPageReportTemplate={`{first} - {last} ${t('admin.pages.sensors.history.of')} {totalRecords}`}
-                leftContent={
-                  <div className="text-sm text-gray-600 ml-2">
-                    {t('common.totalRecords')}: <strong>{totalRecords}</strong>
-                  </div>
-                }
-              />
-            </div>
-          </Card>
+          </CrudPanel>
         ) : (
           /* Chart View */
           <div className="flex flex-col gap-8">

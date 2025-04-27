@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 
 class SensorHistoryController extends Controller
 {
@@ -204,83 +205,63 @@ class SensorHistoryController extends Controller
 
             $url = "https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history";
             if ($lastFetchDate) {
-                $url .= '?last_fetch_date='.urlencode($lastFetchDate);
+                $url .= '?last_fetch_date=' . urlencode($lastFetchDate);
             }
 
             $apiKey = env('VITE_X_API_KEY');
             if (empty($apiKey)) {
-                throw new \Exception('API key not configured');
+                return response()->json(['message' => 'API key not configured'], 500);
             }
 
-            $response = Http::withHeaders(['X-API-Key' => $apiKey])->get($url);
-
-            if (! $response->successful()) {
-                return response()->json([
-                    'message' => 'Error fetching data from external API',
-                    'status' => $response->status(),
-                ], $response->status());
-            }
-
-            $responseData = $response->json();
-            $recordsCreated = 0;
-            $skippedRecords = 0;
-
-            // Convert to array if response is a single object
-            $sensorDataArray = is_array($responseData) && ! array_key_exists('dev_eui', $responseData)
-                ? $responseData
-                : [$responseData];
-
-            // Get existing timestamps to avoid duplicates
-            $existingTimestamps = SensorHistory::where('sensor_id', $sensor->id)
-                ->pluck('created_at')
-                ->map(fn ($timestamp) => $timestamp->toDateTimeString())
-                ->toArray();
-
-            $processedTimestamps = [];
-
-            foreach ($sensorDataArray as $dataPoint) {
-                // Skip records without timestamp
-                if (empty($dataPoint['time'])) {
-                    $skippedRecords++;
-
-                    continue;
-                }
-
-                // Format timestamp and skip if already exists
-                $dataTimestamp = Carbon::parse($dataPoint['time'])->toDateTimeString();
-                if (in_array($dataTimestamp, $existingTimestamps) || in_array($dataTimestamp, $processedTimestamps)) {
-                    $skippedRecords++;
-
-                    continue;
-                }
-
-                $processedTimestamps[] = $dataTimestamp;
-
-                // Create history record
-                SensorHistory::create([
-                    'sensor_id' => $sensor->id,
-                    'temperature_soil' => $dataPoint['temp_soil'] ?? null,
-                    'temperature_air' => $dataPoint['tempc_ds18b20'] ?? null,
-                    'ph_soil' => $dataPoint['ph1_soil'] ?? null,
-                    'humidity_soil' => $dataPoint['water_soil'] ?? null,
-                    'conductivity_soil' => $dataPoint['conductor_soil'] ?? null,
-                    'batery' => $dataPoint['bat'] ?? null,
-                    'signal' => $dataPoint['rssi'] ?? null,
-                    'created_at' => $dataTimestamp,
-                ]);
-                $recordsCreated++;
-            }
-
-            return response()->json([
-                'message' => 'Successfully fetched and stored sensor data',
-                'records_created' => $recordsCreated,
-                'records_skipped' => $skippedRecords,
-                'sensor_id' => $sensor->id,
-                'eui' => $eui,
-                'last_fetch_date' => $lastFetchDate,
-                'total_records_processed' => count($sensorDataArray),
-                'api_url_used' => $url,
+            $client = new Client(['verify' => false]); // Disable SSL verification
+            $response = $client->get($url, [
+                'headers' => ['X-API-Key' => $apiKey],
             ]);
+
+            if ($response->getStatusCode() === 200) {
+                $responseData = json_decode($response->getBody(), true);
+                $recordsCreated = 0;
+                $skippedRecords = 0;
+
+                $sensorDataArray = is_array($responseData) && !array_key_exists('dev_eui', $responseData)
+                    ? $responseData
+                    : [$responseData];
+
+                foreach ($sensorDataArray as $dataPoint) {
+                    if (empty($dataPoint['date_sensor'])) {
+                        $skippedRecords++;
+                        continue;
+                    }
+
+                    $dateSensor = Carbon::parse($dataPoint['date_sensor'])->toDateTimeString();
+
+                    SensorHistory::create([
+                        'sensor_id' => $sensor->id,
+                        'temperature_soil' => $dataPoint['temp_soil'] ?? null,
+                        'temperature_air' => $dataPoint['tempc_ds18b20'] ?? null,
+                        'ph_soil' => $dataPoint['ph1_soil'] ?? null,
+                        'humidity_soil' => $dataPoint['water_soil'] ?? null,
+                        'conductivity_soil' => $dataPoint['conductor_soil'] ?? null,
+                        'batery' => $dataPoint['bat'] ?? null,
+                        'signal' => $dataPoint['rssi'] ?? null,
+                        'date_sensor' => $dateSensor, 
+                    ]);
+                    $recordsCreated++;
+                }
+
+                $allHistory = SensorHistory::where('sensor_id', $sensor->id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+                return response()->json([
+                    'message' => 'Successfully fetched and stored sensor data',
+                    'records_created' => $recordsCreated,
+                    'records_skipped' => $skippedRecords,
+                    'history' => $allHistory,
+                ]);
+            }
+
+            return response()->json(['message' => 'Failed to fetch data from API'], 500);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Sensor not found'], 404);
         } catch (\Exception $e) {
