@@ -58,6 +58,16 @@ const SensorHistory: React.FC = () => {
 
         if (response) {
           setSensorData(response);
+          const filtered = response.filter((data: any) => {
+            const dataDate = parseISO(data.time);
+            return isSameMonth(dataDate, selectedMonth);
+          });
+          setFilteredData(filtered);
+
+          // Preload charts immediately after data is loaded
+          setTimeout(() => {
+            preloadCharts(filtered);
+          }, 100);
         } else {
           setSensorData([]);
         }
@@ -70,7 +80,135 @@ const SensorHistory: React.FC = () => {
     };
 
     loadSensorHistory();
-  }, [eui, t]);
+  }, [eui, t, selectedMonth]);
+
+  const preloadCharts = (data: any[]) => {
+    charts.current.forEach((chart) => chart.destroy());
+    charts.current = [];
+
+    while (chartRefs.current.length < 7) {
+      chartRefs.current.push(null);
+    }
+
+    const reversedData = [...data].reverse();
+
+    const labels = reversedData.map((data) =>
+      format(parseISO(data.time), 'dd/MM/yyyy HH:mm'),
+    );
+
+    const chartConfigs = [
+      {
+        title:
+          t('admin.pages.sensors.history.metrics.temp_soil') ||
+          'Soil Temperature',
+        data: reversedData.map((data) => data.temp_soil),
+        borderColor: '#ef4444',
+        backgroundColor: '#fca5a5',
+        yAxisTitle: '°C',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
+        data: reversedData.map((data) => data.ph1_soil),
+        borderColor: '#8b5cf6',
+        backgroundColor: '#c4b5fd',
+        yAxisTitle: 'pH',
+      },
+      {
+        title:
+          t('admin.pages.sensors.history.metrics.water_soil') ||
+          'Soil Moisture',
+        data: reversedData.map((data) => data.water_soil || null),
+        borderColor: '#059669',
+        backgroundColor: '#6ee7b7',
+        yAxisTitle: '%',
+      },
+      {
+        title:
+          t('admin.pages.sensors.history.metrics.conductor_soil') ||
+          'Soil Conductivity',
+        data: reversedData.map((data) => data.conductor_soil || null),
+        borderColor: '#d97706',
+        backgroundColor: '#fcd34d',
+        yAxisTitle: 'µS/cm',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
+        data: reversedData.map((data) => data.bat),
+        borderColor: '#2563eb',
+        backgroundColor: '#93c5fd',
+        yAxisTitle: 'V',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
+        data: reversedData.map((data) => data.rssi),
+        borderColor: '#7c3aed',
+        backgroundColor: '#c4b5fd',
+        yAxisTitle: 'dBm',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
+        data: reversedData.map((data) => data.snr),
+        borderColor: '#db2777',
+        backgroundColor: '#f9a8d4',
+        yAxisTitle: 'dB',
+      },
+    ];
+
+    chartConfigs.forEach((config, index) => {
+      const ctx = chartRefs.current[index]?.getContext('2d');
+      if (!ctx) return;
+
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: config.title,
+              data: config.data,
+              borderColor: config.borderColor,
+              backgroundColor: config.backgroundColor,
+              fill: false,
+              tension: 0.1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: config.title,
+              font: { size: 16 },
+            },
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+            },
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: config.yAxisTitle,
+              },
+            },
+            x: {
+              title: {
+                display: true,
+                text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+              },
+            },
+          },
+        },
+      });
+
+      charts.current.push(chart);
+    });
+  };
 
   useEffect(() => {
     // Destroy charts when component unmounts or data changes
@@ -103,12 +241,6 @@ const SensorHistory: React.FC = () => {
     }
   }, [sensorData, selectedMonth]);
 
-  const onPageChange = (event: any) => {
-    setPage(event.page + 1);
-    setFirst(event.first);
-    setPerPage(event.rows);
-  };
-
   const getBatterySeverity = (voltage: number) => {
     if (voltage >= 3.6) return 'success';
     if (voltage >= 3.3) return 'warning';
@@ -136,7 +268,10 @@ const SensorHistory: React.FC = () => {
       chartRefs.current.push(null);
     }
 
-    const labels = filteredData.map((data) =>
+    // Reverse the filtered data to show the beginning of the month first
+    const reversedData = [...filteredData].reverse();
+
+    const labels = reversedData.map((data) =>
       format(parseISO(data.time), 'dd/MM/yyyy HH:mm'),
     );
 
@@ -145,14 +280,14 @@ const SensorHistory: React.FC = () => {
         title:
           t('admin.pages.sensors.history.metrics.temp_soil') ||
           'Soil Temperature',
-        data: filteredData.map((data) => data.temp_soil),
+        data: reversedData.map((data) => data.temp_soil),
         borderColor: '#ef4444',
         backgroundColor: '#fca5a5',
         yAxisTitle: '°C',
       },
       {
         title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
-        data: filteredData.map((data) => data.ph1_soil),
+        data: reversedData.map((data) => data.ph1_soil),
         borderColor: '#8b5cf6',
         backgroundColor: '#c4b5fd',
         yAxisTitle: 'pH',
@@ -161,7 +296,7 @@ const SensorHistory: React.FC = () => {
         title:
           t('admin.pages.sensors.history.metrics.water_soil') ||
           'Soil Moisture',
-        data: filteredData.map((data) => data.water_soil || null),
+        data: reversedData.map((data) => data.water_soil || null),
         borderColor: '#059669',
         backgroundColor: '#6ee7b7',
         yAxisTitle: '%',
@@ -170,38 +305,33 @@ const SensorHistory: React.FC = () => {
         title:
           t('admin.pages.sensors.history.metrics.conductor_soil') ||
           'Soil Conductivity',
-        data: filteredData.map((data) => data.conductor_soil || null),
+        data: reversedData.map((data) => data.conductor_soil || null),
         borderColor: '#d97706',
         backgroundColor: '#fcd34d',
         yAxisTitle: 'µS/cm',
       },
       {
         title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
-        data: filteredData.map((data) => data.bat),
+        data: reversedData.map((data) => data.bat),
         borderColor: '#2563eb',
         backgroundColor: '#93c5fd',
         yAxisTitle: 'V',
       },
       {
         title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
-        data: filteredData.map((data) => data.rssi),
+        data: reversedData.map((data) => data.rssi),
         borderColor: '#7c3aed',
         backgroundColor: '#c4b5fd',
         yAxisTitle: 'dBm',
       },
       {
         title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
-        data: filteredData.map((data) => data.snr),
+        data: reversedData.map((data) => data.snr),
         borderColor: '#db2777',
         backgroundColor: '#f9a8d4',
         yAxisTitle: 'dB',
       },
     ];
-
-    // Create and attach refs for more charts
-    while (chartRefs.current.length < chartConfigs.length) {
-      chartRefs.current.push(null);
-    }
 
     // Render each chart
     chartConfigs.forEach((config, index) => {
