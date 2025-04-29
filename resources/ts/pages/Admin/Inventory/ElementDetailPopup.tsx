@@ -887,7 +887,8 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   onClick={() => setIsEditModalVisible(true)}
                 />
 
-                {userData === Roles.admin && (
+                {userData !== Roles.customer && (
+
                   <Button
                     label={t(
                       'admin.pages.inventory.elementDetailPopup.information.deleteElement',

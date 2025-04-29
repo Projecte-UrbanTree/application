@@ -130,6 +130,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('work-reports', [IndexController::class, 'createWorkReport']);
         Route::post('incidents', [IncidentsController::class, 'store']);
         Route::patch('incidents/{id}', [IncidentsController::class, 'update']);
+
+        Route::post('points', [PointController::class, 'store']);
+        
+        Route::post('elements', [ElementController::class, 'store']);
+        Route::put('elements/{id}', [ElementController::class, 'update']);
+        Route::delete('elements/{id}', [ElementController::class, 'destroy']);
         
         // Rutas para el inventario (solo lectura)
         Route::get('zones', [ZoneController::class, 'index']);

@@ -130,14 +130,9 @@ export const InventoryWorker: React.FC = () => {
     setSelectedZone(zone);
   }, []);
 
-  const handleAddElementZone = useCallback(() => {
-    // No permitido para workers
-    toast.current?.show({
-      severity: 'warn',
-      summary: 'Acceso restringido',
-      detail: 'No tienes permisos para añadir elementos',
-      life: 3000,
-    });
+  const handleAddElementZone = useCallback((zone: Zone) => {
+    setSelectedZone(zone);
+    setIsCreatingElement(true);
   }, []);
 
   const handleCreatingElementChange = useCallback((isCreating: boolean) => {

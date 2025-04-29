@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import { Navigate, Outlet } from 'react-router';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -6,13 +7,25 @@ import { getRouteByRole } from '@/utils/roleRoutes';
 export default function UnauthenticatedRoute() {
   const { isAuthenticated, user } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Outlet />;
-  }
+  const redirectRoute = useMemo(() => {
+    if (!isAuthenticated) {
+      return null;
+    }
 
-  if (!user || !user.role) {
-    return <Navigate to="/" replace />;
-  }
+    if (!user?.role) {
+      return '/';
+    }
 
-  return <Navigate to={getRouteByRole(user.role)} replace />;
+    return getRouteByRole(user.role);
+  }, [isAuthenticated, user?.role]);
+
+  const handleRedirect = useCallback(() => {
+    if (!redirectRoute) {
+      return <Outlet />;
+    }
+
+    return <Navigate to={redirectRoute} replace />;
+  }, [redirectRoute]);
+
+  return handleRedirect();
 }

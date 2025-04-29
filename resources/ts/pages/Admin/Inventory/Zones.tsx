@@ -92,6 +92,7 @@ export const Zones = ({
   );
   const userValue = useSelector((state: RootState) => state.user);
   const isAdmin = userValue.role === Roles.admin;
+  const canCreateElements = userValue.role === Roles.admin || userValue.role === Roles.worker;
 
   const uniqueZones = useMemo(
     () => Array.from(new Map(zones.map((z) => [z.id, z])).values()),
@@ -722,6 +723,19 @@ export const Zones = ({
                           />
                         </>
                       )}
+                      {!isAdmin && canCreateElements && (
+                        <Button
+                          icon={<Icon icon="tabler:plus" width="18" />}
+                          className="p-button-outlined p-button-indigo p-button-sm"
+                          tooltip={t(
+                            'admin.pages.inventory.zones.tooltips.addElement',
+                          )}
+                          tooltipOptions={{ position: 'top' }}
+                          onClick={() =>
+                            addElementZone({ isCreatingElement: true, zone })
+                          }
+                        />
+                      )}
                     </div>
                   </div>
 
@@ -744,7 +758,7 @@ export const Zones = ({
                                 'admin.pages.inventory.zones.noElementsInZone',
                               )}
                             </p>
-                            {isAdmin && (
+                            {canCreateElements && (
                               <Button
                                 label={t(
                                   'admin.pages.inventory.zones.addElementButton',
