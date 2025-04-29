@@ -6,6 +6,7 @@ import zoneSlice from './slice/zoneSlice';
 import pointSlice from './slice/pointSlice';
 import elementSlice from './slice/elementSlice';
 import incidentReducer from './slice/incidentSlice';
+import workerReducer from './slice/workerSlice';
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     points: pointSlice.reducer,
     element: elementSlice.reducer,
     incidents: incidentReducer,
+    worker: workerReducer,
   },
 });
 

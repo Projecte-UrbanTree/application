@@ -1,10 +1,30 @@
 import { Zone, ZoneCenterCoord } from '@/types/Zone';
-
+import { AxiosResponse } from 'axios';
 import axiosClient from '../axiosClient';
 
 export const fetchZones = async (): Promise<Zone[]> => {
-  const response = await axiosClient.get<Zone[]>('/admin/zones');
-  return response.data;
+  try {
+    const response: AxiosResponse = await axiosClient.get<Zone[]>(`/zones`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
+};
+
+// Función para acceso de trabajadores
+export const fetchWorkerZones = async (): Promise<Zone[]> => {
+  try {
+    const response: AxiosResponse = await axiosClient.get<Zone[]>(`/worker/zones`);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return [];
 };
 
 export interface SaveZoneForm {
@@ -39,11 +59,39 @@ export const deleteZone = async (zoneId: number): Promise<void> => {
 };
 
 export const getZoneCoords = async (): Promise<ZoneCenterCoord[]> => {
-  const res = await axiosClient.get(`/admin/points/location-contract`);
+  const res = await axiosClient.get(`/points/location-contract`);
   return res.data;
 };
 
-export const getZoneZoom = async (zoneId: number): Promise<ZoneCenterCoord> => {
-  const res = await axiosClient.get(`/admin/zones/${zoneId}/center-zoom`);
+// Función para acceso de trabajadores
+export const getWorkerZoneCoords = async (): Promise<ZoneCenterCoord[]> => {
+  const res = await axiosClient.get(`/worker/points/location-contract`);
   return res.data;
 };
+
+export const getZoneCenterZoom = async (zoneId: number): Promise<ZoneCenterCoord | null> => {
+  try {
+    const response: AxiosResponse = await axiosClient.get<ZoneCenterCoord>(`/zones/${zoneId}/center-zoom`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// Para mantener compatibilidad con el código existente
+export const getZoneZoom = getZoneCenterZoom;
+
+// Función para acceso de trabajadores
+export const getWorkerZoneCenterZoom = async (zoneId: number): Promise<ZoneCenterCoord | null> => {
+  try {
+    const response: AxiosResponse = await axiosClient.get<ZoneCenterCoord>(`/worker/zones/${zoneId}/center-zoom`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// Para mantener compatibilidad con el código existente para trabajadores
+export const getWorkerZoneZoom = getWorkerZoneCenterZoom;

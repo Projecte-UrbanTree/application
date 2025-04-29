@@ -5,9 +5,25 @@ import { Element } from '@/types/Element';
 import axiosClient from '../axiosClient';
 
 export const fetchElements = async (): Promise<Element[]> => {
-  const response: AxiosResponse =
-    await axiosClient.get<Element[]>(`/admin/elements`);
-  return response.data;
+  try {
+    const response: AxiosResponse = await axiosClient.get<Element[]>(`/elements`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }  
+
+  return [];
+};
+
+export const fetchWorkerElements = async (): Promise<Element[]> => {
+  try {
+    const response: AxiosResponse = await axiosClient.get<Element[]>(`/worker/elements`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }  
+
+  return [];
 };
 
 export const saveElements = async (element: Element): Promise<Element> => {

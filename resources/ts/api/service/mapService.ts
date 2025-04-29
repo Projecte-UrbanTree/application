@@ -39,21 +39,45 @@ export class MapService {
     zoneCoords: ZoneCenterCoord[],
     geoCoords: number[],
   ) {
-    this.zoneCoords = zoneCoords;
-    this.geoCoords = geoCoords;
-    mapboxgl.accessToken = token;
-    this.map = new mapboxgl.Map({
-      container,
-      style: 'mapbox://styles/mapbox/standard-satellite',
-      center: this.getCenter(),
-      zoom: 16,
-    });
+    if (!token) {
+      console.error('MapService: MapBox token is required');
+      throw new Error('MapBox token is required');
+    }
 
-    this.map.on('load', () => {
-      this.isMapInitialized = true;
-      this.initCallbacks.forEach((callback) => callback());
-      this.initCallbacks = [];
-    });
+    this.zoneCoords = zoneCoords || [];
+    this.geoCoords = geoCoords || DEFAULT_CENTER;
+    
+    try {
+      mapboxgl.accessToken = token;
+      
+      this.map = new mapboxgl.Map({
+        container,
+        style: 'mapbox://styles/mapbox/satellite-streets-v12',
+        center: this.getCenter(),
+        zoom: 16,
+        minZoom: 2,
+        maxZoom: 18
+      });
+
+      this.map.on('load', () => {
+        console.log('Map loaded successfully');
+        this.isMapInitialized = true;
+        this.initCallbacks.forEach((callback) => callback());
+        this.initCallbacks = [];
+        
+        // Force resize after load to ensure correct dimensions
+        setTimeout(() => {
+          this.map.resize();
+        }, 100);
+      });
+      
+      this.map.on('error', (e) => {
+        console.error('Map error:', e);
+      });
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      throw error;
+    }
   }
 
   private getCenter(): LngLatLike {
@@ -415,18 +439,19 @@ export class MapService {
     if (selectedZone.id === null) return;
 
     try {
-      const { zoom, center }: ZoneCenterCoord = await getZoneZoom(
-        selectedZone.id!,
-      );
-
-      if (center) {
+      const zoneData = await getZoneZoom(selectedZone.id!);
+      
+      if (zoneData && zoneData.center) {
+        const { zoom, center } = zoneData;
         this.map.flyTo({
           center: [center[0], center[1]],
           zoom,
           essential: true,
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error flying to zone:', e);
+    }
   }
 
   public onMapLoad(callback: () => void): () => void {

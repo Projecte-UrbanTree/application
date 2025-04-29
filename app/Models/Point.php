@@ -26,7 +26,7 @@ class Point extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function zones()
+    public function zone()
     {
         return $this->belongsTo(Zone::class, 'zone_id');
     }

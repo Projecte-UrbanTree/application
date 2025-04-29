@@ -6,7 +6,7 @@ import axiosClient from '../axiosClient';
 
 export const fetchPoints = async (): Promise<Point[]> => {
   const response: AxiosResponse =
-    await axiosClient.get<Point[]>(`/admin/points`);
+    await axiosClient.get<Point[]>(`/points`);
   return response.data;
 };
 

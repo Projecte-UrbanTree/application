@@ -139,9 +139,9 @@ export const MapComponent: React.FC<MapProps> = ({
             getZoneCoords(),
           ]);
 
-        setTreeTypes(treeTypesRes);
-        setElementTypes(elementTypesRes);
-        setCenterCoords(centerCoordsRes);
+        setTreeTypes(treeTypesRes || []);
+        setElementTypes(elementTypesRes || []);
+        setCenterCoords(centerCoordsRes || []);
 
         await Promise.all([
           dispatch(fetchPointsAsync()).unwrap(),
@@ -150,6 +150,7 @@ export const MapComponent: React.FC<MapProps> = ({
 
         setIsDataLoaded(true);
       } catch (err) {
+        console.error('Error loading map data:', err);
         toast.current?.show({
           severity: 'error',
           summary: t('admin.pages.inventory.genericErrorTitle'),
@@ -172,41 +173,72 @@ export const MapComponent: React.FC<MapProps> = ({
     )
       return;
 
+    if (!MAPBOX_TOKEN) {
+      console.error('MAPBOX_TOKEN is not defined');
+      toast.current?.show({
+        severity: 'error',
+        summary: t('admin.pages.inventory.genericErrorTitle'),
+        detail: 'Mapbox token is missing. Check your environment configuration.',
+      });
+      return;
+    }
+
     let initialCoordinates: [number, number] = DEFAULT_MADRID_COORDS;
     if (geoLat && geoLng && !geoError) {
       initialCoordinates = [geoLng, geoLat];
-    } else if (centerCoords?.length > 0 && centerCoords[0].center) {
+    } else if (centerCoords?.length > 0 && centerCoords[0]?.center) {
       initialCoordinates = [
         centerCoords[0].center[0],
         centerCoords[0].center[1],
       ];
     }
 
-    const service = new MapService(
-      mapContainerRef.current,
-      MAPBOX_TOKEN!,
-      centerCoords!,
-      initialCoordinates,
-    );
-    mapServiceRef.current = service;
+    try {
+      console.log("Initializing MapService with token:", MAPBOX_TOKEN ? "Valid token" : "Invalid token");
+      console.log("Initial coordinates:", initialCoordinates);
+      console.log("Map container ref exists:", !!mapContainerRef.current);
+      console.log("Center coords length:", centerCoords?.length);
+      
+      const service = new MapService(
+        mapContainerRef.current,
+        MAPBOX_TOKEN,
+        centerCoords || [],
+        initialCoordinates,
+      );
+      mapServiceRef.current = service;
 
-    service.addBasicControls();
+      service.addBasicControls();
 
-    service.enableDraw(userValue.role === Roles.admin, (coords) => {
-      if (coords.length > 0) {
-        setCoordinates(coords);
-        onDrawingModeChange(true);
-        onEnabledButtonChange(true);
-      } else {
-        onDrawingModeChange(false);
-        onEnabledButtonChange(false);
-      }
-    });
+      service.enableDraw(userValue.role === Roles.admin, (coords) => {
+        if (coords.length > 0) {
+          setCoordinates(coords);
+          onDrawingModeChange(true);
+          onEnabledButtonChange(true);
+        } else {
+          onDrawingModeChange(false);
+          onEnabledButtonChange(false);
+        }
+      });
 
-    service.waitForInit(() => {
-      updateZones(service);
-      updateElements(service);
-    });
+      service.waitForInit(() => {
+        console.log("Map service initialized successfully, updating zones and elements");
+        updateZones(service);
+        updateElements(service);
+        
+        // Forzar un redimensionamiento después de la inicialización
+        setTimeout(() => {
+          service.resizeMap();
+          console.log("Map resized after initialization");
+        }, 300);
+      });
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: t('admin.pages.inventory.genericErrorTitle'),
+        detail: 'Error initializing map. Please try refreshing the page.',
+      });
+    }
   }, [
     isDataLoaded,
     isLoading,
@@ -221,10 +253,24 @@ export const MapComponent: React.FC<MapProps> = ({
   ]);
 
   useEffect(() => {
-    const handleResize = () => mapServiceRef.current?.resizeMap();
+    const handleResize = () => {
+      if (mapServiceRef.current) {
+        console.log("Resizing map on window resize");
+        mapServiceRef.current.resizeMap();
+      }
+    };
+    
     window.addEventListener('resize', handleResize);
+    
+    // Forzar un redimensionamiento inicial
+    if (mapServiceRef.current) {
+      setTimeout(() => {
+        handleResize();
+      }, 500);
+    }
+    
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isDataLoaded, isLoading]);
 
   useEffect(() => {
     const service = mapServiceRef.current;
@@ -662,8 +708,8 @@ export const MapComponent: React.FC<MapProps> = ({
     service.addElementMarkers(
       filteredElements,
       relevantPoints,
-      treeTypes,
-      elementTypes,
+      Array.isArray(treeTypes) ? treeTypes : [],
+      Array.isArray(elementTypes) ? elementTypes : [],
       handleElementDelete,
       handleElementClick,
     );
@@ -893,11 +939,11 @@ export const MapComponent: React.FC<MapProps> = ({
           zoneId={selectedZoneForElement?.id!}
           coordinate={newPointCoord!}
           onClose={handleElementFormClose}
-          elementTypes={elementTypes.map((item) => ({
+          elementTypes={(Array.isArray(elementTypes) ? elementTypes : []).map((item) => ({
             label: `${item.name}`,
             value: item.id!,
           }))}
-          treeTypes={treeTypes.map((item) => ({
+          treeTypes={(Array.isArray(treeTypes) ? treeTypes : []).map((item) => ({
             label: `${item.family} ${item.genus} ${item.species}`,
             value: item.id!,
           }))}
@@ -956,8 +1002,8 @@ export const MapComponent: React.FC<MapProps> = ({
             element={selectedElement}
             onClose={() => setElementModalVisible(false)}
             onDeleteElement={handleElementDelete}
-            treeTypes={treeTypes}
-            elementTypes={elementTypes}
+            treeTypes={Array.isArray(treeTypes) ? treeTypes : []}
+            elementTypes={Array.isArray(elementTypes) ? elementTypes : []}
             onOpenIncidentForm={() => setIncidentModalVisible(true)}
             getCoordElement={(element, pts) =>
               mapServiceRef.current?.getCoordElement(element, pts)!
