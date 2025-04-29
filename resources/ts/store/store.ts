@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { contractSlice } from './slice/contractSlice';
+// Importar slices
+import contractSlice from './slice/contractSlice';
 import { userSlice } from './slice/userSlice';
 import zoneSlice from './slice/zoneSlice';
 import pointSlice from './slice/pointSlice';
@@ -8,6 +9,7 @@ import elementSlice from './slice/elementSlice';
 import incidentReducer from './slice/incidentSlice';
 import workerReducer from './slice/workerSlice';
 
+// Configurar el store
 const store = configureStore({
   reducer: {
     user: userSlice.reducer,
@@ -20,6 +22,9 @@ const store = configureStore({
   },
 });
 
-export default store;
+// Exportar tipos
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+// Exportar store
+export default store;

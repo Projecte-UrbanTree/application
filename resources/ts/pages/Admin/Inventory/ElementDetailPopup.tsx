@@ -34,6 +34,8 @@ import { TreeTypes } from '@/types/TreeTypes';
 import { WorkOrder } from '@/types/WorkOrders';
 
 import EditElementForm from './EditElementForm';
+import { Roles } from '@/types/Role';
+import { fetchWorkerIncidents, fetchWorkerWorkOrders } from '@/api/service/workerService';
 
 interface ElementDetailPopupProps {
   element: Element;
@@ -101,6 +103,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
+  const userData = useSelector((state: RootState) => state.user.role);
   const dispatch = useDispatch<AppDispatch>();
   const toast = useRef<Toast>(null);
   const {
@@ -118,7 +121,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
       try {
         setIsLoading(true);
-        const data = await fetchWorkOrders();
+        const data = await fetchWorkerWorkOrders();
         const filteredOrders = data.filter(
           (order) => order.contract_id === currentContract.id,
         );
@@ -145,7 +148,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
 
       try {
         setIsLoading(true);
-        const data = await fetchIncidence();
+        const data = await fetchWorkerIncidents();
 
         if (Array.isArray(data)) {
           setIncidences(data.filter((i) => i.element_id === element.id));
@@ -172,7 +175,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
     try {
       setIsLoadingEva(true);
       const response = await axiosClient.get(
-        `/admin/evas/element/${element.id}`,
+        `/evas/element/${element.id}`,
       );
       setEva(response.data);
       setIsLoadingEva(false);
@@ -189,7 +192,7 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
         try {
           setIsLoadingEva(true);
           const response = await axiosClient.get(
-            `/admin/evas/element/${element.id}`,
+            `/evas/element/${element.id}`,
           );
           setEva(response.data);
           setIsLoadingEva(false);
@@ -883,14 +886,17 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                   icon={<Icon icon="tabler:edit" />}
                   onClick={() => setIsEditModalVisible(true)}
                 />
-                <Button
-                  label={t(
-                    'admin.pages.inventory.elementDetailPopup.information.deleteElement',
-                  )}
+
+                {userData === Roles.admin && (
+                  <Button
+                    label={t(
+                      'admin.pages.inventory.elementDetailPopup.information.deleteElement',
+                    )}
                   className="p-button-outlined p-button-danger p-button-sm"
                   icon={<Icon icon="tabler:trash" />}
-                  onClick={() => handleDeleteElement(element.id!)}
-                />
+                    onClick={() => handleDeleteElement(element.id!)}
+                  />
+                )}
               </div>
             </div>
           </TabPanel>
@@ -951,14 +957,17 @@ const ElementDetailPopup: React.FC<ElementDetailPopupProps> = ({
                           }
                           className="w-[160px] p-inputtext-sm"
                         />
-                        <Button
-                          icon={<Icon icon="tabler:trash" />}
+
+                        {userData === Roles.admin && (
+                          <Button
+                            icon={<Icon icon="tabler:trash" />}
                           label={t(
                             'admin.pages.inventory.elementDetailPopup.incidences.deleteIncident',
                           )}
                           className="p-button-outlined p-button-danger p-button-sm"
-                          onClick={() => handleDeleteIncident(incidence.id!)}
-                        />
+                            onClick={() => handleDeleteIncident(incidence.id!)}
+                          />
+                        )}
                       </div>
                     </Card>
                   ))}

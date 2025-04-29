@@ -5,6 +5,8 @@ import { Zone } from '@/types/Zone';
 import { Point } from '@/types/Point';
 
 import axiosClient from '../axiosClient';
+import { Incidence } from '@/types/Incident';
+import { WorkOrder } from '@/types/WorkOrders';
 
 /**
  * Obtiene todos los elementos para trabajadores
@@ -73,3 +75,24 @@ export const getZoneCenterZoom = async (zoneId: number): Promise<{center: [numbe
     return { center: [0, 0], zoom: 0 };
   }
 }; 
+
+
+export const fetchWorkerIncidents = async (): Promise<Incidence[]> => {
+  try {
+    const response: AxiosResponse = await axiosClient.get(`/worker/incidents`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+export const fetchWorkerWorkOrders = async (): Promise<WorkOrder[]> => {
+  try {
+    const response: AxiosResponse = await axiosClient.get(`/worker/work-orders`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};

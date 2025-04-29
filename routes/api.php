@@ -128,6 +128,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('resource-types', [WorkerResourceController::class, 'resourceTypes']);
         Route::get('resources', [WorkerResourceController::class, 'resources']);
         Route::post('work-reports', [IndexController::class, 'createWorkReport']);
+        Route::post('incidents', [IncidentsController::class, 'store']);
+        Route::patch('incidents/{id}', [IncidentsController::class, 'update']);
         
         // Rutas para el inventario (solo lectura)
         Route::get('zones', [ZoneController::class, 'index']);
@@ -137,5 +139,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('tree-types', [TreeTypeController::class, 'index']);
         Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
         Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
+        Route::get('incidents', [IncidentsController::class, 'index']);
+        Route::get('work-orders', [WorkOrderController::class, 'index']);
+        Route::get('evas/element/{elementId}', [EvaController::class, 'getByElementId']);
+
     });
 });

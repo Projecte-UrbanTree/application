@@ -194,11 +194,6 @@ export const MapComponent: React.FC<MapProps> = ({
     }
 
     try {
-      console.log("Initializing MapService with token:", MAPBOX_TOKEN ? "Valid token" : "Invalid token");
-      console.log("Initial coordinates:", initialCoordinates);
-      console.log("Map container ref exists:", !!mapContainerRef.current);
-      console.log("Center coords length:", centerCoords?.length);
-      
       const service = new MapService(
         mapContainerRef.current,
         MAPBOX_TOKEN,
@@ -221,14 +216,12 @@ export const MapComponent: React.FC<MapProps> = ({
       });
 
       service.waitForInit(() => {
-        console.log("Map service initialized successfully, updating zones and elements");
         updateZones(service);
         updateElements(service);
         
         // Forzar un redimensionamiento después de la inicialización
         setTimeout(() => {
           service.resizeMap();
-          console.log("Map resized after initialization");
         }, 300);
       });
     } catch (error) {
@@ -255,7 +248,6 @@ export const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     const handleResize = () => {
       if (mapServiceRef.current) {
-        console.log("Resizing map on window resize");
         mapServiceRef.current.resizeMap();
       }
     };
