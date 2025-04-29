@@ -372,23 +372,23 @@ const SensorHistory: React.FC = () => {
           scales: {
             y: {
               title: {
-                display: true,
-                text: config.yAxisTitle,
+                  display: true,
+                  text: config.yAxisTitle,
+                },
               },
-            },
-            x: {
-              title: {
-                display: true,
-                text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+              x: {
+                title: {
+                  display: true,
+                  text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+                },
               },
             },
           },
-        },
-      });
+        });
 
-      charts.current.push(chart);
-    });
-  };
+        charts.current.push(chart);
+      });
+    };
 
   const previousMonth = () => {
     setSelectedMonth((prevMonth) => subMonths(prevMonth, 1));
