@@ -243,6 +243,19 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
     ? 'p-0' // Remove all padding for inventory
     : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.userway.org/widget.js';
+    script.setAttribute('data-account', import.meta.env.VITE_USERWAY_ACCOUNT_KEY);
+    script.setAttribute('data-position', '3'); // Position 3 corresponds to bottom-right
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div>
       <div
@@ -386,7 +399,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
         {children}
         </main>
       </div>
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-4 left-4 z-50">
         <Button
           onClick={() => startTour((path: string) => navigate(path), t)}
           className="bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg"
@@ -395,6 +408,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, titleI18n }) => {
         </Button>
       </div>
     </div>
+    
   );
 };
 
