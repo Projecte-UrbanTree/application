@@ -284,39 +284,72 @@ const Sensors: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-white p-3 rounded-lg border border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">
-                    {t('admin.pages.sensors.list.temperature')}
-                  </p>
-                  <div className="flex items-center">
-                    <Icon
-                      icon="tabler:temperature"
-                      className="text-red-500 mr-1"
-                    />
-                    <span className="text-gray-700">
-                      {sensor.temp_soil
-                        ? `${sensor.temp_soil} °C`
-                        : t('admin.pages.sensors.list.noData')}
-                    </span>
-                  </div>
-                </div>
-                <div className="bg-white p-3 rounded-lg border border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">
-                    {t('admin.pages.sensors.list.moisture')}
-                  </p>
-                  <div className="flex items-center">
-                    <Icon
-                      icon="tabler:droplet"
-                      className="text-blue-500 mr-1"
-                    />
-                    <span className="text-gray-700">
-                      {sensor.water_soil
-                        ? `${sensor.water_soil}%`
-                        : t('admin.pages.sensors.list.noData')}
-                    </span>
-                  </div>
-                </div>
-              </div>
+          <div className="bg-white p-3 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-500 mb-1">
+              {t('admin.pages.sensors.list.temperature')}
+            </p>
+            <div className="flex items-center">
+              <Icon icon="tabler:temperature" className="text-red-500 mr-1" />
+              <span className="text-gray-700">
+                {sensor.temp_soil
+                  ? `${sensor.temp_soil} °C`
+                  : t('admin.pages.sensors.list.noData')}
+              </span>
+            </div>
+          </div>
+          <div className="bg-white p-3 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-500 mb-1">
+              {t('admin.pages.sensors.list.moisture')}
+            </p>
+            <div className="flex items-center">
+              <Icon icon="tabler:droplet" className="text-blue-500 mr-1" />
+              <span className="text-gray-700">
+                {sensor.water_soil
+                  ? `${sensor.water_soil}%`
+                  : t('admin.pages.sensors.list.noData')}
+              </span>
+            </div>
+          </div>
+          <div className="bg-white p-3 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-500 mb-1">
+              {t('admin.pages.sensors.list.conductor')}
+            </p>
+            <div className="flex items-center">
+              <Icon icon="tabler:current" className="text-green-500 mr-1" />
+              <span className="text-gray-700">
+                {sensor.conductor_soil
+                  ? `${sensor.conductor_soil} mS/cm`
+                  : t('admin.pages.sensors.list.noData')}
+              </span>
+            </div>
+          </div>
+          <div className="bg-white p-3 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-500 mb-1">
+              {t('admin.pages.sensors.list.ph')}
+            </p>
+            <div className="flex items-center">
+              <Icon icon="tabler:ph" className="text-yellow-500 mr-1" />
+              <span className="text-gray-700">
+                {sensor.ph1_soil
+                  ? `${sensor.ph1_soil} pH`
+                  : t('admin.pages.sensors.list.noData')}
+              </span>
+            </div>
+          </div>
+          <div className="bg-white p-3 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-500 mb-1">
+              {t('admin.pages.sensors.list.snr')}
+            </p>
+            <div className="flex items-center">
+              <Icon icon="tabler:wave-sine" className="text-purple-500 mr-1" />
+              <span className="text-gray-700">
+                {sensor.snr !== undefined
+                  ? `${sensor.snr} dB`
+                  : t('admin.pages.sensors.list.noData')}
+              </span>
+            </div>
+          </div>
+        </div>
 
               <div className="mt-4 pt-3 border-t border-gray-200 flex justify-end">
                 <Button
@@ -334,7 +367,7 @@ const Sensors: React.FC = () => {
 
       {sensors.length === 0 && !loading && !error && (
         <Card className="border border-blue-300 bg-blue-50">
-          <div className="flex flex-col items-center gap-3 py-8">
+          <div className="flex flex-col items-center gap-3 p  y-8">
             <Icon
               icon="tabler:device-desktop-off"
               className="text-blue-500 text-4xl"

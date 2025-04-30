@@ -272,7 +272,7 @@ const SensorHistory: React.FC = () => {
     const reversedData = [...filteredData].reverse();
 
     const labels = reversedData.map((data) =>
-      format(parseISO(data.time), 'dd/MM/yyyy HH:mm'),
+      format(parseISO(data.time), 'dd'),
     );
 
     const chartConfigs = [
@@ -362,11 +362,18 @@ const SensorHistory: React.FC = () => {
               font: { size: 16 },
             },
             legend: {
-              display: false, // No legend needed for single dataset
+              display: false,
             },
             tooltip: {
               mode: 'index',
               intersect: false,
+              callbacks: {
+              title: (context) => {
+                // Mostrar fecha completa en tooltip
+                const data = reversedData[context[0].dataIndex];
+                return format(parseISO(data.time), 'PPpp');
+              },
+            },
             },
           },
           scales: {
@@ -401,7 +408,6 @@ const SensorHistory: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex flex-col gap-6">
-        {/* Header with back button, title, and view toggle */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <Button
             icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
@@ -446,7 +452,7 @@ const SensorHistory: React.FC = () => {
           /* Table View */
           <CrudPanel
             title="admin.pages.sensors.history.title"
-            onCreate={undefined} // No create action for sensor history
+            onCreate={undefined} 
             createDisabled={true}>
             <DataTable
               value={sensorData}
