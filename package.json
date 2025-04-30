@@ -50,6 +50,7 @@
         "react-router-dom": "^7.5.0",
         "redux-persist": "^6.0.0",
         "rxjs": "^7.8.2",
+        "shepherd.js": "^14.5.0",
         "tailwindcss": "^4.0.3",
         "typescript-cookie": "^1.0.6"
     }

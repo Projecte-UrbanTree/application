@@ -7,7 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { SplitButton } from 'primereact/splitbutton';
 import { Tag } from 'primereact/tag';
-import { Toast } from 'primereact/toast';
+import { useToast } from '@/hooks/useToast';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,18 +26,18 @@ const WorkReportDetail = () => {
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const toast = useRef<Toast>(null);
+  const { showToast } = useToast(); // Use useToast instead of toast ref
   const [activeTabs, setActiveTabs] = useState<number[]>([]);
   const [showObservationDialog, setShowObservationDialog] = useState(false);
   const [observationNotes, setObservationNotes] = useState('');
 
   const handleCloseWithObservations = async () => {
     if (!observationNotes.trim()) {
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.messages.error'),
-        detail: t('admin.pages.workReport.messages.observations_required'),
-      });
+      showToast(
+        'error',
+        t('general.messages.error'),
+        t('admin.pages.workReport.messages.observations_required'),
+      );
       return;
     }
 
@@ -47,23 +47,21 @@ const WorkReportDetail = () => {
         observation: observationNotes,
       });
 
-      toast.current?.show({
-        severity: 'warn',
-        summary: t('general.messages.close_with_incidents'),
-        detail: t('admin.pages.workReport.messages.closing_with_incidents'),
-      });
+      showToast(
+        'warn',
+        t('general.messages.close_with_incidents'),
+        t('admin.pages.workReport.messages.closing_with_incidents'),
+      );
       setShowObservationDialog(false);
 
       setTimeout(() => navigate('/admin/work-orders'), 1500);
     } catch (err) {
       console.error('Error closing with observations:', err);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.messages.error'),
-        detail: t(
-          'admin.pages.workReport.messages.error_updating_observations',
-        ),
-      });
+      showToast(
+        'error',
+        t('general.messages.error'),
+        t('admin.pages.workReport.messages.error_updating_observations'),
+      );
     }
   };
 
@@ -94,19 +92,19 @@ const WorkReportDetail = () => {
 
       setWorkReport(response.data);
 
-      const statusMessages = {
+      const statusMessages: Record<number, { severity: 'success' | 'error' | 'warn' | 'info' | 'secondary' | 'contrast'; summary: string; detail: string }> = {
         [WorkReportStatus.COMPLETED]: {
-          severity: 'success' as const,
+          severity: 'success',
           summary: t('general.messages.close_part'),
           detail: t('admin.pages.workReport.messages.closing_part'),
         },
         [WorkReportStatus.REJECTED]: {
-          severity: 'error' as const,
+          severity: 'error',
           summary: t('general.messages.reject'),
           detail: t('admin.pages.workReport.messages.rejecting'),
         },
         [WorkReportStatus.CLOSED_WITH_INCIDENTS]: {
-          severity: 'warn' as const,
+          severity: 'warn',
           summary: t('general.messages.close_with_incidents'),
           detail: t('admin.pages.workReport.messages.closing_with_incidents'),
         },
@@ -114,17 +112,17 @@ const WorkReportDetail = () => {
 
       const message = statusMessages[status as keyof typeof statusMessages];
       if (message) {
-        toast.current?.show(message);
+        showToast(message.severity, message.summary, message.detail);
       }
 
       setTimeout(() => navigate('/admin/work-orders'), 1500);
     } catch (err) {
       console.error('Error updating status:', err);
-      toast.current?.show({
-        severity: 'error',
-        summary: t('general.messages.error'),
-        detail: t('admin.pages.workReport.messages.error_updating_status'),
-      });
+      showToast(
+        'error',
+        t('general.messages.error'),
+        t('admin.pages.workReport.messages.error_updating_status'),
+      );
     }
   };
 
@@ -592,7 +590,6 @@ const WorkReportDetail = () => {
           />
         </div>
       </Dialog>
-      <Toast ref={toast} position="top-center" />
     </div>
   );
 };
