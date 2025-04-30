@@ -132,7 +132,7 @@ const WorkerLayout: React.FC<WorkerLayoutProps> = ({ children, titleI18n }) => {
       to: '/worker/inventory',
       label: 'Inventario',
       icon: 'tabler:settings',
-      active: false,
+      active: isInventoryPage,
     },
   ];
 
