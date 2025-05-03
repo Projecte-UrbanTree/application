@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux';
-
 import axiosClient from '@/api/axiosClient';
 import {
   clearUserData,
@@ -15,24 +14,28 @@ export function useAuth() {
     (state: RootState) => state.user.isAuthenticated,
   );
 
-  async function fetchUser() {
+  async function fetchUser(): Promise<void> {
     const token = localStorage.getItem('authToken');
-    if (!token) return;
+    if (!token) {
+      throw new Error('No token');
+    }
+    const { data } = await axiosClient.get('/user');
+    dispatch(setUserData(data));
+  }
+
+  async function login(authToken: string): Promise<void> {
+    localStorage.setItem('authToken', authToken);
+
     try {
-      const { data } = await axiosClient.get('/user');
-      dispatch(setUserData(data));
+      await fetchUser();
+      dispatch(setAuthenticated(true));
     } catch (error) {
+      dispatch(clearUserData());
       console.error('Failed to fetch user:', error);
     }
   }
 
-  async function login(authToken: string) {
-    localStorage.setItem('authToken', authToken);
-    await fetchUser();
-    dispatch(setAuthenticated(true));
-  }
-
-  async function logout() {
+  async function logout(): Promise<void> {
     await axiosClient.post('/logout').catch((error) => {
       console.error('Failed to logout:', error);
     });
