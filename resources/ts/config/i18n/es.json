@@ -1697,8 +1697,24 @@
         "text": "Haz clic en este botón para cancelar la creación de puntos para la zona."
       },
       "addElementButton": {
-        "title": "Botón: Añadir Elemento",
-        "text": "Haz clic en este botón para añadir un nuevo elemento."
+        "title": "Añadir Elemento",
+        "text": "Haz clic para crear un nuevo elemento dentro de la zona."
+      },
+      "customButton1": {
+        "title": "Ocultar Zona",
+        "text": "Haz clic para ocultar la zona seleccionada."
+      },
+      "customButton2": {
+        "title": "Ir a la Zona",
+        "text": "Haz clic para centrar el mapa en la zona seleccionada."
+      },
+      "customButton3": {
+        "title": "Añadir Elemento",
+        "text": "Haz clic para añadir un nuevo elemento a la zona."
+      },
+      "customButton4": {
+        "title": "Eliminar Zona",
+        "text": "Haz clic para eliminar la zona seleccionada."
       },
       "finishButton": "Finalizar"
     }

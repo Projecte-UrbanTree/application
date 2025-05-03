@@ -1715,24 +1715,24 @@
         "text": "Click this button to cancel the creation of points for the zone."
       },
       "customButton1": {
-        "title": "Custom Button 1",
-        "text": "This is custom button number 1."
+        "title": "Hide Zone",
+        "text": "Click to hide the selected zone."
       },
       "customButton2": {
-        "title": "Custom Button 2",
-        "text": "This is custom button number 2."
+        "title": "Go to Zone",
+        "text": "Click to center the map on the selected zone."
       },
       "customButton3": {
-        "title": "Custom Button 3",
-        "text": "This is custom button number 3."
+        "title": "Add Element",
+        "text": "Click to add a new element to the zone."
       },
       "customButton4": {
-        "title": "Custom Button 4",
-        "text": "This is custom button number 4."
+        "title": "Delete Zone",
+        "text": "Click to delete the selected zone."
       },
       "addElementButton": {
-        "title": "Button: Add Element",
-        "text": "Click this button to add a new element."
+        "title": "Add Element",
+        "text": "Click to create a new element within the zone."
       }
     }
   },

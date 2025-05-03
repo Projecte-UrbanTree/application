@@ -1719,24 +1719,24 @@
         "text": "Fes clic en aquest botó per cancel·lar la creació de punts per a la zona."
       },
       "customButton1": {
-        "title": "Botó Personalitzat 1",
-        "text": "Aquest és el botó personalitzat número 1."
+        "title": "Amaga Zona",
+        "text": "Fes clic per ocultar la zona seleccionada."
       },
       "customButton2": {
-        "title": "Botó Personalitzat 2",
-        "text": "Aquest és el botó personalitzat número 2."
+        "title": "Anar a la Zona",
+        "text": "Fes clic per centrar el mapa a la zona seleccionada."
       },
       "customButton3": {
-        "title": "Botó Personalitzat 3",
-        "text": "Aquest és el botó personalitzat número 3."
+        "title": "Afegeix Element",
+        "text": "Fes clic per afegir un nou element a la zona."
       },
       "customButton4": {
-        "title": "Botó Personalitzat 4",
-        "text": "Aquest és el botó personalitzat número 4."
+        "title": "Elimina Zona",
+        "text": "Fes clic per eliminar la zona seleccionada."
       },
       "addElementButton": {
-        "title": "Botó: Afegeix Element",
-        "text": "Fes clic en aquest botó per afegir un nou element."
+        "title": "Afegeix Element",
+        "text": "Fes clic per crear un nou element dins de la zona."
       }
     }
   },
