@@ -264,138 +264,141 @@ const SensorHistory: React.FC = () => {
     charts.current = [];
 
     while (chartRefs.current.length < 7) {
-      // We have 7 chart configs
-      chartRefs.current.push(null);
+        // We have 7 chart configs
+        chartRefs.current.push(null);
     }
 
-    // Reverse the filtered data to show the beginning of the month first
-    const reversedData = [...filteredData].reverse();
+    // Generate all days of the selected month
+    const start = startOfMonth(selectedMonth);
+    const end = endOfMonth(selectedMonth);
+    const allDays = [];
+    for (let day = start; day <= end; day = new Date(day.getTime() + 24 * 60 * 60 * 1000)) {
+        allDays.push(format(day, 'dd'));
+    }
 
-    const labels = reversedData.map((data) =>
-      format(parseISO(data.time), 'dd'),
-    );
+    // Map data to days of the month, filling missing days with 0
+    const dataByDay = filteredData.reduce((acc, data) => {
+        const day = format(parseISO(data.time), 'dd');
+        acc[day] = data;
+        return acc;
+    }, {} as Record<string, any>);
 
+    const labels = allDays;
     const chartConfigs = [
-      {
-        title:
-          t('admin.pages.sensors.history.metrics.temp_soil') ||
-          'Soil Temperature',
-        data: reversedData.map((data) => data.temp_soil),
-        borderColor: '#ef4444',
-        backgroundColor: '#fca5a5',
-        yAxisTitle: '°C',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
-        data: reversedData.map((data) => data.ph1_soil),
-        borderColor: '#8b5cf6',
-        backgroundColor: '#c4b5fd',
-        yAxisTitle: 'pH',
-      },
-      {
-        title:
-          t('admin.pages.sensors.history.metrics.water_soil') ||
-          'Soil Moisture',
-        data: reversedData.map((data) => data.water_soil || null),
-        borderColor: '#059669',
-        backgroundColor: '#6ee7b7',
-        yAxisTitle: '%',
-      },
-      {
-        title:
-          t('admin.pages.sensors.history.metrics.conductor_soil') ||
-          'Soil Conductivity',
-        data: reversedData.map((data) => data.conductor_soil || null),
-        borderColor: '#d97706',
-        backgroundColor: '#fcd34d',
-        yAxisTitle: 'µS/cm',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
-        data: reversedData.map((data) => data.bat),
-        borderColor: '#2563eb',
-        backgroundColor: '#93c5fd',
-        yAxisTitle: 'V',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
-        data: reversedData.map((data) => data.rssi),
-        borderColor: '#7c3aed',
-        backgroundColor: '#c4b5fd',
-        yAxisTitle: 'dBm',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
-        data: reversedData.map((data) => data.snr),
-        borderColor: '#db2777',
-        backgroundColor: '#f9a8d4',
-        yAxisTitle: 'dB',
-      },
+        {
+            title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
+            data: allDays.map((day) => dataByDay[day]?.temp_soil || 0),
+            borderColor: '#ef4444',
+            backgroundColor: '#fca5a5',
+            yAxisTitle: '°C',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
+            data: allDays.map((day) => dataByDay[day]?.ph1_soil || 0),
+            borderColor: '#8b5cf6',
+            backgroundColor: '#c4b5fd',
+            yAxisTitle: 'pH',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.water_soil') || 'Soil Moisture',
+            data: allDays.map((day) => dataByDay[day]?.water_soil || 0),
+            borderColor: '#059669',
+            backgroundColor: '#6ee7b7',
+            yAxisTitle: '%',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.conductor_soil') || 'Soil Conductivity',
+            data: allDays.map((day) => dataByDay[day]?.conductor_soil || 0),
+            borderColor: '#d97706',
+            backgroundColor: '#fcd34d',
+            yAxisTitle: 'µS/cm',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
+            data: allDays.map((day) => dataByDay[day]?.bat || 0),
+            borderColor: '#2563eb',
+            backgroundColor: '#93c5fd',
+            yAxisTitle: 'V',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
+            data: allDays.map((day) => dataByDay[day]?.rssi || 0),
+            borderColor: '#7c3aed',
+            backgroundColor: '#c4b5fd',
+            yAxisTitle: 'dBm',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
+            data: allDays.map((day) => dataByDay[day]?.snr || 0),
+            borderColor: '#db2777',
+            backgroundColor: '#f9a8d4',
+            yAxisTitle: 'dB',
+        },
     ];
 
-    // Render each chart
     chartConfigs.forEach((config, index) => {
-      const ctx = chartRefs.current[index]?.getContext('2d');
-      if (!ctx) return;
+        const ctx = chartRefs.current[index]?.getContext('2d');
+        if (!ctx) return;
 
-      const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: config.title,
-              data: config.data,
-              borderColor: config.borderColor,
-              backgroundColor: config.backgroundColor,
-              fill: false,
-              tension: 0.1,
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: config.title,
+                        data: config.data,
+                        borderColor: config.borderColor,
+                        backgroundColor: config.backgroundColor,
+                        fill: false,
+                        tension: 0.1,
+                    },
+                ],
             },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            title: {
-              display: true,
-              text: config.title,
-              font: { size: 16 },
-            },
-            legend: {
-              display: false,
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              callbacks: {
-              title: (context) => {
-                // Mostrar fecha completa en tooltip
-                const data = reversedData[context[0].dataIndex];
-                return format(parseISO(data.time), 'PPpp');
-              },
-            },
-            },
-          },
-          scales: {
-            y: {
-              title: {
-                  display: true,
-                  text: config.yAxisTitle,
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: config.title,
+                        font: { size: 16 },
+                    },
+                    legend: {
+                        display: false,
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            title: (context) => {
+                                // Show full date in tooltip
+                                const day = context[0].label;
+                                const fullDate = `${day}/${format(selectedMonth, 'MM/yyyy')}`;
+                                return fullDate;
+                            },
+                        },
+                    },
                 },
-              },
-              x: {
-                title: {
-                  display: true,
-                  text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: config.yAxisTitle,
+                        },
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+                        },
+                    },
                 },
-              },
             },
-          },
         });
 
         charts.current.push(chart);
-      });
-    };
+    });
+};
 
   const previousMonth = () => {
     setSelectedMonth((prevMonth) => subMonths(prevMonth, 1));
