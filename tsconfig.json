@@ -4,7 +4,7 @@
         "target": "ESNext", // Target modern browsers with ESNext support
         "module": "ESNext", // Use ESNext modules for Vite/modern bundlers
         "jsx": "react-jsx", // Modern JSX runtime for React 17+ (React 18 prefers "react-jsx")
-        
+
         // Type Checking
         "strict": true, // Enable all strict type checking options
         "noImplicitAny": true, // Prevent usage of the `any` type unless explicitly declared
