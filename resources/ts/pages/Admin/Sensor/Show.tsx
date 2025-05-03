@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchAllSensorHistory } from '@/api/sensors';
 import { useTranslation } from 'react-i18next';
@@ -45,6 +45,19 @@ const SensorHistory: React.FC = () => {
   const [perPage, setPerPage] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [first, setFirst] = useState<number>(0);
+
+  const availableMetrics = useMemo(() => {
+    const metrics = {
+      temp_soil: sensorData.some((data) => data.temp_soil != null),
+      ph1_soil: sensorData.some((data) => data.ph1_soil != null),
+      water_soil: sensorData.some((data) => data.water_soil != null),
+      conductor_soil: sensorData.some((data) => data.conductor_soil != null),
+      bat: sensorData.some((data) => data.bat != null),
+      rssi: sensorData.some((data) => data.rssi != null),
+      snr: sensorData.some((data) => data.snr != null),
+    };
+    return metrics;
+  }, [sensorData]);
 
   useEffect(() => {
     const loadSensorHistory = async () => {
@@ -98,58 +111,52 @@ const SensorHistory: React.FC = () => {
 
     const chartConfigs = [
       {
-        title:
-          t('admin.pages.sensors.history.metrics.temp_soil') ||
-          'Soil Temperature',
+        title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
         data: reversedData.map((data) => data.temp_soil),
         borderColor: '#ef4444',
-        backgroundColor: '#fca5a5',
+        backgroundColor: 'rgba(239, 68, 68, 0.2)',
         yAxisTitle: '°C',
       },
       {
         title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
         data: reversedData.map((data) => data.ph1_soil),
         borderColor: '#8b5cf6',
-        backgroundColor: '#c4b5fd',
+        backgroundColor: 'rgba(139, 92, 246, 0.2)',
         yAxisTitle: 'pH',
       },
       {
-        title:
-          t('admin.pages.sensors.history.metrics.water_soil') ||
-          'Soil Moisture',
+        title: t('admin.pages.sensors.history.metrics.water_soil') || 'Soil Moisture',
         data: reversedData.map((data) => data.water_soil || null),
         borderColor: '#059669',
-        backgroundColor: '#6ee7b7',
+        backgroundColor: 'rgba(5, 150, 105, 0.2)',
         yAxisTitle: '%',
       },
       {
-        title:
-          t('admin.pages.sensors.history.metrics.conductor_soil') ||
-          'Soil Conductivity',
+        title: t('admin.pages.sensors.history.metrics.conductor_soil') || 'Soil Conductivity',
         data: reversedData.map((data) => data.conductor_soil || null),
         borderColor: '#d97706',
-        backgroundColor: '#fcd34d',
+        backgroundColor: 'rgba(217, 119, 6, 0.2)',
         yAxisTitle: 'µS/cm',
       },
       {
         title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
         data: reversedData.map((data) => data.bat),
         borderColor: '#2563eb',
-        backgroundColor: '#93c5fd',
+        backgroundColor: 'rgba(37, 99, 235, 0.2)',
         yAxisTitle: 'V',
       },
       {
         title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
         data: reversedData.map((data) => data.rssi),
         borderColor: '#7c3aed',
-        backgroundColor: '#c4b5fd',
+        backgroundColor: 'rgba(124, 58, 237, 0.2)',
         yAxisTitle: 'dBm',
       },
       {
         title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
         data: reversedData.map((data) => data.snr),
         borderColor: '#db2777',
-        backgroundColor: '#f9a8d4',
+        backgroundColor: 'rgba(219, 39, 119, 0.2)',
         yAxisTitle: 'dB',
       },
     ];
@@ -168,8 +175,10 @@ const SensorHistory: React.FC = () => {
               data: config.data,
               borderColor: config.borderColor,
               backgroundColor: config.backgroundColor,
-              fill: false,
-              tension: 0.1,
+              fill: true,
+              tension: 0.3,
+              pointRadius: 4,
+              pointHoverRadius: 6,
             },
           ],
         },
@@ -179,7 +188,8 @@ const SensorHistory: React.FC = () => {
             title: {
               display: true,
               text: config.title,
-              font: { size: 16 },
+              font: { size: 18, weight: 'bold', family: 'Arial, sans-serif' },
+              color: '#374151',
             },
             legend: {
               display: false,
@@ -187,6 +197,13 @@ const SensorHistory: React.FC = () => {
             tooltip: {
               mode: 'index',
               intersect: false,
+              backgroundColor: '#1f2937',
+              titleFont: { size: 14, weight: 'bold', family: 'Arial, sans-serif' },
+              bodyFont: { size: 12, family: 'Arial, sans-serif' },
+              titleColor: '#f9fafb',
+              bodyColor: '#f3f4f6',
+              borderColor: '#4b5563',
+              borderWidth: 1,
             },
           },
           scales: {
@@ -194,12 +211,30 @@ const SensorHistory: React.FC = () => {
               title: {
                 display: true,
                 text: config.yAxisTitle,
+                font: { size: 14, weight: 'bold', family: 'Arial, sans-serif' },
+                color: '#374151',
+              },
+              grid: {
+                color: 'rgba(156, 163, 175, 0.2)',
+              },
+              ticks: {
+                color: '#4b5563',
+                font: { size: 12, family: 'Arial, sans-serif' },
               },
             },
             x: {
               title: {
                 display: true,
                 text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+                font: { size: 14, weight: 'bold', family: 'Arial, sans-serif' },
+                color: '#374151',
+              },
+              grid: {
+                color: 'rgba(156, 163, 175, 0.2)',
+              },
+              ticks: {
+                color: '#4b5563',
+                font: { size: 12, family: 'Arial, sans-serif' },
               },
             },
           },
@@ -475,85 +510,99 @@ const SensorHistory: React.FC = () => {
                   </div>
                 )}
               />
-              <Column
-                field="temp_soil"
-                header={t('admin.pages.sensors.history.metrics.temp_soil')}
-                body={(rowData) => (
-                  <div className="flex items-center gap-2">
-                    <Icon icon="tabler:temperature" className="text-red-500" />
-                    <span>{rowData.temp_soil} °C</span>
-                  </div>
-                )}
-              />
-              <Column
-                field="ph1_soil"
-                header={t('admin.pages.sensors.history.metrics.ph1_soil')}
-                body={(rowData) => (
-                  <div className="flex items-center gap-2">
-                    <Icon icon="tabler:ph" className="text-purple-500" />
-                    <span>{rowData.ph1_soil} pH</span>
-                  </div>
-                )}
-              />
-              <Column
-                field="water_soil"
-                header={t('admin.pages.sensors.history.metrics.water_soil')}
-                body={(rowData) =>
-                  rowData.water_soil ? (
+              {availableMetrics.temp_soil && (
+                <Column
+                  field="temp_soil"
+                  header={t('admin.pages.sensors.history.metrics.temp_soil')}
+                  body={(rowData) => (
+                    <div className="flex items-center gap-2">
+                      <Icon icon="tabler:temperature" className="text-red-500" />
+                      <span>{rowData.temp_soil} °C</span>
+                    </div>
+                  )}
+                />
+              )}
+              {availableMetrics.ph1_soil && (
+                <Column
+                  field="ph1_soil"
+                  header={t('admin.pages.sensors.history.metrics.ph1_soil')}
+                  body={(rowData) => (
+                    <div className="flex items-center gap-2">
+                      <Icon icon="tabler:ph" className="text-purple-500" />
+                      <span>{rowData.ph1_soil} pH</span>
+                    </div>
+                  )}
+                />
+              )}
+              {availableMetrics.water_soil && (
+                <Column
+                  field="water_soil"
+                  header={t('admin.pages.sensors.history.metrics.water_soil')}
+                  body={(rowData) =>
+                    rowData.water_soil ? (
+                      <Tag
+                        value={`${rowData.water_soil}%`}
+                        severity={getMoistureSeverity(rowData.water_soil)}
+                        className="font-medium"
+                      />
+                    ) : (
+                      <Tag value="N/A" severity="info" />
+                    )
+                  }
+                />
+              )}
+              {availableMetrics.conductor_soil && (
+                <Column
+                  field="conductor_soil"
+                  header={t('admin.pages.sensors.history.metrics.conductor_soil')}
+                  body={(rowData) =>
+                    rowData.conductor_soil ? (
+                      <div className="flex items-center gap-2">
+                        <Icon
+                          icon="tabler:lightning-bolt"
+                          className="text-yellow-500"
+                        />
+                        <span>{rowData.conductor_soil} µS/cm</span>
+                      </div>
+                    ) : (
+                      'N/A'
+                    )
+                  }
+                />
+              )}
+              {availableMetrics.bat && (
+                <Column
+                  field="bat"
+                  header={t('admin.pages.sensors.history.metrics.bat')}
+                  body={(rowData) => (
                     <Tag
-                      value={`${rowData.water_soil}%`}
-                      severity={getMoistureSeverity(rowData.water_soil)}
+                      value={`${rowData.bat.toFixed(2)} V`}
+                      severity={getBatterySeverity(rowData.bat)}
                       className="font-medium"
                     />
-                  ) : (
-                    <Tag value="N/A" severity="info" />
-                  )
-                }
-              />
-              <Column
-                field="conductor_soil"
-                header={t('admin.pages.sensors.history.metrics.conductor_soil')}
-                body={(rowData) =>
-                  rowData.conductor_soil ? (
-                    <div className="flex items-center gap-2">
-                      <Icon
-                        icon="tabler:lightning-bolt"
-                        className="text-yellow-500"
-                      />
-                      <span>{rowData.conductor_soil} µS/cm</span>
-                    </div>
-                  ) : (
-                    'N/A'
-                  )
-                }
-              />
-              <Column
-                field="bat"
-                header={t('admin.pages.sensors.history.metrics.bat')}
-                body={(rowData) => (
-                  <Tag
-                    value={`${rowData.bat.toFixed(2)} V`}
-                    severity={getBatterySeverity(rowData.bat)}
-                    className="font-medium"
-                  />
-                )}
-              />
-              <Column
-                field="rssi"
-                header={t('admin.pages.sensors.history.metrics.rssi')}
-                body={(rowData) => (
-                  <Tag
-                    value={`${rowData.rssi} dBm`}
-                    severity={getSignalSeverity(rowData.rssi)}
-                    className="font-medium"
-                  />
-                )}
-              />
-              <Column
-                field="snr"
-                header={t('admin.pages.sensors.history.metrics.snr')}
-                body={(rowData) => `${rowData.snr} dB`}
-              />
+                  )}
+                />
+              )}
+              {availableMetrics.rssi && (
+                <Column
+                  field="rssi"
+                  header={t('admin.pages.sensors.history.metrics.rssi')}
+                  body={(rowData) => (
+                    <Tag
+                      value={`${rowData.rssi} dBm`}
+                      severity={getSignalSeverity(rowData.rssi)}
+                      className="font-medium"
+                    />
+                  )}
+                />
+              )}
+              {availableMetrics.snr && (
+                <Column
+                  field="snr"
+                  header={t('admin.pages.sensors.history.metrics.snr')}
+                  body={(rowData) => `${rowData.snr} dB`}
+                />
+              )}
             </DataTable>
           </CrudPanel>
         ) : (
@@ -594,39 +643,21 @@ const SensorHistory: React.FC = () => {
             {/* Individual charts */}
             {filteredData.length > 0 && (
               <div className="flex flex-col gap-6">
-                {Array.from({
-                  length: Math.ceil(chartRefs.current.length / 2),
-                }).map((_, rowIndex) => (
-                  <div
-                    key={rowIndex}
-                    className="flex flex-col md:flex-row gap-6">
-                    {/* First chart in the row */}
-                    {rowIndex * 2 < chartRefs.current.length && (
-                      <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
-                        <div className="h-80">
-                          <canvas
-                            ref={(el) => {
-                              chartRefs.current[rowIndex * 2] = el;
-                            }}
-                          />
-                        </div>
-                      </Card>
-                    )}
-
-                    {/* Second chart in the row */}
-                    {rowIndex * 2 + 1 < chartRefs.current.length && (
-                      <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
-                        <div className="h-80">
-                          <canvas
-                            ref={(el) => {
-                              chartRefs.current[rowIndex * 2 + 1] = el;
-                            }}
-                          />
-                        </div>
-                      </Card>
-                    )}
-                  </div>
-                ))}
+                {Object.entries(availableMetrics)
+                  .filter(([key, value]) => value)
+                  .map(([key, _], index) => (
+                    <Card
+                      key={index}
+                      className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
+                      <div className="h-80">
+                        <canvas
+                          ref={(el) => {
+                            chartRefs.current[index] = el;
+                          }}
+                        />
+                      </div>
+                    </Card>
+                  ))}
               </div>
             )}
 
