@@ -202,7 +202,7 @@ class SensorHistoryController extends Controller
 
             $lastFetchDate = $lastRecord ? $lastRecord->created_at->toIso8601String() : null;
 
-            $url = "http://api_urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history";
+            $url = "https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history";
             if ($lastFetchDate) {
                 $url .= '?last_fetch_date='.urlencode($lastFetchDate);
             }
