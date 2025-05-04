@@ -14,25 +14,31 @@ export function useAuth() {
     (state: RootState) => state.user.isAuthenticated,
   );
 
-  async function fetchUser(): Promise<void> {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      throw new Error('No token');
+  async function fetchUser(token = localStorage.getItem('authToken')) {
+    try {
+      if (!token) {
+        dispatch(clearUserData());
+        return;
+      }
+      
+      const { data } = await axiosClient.get('/user');
+
+      dispatch(setUserData(data));
+
+      return data;
+    } catch (_) {
+      throw new Error('No se pudo recuperar la sesión');
     }
-    const { data } = await axiosClient.get('/user');
-    dispatch(setUserData(data));
-  }
+  } 
 
   async function login(authToken: string): Promise<void> {
-    localStorage.setItem('authToken', authToken);
-
-    try {
-      await fetchUser();
+    await fetchUser(authToken).then((user) => {
+      if (!user) {
+        throw new Error('Error al recuperar los datos del usuario');
+      }
+      localStorage.setItem('authToken', authToken);
       dispatch(setAuthenticated(true));
-    } catch (error) {
-      dispatch(clearUserData());
-      console.error('Failed to fetch user:', error);
-    }
+    });
   }
 
   async function logout(): Promise<void> {

@@ -46,7 +46,7 @@ describe('useAuth · login()', () => {
     const { result } = renderHook(() => useAuth())
     await act(() => result.current.login('tok-456'))
 
-    expect(localStorage.getItem('authToken')).toBe('tok-456')
+    expect(localStorage.getItem('authToken')).not.toBe('tok-456')
     expect(dispatchMock).not.toHaveBeenCalledWith(setUserData(expect.anything()))
     expect(dispatchMock).not.toHaveBeenCalledWith(setAuthenticated(true))
   })
