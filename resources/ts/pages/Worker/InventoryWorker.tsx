@@ -128,6 +128,23 @@ export const InventoryWorker: React.FC = () => {
 
   const handleSelectedZone = useCallback((zone: Zone) => {
     setSelectedZone(zone);
+    
+    // Enviar un evento con timestamp para forzar flyTo
+    eventSubject.next({
+      zone: zone,
+      forceShow: true,
+      refreshMap: true
+    });
+    
+    // Forzar una segunda actualización después de un breve retraso
+    setTimeout(() => {
+      if (zone && zone.id) {
+        eventSubject.next({
+          zone: zone,
+          forceShow: true
+        });
+      }
+    }, 200);
   }, []);
 
   const handleAddElementZone = useCallback((zone: Zone) => {

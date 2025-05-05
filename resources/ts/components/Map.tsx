@@ -266,14 +266,40 @@ export const MapComponent: React.FC<MapProps> = ({
 
   useEffect(() => {
     const service = mapServiceRef.current;
-    if (!service || !selectedZone || !points.length) return;
+    if (!service || !selectedZone) return;
     if (isZoneJustCreated) {
       setIsZoneJustCreated(false);
       return;
     }
 
-    service.flyTo(selectedZone);
-  }, [selectedZone, points, isZoneJustCreated]);
+    // Forzar flyTo con un identificador único para asegurar que siempre se ejecute
+    const flyToId = Date.now();
+    setTimeout(() => {
+      if (service && selectedZone && selectedZone.id) {
+        console.log(`Flying to zone ${selectedZone.id} - ${flyToId}`);
+        service.flyTo(selectedZone);
+      }
+    }, 100);
+  }, [selectedZone, isZoneJustCreated]);
+
+  // Efecto para forzar una inicialización más rápida del mapa
+  useEffect(() => {
+    if (isDataLoaded && !isLoading && mapServiceRef.current) {
+      const service = mapServiceRef.current;
+      setTimeout(() => {
+        if (service) {
+          service.resizeMap();
+          // Forzar actualización de zonas y elementos
+          try {
+            updateZones(service);
+            updateElements(service);
+          } catch (error) {
+            console.error('Error updating map elements:', error);
+          }
+        }
+      }, 300);
+    }
+  }, [isDataLoaded, isLoading]);
 
   useEffect(() => {
     const service = mapServiceRef.current;
