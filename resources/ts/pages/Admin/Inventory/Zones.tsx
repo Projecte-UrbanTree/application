@@ -202,7 +202,7 @@ export const Zones = ({
 
   const confirmDeleteZone = useCallback((zone: Zone) => {
     setSelectedZoneToDelete(zone);
-    setIsConfirmDialogVisible(true);
+    setIsConfirmDialogVisible(true); 
   }, []);
 
   const handleDeleteZone = async (zoneId: number) => {

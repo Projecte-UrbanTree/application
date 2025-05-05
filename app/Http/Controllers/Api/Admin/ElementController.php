@@ -56,6 +56,11 @@ class ElementController extends Controller
             return response()->json(['message' => 'Element not found'], 404);
         }
 
+        $element->incidences()->delete();
+        if ($element->eva) {
+            $element->eva->delete();
+        }
+
         $element->delete();
 
         return response()->json(['message' => 'Element deleted successfully'], 200);
