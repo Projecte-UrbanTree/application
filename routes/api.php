@@ -41,6 +41,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('contracts', [UserContractController::class, 'index']);
 
+    // Rutas para el mapa accesibles para todos los roles
+    Route::get('zones', [ZoneController::class, 'index']);
+    Route::get('points', [PointController::class, 'index']);
+    Route::get('elements', [ElementController::class, 'index']);
+    Route::get('element-types', [ElementTypeController::class, 'index']);
+    Route::get('tree-types', [TreeTypeController::class, 'index']);
+    Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
+    Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
+
     /* Admin protected routes */
     Route::middleware(RoleMiddleware::class.':admin')->prefix('admin')->group(function () {
         Route::post('contracts/{id}/duplicate', [ContractController::class, 'duplicate']);
@@ -67,36 +76,45 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('contracts/{contract}/users/{user}', [WorkerController::class, 'store']);
         Route::delete('contracts/{contract}/users/{user}', [WorkerController::class, 'destroy']);
 
+        // Rutas protegidas por admin (solo crear, actualizar, borrar)
         Route::resources([
             'contracts' => ContractController::class,
-            'elements' => ElementController::class,
-            'element-types' => ElementTypeController::class,
             'evas' => EvaController::class,
-            'points' => PointController::class,
             'resources' => ResourceController::class,
             'resource-types' => ResourceTypeController::class,
             'task-types' => TaskTypeController::class,
-            'tree-types' => TreeTypeController::class,
             'users' => UserController::class,
             'work-orders' => WorkOrderController::class,
             'work-reports' => WorkReportController::class,
-            'zones' => ZoneController::class,
             'incidents' => IncidentsController::class,
             'sensors' => SensorController::class,
         ]);
 
+        // Rutas de write para los recursos del mapa (solo admin)
+        Route::post('zones', [ZoneController::class, 'store']);
+        Route::put('zones/{id}', [ZoneController::class, 'update']);
+        Route::delete('zones/{id}', [ZoneController::class, 'destroy']);
+
+        Route::post('points', [PointController::class, 'store']);
+        Route::put('points/{id}', [PointController::class, 'update']);
+        Route::delete('points/{id}', [PointController::class, 'destroy']);
+
+        Route::post('elements', [ElementController::class, 'store']);
+        Route::put('elements/{id}', [ElementController::class, 'update']);
+        Route::delete('elements/{id}', [ElementController::class, 'destroy']);
+
+        Route::post('element-types', [ElementTypeController::class, 'store']);
+        Route::put('element-types/{id}', [ElementTypeController::class, 'update']);
+        Route::delete('element-types/{id}', [ElementTypeController::class, 'destroy']);
+
+        Route::post('tree-types', [TreeTypeController::class, 'store']);
+        Route::put('tree-types/{id}', [TreeTypeController::class, 'update']);
+        Route::delete('tree-types/{id}', [TreeTypeController::class, 'destroy']);
+
         Route::put('/work-orders/{id}/status', [WorkOrderController::class, 'updateStatus']);
-
         Route::get('/work-orders/{id}/calculate-status', [WorkOrderController::class, 'calculateStatus']);
-
         Route::get('/evas/element/{elementId}', [EvaController::class, 'getByElementId']);
-
-        Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
-
-        Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
-
         Route::put('zones/{id}/inline-update', [ZoneController::class, 'inlineUpdate']);
-
         Route::get('/sensorshistory', [SensorController::class, 'fetchSensors']);
         Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchSensorByEUI']);
         Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);
@@ -110,5 +128,26 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('resource-types', [WorkerResourceController::class, 'resourceTypes']);
         Route::get('resources', [WorkerResourceController::class, 'resources']);
         Route::post('work-reports', [IndexController::class, 'createWorkReport']);
+        Route::post('incidents', [IncidentsController::class, 'store']);
+        Route::patch('incidents/{id}', [IncidentsController::class, 'update']);
+
+        Route::post('points', [PointController::class, 'store']);
+
+        Route::post('elements', [ElementController::class, 'store']);
+        Route::put('elements/{id}', [ElementController::class, 'update']);
+        Route::delete('elements/{id}', [ElementController::class, 'destroy']);
+
+        // Rutas para el inventario (solo lectura)
+        Route::get('zones', [ZoneController::class, 'index']);
+        Route::get('points', [PointController::class, 'index']);
+        Route::get('elements', [ElementController::class, 'index']);
+        Route::get('element-types', [ElementTypeController::class, 'index']);
+        Route::get('tree-types', [TreeTypeController::class, 'index']);
+        Route::get('points/location-contract', [PointController::class, 'getLocationContractZones']);
+        Route::get('zones/{zone_id}/center-zoom', [ZoneController::class, 'getCenterZoom']);
+        Route::get('incidents', [IncidentsController::class, 'index']);
+        Route::get('work-orders', [WorkOrderController::class, 'index']);
+        Route::get('evas/element/{elementId}', [EvaController::class, 'getByElementId']);
+
     });
 });

@@ -20,6 +20,13 @@ export function useMapInitialization() {
   const { points } = useSelector((state: RootState) => state.points);
   const { zones } = useSelector((state: RootState) => state.zone);
   const { elements } = useSelector((state: RootState) => state.element);
+
+  // Obtener datos del worker state si existen
+  const workerState = useSelector((state: RootState) => state.worker);
+  const workerPoints = workerState ? workerState.points : [];
+  const workerZones = workerState ? workerState.zones : [];
+  const workerElements = workerState ? workerState.elements : [];
+  
   const currentContract = useSelector(
     (state: RootState) => state.contract.currentContract,
   );
@@ -36,13 +43,15 @@ export function useMapInitialization() {
   // Initialize map when data is available
   useEffect(() => {
     // Skip if already initializing or ready, or if we don't have required data
-    if (
-      isInitializing ||
-      isMapReady ||
-      !currentContract ||
-      !points.length ||
-      !zones.length
-    ) {
+    if (isInitializing || isMapReady || !currentContract) {
+      return;
+    }
+
+    // Considerar tanto datos de admin como de worker
+    const hasPoints = points.length > 0 || workerPoints.length > 0;
+    const hasZones = zones.length > 0 || workerZones.length > 0;
+
+    if (!hasPoints || !hasZones) {
       return;
     }
 
@@ -76,6 +85,8 @@ export function useMapInitialization() {
     currentContract,
     points.length,
     zones.length,
+    workerPoints.length,
+    workerZones.length,
     isMapReady,
     isInitializing,
   ]);

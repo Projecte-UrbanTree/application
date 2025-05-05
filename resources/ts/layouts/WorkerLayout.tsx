@@ -132,16 +132,19 @@ const WorkerLayout: React.FC<WorkerLayoutProps> = ({ children, titleI18n }) => {
       to: '/worker/inventory',
       label: 'Inventario',
       icon: 'tabler:settings',
-      active: false,
+      active: isInventoryPage,
     },
   ];
 
   const padding = isInventoryPage
-    ? 'py-8 px-4'
+    ? 'p-0'
     : 'max-w-7xl mx-auto pt-8 pb-16 px-8';
 
   return (
-    <div>
+    <div
+      className={
+        isInventoryPage ? 'flex flex-col h-screen overflow-hidden' : ''
+      }>
       <header className="border-b border-gray-300 bg-white shadow-md">
         <nav className="flex items-center justify-between px-8 py-3 max-w-7xl mx-auto">
           <div className="flex items-center gap-4">
@@ -225,7 +228,7 @@ const WorkerLayout: React.FC<WorkerLayoutProps> = ({ children, titleI18n }) => {
         </div>
       </header>
 
-      <main className={padding}>{children}</main>
+      <main className={`${padding} ${isInventoryPage ? 'flex-1 overflow-hidden' : ''}`}>{children}</main>
     </div>
   );
 };

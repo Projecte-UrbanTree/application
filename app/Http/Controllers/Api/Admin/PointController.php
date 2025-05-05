@@ -61,9 +61,9 @@ class PointController extends Controller
         return response()->json(['message' => 'Todos los puntos de la zona han sido eliminados correctamente.'], 200);
     }
 
-    public function show(Request $request): JsonResponse
+    public function getLocationContractZones(): JsonResponse
     {
-        $contractId = $request->header('X-Contract-Id');
+        $contractId = request()->header('X-Contract-Id');
         $zones = Zone::where('contract_id', $contractId)->get();
 
         $result = [];
