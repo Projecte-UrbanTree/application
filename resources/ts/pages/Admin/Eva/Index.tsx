@@ -11,6 +11,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import axiosClient from '@/api/axiosClient';
 import CrudPanel from '@/components/CrudPanel';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export default function Evas() {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,6 +58,9 @@ export default function Evas() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const currentContract = useSelector(
+    (state: RootState) => state.contract.currentContract,
+  );
   const successMsg = location.state?.success;
   const errorMsg = location.state?.error;
   const [msg, setMsg] = useState<string | null>(successMsg || errorMsg || null);
@@ -63,7 +68,9 @@ export default function Evas() {
   useEffect(() => {
     const fetchEvas = async () => {
       try {
-        const response = await axiosClient.get('/admin/evas');
+        const response = await axiosClient.get('/admin/evas', {
+          params: { contract_id: currentContract?.id || 0 },
+        });
         setEvas(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -72,7 +79,7 @@ export default function Evas() {
       }
     };
     fetchEvas();
-  }, []);
+  }, [currentContract]);
 
   useEffect(() => {
     if (msg) {

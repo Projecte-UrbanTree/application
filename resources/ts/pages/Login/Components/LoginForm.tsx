@@ -25,8 +25,8 @@ const LoginForm = () => {
   const { t } = useI18n();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('admin@urbantree.com');
-  const [password, setPassword] = useState('demopass');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -16,9 +16,15 @@ class EvaController extends Controller
      *
      * @return JsonResponse A JSON response containing the list of EVAs.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $evas = Eva::with(['element.point', 'element.elementType'])->get();
+        $contractId = $request->input('contract_id', 0); // Obtener contract_id de la solicitud
+
+        $evas = $contractId > 0
+            ? Eva::whereHas('element.point.zones.contract', fn($query) => $query->where('id', $contractId))
+            ->with(['element', 'element.point.zones.contract', 'element.point', 'element.elementType'])
+            ->get()
+            : Eva::with(['element.point', 'element.elementType'])->get();
 
         return response()->json($evas);
     }

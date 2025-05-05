@@ -1491,7 +1491,6 @@
           "edit": "Editar Sensor",
           "delete": "Eliminar Sensor",
           "show": "Ver Sensor"
-
         },
         "loading": "Cargando datos del sensor...",
         "backButton": "Volver",
@@ -1597,12 +1596,111 @@
             "bat": "Batería",
             "rssi": "Fuerza de la señal (RSSI)",
             "snr": "Relación señal-ruido"
-          }
+          },
+          "loadError": "Error al cargar el historial del sensor."
         },
         "errors": {
           "no_contract": "Debes seleccionar un contrato válido"
         }
       }
+    },
+    "tour": {
+      "startTourButton": "Tour",
+      "previousButton": "Anterior",
+      "nextButton": "Siguiente",
+      "menuDashboard": {
+        "title": "Gestión",
+        "text": "Panel donde podrás gestionar la información del contrato en el que hayas selecionado."
+      },
+      "menuInventory": {
+        "title": "Inventario",
+        "text": "Consulta y gestiona los elementos y zonas disponibles en el inventario con la ayuda de un mapa."
+      },
+      "menuSettings": {
+        "title": "Configuración",
+        "text": "Accede a las configuraciones generales de la aplicación para crear y gestionar los contratos más fácilmente."
+      },
+      "contractDropdown": {
+        "title": "Selector de Contratos",
+        "text": "Selecciona un contrato para filtrar los datos mostrados en la gestión y en el inventario."
+      },
+      "languageSelector": {
+        "title": "Selector de Idioma",
+        "text": "Cambia el idioma de la aplicación según tus preferencias."
+      },
+      "avatar": {
+        "title": "Avatar de Usuario",
+        "text": "Haz clic en tu avatar para acceder a las opciones de tu cuenta."
+      },
+      "submenuElementTypes": {
+        "title": "Submenú: Tipos de Elementos",
+        "text": "Administra los tipos de elementos disponibles para poder crear los elementos."
+      },
+      "submenuTreeTypes": {
+        "title": "Submenú: Especies",
+        "text": "Gestiona las especies de árboles disponibles."
+      },
+      "submenuTaskTypes": {
+        "title": "Submenú: Tipos de Tareas",
+        "text": "Administra los tipos de tareas configurables."
+      },
+      "submenuResourceTypes": {
+        "title": "Submenú: Tipos de Recursos",
+        "text": "Gestiona los tipos de recursos disponibles para crear los recursos."
+      },
+      "submenuUsers": {
+        "title": "Submenú: Usuarios",
+        "text": "Administra los usuarios registrados en la aplicación."
+      },
+      "submenuEva": {
+        "title": "Submenú: EVA",
+        "text": "Consulta y analiza los datos del EVA de cada árbol."
+      },
+      "submenuWorkOrders": {
+        "title": "Submenú: Órdenes de Trabajo",
+        "text": "Lugar donde se crearán las órdenes de trabajo del día."
+      },
+      "submenuWorkers": {
+        "title": "Submenú: Trabajadores",
+        "text": "Lugar donde asignaremos a los usuarios en qué contrato queremos que trabajen."
+      },
+      "submenuResources": {
+        "title": "Submenú: Recursos",
+        "text": "Gestiona los recursos disponibles en el contrato."
+      },
+      "submenuStats": {
+        "title": "Submenú: Estadísticas",
+        "text": "Consulta las estadísticas y gráficos."
+      },
+      "submenuSensors": {
+        "title": "Submenú: Sensores",
+        "text": "Consulta los registros de actividad de los sensores."
+      },
+      "mapScaleControl": {
+        "title": "Control de Escala",
+        "text": "Este control muestra la escala del mapa."
+      },
+      "mapFullscreenControl": {
+        "title": "Control de Pantalla Completa",
+        "text": "Haz clic aquí para alternar el modo de pantalla completa."
+      },
+      "mapGeolocateControl": {
+        "title": "Control de Geolocalización",
+        "text": "Haz clic aquí para centrar el mapa en tu ubicación actual."
+      },
+      "mapAddPointsButton": {
+        "title": "Agregar Puntos para las Zonas",
+        "text": "Haz clic en este botón para comenzar a agregar puntos para una nueva zona."
+      },
+      "mapCancelCreationButton": {
+        "title": "Cancelar Creación",
+        "text": "Haz clic en este botón para cancelar la creación de puntos para la zona."
+      },
+      "addElementButton": {
+        "title": "Botón: Añadir Elemento",
+        "text": "Haz clic en este botón para añadir un nuevo elemento."
+      },
+      "finishButton": "Finalizar"
     }
   },
 
@@ -1701,11 +1799,14 @@
         "resourcesFetchFailed": "Error al obtener recursos disponibles",
         "resourcesSaveFailed": "Error al guardar recursos",
         "workOrderCompleted": "No se puede modificar una orden de trabajo completada",
-        "fetchFailed": "Error al obtener órdenes de trabajo"
+        "fetchFailed": "Error al obtener órdenes de trabajo",
+        "noResourcesSelected": "Seleccione al menos un recurso",
+        "reportCreationFailed": "No se pudo crear el informe de trabajo"
       },
       "messages": {
         "resourcesAdded": "Recursos añadidos con éxito",
-        "taskUpdated": "Tarea actualizada con éxito"
+        "taskUpdated": "Tarea actualizada con éxito",
+        "reportCreated": "Informe de trabajo creado correctamente"
       },
       "createWorkReport": "Crear informe de trabajo",
       "spentFuel": "Combustible consumido (litros)",
@@ -1715,22 +1816,13 @@
       "resource": "Recurso {0}",
       "resourceName": "Nombre del recurso",
       "unit": "Unidad",
-      "quantity": "Cantidad",
       "selectResourceTypeFirst": "Seleccione primero un tipo de recurso",
       "noResourcesForType": "No hay recursos disponibles para este tipo",
       "noResourceTypes": "No hay tipos de recursos disponibles",
       "observations": "Observaciones",
       "observationsPlaceholder": "Introduzca cualquier observación o incidente aquí",
       "submitReport": "Enviar informe",
-      "taskUpdated": "Tarea actualizada correctamente",
-      "messages": {
-        "reportCreated": "Informe de trabajo creado correctamente",
-        "resourcesAdded": "Recursos añadidos correctamente"
-      },
-      "errors": {
-        "noResourcesSelected": "Seleccione al menos un recurso",
-        "reportCreationFailed": "No se pudo crear el informe de trabajo"
-      }
+      "taskUpdated": "Tarea actualizada correctamente"
     },
     "workReports": {
       "title": "Informes de trabajo",

@@ -1597,11 +1597,146 @@
             "bat": "Bateria",
             "rssi": "Força del senyal (RSSI)",
             "snr": "Relació senyal-soroll"
-          }
+          },
+          "loadError": "Error en carregar l'historial del sensor."
         },
         "errors": {
           "no_contract": "Heu de seleccionar un contracte vàlid"
         }
+      }
+    },
+    "tour": {
+      "startTourButton": "Tour",
+      "previousButton": "Anterior",
+      "nextButton": "Següent",
+      "menuDashboard": {
+        "title": "Gestió",
+        "text": "Panell on podràs gestionar la informació del contracte en què estiguis."
+      },
+      "menuInventory": {
+        "title": "Inventari",
+        "text": "Consulta i gestiona els recursos disponibles a l'inventari amb l'ajuda d'un mapa."
+      },
+      "menuSettings": {
+        "title": "Configuració",
+        "text": "Accedeix a les configuracions generals de l'aplicació per crear i gestionar els contractes més fàcilment."
+      },
+      "contractDropdown": {
+        "title": "Selector de Contractes",
+        "text": "Selecciona un contracte per filtrar les dades mostrades a l'aplicació."
+      },
+      "languageSelector": {
+        "title": "Selector d'Idioma",
+        "text": "Canvia l'idioma de l'aplicació segons les teves preferències."
+      },
+      "avatar": {
+        "title": "Avatar d'Usuari",
+        "text": "Fes clic al teu avatar per accedir a les opcions del teu compte."
+      },
+      "submenuElementTypes": {
+        "title": "Submenú: Tipus d'Elements",
+        "text": "Administra els tipus d'elements disponibles."
+      },
+      "submenuTreeTypes": {
+        "title": "Submenú: Espècies",
+        "text": "Gestiona les espècies d'arbres disponibles."
+      },
+      "submenuTaskTypes": {
+        "title": "Submenú: Tipus de Tasques",
+        "text": "Administra els tipus de tasques configurables."
+      },
+      "submenuResourceTypes": {
+        "title": "Submenú: Tipus de Recursos",
+        "text": "Gestiona els tipus de recursos disponibles."
+      },
+      "submenuUsers": {
+        "title": "Submenú: Usuaris",
+        "text": "Administra els usuaris registrats a la plataforma."
+      },
+      "submenuEva": {
+        "title": "Submenú: EVA",
+        "text": "Consulta i analitza les dades de l'EVA de cada arbre en format llistat."
+      },
+      "submenuWorkOrders": {
+        "title": "Submenú: Ordres de Treball",
+        "text": "Lloc on es crearan les ordres de treball del dia."
+      },
+      "submenuWorkers": {
+        "title": "Submenú: Treballadors",
+        "text": "Lloc on assignarem als usuaris en quin contracte volem que treballin."
+      },
+      "submenuResources": {
+        "title": "Submenú: Recursos",
+        "text": "Gestiona els recursos disponibles al contracte."
+      },
+      "submenuStats": {
+        "title": "Submenú: Estadístiques",
+        "text": "Consulta les estadístiques i gràfics."
+      },
+      "submenuSensors": {
+        "title": "Submenú: Sensors",
+        "text": "Consulta els registres d'activitat dels sensors."
+      },
+      "mapScaleControl": {
+        "title": "Control d'Escala del Mapa",
+        "text": "Aquest control mostra l'escala del mapa."
+      },
+      "mapFullscreenControl": {
+        "title": "Control de Pantalla Completa del Mapa",
+        "text": "Fes clic aquí per alternar el mode de pantalla completa."
+      },
+      "mapGeolocateControl": {
+        "title": "Control de Geolocalització del Mapa",
+        "text": "Fes clic aquí per centrar el mapa en la teva ubicació actual."
+      },
+      "mapAddPointsButton": {
+        "title": "Botó: Afegeix Punts al Mapa",
+        "text": "Fes clic en aquest botó per començar a afegir punts per a una nova zona."
+      },
+      "mapCancelCreationButton": {
+        "title": "Botó: Cancel·la Creació de Punts",
+        "text": "Fes clic en aquest botó per cancel·lar la creació de punts per a la zona."
+      },
+      "finishButton": "Finalitzar",
+      "scaleControl": {
+        "title": "Control d'Escala",
+        "text": "Aquest control mostra l'escala del mapa."
+      },
+      "fullscreenControl": {
+        "title": "Control de Pantalla Completa",
+        "text": "Fes clic aquí per alternar el mode de pantalla completa."
+      },
+      "geolocateControl": {
+        "title": "Control de Geolocalització",
+        "text": "Fes clic aquí per centrar el mapa en la teva ubicació actual."
+      },
+      "addPointsButton": {
+        "title": "Afegeix Punts per a les Zones",
+        "text": "Fes clic en aquest botó per començar a afegir punts per a una nova zona."
+      },
+      "cancelCreationButton": {
+        "title": "Cancel·la Creació",
+        "text": "Fes clic en aquest botó per cancel·lar la creació de punts per a la zona."
+      },
+      "customButton1": {
+        "title": "Botó Personalitzat 1",
+        "text": "Aquest és el botó personalitzat número 1."
+      },
+      "customButton2": {
+        "title": "Botó Personalitzat 2",
+        "text": "Aquest és el botó personalitzat número 2."
+      },
+      "customButton3": {
+        "title": "Botó Personalitzat 3",
+        "text": "Aquest és el botó personalitzat número 3."
+      },
+      "customButton4": {
+        "title": "Botó Personalitzat 4",
+        "text": "Aquest és el botó personalitzat número 4."
+      },
+      "addElementButton": {
+        "title": "Botó: Afegeix Element",
+        "text": "Fes clic en aquest botó per afegir un nou element."
       }
     }
   },
@@ -1701,11 +1836,14 @@
         "resourcesFetchFailed": "Error en obtenir recursos disponibles",
         "resourcesSaveFailed": "Error en desar recursos",
         "workOrderCompleted": "No es pot modificar una ordre de treball completada",
-        "fetchFailed": "Error en obtenir ordres de treball"
+        "fetchFailed": "Error en obtenir ordres de treball",
+        "noResourcesSelected": "Selecciona almenys un recurs",
+        "reportCreationFailed": "No s'ha pogut crear l'informe de treball"
       },
       "messages": {
         "resourcesAdded": "Recursos afegits amb èxit",
-        "taskUpdated": "Tasca actualitzada amb èxit"
+        "taskUpdated": "Tasca actualitzada amb èxit",
+        "reportCreated": "Informe de treball creat correctament"
       },
       "createWorkReport": "Crea informe de treball",
       "spentFuel": "Combustible consumit (litres)",
@@ -1715,26 +1853,17 @@
       "resource": "Recurs {0}",
       "resourceName": "Nom del recurs",
       "unit": "Unitat",
-      "quantity": "Quantitat",
       "selectResourceTypeFirst": "Selecciona primer un tipus de recurs",
       "noResourcesForType": "No hi ha recursos disponibles per a aquest tipus",
       "noResourceTypes": "No hi ha tipus de recursos disponibles",
       "observations": "Observacions",
       "observationsPlaceholder": "Introdueix qualsevol observació o incident aquí",
       "submitReport": "Envia informe",
-      "taskUpdated": "Tasca actualitzada correctament",
-      "messages": {
-        "reportCreated": "Informe de treball creat correctament",
-        "resourcesAdded": "Recursos afegits correctament"
-      },
-      "errors": {
-        "noResourcesSelected": "Selecciona almenys un recurs",
-        "reportCreationFailed": "No s'ha pogut crear l'informe de treball"
-      }
-    },
-    "workReports": {
-      "title": "Informes de treball",
-      "create": "Crea informe de treball"
+      "taskUpdated": "Tasca actualitzada correctament"
     }
+  },
+  "workReports": {
+    "title": "Informes de treball",
+    "create": "Crea informe de treball"
   }
 }

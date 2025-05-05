@@ -53,7 +53,7 @@ class StatisticsController extends Controller
 
         $filteredTasks = $tasks->filter(fn ($t) => $t->workOrderBlock?->workOrder?->date && Carbon::parse($t->workOrderBlock->workOrder->date)->between($fromDate, $toDate));
 
-        $tasksDoneCount = $this->countTasksByDay($filteredTasks, $days, 1);
+        $tasksDoneCount = $this->countTasksByDay($filteredTasks, $days, 2);
         $tasksNotDoneCount = $this->countTasksByDay($filteredTasks, $days, 0);
         $hoursWorked = $this->sumHoursByDay($filteredTasks, $days);
 
@@ -73,7 +73,7 @@ class StatisticsController extends Controller
             'hoursWorked' => $hoursWorked,
             'fuelConsumption' => $fuelConsumption,
             'summary' => [
-                'tasks_done_total' => $filteredTasks->where('status', 1)->count(),
+                'tasks_done_total' => $filteredTasks->where('status', 2)->count(),
                 'tasks_not_done_total' => $filteredTasks->where('status', 0)->count(),
                 'hours_worked_total' => $filteredTasks->sum(fn ($t) => (float) $t->spent_time),
                 'fuel_consumption_total' => $reports->sum(fn ($r) => (float) $r->spent_fuel),

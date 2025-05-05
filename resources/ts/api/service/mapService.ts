@@ -93,24 +93,47 @@ export class MapService {
     return DEFAULT_CENTER;
   }
 
-  public addBasicControls(): void {
-    const controls: { control: IControl; position: ControlPosition }[] = [
-      { control: new mapboxgl.NavigationControl(), position: 'top-right' },
-      { control: new mapboxgl.ScaleControl(), position: 'bottom-left' },
-      { control: new mapboxgl.FullscreenControl(), position: 'top-right' },
-      {
-        control: new mapboxgl.GeolocateControl({
-          positionOptions: { enableHighAccuracy: true },
-          trackUserLocation: true,
-        }),
-        position: 'top-right',
-      },
-    ];
+public addBasicControls(): void {
+  const controls = [
+    { 
+      control: new mapboxgl.NavigationControl(), 
+      position: 'top-right' as ControlPosition,
+      className: 'map-control-navigation'
+    },
+    { 
+      control: new mapboxgl.ScaleControl(), 
+      position: 'bottom-left' as ControlPosition,
+      className: 'map-control-scale'
+    },
+    { 
+      control: new mapboxgl.FullscreenControl(), 
+      position: 'top-right' as ControlPosition,
+      className: 'map-control-fullscreen'
+    },
+    {
+      control: new mapboxgl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: true,
+      }),
+      position: 'top-right' as ControlPosition,
+      className: 'map-control-geolocate'
+    },
+  ];
 
-    controls.forEach(({ control, position }) => {
-      this.map.addControl(control, position);
-    });
-  }
+  controls.forEach(({ control, position, className }) => {
+    this.map.addControl(control, position);
+    if (className) {
+      setTimeout(() => {
+        const controlContainer = document.querySelector(
+          `.mapboxgl-ctrl-${className.split('-').pop()}`
+        );
+        if (controlContainer) {
+          controlContainer.classList.add(className);
+        }
+      }, 100);
+    }
+  });
+}
 
   public addGeocoder(): void {
     const geocoder = new MapboxGeocoder({
