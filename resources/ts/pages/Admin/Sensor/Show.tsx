@@ -311,7 +311,7 @@ const SensorHistory: React.FC = () => {
         allDays.push(format(day, 'dd'));
     }
 
-    // Map data to days of the month, filling missing days with 0
+    // Map data to days of the month, leaving missing days as null
     const dataByDay = filteredData.reduce((acc, data) => {
         const day = format(parseISO(data.time), 'dd');
         acc[day] = data;
@@ -322,49 +322,49 @@ const SensorHistory: React.FC = () => {
     const chartConfigs = [
         {
             title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
-            data: allDays.map((day) => dataByDay[day]?.temp_soil || 0),
+            data: allDays.map((day) => dataByDay[day]?.temp_soil ?? null), // Use null for missing values
             borderColor: '#ef4444',
             backgroundColor: '#fca5a5',
             yAxisTitle: '°C',
         },
         {
             title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
-            data: allDays.map((day) => dataByDay[day]?.ph1_soil || 0),
+            data: allDays.map((day) => dataByDay[day]?.ph1_soil ?? null), // Use null for missing values
             borderColor: '#8b5cf6',
             backgroundColor: '#c4b5fd',
             yAxisTitle: 'pH',
         },
         {
             title: t('admin.pages.sensors.history.metrics.water_soil') || 'Soil Moisture',
-            data: allDays.map((day) => dataByDay[day]?.water_soil || 0),
+            data: allDays.map((day) => dataByDay[day]?.water_soil ?? null), // Use null for missing values
             borderColor: '#059669',
             backgroundColor: '#6ee7b7',
             yAxisTitle: '%',
         },
         {
             title: t('admin.pages.sensors.history.metrics.conductor_soil') || 'Soil Conductivity',
-            data: allDays.map((day) => dataByDay[day]?.conductor_soil || 0),
+            data: allDays.map((day) => dataByDay[day]?.conductor_soil ?? null), // Use null for missing values
             borderColor: '#d97706',
             backgroundColor: '#fcd34d',
             yAxisTitle: 'µS/cm',
         },
         {
             title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
-            data: allDays.map((day) => dataByDay[day]?.bat || 0),
+            data: allDays.map((day) => dataByDay[day]?.bat ?? null), // Use null for missing values
             borderColor: '#2563eb',
             backgroundColor: '#93c5fd',
             yAxisTitle: 'V',
         },
         {
             title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
-            data: allDays.map((day) => dataByDay[day]?.rssi || 0),
+            data: allDays.map((day) => dataByDay[day]?.rssi ?? null), // Use null for missing values
             borderColor: '#7c3aed',
             backgroundColor: '#c4b5fd',
             yAxisTitle: 'dBm',
         },
         {
             title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
-            data: allDays.map((day) => dataByDay[day]?.snr || 0),
+            data: allDays.map((day) => dataByDay[day]?.snr ?? null), // Use null for missing values
             borderColor: '#db2777',
             backgroundColor: '#f9a8d4',
             yAxisTitle: 'dB',
