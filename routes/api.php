@@ -40,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('contracts', [UserContractController::class, 'index']);
-    
+
     // Rutas para el mapa accesibles para todos los roles
     Route::get('zones', [ZoneController::class, 'index']);
     Route::get('points', [PointController::class, 'index']);
@@ -89,24 +89,24 @@ Route::middleware('auth:sanctum')->group(function () {
             'incidents' => IncidentsController::class,
             'sensors' => SensorController::class,
         ]);
-        
+
         // Rutas de write para los recursos del mapa (solo admin)
         Route::post('zones', [ZoneController::class, 'store']);
         Route::put('zones/{id}', [ZoneController::class, 'update']);
         Route::delete('zones/{id}', [ZoneController::class, 'destroy']);
-        
+
         Route::post('points', [PointController::class, 'store']);
         Route::put('points/{id}', [PointController::class, 'update']);
         Route::delete('points/{id}', [PointController::class, 'destroy']);
-        
+
         Route::post('elements', [ElementController::class, 'store']);
         Route::put('elements/{id}', [ElementController::class, 'update']);
         Route::delete('elements/{id}', [ElementController::class, 'destroy']);
-        
+
         Route::post('element-types', [ElementTypeController::class, 'store']);
         Route::put('element-types/{id}', [ElementTypeController::class, 'update']);
         Route::delete('element-types/{id}', [ElementTypeController::class, 'destroy']);
-        
+
         Route::post('tree-types', [TreeTypeController::class, 'store']);
         Route::put('tree-types/{id}', [TreeTypeController::class, 'update']);
         Route::delete('tree-types/{id}', [TreeTypeController::class, 'destroy']);
@@ -132,11 +132,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('incidents/{id}', [IncidentsController::class, 'update']);
 
         Route::post('points', [PointController::class, 'store']);
-        
+
         Route::post('elements', [ElementController::class, 'store']);
         Route::put('elements/{id}', [ElementController::class, 'update']);
         Route::delete('elements/{id}', [ElementController::class, 'destroy']);
-        
+
         // Rutas para el inventario (solo lectura)
         Route::get('zones', [ZoneController::class, 'index']);
         Route::get('points', [PointController::class, 'index']);

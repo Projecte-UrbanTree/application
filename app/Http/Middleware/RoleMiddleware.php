@@ -16,12 +16,11 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, string $role): Response
     {
         $userRole = $request->user()->role;
-        
+
         if ($userRole === 'admin') {
             return $next($request);
         }
 
-        
         if ($userRole !== $role) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
