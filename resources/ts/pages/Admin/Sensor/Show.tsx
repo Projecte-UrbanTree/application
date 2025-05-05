@@ -575,11 +575,15 @@ const SensorHistory: React.FC = () => {
                   field="bat"
                   header={t('admin.pages.sensors.history.metrics.bat')}
                   body={(rowData) => (
-                    <Tag
-                      value={`${rowData.bat.toFixed(2)} V`}
-                      severity={getBatterySeverity(rowData.bat)}
-                      className="font-medium"
-                    />
+                    rowData.bat != null ? (
+                      <Tag
+                        value={`${rowData.bat.toFixed(2)} V`}
+                        severity={getBatterySeverity(rowData.bat)}
+                        className="font-medium"
+                      />
+                    ) : (
+                      <Tag value="N/A" severity="info" />
+                    )
                   )}
                 />
               )}
