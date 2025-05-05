@@ -221,7 +221,6 @@ export const MapComponent: React.FC<MapProps> = ({
         
         // Forzar un redimensionamiento después de la inicialización
         setTimeout(() => {
-          console.log('Resizing map');
           
           service.resizeMap();
         }, 300);
@@ -260,7 +259,6 @@ export const MapComponent: React.FC<MapProps> = ({
     const flyToId = Date.now();
     setTimeout(() => {
       if (service && selectedZone && selectedZone.id) {
-        console.log(`Flying to zone ${selectedZone.id} - ${flyToId}`);
         service.flyTo(selectedZone);
       }
     }, 100);

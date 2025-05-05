@@ -67,7 +67,6 @@ export class MapService {
         
         // Force resize after load to ensure correct dimensions
         setTimeout(() => {
-          console.log('Resizing map service');
           this.map.resize();
         }, 100);
       });
