@@ -221,6 +221,8 @@ export const MapComponent: React.FC<MapProps> = ({
         
         // Forzar un redimensionamiento después de la inicialización
         setTimeout(() => {
+          console.log('Resizing map');
+          
           service.resizeMap();
         }, 300);
       });
@@ -245,25 +247,7 @@ export const MapComponent: React.FC<MapProps> = ({
     currentContract?.id,
   ]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (mapServiceRef.current) {
-        mapServiceRef.current.resizeMap();
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Forzar un redimensionamiento inicial
-    if (mapServiceRef.current) {
-      setTimeout(() => {
-        handleResize();
-      }, 500);
-    }
-    
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isDataLoaded, isLoading]);
-
+  
   useEffect(() => {
     const service = mapServiceRef.current;
     if (!service || !selectedZone) return;

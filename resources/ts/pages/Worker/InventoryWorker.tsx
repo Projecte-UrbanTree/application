@@ -25,6 +25,9 @@ export const InventoryWorker: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [dataInitialized, setDataInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Referencia para almacenar el ancho actual de la ventana sin causar re-renderizados
+  const currentWidthRef = useRef(window.innerWidth);
 
   const {
     isMapReady,
@@ -108,23 +111,26 @@ export const InventoryWorker: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      const newIsMobile = window.innerWidth < 768;
-      if (isMobile !== newIsMobile) {
+      const newWidth = window.innerWidth;
+      const newIsMobile = newWidth < 768;
+      const currentIsMobile = currentWidthRef.current < 768;
+      
+      if (newIsMobile !== currentIsMobile) {
+        currentWidthRef.current = newWidth;
         setIsMobile(newIsMobile);
         setMapKey(Date.now());
-      }
-      
-      // Redimensionar el mapa manualmente cuando cambie el tamaño de la ventana
-      if (document.body.contains(mapContainerRef.current)) {
-        setTimeout(() => {
-          window.dispatchEvent(new Event('resize'));
-        }, 100);
+        
+        if (document.body.contains(mapContainerRef.current)) {
+          setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+          }, 100);
+        }
       }
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isMobile]);
+  }, []);
 
   const handleSelectedZone = useCallback((zone: Zone) => {
     setSelectedZone(zone);
