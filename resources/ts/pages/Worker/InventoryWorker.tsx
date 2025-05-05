@@ -26,7 +26,7 @@ export const InventoryWorker: React.FC = () => {
   const [dataInitialized, setDataInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Referencia para almacenar el ancho actual de la ventana sin causar re-renderizados
+  
   const currentWidthRef = useRef(window.innerWidth);
 
   const {
