@@ -661,11 +661,6 @@ export const MapComponent: React.FC<MapProps> = ({
     const handleElementDelete = async (elementId: number) => {
       try {
         await dispatch(deleteElementAsync(elementId));
-        toast.current?.show({
-          severity: 'success',
-          summary: t('admin.pages.inventory.genericSuccessTitle'),
-          detail: t('admin.pages.inventory.deleteElementSuccess'),
-        });
       } catch (error) {
         toast.current?.show({
           severity: 'error',
@@ -788,11 +783,7 @@ export const MapComponent: React.FC<MapProps> = ({
         mapServiceRef.current?.removeElementMarker(elementId);
         setElementModalVisible(false);
         setSelectedElement(null);
-        toast.current?.show({
-          severity: 'success',
-          summary: t('admin.pages.inventory.genericSuccessTitle'),
-          detail: t('admin.pages.inventory.deleteElementSuccess'),
-        });
+        
       } catch (error) {
         toast.current?.show({
           severity: 'error',
