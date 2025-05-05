@@ -1576,7 +1576,10 @@
           "moisture": "Humitat",
           "noData": "Sense dades",
           "viewHistory": "Veure historial",
-          "noSensors": "No s'han trobat sensors"
+          "noSensors": "No s'han trobat sensors",
+          "ph": "pH",
+          "snr": "SNR",
+          "conductor": "Conductor"
         },
         "history": {
           "title": "Historial del sensor",
