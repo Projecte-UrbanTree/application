@@ -19,6 +19,7 @@ import { fetchPointsAsync } from '@/store/slice/pointSlice';
 import { fetchZonesAsync, updateZoneAsync } from '@/store/slice/zoneSlice';
 import { AppDispatch, RootState } from '@/store/store';
 import { ElementType } from '@/types/ElementType';
+import { Roles } from '@/types/Role';
 import { TreeTypes } from '@/types/TreeTypes';
 import { Zone } from '@/types/Zone';
 import { ZoneEvent } from '@/types/ZoneEvent';
@@ -89,6 +90,9 @@ export const Zones = ({
   const { elements, loading: elementsLoading } = useSelector(
     (state: RootState) => state.element,
   );
+  const userValue = useSelector((state: RootState) => state.user);
+  const isAdmin = userValue.role === Roles.admin;
+  const canCreateElements = userValue.role === Roles.admin || userValue.role === Roles.worker;
 
   const uniqueZones = useMemo(
     () => Array.from(new Map(zones.map((z) => [z.id, z])).values()),
@@ -498,7 +502,7 @@ export const Zones = ({
             {t('admin.pages.inventory.zones.title')}
           </h2>
 
-          {isDrawingMode && (
+          {isDrawingMode && isAdmin && (
             <Button
               label={t('admin.pages.inventory.zones.saveZoneButton')}
               icon={<Icon icon="tabler:device-floppy" />}
@@ -596,19 +600,21 @@ export const Zones = ({
                   }}>
                   <div className="border-b border-gray-200 p-3 flex flex-col gap-2">
                     <div className="flex items-center gap-3 min-w-0">
-                      <ColorPicker
-                        value={currentColor.replace('#', '')}
-                        onChange={(e) =>
-                          handleColorChange(zone.id!, `#${e.value}`)
-                        }
-                        onHide={() => handleColorSave(zone)}
-                        tooltip={t(
-                          'admin.pages.inventory.zones.tooltips.changeColor',
-                        )}
-                        appendTo={document.body}
-                      />
+                      {isAdmin && (
+                        <ColorPicker
+                          value={currentColor.replace('#', '')}
+                          onChange={(e) =>
+                            handleColorChange(zone.id!, `#${e.value}`)
+                          }
+                          onHide={() => handleColorSave(zone)}
+                          tooltip={t(
+                            'admin.pages.inventory.zones.tooltips.changeColor',
+                          )}
+                          appendTo={document.body}
+                        />
+                      )}
                       <div className="flex flex-col min-w-0">
-                        {editingField?.zoneId === zone.id &&
+                        {isAdmin && editingField?.zoneId === zone.id &&
                         editingField.field === 'name' ? (
                           <InputText
                             value={localEdits.name ?? zone.name}
@@ -625,14 +631,16 @@ export const Zones = ({
                           />
                         ) : (
                           <span
-                            className="font-semibold text-gray-800 truncate cursor-pointer"
-                            onClick={() =>
-                              handleInlineEditStart(zone.id!, 'name')
-                            }>
+                            className={`font-semibold text-gray-800 truncate ${isAdmin ? 'cursor-pointer' : ''}`}
+                            onClick={() => {
+                              if (isAdmin) {
+                                handleInlineEditStart(zone.id!, 'name');
+                              }
+                            }}>
                             {localEdits.name ?? zone.name}
                           </span>
                         )}
-                        {editingField?.zoneId === zone.id &&
+                        {isAdmin && editingField?.zoneId === zone.id &&
                         editingField.field === 'description' ? (
                           <InputText
                             value={
@@ -653,10 +661,12 @@ export const Zones = ({
                           />
                         ) : (
                           <span
-                            className="text-xs text-gray-500 truncate cursor-pointer"
-                            onClick={() =>
-                              handleInlineEditStart(zone.id!, 'description')
-                            }>
+                            className={`text-xs text-gray-500 truncate ${isAdmin ? 'cursor-pointer' : ''}`}
+                            onClick={() => {
+                              if (isAdmin) {
+                                handleInlineEditStart(zone.id!, 'description');
+                              }
+                            }}>
                             {(localEdits.description ?? zone.description) ||
                               t('admin.pages.inventory.zones.noDescription')}
                           </span>
@@ -689,26 +699,43 @@ export const Zones = ({
                         tooltipOptions={{ position: 'top' }}
                         onClick={() => onSelectedZone(zone)}
                       />
-                      <Button
-                        icon={<Icon icon="tabler:plus" width="18" />}
-                        className="p-button-outlined p-button-indigo p-button-sm"
-                        tooltip={t(
-                          'admin.pages.inventory.zones.tooltips.addElement',
-                        )}
-                        tooltipOptions={{ position: 'top' }}
-                        onClick={() =>
-                          addElementZone({ isCreatingElement: true, zone })
-                        }
-                      />
-                      <Button
-                        icon={<Icon icon="tabler:trash" width="18" />}
-                        className="p-button-outlined p-button-indigo p-button-sm"
-                        tooltip={t(
-                          'admin.pages.inventory.zones.tooltips.deleteZone',
-                        )}
-                        tooltipOptions={{ position: 'top' }}
-                        onClick={() => confirmDeleteZone(zone)}
-                      />
+                      {isAdmin && (
+                        <>
+                          <Button
+                            icon={<Icon icon="tabler:plus" width="18" />}
+                            className="p-button-outlined p-button-indigo p-button-sm"
+                            tooltip={t(
+                              'admin.pages.inventory.zones.tooltips.addElement',
+                            )}
+                            tooltipOptions={{ position: 'top' }}
+                            onClick={() =>
+                              addElementZone({ isCreatingElement: true, zone })
+                            }
+                          />
+                          <Button
+                            icon={<Icon icon="tabler:trash" width="18" />}
+                            className="p-button-outlined p-button-indigo p-button-sm"
+                            tooltip={t(
+                              'admin.pages.inventory.zones.tooltips.deleteZone',
+                            )}
+                            tooltipOptions={{ position: 'top' }}
+                            onClick={() => confirmDeleteZone(zone)}
+                          />
+                        </>
+                      )}
+                      {!isAdmin && canCreateElements && (
+                        <Button
+                          icon={<Icon icon="tabler:plus" width="18" />}
+                          className="p-button-outlined p-button-indigo p-button-sm"
+                          tooltip={t(
+                            'admin.pages.inventory.zones.tooltips.addElement',
+                          )}
+                          tooltipOptions={{ position: 'top' }}
+                          onClick={() =>
+                            addElementZone({ isCreatingElement: true, zone })
+                          }
+                        />
+                      )}
                     </div>
                   </div>
 
@@ -731,19 +758,21 @@ export const Zones = ({
                                 'admin.pages.inventory.zones.noElementsInZone',
                               )}
                             </p>
-                            <Button
-                              label={t(
-                                'admin.pages.inventory.zones.addElementButton',
-                              )}
-                              icon={<Icon icon="tabler:plus" width="16" />}
-                              className="p-button-outlined p-button-indigo p-button-sm"
-                              onClick={() =>
-                                addElementZone({
-                                  isCreatingElement: true,
-                                  zone,
-                                })
-                              }
-                            />
+                            {canCreateElements && (
+                              <Button
+                                label={t(
+                                  'admin.pages.inventory.zones.addElementButton',
+                                )}
+                                icon={<Icon icon="tabler:plus" width="16" />}
+                                className="p-button-outlined p-button-indigo p-button-sm"
+                                onClick={() =>
+                                  addElementZone({
+                                    isCreatingElement: true,
+                                    zone,
+                                  })
+                                }
+                              />
+                            )}
                           </div>
                         </div>
                       );

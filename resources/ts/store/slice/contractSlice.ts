@@ -23,7 +23,7 @@ export const fetchAllContracts = createAsyncThunk(
   },
 );
 
-export const contractSlice = createSlice({
+const contractSlice = createSlice({
   name: 'contract',
   initialState,
   reducers: {
@@ -64,3 +64,5 @@ export const contractSlice = createSlice({
 
 export const { setContractState, selectContract, clearContractState } =
   contractSlice.actions;
+
+export default contractSlice;

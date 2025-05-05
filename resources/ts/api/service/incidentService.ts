@@ -14,7 +14,7 @@ export const saveIncidence = async (
   incidence: Incidence,
 ): Promise<Incidence> => {
   const response: AxiosResponse = await axiosClient.post<Incidence>(
-    `/admin/incidents`,
+    `/worker/incidents`,
     incidence,
   );
   return response.data;
@@ -29,7 +29,7 @@ export const updateIncidence = async (
   updates: Partial<Incidence>,
 ): Promise<Incidence> => {
   const response: AxiosResponse<Incidence> = await axiosClient.patch<Incidence>(
-    `/admin/incidents/${id}`,
+    `/worker/incidents/${id}`,
     updates,
   );
   return response.data;

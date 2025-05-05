@@ -5,14 +5,30 @@ import { Element } from '@/types/Element';
 import axiosClient from '../axiosClient';
 
 export const fetchElements = async (): Promise<Element[]> => {
-  const response: AxiosResponse =
-    await axiosClient.get<Element[]>(`/admin/elements`);
-  return response.data;
+  try {
+    const response: AxiosResponse = await axiosClient.get<Element[]>(`/elements`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }  
+
+  return [];
+};
+
+export const fetchWorkerElements = async (): Promise<Element[]> => {
+  try {
+    const response: AxiosResponse = await axiosClient.get<Element[]>(`/worker/elements`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }  
+
+  return [];
 };
 
 export const saveElements = async (element: Element): Promise<Element> => {
   try {
-    const respose = await axiosClient.post(`/admin/elements`, element);
+    const respose = await axiosClient.post(`/worker/elements`, element);
     return respose.data;
   } catch (error) {
     console.error('Error guardando el elemento', error);
@@ -22,7 +38,7 @@ export const saveElements = async (element: Element): Promise<Element> => {
 
 export const deleteElement = async (elementId: number): Promise<void> => {
   try {
-    await axiosClient.delete(`/admin/elements/${elementId}`);
+    await axiosClient.delete(`/worker/elements/${elementId}`);
   } catch (error) {
     console.error('Error eliminando el elemento', error);
     throw error;
@@ -38,7 +54,7 @@ export const updateElementService = async (
     }
 
     const response = await axiosClient.put(
-      `/admin/elements/${element.id}`,
+      `/worker/elements/${element.id}`,
       element,
     );
     return response.data;
