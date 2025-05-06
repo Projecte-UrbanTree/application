@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchSensorHistoryPaginated } from '@/api/sensors';
+import { fetchAllSensorHistory } from '@/api/sensors';
 import { useTranslation } from 'react-i18next';
 import {
   format,
@@ -21,6 +21,7 @@ import { Button } from 'primereact/button';
 import { ToggleButton } from 'primereact/togglebutton';
 import { Icon } from '@iconify/react';
 import { Chart, registerables } from 'chart.js';
+import CrudPanel  from '@/components/CrudPanel';
 
 // Register Chart.js core components
 Chart.register(...registerables);
@@ -45,6 +46,19 @@ const SensorHistory: React.FC = () => {
   const [totalRecords, setTotalRecords] = useState<number>(0);
   const [first, setFirst] = useState<number>(0);
 
+  const availableMetrics = useMemo(() => {
+    const metrics = {
+      temp_soil: sensorData.some((data) => data.temp_soil != null),
+      ph1_soil: sensorData.some((data) => data.ph1_soil != null),
+      water_soil: sensorData.some((data) => data.water_soil != null),
+      conductor_soil: sensorData.some((data) => data.conductor_soil != null),
+      bat: sensorData.some((data) => data.bat != null),
+      rssi: sensorData.some((data) => data.rssi != null),
+      snr: sensorData.some((data) => data.snr != null),
+    };
+    return metrics;
+  }, [sensorData]);
+
   useEffect(() => {
     const loadSensorHistory = async () => {
       try {
@@ -53,16 +67,24 @@ const SensorHistory: React.FC = () => {
         }
 
         setLoading(true);
-        const response = await fetchSensorHistoryPaginated(eui, page, perPage);
+        const response = await fetchAllSensorHistory(eui);
 
-        if (response && response.data) {
-          setSensorData(response.data);
-          setTotalRecords(response.total);
+        if (response) {
+          setSensorData(response);
+          const filtered = response.filter((data: any) => {
+            const dataDate = parseISO(data.time);
+            return isSameMonth(dataDate, selectedMonth);
+          });
+          setFilteredData(filtered);
+
+          // Preload charts immediately after data is loaded
+          setTimeout(() => {
+            preloadCharts(filtered);
+          }, 100);
         } else {
           setSensorData([]);
-          setTotalRecords(0);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error loading sensor history:', err);
         setError(t('admin.pages.sensors.history.loadError'));
       } finally {
@@ -71,7 +93,157 @@ const SensorHistory: React.FC = () => {
     };
 
     loadSensorHistory();
-  }, [eui, page, perPage, t]);
+  }, [eui, t, selectedMonth]);
+
+  const preloadCharts = (data: any[]) => {
+    charts.current.forEach((chart) => chart.destroy());
+    charts.current = [];
+
+    while (chartRefs.current.length < 7) {
+      chartRefs.current.push(null);
+    }
+
+    const reversedData = [...data].reverse();
+
+    const labels = reversedData.map((data) =>
+      format(parseISO(data.time), 'dd/MM/yyyy HH:mm'),
+    );
+
+    const chartConfigs = [
+      {
+        title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
+        data: reversedData.map((data) => data.temp_soil),
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+        yAxisTitle: '°C',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
+        data: reversedData.map((data) => data.ph1_soil),
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.2)',
+        yAxisTitle: 'pH',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.water_soil') || 'Soil Moisture',
+        data: reversedData.map((data) => data.water_soil || null),
+        borderColor: '#059669',
+        backgroundColor: 'rgba(5, 150, 105, 0.2)',
+        yAxisTitle: '%',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.conductor_soil') || 'Soil Conductivity',
+        data: reversedData.map((data) => data.conductor_soil || null),
+        borderColor: '#d97706',
+        backgroundColor: 'rgba(217, 119, 6, 0.2)',
+        yAxisTitle: 'µS/cm',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
+        data: reversedData.map((data) => data.bat),
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.2)',
+        yAxisTitle: 'V',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
+        data: reversedData.map((data) => data.rssi),
+        borderColor: '#7c3aed',
+        backgroundColor: 'rgba(124, 58, 237, 0.2)',
+        yAxisTitle: 'dBm',
+      },
+      {
+        title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
+        data: reversedData.map((data) => data.snr),
+        borderColor: '#db2777',
+        backgroundColor: 'rgba(219, 39, 119, 0.2)',
+        yAxisTitle: 'dB',
+      },
+    ];
+
+    chartConfigs.forEach((config, index) => {
+      const ctx = chartRefs.current[index]?.getContext('2d');
+      if (!ctx) return;
+
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: config.title,
+              data: config.data,
+              borderColor: config.borderColor,
+              backgroundColor: config.backgroundColor,
+              fill: true,
+              tension: 0.3,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: config.title,
+              font: { size: 18, weight: 'bold', family: 'Arial, sans-serif' },
+              color: '#374151',
+            },
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: '#1f2937',
+              titleFont: { size: 14, weight: 'bold', family: 'Arial, sans-serif' },
+              bodyFont: { size: 12, family: 'Arial, sans-serif' },
+              titleColor: '#f9fafb',
+              bodyColor: '#f3f4f6',
+              borderColor: '#4b5563',
+              borderWidth: 1,
+            },
+          },
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: config.yAxisTitle,
+                font: { size: 14, weight: 'bold', family: 'Arial, sans-serif' },
+                color: '#374151',
+              },
+              grid: {
+                color: 'rgba(156, 163, 175, 0.2)',
+              },
+              ticks: {
+                color: '#4b5563',
+                font: { size: 12, family: 'Arial, sans-serif' },
+              },
+            },
+            x: {
+              title: {
+                display: true,
+                text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+                font: { size: 14, weight: 'bold', family: 'Arial, sans-serif' },
+                color: '#374151',
+              },
+              grid: {
+                color: 'rgba(156, 163, 175, 0.2)',
+              },
+              ticks: {
+                color: '#4b5563',
+                font: { size: 12, family: 'Arial, sans-serif' },
+              },
+            },
+          },
+        },
+      });
+
+      charts.current.push(chart);
+    });
+  };
 
   useEffect(() => {
     // Destroy charts when component unmounts or data changes
@@ -104,12 +276,6 @@ const SensorHistory: React.FC = () => {
     }
   }, [sensorData, selectedMonth]);
 
-  const onPageChange = (event: any) => {
-    setPage(event.page + 1);
-    setFirst(event.first);
-    setPerPage(event.rows);
-  };
-
   const getBatterySeverity = (voltage: number) => {
     if (voltage >= 3.6) return 'success';
     if (voltage >= 3.3) return 'warning';
@@ -133,133 +299,141 @@ const SensorHistory: React.FC = () => {
     charts.current = [];
 
     while (chartRefs.current.length < 7) {
-      // We have 7 chart configs
-      chartRefs.current.push(null);
+        // We have 7 chart configs
+        chartRefs.current.push(null);
     }
 
-    const labels = filteredData.map((data) =>
-      format(parseISO(data.time), 'dd/MM/yyyy HH:mm'),
-    );
+    // Generate all days of the selected month
+    const start = startOfMonth(selectedMonth);
+    const end = endOfMonth(selectedMonth);
+    const allDays = [];
+    for (let day = start; day <= end; day = new Date(day.getTime() + 24 * 60 * 60 * 1000)) {
+        allDays.push(format(day, 'dd'));
+    }
 
+    // Map data to days of the month, leaving missing days as null
+    const dataByDay = filteredData.reduce((acc, data) => {
+        const day = format(parseISO(data.time), 'dd');
+        acc[day] = data;
+        return acc;
+    }, {} as Record<string, any>);
+
+    const labels = allDays;
     const chartConfigs = [
-      {
-        title:
-          t('admin.pages.sensors.history.metrics.temp_soil') ||
-          'Soil Temperature',
-        data: filteredData.map((data) => data.temp_soil),
-        borderColor: '#ef4444',
-        backgroundColor: '#fca5a5',
-        yAxisTitle: '°C',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
-        data: filteredData.map((data) => data.ph1_soil),
-        borderColor: '#8b5cf6',
-        backgroundColor: '#c4b5fd',
-        yAxisTitle: 'pH',
-      },
-      {
-        title:
-          t('admin.pages.sensors.history.metrics.water_soil') ||
-          'Soil Moisture',
-        data: filteredData.map((data) => data.water_soil || null),
-        borderColor: '#059669',
-        backgroundColor: '#6ee7b7',
-        yAxisTitle: '%',
-      },
-      {
-        title:
-          t('admin.pages.sensors.history.metrics.conductor_soil') ||
-          'Soil Conductivity',
-        data: filteredData.map((data) => data.conductor_soil || null),
-        borderColor: '#d97706',
-        backgroundColor: '#fcd34d',
-        yAxisTitle: 'µS/cm',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
-        data: filteredData.map((data) => data.bat),
-        borderColor: '#2563eb',
-        backgroundColor: '#93c5fd',
-        yAxisTitle: 'V',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
-        data: filteredData.map((data) => data.rssi),
-        borderColor: '#7c3aed',
-        backgroundColor: '#c4b5fd',
-        yAxisTitle: 'dBm',
-      },
-      {
-        title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
-        data: filteredData.map((data) => data.snr),
-        borderColor: '#db2777',
-        backgroundColor: '#f9a8d4',
-        yAxisTitle: 'dB',
-      },
+        {
+            title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
+            data: allDays.map((day) => dataByDay[day]?.temp_soil ?? null), // Use null for missing values
+            borderColor: '#ef4444',
+            backgroundColor: '#fca5a5',
+            yAxisTitle: '°C',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
+            data: allDays.map((day) => dataByDay[day]?.ph1_soil ?? null), // Use null for missing values
+            borderColor: '#8b5cf6',
+            backgroundColor: '#c4b5fd',
+            yAxisTitle: 'pH',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.water_soil') || 'Soil Moisture',
+            data: allDays.map((day) => dataByDay[day]?.water_soil ?? null), // Use null for missing values
+            borderColor: '#059669',
+            backgroundColor: '#6ee7b7',
+            yAxisTitle: '%',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.conductor_soil') || 'Soil Conductivity',
+            data: allDays.map((day) => dataByDay[day]?.conductor_soil ?? null), // Use null for missing values
+            borderColor: '#d97706',
+            backgroundColor: '#fcd34d',
+            yAxisTitle: 'µS/cm',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
+            data: allDays.map((day) => dataByDay[day]?.bat ?? null), // Use null for missing values
+            borderColor: '#2563eb',
+            backgroundColor: '#93c5fd',
+            yAxisTitle: 'V',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
+            data: allDays.map((day) => dataByDay[day]?.rssi ?? null), // Use null for missing values
+            borderColor: '#7c3aed',
+            backgroundColor: '#c4b5fd',
+            yAxisTitle: 'dBm',
+        },
+        {
+            title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
+            data: allDays.map((day) => dataByDay[day]?.snr ?? null), // Use null for missing values
+            borderColor: '#db2777',
+            backgroundColor: '#f9a8d4',
+            yAxisTitle: 'dB',
+        },
     ];
 
-    // Create and attach refs for more charts
-    while (chartRefs.current.length < chartConfigs.length) {
-      chartRefs.current.push(null);
-    }
-
-    // Render each chart
     chartConfigs.forEach((config, index) => {
-      const ctx = chartRefs.current[index]?.getContext('2d');
-      if (!ctx) return;
+        const ctx = chartRefs.current[index]?.getContext('2d');
+        if (!ctx) return;
 
-      const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: config.title,
-              data: config.data,
-              borderColor: config.borderColor,
-              backgroundColor: config.backgroundColor,
-              fill: false,
-              tension: 0.1,
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: config.title,
+                        data: config.data,
+                        borderColor: config.borderColor,
+                        backgroundColor: config.backgroundColor,
+                        fill: false,
+                        tension: 0.1,
+                    },
+                ],
             },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            title: {
-              display: true,
-              text: config.title,
-              font: { size: 16 },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: config.title,
+                        font: { size: 16 },
+                    },
+                    legend: {
+                        display: false,
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            title: (context) => {
+                                // Show full date in tooltip
+                                const day = context[0].label;
+                                const fullDate = `${day}/${format(selectedMonth, 'MM/yyyy')}`;
+                                return fullDate;
+                            },
+                        },
+                    },
+                },
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: config.yAxisTitle,
+                        },
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+                        },
+                    },
+                },
             },
-            legend: {
-              display: false, // No legend needed for single dataset
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-            },
-          },
-          scales: {
-            y: {
-              title: {
-                display: true,
-                text: config.yAxisTitle,
-              },
-            },
-            x: {
-              title: {
-                display: true,
-                text: t('admin.pages.sensors.history.metrics.time') || 'Time',
-              },
-            },
-          },
-        },
-      });
+        });
 
-      charts.current.push(chart);
+        charts.current.push(chart);
     });
-  };
+};
 
   const previousMonth = () => {
     setSelectedMonth((prevMonth) => subMonths(prevMonth, 1));
@@ -269,61 +443,9 @@ const SensorHistory: React.FC = () => {
     setSelectedMonth((prevMonth) => addMonths(prevMonth, 1));
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <ProgressSpinner
-          style={{ width: '50px', height: '50px' }}
-          strokeWidth="4"
-          animationDuration=".5s"
-        />
-      </div>
-    );
-  }
-
-  if (error)
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <Card className="border-red-200 bg-red-50 w-full max-w-2xl shadow-sm">
-          <div className="flex flex-col items-center gap-4">
-            <Icon
-              icon="tabler:alert-circle"
-              className="text-red-500 text-4xl"
-            />
-            <h3 className="text-red-600 font-semibold text-lg">{error}</h3>
-            <Button
-              severity="info"
-              onClick={() => window.location.reload()}
-              className="flex items-center gap-2"
-              icon={<Icon icon="tabler:reload" />}
-              label={t('common.tryAgain')}
-            />
-          </div>
-        </Card>
-      </div>
-    );
-
-  if (!sensorData.length)
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <Card className="border-blue-200 bg-blue-50 w-full max-w-2xl shadow-sm">
-          <div className="flex flex-col items-center gap-4">
-            <Icon
-              icon="tabler:database-off"
-              className="text-blue-500 text-4xl"
-            />
-            <h3 className="text-blue-600 font-semibold text-lg">
-              {t('admin.pages.sensors.history.noData')}
-            </h3>
-          </div>
-        </Card>
-      </div>
-    );
-
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex flex-col gap-6">
-        {/* Header with back button, title and view toggle */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <Button
             icon={<Icon icon="tabler:arrow-left" className="h-5 w-5" />}
@@ -366,17 +488,18 @@ const SensorHistory: React.FC = () => {
 
         {viewMode === 'table' ? (
           /* Table View */
-          <Card className="shadow-sm border border-gray-300 bg-gray-50">
+          <CrudPanel
+            title="admin.pages.sensors.history.title"
+            onCreate={undefined} 
+            createDisabled={true}>
             <DataTable
               value={sensorData}
-              paginator={false}
+              paginator
+              rows={perPage}
+              rowsPerPageOptions={[5, 10, 20, 50]}
               stripedRows
               showGridlines
-              size="small"
-              className="p-datatable-sm"
-              emptyMessage={t('admin.pages.sensors.history.noData')}
-              scrollable
-              scrollHeight="flex">
+              className="p-datatable-sm">
               <Column
                 field="time"
                 header={t('admin.pages.sensors.history.metrics.time')}
@@ -386,122 +509,106 @@ const SensorHistory: React.FC = () => {
                     <span>{format(parseISO(rowData.time), 'PPpp')}</span>
                   </div>
                 )}
-                headerClassName="font-semibold"
               />
-
-              <Column
-                field="temp_soil"
-                header={t('admin.pages.sensors.history.metrics.temp_soil')}
-                body={(rowData) => (
-                  <div className="flex items-center gap-2">
-                    <Icon icon="tabler:temperature" className="text-red-500" />
-                    <span>{rowData.temp_soil} °C</span>
-                  </div>
-                )}
-                headerClassName="font-semibold"
-              />
-
-              <Column
-                field="ph1_soil"
-                header={t('admin.pages.sensors.history.metrics.ph1_soil')}
-                body={(rowData) => (
-                  <div className="flex items-center gap-2">
-                    <Icon icon="tabler:ph" className="text-purple-500" />
-                    <span>{rowData.ph1_soil} pH</span>
-                  </div>
-                )}
-                headerClassName="font-semibold"
-              />
-
-              <Column
-                field="water_soil"
-                header={t('admin.pages.sensors.history.metrics.water_soil')}
-                body={(rowData) =>
-                  rowData.water_soil ? (
+              {availableMetrics.temp_soil && (
+                <Column
+                  field="temp_soil"
+                  header={t('admin.pages.sensors.history.metrics.temp_soil')}
+                  body={(rowData) => (
+                    <div className="flex items-center gap-2">
+                      <Icon icon="tabler:temperature" className="text-red-500" />
+                      <span>{rowData.temp_soil} °C</span>
+                    </div>
+                  )}
+                />
+              )}
+              {availableMetrics.ph1_soil && (
+                <Column
+                  field="ph1_soil"
+                  header={t('admin.pages.sensors.history.metrics.ph1_soil')}
+                  body={(rowData) => (
+                    <div className="flex items-center gap-2">
+                      <Icon icon="tabler:ph" className="text-purple-500" />
+                      <span>{rowData.ph1_soil} pH</span>
+                    </div>
+                  )}
+                />
+              )}
+              {availableMetrics.water_soil && (
+                <Column
+                  field="water_soil"
+                  header={t('admin.pages.sensors.history.metrics.water_soil')}
+                  body={(rowData) =>
+                    rowData.water_soil ? (
+                      <Tag
+                        value={`${rowData.water_soil}%`}
+                        severity={getMoistureSeverity(rowData.water_soil)}
+                        className="font-medium"
+                      />
+                    ) : (
+                      <Tag value="N/A" severity="info" />
+                    )
+                  }
+                />
+              )}
+              {availableMetrics.conductor_soil && (
+                <Column
+                  field="conductor_soil"
+                  header={t('admin.pages.sensors.history.metrics.conductor_soil')}
+                  body={(rowData) =>
+                    rowData.conductor_soil ? (
+                      <div className="flex items-center gap-2">
+                        <Icon
+                          icon="tabler:lightning-bolt"
+                          className="text-yellow-500"
+                        />
+                        <span>{rowData.conductor_soil} µS/cm</span>
+                      </div>
+                    ) : (
+                      'N/A'
+                    )
+                  }
+                />
+              )}
+              {availableMetrics.bat && (
+                <Column
+                  field="bat"
+                  header={t('admin.pages.sensors.history.metrics.bat')}
+                  body={(rowData) => (
+                    rowData.bat != null ? (
+                      <Tag
+                        value={`${rowData.bat.toFixed(2)} V`}
+                        severity={getBatterySeverity(rowData.bat)}
+                        className="font-medium"
+                      />
+                    ) : (
+                      <Tag value="N/A" severity="info" />
+                    )
+                  )}
+                />
+              )}
+              {availableMetrics.rssi && (
+                <Column
+                  field="rssi"
+                  header={t('admin.pages.sensors.history.metrics.rssi')}
+                  body={(rowData) => (
                     <Tag
-                      value={`${rowData.water_soil}%`}
-                      severity={getMoistureSeverity(rowData.water_soil)}
+                      value={`${rowData.rssi} dBm`}
+                      severity={getSignalSeverity(rowData.rssi)}
                       className="font-medium"
                     />
-                  ) : (
-                    <Tag value="N/A" severity="info" />
-                  )
-                }
-                headerClassName="font-semibold"
-              />
-
-              <Column
-                field="conductor_soil"
-                header={t('admin.pages.sensors.history.metrics.conductor_soil')}
-                body={(rowData) =>
-                  rowData.conductor_soil ? (
-                    <div className="flex items-center gap-2">
-                      <Icon
-                        icon="tabler:lightning-bolt"
-                        className="text-yellow-500"
-                      />
-                      <span>{rowData.conductor_soil} µS/cm</span>
-                    </div>
-                  ) : (
-                    'N/A'
-                  )
-                }
-                headerClassName="font-semibold"
-              />
-
-              <Column
-                field="bat"
-                header={t('admin.pages.sensors.history.metrics.bat')}
-                body={(rowData) => (
-                  <Tag
-                    value={`${rowData.bat.toFixed(2)} V`}
-                    severity={getBatterySeverity(rowData.bat)}
-                    className="font-medium"
-                  />
-                )}
-                headerClassName="font-semibold"
-              />
-
-              <Column
-                field="rssi"
-                header={t('admin.pages.sensors.history.metrics.rssi')}
-                body={(rowData) => (
-                  <Tag
-                    value={`${rowData.rssi} dBm`}
-                    severity={getSignalSeverity(rowData.rssi)}
-                    className="font-medium"
-                  />
-                )}
-                headerClassName="font-semibold"
-              />
-
-              <Column
-                field="snr"
-                header={t('admin.pages.sensors.history.metrics.snr')}
-                body={(rowData) => `${rowData.snr} dB`}
-                headerClassName="font-semibold"
-              />
+                  )}
+                />
+              )}
+              {availableMetrics.snr && (
+                <Column
+                  field="snr"
+                  header={t('admin.pages.sensors.history.metrics.snr')}
+                  body={(rowData) => `${rowData.snr} dB`}
+                />
+              )}
             </DataTable>
-
-            {/* Paginator */}
-            <div className="mt-4 border-t border-gray-100 pt-4">
-              <Paginator
-                first={first}
-                rows={perPage}
-                totalRecords={totalRecords}
-                rowsPerPageOptions={[5, 10, 20, 50]}
-                onPageChange={onPageChange}
-                className="border-0"
-                template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
-                currentPageReportTemplate={`{first} - {last} ${t('admin.pages.sensors.history.of')} {totalRecords}`}
-                leftContent={
-                  <div className="text-sm text-gray-600 ml-2">
-                    {t('common.totalRecords')}: <strong>{totalRecords}</strong>
-                  </div>
-                }
-              />
-            </div>
-          </Card>
+          </CrudPanel>
         ) : (
           /* Chart View */
           <div className="flex flex-col gap-8">
@@ -540,39 +647,21 @@ const SensorHistory: React.FC = () => {
             {/* Individual charts */}
             {filteredData.length > 0 && (
               <div className="flex flex-col gap-6">
-                {Array.from({
-                  length: Math.ceil(chartRefs.current.length / 2),
-                }).map((_, rowIndex) => (
-                  <div
-                    key={rowIndex}
-                    className="flex flex-col md:flex-row gap-6">
-                    {/* First chart in the row */}
-                    {rowIndex * 2 < chartRefs.current.length && (
-                      <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
-                        <div className="h-80">
-                          <canvas
-                            ref={(el) => {
-                              chartRefs.current[rowIndex * 2] = el;
-                            }}
-                          />
-                        </div>
-                      </Card>
-                    )}
-
-                    {/* Second chart in the row */}
-                    {rowIndex * 2 + 1 < chartRefs.current.length && (
-                      <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
-                        <div className="h-80">
-                          <canvas
-                            ref={(el) => {
-                              chartRefs.current[rowIndex * 2 + 1] = el;
-                            }}
-                          />
-                        </div>
-                      </Card>
-                    )}
-                  </div>
-                ))}
+                {Object.entries(availableMetrics)
+                  .filter(([key, value]) => value)
+                  .map(([key, _], index) => (
+                    <Card
+                      key={index}
+                      className="p-4 shadow-sm border border-gray-300 bg-gray-50 flex-1">
+                      <div className="h-80">
+                        <canvas
+                          ref={(el) => {
+                            chartRefs.current[index] = el;
+                          }}
+                        />
+                      </div>
+                    </Card>
+                  ))}
               </div>
             )}
 

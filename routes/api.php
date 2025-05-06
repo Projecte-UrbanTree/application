@@ -117,7 +117,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('zones/{id}/inline-update', [ZoneController::class, 'inlineUpdate']);
         Route::get('/sensorshistory', [SensorController::class, 'fetchSensors']);
         Route::get('/sensors/{eui}/history', [SensorController::class, 'fetchSensorByEUI']);
-        Route::get('/sensors/{eui}/history/paginated', [SensorController::class, 'fetchAllHistorySensorbyEUI']);
+        Route::get('/sensors/{eui}/history/all', [SensorController::class, 'fetchAllSensorHistory']);
         Route::get('/sensors/{eui}/fetch-and-store', [SensorHistoryController::class, 'fetchAndStoreSensorData']);
     });
 

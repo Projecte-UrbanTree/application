@@ -99,30 +99,12 @@ export const fetchSensorByEUI = async (eui: string): Promise<any> => {
   }
 };
 
-export const fetchSensorHistoryPaginated = async (
-  eui: string,
-  page = 1,
-  perPage = 10,
-): Promise<any> => {
-  const cacheKey = `sensor-history-${eui}-${page}-${perPage}`;
-
-  // Try to get from cache first
-  const cachedData = getCachedData(cacheKey);
-  if (cachedData) return cachedData;
-
+export const fetchAllSensorHistory = async (eui: string): Promise<any> => {
   try {
-    const response = await axiosClient.get(
-      `/admin/sensors/${eui}/history/paginated`,
-      {
-        params: { page, perPage },
-      },
-    );
-
-    // Store in cache
-    setCacheData(cacheKey, response.data);
+    const response = await axiosClient.get(`/admin/sensors/${eui}/history/all`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching paginated sensor history:', error);
+    console.error('Error fetching all sensor history:', error);
     throw error;
   }
 };
