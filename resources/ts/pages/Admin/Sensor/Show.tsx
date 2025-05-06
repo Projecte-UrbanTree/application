@@ -23,7 +23,6 @@ import { Icon } from '@iconify/react';
 import { Chart, registerables } from 'chart.js';
 import CrudPanel  from '@/components/CrudPanel';
 
-// Register Chart.js core components
 Chart.register(...registerables);
 
 const SensorHistory: React.FC = () => {
@@ -40,7 +39,6 @@ const SensorHistory: React.FC = () => {
   const chartRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const charts = useRef<Chart[]>([]);
 
-  // Pagination state
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -77,7 +75,6 @@ const SensorHistory: React.FC = () => {
           });
           setFilteredData(filtered);
 
-          // Preload charts immediately after data is loaded
           setTimeout(() => {
             preloadCharts(filtered);
           }, 100);
@@ -246,7 +243,6 @@ const SensorHistory: React.FC = () => {
   };
 
   useEffect(() => {
-    // Destroy charts when component unmounts or data changes
     return () => {
       charts.current.forEach((chart) => chart.destroy());
       charts.current = [];
@@ -254,9 +250,7 @@ const SensorHistory: React.FC = () => {
   }, [sensorData]);
 
   useEffect(() => {
-    // This will ensure charts render whenever view mode or data changes
     if (viewMode === 'chart' && filteredData.length > 0) {
-      // Small delay to ensure the DOM is ready
       const timer = setTimeout(() => {
         renderCharts();
       }, 100);
@@ -299,11 +293,9 @@ const SensorHistory: React.FC = () => {
     charts.current = [];
 
     while (chartRefs.current.length < 7) {
-        // We have 7 chart configs
         chartRefs.current.push(null);
     }
 
-    // Generate all days of the selected month
     const start = startOfMonth(selectedMonth);
     const end = endOfMonth(selectedMonth);
     const allDays = [];
@@ -311,7 +303,6 @@ const SensorHistory: React.FC = () => {
         allDays.push(format(day, 'dd'));
     }
 
-    // Group data by day and calculate averages
     const dataByDay = filteredData.reduce((acc, data) => {
         const day = format(parseISO(data.time), 'dd');
         if (!acc[day]) acc[day] = [];
@@ -428,7 +419,6 @@ const SensorHistory: React.FC = () => {
                         intersect: false,
                         callbacks: {
                             title: (context) => {
-                                // Show full date in tooltip
                                 const day = context[0].label;
                                 const fullDate = `${day}/${format(selectedMonth, 'MM/yyyy')}`;
                                 return fullDate;
@@ -446,7 +436,7 @@ const SensorHistory: React.FC = () => {
                     x: {
                         title: {
                             display: true,
-                            text: t('admin.pages.sensors.history.metrics.day') || 'Day', // Updated to "Day"
+                            text: t('admin.pages.sensors.history.metrics.day') || 'Day', 
                         },
                     },
                 },
@@ -556,7 +546,7 @@ const SensorHistory: React.FC = () => {
                     rowData.ph1_soil != null ? (
                       <div className="flex items-center gap-2">
                         <Icon icon="tabler:ph" className="text-purple-500" />
-                        <span>{rowData.ph1_soil} pH</span> {/* Fixed mismatched tags */}
+                        <span>{rowData.ph1_soil} pH</span> 
                       </div>
                     ) : (
                       'N/A'
@@ -643,12 +633,10 @@ const SensorHistory: React.FC = () => {
                   }
                 />
               )}
-            </DataTable> {/* Fixed mismatched closing tag */}
+            </DataTable> 
           </CrudPanel>
         ) : (
-          /* Chart View */
           <div className="flex flex-col gap-8">
-            {/* Month selector */}
             <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50">
               <div className="flex justify-between items-center">
                 <Button
@@ -680,7 +668,6 @@ const SensorHistory: React.FC = () => {
               )}
             </Card>
 
-            {/* Individual charts */}
             {filteredData.length > 0 && (
               <div className="flex flex-col gap-6">
                 {Object.entries(availableMetrics)
