@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Sensor;
 use App\Models\SensorHistory;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use GuzzleHttp\Client;
 
 class SensorHistoryController extends Controller
 {
@@ -205,7 +204,7 @@ class SensorHistoryController extends Controller
 
             $url = "https://api-urbantree.alumnat.iesmontsia.org/sensors/deveui/{$eui}/history";
             if ($lastFetchDate) {
-                $url .= '?last_fetch_date=' . urlencode($lastFetchDate);
+                $url .= '?last_fetch_date='.urlencode($lastFetchDate);
             }
 
             $apiKey = env('VITE_X_API_KEY');
@@ -223,13 +222,14 @@ class SensorHistoryController extends Controller
                 $recordsCreated = 0;
                 $skippedRecords = 0;
 
-                $sensorDataArray = is_array($responseData) && !array_key_exists('dev_eui', $responseData)
+                $sensorDataArray = is_array($responseData) && ! array_key_exists('dev_eui', $responseData)
                     ? $responseData
                     : [$responseData];
 
                 foreach ($sensorDataArray as $dataPoint) {
                     if (empty($dataPoint['date_sensor'])) {
                         $skippedRecords++;
+
                         continue;
                     }
 
@@ -244,7 +244,7 @@ class SensorHistoryController extends Controller
                         'conductivity_soil' => $dataPoint['conductor_soil'] ?? null,
                         'batery' => $dataPoint['bat'] ?? null,
                         'signal' => $dataPoint['rssi'] ?? null,
-                        'date_sensor' => $dateSensor, 
+                        'date_sensor' => $dateSensor,
                     ]);
                     $recordsCreated++;
                 }
