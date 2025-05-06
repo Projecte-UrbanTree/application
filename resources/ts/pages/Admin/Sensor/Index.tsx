@@ -45,7 +45,7 @@ const Sensors: React.FC = () => {
     const fetchAndProcessSensors = async () => {
       try {
         const backendResponse = await axiosClient.get('/admin/sensors', {
-          params: { contract_id: currentContract?.id || 0 }, // Filtrar por contrato
+          params: { contract_id: currentContract?.id || 0 },
         });
         const backendSensors: Sensor[] = backendResponse.data;
 

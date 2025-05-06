@@ -23,7 +23,6 @@ import { Icon } from '@iconify/react';
 import { Chart, registerables } from 'chart.js';
 import CrudPanel  from '@/components/CrudPanel';
 
-// Register Chart.js core components
 Chart.register(...registerables);
 
 const SensorHistory: React.FC = () => {
@@ -40,7 +39,6 @@ const SensorHistory: React.FC = () => {
   const chartRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const charts = useRef<Chart[]>([]);
 
-  // Pagination state
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(10);
   const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -77,7 +75,6 @@ const SensorHistory: React.FC = () => {
           });
           setFilteredData(filtered);
 
-          // Preload charts immediately after data is loaded
           setTimeout(() => {
             preloadCharts(filtered);
           }, 100);
@@ -246,7 +243,6 @@ const SensorHistory: React.FC = () => {
   };
 
   useEffect(() => {
-    // Destroy charts when component unmounts or data changes
     return () => {
       charts.current.forEach((chart) => chart.destroy());
       charts.current = [];
@@ -254,9 +250,7 @@ const SensorHistory: React.FC = () => {
   }, [sensorData]);
 
   useEffect(() => {
-    // This will ensure charts render whenever view mode or data changes
     if (viewMode === 'chart' && filteredData.length > 0) {
-      // Small delay to ensure the DOM is ready
       const timer = setTimeout(() => {
         renderCharts();
       }, 100);
@@ -299,11 +293,9 @@ const SensorHistory: React.FC = () => {
     charts.current = [];
 
     while (chartRefs.current.length < 7) {
-        // We have 7 chart configs
         chartRefs.current.push(null);
     }
 
-    // Generate all days of the selected month
     const start = startOfMonth(selectedMonth);
     const end = endOfMonth(selectedMonth);
     const allDays = [];
@@ -311,65 +303,86 @@ const SensorHistory: React.FC = () => {
         allDays.push(format(day, 'dd'));
     }
 
-    // Map data to days of the month, leaving missing days as null
     const dataByDay = filteredData.reduce((acc, data) => {
         const day = format(parseISO(data.time), 'dd');
-        acc[day] = data;
+        if (!acc[day]) acc[day] = [];
+        acc[day].push(data);
         return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, any[]>);
+
+    const calculateAverage = (values: (number | null)[]) => {
+        const validValues = values.filter((v) => v != null) as number[];
+        return validValues.length > 0
+            ? validValues.reduce((sum, val) => sum + val, 0) / validValues.length
+            : null;
+    };
 
     const labels = allDays;
     const chartConfigs = [
         {
             title: t('admin.pages.sensors.history.metrics.temp_soil') || 'Soil Temperature',
-            data: allDays.map((day) => dataByDay[day]?.temp_soil ?? null), // Use null for missing values
+            data: allDays.map((day) =>
+                calculateAverage(dataByDay[day]?.map((entry: any) => entry.temp_soil) || [])
+            ),
             borderColor: '#ef4444',
             backgroundColor: '#fca5a5',
             yAxisTitle: '°C',
         },
         {
             title: t('admin.pages.sensors.history.metrics.ph1_soil') || 'Soil pH',
-            data: allDays.map((day) => dataByDay[day]?.ph1_soil ?? null), // Use null for missing values
+            data: allDays.map((day) =>
+                calculateAverage(dataByDay[day]?.map((entry: any) => entry.ph1_soil) || [])
+            ),
             borderColor: '#8b5cf6',
             backgroundColor: '#c4b5fd',
             yAxisTitle: 'pH',
         },
         {
             title: t('admin.pages.sensors.history.metrics.water_soil') || 'Soil Moisture',
-            data: allDays.map((day) => dataByDay[day]?.water_soil ?? null), // Use null for missing values
+            data: allDays.map((day) =>
+                calculateAverage(dataByDay[day]?.map((entry: any) => entry.water_soil) || [])
+            ),
             borderColor: '#059669',
             backgroundColor: '#6ee7b7',
             yAxisTitle: '%',
         },
         {
             title: t('admin.pages.sensors.history.metrics.conductor_soil') || 'Soil Conductivity',
-            data: allDays.map((day) => dataByDay[day]?.conductor_soil ?? null), // Use null for missing values
+            data: allDays.map((day) =>
+                calculateAverage(dataByDay[day]?.map((entry: any) => entry.conductor_soil) || [])
+            ),
             borderColor: '#d97706',
             backgroundColor: '#fcd34d',
             yAxisTitle: 'µS/cm',
         },
         {
             title: t('admin.pages.sensors.history.metrics.bat') || 'Battery',
-            data: allDays.map((day) => dataByDay[day]?.bat ?? null), // Use null for missing values
+            data: allDays.map((day) =>
+                calculateAverage(dataByDay[day]?.map((entry: any) => entry.bat) || [])
+            ),
             borderColor: '#2563eb',
             backgroundColor: '#93c5fd',
             yAxisTitle: 'V',
         },
         {
             title: t('admin.pages.sensors.history.metrics.rssi') || 'RSSI',
-            data: allDays.map((day) => dataByDay[day]?.rssi ?? null), // Use null for missing values
+            data: allDays.map((day) =>
+                calculateAverage(dataByDay[day]?.map((entry: any) => entry.rssi) || [])
+            ),
             borderColor: '#7c3aed',
             backgroundColor: '#c4b5fd',
             yAxisTitle: 'dBm',
         },
         {
             title: t('admin.pages.sensors.history.metrics.snr') || 'SNR',
-            data: allDays.map((day) => dataByDay[day]?.snr ?? null), // Use null for missing values
+            data: allDays.map((day) =>
+                calculateAverage(dataByDay[day]?.map((entry: any) => entry.snr) || [])
+            ),
             borderColor: '#db2777',
             backgroundColor: '#f9a8d4',
             yAxisTitle: 'dB',
         },
-    ];
+    ].filter((config) => config.data.some((value) => value != null));
 
     chartConfigs.forEach((config, index) => {
         const ctx = chartRefs.current[index]?.getContext('2d');
@@ -406,7 +419,6 @@ const SensorHistory: React.FC = () => {
                         intersect: false,
                         callbacks: {
                             title: (context) => {
-                                // Show full date in tooltip
                                 const day = context[0].label;
                                 const fullDate = `${day}/${format(selectedMonth, 'MM/yyyy')}`;
                                 return fullDate;
@@ -424,7 +436,7 @@ const SensorHistory: React.FC = () => {
                     x: {
                         title: {
                             display: true,
-                            text: t('admin.pages.sensors.history.metrics.time') || 'Time',
+                            text: t('admin.pages.sensors.history.metrics.day') || 'Day', 
                         },
                     },
                 },
@@ -514,24 +526,32 @@ const SensorHistory: React.FC = () => {
                 <Column
                   field="temp_soil"
                   header={t('admin.pages.sensors.history.metrics.temp_soil')}
-                  body={(rowData) => (
-                    <div className="flex items-center gap-2">
-                      <Icon icon="tabler:temperature" className="text-red-500" />
-                      <span>{rowData.temp_soil} °C</span>
-                    </div>
-                  )}
+                  body={(rowData) =>
+                    rowData.temp_soil != null ? (
+                      <div className="flex items-center gap-2">
+                        <Icon icon="tabler:temperature" className="text-red-500" />
+                        <span>{rowData.temp_soil} °C</span>
+                      </div>
+                    ) : (
+                      'N/A'
+                    )
+                  }
                 />
               )}
               {availableMetrics.ph1_soil && (
                 <Column
                   field="ph1_soil"
                   header={t('admin.pages.sensors.history.metrics.ph1_soil')}
-                  body={(rowData) => (
-                    <div className="flex items-center gap-2">
-                      <Icon icon="tabler:ph" className="text-purple-500" />
-                      <span>{rowData.ph1_soil} pH</span>
-                    </div>
-                  )}
+                  body={(rowData) =>
+                    rowData.ph1_soil != null ? (
+                      <div className="flex items-center gap-2">
+                        <Icon icon="tabler:ph" className="text-purple-500" />
+                        <span>{rowData.ph1_soil} pH</span> 
+                      </div>
+                    ) : (
+                      'N/A'
+                    )
+                  }
                 />
               )}
               {availableMetrics.water_soil && (
@@ -539,7 +559,7 @@ const SensorHistory: React.FC = () => {
                   field="water_soil"
                   header={t('admin.pages.sensors.history.metrics.water_soil')}
                   body={(rowData) =>
-                    rowData.water_soil ? (
+                    rowData.water_soil != null ? (
                       <Tag
                         value={`${rowData.water_soil}%`}
                         severity={getMoistureSeverity(rowData.water_soil)}
@@ -556,7 +576,7 @@ const SensorHistory: React.FC = () => {
                   field="conductor_soil"
                   header={t('admin.pages.sensors.history.metrics.conductor_soil')}
                   body={(rowData) =>
-                    rowData.conductor_soil ? (
+                    rowData.conductor_soil != null ? (
                       <div className="flex items-center gap-2">
                         <Icon
                           icon="tabler:lightning-bolt"
@@ -574,7 +594,7 @@ const SensorHistory: React.FC = () => {
                 <Column
                   field="bat"
                   header={t('admin.pages.sensors.history.metrics.bat')}
-                  body={(rowData) => (
+                  body={(rowData) =>
                     rowData.bat != null ? (
                       <Tag
                         value={`${rowData.bat.toFixed(2)} V`}
@@ -584,35 +604,39 @@ const SensorHistory: React.FC = () => {
                     ) : (
                       <Tag value="N/A" severity="info" />
                     )
-                  )}
+                  }
                 />
               )}
               {availableMetrics.rssi && (
                 <Column
                   field="rssi"
                   header={t('admin.pages.sensors.history.metrics.rssi')}
-                  body={(rowData) => (
-                    <Tag
-                      value={`${rowData.rssi} dBm`}
-                      severity={getSignalSeverity(rowData.rssi)}
-                      className="font-medium"
-                    />
-                  )}
+                  body={(rowData) =>
+                    rowData.rssi != null ? (
+                      <Tag
+                        value={`${rowData.rssi} dBm`}
+                        severity={getSignalSeverity(rowData.rssi)}
+                        className="font-medium"
+                      />
+                    ) : (
+                      <Tag value="N/A" severity="info" />
+                    )
+                  }
                 />
               )}
               {availableMetrics.snr && (
                 <Column
                   field="snr"
                   header={t('admin.pages.sensors.history.metrics.snr')}
-                  body={(rowData) => `${rowData.snr} dB`}
+                  body={(rowData) =>
+                    rowData.snr != null ? `${rowData.snr} dB` : 'N/A'
+                  }
                 />
               )}
-            </DataTable>
+            </DataTable> 
           </CrudPanel>
         ) : (
-          /* Chart View */
           <div className="flex flex-col gap-8">
-            {/* Month selector */}
             <Card className="p-4 shadow-sm border border-gray-300 bg-gray-50">
               <div className="flex justify-between items-center">
                 <Button
@@ -644,7 +668,6 @@ const SensorHistory: React.FC = () => {
               )}
             </Card>
 
-            {/* Individual charts */}
             {filteredData.length > 0 && (
               <div className="flex flex-col gap-6">
                 {Object.entries(availableMetrics)
