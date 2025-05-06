@@ -1594,7 +1594,8 @@
             "conductor_soil": "Soil Conductivity",
             "bat": "Battery",
             "rssi": "Signal Strength (RSSI)",
-            "snr": "Signal-to-Noise Ratio"
+            "snr": "Signal-to-Noise Ratio",
+            "day": "Day"
           },
           "loadError": "Error loading the sensor history."
         }

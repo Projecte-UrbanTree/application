@@ -1598,7 +1598,8 @@
             "conductor_soil": "Conductividad del suelo",
             "bat": "Batería",
             "rssi": "Fuerza de la señal (RSSI)",
-            "snr": "Relación señal-ruido"
+            "snr": "Relación señal-ruido",
+            "day": "Día"
           },
           "loadError": "Error al cargar el historial del sensor."
         },
