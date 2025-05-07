@@ -13,6 +13,7 @@
         "strictBindCallApply": true, // Check argument lists in `bind`, `call`, and `apply`
         "noImplicitThis": true, // Warn on `this` being used in an untyped way
         "alwaysStrict": true, // Parse in strict mode and emit "use strict" for each file
+        "types": ["vitest/globals", "@testing-library/jest-dom"],
 
         // Module Resolution
         "moduleResolution": "Node", // Match how Node.js resolves modules

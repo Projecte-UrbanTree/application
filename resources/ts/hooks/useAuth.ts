@@ -15,24 +15,30 @@ export function useAuth() {
     (state: RootState) => state.user.isAuthenticated,
   );
 
-  async function fetchUser() {
-    const token = localStorage.getItem('authToken');
-    if (!token) return;
-    try {
-      const { data } = await axiosClient.get('/user');
-      dispatch(setUserData(data));
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
+  async function fetchUser(token = localStorage.getItem('authToken')) {
+    if (!token) {
+      dispatch(clearUserData());
+      return null;
     }
+
+    const { data } = await axiosClient.get('/user');
+    dispatch(setUserData(data));
+    return data;
   }
 
-  async function login(authToken: string) {
+  async function login(authToken: string): Promise<void> {
     localStorage.setItem('authToken', authToken);
-    await fetchUser();
-    dispatch(setAuthenticated(true));
+    await fetchUser(authToken).then(() => {
+      dispatch(setAuthenticated(true));
+    }).catch((error) => {
+      console.error('Failed to fetch user:', error);
+      localStorage.removeItem('authToken');
+      dispatch(setAuthenticated(false));
+      throw error;
+    });
   }
 
-  async function logout() {
+  async function logout(): Promise<void> {
     await axiosClient.post('/logout').catch((error) => {
       console.error('Failed to logout:', error);
     });

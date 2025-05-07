@@ -2,9 +2,9 @@ name: Laravel
 
 on:
   push:
-    branches: ["*"]
+    branches: ['*']
   pull_request:
-    branches: ["*"]
+    branches: ['*']
 
 jobs:
   laravel-tests:
@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: '8.2'
       - uses: actions/checkout@v4
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -38,3 +38,5 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
         run: vendor/bin/phpunit
+      - name: Execute tests (Unit and Feature tests) via Vitest
+        run: npm run test
