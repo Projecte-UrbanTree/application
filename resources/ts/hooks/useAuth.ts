@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+
 import axiosClient from '@/api/axiosClient';
 import {
   clearUserData,
@@ -15,29 +16,25 @@ export function useAuth() {
   );
 
   async function fetchUser(token = localStorage.getItem('authToken')) {
-    try {
-      if (!token) {
-        dispatch(clearUserData());
-        return;
-      }
-      
-      const { data } = await axiosClient.get('/user');
-
-      dispatch(setUserData(data));
-
-      return data;
-    } catch (_) {
-      throw new Error('No se pudo recuperar la sesión');
+    if (!token) {
+      dispatch(clearUserData());
+      return null;
     }
-  } 
+
+    const { data } = await axiosClient.get('/user');
+    dispatch(setUserData(data));
+    return data;
+  }
 
   async function login(authToken: string): Promise<void> {
-    await fetchUser(authToken).then((user) => {
-      if (!user) {
-        throw new Error('Error al recuperar los datos del usuario');
-      }
-      localStorage.setItem('authToken', authToken);
+    localStorage.setItem('authToken', authToken);
+    await fetchUser(authToken).then(() => {
       dispatch(setAuthenticated(true));
+    }).catch((error) => {
+      console.error('Failed to fetch user:', error);
+      localStorage.removeItem('authToken');
+      dispatch(setAuthenticated(false));
+      throw error;
     });
   }
 
