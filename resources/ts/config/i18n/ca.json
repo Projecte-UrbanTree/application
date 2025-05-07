@@ -1576,7 +1576,10 @@
           "moisture": "Humitat",
           "noData": "Sense dades",
           "viewHistory": "Veure historial",
-          "noSensors": "No s'han trobat sensors"
+          "noSensors": "No s'han trobat sensors",
+          "ph": "pH",
+          "snr": "SNR",
+          "conductor": "Conductor"
         },
         "history": {
           "title": "Historial del sensor",
@@ -1596,7 +1599,8 @@
             "conductor_soil": "Conductivitat del sòl",
             "bat": "Bateria",
             "rssi": "Força del senyal (RSSI)",
-            "snr": "Relació senyal-soroll"
+            "snr": "Relació senyal-soroll",
+            "day": "Dia"
           },
           "loadError": "Error en carregar l'historial del sensor."
         },

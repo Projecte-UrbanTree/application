@@ -1575,7 +1575,10 @@
           "moisture": "Humedad",
           "noData": "Sin datos",
           "viewHistory": "Ver historial",
-          "noSensors": "No se encontraron sensores"
+          "noSensors": "No se encontraron sensores",
+          "ph": "pH",
+          "snr": "SNR",
+          "conductor": "Conductor"
         },
         "history": {
           "title": "Historial del sensor",
@@ -1595,7 +1598,8 @@
             "conductor_soil": "Conductividad del suelo",
             "bat": "Batería",
             "rssi": "Fuerza de la señal (RSSI)",
-            "snr": "Relación señal-ruido"
+            "snr": "Relación señal-ruido",
+            "day": "Día"
           },
           "loadError": "Error al cargar el historial del sensor."
         },

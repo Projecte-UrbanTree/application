@@ -1,5 +1,4 @@
-import type { Roles } from './Role';
-import { UserPivot } from './WorkOrder';
+  import type { Roles } from './Role';
 
 export interface User {
   id?: number;
@@ -12,5 +11,4 @@ export interface User {
   role?: Roles;
   created_at?: null;
   updated_at?: null;
-  pivot?: UserPivot;
 }

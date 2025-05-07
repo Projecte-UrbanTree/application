@@ -82,4 +82,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(WorkOrder::class, 'work_order_users', 'user_id', 'work_order_id')->withTimestamps();
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

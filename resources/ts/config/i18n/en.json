@@ -1564,18 +1564,17 @@
           "sensorDefaultName": "Sensor {{id}}",
           "devEUI": "DevEUI",
           "lastUpdate": "Last Update",
-          "notAvailable": "N/A",
+          "notAvailable": "Not Available",
           "battery": "Battery",
-          "noValueUnit": "-- {{unit}}",
           "signal": "Signal",
-          "snrUnit": "SNR",
-          "latitude": "Latitude",
-          "longitude": "Longitude",
           "temperature": "Temperature",
           "moisture": "Moisture",
-          "noData": "No data",
+          "conductor": "Conductivity",
+          "ph": "pH",
+          "snr": "SNR",
           "viewHistory": "View History",
-          "noSensors": "No sensors found"
+          "noSensors": "No sensors found",
+          "noValueUnit": "-- {{unit}}"
         },
         "history": {
           "title": "Sensor History",
@@ -1595,7 +1594,8 @@
             "conductor_soil": "Soil Conductivity",
             "bat": "Battery",
             "rssi": "Signal Strength (RSSI)",
-            "snr": "Signal-to-Noise Ratio"
+            "snr": "Signal-to-Noise Ratio",
+            "day": "Day"
           },
           "loadError": "Error loading the sensor history."
         }
